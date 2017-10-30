@@ -1,0 +1,3836 @@
+###########################################
+#                                         #
+# Way of Life business events             #
+#                                         #
+# ID WoL.10000-WoL.10999                  #
+#                                         #
+###########################################
+
+# Written by Joel Hansson
+
+namespace = WoL
+
+### Trade route for exotic goods
+# Start of chain (hidden)
+character_event = {
+	id = WoL.10100
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		job_treasurer = {
+			character_event = { id = WoL.10101 }
+		}
+	}
+}
+
+# Start of chain (Steward)
+character_event = {
+	id = WoL.10101
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10101
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10101
+		ai_chance = {
+			factor = 1
+		}
+		save_event_target_as = steward
+		FROM = { character_event = { id = WoL.10102 } }
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10101
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# Steward presents an opportunity
+character_event = {
+	id = WoL.10102
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10102
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10102
+		set_character_flag = trade_route_progress
+		if = {
+			limit = {
+				capital_scope = {
+					OR = {
+						region = world_steppe
+						region = world_persia
+					}
+				}
+			}
+			character_event = { id = WoL.10103 }
+			break = yes
+		}
+		character_event = { id = WoL.10104 }
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10102
+		clr_character_flag = trade_route_progress
+	}
+}
+
+# Land: setting up a land based trade route
+character_event = {
+	id = WoL.10103
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10103
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+	
+	option = { # hire crew
+		name = EVTOPTA_WOL_10103
+		set_character_flag = trade_is_land
+		if = { 
+			limit = { yearly_income = 200 }
+			wealth = -200
+		}
+		if = {
+			limit = { 
+				yearly_income = 25 
+				NOT = { yearly_income = 200 }
+			}
+			scaled_wealth = -1
+		}
+		if = {
+			limit = { NOT = { yearly_income = 25 } }
+			wealth = -25
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10105 days = 3 }
+		}
+	}
+	
+	option = { # hire bandits to steal packing animals
+		name = EVTOPTB_WOL_10103
+		set_character_flag = trade_bandits
+		set_character_flag = trade_is_land
+		if = { 
+			limit = { yearly_income = 200 }
+			wealth = -80
+		}
+		if = {
+			limit = { 
+				yearly_income = 25 
+				NOT = { yearly_income = 200 }
+			}
+			scaled_wealth = -0.4
+		}
+		if = {
+			limit = { NOT = { yearly_income = 25 } }
+			wealth = -10
+		}
+		add_trait = arbitrary
+		hidden_tooltip = {
+			random_list = {
+				20 = {
+					modifier = {
+						factor = 0.7
+						intrigue = 8
+					}
+					modifier = {
+						factor = 0.7
+						intrigue = 11
+					}
+					modifier = {
+						factor = 0.7
+						intrigue = 14
+					}
+					set_character_flag = trade_bandits_fail
+					character_event = { id = WoL.10105 days = 3 }
+				}
+				80 = { character_event = { id = WoL.10105 days = 3 } }
+			}
+		}
+	}
+	
+	option = { # this is too expensive
+		name = EVTOPTC_WOL_10103
+		clr_character_flag = trade_route_progress
+	}
+}
+
+# Naval: setting up a naval based trade route 
+character_event = {
+	id = WoL.10104
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10104
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_economy
+	
+	option = { # hire crew
+		name = EVTOPTA_WOL_10104
+		if = { 
+			limit = { yearly_income = 200 }
+			wealth = -200
+		}
+		if = {
+			limit = { 
+				yearly_income = 25 
+				NOT = { yearly_income = 200 }
+			}
+			scaled_wealth = -1
+		}
+		if = {
+			limit = { NOT = { yearly_income = 25 } }
+			wealth = -25
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10105 days = 3 }
+		}
+	}
+	
+	option = { # hire bandits to steal carrying animals
+		name = EVTOPTB_WOL_10104
+		set_character_flag = trade_bandits
+		if = { 
+			limit = { yearly_income = 200 }
+			wealth = -80
+		}
+		if = {
+			limit = { 
+				yearly_income = 25 
+				NOT = { yearly_income = 200 }
+			}
+			scaled_wealth = -0.4
+		}
+		if = {
+			limit = { NOT = { yearly_income = 25 } }
+			wealth = -10
+		}
+		hidden_tooltip = {
+			random_list = {
+				20 = {
+					modifier = {
+						factor = 0.7
+						intrigue = 8
+					}
+					modifier = {
+						factor = 0.7
+						intrigue = 11
+					}
+					modifier = {
+						factor = 0.7
+						intrigue = 14
+					}
+					set_character_flag = trade_bandits_fail
+					character_event = { id = WoL.10105 days = 3 }
+				}
+				80 = { character_event = { id = WoL.10105 days = 3 } }
+			}
+		}
+	}
+	
+	option = { # this is too expensive
+		name = EVTOPTC_WOL_10104
+		clr_character_flag = trade_route_progress
+	}
+}
+
+# Clergy wants to come along and can finance some of the costs ## might be angered/get in trouble later
+character_event = {
+	id = WoL.10105
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10105
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10105
+		if = { 
+			limit = { yearly_income = 200 }
+			wealth = 80
+		}
+		if = {
+			limit = { 
+				yearly_income = 25 
+				NOT = { yearly_income = 200 }
+			}
+			scaled_wealth = 0.4
+		}
+		if = {
+			limit = { NOT = { yearly_income = 25 } }
+			wealth = 5
+		}
+		set_character_flag = trade_priest
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					if = {
+						limit = { has_character_flag = trade_bandits_fail }
+						character_event = { id = WoL.10110 days = 7 }
+						break = yes
+					}
+					if = {
+						limit = {
+							any_independent_ruler = {
+								is_within_diplo_range = ROOT
+								is_merchant_republic = yes
+							}
+						}
+						random_independent_ruler = {
+							limit = {
+								is_within_diplo_range = ROOT
+								is_merchant_republic = yes
+							}
+							character_event = { id = WoL.10107 }
+						}
+					}
+					character_event = { id = WoL.10111 days = 14 }
+				}
+				50 = {
+					if = {
+						limit = { has_character_flag = trade_bandits_fail }
+						character_event = { id = WoL.10110 days = 7 }
+						break = yes
+					}
+					character_event = { id = WoL.10111 days = 14 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10105
+		any_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+		if = {
+			limit = { has_character_flag = trade_bandits_fail }
+			character_event = { id = WoL.10110 days = 7 }
+			break = yes
+		}
+		character_event = { id = WoL.10111 days = 7 }
+	}
+} 
+
+# Clergy annoyed of bandits
+character_event = {
+	id = WoL.10106
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10106
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10106 
+		piety = -15
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10106
+		tooltip_info = diplomacy
+		trigger = { diplomacy = 12 }
+	}
+}
+
+# Doge responds to venture
+character_event = {
+	id = WoL.10107
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10107
+	picture = GFX_evt_doge_republic
+	border = GFX_event_normal_frame_economy
+	
+	option = { # Demand compensation
+		name = EVTOPTA_WOL_10107
+		FROM = {
+			opinion = {
+				modifier = opinion_irritated
+				who = ROOT
+				years = 3
+			}
+			letter_event = { id = WoL.10108 }
+		}
+	}
+	
+	option = { # Never mind
+		name = EVTOPTB_WOL_10107
+	}
+}
+
+# Nearby Doge angered by trade competition
+letter_event = {
+	id = WoL.10108
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10108
+	
+	option = { # Monetary compensation
+		name = EVTOPTA_WOL_10108
+		FROM = {
+			set_character_flag = trade_compensation
+			hidden_tooltip = {
+				letter_event = { id = WoL.10109 days = 3 }
+			}
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 5
+			}
+		}
+		wealth = -50
+	}
+	
+	option = { # Refuse
+		name = EVTOPTB_WOL_10108
+		FROM = {
+			hidden_tooltip = {
+				letter_event = { id = WoL.10109 days = 3 }
+			}
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+# Doge gets response
+letter_event = {
+	id = WoL.10109
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESCA_WOL_10109
+		trigger = {
+			has_character_flag = trade_compensation
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10109
+		trigger = {
+			NOT = { has_character_flag = trade_compensation }
+		}
+	}
+	option = {
+		name = EVTOPTA_WOL_10109
+		trigger = {
+			has_character_flag = trade_compensation
+		}
+		wealth = 50
+		clr_character_flag = trade_compensation
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10109
+		trigger = {
+			NOT = { has_character_flag = trade_compensation }
+		}
+		clr_character_flag = trade_compensation
+	}
+}
+
+# Bandits fail to steal ship/carrying animals
+character_event = {
+	id = WoL.10110
+	is_triggered_only = yes
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_economy
+	
+	desc = {
+		text = EVTDESCA_WOL_10110
+		trigger = {
+			has_character_flag = trade_is_land
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10110
+		trigger = {
+			NOT = { has_character_flag = trade_is_land }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10110 
+		prestige = -50
+		clr_character_flag = trade_is_land
+		character_event = { id = WoL.10128 }
+	}
+}
+
+# Heading out
+character_event = {
+	id = WoL.10111
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10111
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_economy
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_WOL_10111
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_character_flag = trade_bandits
+					has_character_flag = trade_priest
+				}
+				character_event = { id = WoL.10106 days = 10 }
+			}
+			character_event = { id = WoL.10112 days = 35 random = 15 }
+		}
+	}
+}
+
+# Arriving (hidden)
+character_event = {
+	id = WoL.10112
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		random_independent_ruler = {
+			limit = {
+				ai = yes
+				controls_religion = no
+				is_adult = yes
+				is_within_diplo_range = ROOT
+				mercenary = no
+				holy_order = no
+				primary_title = {
+					is_landless_type_title = no
+				}
+				NOR = {
+					is_rival = ROOT
+					trait = incapable
+					prisoner = yes
+					religion_group = ROOT
+					ROOT = {
+						any_liege = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.10113 }
+			break = yes
+		}
+		random_independent_ruler = {
+			limit = {
+				ai = yes
+				controls_religion = no
+				is_adult = yes
+				is_within_diplo_range = ROOT
+				mercenary = no
+				holy_order = no
+				primary_title = {
+					is_landless_type_title = no
+				}
+				NOR = {
+					is_rival = ROOT
+					trait = incapable
+					prisoner = yes
+					religion = ROOT
+					ROOT = {
+						any_liege = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.10113 }
+			break = yes
+		}
+		random_independent_ruler = {
+			limit = {
+				ai = yes
+				controls_religion = no
+				is_adult = yes
+				is_within_diplo_range = ROOT
+				mercenary = no
+				holy_order = no
+				primary_title = {
+					is_landless_type_title = no
+				}
+				NOR = {
+					is_rival = ROOT
+					trait = incapable
+					prisoner = yes
+					ROOT = {
+						any_liege = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.10113 }
+			break = yes
+		}		
+		random_independent_ruler = {
+			limit = {
+				ai = yes
+				controls_religion = no
+				is_adult = yes
+				mercenary = no
+				holy_order = no
+				primary_title = {
+					is_landless_type_title = no
+				}
+				NOT = {
+					OR = {
+						is_rival = ROOT
+						trait = incapable
+						prisoner = yes
+						ROOT = {
+							any_liege = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.10113 }
+			break = yes
+		}
+		character_event = { id = WoL.10999 }
+	}
+}
+
+# Failed to find target
+character_event = {
+	id = WoL.10999
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10999
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10999
+		log = "WoL.10112: [Root.GetTitledName] failed to find a suitable trade target."
+		clr_character_flag = trade_bandits
+		clr_character_flag = trade_is_land
+		clr_character_flag = trade_route_progress
+		clr_character_flag = trade_priest
+		clr_character_flag = trade_friend
+		clr_character_flag = trade_success
+		clr_character_flag = trade_rival
+	}
+}
+
+# Arriving at destination - Host (hidden)
+character_event = {
+	id = WoL.10113
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = { character_event = { id = WoL.10114 } }
+	}
+}
+
+# Arriving at destination - present a gift?
+character_event = {
+	id = WoL.10114
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10114
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_economy
+	
+	option = { 
+		name = { # A dozen of strong horses
+			text = EVTOPTA_WOL_10114_HORSES
+			trigger = { 
+				OR = {
+					religion_group = christian
+					religion_group = zoroastrian_group
+					religion_group = jewish_group
+				}
+			}
+		}
+		name = { # A dozen of sturdy camels
+			text = EVTOPTA_WOL_10114_CAMELS
+			trigger = { religion_group = muslim }
+		}
+		name = { # An elephant
+			text = EVTOPTA_WOL_10114_ELEPHANT
+			trigger = { religion_group = indian_group }
+		}
+		name = { # A dozen of tough warriors
+			text = EVTOPTA_WOL_10114_WARRIORS
+			trigger = { religion_group = pagan_group }
+		}
+		wealth = -30
+		FROM = {
+			opinion = {
+				modifier = opinion_flattered # +25
+				who = ROOT
+				years = 5
+			}
+			hidden_tooltip = {
+				character_event = { id = WoL.10115 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10114
+		wealth = -15
+		FROM = {
+			opinion = {
+				modifier = opinion_fine_gift # +10
+				who = ROOT
+				years = 3
+			}
+			hidden_tooltip = {
+				character_event = { id = WoL.10115 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10114
+		wealth = -5
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.10115 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD_WOL_10114
+		FROM = {
+			opinion = {
+				modifier = opinion_mildly_disappointed # -5
+				who = ROOT
+				years = 3
+			}
+			hidden_tooltip = {
+				character_event = { id = WoL.10115 }
+			}
+		}
+	}	
+}
+
+# Foreign ruler responds (just bounce?)
+character_event = {
+	id = WoL.10115
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.10116 days = 7 }
+		}
+	}
+}
+
+# Cultural differences
+character_event = {
+	id = WoL.10116
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10116
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10116
+		tooltip_info = learning
+		trigger = {
+			learning = 10
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.10117 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10116
+		event_target:steward = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 1
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.10117 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10116
+		FROM = {
+			opinion = {
+				modifier = opinion_disrespecting_culture
+				who = ROOT
+				years = 1
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.10117 }
+			}
+		}
+	}
+}
+
+# Foreign ruler (bounce)
+character_event = {
+	id = WoL.10117
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				FROM = { has_character_flag = trade_priest } 
+				NOT = { religion = FROM }
+			}
+			FROM = {
+				character_event = { id = WoL.10118 days = 7 }
+			}
+			break = yes
+		}
+		FROM = {
+			character_event = { id = WoL.10140 days = 7}
+		}
+	}
+}
+
+# Clergy theological debate, endangering venture
+character_event = {
+	id = WoL.10118
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10118
+	picture = GFX_evt_bishop_pagan_group
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10118
+		any_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+		FROM = {
+			hidden_tooltip = {
+				character_event = { id = WoL.10119 days = 7 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10118
+		tooltip_info = gregarious
+		trigger = {
+			trait = gregarious
+		}
+		FROM = {
+			hidden_tooltip = {
+				character_event = { id = WoL.10119 days = 7 }
+			}
+		}
+	}
+	
+	option = {
+		name = {
+			text = EVTOPTC_WOL_10118
+			trigger = {
+				FROM = {
+					NOT = {
+						religion = ROOT
+					}
+					religion_group = ROOT
+				}
+			}
+		}
+		name = {
+			text = EVTOPTD_WOL_10118
+			trigger = {
+				NOT = {
+					FROM = {
+						religion_group = ROOT
+					}
+				}
+			}
+		}
+		random = {
+			chance = 50
+			add_trait = zealous
+			hidden_tooltip = {
+				character_event = {
+					id = 38269 #Notify Zealous
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_religious_quarrel
+				who = ROOT
+				months = 12
+			}
+			hidden_tooltip = {
+				character_event = { id = WoL.10119 days = 7 }
+			}
+		}
+	}
+}
+
+# Foreign ruler friend/rival (hidden)
+character_event = {
+	id = WoL.10119
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		random_list = {
+			30 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						personal_opinion = {
+							who = FROM
+							value = 0
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					personal_opinion = {
+						who = FROM
+						value = 20
+					}
+				}
+				modifier = {
+					factor = 2
+					personal_opinion = {
+						who = FROM
+						value = 40
+					}
+				}
+				modifier = {
+					factor = 1.3
+					FROM = { stewardship = 10 }
+				}
+				
+				modifier = {
+					factor = 1.3
+					FROM = { stewardship = 13 }
+				}
+				FROM = {
+					set_character_flag = trade_friend
+					character_event = { id = WoL.10120 }
+				}
+			}
+			30 = {
+				modifier = {
+					factor = 1.3
+					FROM = { stewardship = 10 }
+				}
+				
+				modifier = {
+					factor = 1.3
+					FROM = { stewardship = 13 }
+				}
+				opinion = {
+					modifier = opinion_trade_partner
+					who = FROM
+					years = 10
+				}
+				FROM = {
+					set_character_flag = trade_success
+					character_event = { id = WoL.10120 }
+				}
+			}
+			30 = {
+				modifier = {
+					factor = 0
+					personal_opinion = {
+						who = FROM
+						value = -10
+					}
+				}
+				modifier = {
+					factor = 2
+					NOT = {
+						personal_opinion = {
+							who = FROM
+							value = -40
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					NOT = {
+						personal_opinion = {
+							who = FROM
+							value = -65
+						}
+					}
+				}
+				FROM = {
+					set_character_flag = trade_rival
+					character_event = { id = WoL.10120 }
+				}
+			}
+		}
+	}
+}
+
+# Foreign ruler responds
+character_event = {
+	id = WoL.10120
+	is_triggered_only = yes
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_economy
+	
+	desc = {
+		text = EVTDESCA_WOL_10120
+		trigger = {
+			has_character_flag = trade_friend
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10120
+		trigger = {
+			has_character_flag = trade_success
+		}
+	}
+	desc = {
+		text = EVTDESCC_WOL_10120
+		trigger = {
+			has_character_flag = trade_rival
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10120
+		trigger = {
+			has_character_flag = trade_friend
+		}
+		clr_character_flag = trade_rival
+		clr_character_flag = trade_success
+		clr_character_flag = trade_friend
+		add_friend = FROM
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.10121 }
+			}
+			random = {
+				chance = 50
+				character_event = { id = WoL.10123 days = 3 }
+			}
+			character_event = { id = WoL.10125 days = 7 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10120
+		trigger = {
+			has_character_flag = trade_success
+		}
+		clr_character_flag = trade_rival
+		clr_character_flag = trade_success
+		clr_character_flag = trade_friend
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.10123 days = 3 }
+			}
+			character_event = { id = WoL.10125 days = 7 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10120
+		trigger = {
+			has_character_flag = trade_rival
+		}
+		clr_character_flag = trade_rival
+		clr_character_flag = trade_success
+		clr_character_flag = trade_friend
+		add_rival = FROM
+		opinion = {
+			modifier = grievously_offended
+			who = FROM
+			years = 10
+		}
+		hidden_tooltip = {
+			FROM = {
+				opinion = {
+					modifier = grievously_offended
+					who = ROOT
+					years = 10
+				}
+				character_event = { id = WoL.10122 }
+			}
+			character_event = { id = WoL.10128 days = 5 }
+		}
+	}
+}
+
+# Foreign ruler friend (hidden)
+character_event = {
+	id = WoL.10121
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		add_friend = FROM
+	}
+}
+
+# Foreign ruler rival (hidden)
+character_event = {
+	id = WoL.10122
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		add_rival = FROM
+	}
+}
+
+# Learn stewardship in foreign court
+character_event = {
+	id = WoL.10123
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10123
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		OR = {
+			trait = fortune_builder
+			trait = thrifty_clerk 
+			trait = indulgent_wastrel
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10123
+		if = {
+			limit = { trait = fortune_builder }
+			hidden_tooltip = {
+				remove_trait = fortune_builder
+			}
+			add_trait = midas_touched 
+		}
+		if = {
+			limit = { trait = thrifty_clerk }
+			hidden_tooltip = {
+				remove_trait = thrifty_clerk
+			}
+			add_trait = fortune_builder
+		}
+		if = {
+			limit = { trait = indulgent_wastrel }
+			hidden_tooltip = {
+				remove_trait = indulgent_wastrel
+			}
+			add_trait = thrifty_clerk
+		}
+	}
+}
+
+# Successful expedition
+character_event = {
+	id = WoL.10125
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10125
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10125
+		if = {
+			limit = { NOT = { yearly_income = 40 } }
+			wealth = 100
+		}
+		if = {
+			limit = { 
+				NOT = { yearly_income = 200 } 
+				yearly_income = 40
+			}
+			scaled_wealth = 2.5
+		}
+		if = {
+			limit = { yearly_income = 200 }
+			wealth = 500
+		}
+		prestige = 150
+		set_character_flag = est_trade_route
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_were_in_business
+		}
+		clr_character_flag = trade_route_progress
+		clr_character_flag = trade_priest
+		capital_scope = {
+			hidden_tooltip = {
+				remove_province_modifier = trade_route
+			}
+			add_province_modifier = {
+				name = trade_route
+				duration = 10950
+			}
+			hidden_tooltip = {
+				add_province_modifier = {
+					name = refresh_trade_route_timer
+					duration = 9125
+					hidden = yes
+				}
+				province_event = { id = WoL.10129 days = 10220 }
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						change_variable = { which = prosperity_value value = 6 }
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						trait = architect
+						trait = gardener
+					}
+				}
+			}
+			add_character_modifier = {
+				name = trader
+				duration = -1
+			}
+			hidden_tooltip = {
+				remove_character_modifier = aspiring_trader
+			}
+		}
+		add_character_modifier = {
+			name = business_contacts
+			duration = -1
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10126 days = 5 }
+		}
+	}
+}
+
+# Reward steward?
+character_event = {
+	id = WoL.10126
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10126
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10126
+		transfer_scaled_wealth = {
+			to = event_target:steward
+			value = 0.5
+			max = 200
+		}
+		event_target:steward = {
+			hidden_tooltip = {
+				set_character_flag = trade_rewarded
+				character_event = { id = WoL.10127 }
+			}
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10126
+		random = {
+			chance = 50
+			add_trait = greedy
+			hidden_tooltip = {
+				character_event = {
+					id = 38252 #Notify Greedy
+				}
+			}
+		}
+		event_target:steward = {
+			hidden_tooltip = {
+				character_event = { id = WoL.10127 }
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+# Steward conclusion
+character_event = {
+	id = WoL.10127
+	is_triggered_only = yes
+	hide_window = yes ###fix if time
+	
+	option = {
+		trigger = {
+			has_character_flag = trade_rewarded
+		}
+		tooltip = {
+			FROM = {
+				transfer_scaled_wealth = {
+					to = ROOT
+					value = 0.5
+				}
+			}
+		}
+		clr_character_flag = trade_rewarded
+	}
+	
+	option = {
+		trigger = {
+			NOT = { has_character_flag = trade_rewarded }
+		}
+	}
+}
+
+# Failed expedition
+character_event = {
+	id = WoL.10128
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10128
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	option = { # at least I learned something
+		name = EVTOPTA_WOL_10128
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_modifier = trader
+						trait = architect
+						trait = gardener
+					}
+				}
+				has_character_modifier = aspiring_trader
+			}
+			add_character_modifier = {
+				name = trader
+				duration = -1
+			}
+			hidden_tooltip = {
+				remove_character_modifier = aspiring_trader
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_modifier = trader
+						has_character_modifier = aspiring_trader
+						trait = architect
+						trait = gardener
+					}
+				}
+			}
+			add_character_modifier = {
+				name = aspiring_trader
+				duration = -1
+			}
+		}
+		clr_character_flag = trade_bandits_fail
+		clr_character_flag = trade_bandits
+		clr_character_flag = trade_is_land
+		clr_character_flag = trade_priest
+		clr_character_flag = trade_friend
+		clr_character_flag = trade_success
+		clr_character_flag = trade_rival
+	}
+}
+
+# Refresh trade route (hidden)
+province_event = {
+	id = WoL.10129
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					region = world_steppe
+					region = world_persia
+				}
+			}
+			province_event = { id = WoL.10130 }
+			break = yes
+		}
+		province_event = { id = WoL.10131 }
+	}
+}
+
+# Refresh trade route land
+province_event = {
+	id = WoL.10130
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10130
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		has_province_modifier = trade_route
+		NOT = { has_province_modifier = refresh_trade_route_timer }
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10130
+		ai_chance = {
+			factor = 1
+		}
+		holder_scope = {
+			if = {
+				limit = { NOT = { yearly_income = 80 } }
+				scaled_wealth = -2.5
+			}
+			if = {
+				limit = { yearly_income = 80 }
+				wealth = -200
+			}
+		}
+		add_province_modifier = {
+			name = trade_route
+			duration = 10950
+		}
+		hidden_tooltip = {			
+			add_province_modifier = {
+				name = refresh_trade_route_timer
+				duration = 9125
+				hidden = yes
+			}
+			province_event = { id = WoL.10129 days = 10220 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10130
+		ai_chance = {
+			factor = 3
+		}
+		holder_scope = {
+			prestige = -25
+		}
+	}
+}
+
+# Refresh trade route sea
+province_event = {
+	id = WoL.10131
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10131
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		has_province_modifier = trade_route
+		NOT = { has_province_modifier = refresh_trade_route_timer }
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10130
+		ai_chance = {
+			factor = 1
+		}
+		holder_scope = {
+			if = {
+				limit = { NOT = { yearly_income = 80 } }
+				scaled_wealth = -2.5
+			}
+			if = {
+				limit = { yearly_income = 80 }
+				wealth = -200
+			}
+		}
+		
+		hidden_tooltip = {
+			remove_province_modifier = trade_route
+		}
+		add_province_modifier = {
+			name = trade_route
+			duration = 10950
+		}
+		hidden_tooltip = {			
+			add_province_modifier = {
+				name = refresh_trade_route_timer
+				duration = 9125
+				hidden = yes
+			}
+			province_event = { id = WoL.10129 days = 10220 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10130
+		ai_chance = {
+			factor = 3
+		}
+		holder_scope = {
+			prestige = -25
+		}
+	}
+}
+
+character_event = {
+	id = WoL.10140
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.10119 }
+		}
+	}
+}
+
+### Build a tower
+# Undertake the project
+character_event = {
+	id = WoL.10200
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10200
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	option = { # I'll build a tower
+		name = EVTOPTA_WOL_10200
+		set_character_flag = tower_start
+		custom_tooltip = {
+			text = tower_start
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10201 days = 7}
+		}
+	}
+	
+	option = { # Nope
+		name = EVTOPTB_WOL_10200
+	}
+}
+
+# Find a mason to do the stone details
+character_event = {
+	id = WoL.10201
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10201
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_economy
+	
+	option = { # I know a craftsman that has the skill
+		name = EVTOPTA_WOL_10201
+		scaled_wealth = -1
+		capital_scope = {
+			create_character = {
+				random_traits = no
+				dynasty = NONE
+				religion = ROOT
+				culture = PREV
+				age = 28
+				trait = thrifty_clerk
+				trait = quick
+				trait = diligent
+				trait = lustful
+				trait = cynical
+				trait = gregarious
+				attributes = {
+					diplomacy = 9
+					martial = 1
+					stewardship = 6
+					intrigue = 4
+					learning = 6
+				}
+			}
+			new_character = {
+				set_defacto_liege = ROOT
+				save_event_target_as = stonemason
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10202 days = 7 }
+		}
+	}
+	
+	option = { # a street boy will do fine
+		name = EVTOPTB_WOL_10201
+		tooltip_info = greedy
+		trigger = {
+			trait = greedy
+		}
+		scaled_wealth = -0.08
+		capital_scope = {
+			create_character = {
+				random_traits = no
+				dynasty = NONE
+				religion = PREV
+				culture = PREV
+				age = 17
+				trait = indulgent_wastrel
+				trait = humble
+				trait = slothful
+				trait = shy
+				trait = trusting
+				attributes = {
+					diplomacy = 4
+					martial = 5
+					stewardship = 5
+					intrigue = 6
+					learning = 2
+				}
+			}
+			new_character = {
+				set_defacto_liege = ROOT
+				save_event_target_as = stonemason
+				set_character_flag = is_street_mason
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10202 days = 7 }
+			set_character_flag = tower_street_mason
+		}
+	}
+}
+
+# Burghers react to tower building
+character_event = {
+	id = WoL.10202
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10202
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_economy
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_WOL_10202
+		random_vassal = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_flag = selected 
+						trait = incapable
+					}
+				}
+				prisoner = no
+				is_adult = yes
+				is_republic = yes
+			}
+			set_character_flag = selected			
+			opinion = {
+				modifier = opinion_impressed
+				years = 2
+				who = ROOT
+			}
+		}
+		random_vassal = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_flag = selected 
+						trait = incapable
+					}
+				}
+				prisoner = no
+				is_adult = yes
+				is_republic = yes
+			}
+			set_character_flag = selected			
+			opinion = {
+				modifier = opinion_impressed
+				years = 2
+				who = ROOT
+			}
+		}
+		random_vassal = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_flag = selected 
+						trait = incapable
+					}
+				}
+				prisoner = no
+				is_adult = yes
+				is_republic = yes
+			}
+			set_character_flag = selected			
+			opinion = {
+				modifier = opinion_impressed
+				years = 2
+				who = ROOT
+			}
+		}
+		random_vassal = {
+			limit = {
+				NOT = {
+					OR = {
+						has_character_flag = selected 
+						trait = incapable
+					}
+				}
+				prisoner = no
+				is_adult = yes
+				is_republic = yes
+			}
+			set_character_flag = selected			
+			opinion = {
+				modifier = opinion_impressed
+				years = 2
+				who = ROOT
+			}
+		}
+		any_vassal = {
+			limit = { has_character_flag = selected }
+			clr_character_flag = selected
+		}
+		hidden_tooltip = {
+			event_target:stonemason = {
+				character_event = { id = WoL.10203 days = 20 }
+			}
+		}
+	}
+}
+
+# Stonemason bounce
+character_event = {
+	id = WoL.10203
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = { character_event = { id = WoL.10204 } }
+	}
+}
+
+# More funding to lay out the plan
+character_event = {
+	id = WoL.10204
+	is_triggered_only = yes
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_economy
+	
+	desc = {
+		text = EVTDESCA_WOL_10204
+		trigger = {
+			has_character_flag = tower_street_mason
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10204
+		trigger = {
+			NOT = { has_character_flag = tower_street_mason }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10204
+		trigger = {
+			NOT = { has_character_flag = tower_street_mason }
+		}
+		scaled_wealth = -1
+		hidden_tooltip = { character_event = { id = WoL.10205 days = 7 } }
+	}
+	
+	option = { # you're just using the money on lustful adventures
+		name = EVTOPTB_WOL_10204
+		tooltip_info = intrigue
+		trigger = {
+			NOT = { has_character_flag = tower_street_mason }
+			intrigue = 10
+		}
+		hidden_tooltip = { character_event = { id = WoL.10205 days = 7 } }
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10204
+		trigger = {
+			has_character_flag = tower_street_mason
+		}
+		scaled_wealth = -0.08
+		hidden_tooltip = { character_event = { id = WoL.10205 days = 7 } }
+	}
+	
+	option = {
+		name = EVTOPTD_WOL_10204
+		trigger = {
+			has_character_flag = tower_street_mason
+		}
+		if = {
+			limit = { NOT = { trait = cruel } }
+			random = {
+				chance = 50
+				add_trait = cruel
+				hidden_tooltip = {
+					character_event = {
+						id = 38259 #Notify Cruel
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10205 days = 7 } }
+	}
+}
+
+# Fix building materials
+character_event = {
+	id = WoL.10205
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10205
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	option = { # Import the stone
+		name = EVTOPTA_WOL_10205
+		scaled_wealth = -1
+		hidden_tooltip = {
+			character_event = { id = WoL.10206 days = 5 }
+		}
+	}
+	
+	option = { # Construct a Quarry
+		name = EVTOPTB_WOL_10205
+		scaled_wealth = -3
+		hidden_tooltip = {
+			character_event = { id = WoL.10206 days = 5 }
+		}
+		capital_scope = {
+			hidden_tooltip = {
+				remove_province_modifier = stone_quarry
+				province_event = { id = WoL.10207 days = 29200 }
+			}
+			add_province_modifier = {
+				name = stone_quarry
+				duration = 29200 # 80 years
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						change_variable = { which = prosperity_value value = 6 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Recycle old building materials
+		name = EVTOPTC_WOL_10205
+		trigger = {
+			trait = greedy
+		}
+		wealth = -10
+		hidden_tooltip = {
+			character_event = { id = WoL.10206 days = 60 }
+		}
+	}
+}
+
+# Accident at the construction site
+character_event = {
+	id = WoL.10206
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10206
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10206
+		capital_scope = {
+			add_province_modifier = {
+				name = construction_accident
+				duration = 365
+			}
+		}
+		add_trait = cruel
+		hidden_tooltip = {
+			character_event = { id = WoL.10208 days = 120 }			
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10206
+		scaled_wealth = -0.5
+		hidden_tooltip = {
+			character_event = { id = WoL.10208 days = 300 }
+		}
+	}
+}
+
+# Quarry operations shut down notification
+province_event = {
+	id = WoL.10207
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10207
+	picture = GFX_evt_construction_site
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10207
+		remove_province_modifier = stone_quarry
+	}
+}
+
+# Bounce to bishop (hidden)
+character_event = {
+	id = WoL.10208
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = { 
+			limit = {
+				NOT = {
+					OR = {
+						religion_group = indian_group
+						religion_group = pagan_group
+					}
+				}
+				any_vassal = {
+					ai = yes
+					is_priest = yes
+					religion = ROOT
+				}
+			}
+			random_vassal = {
+				limit = {
+					ai = yes
+					is_priest = yes
+					religion = ROOT
+				}
+				character_event = { id = WoL.10209 }
+			}
+			break = yes
+		}
+		long_character_event = { id = WoL.10216 days = 60 }
+	}
+}
+
+# Bishop responds to tower (hidden)
+character_event = {
+	id = WoL.10209
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.10210 }
+		}
+	}
+}
+
+# Bishop upset that you're trying to cheat your way into heaven 
+character_event = {
+	id = WoL.10210
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10210
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10210
+		FROM = {
+			opinion = {
+				modifier = opinion_annoyed
+				who = ROOT
+				months = 12
+			}
+		}
+		hidden_tooltip = {
+			long_character_event = { id = WoL.10216 days = 60 }
+		}
+	}
+	
+	option = { # I guess we can cut some meters of the top of the tower
+		name = EVTOPTB_WOL_10210
+		prestige = -50
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				months = 240
+			}
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				months = 240
+			}
+		}
+		hidden_tooltip = {
+			long_character_event = { id = WoL.10216 days = 60 }
+		}
+	}
+	
+	option = { # I'm just following the words of 'God'.
+		trigger = {
+			trait = possessed
+		}
+		name = EVTOPTC_WOL_10210
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_religious_agenda
+				who = ROOT
+				months = 60
+			}
+		}
+		hidden_tooltip = {
+			long_character_event = { id = WoL.10216 days = 60 }
+		}
+	}
+	
+	option = { # He's onto me. He must disappear.
+		trigger = {
+			trait = lunatic
+		}
+		name = EVTOPTD_WOL_10210
+		custom_tooltip = {
+			text = EVTTOOLTIPWOL10210
+			hidden_tooltip = {
+				character_event = { id = WoL.10211 days = 3 }
+			}
+		}
+	}
+}
+
+# Bishop bounce
+character_event = {
+	id = WoL.10211
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.10212 }
+		}
+	}
+}
+
+# Attempt to show bishop the top of the tower followed by the low of the ground
+character_event = {
+	id = WoL.10212
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10212
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10212
+		custom_tooltip = {
+			text = EVTTOOLTIPWOL10212
+			hidden_tooltip = {
+				FROM = { character_event = { id = WoL.10213 } }
+			}
+		}
+	}
+}
+
+# Bishop bounce
+character_event = {
+	id = WoL.10213
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		FROM = {				
+			random_list = {
+					10 = {
+						character_event = { id = WoL.10214 }
+					}
+					90 = {
+						character_event = { id = WoL.10215}
+					}
+			}
+		}
+	}
+}
+
+# Bishop randomly dodges and you fall
+character_event = {
+	id = WoL.10214
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10214
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_economy
+	
+	immediate = {
+		death = {
+			death_reason = death_accident_fall
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10214
+		tooltip = {
+			death = {
+				death_reason = death_accident_fall
+			}
+		}
+	}
+}
+
+# Bishop falls
+character_event = {
+	id = WoL.10215
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10215
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_economy
+	
+	immediate = {
+		FROMFROM = {
+			death = {
+				death_reason = death_murder_unknown_fall
+				killer = ROOT
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10215
+		tooltip = {
+			FROMFROM = {
+				death = {
+					death_reason = death_murder_unknown_fall
+					killer = ROOT
+				}
+			}
+		}
+		hidden_tooltip = {
+			long_character_event = { id = WoL.10216 days = 57 }
+		}
+	}
+}
+
+# Construction complete
+long_character_event = {
+	id = WoL.10216
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10216
+	picture = GFX_evt_powerful_tower
+	border = GFX_event_long_frame_economy
+	hide_from = yes
+	
+	immediate = {
+		save_event_target_as = tower_founder
+		set_character_flag = is_tower_founder
+		clr_character_flag = tower_start
+		set_character_flag = tower_end
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10216
+		prestige = 100
+		add_trait = architect
+		remove_character_modifier = trader
+		add_character_modifier = {
+			name = great_tower
+			duration = -1
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 2
+				if = {
+					limit = {
+						capital_scope = {
+							OR = {
+								has_province_modifier = leaning_tower
+								has_province_modifier = leaning_tower_bad
+							}
+						}
+					}
+					random_demesne_province = {
+						limit = {
+							NOT = {
+								OR = {
+									has_province_modifier = leaning_tower
+									has_province_modifier = leaning_tower_bad									
+								}
+							}
+						}
+						province_event = { id = WoL.10217 days = 3650 }
+					}
+				}
+				if = {
+					limit = {
+						capital_scope = {
+							NOT = {
+								OR = {
+									has_province_modifier = leaning_tower
+									has_province_modifier = leaning_tower_bad
+								}
+							}
+						}
+					}
+					capital_scope = { province_event = { id = WoL.10217 days = 3650 } }
+				}
+				break = yes
+			}
+			character_event = { id = WoL.10222 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10216
+		prestige = 250
+		add_character_modifier = {
+			name = great_tower
+			duration = -1
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 2
+				if = {
+					limit = {
+						capital_scope = {
+							OR = {
+								has_province_modifier = leaning_tower
+								has_province_modifier = leaning_tower_bad
+							}
+						}
+					}
+					random_demesne_province = {
+						limit = {
+							NOT = {
+								OR = {
+									has_province_modifier = leaning_tower
+									has_province_modifier = leaning_tower_bad									
+								}
+							}
+						}
+						province_event = { id = WoL.10217 days = 3650 }
+					}
+				}
+				if = {
+					limit = {
+						capital_scope = {
+							NOT = {
+								OR = {
+									has_province_modifier = leaning_tower
+									has_province_modifier = leaning_tower_bad
+								}
+							}
+						}
+					}
+					capital_scope = { province_event = { id = WoL.10217 days = 3650 } }
+				}
+				break = yes
+			} 
+			character_event = { id = WoL.10222 }
+		}
+	}
+}
+
+# Tower beginning to lean
+province_event = {
+	id = WoL.10217
+	is_triggered_only = yes
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		holder_scope = {
+			ai = no
+		}
+	}
+	
+	desc = {
+		text = EVTDESCA_WOL_10217
+		trigger = {
+			holder_scope = {
+				event_target:tower_founder = { character = PREV }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10217
+		trigger = {
+			NOT = {
+				holder_scope = {
+					event_target:tower_founder = { character = PREV }
+				}
+			}
+		}
+	}
+		
+	option = { # blame the stonemason
+		trigger = {
+			holder_scope = {
+				has_character_flag = is_tower_founder
+				event_target:stonemason = {
+					PREV = {
+						any_courtier = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+		}
+		name = EVTOPTA_WOL_10217
+		holder_scope = {
+			event_target:stonemason = {
+				imprison = PREV
+			}
+			hidden_tooltip = {
+				set_character_flag = tower_blamed_mason
+				remove_character_modifier = great_tower
+				character_event = { id = WoL.10218 days = 30 }
+			}
+		}
+		
+		add_province_modifier = {
+			name = leaning_tower_bad
+			duration = -1
+		}
+	}
+	
+	option = { # blame the workers
+		trigger = {
+			holder_scope = {
+				has_character_flag = is_tower_founder
+			}
+		}
+		name = EVTOPTB_WOL_10217
+		add_province_modifier = {
+			name = peasant_unrest
+			duration = 365
+		}
+		holder_scope = {
+			hidden_tooltip = {
+				remove_character_modifier = great_tower
+				character_event = { id = WoL.10218 days = 30 }
+			}
+		}
+		add_province_modifier = {
+			name = leaning_tower_bad
+			duration = -1
+		}
+	}
+	
+	option = { # take the blame yourself
+		trigger = {
+			holder_scope = {
+				has_character_flag = is_tower_founder
+			}
+		}
+		name = EVTOPTC_WOL_10217
+		holder_scope = {
+			if = {
+				limit = { trait = proud }
+				prestige = -100
+			}
+			if = {
+				limit = { NOT = { trait = proud } }
+				prestige = -50
+			}
+			hidden_tooltip = {
+				remove_character_modifier = great_tower
+				character_event = { id = WoL.10218 days = 30 }
+			}
+		}
+		add_province_modifier = {
+			name = leaning_tower_bad
+			duration = -1
+		}
+	}
+	
+	option = { # how unfortunate
+		trigger = {
+			NOT = {
+				holder_scope = {
+					has_character_flag = is_tower_founder
+				}
+			}
+		}
+		name = EVTOPTD_WOL_10217
+		hidden_tooltip = {
+			holder_scope = {
+				character_event = { id = WoL.10218 days = 30 }
+			}
+		}
+		add_province_modifier = {
+			name = leaning_tower_bad
+			duration = -1
+		}
+	}
+}
+
+# Save the tower effort
+character_event = {
+	id = WoL.10218
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10218
+	picture = GFX_evt_leaning_tower
+	border = GFX_event_normal_frame_economy
+	
+	option = { # major reconstruction effort
+		name = EVTOPTA_WOL_10218
+		random_list = {
+			99 = {
+				modifier = {
+					factor = 0.7
+					has_character_flag = tower_street_mason
+				}
+				custom_tooltip = {
+					text = tower_stands
+					hidden_tooltip = {
+						character_event = { id = WoL.10219 days = 10 }
+					}
+				}
+			}
+			1 = {
+				custom_tooltip = {
+					text = tower_topples
+					hidden_tooltip = {
+						long_character_event = { id = WoL.10220 days = 10 }
+					}
+				}
+			}
+		}
+		scaled_wealth = -2
+	}
+	
+	option = { # minor reconstruction effort
+		name = EVTOPTB_WOL_10218
+		random_list = {
+			70 = {
+				modifier = {
+					factor = 0.7
+					has_character_flag = tower_street_mason
+				}
+				custom_tooltip = {
+					text = tower_stands
+					hidden_tooltip = {
+						character_event = { id = WoL.10219 days = 10 }
+					}
+				}
+			}
+			30 = {
+				custom_tooltip = {
+					text = tower_topples
+					hidden_tooltip = {
+						long_character_event = { id = WoL.10220 days = 10 }
+					}
+				}
+			}
+		}
+		scaled_wealth = -0.5
+	}
+	
+	option = { # no reconstruction effort
+		name = EVTOPTC_WOL_10218
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 0.7
+					has_character_flag = tower_street_mason
+				}
+				custom_tooltip = {
+					text = tower_stands
+					hidden_tooltip = {
+						character_event = { id = WoL.10219 days = 10 }
+					}
+				}
+			}
+			50 = {
+				custom_tooltip = {
+					text = tower_topples
+					hidden_tooltip = {
+						long_character_event = { id = WoL.10220 days = 10 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Tower stands
+character_event = {
+	id = WoL.10219
+	is_triggered_only = yes
+	picture = GFX_evt_leaning_tower
+	border = GFX_event_normal_frame_economy
+	desc = {
+		text = EVTDESCA_WOL_10219
+		trigger = {
+			event_target:tower_founder = {
+				character = ROOT
+			}
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_10219
+		trigger = {
+			NOT = {
+				event_target:tower_founder = {
+					character = ROOT
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WOL_10219
+		hidden_tooltip = {
+			FROM = {
+				long_character_event = { id = WoL.10221 days = 1095 }
+			}
+		}
+	}
+}
+
+# Tower topples
+long_character_event = {
+	id = WoL.10220
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10220
+	picture = GFX_evt_bad_news
+	border = GFX_event_long_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10220
+		FROMFROM = {
+			remove_province_modifier = leaning_tower_bad
+			add_province_modifier = {
+				name = construction_accident
+				duration = 365
+			}
+		}
+		prestige = -50
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+}
+
+# Foreign dignitary visits the tower
+long_character_event = {
+	id = WoL.10221
+	is_triggered_only = yes
+	picture = GFX_evt_leaning_tower
+	border = GFX_event_long_frame_economy
+	
+	desc = {
+		text = EVTDESCA_WOL_10221
+		trigger = {
+			NOT = {
+				has_character_flag = tower_blamed_mason
+			}
+			NOT = {
+				OR = {
+					has_character_flag = tower_street_mason
+					event_target:stonemason = { has_character_flag = is_street_mason }
+				}
+			}
+		}
+	}
+
+	desc = {
+		text = EVTDESCB_WOL_10221
+		trigger = {
+			NOT = { has_character_flag = tower_blamed_mason }
+			OR = {
+				has_character_flag = tower_street_mason
+				event_target:stonemason = { has_character_flag = is_street_mason }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESCC_WOL_10221
+		trigger = {
+			has_character_flag = tower_blamed_mason
+			NOT ={
+				OR = {
+					has_character_flag = tower_street_mason
+					event_target:stonemason = { has_character_flag = is_street_mason }
+				}
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESCD_WOL_10221
+		trigger = {
+			has_character_flag = tower_blamed_mason
+			OR = {
+				has_character_flag = tower_street_mason
+				event_target:stonemason = { has_character_flag = is_street_mason }
+			}
+		}
+	}
+	
+	option = { # Uhm. Of course I'll bring him to you from my, humm... court.
+		trigger = {
+			has_character_flag = tower_blamed_mason
+			has_character_flag = is_tower_founder
+			any_courtier = {
+				event_target:stonemason = { character = PREV }
+				prisoner = yes
+				host = { character = ROOT }
+			}
+		}
+		name = EVTOPTA_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		event_target:stonemason = {
+			prisoner = no
+			prestige = 500
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		scaled_wealth = 0.5
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # I'll bring him to you right away.
+		trigger = {
+			has_character_flag = tower_blamed_mason
+			has_character_flag = is_tower_founder
+			NOT = { has_character_flag = tower_street_mason }
+			any_courtier = {
+				event_target:stonemason = { character = PREV }
+			}
+		}
+		name = EVTOPTB_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		event_target:stonemason = {
+			if = {
+				limit = {
+					prisoner = yes
+				}
+				prisoner = no
+			}
+			prestige = 500
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		scaled_wealth = 0.5
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # He's not here. He's got more important matters
+		trigger = {
+			has_character_flag = tower_blamed_mason
+			has_character_flag = is_tower_founder
+			NOT = { has_character_flag = tower_street_mason }
+			NOT = {
+				any_courtier = {
+					event_target:stonemason = { character = PREV }
+				}
+			}
+		}
+		name = EVTOPTC_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+			holder_scope = {
+				prestige = -50
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # You are talking to him right now.
+		trigger = {
+			NOT = { has_character_flag = tower_blamed_mason }
+			has_character_flag = is_tower_founder
+		}
+		name = EVTOPTD_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		prestige = 250
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # It was constructed here before my rule.
+		trigger = {
+			NOT = { has_character_flag = is_tower_founder }
+		}
+		name = EVTOPTE_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # Uhm. Of course I'll bring him to you from my, humm... court.
+		trigger = {
+			has_character_flag = tower_street_mason
+			any_courtier = {
+				event_target:stonemason = { character = PREV }
+			}
+		}
+		name = EVTOPTF_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		event_target:stonemason = {
+			if = {
+				limit = {
+					prisoner = yes
+				}
+				prisoner = no
+			}
+			prestige = 500
+			if = {
+				limit = {
+					is_ruler = no
+				}
+				random_independent_ruler = {
+					limit = {
+						NOT = {
+							OR = {
+								character = ROOT 
+								ROOT = {
+									any_liege = {
+										character = PREVPREV
+									}
+								}
+							}
+						}
+						demesne_size = 2
+						ai = yes
+					}
+					PREV = {
+						set_defacto_liege = PREV
+					}
+					random_demesne_title = {
+						limit = {
+							tier = COUNT
+							location = {
+								any_province_holding = {
+									NOT = { holding_type = nomad }
+								}
+							}
+						}
+						grant_title = PREVPREV
+					}
+				}
+			}
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		scaled_wealth = 0.5
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+	
+	option = { # He's not here. He's got more important matters
+		trigger = {
+			has_character_flag = tower_street_mason
+			NOT = {
+				any_courtier = {
+					event_target:stonemason = { character = PREV }
+				}
+			}
+		}
+		name = EVTOPTG_WOL_10221
+		if = {
+			limit = { NOT = { has_character_modifier = great_tower } }
+			add_character_modifier = {
+				name = great_tower
+				duration = -1
+			}
+		}
+		FROMFROMFROM = {
+			hidden_tooltip = {
+				remove_province_modifier = leaning_tower_bad
+			}
+			add_province_modifier = {
+				name = leaning_tower
+				duration = -1
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10222 } }
+	}
+}
+
+# Flag-clearing
+character_event = {
+	id = WoL.10222
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		clr_character_flag = tower_street_mason
+		clr_character_flag = is_tower_founder
+		clr_character_flag = tower_blamed_mason
+	}
+}
+
+######## The hedge maze
+# Start plantation
+character_event = {
+	id = WoL.10300
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10300
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_economy
+	
+	option = { # let's build a hedge maze
+		name = EVTOPTA_WOL_10300
+		set_character_flag = hedge_maze
+		hidden_tooltip = { character_event = { id = WoL.10301 days = 7 } }
+	}
+	
+	option = { # nope
+		name = EVTOPTB_WOL_10300
+	}
+}
+
+# Cleaning out weeds
+character_event = {
+	id = WoL.10301
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10301
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_economy
+	
+	option = { # I'll do it myself
+		name = EVTOPTA_WOL_10301
+		if = {
+			limit = { NOT = { trait = slothful } }
+			random = {
+				chance = 50
+				add_trait = diligent			
+				hidden_tooltip = {
+					character_event ={
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+		}
+		if = {
+			limit = { trait = slothful }
+			remove_trait = slothful
+		}
+		hidden_tooltip = { character_event = { id = WoL.10302 days = 28 } }
+	}
+	
+	option = { # Acquire a helping hand
+		trigger = {
+			any_courtier = {
+				NOT = {
+					OR = {
+						character = ROOT
+						is_friend = ROOT
+						is_rival = ROOT
+						trait = incapable
+						trait = infirm
+					}
+				}
+				is_adult = yes
+				prisoner = no
+				in_command = no
+			}
+		}
+		name = EVTOPTB_WOL_10301
+		random_courtier = {
+			limit = {
+				NOT = {
+					OR = {
+						character = ROOT
+						is_friend = ROOT
+						is_rival = ROOT
+						trait = incapable
+						trait = infirm
+					}
+				}
+				is_adult = yes
+				prisoner = no
+				in_command = no
+			}
+			add_friend = ROOT
+			hidden_tooltip = {
+				ROOT = {
+					add_friend = PREV
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10302 days = 28 } }
+	}
+	
+	option = { # Let the servants do it
+		trigger = {
+			trait = slothful
+		}
+		name = EVTOPTC_WOL_10301
+		random = {
+			chance = 50
+			add_trait = cruel			
+			hidden_tooltip = {
+				character_event ={
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10302 days = 28 } }
+	}
+}
+
+# Add statues
+character_event = {
+	id = WoL.10302
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10302
+	picture = GFX_evt_castle_garden
+	border = GFX_event_normal_frame_economy
+	
+	option = { # of family members
+		name = EVTOPTA_WOL_10302
+		set_character_flag = maze_statues
+		if = {
+			limit = { NOT = { trait = proud } }
+			add_trait = proud
+		}
+		custom_tooltip = {
+			text = EVTTOOLTIPWOL10302
+			hidden_tooltip = {
+				any_dynasty_member = {
+					opinion = {
+						modifier = opinion_family_statues
+						who = ROOT
+						years = 150
+					}
+				}
+			}
+		}
+		scaled_wealth = -0.6
+		hidden_tooltip = { character_event = { id = WoL.10303 days = 28 } }
+	}
+	
+	option = {
+		trigger = {
+			NOT = {
+				OR = {
+					religion_group = muslim
+					religion = iconoclast
+				}
+			}
+		}
+		name = EVTOPTB_WOL_10302
+		set_character_flag = maze_statues
+		scaled_wealth = -0.6
+		religion_head = {
+			opinion = {
+				modifier = opinion_impressed
+				who = ROOT
+				months = 120
+			}
+		}
+		random_vassal = {
+			limit = {
+				is_priest = yes
+				religion_head = { NOT = { character = PREV } }
+			}
+			opinion = {
+				modifier = opinion_impressed
+				who = ROOT
+				months = 120
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.10303 days = 28 } }
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10302
+		prestige = -25
+		hidden_tooltip = { character_event = { id = WoL.10303 days = 28 } }
+	}
+}
+
+# Build fountain
+character_event = {
+	id = WoL.10303
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10303
+	picture = GFX_evt_castle_garden
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10303
+		add_character_modifier = {
+			name = maze_fountain
+			duration = -1
+		}
+		scaled_wealth = -1
+		hidden_tooltip = { character_event = { id = WoL.10304 days = 28 } }
+	}
+	
+	option = {
+		trigger = {
+			OR = {
+				trait = decadent
+				NOT = { religion_group = muslim }
+			}
+		}
+		name = EVTOPTB_WOL_10303
+		add_character_modifier = {
+			name = maze_fountain_extravagant
+			duration = -1
+		}
+		if = {
+			limit = { 
+				NOT = {
+					OR = {
+						trait = gluttonous 
+						trait = temperate
+					}
+				} 
+			}
+			random = {
+				chance = 33
+				add_trait = gluttonous
+				hidden_tooltip = {
+					character_event = { id = 38177 }
+				}
+			}
+		}
+		if = {
+			limit = { trait = temperate }
+			remove_trait = temperate
+		}
+		scaled_wealth = -3
+		hidden_tooltip = { character_event = { id = WoL.10304 days = 28 } }
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10303
+		hidden_tooltip = { character_event = { id = WoL.10304 days = 28 } }
+	}
+}
+
+# Import flowers
+character_event = {
+	id = WoL.10304
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10304
+	picture = GFX_evt_castle_garden
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10304
+		set_character_flag = maze_flowers
+		scaled_wealth = -0.3
+		hidden_tooltip = { character_event = { id = WoL.10305 days = 28 } }
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10304
+		hidden_tooltip = { character_event = { id = WoL.10305 days = 28 } }
+	}
+}
+
+# Build pavilion
+character_event = {
+	id = WoL.10305
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10305
+	picture = GFX_evt_castle_garden
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10305
+		add_character_modifier = {
+			name = maze_pavilion
+			duration = -1
+		}
+		scaled_wealth = -0.5
+		hidden_tooltip = { character_event = { id = WoL.10306 days = 28 } }
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10305
+		hidden_tooltip = { character_event = { id = WoL.10306 days = 28 } }
+	}
+}
+
+# Completion
+character_event = {
+	id = WoL.10306
+	is_triggered_only = yes
+	picture = GFX_evt_castle_garden
+	border = GFX_event_normal_frame_economy
+	
+	desc = {
+		text = EVTDESCA_WOL_10306
+		trigger = {
+			has_character_flag = magnificent_maze
+		}
+	}
+	
+	desc = {
+		text = EVTDESCB_WOL_10306
+		trigger = {
+			NOT = {
+				has_character_flag = magnificent_maze
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_character_flag = maze_statues
+						OR = {
+							has_character_modifier = maze_fountain
+							has_character_modifier = maze_fountain_extravagant
+						}
+						has_character_flag = maze_flowers
+					}
+					AND = {
+						has_character_flag = maze_statues
+						OR = {
+							has_character_modifier = maze_fountain
+							has_character_modifier = maze_fountain_extravagant
+						}
+						has_character_modifier = maze_pavilion
+					}
+					AND = {
+						has_character_flag = maze_statues
+						has_character_flag = maze_flowers
+						has_character_modifier = maze_pavilion
+					}
+					AND = {
+						OR = {
+							has_character_modifier = maze_fountain
+							has_character_modifier = maze_fountain_extravagant
+						}
+						has_character_flag = maze_flowers
+						has_character_modifier = maze_pavilion
+					}
+				}
+			}
+			set_character_flag = magnificent_maze
+		}
+		clr_character_flag = maze_flowers
+		clr_character_flag = maze_statues
+		clr_character_flag = maze_start
+		clr_character_flag = hedge_maze
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10306
+		add_trait = gardener
+		remove_character_modifier = trader
+		if = {
+			limit = { has_character_flag = magnificent_maze }
+			add_character_modifier = {
+				name = magnificent_maze
+				duration = -1
+			}
+			clr_character_flag = magnificent_maze
+		}
+		set_character_flag = maze_end
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10306
+		if = {
+			limit = { NOT = { has_character_modifier = aspiring_gardener } }
+			add_character_modifier = {
+				name = aspiring_gardener
+				duration = -1
+			}
+		}
+		if = {
+			limit = { has_character_flag = magnificent_maze }
+			add_character_modifier = {
+				modifier = magnificent_maze
+				duration = -1
+			}
+			clr_character_flag = magnificent_maze
+		}
+		set_character_flag = maze_end
+	}
+}
+
+### Minor events
+
+# Fire events
+character_event = {
+	id = WoL.10400
+	hide_window = yes
+	
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_business
+		in_command = no
+		demesne_size = 1
+		NOT = {
+			OR = {
+				trait = incapable
+				trait = infirm
+				has_character_flag = do_not_disturb
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 2
+	}
+	
+	immediate = {
+		random_list = {
+			15 = {
+				modifier = {
+					trait = stressed
+					factor = 0
+				}
+				character_event = { id = WoL.10401 }
+			}
+			30 = {
+				modifier = {
+					NOT = {
+						any_demesne_province = {
+							any_province_holding = {
+								holding_type = city
+								holder_scope = {
+									any_liege = { character = ROOT }
+								}
+							}
+							NOT = { has_province_modifier = artisan_workshop }
+							NOT = { has_province_flag = workshop_construction }
+						}
+					}
+					factor = 0
+				}
+				random_demesne_province = {			
+					limit = {
+						any_province_holding = {
+							holding_type = city
+							holder_scope = {
+								any_liege = { character = ROOT }
+							}
+						}
+						NOT = { has_province_modifier = artisan_workshop }
+						NOT = { has_province_flag = workshop_construction }
+					}
+					province_event = { id = WoL.10439 }
+				}
+			}
+			30 = {
+				modifier = {
+					OR = {
+						capital_scope = {
+							has_province_modifier = sold_off_land
+						}
+						NOT = {
+							capital_scope = {
+								any_province_holding = {
+									holding_type = city
+									holder_scope = {
+										NOT = { character = ROOT }
+										any_liege = { character = ROOT }
+									}
+								}
+							}
+						}
+					}
+					factor = 0
+				}
+				capital_scope = {
+					random_province_holding = {
+						limit = {
+							holding_type = city
+							holder_scope = {
+								NOT = { character = ROOT }
+								any_liege = { character = ROOT }
+							}
+						}
+						holder_scope = {
+							character_event = { id = WoL.10429 }
+						}
+					}
+				}
+			}
+			30 = {
+				character_event = { id = WoL.10420 }
+				modifier = {
+					has_character_modifier = wol_debase_timer
+					factor = 0
+				}
+			}
+			30 = {
+				modifier = {
+					OR = {
+						NOT = { year = 1000 }
+						NOT = {
+							any_demesne_province = {
+								any_province_holding = {
+									holding_type = city
+									holder_scope = {
+										NOT = { character = ROOT }
+										any_liege = { character = ROOT }
+									}
+								}
+								NOT = {
+									OR = {
+										has_province_modifier = carpenters_guild
+										has_province_modifier = outlawed_guild
+									}
+								}
+							}
+						}
+					}
+					factor = 0
+				}
+				random_demesne_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = city
+							holder_scope = {
+								any_liege = { character = ROOT }
+							}
+						}
+						NOT = {
+							OR = {
+								has_province_modifier = carpenters_guild
+								has_province_modifier = outlawed_guild
+							}
+						}
+					}
+					province_event = { id = WoL.10409 }
+				}
+			}
+			30 = {
+				modifier = {
+					OR = {
+						is_tribal = yes
+						is_nomadic = yes
+						NOT = { has_character_modifier = trader }
+						lifestyle_traits = 1
+						has_character_flag = tower_start
+						has_character_flag = hedge_maze
+						has_character_flag = tower_end
+					}
+					factor = 0
+				}
+				character_event = { id = WoL.10200 }
+			}
+			30 = {
+				modifier = {
+					OR = {
+						NOT = { has_character_modifier = trader }
+						lifestyle_traits = 1
+						has_character_flag = tower_start
+						has_character_flag = hedge_maze
+						has_character_flag = maze_end
+					}
+					factor = 0
+				}
+				character_event = { id = WoL.10300 }
+			}
+			30 = {
+				modifier = {
+					OR = {
+						NOT = {
+							job_treasurer = {
+								always = yes
+							}
+						}
+						NOT = {
+							any_independent_ruler = {
+								ai = yes
+								is_adult = yes
+								is_within_diplo_range = ROOT
+								mercenary = no
+								holy_order = no
+								NOT = {
+									OR = {
+										is_rival = ROOT
+										trait = incapable
+										prisoner = yes
+										religion = ROOT
+										ROOT = {
+											any_liege = {
+												character = PREVPREV
+											}
+										}
+									}
+								}
+							}
+						}
+						has_character_flag = est_trade_route
+						NOT = { demesne_size = 1 }
+					}
+					factor = 0
+				}
+				modifier = {
+					has_character_flag = trade_route_progress
+					factor = 0.1
+				}
+				character_event = { id = WoL.10100 }
+			}
+			1 = { # No event
+			}
+		}
+	}
+}
+
+# Gain Stressed
+character_event = {
+	id = WoL.10401
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10401
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10401
+		add_trait = stressed
+	}
+}
+
+### Support carpenter's guild
+province_event = {
+	id = WoL.10409
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			long_character_event = { id = WoL.10410 }
+		}
+	}
+}
+
+long_character_event = {
+	id = WoL.10410
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10410
+	picture = GFX_evt_construction_site
+	border = GFX_event_long_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10410
+		FROM = {
+			add_province_modifier = {
+				name = carpenters_guild
+				duration = 3650
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						change_variable = { which = prosperity_value value = 6 }
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.10500 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10410
+		add_character_modifier = {
+			name = despised_aristocrat
+			duration = -1
+		}
+		FROM = {
+			add_province_modifier = {
+				name = outlawed_guild # outlawed a guild
+				duration = 3650
+			}
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.10500 }
+			}
+		}
+	}
+}
+
+### Coin minting - debasing / true coins
+character_event = {
+	id = WoL.10420
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10420
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_economy
+	
+	immediate = {
+		add_character_modifier = {
+			modifier = wol_debase_timer
+			duration = 730
+			hidden = yes
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10420
+		wealth = -100
+		prestige = 100
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.10500 days = 7 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10420
+		wealth = 100
+		prestige = 100
+		add_trait = greedy
+		random = {
+			chance = 25
+			add_trait = deceitful
+		}
+		hidden_tooltip = {
+			random_list = {
+				75 = {} # nothing
+				25 = { # discovered
+					character_event = { id = WoL.10421 days = 365 }
+				}
+			}
+			random = {
+				chance = 50
+				character_event = { id = WoL.10500 days = 7 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_10420
+	}
+}
+
+character_event = {
+	id = WoL.10421
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10421
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10421
+		prestige = -200
+	}
+}
+
+### Rich mayor wants to buy a bit of land
+character_event = {
+	id = WoL.10429
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.10430 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.10430
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10430
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10430
+		wealth = 150
+		prestige = -25
+		capital_scope = {
+			add_province_modifier = {
+				name = sold_off_land
+				duration = 3650
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				wealth = -150
+			}
+			character_event = { id = WoL.10500 days = 7 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10430
+	}
+}
+
+### Artisan workshop
+province_event = {
+	id = WoL.10439
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		set_province_flag = workshop_construction
+		FROM = {
+			character_event = { id = WoL.10440 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.10440
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10440
+	picture = GFX_evt_construction_site
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10440
+		wealth = -50
+		custom_tooltip = {
+			text = EVTTOOLTIPWOL10440
+			hidden_tooltip = {
+				random_list = {
+					65 = {
+						character_event = { id = WoL.10441 days = 730 }
+					}
+					35 = {
+						character_event = { id = WoL.10442 days = 730 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_10440
+		hidden_tooltip = {
+			FROM = { 
+				clr_province_flag = workshop_construction
+			}
+		}
+	}
+}
+
+character_event = {
+	id = WoL.10441
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10441
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10441
+		wealth = 100
+		FROMFROM = {
+			add_province_modifier = {
+				name = artisan_workshop
+				duration = 3650
+			}
+			clr_province_flag = workshop_construction
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						change_variable = { which = prosperity_value value = 6 }
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.10500 days = 7 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.10442
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10442
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_economy
+	
+	option = {
+		name = EVTOPTA_WOL_10442
+		hidden_tooltip = {
+			FROMFROM = {
+				clr_province_flag = workshop_construction
+			}
+		}
+	}
+}
+
+### Level up
+character_event = {
+	id = WoL.10500
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_10500
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		NOT = {
+			OR = {
+				has_character_modifier = trader
+				trait = gardener
+				trait = architect
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_10500
+		if = {
+			limit = {
+				has_character_modifier = aspiring_trader
+			}
+			hidden_tooltip = {
+				remove_character_modifier = aspiring_trader
+			}
+			add_character_modifier = {
+				name = trader
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { 
+					OR = {
+						has_character_modifier = trader
+						has_character_modifier = aspiring_trader
+					}
+				}
+			}
+			add_character_modifier = {
+				name = aspiring_trader
+				duration = -1
+			}
+		}
+	}
+}
