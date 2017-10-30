@@ -5,28 +5,32 @@ open FParsec
 module CKParser =
     type ID =
         | ID of string
-        override x.ToString() = let (ID v) = x in sprintf "%s" v
+        override x.ToString() = let (ID v) = x in sprintf "%s" v  
 
-
-    type KeyValue = 
-        | KeyValue of ID * Value
-        override x.ToString() = let (KeyValue (id, v)) = x in sprintf "%O = %O" id v
+    type KeyValueItem = 
+        | KeyValueItem of ID * Value
+        override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
         | String of string
         | Float of float
         | Bool of bool
-        | Block of KeyValue list
+        | Block of Statement list
         override x.ToString() =
             match x with
             | Block b -> "{ " + sprintf "%O" b + " }"
             | x -> sprintf "%A" x
-    type EventFile = KeyValue list
+    
+    and Statement =
+        | Comment of string
+        | KeyValue of KeyValueItem
+    
+    type EventFile = Statement list
     let whitespaceTextChars = " \t\r\n"
 
     //let spaceAsStr = anyOf whitespaceTextChars |>> fun chr -> string chr
-    
-    let comment = skipChar '#' >>. skipManyTill anyChar newline
-    let ws = (many (comment <|> spaces1) |>> ignore) <?> "whitespace"
+    let ws = (many spaces1 |>> ignore) <?> "whitespace"
+    let comment = skipChar '#' >>. manyCharsTill anyChar newline .>> ws |>> string |>> Comment
+    let wsc = (many (comment |>> ignore <|> spaces1) |>> ignore) <?> "whitespace_comment"
     let str s = pstring s .>> ws
     let ch c = skipChar c >>. ws
     let id =
@@ -47,14 +51,14 @@ module CKParser =
 //    restOfLine false .>> ws |>> String <?> "valueS"
     //let valueBlock = ch '{' >>. inner .>> ch '}'
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
-    let keyvaluelist = many keyvalue
+    let keyvaluelist = many (comment <|> keyvalue)
     let valueBlock = 
         let list = keyvaluelist |>> Block
         between (ch '{') (ch '}') list <?> "valueBlock"
     let value = valueQ <|> valueBlock <|> valueS <?> "value"
     do keyvalueimpl := 
         pipe2 (id .>> ch '=') (value)
-            (fun id value -> KeyValue(id, value) : KeyValue)
+            (fun id value -> KeyValue(KeyValueItem(id, value)))
     
     let all = ws >>. keyvaluelist .>> eof |>> (fun f -> (f : EventFile))
 
@@ -83,7 +87,8 @@ module CKParser =
 
     and printKeyValue kv depth =
         match kv with
-        | KeyValue (key, v) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
+        | Comment c -> (tabs depth) + "#" + c + "\n"
+        | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint e =
