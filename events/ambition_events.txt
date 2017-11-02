@@ -1,0 +1,3807 @@
+################################
+# 
+# Ambition Events
+#
+# ID 94000 - 95000 reserved
+#
+################################
+
+# Written by Henrik Eklund
+
+####################
+# Martial Ambition #
+####################
+
+### Toy Army
+
+# Toy Army
+character_event = {
+	id = 94000
+	desc = EVTDESC94000
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	only_men = yes
+	is_married = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_war
+				NOT = { martial = 8 }
+			}
+			has_ambition = obj_improve_martial
+		}
+		NOT = { has_character_flag = toy_army }
+		NOT = { has_character_flag = street_ruffians }
+		NOT = { has_character_flag = warrior_mentor }
+		NOT = { has_character_flag = toy_army_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94000
+		set_character_flag = toy_army
+		set_character_flag = toy_army_prepare
+		set_character_flag = toy_army_taken
+		change_martial = 1
+	}
+}
+
+# Other Toy Army Enthusiasts
+character_event = {
+	id = 94001
+	desc = EVTDESC94001
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	prisoner = no
+	only_rulers = yes
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		has_character_flag = toy_army_prepare
+		OR = {
+			has_ambition = obj_improve_martial
+			has_focus = focus_war
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA94001
+		character_event = { id = 94002 days = 10 tooltip = EVTTOOLTIP94002 }
+	}
+	option = {
+		name = EVTOPTB94001
+		clr_character_flag = toy_army
+		clr_character_flag = toy_army_prepare
+	}
+}
+
+# Toy Army Tournament Begins
+character_event = {
+	id = 94002
+	desc = EVTDESC94002
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_martial
+			has_focus = focus_war
+		}
+	}
+	
+	option = {
+		name = EVTOPTA94002
+		random_list = {
+			50 = {
+				character_event = { id = 94004 tooltip = EVTTOOLTIP94004 }
+			}
+			50 = {
+				character_event = { id = 94003 tooltip = EVTTOOLTIP94003 }
+			}
+		}
+	}
+}
+
+# Toy Army Tournament Defeat
+character_event = {
+	id = 94003
+	desc = EVTDESC94003
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94003
+		tooltip_info = wroth
+		trigger = { 
+			trait = wroth
+		}
+		ambition_succeeds = yes
+		change_martial = 1
+		set_character_flag = improve_martial_success
+		piety = -10
+	}
+	option = {
+		name = EVTOPTB94003
+		ambition_succeeds = yes
+		change_martial = 1
+		set_character_flag = improve_martial_success
+		prestige = -15
+	}
+}
+
+# Toy Army Tournament Victory
+character_event = {
+	id = 94004
+	desc = EVTDESC94004
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94004
+		change_martial = 2
+		prestige = 15
+	}
+}
+
+### Street Ruffians
+
+# Street Ruffians
+character_event = {
+	id = 94005
+	desc = EVTDESC94005
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_war
+				NOT = { martial = 8 }
+			}
+			has_ambition = obj_improve_martial
+		}
+		NOT = { has_character_flag = toy_army }
+		NOT = { has_character_flag = street_ruffians }
+		NOT = { has_character_flag = warrior_mentor }
+		NOT = { has_character_flag = street_ruffians_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94005
+		set_character_flag = street_ruffians
+		set_character_flag = street_ruffians_taken
+		random_list = {
+			50 = {
+				character_event = { id = 94007 tooltip = EVTTOOLTIP94007 }
+			}
+			50 = {
+				character_event = { id = 94006 tooltip = EVTTOOLTIP94006 }
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+	}
+	option = {
+		name = EVTOPTB94005
+		custom_tooltip = { text = improve_martial_quit }
+	}
+}
+
+# Melee Lost
+character_event = {
+	id = 94006
+	desc = EVTDESC94006
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94006
+		tooltip_info = cruel
+		trigger = {
+			trait = cruel
+		}
+		change_martial = 1
+		piety = -10
+	}
+	option = {
+		name = EVTOPTB94006
+		change_martial = 1
+		prestige = -15
+	}
+}
+
+# Melee Won
+character_event = {
+	id = 94007
+	desc = EVTDESC94007
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94007
+		change_martial = 2
+		prestige = 15
+	}
+}
+
+### Drunken Warrior
+
+# Drunken Warrior
+character_event = {
+	id = 94010
+	desc = EVTDESC94010
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_war
+				NOT = { martial = 8 }
+			}
+			has_ambition = obj_improve_martial
+		}
+		NOT = { has_character_flag = toy_army }
+		NOT = { has_character_flag = street_ruffians }
+		NOT = { has_character_flag = warrior_mentor }
+		NOT = { has_character_flag = warrior_mentor_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94010
+		set_character_flag = warrior_mentor
+		set_character_flag = warrior_mentor_search
+	}
+}
+
+# The Warrior is found
+character_event = {
+	id = 94011
+	desc = EVTDESC94011
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	only_rulers = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_martial
+			has_focus = focus_war
+		}
+		has_character_flag = warrior_mentor_search
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA94011
+		clr_character_flag = warrior_mentor
+		clr_character_flag = warrior_mentor_search
+		custom_tooltip = { text = improve_martial_quit }
+	}
+	option = {
+		name = EVTOPTB94011
+		wealth = -50
+		character_event = { id = 94012 tooltip = EVTTOOLTIP94012 }
+		clr_character_flag = warrior_mentor_search
+		set_character_flag = warrior_mentor_taken
+	}
+}
+
+# Warrior is asked to teach
+character_event = {
+	id = 94012
+	desc = EVTDESC94012
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94012
+		character_event = { id = 94013 days = 50 random = 10 tooltip = EVTTOOLTIP94013 }
+	}
+	option = {
+		name = EVTOPTB94012
+		clr_character_flag = warrior_mentor
+		custom_tooltip = { text = improve_martial_quit }
+	}
+}
+
+# Chopsticks
+character_event = {
+	id = 94013
+	desc = EVTDESC94013
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94013
+		character_event = { id = 94014 days = 50 random = 10 tooltip = EVTTOOLTIP94014 }
+		change_martial = 1
+	}
+}
+
+# Boat
+character_event = {
+	id = 94014
+	desc = EVTDESC94014
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94014
+		tooltip_info = wroth
+		trigger = { 
+			trait = wroth
+		}
+		clr_character_flag = warrior_mentor
+		prestige = -15
+		custom_tooltip = { text = improve_martial_quit }
+	}
+	option = {
+		name = EVTOPTB94014
+		character_event = { id = 94015 days = 50 random = 10 tooltip = EVTTOOLTIP94014 }
+		change_martial = 1
+	}
+}
+
+# Training Done
+character_event = {
+	id = 94015
+	desc = EVTDESC94015
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_war
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94015
+		prestige = 15
+		change_martial = 2
+		if = {
+			limit = {
+				is_weak_trigger = yes
+			}
+			remove_trait = weak
+			remove_trait = feeble
+		}
+		clr_character_flag = warrior_mentor
+	}
+}
+
+### Training with the Guard
+character_event = {
+	id = 94016
+	desc = EVTDESC94016
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_war
+				NOT = { martial = 8 }
+			}
+			has_ambition = obj_improve_martial
+		}
+		NOT = { has_character_flag = toy_army }
+		NOT = { has_character_flag = street_ruffians }
+		NOT = { has_character_flag = warrior_mentor }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94016
+		change_martial = 1
+	}
+}
+
+### Horsemanship
+character_event = {
+	id = 94017
+	desc = EVTDESC94017
+	picture = GFX_evt_joust
+	border = GFX_event_normal_frame_war
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_hunting
+				NOT = { martial = 8 }
+			}
+			has_ambition = obj_improve_martial
+		}
+		NOT = { has_character_flag = toy_army }
+		NOT = { has_character_flag = street_ruffians }
+		NOT = { has_character_flag = warrior_mentor }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94017
+		change_martial = 1
+	}
+}
+
+### Alexander/Ashoka the Great
+character_event = {
+	id = 94018
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESC94018
+		trigger = {
+			capital_scope = { NOT = { region = world_india } }
+		} 
+	}
+	desc = {
+		text = EVTDESC94018_india
+		trigger = {
+			capital_scope = { region = world_india }
+		}
+	}
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_war
+				NOT = { martial = 8 }
+				NOT = { has_character_flag = toy_army }
+				NOT = { has_character_flag = street_ruffians }
+				NOT = { has_character_flag = warrior_mentor }
+				NOT = { has_character_modifier = student_of_strategy }
+				NOT = { has_character_modifier = adept_of_strategy }
+				NOT = { trait = strategist }
+			}
+			AND = {
+				has_focus = focus_war
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_character_modifier = student_of_strategy }
+				NOT = { has_character_modifier = adept_of_strategy }
+			}
+			has_ambition = obj_improve_martial
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94018
+		trigger = {
+			capital_scope = { NOT = { region = world_india } }
+			OR = {
+				has_ambition = obj_improve_martial
+				NOT = { martial = 8 }
+			}
+		}
+		change_martial = 1
+	}
+	option = {
+		name = EVTOPTB_94018
+		trigger = {
+			capital_scope = { region = world_india }
+			OR = {
+				has_ambition = obj_improve_martial
+				NOT = { martial = 8 }
+			}
+		}
+		change_martial = 1
+	}
+	option = {
+		name = EVTOPTC_94018     # Study further
+		trigger = {
+			has_focus = focus_war
+		}
+		add_character_modifier = {
+			modifier = student_of_strategy
+			duration = -1
+		}
+		custom_tooltip = { text = studying_strategy_tooltip }
+		hidden_tooltip = { character_event = { id = 94019 days = 300 random = 900 } }
+	}
+}
+
+# Further studies in strategy
+character_event = {
+	id = 94019
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESC_94019
+		trigger = {
+			capital_scope = {
+				NOT = { region = world_india }
+			}
+		} 
+	}
+	desc = {
+		text = EVTDESC_94019_india
+		trigger = {
+			capital_scope = {
+				region = world_india
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_94019
+		trigger = {
+			has_focus = focus_war
+			NOT = { lifestyle_traits = 1 }
+			has_character_modifier = adept_of_strategy
+		}
+		remove_character_modifier = adept_of_strategy
+		add_trait = strategist
+	}
+	option = {
+		name = EVTOPTA_94019
+		trigger = {
+			has_character_modifier = student_of_strategy
+		}
+		remove_character_modifier = student_of_strategy
+		add_character_modifier = {
+			modifier = adept_of_strategy
+			duration = -1
+		}
+	}
+	option = {
+		name = EVTOPTB_94019
+		trigger = {
+			has_character_modifier = adept_of_strategy
+		}
+		prestige = 25
+	}
+	option = {
+		name = EVTOPTC_94019
+		trigger = {
+			trait = strategist
+		}
+		add_character_modifier = { 
+			modifier = strategic_innovation
+			duration = 1095
+		}
+	}
+}
+
+########################
+# Stewardship Ambition #
+########################
+
+### The Inn
+
+# The Inn
+character_event = {
+	id = 94050
+	desc = EVTDESC94050
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_business
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		wealth = 100
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+		NOT = { has_character_flag = the_inn_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94050
+		character_event = { id = 94051 days = 30 random = 10 tooltip = EVTTOOLTIP94051 }
+		wealth = -50
+		set_character_flag = the_inn
+		set_character_flag = the_inn_taken
+	}
+	option = {
+		name = EVTOPTB94050
+		custom_tooltip = { text = improve_stewardship_quit }
+	}
+}
+
+# The Inn's name
+character_event = {
+	id = 94051
+	desc = EVTDESC94051
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_stewardship
+			has_focus = focus_business
+		}
+		has_character_flag = the_inn
+	}
+	
+	option = {
+		name = EVTOPTA94051
+		trigger = { NOT = { uses_decadence = yes } }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTB94051
+		trigger = {
+			NOT = { uses_decadence = yes }
+			NOT = { religion_group = indian_group }
+		}
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTC94051
+		trigger = { NOT = { uses_decadence = yes } }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTD94051
+		trigger = {
+			NOT = { uses_decadence = yes }
+			NOT = { religion_group = indian_group }
+		}
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTE94051
+		trigger = { uses_decadence = yes }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTF94051
+		trigger = { uses_decadence = yes }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTG94051
+		trigger = { uses_decadence = yes }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+	option = {
+		name = EVTOPTH94051
+		trigger = { uses_decadence = yes }
+		character_event = { id = 94052 days = 30 random = 10 tooltip = EVTTOOLTIP94052 }
+	}
+}
+
+# Salt the turnips
+character_event = {
+	id = 94052
+	desc = EVTDESC94052
+	picture = GFX_evt_brothel
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_stewardship
+			has_focus = focus_business
+		}
+		has_character_flag = the_inn
+	}
+	
+	option = {
+		name = EVTOPTA94052
+		set_character_flag = 10_salt
+		character_event = { id = 94053 days = 30 random = 10 tooltip = EVTTOOLTIP94053 }
+	}
+	option = {
+		name = EVTOPTB94052
+		set_character_flag = 20_salt
+		character_event = { id = 94053 days = 30 random = 10 tooltip = EVTTOOLTIP94053 }
+	}
+	option = {
+		name = EVTOPTC94052
+		set_character_flag = 30_salt
+		character_event = { id = 94053 days = 30 random = 10 tooltip = EVTTOOLTIP94053 }
+	}
+	option = {
+		name = EVTOPTD94052
+		set_character_flag = all_salt
+		character_event = { id = 94053 days = 30 random = 10 tooltip = EVTTOOLTIP94053 }
+	}
+}
+
+# Entertainment
+character_event = {
+	id = 94053
+	desc = EVTDESC94053
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_stewardship
+			has_focus = focus_business
+		}
+		has_character_flag = the_inn
+	}
+	
+	option = {
+		name = EVTOPTA94053
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+			}
+		}
+		character_event = { id = 94054 days = 30 random = 10 tooltip = EVTTOOLTIP94054 }
+		wealth = -5
+	}
+	option = {
+		name = EVTOPTB94053
+		character_event = { id = 94055 days = 30 random = 10 tooltip = EVTTOOLTIP94055 }
+		wealth = -10
+	}
+	option = {
+		name = EVTOPTC94053
+		trigger = {
+			NOT = {
+				religion_group = indian_group
+			}
+		}
+		character_event = { id = 94056 days = 30 random = 10 tooltip = EVTTOOLTIP94056 }
+		wealth = -15
+	}
+	option = {
+		name = EVTOPTD94053
+		character_event = { id = 94057 days = 30 random = 10 tooltip = EVTTOOLTIP94057 }
+	}
+}
+
+# Clergyman
+character_event = {
+	id = 94054
+	desc = EVTDESC94054
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94054
+		hidden_tooltip = {
+			character_event = { id = 94059 days = 5 }
+			character_event = { id = 94058 days = 5 }
+		}
+		wealth = 10
+	}
+}
+
+# Bard
+character_event = {
+	id = 94055
+	desc = EVTDESC94055
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94055
+		hidden_tooltip = {
+			character_event = { id = 94059 days = 5 }
+			character_event = { id = 94058 days = 5 }
+		}
+		wealth = 15
+	}
+}
+
+# Eunuch
+character_event = {
+	id = 94056
+	desc = EVTDESC94056
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94056
+		hidden_tooltip = {
+			character_event = { id = 94059 days = 5 }
+			character_event = { id = 94058 days = 5 }
+		}
+		wealth = -10
+	}
+}
+
+# Wild Ass
+character_event = {
+	id = 94057
+	desc = EVTDESC94057
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94057
+		hidden_tooltip = {
+			character_event = { id = 94059 days = 5 }
+			character_event = { id = 94058 days = 5 }
+		}
+		wealth = -20
+	}
+}
+
+# Salt Disaster
+character_event = {
+	id = 94058
+	desc = EVTDESC94058
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = all_salt
+	}
+	
+	option = {
+		name = EVTOPTA94058
+		hidden_tooltip = {
+			character_event = { id = 94060 days = 5 }
+		}
+		wealth = -20
+	}
+}
+
+# Salt Profit
+character_event = {
+	id = 94059
+	desc = EVTDESC94059
+	picture = GFX_evt_brothel
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_flag = all_salt }
+	}
+	
+	option = {
+		name = EVTOPTA94059
+		trigger = {
+			has_character_flag = 10_salt
+		}
+		wealth = 15
+		hidden_tooltip = {
+			character_event = { id = 94060 days = 5 }
+		}
+	}
+	option = {
+		name = EVTOPTA94059
+		trigger = {
+			has_character_flag = 20_salt
+		}
+		wealth = 20
+		hidden_tooltip = {
+			character_event = { id = 94060 days = 5 }
+		}
+	}
+	option = {
+		name = EVTOPTA94059
+		trigger = {
+			has_character_flag = 30_salt
+		}
+		wealth = 25
+		hidden_tooltip = {
+			character_event = { id = 94060 days = 5 }
+		}
+	}
+}
+
+# Opening Night Over
+character_event = {
+	id = 94060
+	desc = EVTDESC94060
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94060
+		wealth = 65
+		change_stewardship = 2
+		clr_character_flag = 10_salt
+		clr_character_flag = 20_salt
+		clr_character_flag = 30_salt
+		clr_character_flag = all_salt
+	}
+}
+
+### The Garden
+
+# The Garden
+character_event = {
+	id = 94065
+	desc = EVTDESC94065
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_business
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+		NOT = { has_character_flag = the_garden_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94065
+		character_event = { id = 94066 days = 50 random = 10 tooltip = EVTTOOLTIP94066 }
+		set_character_flag = the_garden
+		set_character_flag = the_garden_taken
+	}
+	option = {
+		name = EVTOPTB94065
+		custom_tooltip = { text = improve_stewardship_quit }
+	}
+}
+
+# Gardening Done
+character_event = {
+	id = 94066
+	desc = EVTDESC94066
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94066
+		change_stewardship = 2
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			add_trait = gardener
+		}
+	}
+}
+
+### Land Survey
+
+# Land Survey
+character_event = {
+	id = 94070
+	desc = EVTDESC94070
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_rulership
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+		NOT = { has_character_flag = the_survey_taken }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94070
+		set_character_flag = the_survey
+		set_character_flag = the_survey_taken
+		character_event = { id = 94071 days = 260 random = 50 tooltip = EVTTOOLTIP94071 }
+	}
+	option = {
+		name = EVTOPTB94070
+		custom_tooltip = { text = improve_stewardship_quit }
+	}
+}
+
+# Survey Complete
+character_event = {
+	id = 94071
+	desc = EVTDESC94071
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94071
+		change_stewardship = 2
+	}
+}
+
+### Bookkeeping
+character_event = {
+	id = 94072
+	desc = EVTDESC94072
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_business
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94072
+		change_stewardship = 1
+	}
+}
+
+### Delegation
+character_event = {
+	id = 94073
+	desc = EVTDESC94073
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_rulership
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94073
+		change_stewardship = 1
+	}
+}
+
+### Servant Staff
+character_event = {
+	id = 94074
+	desc = EVTDESC94074
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_economy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_rulership
+				NOT = { stewardship = 8 }
+			}
+			has_ambition = obj_improve_stewardship
+		}
+		NOT = { has_character_flag = the_inn }
+		NOT = { has_character_flag = the_garden }
+		NOT = { has_character_flag = the_survey }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94074
+		change_stewardship = 1
+	}
+}
+
+#####################
+# Learning Ambition #
+#####################
+
+### The Flying Machine
+
+# The Flying Machine
+character_event = {
+	id = 94080
+	desc = EVTDESC94080
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_scholarship
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+		NOT = { has_character_flag = flying_machine_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94080
+		character_event = { id = 94081 days = 30 random = 10 tooltip = EVTTOOLTIP94081 }
+		set_character_flag = flying_machine
+		set_character_flag = meldrick_fly
+		set_character_flag = flying_machine_taken
+	}
+	option = {
+		name = EVTOPTB94080
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Studies 
+character_event = {
+	id = 94081
+	desc = EVTDESC94081
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_learning
+			has_focus = focus_scholarship
+		}
+		has_character_flag = flying_machine
+	}
+	
+	option = {
+		name = EVTOPTA94081
+		character_event = { id = 94082 days = 30 random = 10 tooltip = EVTTOOLTIP94082 }
+	}
+}
+
+# Enlist Pilot
+character_event = {
+	id = 94082
+	desc = EVTDESC94082
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_learning
+			has_focus = focus_scholarship
+		}
+		has_character_flag = flying_machine
+	}
+	
+	option = { # Otis
+		name = EVTOPTA94082
+		trigger = {
+			NOT = { religion_group = muslim }
+			NOT = { religion_group = indian_group }
+		}
+		character_event = { id = 94083 days = 5 tooltip = EVTTOOLTIP94083 }
+	}
+	option = { # Meldrick
+		name = EVTOPTB94082
+		trigger = {
+			NOT = { religion_group = muslim }
+			NOT = { religion_group = indian_group }
+		}
+		character_event = { id = 94084 days = 5 tooltip = EVTTOOLTIP94084 }
+	}
+	option = { # Dog
+		name = EVTOPTC94082
+		character_event = { id = 94085 days = 5 tooltip = EVTTOOLTIP94085 }
+	}
+	option = { # al-Otis
+		name = EVTOPTD94082
+		trigger = {
+			OR = {
+				religion_group = muslim
+				religion_group = indian_group
+			}
+		}
+		character_event = { id = 94092 days = 5 tooltip = EVTTOOLTIP94092 }
+	}
+	option = { # Ba'ah al-Drik
+		name = EVTOPTE94082
+		trigger = {
+			OR = {
+				religion_group = muslim
+				religion_group = indian_group
+			}
+		}
+		character_event = { id = 94093 days = 5 tooltip = EVTTOOLTIP94093 }
+	}
+}
+
+# Otis Flies
+character_event = {
+	id = 94083
+	desc = EVTDESC94083
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94083
+		character_event = { id = 94086 days = 5 tooltip = EVTTOOLTIP94086 }
+	}
+}
+
+# al-Otis Flies (Muslim version)
+character_event = {
+	id = 94092
+	desc = EVTDESC94092
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94092
+		character_event = { id = 94094 days = 5 tooltip = EVTTOOLTIP94086 }
+	}
+}
+
+# Meldrick Flies
+character_event = {
+	id = 94084
+	desc = EVTDESC94084
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94084
+		character_event = { id = 94087 days = 5 tooltip = EVTTOOLTIP94086 }
+	}
+}
+
+# Ba'ah al-Drik Flies (Muslim version)
+character_event = {
+	id = 94093
+	desc = EVTDESC94093
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94093
+		character_event = { id = 94095 days = 5 tooltip = EVTTOOLTIP94086 }
+	}
+}
+
+# Dog Flies
+character_event = {
+	id = 94085
+	desc = EVTDESC94085
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94085
+		character_event = { id = 94088 days = 5 tooltip = EVTTOOLTIP94088 }
+		add_trait = wounded
+	}
+}
+
+# Otis Aftermath
+character_event = {
+	id = 94086
+	desc = EVTDESC94086
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94086
+		character_event = { id = 94089 days = 15 random = 5 tooltip = EVTTOOLTIP94089 }
+	}
+	option = {
+		name = EVTOPTB94086
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# al-Otis Aftermath (Muslim version)
+character_event = {
+	id = 94094
+	desc = EVTDESC94094
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94086
+		character_event = { id = 94096 days = 15 random = 5 tooltip = EVTTOOLTIP94089 }
+	}
+	option = {
+		name = EVTOPTB94086
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Meldrick Aftermath
+character_event = {
+	id = 94087
+	desc = EVTDESC94087
+	picture = GFX_evt_whispers
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94087
+		character_event = { id = 94090 days = 15 random = 5 tooltip = EVTTOOLTIP94090 }
+	}
+	option = {
+		name = EVTOPTB94087
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Ba'ah al-Drik Aftermath (Muslim version)
+character_event = {
+	id = 94095
+	desc = EVTDESC94095
+	picture = GFX_evt_whispers
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94087
+		character_event = { id = 94097 days = 15 random = 5 tooltip = EVTTOOLTIP94097 }
+	}
+	option = {
+		name = EVTOPTB94087
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Dog Aftermath
+character_event = {
+	id = 94088
+	desc = EVTDESC94088
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94088
+		trigger = { NOT = { religion_group = muslim } }
+		change_learning = 1
+	}
+	option = {
+		name = EVTOPTA94091
+		trigger = { religion_group = muslim }
+		change_learning = 1
+	}
+}
+
+# Otis Second Attempt
+character_event = {
+	id = 94089
+	desc = EVTDESC94089
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94089
+		character_event = { id = 94091 days = 6 tooltip = EVTTOOLTIP94091 }
+	}
+}
+
+# al-Otis Second Attempt (Muslim version)
+character_event = {
+	id = 94096
+	desc = EVTDESC94096
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94096
+		character_event = { id = 94091 days = 6 tooltip = EVTTOOLTIP94091 }
+	}
+}
+
+# Meldrick Second Attempt
+character_event = {
+	id = 94090
+	desc = EVTDESC94090
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94090
+		character_event = { id = 94091 days = 6 tooltip = EVTTOOLTIP94091 }
+	}
+}
+
+# Ba'ah al-Drik Second Attempt
+character_event = {
+	id = 94097
+	desc = EVTDESC94097
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94090
+		character_event = { id = 94091 days = 6 tooltip = EVTTOOLTIP94091 }
+	}
+}
+
+# Aftermath
+character_event = {
+	id = 94091
+	desc = EVTDESC94091
+	picture = GFX_evt_falconing
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94088
+		trigger = { NOT = { religion_group = muslim } }
+		change_learning = 2
+	}
+	option = {
+		name = EVTOPTA94091
+		trigger = { religion_group = muslim }
+		change_learning = 2
+	}
+}
+
+### St. Augustine's Confessions
+
+# Augustine
+character_event = {
+	id = 94098
+	desc = EVTDESC94098
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_theology
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { religion_group = muslim }
+		NOT = { religion_group = indian_group }
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+		NOT = { has_character_flag = ancient_tome_taken }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94098
+		character_event = { id = 94099 days = 6 tooltip = EVTTOOLTIP94099 }
+		set_character_flag = ancient_tome
+		set_character_flag = ancient_tome_taken
+	}
+	option = {
+		name = EVTOPTB94098
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Finished Reading
+character_event = {
+	id = 94099
+	desc = EVTDESC94099
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94099
+		change_learning = 2
+	}
+}
+
+### The Shahnameh
+
+# The Shahnameh
+character_event = {
+	id = 94100
+	desc = EVTDESC94100
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		year = 1010
+		OR = {
+			AND = {
+				has_focus = focus_theology
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		OR = {
+			religion_group = muslim
+			religion_group = indian_group
+		}
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+		NOT = { has_character_flag = ancient_tome_taken }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94098
+		character_event = { id = 94101 days = 6 tooltip = EVTTOOLTIP94099 }
+		set_character_flag = ancient_tome
+		set_character_flag = ancient_tome_taken
+	}
+	option = {
+		name = EVTOPTB94098
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Finished Reading
+character_event = {
+	id = 94101
+	desc = EVTDESC94101
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94099
+		change_learning = 2
+	}
+}
+
+### The Hermit
+
+# Hermit
+character_event = {
+	id = 94102
+	desc = EVTDESC94102
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_theology
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+		NOT = { has_character_flag = hermit_visit_taken }
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = { has_character_flag = do_not_disturb }
+		in_command = no
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94102
+		character_event = { id = 94103 days = 16 random = 5 tooltip = EVTTOOLTIP94103 }
+		set_character_flag = hermit_visit
+		set_character_flag = hermit_visit_taken
+	}
+	option = {
+		name = EVTOPTB94102
+		custom_tooltip = { text = improve_learning_quit }
+	}
+}
+
+# Arrival
+character_event = {
+	id = 94103
+	desc = EVTDESC94103
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94103
+		character_event = { id = 94104 tooltip = EVTTOOLTIP94104 }
+	}
+}
+
+# The Old Man Appears
+character_event = {
+	id = 94104
+	desc = EVTDESC94104
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94104
+		character_event = { id = 94105 tooltip = EVTTOOLTIP94105 }
+	}
+	option = {
+		name = EVTOPTB94104
+		custom_tooltip = { text = improve_learning_quit }
+		clr_character_flag = hermit_visit
+	}
+}
+
+# The Cave
+character_event = {
+	id = 94105
+	desc = EVTDESC94105
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94105
+		character_event = { id = 94106 days = 8 random = 3 tooltip = EVTTOOLTIP94106 }
+	}
+}
+
+# Leaving
+character_event = {
+	id = 94106
+	desc = EVTDESC94106
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94106
+		change_learning = 2
+	}
+}
+
+### Roman Engineering
+character_event = {
+	id = 94107
+	desc = EVTDESC94107
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_scholarship
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { religion_group = indian_group }
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94107
+		change_learning = 1
+	}
+}
+
+### Philosophy
+character_event = {
+	id = 94108
+	desc = EVTDESC94108
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_scholarship
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { religion_group = indian_group }
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94108
+		change_learning = 1
+	}
+}
+
+### Astronomy
+character_event = {
+	id = 94109
+	desc = EVTDESC94109
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_scholarship
+				NOT = { learning = 8 }
+			}
+			has_ambition = obj_improve_learning
+		}
+		NOT = { has_character_flag = flying_machine }
+		NOT = { has_character_flag = ancient_tome }
+		NOT = { has_character_flag = hermit_visit }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94109
+		change_learning = 1
+	}
+}
+
+######################
+# Diplomacy Ambition #
+######################
+
+### The Feud
+
+# The Feud
+character_event = {
+	id = 94110
+	desc = EVTDESC94110
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_family
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+		NOT = { has_character_flag = the_feud_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94110
+		character_event = { id = 94111 days = 5 tooltip = EVTTOOLTIP94111 }
+		set_character_flag = the_feud
+		set_character_flag = the_feud_taken
+	}
+	option = {
+		name = EVTOPTB94110
+		custom_tooltip = { text = improve_diplomacy_quit }
+	}
+}
+
+# The Conference (Choice 1)
+character_event = {
+	id = 94111
+	desc = EVTDESC94111
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_ambition = obj_improve_diplomacy
+			has_focus = focus_family
+		}
+	}
+	
+	option = {
+		name = EVTOPTA94111
+		character_event = { id = 94112 tooltip = EVTTOOLTIP94112 }
+	}
+	option = {
+		name = EVTOPTB94111
+		character_event = { id = 94113 tooltip = EVTTOOLTIP94112 }
+	}
+	option = {
+		name = EVTOPTC94111
+		tooltip_info = inbred
+		trigger = {
+			trait = inbred
+		}
+		character_event = { id = 94114 tooltip = EVTTOOLTIP94112 }
+	}
+}
+
+# Appeal to reason
+character_event = {
+	id = 94112
+	desc = EVTDESC94112
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94112
+		character_event = { id = 94119 tooltip = EVTTOOLTIP94119 }
+	}
+}
+
+# Flatter them (Choice 2A)
+character_event = {
+	id = 94113
+	desc = EVTDESC94113
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94113
+		character_event = { id = 94115 tooltip = EVTTOOLTIP94112 }
+	}
+	option = {
+		name = EVTOPTB94113
+		character_event = { id = 94116 tooltip = EVTTOOLTIP94112 }
+	}
+}
+
+# Find common ground (Choice 2B)
+character_event = {
+	id = 94114
+	desc = EVTDESC94114
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94113
+		character_event = { id = 94115 tooltip = EVTTOOLTIP94112 }
+	}
+	option = {
+		name = EVTOPTB94113
+		character_event = { id = 94116 tooltip = EVTTOOLTIP94112 }
+	}
+}
+
+# Their patriotic duty
+character_event = {
+	id = 94115
+	desc = EVTDESC94115
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94112
+		character_event = { id = 94119 tooltip = EVTTOOLTIP94119 }
+	}
+}
+
+# Soothe tempers (Choice 3)
+character_event = {
+	id = 94116
+	desc = EVTDESC94116
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94116
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		character_event = { id = 94117 tooltip = EVTTOOLTIP94112 }
+	}
+	option = {
+		name = EVTOPTB94116
+		character_event = { id = 94118 tooltip = EVTTOOLTIP94112 }
+	}
+}
+
+# Threaten violence
+character_event = {
+	id = 94117
+	desc = EVTDESC94117
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94112
+		character_event = { id = 94119 tooltip = EVTTOOLTIP94119 }
+	}
+}
+
+# Lambast childish behavior
+character_event = {
+	id = 94118
+	desc = EVTDESC94118
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94118
+		character_event = { id = 94120 tooltip = EVTTOOLTIP94120 }
+	}
+}
+
+# Fight!
+character_event = {
+	id = 94119
+	desc = EVTDESC94119
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94119
+		change_diplomacy = 1
+	}
+}
+
+# Peace In Our Time
+character_event = {
+	id = 94120
+	desc = EVTDESC94120
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94120
+		change_diplomacy = 2
+	}
+}
+
+### The Mirror
+
+# The Mirror
+character_event = {
+	id = 94125
+	desc = EVTDESC94125
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_carousing
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+		NOT = { has_character_flag = the_mirror_taken }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94125
+		set_character_flag = the_mirror
+		set_character_flag = the_mirror_taken
+	}
+}
+
+# Practise Done
+character_event = {
+	id = 94126
+	desc = EVTDESC94126
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = the_mirror
+		OR = {
+			has_ambition = obj_improve_diplomacy
+			has_focus = focus_carousing
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA94126
+		change_diplomacy = 2
+	}
+}
+
+### The Suicide
+
+# The Suicide
+character_event = {
+	id = 94130
+	desc = EVTDESC94130
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_carousing
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+		NOT = { has_character_flag = the_suicide_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94130
+		set_character_flag = the_suicide
+		set_character_flag = the_suicide_taken
+		character_event = { id = 94131 tooltip = EVTTOOLTIP94131 }
+	}
+	option = {
+		name = EVTOPTB94130
+		custom_tooltip = { text = improve_diplomacy_quit }
+	}
+}
+
+# Approaching the Jumper
+character_event = {
+	id = 94131
+	desc = EVTDESC94131
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { # Grab Man
+		name = EVTOPTA94131
+		character_event = { id = 94132 tooltip = EVTTOOLTIP94132 }
+	}
+	option = { # Talk to Man
+		name = EVTOPTB94131
+		random_list = {
+			50 = {
+				character_event = { id = 94136 tooltip = EVTTOOLTIP94136 }
+			}
+			50 = {
+				character_event = { id = 94137 tooltip = EVTTOOLTIP94137 }
+			}
+		}
+	}
+}
+
+# Man Grabbed
+character_event = {
+	id = 94132
+	desc = EVTDESC94132
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { # Jump
+		name = EVTOPTA94132
+		character_event = { id = 94133 tooltip = EVTTOOLTIP94133 }
+	}
+	option = { # Pull Inside
+		name = EVTOPTB94132
+		character_event = { id = 94135 tooltip = EVTTOOLTIP94135 }
+	}
+}
+
+# Jumping
+character_event = {
+	id = 94133
+	desc = EVTDESC94133
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94133
+		character_event = { id = 94134 tooltip = EVTTOOLTIP94134 }
+	}
+}
+
+# Jumping Aftermath
+character_event = {
+	id = 94134
+	desc = EVTDESC94134
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94134
+		change_diplomacy = 1
+	}
+}
+
+# Man Pulled Inside
+character_event = {
+	id = 94135
+	desc = EVTDESC94135
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94135
+		change_diplomacy = 1
+	}
+}
+
+# Talk Successful
+character_event = {
+	id = 94136
+	desc = EVTDESC94136
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94136
+		change_diplomacy = 2
+	}
+}
+
+# Talk Failure
+character_event = {
+	id = 94137
+	desc = EVTDESC94137
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94137
+		change_diplomacy = 1
+	}
+}
+
+### Town Crier
+character_event = {
+	id = 94138
+	desc = EVTDESC94138
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_carousing
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94138
+		change_diplomacy = 1
+	}
+}
+
+### Foreign Cultures
+character_event = {
+	id = 94139
+	desc = EVTDESC94139
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_carousing
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94139
+		change_diplomacy = 1
+	}
+}
+
+### Old Diplomat
+character_event = {
+	id = 94156
+	desc = EVTDESC94156
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_diplomacy
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_carousing
+				NOT = { diplomacy = 8 }
+			}
+			has_ambition = obj_improve_diplomacy
+		}
+		NOT = { religion_group = indian_group }
+		NOT = { has_character_flag = the_feud }
+		NOT = { has_character_flag = the_mirror }
+		NOT = { has_character_flag = the_suicide }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94156
+		change_diplomacy = 1
+	}
+}
+
+#####################
+# Intrigue Ambition #
+#####################
+
+### The Necklace
+
+# The Necklace
+character_event = {
+	id = 94140
+	desc = EVTDESC94140
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+		NOT = { has_character_flag = the_necklace_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = { # Do it
+		name = EVTOPTA94140
+		set_character_flag = the_necklace
+		set_character_flag = the_necklace_taken
+		character_event = { id = 94141 days = 3 tooltip = EVTTOOLTIP94141 }
+	}
+	option = { # Don't do it
+		name = EVTOPTB94140
+		custom_tooltip = { text = improve_intrigue_quit }
+	}
+}
+
+# The Theft
+character_event = {
+	id = 94141
+	desc = EVTDESC94141
+	picture = GFX_evt_shadow
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { # Magda
+		name = EVTOPTA94141
+		trigger = { NOT = { religion_group = muslim } }
+		character_event = { id = 94142 tooltip = EVTTOOLTIP94142 }
+	}
+	option = { # Meldrick
+		name = EVTOPTB94141
+		trigger = { NOT = { religion_group = muslim } }
+		character_event = { id = 94149 tooltip = EVTTOOLTIP94149 }
+	}
+	option = { # Wafaa
+		name = EVTOPTC94141
+		trigger = { religion_group = muslim }
+		character_event = { id = 94142 tooltip = EVTTOOLTIP94142 }
+	}
+	option = {	# Bah al-Drik
+		name = EVTOPTD94141
+		trigger = { religion_group = muslim }
+		character_event = { id = 94149 tooltip = EVTTOOLTIP94149 }
+	}
+}
+
+# Cook's Wife
+character_event = {
+	id = 94142
+	desc = EVTDESC94142
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94142
+		character_event = { id = 94143 days = 3 tooltip = EVTTOOLTIP94143 }
+	}
+}
+
+# Cook's Wife, Theft Discovered
+character_event = {
+	id = 94143
+	desc = EVTDESC94143
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { # Magda
+		name = EVTOPTA94143
+		trigger = { NOT = { religion_group = muslim } }
+		character_event = { id = 94144 tooltip = EVTTOOLTIP94144 }
+	}
+	option = { # Wafaa
+		name = EVTOPTB94143
+		trigger = { religion_group = muslim }
+		character_event = { id = 94144 tooltip = EVTTOOLTIP94144 }
+	}
+}
+
+# Cook's Wife Caught
+character_event = {
+	id = 94144
+	desc = EVTDESC94144
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94144
+		character_event = { id = 94145 tooltip = EVTTOOLTIP94145 }
+	}
+}
+
+# Cook's Wife Aftermath
+character_event = {
+	id = 94145
+	desc = EVTDESC94145
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94145
+		change_intrigue = 3
+		if = {
+			limit = { 
+				NOT = { 
+					trait = deceitful
+					trait = honest
+				}
+			}
+			random = {
+				chance = 60
+				add_trait = deceitful
+				hidden_tooltip = {
+					character_event = {
+						id = 38255 #Notify Deceitful
+					}
+				}
+			}
+		}
+		if = {
+			limit = { trait = honest }
+			remove_trait = honest
+		}
+		hidden_tooltip = {
+			random_list = {
+				40 = {
+				}
+				60 = {
+					character_event = { id = 94146 days = 3000 random = 100 }
+				}
+			}
+		}
+	}
+}
+
+# Cook's Wife Forgotten
+character_event = {
+	id = 94146
+	desc = EVTDESC94146
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94146
+		trigger = { NOT = { religion_group = muslim } }
+		custom_tooltip = {
+			text = hurry_dungeons
+			hidden_tooltip = {
+				random_list = {
+					50 = {
+						character_event = { id = 94147 }
+					}
+					50 = {
+						character_event = { id = 94148 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB94146
+		trigger = { religion_group = muslim }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = 94147 }
+				}
+				50 = {
+					character_event = { id = 94148 }
+				}
+			}
+		}
+	}
+}
+
+# Cook's Wife Dead
+character_event = {
+	id = 94147
+	desc = EVTDESC94147
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94147
+		piety = -50
+	}
+}
+
+# Cook's Wife Alive
+character_event = {
+	id = 94148
+	desc = EVTDESC94148
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94148
+		piety = -25
+	}
+}
+
+# Servant
+character_event = {
+	id = 94149
+	desc = EVTDESC94149
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94149
+		character_event = { id = 94150 tooltip = EVTTOOLTIP94143 }
+	}
+}
+
+# Servant, Theft Discovered
+character_event = {
+	id = 94150
+	desc = EVTDESC94150
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { # Meldrick
+		name = EVTOPTA94150
+		trigger = { NOT = { religion_group = muslim } }
+		character_event = { id = 94151 tooltip = EVTTOOLTIP94151 }
+	}
+	option = { # Arab Meldrick
+		name = EVTOPTB94150
+		trigger = { religion_group = muslim }
+		character_event = { id = 94151 tooltip = EVTTOOLTIP94151 }
+	}
+}
+
+# Servant Caught
+character_event = {
+	id = 94151
+	desc = EVTDESC94151
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94151
+		character_event = { id = 94152 tooltip = EVTTOOLTIP94145 }
+	}
+}
+
+# Servant Aftermath
+character_event = {
+	id = 94152
+	desc = EVTDESC94152
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94152
+		change_intrigue = 3
+		if = {
+			limit = { 
+				NOT = { 
+					trait = deceitful
+					trait = honest
+				}
+			}
+			random = {
+				chance = 60
+				add_trait = deceitful
+				hidden_tooltip = {
+					character_event = {
+						id = 38255 #Notify Deceitful
+					}
+				}
+			}
+		}
+		if = {
+			limit = { trait = honest }
+			remove_trait = honest
+		}
+		hidden_tooltip = {
+			random_list = {
+				40 = {
+				}
+				60 = {
+					character_event = { id = 94153 days = 3000 random = 100}
+				}
+			}
+		}
+	}
+}
+
+# Servant Forgotten
+character_event = {
+	id = 94153
+	desc = EVTDESC94153
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_flag = meldrick_fly }
+	}
+	
+	option = {
+		name = EVTOPTA94153
+		custom_tooltip = { 
+			text = hurry_dungeons
+			hidden_tooltip = {
+				random_list = {
+					50 = {
+						character_event = { id = 94154 }
+					}
+					50 = {
+						character_event = { id = 94155 }
+					}
+				}
+			}
+		}
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = EVTOPTA94153
+		custom_tooltip = { 
+			text = hurry_dungeons
+			hidden_tooltip = {
+				random_list = {
+					50 = {
+						character_event = { id = 94154 }
+					}
+					50 = {
+						character_event = { id = 94155 }
+					}
+				}
+			}
+		}
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Servant Dead
+character_event = {
+	id = 94154
+	desc = EVTDESC94154
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94154
+		piety = -50
+	}
+}
+
+# Servant Alive
+character_event = {
+	id = 94155
+	desc = EVTDESC94155
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94155
+		piety = -25
+	}
+}
+
+### Gossip
+
+# Gossip
+character_event = {
+	id = 94160
+	desc = EVTDESC94160
+	picture = GFX_evt_whispers
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+		NOT = { has_character_flag = gossip_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94160
+		set_character_flag = gossip
+		set_character_flag = gossip_taken
+		character_event = { id = 94161 days = 72 random = 20 tooltip = EVTTOOLTIP94161 }
+	}
+	option = {
+		name = EVTOPTB94160
+		custom_tooltip = { text = improve_intrigue_quit }
+	}
+}
+
+# Gossip learned
+character_event = {
+	id = 94161
+	desc = EVTDESC94161
+	picture = GFX_evt_whispers
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94161
+		change_intrigue = 2
+	}
+}
+
+### Old Spymaster
+
+# Old Spymaster
+character_event = {
+	id = 94165
+	desc = EVTDESC94165
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+		NOT = { has_character_flag = old_spymaster_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94165
+		set_character_flag = old_spymaster
+		set_character_flag = old_spymaster_taken
+		character_event = { id = 94166 days = 15 tooltip = EVTTOOLTIP94166 }
+	}
+	option = {
+		name = EVTOPTB94165
+		custom_tooltip = { text = improve_intrigue_quit }
+	}
+}
+
+# Visit
+character_event = {
+	id = 94166
+	desc = EVTDESC94166
+	picture = GFX_evt_shadow
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94166
+		character_event = { id = 94167 tooltip = EVTTOOLTIP94167 }
+	}
+}
+
+# Agreed to teach
+character_event = {
+	id = 94167
+	desc = EVTDESC94167
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94167
+		character_event = { id = 94168 days = 190 random = 40 tooltip = EVTTOOLTIP94168 }
+	}
+}
+
+# Training complete
+character_event = {
+	id = 94168
+	desc = EVTDESC94168
+	picture = GFX_evt_shadow
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94168
+		change_intrigue = 2
+	}
+}
+
+### Alchemy
+character_event = {
+	id = 94169
+	desc = EVTDESC94169
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94169
+		change_intrigue = 1
+	}
+}
+
+### Improved Bodygard
+character_event = {
+	id = 94172
+	desc = EVTDESC94172
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94172
+		change_intrigue = 1
+	}
+}
+
+### Old Assassin
+character_event = {
+	id = 94173
+	desc = EVTDESC94173
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_focus = focus_intrigue
+				NOT = { intrigue = 8 }
+			}
+			has_ambition = obj_improve_intrigue
+		}
+		NOT = { has_character_flag = the_necklace }
+		NOT = { has_character_flag = gossip }
+		NOT = { has_character_flag = old_spymaster }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94173
+		change_intrigue = 1
+	}
+}
+
+######################
+# Decadence Ambition #
+######################
+
+### Berber Life
+
+# Berber Life
+character_event = {
+	id = 94170
+	desc = EVTDESC94170
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+		NOT = { has_character_flag = berber_life_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94170
+		set_character_flag = berber_life
+		set_character_flag = berber_life_taken
+		character_event = { id = 94171 days = 15 tooltip = EVTTOOLTIP94171 }
+	}
+	option = {
+		name = EVTOPTB94170
+		custom_tooltip = { text = lower_decadence_quit }
+	}
+}
+
+# Living with Berbers
+character_event = {
+	id = 94171
+	desc = EVTDESC94171
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94171
+		decadence = -5
+	}
+}
+
+### The Bandit Camp
+
+# The Bandit Camp
+character_event = {
+	id = 94175
+	desc = EVTDESC94175
+	picture = GFX_evt_moors
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+		NOT = { has_character_flag = bandit_camp_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94175
+		set_character_flag = bandit_camp
+		set_character_flag = bandit_camp_taken
+		character_event = { id = 94176 days = 3 tooltip = EVTTOOLTIP94176 }
+	}
+	option = {
+		name = EVTOPTB94175
+		custom_tooltip = { text = lower_decadence_quit }
+	}
+	option = {
+		name = EVTOPTC94175
+		trigger = { age = 60 }
+		custom_tooltip = { text = lower_decadence_quit }
+	}
+}
+
+# Sneak up on Camp
+character_event = {
+	id = 94176
+	desc = EVTDESC94176
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94176
+		character_event = { id = 94177 tooltip = EVTTOOLTIP94177 }
+	}
+	option = {
+		name = EVTOPTB94176
+		tooltip_info = craven
+		trigger = { trait = craven }
+		custom_tooltip = { text = lower_decadence_quit }
+	}
+}
+
+# The Fight
+character_event = {
+	id = 94177
+	desc = EVTDESC94177
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94177
+		tooltip_info = craven
+		trigger = { trait = craven }
+		character_event = { id = 94178 tooltip = EVTTOOLTIP94178 }
+		random = {
+			chance = 20
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB94177
+		tooltip_info = impaler
+		trigger = { trait = impaler }
+		character_event = { id = 94178 tooltip = EVTTOOLTIP94178 }
+		random = {
+			chance = 5
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC94177
+		character_event = { id = 94178 tooltip = EVTTOOLTIP94178 }
+		trigger = { 
+			NOT = {
+				trait = impaler
+				trait = craven
+			}
+		}
+		random = {
+			chance = 10
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+}
+
+# Fight Aftermath
+character_event = {
+	id = 94178
+	desc = EVTDESC94178
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94178
+		trigger = {
+			NOT = { trait = impaler }
+		}
+		decadence = -5
+	}
+	option = {
+		name = EVTOPTB94178
+		tooltip_info = impaler
+		trigger = { trait = impaler }
+		decadence = -5
+	}
+}
+
+### The Two-Headed Dromedary Hunt
+
+# The Hunt
+character_event = {
+	id = 94180
+	desc = EVTDESC94180
+	picture = GFX_evt_hunt
+	border = GFX_event_normal_frame_religion
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+		NOT = { has_character_flag = dromedary_hunt_taken }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94180
+		set_character_flag = dromedary_hunt
+		set_character_flag = dromedary_hunt_taken
+		character_event = { id = 94181 days = 6 tooltip = EVTTOOLTIP94181 }
+	}
+	option = {
+		name = EVTOPTB94180
+		custom_tooltip = { text = lower_decadence_quit }
+	}
+}
+
+# The Hunt Begins
+character_event = {
+	id = 94181
+	desc = EVTDESC94181
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94181
+		character_event = { id = 94182 days = 6 tooltip = EVTTOOLTIP94182 }
+	}
+}
+
+# No Sign of the Beast
+character_event = {
+	id = 94182
+	desc = EVTDESC94182
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94182
+		character_event = { id = 94183 days = 6 tooltip = EVTTOOLTIP94183 }
+	}
+}
+
+# Hunt is Abandoned
+character_event = {
+	id = 94183
+	desc = EVTDESC94183
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94183
+		character_event = { id = 94184 days = 6 tooltip = EVTTOOLTIP94184 }
+	}
+}
+
+# Coming Home
+character_event = {
+	id = 94184
+	desc = EVTDESC94184
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA94184
+		decadence = -5
+	}
+}
+
+### Couriers
+character_event = {
+	id = 94185
+	desc = EVTDESC94185
+	picture = GFX_evt_imam
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94185
+		decadence = -3
+	}
+}
+
+### Palace Stripped of Luxuries
+character_event = {
+	id = 94186
+	desc = EVTDESC94186
+	picture = GFX_evt_jugglers
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94186
+		decadence = -3
+	}
+}
+
+### Brothels Closed
+character_event = {
+	id = 94187
+	desc = EVTDESC94187
+	picture = GFX_evt_sultan
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		has_ambition = obj_lower_decadence
+		NOT = { has_character_flag = berber_life }
+		NOT = { has_character_flag = bandit_camp }
+		NOT = { has_character_flag = dromedary_hunt }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA94187
+		decadence = -3
+	}
+}

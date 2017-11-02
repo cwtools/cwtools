@@ -1,0 +1,473 @@
+###########################################
+#                                         #
+# Zeus | Chancellor flavor events		  #
+# ID ZE.2000-2049	                      #
+#                                         #
+###########################################
+
+# Written by Joel Hansson
+
+namespace = ZE
+
+character_event = {
+	id = ZE.2020
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	only_playable = yes
+	capable_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOR = {
+			trait = charismatic_negotiator
+			trait = grey_eminence
+			trait = gregarious
+			is_inaccessible_trigger = yes
+			has_character_modifier = multilingual
+		}
+		prisoner = no
+		job_chancellor = {
+			NOT = { is_inaccessible_trigger = yes }
+			OR = {
+				trait = diligent
+				AND = {
+					trait = gregarious
+					diplomacy = 12
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 2
+			NOT = { diplomacy = 10 }
+		}
+		modifier = {
+			factor = 1.5
+			trait = wroth
+		}
+	}
+	
+	immediate = {
+		job_chancellor = {
+			character_event = { id = ZE.2021 }
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2021
+	desc = EVTDESC_ZE_2021
+	picture = GFX_evt_leaving_table_agnrily 
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2021
+		ai_chance = {
+			factor = 10
+		}
+		liege = { 
+			custom_tooltip = {
+				text = EVTTOOLTIP_ZE_2021
+				character_event = { id = ZE.2022 } 
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2021
+		ai_chance = {
+			factor = 0
+		}
+		prestige = -5
+	}
+}
+
+character_event = {
+	id = ZE.2022
+	desc = EVTDESC_ZE_2022
+	picture = GFX_evt_council_speaker
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		job_chancellor = {
+			save_event_target_as = language_teacher
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2022
+		add_character_modifier = {
+			modifier = student_of_language
+			duration = -1
+		}
+		tooltip = {
+			reverse_add_favor = FROM
+		}
+		hidden_tooltip = {
+			character_event = { id = ZE.2023 days = 30 }
+			random_list = {
+				65 = {
+					character_event = { id = ZE.2026 days = 200 random = 50 }
+				}
+				35 = {
+					character_event = { id = ZE.2025 days = 545 random = 100 }
+				}
+			}
+			FROM  = {
+				character_event = { id = ZE.2029 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2022
+		random_list = {
+			40 = {
+				add_trait = shy
+				hidden_tooltip = {
+					character_event = { id = 38263 } # notify shy
+				}
+			}
+			20 = {
+				add_trait = proud
+				hidden_tooltip = {
+					character_event = { id = 38261 } # notify proud
+				}
+			}
+			40 = {
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ZE.2028 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2023
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { job_chancellor = { character = event_target:language_teacher } }
+			}
+			clear_delayed_event = { id = ZE.2025 }
+			clear_delayed_event = { id = ZE.2026 }
+			character_event = { id = ZE.2024 }
+			break = yes
+		}
+		repeat_event = { id = ZE.2023 days = 30 }
+	}
+}
+
+character_event	= {
+	id = ZE.2024
+	desc = EVTDESC_ZE_2024
+	picture = GFX_evt_stressed_ruler 
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2024
+		remove_character_modifier = student_of_language
+	}
+}
+
+character_event = {
+	id = ZE.2025
+	desc = EVTDESC_ZE_2025
+	picture = GFX_evt_noble_in_castle
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_delayed_event = { id = ZE.2023 }
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2025
+		hidden_tooltip = {
+			remove_character_modifier = student_of_language
+		}
+		add_character_modifier = {
+			modifier = multilingual
+			duration = -1
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2026
+	desc = EVTDESC_ZE_2026
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2026
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 2
+				event_target:language_teacher = {
+					diplomacy = 12
+				}
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = ZE.2025 days = 340 random = 150 }
+		}
+		random = {
+			chance = 15
+			if = {
+				limit = {
+					NOT = {
+						trait = slothful
+					}
+				}
+				add_trait = diligent
+				hidden_tooltip = { # Notify diligent
+					character_event = { id = 38256 }
+				}
+			}
+			if = {
+				limit = {
+					trait = slothful
+				}
+				remove_trait = slothful
+				hidden_tooltip = { # Notify loss of slothful
+					character_event = { id = 38298 }
+				}
+			}
+		}
+		random = {
+			chance = 30
+			if = {
+				limit = {
+					NOT = {
+						trait = stressed
+					}
+				}
+				add_trait = stressed
+				hidden_tooltip = { # Notify stressed
+					character_event = { id = 38282 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2026
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				event_target:language_teacher = {
+					trait = underhanded_rogue
+				}
+			}
+			modifier = {
+				factor = 3
+				event_target:language_teacher = {
+					trait = naive_appeaser
+				}
+			}
+		}
+		clear_delayed_event = { id = ZE.2023 }
+		remove_character_modifier = student_of_language
+		if = {
+			limit = {
+				NOT = { trait = slothful }
+			}
+			random = {
+				chance = 15
+				add_trait = slothful
+				hidden_tooltip = {
+					character_event = { id = 38251 } # Notify Slothful
+				}
+			}
+		}
+		ROOT = {
+			custom_tooltip = {
+				text = EVTTOOLTIP_ZE_2026
+			}
+		}
+		event_target:language_teacher = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_disappointed
+				years = 5
+			}
+			hidden_tooltip = {
+				character_event = { id = ZE.2027 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2027
+	desc = EVTDESC_ZE_2027
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2027
+		random = {
+			chance = 35
+			add_trait = wroth
+			hidden_tooltip = {
+				character_event = { id = 38254 } # Notify wroth
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2027
+		random = {
+			chance = 10
+			add_trait = patient
+			hidden_tooltip = {
+				character_event = { id = 38264 } # Notify patient
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2028
+	desc = EVTDESC_ZE_2028
+	picture = GFX_evt_council_speaker 
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2028
+	}
+}
+
+character_event = {
+	id = ZE.2029
+	desc = EVTDESC_ZE_2029
+	picture = GFX_evt_council_speaker 
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		add_favor = FROM
+	}
+}
+
+# Abuse of office
+character_event = {
+	id = ZE.2030
+	desc = EVTDESC_ZE_2030
+	picture = GFX_evt_bad_news_female
+	border = GFX_event_normal_frame_diplomacy 
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	only_playable = yes
+	capable_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOT = { is_inaccessible_trigger = yes }
+		prisoner = no
+		job_chancellor = {
+			NOT = { opinion = { who = liege value = -74 } }
+			NOR = { 
+				trait = honest 
+				is_inaccessible_trigger = yes
+			}
+			ai = yes
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+  
+		modifier = {
+			factor = 2
+			job_chancellor = { trait = deceitful }
+		}
+		modifier = {
+			factor = 2
+			job_chancellor = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.5
+			job_chancellor = { trait = craven }
+		}
+		modifier = {
+			factor = 0.5
+			job_chancellor = { trait = slothful }
+		}
+	}
+	
+	immediate = {
+		job_chancellor = {
+			wealth = 100
+			set_character_flag = chancellor_abuse_of_office
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2030 # Depose + get imprison reason
+		job_chancellor = {
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+			remove_title = job_chancellor
+			prestige = -50
+			piety = -50
+			imprison = ROOT
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_2030 # Turn a blind eye for now but get imprison reason
+		capital_scope = {
+			add_province_modifier = {
+				modifier = excessive_bureaucracy
+				months = 60
+			}
+		}
+		job_chancellor = {
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+		}
+	}
+}

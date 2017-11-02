@@ -1,0 +1,298 @@
+###########################################
+#
+# Campaign Events
+#
+# ID 6900-6999 is reserved
+#
+###########################################
+#
+# Written by Johan Andersson
+
+#Become friendly with a fellow vassal when both at same location and we got same liege
+character_event = {
+	id = 6900
+	desc = EVTDESC6900
+	picture = GFX_evt_battle
+	
+	only_men = yes
+	min_age = 16	
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		in_command = yes
+		independent = no
+		NOT = { trait = shy }
+		liege = {
+			any_vassal = {
+				NOT = { character = ROOT }
+				in_command = yes
+				at_location = ROOT
+				NOT = { war_with = ROOT }
+				NOT = { trait = shy }
+				opinion = { who = ROOT value = -30 }
+				NOT = {	opinion = { who = ROOT value = 30 } }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		modifier = {
+			factor = 0.8
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+	}
+	
+	immediate = {
+		liege = {
+			random_vassal = {
+				limit = {
+					NOT = { character = ROOT }
+					in_command = yes
+					at_location = ROOT
+					NOT = { war_with = ROOT }
+					NOT = { trait = shy }
+					opinion = { who = ROOT value = -30 }
+					NOT = {	opinion = { who = ROOT value = 30 } }
+				}
+				save_event_target_as = campaign_friend_6900
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA6900
+		liege = {
+			event_target:campaign_friend_6900 = {
+				
+				opinion = {
+					modifier = campaign_friend
+					who = ROOT
+					years = 10
+				}
+				hidden_tooltip = {
+					character_event = { id = 6901 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+#Brother in arms!
+character_event = {
+	id = 6901
+	desc = EVTDESC6901
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA6901
+		reverse_opinion = {
+			modifier = campaign_friend
+			who = FROM
+			years = 10
+		}		
+	}
+}
+
+#Save someone's life at the battlefield...  become very good friend.
+character_event = {
+	id = 6910
+	desc = EVTDESC6910
+	picture = GFX_evt_battle
+
+	min_age = 16	
+	only_men = yes
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		in_command = yes
+		in_battle = yes
+		independent = no
+		NOT = { trait = craven }
+		NOT = { health_traits = 1 }
+		liege = {
+			any_vassal = {
+				NOT = { character = ROOT }
+				in_command = yes
+				in_battle = yes
+				at_location = ROOT
+				NOT = { war_with = ROOT }
+				NOT = { health_traits = 1 }
+				opinion = { who = ROOT value = -30 }
+				NOT = {	opinion = { who = ROOT value = 30 } }
+			}
+		}
+
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		modifier = {
+			factor = 0.5
+			trait = brave
+		}
+		
+	}
+	immediate = {
+		liege = {
+			random_vassal = {
+				limit = {
+					NOT = { character = ROOT }
+					in_command = yes
+					at_location = ROOT
+					in_battle = yes
+					NOT = { health_traits = 1 }
+					NOT = { war_with = ROOT }
+					opinion = { who = ROOT value = -30 }
+					NOT = {	opinion = { who = ROOT value = 30 } }
+				}
+				save_event_target_as = campaign_friend_6910
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA6910
+		liege = {
+			event_target:campaign_friend_6910 = {				
+				prestige = 5
+				
+				add_friend = ROOT
+				if = {
+					limit = {
+						has_dlc = "Zeus"
+					}
+					reverse_add_favor = ROOT
+				}
+				hidden_tooltip = {
+					character_event = { id = 6911 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+#Saved a new friend
+character_event = {
+	id = 6911
+	desc = EVTDESC6911
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA6911
+		add_trait = wounded
+		tooltip = {
+			add_friend = FROM
+			if = {
+				limit = {
+					has_dlc = "Zeus"
+				}
+				reverse_add_favor = FROM
+			}
+		}
+	}
+}
+
+#Become rival with a fellow vassal when both at same location and we got same liege
+character_event = {
+	id = 6920
+	desc = EVTDESC6920
+	picture = GFX_evt_battle
+
+	only_men = yes
+	min_age = 16
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		in_command = yes
+		independent = no
+		liege = {
+			any_vassal = {
+				NOT = { character = ROOT }
+				in_command = yes
+				at_location = ROOT
+				NOT = { war_with = ROOT }
+				opinion = { who = ROOT value = -30 }
+				NOT = {	opinion = { who = ROOT value = 30 } }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		modifier = {
+			factor = 0.8
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.8
+			trait = wroth
+		}
+		
+	}
+	immediate = {
+		liege = {
+			random_vassal = {
+				limit = {
+					NOT = { character = ROOT }
+					in_command = yes
+					at_location = ROOT
+					NOT = { war_with = ROOT }
+					opinion = { who = ROOT value = -30 }
+					NOT = {	opinion = { who = ROOT value = 30 } }
+				}
+				save_event_target_as = campaign_friend_6920
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA6920
+		liege = {
+			event_target:campaign_friend_6920 = {				
+				opinion = {
+					modifier = campaign_rival
+					who = ROOT
+					years = 5
+				}
+				hidden_tooltip = {
+					character_event = { id = 6921 days = 1 }
+				}
+			}
+		}
+		
+	}
+}
+
+#Gained a rival
+character_event = {
+	id = 6921
+	desc = EVTDESC6921
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA6921
+		reverse_opinion = {
+			modifier = campaign_rival
+			who = FROM
+			years = 5
+		}		
+	}
+}

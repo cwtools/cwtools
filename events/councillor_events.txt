@@ -1,0 +1,427 @@
+###################################
+#
+# CHARLEMAGNE
+# - Councillor events
+#
+###################################
+
+# Written by Henrik "Groogy" Hansson
+
+character_event = {
+	id = 108050
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		liege = {
+			character_event = { id = 108000 }
+		}
+	}
+}
+
+character_event = {
+	id = 108051
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		liege = {
+			character_event = { id = 108001 }
+		}
+	}
+}
+
+character_event = {
+	id = 108052
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		liege = {
+			character_event = { id = 108002 }
+		}
+	}
+}
+
+# Chancellor propose to liege to handle his titles for him
+character_event = {
+	id = 108000
+	desc = EVTDESC_108000
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_108000
+		ai_chance = { factor = 10000 }
+		set_character_flag = getting_help_with_titles
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108010 }
+				character_event = { id = 108005 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+	}
+	option = { 
+		name = EVTOPTC_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+		set_character_flag = refused_any_help_with_titles
+		custom_tooltip = {
+			text = EVTOPTC_108000_TOOLTIP
+		}
+	}
+}
+
+# Steward propose to liege to handle his titles for him
+character_event = {
+	id = 108001
+	desc = EVTDESC_108001
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_108000
+		ai_chance = { factor = 10000 }
+		set_character_flag = getting_help_with_titles
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108010 }
+				character_event = { id = 108005 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+	}
+	option = { 
+		name = EVTOPTC_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+		set_character_flag = refused_any_help_with_titles
+		custom_tooltip = {
+			text = EVTOPTC_108000_TOOLTIP
+		}
+	}
+}
+
+# Spiritual leader propose to liege to handle his titles for him
+character_event = {
+	id = 108002
+	desc = EVTDESC_108002
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_108000
+		ai_chance = { factor = 10000 }
+		set_character_flag = getting_help_with_titles
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108010 }
+				character_event = { id = 108005 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+	}
+	option = { 
+		name = EVTOPTC_108000
+		ai_chance = { factor = 0 }
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 108006 }
+			}
+		}
+		set_character_flag = refused_any_help_with_titles
+		custom_tooltip = {
+			text = EVTOPTC_108000_TOOLTIP
+		}
+	}
+}
+
+# Council member receives a positive response from his liege
+character_event = {
+	id = 108005
+	desc = EVTDESC_108005
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+# Council member receives a negative response from his liege
+character_event = {
+	id = 108006
+	desc = EVTDESC_108006
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+# Chancellor is approved to help liege with titles
+character_event = {
+	id = 108010
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		character_event = { id = 108020 }
+		if = {
+			limit = {
+				ai = yes
+			}
+			character_event = { id = 108015 }
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			character_event = { id = 108015 days = 2 }
+		}
+	}
+}
+
+character_event = {
+	id = 108015
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		liege = {
+			has_newly_acquired_titles = yes
+			over_max_demesne_size = 1
+		}
+	}
+
+	immediate = {
+		character_event = { id = 108010 days = 1 }
+	}
+}
+
+# Chancellor gets event to give away title
+character_event = {
+	id = 108020
+	desc = EVTDESC_108020
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_108020
+
+		ai_chance = {
+			factor = 15
+		}
+
+		trigger = {
+			liege = {
+				title_to_get_rid_of = {
+					num_fitting_characters_for_title = 1
+				}
+			}
+		}
+
+		liege = {
+			title_to_get_rid_of = {
+				best_fit_character_for_title = {
+					title = PREV 			# The Title we are looking at
+					perspective = ROOT		# From whose perspective we are viewing the title
+					index = 1 				# The index of the character in the list
+					grant_title = PREV
+				}
+			}		
+		}
+	}
+	option = {
+		name = EVTOPTB_108020
+
+		ai_chance = {
+			factor = 10
+		}
+
+		trigger = {
+			liege = {
+				title_to_get_rid_of = {
+					num_fitting_characters_for_title = 1
+				}
+			}
+		}
+
+		liege = {
+			title_to_get_rid_of = {
+				best_fit_character_for_title = {
+					title = PREV 			# The Title we are looking at
+					perspective = ROOT		# From whose perspective we are viewing the title
+					index = 2 				# The index of the character in the list
+					grant_title = PREV
+				}
+			}		
+		}
+	}
+	option = { 
+		name = EVTOPTC_108020
+
+		ai_chance = {
+			factor = 5
+		}
+
+		trigger = {
+			NOT = {
+				OR = {
+					trait = greedy
+					trait = ambitious
+					trait = envious
+					trait = deceitful
+					trait = arbitrary
+				}
+			}
+			liege = {
+				title_to_get_rid_of = {
+					num_fitting_characters_for_title = 1
+				}
+			}
+		}
+
+		liege = {
+			title_to_get_rid_of = {
+				best_fit_character_for_title = {
+					title = PREV 			# The Title we are looking at
+					perspective = ROOT		# From whose perspective we are viewing the title
+					index = 3 				# The index of the character in the list
+					grant_title = PREV
+				}
+			}		
+		}
+	}
+
+	option = {
+		name = EVTOPTD_108020
+
+		ai_chance = {
+			factor = 5
+		}
+
+		trigger = {
+			liege = {
+				title_to_get_rid_of = {
+					NOT = { num_fitting_characters_for_title = 3 }
+				}
+			}
+		}
+
+		liege = {
+			create_random_steward = {
+				random_traits = yes
+				dynasty = random
+				female = no
+			}
+			new_character = {
+				hidden_tooltip = {
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = kshatriya
+						character_event = { id = RoI.30121 }
+					}
+				}
+				liege = {
+					title_to_get_rid_of = {
+						grant_title = PREVPREV
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTE_108020
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 2
+				trait = envious
+			}
+			modifier = {
+				factor = 2
+				trait = deceitful
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+
+		trigger = {
+			OR = {
+				trait = greedy
+				trait = ambitious
+				trait = envious
+				trait = deceitful
+				trait = arbitrary
+			}
+		}
+
+		liege = {
+			title_to_get_rid_of = {
+				grant_title = ROOT
+			}
+		}
+	}
+}

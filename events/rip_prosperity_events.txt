@@ -1,0 +1,1469 @@
+namespace = RIP
+
+character_event = {
+	id = RIP.11700
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	
+	trigger = {
+		has_dlc = "Reapers"
+	}
+	
+	immediate = {
+		any_realm_province = {
+			limit = {
+				any_province_holding = { #empty provinces (including provinces with ONLY a temple) do not prosper
+					OR = {
+						holding_type = city
+						#holding_type = temple
+						holding_type = castle
+						holding_type = tribal
+					}
+				}
+				owner = { character = ROOT }
+				NOR = {
+					has_province_modifier = depopulated_1
+					has_province_modifier = depopulated_2
+					has_province_modifier = depopulated_3
+				}
+			}
+			province_event = {
+				id = RIP.11701
+			}
+		}
+	}
+}
+
+province_event = { #prosperity gain
+	id = RIP.11701
+
+	hide_window = yes
+	
+	is_triggered_only = yes	
+	
+	option = {
+			random = {
+			chance = 50 #50/50 base chance to increase
+				modifier = {
+					factor = 1.5 #over 16 stewardship you have a 75% chance
+					owner = {
+						stewardship = 16
+					}
+				}
+				modifier = {
+					factor = 1.5 #over 20 stewardship you increase 100%
+					owner = {
+						stewardship = 20
+					}
+				}
+				modifier = {
+					factor = 1.2 #having trade posts increases the chance
+					has_trade_post = yes
+				}
+				modifier = {
+					factor = 0.9 #having under 10 stewardship slightly reduces the chance
+					owner = {
+						NOT = { stewardship = 10 }
+					}
+				}
+				modifier = {
+					factor = 0.8 #having under 4 stewardship significantly reduces the chance
+					owner = {
+						NOT = { stewardship = 4 }
+					}
+				}
+				modifier = {
+					factor = 0.9 #not being independent slightly reduces the chance
+					owner = {
+						NOT = { independent = yes }
+					}
+				}
+				modifier = {
+					factor = 0.6 #tribes prosper slower
+					AND = {
+						owner = {
+							is_tribal = yes
+						}
+						any_province_holding = {
+							holding_type = tribal
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5 #bad province modifiers decrease chance
+					OR = {
+						has_province_modifier = incompetent_rule
+						has_province_modifier = thieves_guild
+						has_province_modifier = smugglers_ring
+						has_province_modifier = highway_robber_band
+						has_province_modifier = heretic_stronghold
+						has_province_modifier = religious_tension
+						has_province_modifier = temple_corruption
+						has_province_modifier = local_death_cult
+						has_province_modifier = extra_tax
+					}
+				}
+				modifier = {
+					factor = 0.7 #slightly lower chance if helping in a war
+					owner = {
+						any_war = {
+							NOR = {
+								is_primary_war_defender = yes
+								is_primary_war_attacker = yes
+							}
+						}
+						NOR = {
+							any_war = {
+								is_primary_war_defender = yes
+							}
+							any_war = {
+								is_primary_war_attacker = yes
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5 #low chance if defending in a war
+					owner = {
+						any_war = {
+							is_primary_war_defender = yes
+						}
+						NOT = {
+							any_war = {
+								is_primary_war_attacker = yes
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0.2 #very low chance if attacking in a war
+					owner = {
+						any_war = {
+							is_primary_war_attacker = yes
+						}
+					}
+				}
+				modifier = {
+					factor = 0 #no chance if under siege/occupied/diseased
+					OR = {
+						any_province_holding = {
+							has_siege = yes
+						}
+						any_province_holding = {
+							is_occupied = yes
+						}
+						has_disease = yes
+					}
+				}
+				
+				trigger_switch = {
+					on_trigger	= terrain
+					farmlands	= { change_variable = { which = prosperity_value value = 10 } } #gain depends on terrain type
+					plains		= { change_variable = { which = prosperity_value value = 8 } }
+					steppe 		= { change_variable = { which = prosperity_value value = 8 } }
+					forest 		= { change_variable = { which = prosperity_value value = 6 } }
+					hills		= { change_variable = { which = prosperity_value value = 6 } }
+					jungle		= { change_variable = { which = prosperity_value value = 4 } }
+					desert		= { change_variable = { which = prosperity_value value = 4 } }
+					mountain	= { change_variable = { which = prosperity_value value = 2 } }
+					arctic		= { change_variable = { which = prosperity_value value = 2 } }
+				}
+				
+				if = { # Coastal provinces prosper quicker because they get more trade/disease
+					limit = {
+						port = yes
+						any_province_holding = {
+							holding_type = city
+						}
+					}
+					change_variable = { which = prosperity_value value = 2 }
+				}
+				
+				if = { # Coastal Mountains/Arctic, i.e. Aden, prosper quicker than non-coastal terrain of the same type
+					limit = {
+						port = yes
+						any_province_holding = {
+							holding_type = city
+						}
+						OR = {
+							terrain = mountain
+							terrain = arctic
+						}
+					}
+					change_variable = { which = prosperity_value value = 4 }
+				}
+				
+				if = { # Coastal Desert/Jungle, i.e. Mecca, prosper quicker than non-coastal terrain of the same type 
+					limit = {
+						port = yes
+						any_province_holding = {
+							holding_type = city
+						}
+						OR = {
+							terrain = desert
+							terrain = jungle
+						}
+					}
+					change_variable = { which = prosperity_value value = 2 }
+				}
+			}
+			if = {
+				limit = {
+					has_province_flag = crown_focus_province #provinces with crown focus set gain a bonus 1-5 prosperity progress per year regardless of other factors
+					NOR = {
+						any_province_holding = {
+							is_occupied = yes
+						}
+						any_province_holding = {
+							has_disease = yes
+						}
+						has_disease = yes
+					}
+				}
+				random_list = {
+					10 = {
+						change_variable = { which = prosperity_value value = 5 }
+					}
+					10 = {
+						change_variable = { which = prosperity_value value = 4 }
+					}
+					10 = {
+						change_variable = { which = prosperity_value value = 3 }
+					}
+					10 = {
+						change_variable = { which = prosperity_value value = 2 }
+					}
+					10 = {
+						change_variable = { which = prosperity_value value = 1 }
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_province_flag = recent_depopulation_1
+				}
+				change_variable = { which = prosperity_value value = 3 }
+			}
+			if = {
+				limit = {
+					has_province_flag = recent_depopulation_2
+				}
+				change_variable = { which = prosperity_value value = 4 }
+			}
+			if = {
+				limit = {
+					has_province_flag = recent_depopulation_3
+				}
+				change_variable = { which = prosperity_value value = 5 }
+			}
+			if = {
+				limit = {
+					check_variable = { which = prosperity_value value = 100 } #gain modifiers at 100/250/500 value
+					NOR = {
+						has_province_modifier = prosperity_modifier_1
+						has_province_modifier = prosperity_modifier_2
+						has_province_modifier = prosperity_modifier_3
+					}
+				}
+				add_province_modifier = { name = prosperity_modifier_1 duration = -1 }
+				owner = { character_event = { id = RIP.11712 } }
+				break = yes
+			}
+			if = {
+				limit = {
+					check_variable = { which = prosperity_value value = 250 }
+					NOR = {
+						has_province_modifier = prosperity_modifier_2
+						has_province_modifier = prosperity_modifier_3
+					}
+				}
+				remove_province_modifier = prosperity_modifier_1
+				add_province_modifier = { name = prosperity_modifier_2 duration = -1 }
+				owner = { character_event = { id = RIP.11712 } }
+				break = yes
+			}
+			if = {
+				limit = {
+					check_variable = { which = prosperity_value value = 500 }
+					NOT = {
+						has_province_modifier = prosperity_modifier_3
+					}
+				}
+				remove_province_modifier = prosperity_modifier_2
+				add_province_modifier = { name = prosperity_modifier_3 duration = -1 }
+				owner = { character_event = { id = RIP.11712 } }
+			}
+	}
+}
+
+character_event = { #when sieged prosperity progress is wiped, with a major chance to drop a level
+	id = RIP.11702
+
+	hide_window = yes
+	
+	is_triggered_only = yes	
+	
+	immediate = {
+		FROM = {
+			location = {
+				set_variable = { which = prosperity_value value = 0 }
+				random = {
+				chance = 75 #chance to lower by 1 step
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_1
+						}
+						remove_province_modifier = prosperity_modifier_1
+						break = yes
+					}
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_2
+						}
+						remove_province_modifier = prosperity_modifier_2
+						add_province_modifier = { name = prosperity_modifier_1 duration = -1 }
+						break = yes
+					}
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_3
+						}
+						remove_province_modifier = prosperity_modifier_3
+						add_province_modifier = { name = prosperity_modifier_2 duration = -1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+character_event = { #when looted prosperity progress is wiped, with a minor chance to drop a level
+	id = RIP.11720
+
+	hide_window = yes
+	
+	is_triggered_only = yes	
+	
+	immediate = {
+		FROM = {
+			location = {
+				set_variable = { which = prosperity_value value = 0 }
+				random = {
+				chance = 15 #chance to lower by 1 step
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_1
+						}
+						remove_province_modifier = prosperity_modifier_1
+						break = yes
+					}
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_2
+						}
+						remove_province_modifier = prosperity_modifier_2
+						add_province_modifier = { name = prosperity_modifier_1 duration = -1 }
+						break = yes
+					}
+					if = {
+						limit = {
+							has_province_modifier = prosperity_modifier_3
+						}
+						remove_province_modifier = prosperity_modifier_3
+						add_province_modifier = { name = prosperity_modifier_2 duration = -1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+province_event = { #when epidemic appears prosperity progress is reduced based on prosperity level
+	id = RIP.11703
+
+	hide_window = yes
+	
+	is_triggered_only = yes	
+	
+	immediate = {
+		if = {
+			limit = {
+				has_province_modifier = prosperity_modifier_3
+			}
+			set_variable = { which = prosperity_value value = 500 }
+		}
+		if = {
+			limit = {
+				has_province_modifier = prosperity_modifier_2
+			}
+			set_variable = { which = prosperity_value value = 250 }
+		}
+		if = {
+			limit = {
+				has_province_modifier = prosperity_modifier_1
+			}
+			set_variable = { which = prosperity_value value = 100 }
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_province_modifier = prosperity_modifier_1
+					has_province_modifier = prosperity_modifier_2
+					has_province_modifier = prosperity_modifier_3
+				}
+			}
+			set_variable = { which = prosperity_value value = 0 }
+		}
+	}
+}
+
+character_event = { #prosperity notification
+	id = RIP.11712
+	desc = RIP.11712.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes	
+	
+	option = {
+		name = RIP.11712.a
+		#
+	}
+}
+
+character_event = { #removes flag on new holder
+	id = RIP.11715
+
+	hide_window = yes
+	
+	is_triggered_only = yes	
+	
+	option = {
+		FROM = {
+			if = {
+				limit = {
+					tier = count
+				}
+				location = {
+					clr_province_flag = crown_focus_province
+				}
+			}
+		}
+	}
+}
+
+##Events for Focus provinces
+
+province_event = { # Province Modifier Tombola
+	id = RIP.11719
+	hide_window = yes
+	
+	has_flag = crown_focus_province
+	
+	trigger = {
+		has_province_modifier = prosperity_modifier_3
+	}	
+	
+	mean_time_to_happen = {
+		years = 45
+		modifier = {
+			factor = 1.2
+			owner = {
+				independent = no
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				is_smart_trigger = yes
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = administrator
+					trait = architect
+					trait = scholar
+					trait = gardener
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				trait = diligent
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = scholarly_theologian
+					trait = mastermind_theologian
+					trait = charismatic_negotiator
+					trait = grey_eminence
+					trait = fortune_builder
+					trait = midas_touched
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			
+			10 = { # Jewish Settlement
+				modifier = {
+					factor = 0
+					NOR = {
+						owner = { religion_group = christian }
+						owner = { religion_group = muslim }
+						owner = { religion_group = zoroastrian_group }
+					}
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						has_character_modifier = expelled_jewish
+					}
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_province_modifier = jewish_settlement_province
+						has_province_modifier = religious_settlement_province
+						religion_group = jewish_group 
+					}
+				}
+				modifier = {
+					factor = 3
+					trait = cynical
+				}
+				province_event = { id = RIP.11704 }
+			}
+			10 = { # Religious Settlement
+				modifier = {
+					factor = 0
+					OR = {
+						owner = { religion_group = christian }
+						owner = { religion_group = muslim }
+						owner = { religion_group = zoroastrian_group }
+					}
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						has_province_modifier = jewish_settlement_province
+						has_province_modifier = religious_settlement_province
+					}
+				}
+				modifier = {
+					factor = 3
+					trait = cynical
+				}
+				province_event = { id = RIP.11718 }
+			}
+			10 = { # Monument to Glory
+				modifier = {
+					factor = 0
+					has_province_modifier = glorious_monument_province
+				}
+				modifier = {
+					factor = 5
+					owner = {
+						trait = proud
+					}
+				}
+				province_event = { id = RIP.11707 }
+			}
+			10 = { # Merchant Harbor
+				modifier = {
+					factor = 0
+					has_province_modifier = merchant_harbor_province
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						port = yes
+					}
+				}
+				province_event = { id = RIP.11708 }
+			}
+			10 = { # Scholar Foundation
+				modifier = {
+					factor = 0
+					has_province_modifier = scholar_foundation_province
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = scholarly_theologian
+							trait = mastermind_theologian
+							trait = scholar
+							trait = theologian
+							trait = mystic
+						}
+					}
+				}
+				province_event = { id = RIP.11709 }
+			}
+			10 = { # Great Library
+				modifier = {
+					factor = 0
+					has_province_modifier = great_library_province
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = scholarly_theologian
+							trait = mastermind_theologian
+							trait = scholar
+						}
+					}
+				}
+				province_event = { id = RIP.11710 }
+			}
+			10 = { # Center of Worship
+				modifier = {
+					factor = 0
+					has_province_modifier = center_of_worship_province
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = scholarly_theologian
+							trait = mastermind_theologian
+							trait = theologian
+							trait = mystic
+						}
+					}
+				}
+				province_event = { id = RIP.11711 }
+			}
+			10 = { # Logging Company
+				modifier = {
+					factor = 0
+					has_province_modifier = logging_company_province
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						terrain = forest
+						terrain = jungle
+					}
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = diligent
+							trait = architect
+							trait = administrator
+							trait = fortune_builder
+							trait = midas_touched
+						}
+					}
+				}
+				province_event = { id = RIP.11716 }
+			}
+			10 = { # Ore Mine
+				modifier = {
+					factor = 0
+					has_province_modifier = ore_mine_province
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						terrain = mountain
+					}
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = diligent
+							trait = architect
+							trait = administrator
+							trait = fortune_builder
+							trait = midas_touched
+						}
+					}
+				}
+				province_event = { id = RIP.11717 }
+			}
+			10 = { # Regimental Grounds
+				modifier = {
+					factor = 0
+					has_province_modifier = regimental_ground_province
+				}
+				modifier = {
+					factor = 3
+					owner = {
+						OR = {
+							trait = skilled_tactician
+							trait = brilliant_strategist
+							martial = 14
+						}
+					}
+				}
+				province_event = { id = RIP.11721 }
+			}
+		
+		}
+	}
+}
+
+province_event = { #Reclaim Land
+	id = RIP.11705
+	title = PROSPERITY_TITLE
+	desc = RIP.11705.d
+	picture = "GFX_evt_culture_change"
+	border = GFX_event_normal_frame_economy
+	
+	has_flag = crown_focus_province
+	
+	trigger = {
+		has_province_modifier = prosperity_modifier_3
+		NOT = {
+			num_of_max_settlements = 7
+		}
+	}	
+	
+	mean_time_to_happen = {
+		years = 65
+		modifier = {
+			factor = 1.2
+			owner = {
+				independent = no
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				is_smart_trigger = yes
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = administrator
+					trait = architect
+					trait = scholar
+					trait = gardener
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				trait = diligent
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = scholarly_theologian
+					trait = mastermind_theologian
+					trait = charismatic_negotiator
+					trait = grey_eminence
+					trait = fortune_builder
+					trait = midas_touched
+				}
+			}
+		}
+	}
+	
+	
+	option = {
+		name = RIP.11705.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -2.5
+		}
+		add_holding_slot = 1
+	}
+	option = {
+		name = RIP.11705.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+province_event = { #Monetary Incentives for culture conversion
+	id = RIP.11706
+	title = PROSPERITY_TITLE
+	desc = RIP.11706.d
+	picture = "GFX_evt_culture_change"
+	border = GFX_event_normal_frame_economy
+	
+	has_flag = crown_focus_province
+	
+	trigger = {
+		OR = {
+			has_province_modifier = prosperity_modifier_2
+			has_province_modifier = prosperity_modifier_3	
+		}
+		owner = {
+			NOT = { culture = ROOT }
+		}
+	}	
+	
+	mean_time_to_happen = {
+		years = 40
+		modifier = {
+			factor = 2
+			owner = {
+				independent = no
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				stewardship = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 12
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				learning = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				is_smart_trigger = yes
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = administrator
+					trait = architect
+					trait = scholar
+					trait = gardener
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				trait = diligent
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				OR = {
+					trait = scholarly_theologian
+					trait = mastermind_theologian
+					trait = charismatic_negotiator
+					trait = grey_eminence
+					trait = fortune_builder
+					trait = midas_touched
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = RIP.11706.a
+
+		ai_chance = { 
+			factor = 50
+		}
+		
+		owner = {
+			scaled_wealth = -1
+			ROOT = {
+				culture = PREV
+				if = {
+					limit = {
+						NOT = {
+							religion = PREV
+						}
+					}
+					religion = PREV
+				}
+				if = {
+					limit = {
+						has_province_modifier = nomad_agitation
+					}
+					remove_province_modifier = nomad_agitation
+				}
+			}
+		}
+	}
+	option = {
+		name = RIP.11706.b
+		
+		ai_chance = { 
+			factor = 50
+		}
+		
+	}
+}
+
+province_event = { #Jewish settlement 
+	id = RIP.11704
+	title = PROSPERITY_TITLE
+	desc = RIP.11704.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11704.a
+		
+		ai_chance = { 
+			factor = 95 
+		
+			modifier = {
+				factor = 0.1
+				trait = zealous
+			}
+		}
+		
+		owner = {
+			scaled_wealth = -1
+			piety = -200
+		}
+		add_province_modifier = {
+			name = jewish_settlement_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11704.b
+		
+		ai_chance = { 
+			factor = 5 
+		}
+		
+		owner = {
+			piety = 200
+		}
+	}
+}
+
+province_event = { #Monument to Glory
+	id = RIP.11707
+	title = PROSPERITY_TITLE
+	desc = RIP.11707.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11707.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -1.5
+		}
+		add_province_modifier = {
+			name = glorious_monument_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11707.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+character_event = { #Monument to Glory teardown
+	id = RIP.11713
+	desc = RIP.11713.d
+	picture = "GFX_evt_siege"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes	
+	
+	trigger = {
+		FROM = {
+			location = {
+				has_province_modifier = glorious_monument_province
+			}
+			NOT = {
+				owner = { character = ROOT }
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+		wealth = 50
+		FROM = {
+			county = {
+				remove_province_modifier = glorious_monument_province
+			}
+		}
+	}
+}
+
+province_event = { #Merchant Harbor
+	id = RIP.11708
+	title = PROSPERITY_TITLE
+	desc = RIP.11708.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11708.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -0.5
+		}
+		add_province_modifier = {
+			name = merchant_harbor_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11708.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+province_event = { #Scholar Foundation
+	id = RIP.11709
+	title = PROSPERITY_TITLE
+	desc = RIP.11709.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11709.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -1
+		}
+		add_province_modifier = {
+			name = scholar_foundation_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11709.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+province_event = { #Great library
+	id = RIP.11710
+	title = PROSPERITY_TITLE
+	desc = RIP.11710.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11709.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -0.5
+		}
+		add_province_modifier = {
+			name = great_library_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11709.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+province_event = { #Center of Worship
+	id = RIP.11711
+	title = PROSPERITY_TITLE
+	desc = RIP.11711.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+		
+	option = {
+		name = RIP.11711.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		scaled_wealth = -1
+		add_province_modifier = {
+			name = center_of_worship_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11711.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+province_event = { #Logging Company
+	id = RIP.11716
+	title = PROSPERITY_TITLE
+	desc = RIP.11716.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+		
+	option = {
+		name = RIP.11716.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		scaled_wealth = -0.5
+		add_province_modifier = {
+			name = logging_company_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11716.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+		scaled_wealth = 0.3
+		
+		ai_chance = { factor = 0 }
+	}
+}
+
+province_event = { #Ore Mine
+	id = RIP.11717
+	title = PROSPERITY_TITLE
+	desc = RIP.11717.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+		
+	option = {
+		name = RIP.11717.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		scaled_wealth = -0.5
+		add_province_modifier = {
+			name = ore_mine_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11717.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+		scaled_wealth = 0.3
+		
+		ai_chance = { factor = 0 }
+	}
+}
+
+province_event = { #Religious settlement 
+	id = RIP.11718
+	title = PROSPERITY_TITLE
+	desc = RIP.11718.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11718.a
+		
+		ai_chance = { 
+			factor = 95 
+		
+			modifier = {
+				factor = 0.1
+				trait = zealous
+			}
+		}
+		
+		owner = {
+			scaled_wealth = -1
+			piety = -200
+		}
+		add_province_modifier = {
+			name = religious_settlement_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11718.b
+		
+		ai_chance = { 
+			factor = 5 
+		}
+		
+		owner = {
+			piety = 200
+		}
+	}
+}
+
+province_event = { #Regimental Grounds
+	id = RIP.11721
+	title = PROSPERITY_TITLE
+	desc = RIP.11721.d
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIP.11721.a
+		
+		ai_chance = { 
+			factor = 95 
+		}
+		
+		owner = {
+			scaled_wealth = -1.5
+		}
+		add_province_modifier = {
+			name = regimental_ground_province
+			duration = -1
+		}
+	}
+	option = {
+		name = RIP.11721.b
+		
+		ai_chance = { 
+			factor = 5 
+		}
+		
+	}
+}
+
+province_event = { #flag cleanup 1
+	id = RIP.11722
+
+	hide_window = yes
+	
+	has_flag = recent_depopulation_1
+	
+	trigger = {
+		had_province_flag = { flag = recent_depopulation_1 days = 7300 }
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	option = {
+		clr_province_flag = recent_depopulation_1
+	}
+
+}
+
+province_event = { #flag cleanup 2
+	id = RIP.11723
+
+	hide_window = yes
+	
+	has_flag = recent_depopulation_2
+	
+	trigger = {
+		had_province_flag = { flag = recent_depopulation_2 days = 9125 }
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	option = {
+		clr_province_flag = recent_depopulation_2
+	}
+
+}
+
+province_event = { #flag cleanup 3
+	id = RIP.11724
+
+	hide_window = yes
+	
+	has_flag = recent_depopulation_3
+	
+	trigger = {
+		had_province_flag = { flag = recent_depopulation_3 days = 10950 }
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	option = {
+		clr_province_flag = recent_depopulation_3
+	}
+
+}

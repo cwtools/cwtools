@@ -1,0 +1,434 @@
+###########################################
+#                                         #
+# Horse Lords nomad horse events 2		  #
+# ID HL.6500-6999                         #
+#                                         #
+###########################################
+
+# Written by Joel Hansson
+
+namespace = HL
+
+# Horse dies
+character_event = {
+	id = HL.6500
+	desc = {
+		text = EVTDESC_HL_6500_LIGHTNING
+		trigger = {
+			has_character_flag = nomad_warhorse_name_lightning
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6500_SKY
+		trigger = {
+			has_character_flag = nomad_warhorse_name_sky
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6500_DRAGON
+		trigger = {
+			has_character_flag = nomad_warhorse_name_dragon
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6500_ARROW
+		trigger = {
+			has_character_flag = nomad_warhorse_name_arrow
+		}
+	}
+	picture = GFX_evt_horse_friend
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_modifier = nomad_warhorse
+	}
+	
+	option = {
+		name = EVTOPTA_HL_6500
+		remove_character_modifier = nomad_warhorse
+		hidden_tooltip = {
+			character_event = { id = HL.6999 }
+		}
+	}
+}
+
+# Other horse bit my horse
+character_event = {
+	id = HL.6510
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	
+	trigger = {
+		has_character_modifier = nomad_warhorse
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+		OR = {
+		    any_vassal = {
+			    is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+		    	ai = yes
+		    }
+		    any_courtier = {
+			    is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+			    ai = yes
+		    }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				any_vassal = {
+					is_adult = yes
+				    prisoner = no
+				    NOT = { trait = incapable }
+			    	ai = yes
+				}
+			}
+			random_vassal = {
+				limit = {
+					is_adult = yes
+				    prisoner = no
+				    NOT = { trait = incapable }
+			    	ai = yes
+				}
+				character_event = { id = HL.6511 }
+				break = yes
+			}
+		}
+		random_courtier = {
+			limit = {
+				is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+			    ai = yes
+			}
+			character_event = { id = HL.6511 }
+		}
+	}
+}
+
+character_event = {
+	id = HL.6511
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = HL.6512 }
+		}
+	}
+}
+
+character_event = {
+	id = HL.6512
+	desc = {
+		text = EVTDESC_HL_6512_LIGHTNING
+		trigger = {
+			has_character_flag = nomad_warhorse_name_lightning
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6512_SKY
+		trigger = {
+			has_character_flag = nomad_warhorse_name_sky
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6512_DRAGON
+		trigger = {
+			has_character_flag = nomad_warhorse_name_dragon
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_6512_ARROW
+		trigger = {
+			has_character_flag = nomad_warhorse_name_arrow
+		}
+	}
+	picture = GFX_evt_horse_friend
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_6512
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_killed_horse
+			years = 15
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_HL_6512
+		prestige = -30
+	}
+}
+
+# Commission an expensive prestigious portrait
+character_event = {
+	id = HL.6520
+	desc = EVTDESC_HL_6520
+	picture = GFX_evt_market_altaic
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		prestige = 1500
+		has_character_modifier = nomad_warhorse
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = { has_character_flag = nomad_painter }
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = nomad_painter
+	}
+	
+	option = {
+		name = EVTOPTA_HL_6520
+		prestige = 50
+		wealth = -50
+	}
+	
+	option = {
+		name = EVTOPTB_HL_6520
+		trigger = {
+			spouse = { always = yes }
+		}
+		prestige = 25
+		wealth = -50
+		spouse = {
+			prestige = 50
+			opinion = {
+				who = ROOT
+				modifier = opinion_happy
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_HL_6520
+		trigger = {
+			NOT = {
+				spouse = { always = yes }
+			}
+			any_courtier = { is_consort = ROOT }
+		}
+		prestige = 25
+		wealth = -50
+		random_courtier = {
+			limit = {
+				is_consort = ROOT
+			}
+			prestige = 50
+			opinion = {
+				who = ROOT
+				modifier = opinion_delighted
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD_HL_6520_SKY
+		trigger = {
+			has_character_flag = nomad_warhorse_name_sky
+		}
+		prestige = 100
+		wealth = -50
+	}
+	
+	option = {
+		name = EVTOPTD_HL_6520_LIGHTNING
+		trigger = {
+			has_character_flag = nomad_warhorse_name_lightning
+		}
+		prestige = 100
+		wealth = -50
+	}
+	
+	option = {
+		name = EVTOPTD_HL_6520_ARROW
+		trigger = {
+			has_character_flag = nomad_warhorse_name_arrow
+		}
+		prestige = 100
+		wealth = -50
+	}
+	
+	option = {
+		name = EVTOPTD_HL_6520_DRAGON
+		trigger = {
+			has_character_flag = nomad_warhorse_name_dragon
+		}
+		prestige = 100
+		wealth = -50
+	}
+	
+	option = {
+		name = EVTOPTE_HL_6520
+		prestige = -25
+		random = {
+			chance = 40
+			add_trait = shy
+			hidden_tooltip = {
+				character_event = {
+					id = 38263 #Notify Shy
+				}
+			}
+		}
+	}
+}
+
+# Sad my horse died
+character_event = {
+	id = HL.6990
+	desc = EVTDESC_HL_6990
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_modifier = nomad_warhorse }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_6990
+		random = {
+			chance = 5
+			add_trait = depressed
+			hidden_tooltip = {
+				character_event = {
+					id = 38288 #Notify Depressed
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_HL_6990
+		trigger = {
+			spouse = {
+				opinion = {
+					who = ROOT
+					value = 60
+				}
+				NOT = { trait = incapable }
+			}
+		}
+		spouse = {
+			random = {
+				chance = 5
+				add_trait = depressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38288 #Notify Depressed
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_HL_6990
+		trigger = {
+			any_friend = {
+				NOT = { trait = incapable }
+			}
+		}
+		random_friend = {
+			limit = {
+				NOT = { trait = incapable }
+			}
+			random = {
+				chance = 5
+				add_trait = depressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38288 #Notify Depressed
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_HL_6990
+		trigger = {
+			NOT = {
+				any_friend = {
+					NOT = { trait = incapable }
+				}
+			}
+			any_courtier = {
+				trait = kind
+				opinion = {
+					who = ROOT
+					value = 0
+				}
+				NOT = { trait = incapable }
+			}
+		}
+		random_courtier = {
+			limit = {
+				trait = kind
+				opinion = {
+					who = ROOT
+					value = 0
+				}
+				NOT = { trait = incapable }
+			}
+			random = {
+				chance = 5
+				add_trait = depressed
+			}
+		}
+	}
+}
+
+# Flag and modifier clean-up
+character_event = {
+	id = HL.6999
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = nomad_warhorse
+		clr_character_flag = nomad_warhorse_name_lightning
+		clr_character_flag = nomad_warhorse_name_dragon
+		clr_character_flag = nomad_warhorse_name_sky
+		clr_character_flag = nomad_warhorse_name_arrow
+		clear_delayed_event = { id = HL.6500 }
+		
+		if = {
+			limit = {
+				NOT = { has_character_flag = nomad_warhorse_ignore_grief }
+			}
+			random = {
+				chance = 10
+				character_event = { id = HL.6990 days = 150 }
+			}
+		}
+		clr_character_flag = nomad_warhorse_ignore_grief
+	}
+}

@@ -1,0 +1,127 @@
+###############################
+#
+# ID numbers for all events.
+#
+###############################
+
+# On-Actions: 0-999, 40000 - 44999
+
+# (Character) Adult Personality Traits: 1000-1499
+
+# (Character) Childhood Personality Traits: 1500-1999
+
+# (Character) Guardian Events: 2000-2500, 38100 - 38299
+
+# (Character) Personality Trait Effects: 3000 - 3999
+
+# (Character) Feudal Life: 4000-4499
+
+# (Character) Lifestyle Events: 5000-5499
+
+# (Character) Health Events: 6000-6499
+
+# (Character) Critical Events: 6500-6899
+
+# (Character) Campaign Events: 6900-6999
+
+# Plot Events: 7000-8299
+
+# Crusade Events: 8300-8499
+
+# Holy Order Events: 8500-8999
+
+# Councillor Job Events: 9000-9999
+
+# Narrative Events: 10000-19999
+
+# Triggered by on-action/special events: 20000-24499
+
+# Mourning Event series : 24500 - 24999
+
+# (Character) Married Life Events: 30000-30999
+
+# Muslims (Religion) Events: 31000 - 31999
+
+# Hunting Events 36000 - 36099 
+
+# (Character) Family Events: 37000-37999
+
+# Bankruptcy Events: 38000 - 38099
+
+# Religious Events: 39000 - 39999
+
+# Civil War Events: 45000 - 45999
+
+# Imprisoned Events: 50000 - 54999
+
+# Cultural Conversion Events: 55000 - 59999
+
+# Mongol Horde Events: 60000 - 60999
+
+# Regency Events: 61000 - 61999
+
+# Siege Events: 62000 - 62299
+
+# misc_old_gods_events: 62300 - 62999
+
+# Vassal Request Events: 63000 - 63999
+
+# (Character) Lovers Events: 64000 - 64499
+
+# (Character) Various Traits Events: 65000 - 65999
+
+# (Character) Dynasty Events: 66000 - 66999
+
+# (Character) Pope vs Free Investiture: 67000 - 67999
+
+# (Character) UNUSED: 68000 - 68999
+
+# (Character) Rumours Events: 69000 - 69999
+
+# (Character) Tournament Events: 70000 - 70999
+
+# (Character) Hedge Knights: 71000 - 71999
+
+# (Character) Feast Events: 72000 - 72999
+
+# (Character) Court Events: 73000 - 73999
+
+# (Character) Summer Fair Events: 74000 - 74999
+
+# (Character) Job Flavour Events: 75000 - 75999
+
+# (Character) Bastard Events: 76000 - 76999
+
+# (Province) Province Lordship Events: 77000 - 77999
+
+# (Character) Ward Events: 78000 - 78999
+
+# Rebel events: 80000 - 85000
+
+# Muslim Pilgrimage: 86000-86999
+
+# Hashshashin Events: 88000 - 88249
+
+# Furusiyya Events: 88250 - 88499
+
+# Ramadan Events: 88500 - 88749
+
+# Fatwa Events: 88750 - 88999
+
+# Polygamy Events: 89000 - 89249
+
+# Tutorial Events: 90000 - 90999
+
+# Decadence Events: 91000 - 91499
+
+# Ambition Events: 94000 - 94999
+
+# Friends & Rivals events: 100000 - 104999
+
+# (Character) Muslim Honorary Titles Events: 105000 - 105999
+
+# Important Muslims: 106000 - 106999
+
+# Learning Scenario: 107000 - 107999
+
+# Councillor Events: 108000 - 108100

@@ -1,0 +1,8989 @@
+###################################
+#
+# Mongol Horde Events
+#
+# Id 60000 - 61000 is reserved
+#
+###################################
+
+## Rumors of a Steppe Menace
+#narrative_event = {
+#	id = 60000
+#	title = EVTNAME60000
+#	desc = EVTDESC60000
+#	major = yes
+#	
+#	picture = "GFX_evt_mongols"
+#	border = "GFX_event_narrative_frame_war"
+#	
+#	only_playable = yes
+#	religion = catholic
+#	only_men = yes
+#	min_age = 16
+#	
+#	trigger = {
+#		always = no # replaced by new mongol arrival event
+#		year = 1215
+#		
+#		controls_religion = yes # Let it happen for the Pope - he's always around
+#		
+#		NOT = { has_global_flag = mongol_horde_rumors }
+#		NOT = { has_global_flag = il_khanate_arrival }
+#		NOT = { has_global_flag = golden_horde_arrival }
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 1
+#	}
+#	
+#	immediate = {
+#		set_global_flag = mongol_horde_rumors
+#		activate_title = { title = e_il-khanate status = yes }
+#		create_random_soldier = {
+#			random_traits = no
+#			dynasty = 101916 # Toluid
+#			name = "Hulegu"
+#			culture = mongol
+#			religion = tengri_pagan
+#			age = 30
+#			attributes = {
+#				martial = 8
+#				diplomacy = 4
+#				stewardship = 5
+#				intrigue = 4
+#				learning = 3
+#			}
+#			health = 6
+#			fertility = 0.7
+#			trait = brilliant_strategist
+#			trait = wroth
+#			trait = cruel
+#			trait = proud
+#			trait = zealous
+#		}
+#		new_character = {
+#			e_il-khanate = {
+#				grant_title = PREV
+#			}
+#			set_defacto_liege = THIS
+#		}
+#		any_playable_ruler = {
+#			limit = { ai = no }
+#			chronicle = {
+#				entry = CHRONICLE_MONGOL_RUMORS
+#				portrait = [New.GetID]
+#			}
+#		}
+#		
+#		activate_title = { title = e_golden_horde status = yes }
+#		create_random_soldier = {
+#			random_traits = no
+#			dynasty = 7379 # Jochid
+#			name = "Batu"
+#			culture = mongol
+#			religion = tengri_pagan
+#			age = 33
+#			attributes = {
+#				martial = 9
+#				diplomacy = 5
+#				stewardship = 8
+#				intrigue = 7
+#				learning = 3
+#			}
+#			health = 6
+#			fertility = 0.7
+#			trait = brilliant_strategist
+#			trait = diligent
+#			trait = humble
+#			trait = gregarious
+#			trait = just
+#		}
+#		new_character = {
+#			e_golden_horde = {
+#				grant_title = PREV
+#			}
+#			set_defacto_liege = THIS
+#		}
+#	}
+#	
+#	option = {
+#		name = "EVTOPTA60000"
+#	}
+#}
+#
+## Arrival of the Ilkhanate
+#narrative_event = {
+#	id = 60001
+#	title = "EVTNAME60001"
+#	desc = "EVTDESC60001"
+#	major = yes
+#	hide_new = yes
+#	
+#	picture = "GFX_evt_mongols"
+#	border = "GFX_event_narrative_frame_war"
+#	
+#	only_playable = yes
+#	
+#	trigger = {
+#		always = no # replaced by new mongol arrival event
+#		year = 1216
+#		has_landed_title = e_il-khanate
+#		NOT = { year = 1224 }
+#		NOT = { has_global_flag = il_khanate_arrival }
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 24
+#	}
+#	
+#	option = {
+#		name = "OK"
+#		trigger = {
+#			has_landed_title = e_il-khanate
+#		}
+#		set_global_flag = il_khanate_arrival
+#		1423 = { # Fergana
+#			kingdom = {
+#				ROOT = {
+#					war = {
+#						casus_belli = tribal_invasion
+#						target = PREVPREV # The top liege of the owner
+#						thirdparty_title = PREV # The de jure kingdom
+#					}
+#				}
+#			}
+#		}
+#		wealth = 5000
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1181 # Oshrusana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		random = {
+#			chance = 50
+#			
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 30
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 35
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 39
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#		}
+#		random = {
+#			chance = 50
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 30
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 35
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 39
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 903 # Samarkand
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#		}
+#		
+#		# Some extra courtiers
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 25
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 26
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 28
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 17
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 20
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTB60001"
+#		trigger = {
+#			religion_group = muslim
+#			NOT = { has_landed_title = e_il-khanate }
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTC60001"
+#		trigger = {
+#			religion_group = christian
+#			NOT = { has_landed_title = e_il-khanate }
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTD60001"
+#		trigger = {
+#			NOT = { religion_group = christian }
+#			NOT = { religion_group = muslim }
+#			NOT = { has_landed_title = e_il-khanate }
+#		}
+#	}
+#}
+#
+#
+## Arrival of the Golden Horde
+#narrative_event = {
+#	id = 60002
+#	title = "EVTNAME60002"
+#	desc = "EVTDESC60002"
+#	major = yes
+#	hide_new = yes
+#	
+#	picture = "GFX_evt_mongols"
+#	border = "GFX_event_narrative_frame_war"
+#	
+#	only_playable = yes
+#	
+#	trigger = {
+#		always = no # replaced by new mongol arrival event
+#		year = 1224
+#		NOT = { year = 1250 }
+#		has_landed_title = e_golden_horde
+#		has_global_flag = il_khanate_arrival
+#		NOT = { has_global_flag = golden_horde_arrival }
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 120
+#		modifier = {
+#			factor = 0.5
+#			year = 1235
+#		}
+#		modifier = {
+#			factor = 0.5
+#			year = 1240
+#		}
+#	}
+#	
+#	option = {
+#		name = "OK"
+#		trigger = {
+#			has_landed_title = e_golden_horde
+#		}
+#		set_global_flag = golden_horde_arrival
+#		if = {
+#			limit = {
+#				1425 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1425 = { # Ili
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#				1427 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1427 = { # Urzhar
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#				1132 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1132 = { # Kirghiz
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#				1329 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1329 = { # Ket
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#				1205 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1205 = { # Narim
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#				1306 = {
+#					owner = {
+#						realm = {
+#							NOT = { title = e_il-khanate }
+#						}
+#					}
+#				}
+#			}
+#			1306 = { # Tura
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		if = {
+#			limit = {
+#				war = no
+#			}
+#			1425 = { # Ili - Ok, we have no choice. DoW on the Il-Khanate.
+#				kingdom = {
+#					ROOT = {
+#						war = {
+#							casus_belli = tribal_invasion
+#							target = PREVPREV # The top liege of the owner of the province
+#							thirdparty_title = PREV # The de jure kingdom
+#						}
+#					}
+#				}
+#			}
+#		}
+#		
+#		wealth = 5000
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 35
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 39
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1427 # Urzhar
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		random = {
+#			chance = 50
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 30
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 35
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 39
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#		}
+#		random = {
+#			chance = 50
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 30
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 35
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 39
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1132 # Kirghiz
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#		}
+#		
+#		# Some extra courtiers
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 25
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 26
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 28
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 17
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = yes
+#			age = 20
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTB60002"
+#		trigger = {
+#			religion_group = christian
+#			NOT = { has_landed_title = e_golden_horde }
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTC60002"
+#		trigger = {
+#			religion_group = muslim
+#			NOT = { has_landed_title = e_golden_horde }
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTD60002"
+#		trigger = {
+#			NOT = { religion_group = christian }
+#			NOT = { religion_group = muslim }
+#			NOT = { has_landed_title = e_golden_horde }
+#		}
+#	}
+#}
+#
+## Ilkhanate reinforcements
+#character_event = {
+#	id = 60004
+#	desc = "EVTDESC60004"
+#	
+#	picture = "GFX_evt_mongols"
+#	border = "GFX_event_normal_frame_war"
+#	
+#	only_playable = yes
+#	
+#	trigger = {
+#		always = no # replaced by new mongol arrival event
+#		NOT = { year = 1300 }
+#		has_landed_title = e_il-khanate
+#		NOT = { has_character_flag = ilkhanate_reinf }
+#		had_global_flag = { flag = il_khanate_arrival days = 3650 }
+#		e_il-khanate = {
+#			holder_scope = {
+#				culture = mongol
+#				religion = tengri_pagan
+#				OR = {
+#					war = yes
+#					is_landed = yes
+#				}
+#			}
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 1
+#	}
+#	
+#	option = {
+#		name = "OK"
+#		set_character_flag = ilkhanate_reinf
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 25
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 26
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 27
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1423 # Fergana
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		
+#		random = {
+#			chance = 50
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 25
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1423 # Fergana
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 26
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1423 # Fergana
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#			create_character = {
+#				random_traits = yes
+#				dynasty = random
+#				religion = tengri_pagan
+#				culture = ROOT
+#				female = no
+#				age = 27
+#				attributes = {
+#					martial = 12
+#				}
+#				trait = brilliant_strategist
+#			}
+#			new_character = {
+#				spawn_unit = {
+#					province = 1423 # Fergana
+#					troops =
+#					{
+#						horse_archers = { 2700 2700 }
+#						light_cavalry = { 1600 1600 }
+#						light_infantry = { 541 541 }
+#						heavy_infantry = { 210 210 }
+#						knights = { 47 47 }
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+## Golden Horde reinforcements
+#character_event = {
+#	id = 60005
+#	desc = "EVTDESC60004"
+#	
+#	picture = "GFX_evt_mongols"
+#	border = "GFX_event_normal_frame_war"
+#	
+#	only_playable = yes
+#	
+#	trigger = {
+#		always = no # replaced by new mongol arrival event
+#		NOT = { year = 1320 }
+#		has_landed_title = e_golden_horde
+#		NOT = { has_character_flag = golden_horde_reinf }
+#		had_global_flag = { flag = golden_horde_arrival days = 3650 }
+#		e_golden_horde = {
+#			holder_scope = {
+#				culture = mongol
+#				religion = tengri_pagan
+#				OR = {
+#					war = yes
+#					is_landed = yes
+#				}
+#			}
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		months = 1
+#	}
+#	
+#	option = {
+#		name = "OK"
+#		set_character_flag = golden_horde_reinf
+#		
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 30
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 32
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = random
+#			religion = tengri_pagan
+#			culture = ROOT
+#			female = no
+#			age = 36
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		new_character = {
+#			spawn_unit = {
+#				province = 1425 # Ili
+#				troops =
+#				{
+#					horse_archers = { 2700 2700 }
+#					light_cavalry = { 1600 1600 }
+#					light_infantry = { 541 541 }
+#					heavy_infantry = { 210 210 }
+#					knights = { 47 47 }
+#				}
+#			}
+#		}
+#	}
+#}
+
+### The Hordes Convert ###
+
+# Ilkhanate converts to Catholic
+character_event = {
+	id = 60010
+	title = "EVTNAME60010"
+	desc = "EVTDESC60010"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_war"
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no 
+	
+	trigger = {
+		primary_title = {
+			title = e_il-khanate
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = il_khanate_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = il_khanate_converts }
+		any_realm_province = {
+			religion = catholic
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1440
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = catholic
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = il_khanate_converts
+	}
+	
+	option = {	# Catholic
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_il-khanate
+		}
+		religion = catholic
+		capital_scope = {
+			religion = catholic
+		}
+		
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = catholic
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = catholic
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+}
+
+# Ilkhanate converts to Orthodox
+character_event = {
+	id = 60011
+	title = "EVTNAME60010"
+	desc = "EVTDESC60011"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no 
+	
+	trigger = {
+		primary_title = {
+			title = e_il-khanate
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = il_khanate_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = il_khanate_converts }
+		any_realm_province = {
+			religion = orthodox
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 960
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = orthodox
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = il_khanate_converts
+	}
+	
+	option = {	# Orthodox
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_il-khanate
+		}
+		religion = orthodox
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = orthodox
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = orthodox
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+}
+
+# Ilkhanate converts to Sunni
+character_event = {
+	id = 60012
+	title = "EVTNAME60010"
+	desc = "EVTDESC60012"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_il-khanate
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = il_khanate_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = il_khanate_converts }
+		any_realm_province = {
+			religion = sunni
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = sunni
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = il_khanate_converts
+	}
+	
+	option = {	# Sunni
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_il-khanate
+		}
+		religion = sunni
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = sunni
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = sunni
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTC60010"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+}
+
+# Ilkhanate converts to Shiite
+character_event = {
+	id = 60013
+	title = "EVTNAME60010"
+	desc = "EVTDESC60013"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_il-khanate
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = il_khanate_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = il_khanate_converts }
+		any_realm_province = {
+			religion = shiite
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = shiite
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = il_khanate_converts
+	}
+	
+	option = {	# Shiite
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_il-khanate
+		}
+		religion = shiite
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = shiite
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = shiite
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTC60010"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+}
+
+# Ilkhanate converts to Nestorian
+character_event = {
+	id = 60014
+	title = "EVTNAME60010"
+	desc = "EVTDESC60014"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_war"
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_il-khanate
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = il_khanate_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = il_khanate_converts }
+	}
+
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = nestorian
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = il_khanate_converts
+	}
+	
+	option = {	# Nestorian
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_il-khanate
+		}
+		religion = nestorian
+		capital_scope = {
+			religion = nestorian
+		}
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = nestorian
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = nestorian
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_il-khanate }
+		}
+	}
+}
+
+# Golden Horde converts to Catholic
+character_event = {
+	id = 60020
+	title = "EVTNAME60020"
+	desc = "EVTDESC60010"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_golden_horde
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = golden_horde_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = golden_horde_converts }
+		any_realm_province = {
+			religion = catholic
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 960
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = catholic
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = golden_horde_converts
+	}
+	
+	option = {	# Catholic
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_golden_horde
+		}
+		religion = catholic
+		capital_scope = {
+			religion = catholic
+		}
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = catholic
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = catholic
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+}
+
+# Golden Horde converts to Orthodox
+character_event = {
+	id = 60021
+	title = "EVTNAME60020"
+	desc = "EVTDESC60011"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_golden_horde
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = golden_horde_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = golden_horde_converts }
+		any_realm_province = {
+			religion = orthodox
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = orthodox
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = golden_horde_converts
+	}
+	
+	option = {	# Orthodox
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_golden_horde
+		}
+		religion = orthodox
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = orthodox
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = orthodox
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+}
+
+# Golden Horde converts to Sunni
+character_event = {
+	id = 60022
+	title = "EVTNAME60020"
+	desc = "EVTDESC60012"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_golden_horde
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = golden_horde_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = golden_horde_converts }
+		any_realm_province = {
+			religion = sunni
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = sunni
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = golden_horde_converts
+	}
+	
+	option = {	# Sunni
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_golden_horde
+		}
+		religion = sunni
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = sunni
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = sunni
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTC60010"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+}
+
+# Golden Horde converts to Shiite
+character_event = {
+	id = 60023
+	title = "EVTNAME60020"
+	desc = "EVTDESC60013"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_golden_horde
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = golden_horde_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = golden_horde_converts }
+		any_realm_province = {
+			religion = shiite
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = shiite
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = golden_horde_converts
+	}
+	
+	option = {	# Shiite
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_golden_horde
+		}
+		religion = shiite
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = shiite
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = shiite
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTC60010"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+}
+
+# Golden Horde converts to Nestorian
+character_event = {
+	id = 60024
+	title = "EVTNAME60020"
+	desc = "EVTDESC60014"
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_normal_frame_religion"
+	
+	major = yes
+	
+	only_playable = yes
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		primary_title = {
+			title = e_golden_horde
+			holder_scope = {
+				religion = tengri_pagan
+				NOT = { trait = zealous }
+			}
+		}
+		had_global_flag = { flag = golden_horde_arrival days = 14600 }
+		NOT = { had_global_flag = { flag = il_khanate_arrival days = 29200 } }
+		NOT = { has_global_flag = golden_horde_converts }
+	}
+
+	mean_time_to_happen = {
+		months = 1440
+		modifier = {
+			factor = 0.75
+			any_demesne_province = {
+				is_capital = yes
+				religion = nestorian
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = golden_horde_converts
+	}
+	
+	option = {	# Nestorian
+		name = "EVTOPTA60010"
+		trigger = {
+			has_landed_title = e_golden_horde
+		}
+		religion = nestorian
+		any_realm_character = {
+			limit = { religion = tengri_pagan }
+			religion = nestorian
+			if = {
+				limit = {
+					is_playable = yes
+					capital_scope = {
+						religion = tengri_pagan
+					}
+				}
+				capital_scope = {
+					religion = nestorian
+				}
+			}
+		}
+	}
+	# Other rulers are informed
+	option = {
+		name = "EVTOPTB60010"
+		trigger = {
+			religion_group = muslim
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EXCELLENT"
+		trigger = {
+			religion_group = christian
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+	option = {
+		name = "EVTOPTD60010"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { has_landed_title = e_golden_horde }
+		}
+	}
+}
+
+
+### Mongols sack European cities ###
+
+# Mongols sack Kiev
+narrative_event = {
+	id = 60100
+	title = "EVTNAME60100"
+	desc = "EVTDESC60100"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_kiev }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_kiev }
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_kiev
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.1 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60100"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60100"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Novgorod
+narrative_event = {
+	id = 60101
+	title = "EVTNAME60101"
+	desc = "EVTDESC60101"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_novgorod }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_novgorod }
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_novgorod
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.2 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA60101 # Perhaps their bloodlust has been sated now
+		trigger = { NOT = { culture = mongol } }
+	}
+	option = {
+		name = EVTOPTB60101 # May the snows of the frozen north claim them
+		trigger = {
+			culture = mongol
+		}
+	}
+}
+
+# Mongols sack Krakow
+narrative_event = {
+	id = 60102
+	title = "EVTNAME60102"
+	desc = "EVTDESC60102"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_krakow }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_krakow }
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_krakow
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.3 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60102"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60102"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Aachen
+narrative_event = {
+	id = 60103
+	title = "EVTNAME60103"
+	desc = "EVTDESC60103"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_aachen }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_aachen }
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_aachen
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.4 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60103"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60103"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Paris
+narrative_event = {
+	id = 60104
+	title = "EVTNAME60104"
+	desc = "EVTDESC60104"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_paris }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_paris }
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_paris
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.5 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60104"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60104"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack London
+narrative_event = {
+	id = 60105
+	title = "EVTNAME60105"
+	desc = "EVTDESC60105"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_london }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_london }
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_london
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.6 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60105"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60105"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Rome
+narrative_event = {
+	id = 60106
+	title = "EVTNAME60106"
+	desc = "EVTDESC60106"
+	major = yes
+	
+	picture = "GFX_evt_rome_falls"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		NOT = { has_global_flag = mongols_sack_rome }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		FROM = { title = b_roma }
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_rome
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.7 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60106"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60106"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Venice
+narrative_event = {
+	id = 60107
+	title = "EVTNAME60107"
+	desc = "EVTDESC60107"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_venezia }
+		NOT = { has_global_flag = mongols_sack_venice }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_venice
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.8 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60107"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60107"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Constantinople
+narrative_event = {
+	id = 60108
+	title = "EVTNAME60108"
+	desc = "EVTDESC60108"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_constantinople }
+		NOT = { has_global_flag = mongols_sack_constantinople }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_constantinople
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.9 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60108"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60108"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Lisbon
+narrative_event = {
+	id = 60109
+	title = "EVTNAME60109"
+	desc = "EVTDESC60109"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_lisboa }
+		NOT = { has_global_flag = mongols_sack_lisbon }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_lisbon
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.10 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60109"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60109"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Smolensk
+narrative_event = {
+	id = 60110
+	title = "EVTNAME60110"
+	desc = "EVTDESC60110"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_smolensk }
+		NOT = { has_global_flag = mongols_sack_smolensk }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_smolensk
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.11 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60110"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60110"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Prague
+narrative_event = {
+	id = 60111
+	title = "EVTNAME60111"
+	desc = "EVTDESC60111"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_praha }
+		NOT = { has_global_flag = mongols_sack_prague }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_prague
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.12 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60111"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60111"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Vienna
+narrative_event = {
+	id = 60112
+	title = "EVTNAME60112"
+	desc = "EVTDESC60112"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_wien }
+		NOT = { has_global_flag = mongols_sack_vienna }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_vienna
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.13 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60112"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60112"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Esztergom
+narrative_event = {
+	id = 60113
+	title = "EVTNAME60113"
+	desc = "EVTDESC60113"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_esztergom }
+		NOT = { has_global_flag = mongols_sack_esztergom }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_esztergom
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.14 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60113"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60113"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Athens
+narrative_event = {
+	id = 60114
+	title = "EVTNAME60114"
+	desc = "EVTDESC60114"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_athens }
+		NOT = { has_global_flag = mongols_sack_athens }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_athens
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.15 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60114"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60114"
+		trigger = { religion_group = muslim }
+	}
+}
+
+# Mongols sack Belgrade
+narrative_event = {
+	id = 60115
+	title = "EVTNAME60115"
+	desc = "EVTDESC60115"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_belgrade }
+		NOT = { has_global_flag = mongols_sack_belgrade }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_belgrade
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.16 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60115"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+	option = {
+		name = "EVTOPTB60115"
+		trigger = { religion_group = muslim }
+	}
+}
+
+### Mongols sack Middle Eastern cities ###
+
+# Mongols sack Baghdad
+narrative_event = {
+	id = 60116
+	title = "EVTNAME60116"
+	desc = "EVTDESC60116"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_bagdad }
+		NOT = { has_global_flag = mongols_sack_baghdad }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_baghdad
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.17 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60116"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60116"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+# Mongols sack Damascus
+narrative_event = {
+	id = 60117
+	title = "EVTNAME60117"
+	desc = "EVTDESC60117"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_damascus }
+		NOT = { has_global_flag = mongols_sack_damascus }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_damascus
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.18 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60117"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60117"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+# Mongols sack Jerusalem
+narrative_event = {
+	id = 60118
+	title = "EVTNAME60118"
+	desc = "EVTDESC60118"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_jerusalem }
+		NOT = { has_global_flag = mongols_sack_jerusalem }
+		NOT = {
+			OR = {
+				religion_group = muslim 
+				religion_group = christian 
+			}
+		}
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_jerusalem
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.19 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60118"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60118"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+# Mongols sack Alexandria
+narrative_event = {
+	id = 60119
+	title = "EVTNAME60119"
+	desc = "EVTDESC60119"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_alexandria }
+		NOT = { has_global_flag = mongols_sack_alexandria }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_alexandria
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.20 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60119"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60119"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+# Mongols sack Cairo
+narrative_event = {
+	id = 60120
+	title = "EVTNAME60120"
+	desc = "EVTDESC60120"
+	major = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_cairo }
+		NOT = { has_global_flag = mongols_sack_cairo }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_cairo
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.21 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60120"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60120"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+# Mongols sack Mecca
+narrative_event = {
+	id = 60121
+	title = "EVTNAME60121"
+	desc = "EVTDESC60121"
+	major = yes
+	
+	picture = "GFX_evt_mecca_falls_soa"
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	culture = mongol
+	
+	trigger = {
+		FROM = { title = b_mecca }
+		NOT = { has_global_flag = mongols_sack_mecca }
+		NOT = { religion_group = muslim }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+		
+		NOT = {
+			FROM = {
+				owner = {
+					OR = {
+						has_landed_title = e_il-khanate
+						has_landed_title = e_golden_horde
+						has_landed_title = e_mongol_empire
+						liege = { has_landed_title = e_il-khanate }
+						liege = { has_landed_title = e_golden_horde }
+						liege = { has_landed_title = e_mongol_empire }
+						top_liege = { has_landed_title = e_il-khanate }
+						top_liege = { has_landed_title = e_golden_horde }
+						top_liege = { has_landed_title = e_mongol_empire }
+					}
+				}
+			}
+		}		
+	}
+	
+	major_trigger = {
+		NOT = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			has_landed_title = e_mongol_empire
+			liege = { has_landed_title = e_il-khanate }
+			liege = { has_landed_title = e_golden_horde }
+			liege = { has_landed_title = e_mongol_empire }
+			top_liege = { has_landed_title = e_il-khanate }
+			top_liege = { has_landed_title = e_golden_horde }
+			top_liege = { has_landed_title = e_mongol_empire }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_sack_mecca
+		any_player = {
+			limit = {
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+					has_landed_title = e_mongol_empire
+					liege = { has_landed_title = e_il-khanate }
+					liege = { has_landed_title = e_golden_horde }
+					liege = { has_landed_title = e_mongol_empire }
+					top_liege = { has_landed_title = e_il-khanate }
+					top_liege = { has_landed_title = e_golden_horde }
+					top_liege = { has_landed_title = e_mongol_empire }
+				}
+			}
+			narrative_event = { id = TOG.22 }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60121"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTB60121"
+		trigger = { NOT = { religion_group = muslim } }
+	}
+}
+
+##################################
+# Rise of the Seljuks
+##################################
+
+# Seljuk distinguishes himself in a Turkish court
+character_event = {
+	id = 60200
+	desc = EVTDESC60200
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	culture = turkish
+	
+	trigger = {
+		year = 960
+		NOT = { year = 980 }
+		
+		higher_tier_than = count
+		
+		NOT = { has_global_flag = seljuk_spawned }
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		create_random_soldier = {
+			random_traits = no
+			dynasty = 613 # Seljuk
+			name = Seljuk
+			culture = turkish
+			religion = ROOT
+			age = 18
+			attributes = {
+				martial = 8
+				diplomacy = 4
+				stewardship = 5
+				intrigue = 4
+				learning = 3
+			}
+			health = 7
+			fertility = 0.8
+			trait = brilliant_strategist
+			trait = wroth
+			trait = cruel
+			trait = proud
+			trait = zealous
+			trait = ambitious
+			trait = adventurer
+		}
+		new_character = {
+			character_event = {
+				id = 60201
+				days = 3285
+				random = 730
+			}
+			set_character_flag = seljuk_himself
+		}
+	}
+	
+	option = { # A most capable young man
+		name = EVTOPTA60200
+		
+		set_global_flag = seljuk_spawned
+		set_global_flag = seljuk_spawned_by_event
+		
+		tooltip = {
+			create_random_soldier = {
+				random_traits = no
+				dynasty = 613 # Seljuk
+				name = Seljuk
+				culture = turkish
+				religion = ROOT
+				age = 18
+				attributes = {
+					martial = 8
+					diplomacy = 4
+					stewardship = 5
+					intrigue = 4
+					learning = 3
+				}
+				health = 7
+				fertility = 0.8
+				trait = brilliant_strategist
+				trait = wroth
+				trait = cruel
+				trait = proud
+				trait = zealous
+				trait = ambitious
+			}
+		}
+	}
+}
+
+# Seljuk and his men consider starting an adventure
+character_event = {
+	id = 60201
+	desc = EVTDESC60201
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+		
+		OR = {
+			630 = { # Merv
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			631 = { # Dihistan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			632 = { # Tus
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+	}
+	
+	option = { # Merv it is!
+		name = EVTOPTA60201
+		trigger = {
+			630 = { # Merv
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 10000
+		}
+		
+		630 = {
+			province_event = {
+				id = 60202
+				days = 2
+			}
+		}
+	}
+	option = { # Khorasan
+		name = EVTOPTB60201
+		trigger = {
+			632 = { # Tus
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+		}
+		
+		632 = {
+			province_event = {
+				id = 60202
+				days = 2
+			}
+		}
+	}
+	option = { # Dihistan
+		name = EVTOPTC60201
+		trigger = {
+			631 = { # Dihistan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		631 = {
+			province_event = {
+				id = 60202
+				days = 2
+			}
+		}
+	}
+}
+
+# Ping the target province
+province_event = {
+	id = 60202
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = yes
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60204
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = no
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60203
+				}
+			}
+		}
+	}
+}
+
+# The landless Seljuk and his men start an adventure
+character_event = {
+	id = 60203
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60205
+				days = 1
+			}
+		}
+		
+		liege = {
+			capital_scope = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ROOT = {
+								set_defacto_liege = ROOT
+								create_title = {
+									tier = DUKE
+									landless = yes
+									temporary = yes
+									culture = ROOT
+									name = "CLAIMANT_ADVENTURE"
+									holder = ROOT
+								}
+								
+								set_character_flag = duchy_adventurer
+							
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								war = {
+									target = PREV
+									casus_belli = duchy_adventure
+									thirdparty_title = PREVPREVPREV
+									tier = DUKE
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = { religion_group = muslim }
+			}
+			religion = sunni
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60203: Seljuk starts his first war as a landless character!"
+	}
+}
+
+# The landed Seljuk and his men start an adventure
+character_event = {
+	id = 60204
+	desc = EVTDESC60204
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60205
+				days = 1
+			}
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					ROOT = {
+						capital_scope = {
+							ROOT = {
+								set_character_flag = duchy_adventurer
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+							}
+						}
+						
+						war = {
+							target = PREV
+							casus_belli = duchy_adventure
+							thirdparty_title = PREVPREVPREV
+							tier = DUKE
+						}
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = { religion_group = muslim }
+			}
+			religion = sunni
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60204: Seljuk starts his first war as a landed character!"
+	}
+	
+	option = {
+		name = EVTOPTA60204
+	}
+}
+
+# Notify Seljuk's old liege
+character_event = {
+	id = 60205
+	desc = EVTDESC60205
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_ruler = yes } # The DoW worked and the adventurer has a temporary title
+	}
+	
+	option = {
+		name = EVTOPTA60205
+	}
+}
+
+# Seljuk is successful!
+# Fired from the duchy_adventure CB
+narrative_event = {
+	id = 60206
+	title = EVTNAME60206
+	desc = EVTDESC60206
+	picture = GFX_evt_mongols
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					independent = yes
+					liege = {
+						ai = yes
+					}
+				}
+			}
+			set_defacto_liege = ROOT
+			activate_title = { title = e_seljuk_turks status = yes }
+			e_seljuk_turks = {
+				grant_title = ROOT
+			}
+		}
+		
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			decadence = -25
+		}
+		
+		prestige = 1000
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+			}
+		}
+		
+		log = "60206: Seljuk wins his first war!"
+	}
+	
+	option = {
+		name = EVTOPTA60206
+		trigger = {
+			has_character_flag = seljuk_himself
+		}
+	}
+	option = {
+		name = EVTOPTB60206
+		trigger = {
+			NOT = { has_character_flag = seljuk_himself }
+			OR = {
+				culture = turkish
+				culture = karluk
+				culture = cuman
+				culture = pecheneg
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC60206
+		trigger = {
+			NOT = { has_character_flag = seljuk_himself }
+			NOT = {
+				OR = {
+					culture = turkish
+					culture = karluk
+					culture = cuman
+					culture = pecheneg
+				}
+			}
+		}
+	}
+}
+
+# Seljuk's successor revitalizes the new state
+character_event = {
+	id = 60207
+	desc = EVTDESC60207
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	only_independent = yes
+	has_global_flag = seljuk_spawned_by_event
+	
+	trigger = {
+		year = 980
+		NOT = { year = 1100 }
+		uses_decadence = yes
+		
+		dynasty = 613 # Seljuk
+		
+		higher_tier_than = duke
+		
+		martial = 7
+		
+		NOT = { has_character_flag = seljuk_himself }
+		NOT = { has_character_flag = seljuk_reinforcements }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			martial = 9
+		}
+		modifier = {
+			factor = 0.5
+			martial = 11
+		}
+		modifier = {
+			factor = 0.5
+			martial = 13
+		}
+	}
+	
+	immediate = {
+		set_character_flag = seljuk_reinforcements
+		
+		decadence = -75
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				if = {
+					limit = {
+						martial = 9
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				if = {
+					limit = {
+						martial = 11
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				if = {
+					limit = {
+						martial = 13
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA60207
+	}
+}
+
+##################################
+# Rise of the Timurids
+##################################
+
+# Timur distinguishes himself at a Mongol court
+character_event = {
+	id = 60300
+	desc = EVTDESC60300
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	culture_group = altaic
+	
+	trigger = {
+		year = 1350
+		NOT = { year = 1370 }
+		
+		culture = mongol
+		higher_tier_than = count
+		
+		NOT = { has_global_flag = timur_spawned }
+		
+		any_realm_province = {
+			region = world_persia
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = no
+			name = "Timur"
+			dynasty = 800
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 18
+			attributes = {
+				martial = 12
+				diplomacy = 8
+				stewardship = 9
+				intrigue = 9
+				learning = 6
+			}
+			health = 6
+			fertility = 0.8
+			trait = brilliant_strategist
+			trait = diligent
+			trait = ambitious
+			trait = proud
+			trait = quick
+			trait = clubfooted
+			trait = adventurer
+		}
+		
+		new_character = {
+			set_character_flag = timur_himself
+			character_event = {
+				id = 60301
+				days = 3285
+				random = 730
+			}
+		}
+	}
+	
+	option = { # A most capable young man
+		name = EVTOPTA60300
+		
+		set_global_flag = timur_spawned
+		set_global_flag = timur_spawned_by_event
+		
+		tooltip = {
+			create_character = {
+				random_traits = no
+				name = "Timur"
+				dynasty = 800
+				religion = ROOT
+				culture = ROOT
+				female = no
+				age = 18
+				attributes = {
+					martial = 12
+					diplomacy = 8
+					stewardship = 9
+					intrigue = 9
+					learning = 6
+				}
+				health = 6
+				fertility = 0.8
+				trait = brilliant_strategist
+				trait = diligent
+				trait = ambitious
+				trait = proud
+				trait = quick
+				trait = clubfooted
+			}
+		}
+	}
+}
+
+# Timur and his men consider starting an adventure
+character_event = {
+	id = 60301
+	desc = EVTDESC60201
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+		
+		OR = {
+			903 = { # Samarkand
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			904 = { # Balkh
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			630 = { # Merv
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			631 = { # Dihistan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			632 = { # Tus
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+	}
+	
+	option = { # Merv it is!
+		name = EVTOPTA60201
+		trigger = {
+			630 = { # Merv
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 10000
+		}
+		
+		630 = {
+			province_event = {
+				id = 60302
+				days = 2
+			}
+		}
+	}
+	option = { # Khorasan
+		name = EVTOPTB60201
+		trigger = {
+			632 = { # Tus
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+		}
+		
+		632 = {
+			province_event = {
+				id = 60302
+				days = 2
+			}
+		}
+	}
+	option = { # Dihistan
+		name = EVTOPTC60201
+		trigger = {
+			631 = { # Dihistan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		631 = {
+			province_event = {
+				id = 60302
+				days = 2
+			}
+		}
+	}
+	option = { # Samarkand
+		name = EVTOPTD60201
+		trigger = {
+			903 = { # Samarkand
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		903 = {
+			province_event = {
+				id = 60302
+				days = 2
+			}
+		}
+	}
+	option = { # Balkh
+		name = EVTOPTE60201
+		trigger = {
+			904 = { # Balkh
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		904 = {
+			province_event = {
+				id = 60302
+				days = 2
+			}
+		}
+	}
+}
+
+# Ping the target province
+province_event = {
+	id = 60302
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = yes
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60304
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = no
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60303
+				}
+			}
+		}
+	}
+}
+
+# The landless Timur and his men start an adventure
+character_event = {
+	id = 60303
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60305
+				days = 1
+			}
+		}
+		
+		liege = {
+			capital_scope = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ROOT = {
+								set_defacto_liege = ROOT
+								create_title = {
+									tier = DUKE
+									landless = yes
+									temporary = yes
+									culture = ROOT
+									name = "CLAIMANT_ADVENTURE"
+									holder = ROOT
+								}
+								
+								set_character_flag = duchy_adventurer
+							
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								war = {
+									target = PREV
+									casus_belli = duchy_adventure
+									thirdparty_title = PREVPREVPREV
+									tier = DUKE
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 28
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 23
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60303: Timur starts his first war (landless)!"
+	}
+}
+
+# The landed Timur and his men start an adventure
+character_event = {
+	id = 60304
+	desc = EVTDESC60304
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60305
+				days = 1
+			}
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					ROOT = {
+						capital_scope = {
+							ROOT = {
+								set_character_flag = duchy_adventurer
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+							}
+						}
+						
+						war = {
+							target = PREV
+							casus_belli = duchy_adventure
+							thirdparty_title = PREVPREVPREV
+							tier = DUKE
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 28
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 23
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60303: Timur starts his first war (landed)!"
+	}
+	
+	option = {
+		name = EVTOPTA60204
+	}
+}
+
+# Notify Timur's old liege
+character_event = {
+	id = 60305
+	desc = EVTDESC60205
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_ruler = yes } # The DoW worked and the adventurer has a temporary title
+	}
+	
+	option = {
+		name = EVTOPTA60305
+	}
+}
+
+# Timur is successful!
+# Fired from the duchy_adventure CB
+narrative_event = {
+	id = 60306
+	title = EVTNAME60306
+	desc = EVTDESC60306
+	picture = GFX_evt_mongols
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					independent = yes
+					liege = {
+						ai = yes
+					}
+				}
+			}
+			set_defacto_liege = ROOT
+			activate_title = { title = e_timurids status = yes }
+			e_timurids = {
+				grant_title = ROOT
+			}
+		}
+		
+		prestige = 1000
+		
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			decadence = -25
+		}
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+			}
+		}
+		
+		log = "60306: Timur wins his first war!"
+	}
+	
+	option = {
+		name = EVTOPTA60306
+		trigger = {
+			has_character_flag = timur_himself
+		}
+	}
+	option = {
+		name = EVTOPTB60306
+		trigger = {
+			NOT = { has_character_flag = timur_himself }
+			culture = mongol
+		}
+	}
+	option = {
+		name = EVTOPTC60306
+		trigger = {
+			NOT = { has_character_flag = timur_himself }
+			NOT = { culture = mongol }
+		}
+	}
+}
+
+# Timur's successors revitalize the state
+character_event = {
+	id = 60307
+	desc = EVTDESC60307
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	only_independent = yes
+	has_global_flag = timur_spawned_by_event
+	
+	trigger = {
+		year = 1370
+		NOT = { year = 1500 }
+		
+		dynasty = 800 # Timurid
+		
+		higher_tier_than = duke
+		
+		martial = 7
+		
+		NOT = { has_character_flag = timur_himself }
+		NOT = { has_character_flag = timur_reinforcements }
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		modifier = {
+			factor = 0.5
+			martial = 9
+		}
+		modifier = {
+			factor = 0.5
+			martial = 11
+		}
+		modifier = {
+			factor = 0.5
+			martial = 13
+		}
+	}
+	
+	immediate = {
+		set_character_flag = timur_reinforcements
+		
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			decadence = -75
+		}
+		
+		capital_scope = { 
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				if = {
+					limit = {
+						martial = 9
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				if = {
+					limit = {
+						martial = 11
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				if = {
+					limit = {
+						martial = 13
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA60307
+	}
+}
+
+
+##########################################
+# Rise of the Ghaznavids under Sabuktigin
+##########################################
+
+# Sabuktigin distinguishes himself at a Mongol court
+character_event = {
+	id = 60400
+	desc = EVTDESC60400
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	religion_group = muslim
+	
+	trigger = {
+		year = 965
+		NOT = { year = 1010 }
+		
+		higher_tier_than = count
+		
+		NOT = { has_global_flag = sabuktigin_spawned }
+		
+		1182 = { # Ghazna
+			owner = {
+				same_realm = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = no
+			name = "Sabuktigin"
+			dynasty = 790
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 18
+			attributes = {
+				martial = 12
+				diplomacy = 8
+				stewardship = 9
+				intrigue = 9
+				learning = 6
+			}
+			health = 6
+			fertility = 0.8
+			trait = brilliant_strategist
+			trait = diligent
+			trait = ambitious
+			trait = proud
+			trait = quick
+			trait = adventurer
+		}
+		
+		new_character = {
+			set_character_flag = sabuktigin_himself
+			character_event = {
+				id = 60401
+				days = 3285
+				random = 730
+			}
+		}
+	}
+	
+	option = { # A most capable young man
+		name = EVTOPTA60300
+		
+		set_global_flag = sabuktigin_spawned
+		set_global_flag = sabuktigin_spawned_by_event
+		
+		tooltip = {
+			create_character = {
+				random_traits = no
+				name = "Sabuktigin"
+				dynasty = 790
+				religion = ROOT
+				culture = ROOT
+				female = no
+				age = 18
+				attributes = {
+					martial = 12
+					diplomacy = 8
+					stewardship = 9
+					intrigue = 9
+					learning = 6
+				}
+				health = 6
+				fertility = 0.8
+				trait = brilliant_strategist
+				trait = diligent
+				trait = ambitious
+				trait = proud
+				trait = quick
+			}
+		}
+	}
+}
+
+# Sabuktigin and his men consider starting an adventure
+character_event = {
+	id = 60401
+	desc = EVTDESC60201
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+		
+		OR = {
+			1341 = { # Nandana in Gandhara
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			1338 = { # Multan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			1362 = { # Lahore
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+			1138 = { # Bhakkar
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+	}
+	
+	option = { # Gandhara it is!
+		name = EVTOPTA60401
+		trigger = {
+			1341 = { # Nandana
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 10000
+		}
+		
+		1341 = {
+			province_event = {
+				id = 60402
+				days = 2
+			}
+		}
+	}
+	option = { # Multan
+		name = EVTOPTB60401
+		trigger = {
+			1338 = { # Multan
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+		}
+		
+		1338 = {
+			province_event = {
+				id = 60402
+				days = 2
+			}
+		}
+	}
+	option = { # Lahore
+		name = EVTOPTC60401
+		trigger = {
+			1362 = { # Lahore
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		1362 = {
+			province_event = {
+				id = 60402
+				days = 2
+			}
+		}
+	}
+	option = { # Bhakkar
+		name = EVTOPTD60401
+		trigger = {
+			1138 = { # Bhakkar
+				owner = {
+					NOT = { same_realm = ROOT }
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		1138 = {
+			province_event = {
+				id = 60402
+				days = 2
+			}
+		}
+	}
+}
+
+# Ping the target province
+province_event = {
+	id = 60402
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = yes
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60404
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = no
+				}
+			}
+			FROM = {
+				character_event = {
+					id = 60403
+				}
+			}
+		}
+	}
+}
+
+# The landless Sabuktigin and his men start an adventure
+character_event = {
+	id = 60403
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60405
+				days = 1
+			}
+		}
+		
+		liege = {
+			capital_scope = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ROOT = {
+								set_defacto_liege = ROOT
+								create_title = {
+									tier = DUKE
+									landless = yes
+									temporary = yes
+									culture = ROOT
+									name = "CLAIMANT_ADVENTURE"
+									holder = ROOT
+								}
+								
+								set_character_flag = duchy_adventurer
+							
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								war = {
+									target = PREV
+									casus_belli = duchy_adventure
+									thirdparty_title = PREVPREVPREV
+									tier = DUKE
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 28
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 23
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60403: Sabuktigin starts his first war (landless)!"
+	}
+}
+
+# The landed Sabuktigin and his men start an adventure
+character_event = {
+	id = 60404
+	desc = EVTDESC60304
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = blinded }
+		NOT = { trait = eunuch }
+		NOT = { trait = infirm }
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = 60405
+				days = 1
+			}
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					ROOT = {
+						capital_scope = {
+							ROOT = {
+								set_character_flag = duchy_adventurer
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 500
+									match_max = 10000
+									attrition = 0.25
+								}
+							}
+						}
+						
+						war = {
+							target = PREV
+							casus_belli = duchy_adventure
+							thirdparty_title = PREVPREVPREV
+							tier = DUKE
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 28
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 23
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		
+		log = "60404: Sabuktigin starts his first war (landed)!"
+	}
+	
+	option = {
+		name = EVTOPTA60204
+	}
+}
+
+# Notify Sabuktigin's old liege
+character_event = {
+	id = 60405
+	desc = EVTDESC60205
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_ruler = yes } # The DoW worked and the adventurer has a temporary title
+	}
+	
+	option = {
+		name = EVTOPTA60305
+	}
+}
+
+# Sabuktigin is successful!
+# Fired from the duchy_adventure CB
+narrative_event = {
+	id = 60406
+	title = EVTNAME60406
+	desc = EVTDESC60406
+	picture = GFX_evt_mongols
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					independent = yes
+					liege = {
+						ai = yes
+					}
+				}
+			}
+			set_defacto_liege = ROOT
+		}
+		
+		prestige = 1000
+		
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			decadence = -25
+		}
+		
+		capital_scope = {
+			religion = ROOT
+			culture = ROOT
+			
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					troops = {
+						light_infantry = { 2250 2250 }
+						light_cavalry = { 2000 2000 }
+						horse_archers = { 1500 1500 }
+						knights = { 50 50 }
+					}
+				}
+				
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+				random = {
+					chance = 50
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						troops = {
+							light_infantry = { 2250 2250 }
+							light_cavalry = { 2000 2000 }
+							horse_archers = { 1500 1500 }
+							knights = { 50 50 }
+						}
+					}
+				}
+			}
+		}
+		
+		random_realm_province = {
+			limit = {
+				OR = {
+					NOT = { culture = ROOT }
+					NOT = { religion = ROOT }
+				}
+			}
+			religion = ROOT
+			culture = ROOT
+		}
+		
+		log = "60406: Sabuktigin wins his first war!"
+	}
+	
+	option = {
+		name = EVTOPTA60406
+		trigger = {
+			has_character_flag = sabuktigin_himself
+		}
+	}
+	option = {
+		name = EVTOPTB60406
+		trigger = {
+			NOT = { has_character_flag = sabuktigin_himself }
+		}
+	}
+}
+
+# Mongol horde starts forming
+narrative_event = {
+	id = 60500
+	title = "EVTNAME60500"
+	desc = "EVTDESC60500"
+	major = yes
+	hide_new = yes
+	hide_from = yes
+	
+	picture = "GFX_evt_mongols"
+	border = "GFX_event_narrative_frame_war"
+	
+	only_playable = yes
+	religion = catholic
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			year = 1210
+			AND = {
+				has_game_rule = {
+					name = mongol_invasion
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOR = { 
+			year = 1218
+			has_game_rule = {
+				name = mongol_invasion
+				value = off
+			}
+		}
+		controls_religion = yes # Let it happen for the Pope. He's always around.
+		NOR = {
+			has_global_flag = il_khanate_arrival # Backwards compatibility
+			has_global_flag = golden_horde_arrival # Backwards compatibility
+			has_global_flag = mongol_empire_arrival
+		}
+	}
+	
+	#major_trigger = {
+	#	NOT = { has_character_flag = is_temujin }
+	#}
+	
+	mean_time_to_happen = {
+		months = 36
+		modifier = {
+			factor = 0.5
+			year = 1213
+		}
+		modifier = {
+			factor = 0.5
+			year = 1215
+		}
+		modifier = {
+			factor = 66
+			has_game_rule = {
+				name = mongol_invasion
+				value = random
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = mongol_empire_arrival }
+			}
+			set_global_flag = mongol_empire_arrival
+			activate_title = { title = e_mongol_empire status = yes }
+			
+			if = {
+				limit = {
+					has_global_flag = temujin_born
+				}
+				if = {
+					limit = {
+						any_independent_ruler = {
+							has_character_flag = is_temujin
+							demesne_size = 1
+							ai = yes
+						}
+					}
+					log = "Temujin exists as independent ai"
+					random_independent_ruler = {
+						limit = {
+							has_character_flag = is_temujin
+							ai = yes
+						}
+						any_demesne_title = {
+							limit = {
+								tier = EMPEROR
+							}
+							set_title_flag = to_be_destroyed
+						}
+						e_mongol_empire = {
+							grant_title = PREV
+						}
+						any_demesne_title = {
+							limit = {
+								has_title_flag = to_be_destroyed
+							}
+							activate_title = { title = THIS status = no }
+							destroy_landed_title = THIS
+						}
+						wealth = 5000
+						prestige = 5000
+						set_character_flag = horde_invader
+						character_event = { id = 60510 } # Spawn troops
+						character_event = { id = 60515 days = 1 } # Spawn population
+					}
+					break = yes
+				}
+				if = {
+					limit = {
+						NOT = {
+							e_mongol_empire = {
+								holder_scope = {
+									always = yes
+								}
+							}
+						}
+					}
+					log = "Real Temujin didn't recieve title"
+					create_character = {
+						random_traits = yes
+						dynasty = random
+						religion = tengri_pagan
+						culture = mongol
+						female = no
+						age = 24
+						attributes = {
+							martial = 12
+						}
+						trait = brilliant_strategist
+						trait = ambitious
+						trait = diligent
+						trait = brave
+					}
+					new_character = {
+						e_mongol_empire = {
+							set_title_landless = { title = THIS status = yes }
+							set_title_flag = temporary_landless_title
+							grant_title = PREV
+						}
+						set_defacto_liege = THIS
+						if = {
+							limit = {
+								has_dlc = "Horse Lords"
+							}
+							set_government_type = nomadic_government
+						}
+						if = {
+							limit = {
+								NOT = { has_dlc = "Horse Lords" }
+							}
+							set_government_type = tribal_government
+						}
+						wealth = 5000
+						set_character_flag = horde_invader
+						prestige = 5000
+						character_event = { id = 60509 } # Spawn courtiers
+						character_event = { id = 60510 } # Spawn troops
+						character_event = { id = 60515 days = 1 } # Spawn population
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						e_mongol_empire = {
+							holder_scope = { always = yes }
+						}
+					}
+				}
+				log = "Spawning Temujin for invasion"
+				create_character = {
+					name="Temujin"
+					# AKA: Genghis Khan
+					dynasty=11100
+					dna="bfimkolbecc"
+					properties="ge0af0000000"
+					age = 43
+					attributes = {
+						martial=10
+						diplomacy=8
+						intrigue=8
+						stewardship=9
+					}
+					health = 6
+					fertility = 0.7
+					religion="tengri_pagan"
+					culture="mongol"
+					trait="brave"
+					trait="ambitious"
+					trait="diligent"
+					trait="cruel"
+					trait="hunter"
+					trait="cavalry_leader"
+					trait="brilliant_strategist"
+				}
+				new_character = {
+					set_character_flag = is_temujin
+					e_mongol_empire = {
+						set_title_landless = { title = THIS status = yes }
+						set_title_flag = temporary_landless_title
+						grant_title = PREV
+					}
+					set_defacto_liege = THIS
+					if = {
+						limit = {
+							has_dlc = "Horse Lords"
+						}
+						set_government_type = nomadic_government
+					}
+					if = {
+						limit = {
+							NOT = { has_dlc = "Horse Lords" }
+						}
+						set_government_type = tribal_government
+					}
+					wealth = 5000
+					set_character_flag = horde_invader
+					prestige = 5000
+					character_event = { id = 60505 } # Spawn Temujins generals
+					character_event = { id = 60509 } # Spawn courtiers
+					character_event = { id = 60510 } # Spawn troops
+					character_event = { id = 60515 days = 1 } # Spawn population
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Horse Lords"
+				}				
+				1457 = { # Ordu Baliq
+					kingdom = {
+						e_mongol_empire = {
+							holder_scope = {
+								war = {
+									casus_belli = nomad_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_dlc = "Horse Lords" }
+				}				
+				1457 = { # Ordu Baliq
+					kingdom = {
+						e_mongol_empire = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA60500"
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+				religion_group = pagan_group
+			}
+			NOT = { government = nomadic_government }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB60500"
+		trigger = {
+			NOT = { religion_group = christian }
+			NOT = { religion_group = muslim }
+			NOT = { religion_group = pagan_group }
+			NOT = { government = nomadic_government }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC60500"
+		trigger = {
+			government = nomadic_government
+		}
+	}
+}
+# Remove landless status fired from on_action
+character_event = {
+	id = 60504
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			tier = COUNT
+		}
+		primary_title = { 
+			has_title_flag = temporary_landless_title
+			is_landless_type_title = yes
+		}
+	}
+	
+	immediate = {
+		any_demesne_title = {
+			limit = {
+				has_title_flag = temporary_landless_title
+			}
+			set_title_landless = { title = THIS status = no }
+		}
+	}
+}
+# Spawn mongol leaders
+character_event = {
+	id = 60505
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			name = "Borte"
+			age = 49
+			dynasty = 1041000
+			religion = tengri_pagan
+			culture = mongol
+			female = yes
+			random_traits = yes
+		}
+		new_character = {
+			save_event_target_as = borte
+			add_spouse = ROOT
+		}
+		create_character = {
+			name="Subutai"
+			age = 35
+			religion="tengri_pagan"
+			culture="mongol"
+			attributes = {
+				martial=10
+				diplomacy=4
+				intrigue=6
+				stewardship=6
+			}
+			trait="brave"
+			trait="strong"
+			trait="quick"
+			trait="diligent"
+			trait="brilliant_strategist"
+			trait="trickster"
+		}
+		create_character = {
+			name="Chagatai" 
+			age = 27
+			dynasty=11100
+			religion="tengri_pagan"
+			culture="mongol"
+			trait="skilled_tactician"
+			trait="wroth"
+			trait="just"
+			trait="drunkard"
+		}
+		new_character = {
+			set_father = ROOT
+			set_mother = event_target:borte
+		}
+		create_character = {
+			name="Ogodei" # Ögedei Khan
+			age = 24
+			dynasty=11100
+			religion="tengri_pagan"
+			culture="mongol"
+			trait="skilled_tactician"
+			trait="gregarious"
+			trait="just"
+		}
+		new_character = {
+			set_father = ROOT
+			set_mother = event_target:borte
+		}
+		create_character = {
+			name="Jochi"
+			age = 29
+			dynasty=11100
+			religion="tengri_pagan"
+			culture="mongol"
+			trait="skilled_tactician"
+			trait="hunter"
+			trait="kind"
+			trait="patient"
+		}
+		new_character = {
+			set_father = ROOT
+			set_mother = event_target:borte
+		}
+		create_character = {
+			name="Tolui"
+			age = 18
+			dynasty=11100
+			religion="tengri_pagan"
+			culture="mongol"
+			random_traits = yes
+		}
+		new_character = {
+			set_father = ROOT
+			set_mother = event_target:borte
+		}
+		create_character = {
+			name="Jebe"
+			#AKA Chepe
+			age = 50
+			dynasty = random
+			religion="tengri_pagan"
+			culture="mongol"
+			attributes = {
+				martial=10
+				diplomacy=5
+				intrigue=5
+				stewardship=4
+			}
+			trait="skilled_tactician"
+			trait="brave"
+		}
+	}
+}
+# Spawn extra courtiers
+character_event = {
+	id = 60509
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = tengri_pagan
+			culture = ROOT
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+	}
+}
+# Spawn mongol troops
+character_event = {
+	id = 60510
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1457 # Ordu-Baliq
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		spawn_unit = {
+			province = 1460 # Baygal
+			troops =
+			{
+				light_cavalry = { 2750 2750 }
+				horse_archers = { 2250 2250 }
+				knights = { 500 500 }
+			}
+		}
+		random = {
+			chance = 50
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+		}
+		random = {
+			chance = 50
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+			spawn_unit = {
+				province = 1408 # Gobi
+				troops =
+				{
+					light_cavalry = { 2750 2750 }
+					horse_archers = { 2250 2250 }
+					knights = { 500 500 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = 60515
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		population = 120000
+		add_character_modifier = {
+			modifier = invading_population_halt
+			duration = 10950
+			hidden = yes
+		}
+		character_event = {
+			id = 60516
+			days = 365
+		}
+	}
+}
+
+character_event = {
+	id = 60516
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { government = nomadic_government }
+				NOT = { has_character_modifier = invading_population_halt }
+			}
+			remove_character_modifier = invading_population_halt
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { population_factor = 1 }
+			}
+			population = 80000
+			if = {
+				limit = {
+					population = 350000
+				}
+				character_event = {
+					id = 60517
+					days = 365
+				}
+				break = yes
+			}
+		}
+		repeat_event = { 
+			id = 60516
+			days = 365
+		}
+	}
+}
+
+character_event = {
+	id = 60517
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { government = nomadic_government }
+				NOT = { has_character_modifier = invading_population_halt }
+			}
+			remove_character_modifier = invading_population_halt
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { population_factor = 1 }
+			}
+			remove_character_modifier = invading_population_halt
+			break = yes
+		}
+		repeat_event = {
+			id = 60517
+			days = 365
+		}
+	}
+}
+
+# Notify world about the greatest of Khans
+narrative_event = {
+	id = 60520
+	title = EVTNAME60520
+	desc = EVTDESC60520
+	is_triggered_only = yes
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_narrative_frame_war
+	
+	option = {
+		name = EVTOPTA_60520
+		trigger = {
+			primary_title = {
+				title = e_mongol_empire
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_60520
+		trigger = {
+			NOT = {
+				primary_title = {
+					title = e_mongol_empire
+				}
+			}
+			NOT = {
+				any_liege = {
+					primary_title = {
+						title = e_mongol_empire
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_60520
+		trigger = {
+			any_liege = {
+				primary_title = {
+					title = e_mongol_empire
+				}
+			}
+		}
+	}
+}
+# Ai - reinforcement event for Genghis decision
+character_event = {
+	id = 60530
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					troops =
+					{
+						light_cavalry = { 2750 2750 }
+						horse_archers = { 2250 2250 }
+						knights = { 500 500 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					troops =
+					{
+						light_cavalry = { 2750 2750 }
+						horse_archers = { 2250 2250 }
+						knights = { 500 500 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					troops =
+					{
+						light_cavalry = { 2750 2750 }
+						horse_archers = { 2250 2250 }
+						knights = { 500 500 }
+					}
+				}
+				spawn_unit = {
+					province = PREV
+					troops =
+					{
+						light_cavalry = { 2750 2750 }
+						horse_archers = { 2250 2250 }
+						knights = { 500 500 }
+					}
+				}
+			}
+		}
+	}
+}

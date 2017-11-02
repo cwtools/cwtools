@@ -1,0 +1,1945 @@
+###########################################
+#                                         #
+# Special Chronicle Events                #
+#                                         #
+# ID CM.10000-CM.11999                    #
+#                                         #
+###########################################
+
+namespace = CM
+
+# When chronicle is begun (On Action on_chronicle_start)
+character_event = {
+	id = CM.10000
+
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_START
+			picture = GFX_evt_monk
+		}
+	}
+}
+
+# When chronicle is transferred to new character (On Action on_chronicle_owner_change)
+character_event = {
+	id = CM.10001
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_dying = no
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_PLAYER_INHERITANCE_LANDLESS
+				portrait = [Root.GetID]
+				picture = GFX_evt_emissary
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_dying = yes
+					culture = ROOT
+					religion = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_PLAYER_INHERITANCE_NORMAL
+				portrait = [Root.GetID]
+				picture = GFX_evt_coronation
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_dying = yes
+					culture = ROOT
+					NOT = { religion = ROOT }
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_PLAYER_INHERITANCE_NEW_RELIGION
+				portrait = [Root.GetID]
+				picture = GFX_evt_coronation
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_dying = yes
+					NOT = { culture = ROOT }
+					religion = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_PLAYER_INHERITANCE_NEW_CULTURE
+				portrait = [Root.GetID]
+				picture = GFX_evt_coronation
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_dying = yes
+					NOT = { culture = ROOT }
+					NOT = { religion = ROOT }
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_PLAYER_INHERITANCE_NEW_CULTURE_AND_RELIGION
+				portrait = [Root.GetID]
+				picture = GFX_evt_coronation
+			}
+		}
+	}
+}
+
+#############################
+# Various chronicle events  #
+#############################
+
+# From on action on_death - check who died and create appropriate chronicle entries
+character_event = {
+	id = CM.10010
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_player = {
+			OR = {
+				liege = { character = ROOT }
+				any_spouse = { character = ROOT }
+				is_child_of = ROOT
+				current_heir = {
+					character = ROOT
+				}
+				AND = {
+					religion = ROOT
+					ROOT = { controls_religion = yes }
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = no
+				NOT = {
+					OR = {
+						father = { character = ROOT }
+						mother = { character = ROOT }
+					}
+				}
+				NOT = { is_primary_heir = ROOT } # Any vassal except primary heir which is handled in chronicle owner transfer event CM.10001
+			}
+			chronicle = {
+				entry = CHRONICLE_DEATH_OF_LIEGE
+				portrait = [Root.GetID]
+			}
+		}
+		any_spouse = {
+			limit = {
+				ai = no
+				NOT = { is_primary_heir = ROOT } # Not used for primary heir which is handled in chronicle owner transfer event CM.10001
+			}
+			chronicle = {
+				entry = CHRONICLE_DEATH_OF_SPOUSE
+				portrait = [Root.GetID]
+			}
+		}
+		any_child = {
+			limit = {
+				ai = no
+				ROOT = {
+					NOT = { is_primary_heir = PREV } # Sent to any child except primary heir which is handled in chronicle owner transfer event CM.10001
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_DEATH_OF_PARENT
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				current_heir = {
+					character = ROOT
+				}
+				NOT = { is_primary_heir = ROOT } # Not used for primary heir which is handled in chronicle owner transfer event CM.10001
+			}
+			chronicle = {
+				entry = CHRONICLE_DEATH_OF_HEIR
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				religion_head = {
+					character = ROOT
+				}
+				NOT = { is_primary_heir = ROOT } # Not used for primary heir which is handled in chronicle owner transfer event CM.10001
+				NOT = {
+					OR = {
+						father = { character = ROOT }
+						mother = { character = ROOT }
+						spouse = { character = ROOT }
+					}
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_DEATH_OF_RELIGION_HEAD
+				portrait = [Root.GetID]
+			}
+		}
+	}
+}
+
+# From on action on_birth - check who was born and create appropriate chronicle entries
+character_event = {
+	id = CM.10011
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			father = { ai = no }
+			mother = { ai = no }
+		}
+	}
+	
+	immediate = {
+		character_event = { id = CM.19011 days = 2 } # Delay to allow for naming of child.
+	}
+}
+
+character_event = {
+	id = CM.19011
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			father = { ai = no }
+			mother = { ai = no }
+		}
+	}
+	
+	immediate = {
+		father = {
+			if = {
+				limit = {
+					ai = no
+					OR = {
+						NOT = { num_of_children = 2 }
+						AND = {
+							FROM = { is_female = no }
+							NOT = {
+								any_child = {
+									NOT = { character = FROM }
+									is_female = no
+								}
+							}
+						}
+					}
+				}
+				chronicle = {
+					entry = CHRONICLE_BIRTH_FATHER
+					portrait = [Root.GetID]
+				}
+			}
+		}
+		mother = {
+			if = {
+				limit = {
+					ai = no
+					OR = {
+						NOT = { num_of_children = 2 }
+						AND = {
+							FROM = { is_female = no }
+							NOT = {
+								any_child = {
+									NOT = { character = FROM }
+									is_female = no
+								}
+							}
+						}
+					}
+				}
+				chronicle = {
+					entry = CHRONICLE_BIRTH_MOTHER
+					portrait = [Root.GetID]
+				}
+			}
+		}
+	}
+}
+
+# War
+character_event = {
+	id = CM.10012
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			ai = no
+			FROM = { ai = no }
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_WAR_DECLARED_ATTACKER
+					portrait = [Prev.GetID]
+				}
+			}
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_WAR_DECLARED_DEFENDER
+				portrait = [From.GetID]
+			}
+		}
+	}
+}
+
+# Joined ally in war
+character_event = {
+	id = CM.10013
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_JOINED_ALLY_IN_WAR
+			portrait = [From.GetID]
+		}
+	}
+}
+
+# Answered call to arms
+character_event = {
+	id = CM.10014
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { ai = no }
+	}
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_JOINED_ALLY_IN_WAR_2
+				portrait = [Prev.GetID]
+			}
+		}
+	}
+}
+
+# On crusade creation
+	# Called from 'on_crusade_creation'
+	# new_character is the targetted enemy
+	# ROOT is the religious head
+	# FROM is the attacked kingdom title
+character_event = {
+	id = CM.10015
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		any_player = {
+			limit = {
+				religion = ROOT
+			}
+			chronicle = {
+				entry = CHRONICLE_FRIENDLY_CRUSADE_STARTED
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				religion = new_character
+			}
+			chronicle = {
+				entry = CHRONICLE_UNFRIENDLY_CRUSADE_STARTED
+				portrait = [Root.GetID]
+			}
+		}
+		ROOT = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_FRIENDLY_CRUSADE_STARTED
+					portrait = [Root.GetID]
+				}
+			}
+		}
+	}
+}
+
+# On crusade success
+	# ROOT is the target title
+	# new_character is the Enemy
+	# FROM is the taker
+character_event = {
+	id = CM.10016
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					religion_head = { is_alive = yes }
+				}
+			}
+			any_player = {
+				limit = {
+					OR = {
+						religion = FROM
+						religion = new_character
+					}
+					NOT = { character = FROM }
+				}
+				chronicle = {
+					entry = CHRONICLE_CRUSADE_WON
+					portrait = [From.RelHead.GetID]
+				}
+			}
+			FROM = {
+				if = {
+					limit = { ai = no }
+					chronicle = {
+						entry = CHRONICLE_CRUSADE_WON_AND_I_GOT_THE_TITLE
+						portrait = [From.GetID]
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						religion_head = { is_alive = yes } # Crusade ended inconclusively as the religious head no longer exist
+					}
+				}
+			}
+			any_player = {
+				limit = {
+					OR = {
+						religion = FROM
+						religion = new_character
+					}
+				}
+				chronicle = {
+					entry = CHRONICLE_CRUSADE_LOST_NO_HEAD
+				}
+			}
+		}
+	}
+}
+
+# On crusade failure
+	# ROOT is the target title
+	# new_character is the Enemy
+	# FROM is the Pope/Caliph
+character_event = {
+	id = CM.10017
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		any_player = {
+			limit = {
+				OR = {
+					religion = FROM
+					religion = new_character
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_CRUSADE_LOST
+				portrait = [New.GetID]
+			}
+		}
+	}
+}
+
+# Aztec first contact
+character_event = {
+	id = CM.10018
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		any_player = {
+			limit = {
+				capital_scope = {
+					NOT = { region = world_india }
+					NOT = { region = world_africa_east }
+				}
+			}
+			character_event = { id = CM.10019 }
+		}
+	}
+}
+
+character_event = {
+	id = CM.10019
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_AZTECS_FIRST_CONTACT
+			portrait = [From.GetID]
+		}
+	}
+}
+
+# Aztec Invasion
+character_event = {
+	id = CM.10020
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_AZTEC_INVASION
+			portrait = [From.GetID]
+		}
+	}
+}
+
+# Creates new higher level title
+	# On create title - ROOT is the creating character, FROM is the title
+character_event = {
+	id = CM.10021
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		ROOT = {
+			ai = no
+			any_demesne_title = {
+				NOT = { title = FROM }
+				FROM = {
+					higher_tier_than = PREV
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_CREATED_TITLE
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# Usurps new higher level title
+	# On usurp title ROOT is the character, FROM is the title, FROMFROM is the old holder
+character_event = {
+	id = CM.10022
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		ai = no
+		ROOT = {
+			any_demesne_title = {
+				NOT = { title = FROM }
+				FROM = {
+					higher_tier_than = PREV
+				}
+			}
+		}
+	}
+
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_USURPED_TITLE
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# Marriage
+character_event = {
+	id = CM.10023
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			ai = no
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				new_character = {
+					mother_even_if_dead = { always = yes }
+					OR = {
+						father_even_if_dead = {
+							PREV = {
+								mother_even_if_dead = {
+									higher_tier_than = PREVPREV
+								}
+							}
+						}
+						NOT = { father_even_if_dead = { always = yes } }
+					}
+				}
+			}
+			FROM = {
+				chronicle = {
+				entry = CHRONICLE_MARRIED_MOTHER_IMPORTANT
+				portrait = [New.GetID]
+				}
+			}
+		}
+		if = {
+			limit = {
+				new_character = {
+					father_even_if_dead = { always = yes }
+					OR = {
+						father_even_if_dead = {
+							PREV = {
+								mother_even_if_dead = {
+									NOT = { higher_tier_than = PREVPREV }
+								}
+							}
+						}
+						NOT = { mother_even_if_dead = { always = yes } }
+					}
+				}
+			}
+			FROM = {
+				chronicle = {
+				entry = CHRONICLE_MARRIED_FATHER_IMPORTANT
+				portrait = [New.GetID]
+				}
+			}
+		}
+		if = {
+			limit = {
+				new_character = {
+					NOT = { father_even_if_dead = { always = yes } }
+					NOT = { mother_even_if_dead = { always = yes } }
+				}
+			}
+			FROM = {
+				chronicle = {
+				entry = CHRONICLE_MARRIED_NO_PARENT
+				portrait = [New.GetID]
+				}
+			}
+		}
+	}
+}
+
+
+# From on action on_became_imprisoned - check who was imprisoned and create appropriate chronicle entries
+character_event = {
+	id = CM.10024
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_player = {
+			OR = {
+				character = ROOT
+				liege = { character = ROOT }
+				any_spouse = { character = ROOT }
+				is_child_of = ROOT
+				current_heir = {
+					character = ROOT
+				}
+				AND = {
+					religion = ROOT
+					ROOT = { controls_religion = yes }
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PLAYER_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+		any_vassal = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_LIEGE_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+		any_spouse = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_SPOUSE_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+		any_child = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PARENT_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				current_heir = {
+					character = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_HEIR_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				religion_head = {
+					character = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_RELIGION_HEAD_IMPRISONED
+				portrait = [Root.GetID]
+			}
+		}
+	}
+}
+
+# From on action on_released_from_prison - check who was released and create appropriate chronicle entries
+character_event = {
+	id = CM.10025
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_player = {
+			OR = {
+				character = ROOT
+				liege = { character = ROOT }
+				any_spouse = { character = ROOT }
+				is_child_of = ROOT
+				current_heir = {
+					character = ROOT
+				}
+				AND = {
+					religion = ROOT
+					ROOT = { controls_religion = yes }
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PLAYER_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+		any_vassal = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_LIEGE_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+		any_spouse = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_SPOUSE_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+		any_child = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PARENT_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				current_heir = {
+					character = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_HEIR_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+		any_player = {
+			limit = {
+				religion_head = {
+					character = ROOT
+				}
+			}
+			chronicle = {
+				entry = CHRONICLE_RELIGION_HEAD_RELEASED
+				portrait = [Root.GetID]
+			}
+		}
+	}
+}
+
+# When a character converts to a new religion - On action: on_character_convert_religion
+character_event = {
+	id = CM.10026
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			ai = no
+			any_vassal = { ai = no }
+			liege = { ai = no }
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PLAYER_CONVERTED_RELIGION
+				portrait = [Root.GetID]
+			}
+		}
+		if = {
+			limit = {
+				any_vassal = { ai = no }
+			}
+			any_vassal = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_LIEGE_CONVERTED_RELIGION
+					portrait = [Root.GetID]
+				}
+			}
+		}
+		if = {
+			limit = {
+				liege = { ai = no }
+				independent = no
+				OR = {
+					AND = {
+						liege = { primary_title = { tier = KING } }
+						primary_title = { higher_tier_than = COUNT }
+					}
+					AND = {
+						liege = { primary_title = { tier = EMPEROR } }
+						primary_title = { higher_tier_than = DUKE }
+					}
+				}
+			}
+			liege = {
+				chronicle = {
+					entry = CHRONICLE_MAJOR_VASSAL_CONVERTED_RELIGION
+					portrait = [Root.GetID]
+				}
+			}
+		}
+	}
+}
+
+# When a character converts to a new culture - On action: on_character_convert_culture
+character_event = {
+	id = CM.10027
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_PLAYER_CONVERTED_CULTURE
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# When a character acquires a nickname - On action: on_acquire_nickname
+character_event = {
+	id = CM.10028
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_PLAYER_ACQUIRED_NICKNAME
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# Won battle - On action: on_battle_won
+character_event = {
+	id = CM.10029
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_WON_BATTLE_FOUGHT
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# Lost battle - On action: on_battle_lost
+character_event = {
+	id = CM.10030
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_LOST_BATTLE_FOUGHT
+			portrait = [Root.GetID]
+		}
+	}
+}
+
+# Won battle but didn't participate myself
+character_event = {
+	id = CM.10031
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				top_liege = {
+					ai = no
+					NOT = { at_location = ROOT }
+					war_with = FROM
+				}
+			}
+			top_liege = {
+				chronicle = {
+					entry = CHRONICLE_WON_BATTLE_BUT_DIDNT_FIGHT
+					portrait = [Root.GetID] # The commander
+				}
+			}
+		}
+	}
+}
+
+# Lost battle but didn't participate myself
+character_event = {
+	id = CM.10032
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				top_liege = {
+					ai = no
+					NOT = { at_location = ROOT }
+					war_with = FROM
+				}
+			}
+			top_liege = {
+				chronicle = {
+					entry = CHRONICLE_LOST_BATTLE_BUT_DIDNT_FIGHT
+					portrait = [Root.GetID] # The commander
+				}
+			}
+		}
+	}
+}
+
+# Personally captured major settlement
+character_event = {
+	id = CM.10033
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_CAPTURED_MAJOR_SETTLEMENT_MYSELF
+			picture = GFX_evt_victory_arch_byzantine
+		}
+	}
+}
+
+# My forces captured major settlement
+character_event = {
+	id = CM.10034
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = yes
+	
+	trigger = {
+		OR = {
+			FROM = { title = b_roma }
+			FROM = { title = b_constantinople }
+			FROM = { title = b_bagdad }
+			FROM = { title = b_indraprastha }
+			FROM = { title = b_jerusalem }
+			FROM = { title = b_mecca }
+			FROM = { title = b_alexandria }
+			FROM = { title = b_cordoba }
+			AND = {
+				year = 900
+				FROM = { title = b_venezia }
+			}
+			AND = {
+				year = 1164
+				FROM = { title = b_koln }
+			}
+			AND = {
+				year = 1200
+				FROM = { title = b_paris }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				top_liege = {
+					ai = no
+					NOT = { at_location = ROOT }
+				}
+			}
+			top_liege = {
+				chronicle = {
+					entry = CHRONICLE_MY_FORCES_CAPTURED_MAJOR_SETTLEMENT
+					portrait = [Root.GetID] # The commander
+				}
+			}
+		}
+	}
+}
+
+# Enemy forces captured major settlement
+character_event = {
+	id = CM.10035
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	ai = yes
+	
+	trigger = {
+		OR = {
+			FROM = { title = b_roma }
+			FROM = { title = b_constantinople }
+			FROM = { title = b_bagdad }
+			FROM = { title = b_indraprastha }
+			FROM = { title = b_jerusalem }
+			FROM = { title = b_mecca }
+			FROM = { title = b_alexandria }
+			FROM = { title = b_cordoba }
+			AND = {
+				year = 900
+				FROM = { title = b_venezia }
+			}
+			AND = {
+				year = 1164
+				FROM = { title = b_koln }
+			}
+			AND = {
+				year = 1200
+				FROM = { title = b_paris }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ai = no
+						}
+					}
+				}
+			}
+			FROM = {
+				owner = {
+					top_liege = {
+						chronicle = {
+							entry = CHRONICLE_ENEMY_FORCES_CAPTURED_MAJOR_SETTLEMENT
+							portrait = [Root.GetID] # The owner of the enemy forces
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Marriage of primary heir  - ROOT is employer. FROM is employers "employee". new_character is the other spouse.
+character_event = {
+	id = CM.10036
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_player = {
+			FROM = { is_primary_heir = PREV }
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				new_character = {
+					mother_even_if_dead = { always = yes }
+					OR = {
+						father_even_if_dead = {
+							PREV = {
+								mother_even_if_dead = {
+									higher_tier_than = PREVPREV
+								}
+							}
+						}
+						NOT = { father_even_if_dead = { always = yes } }
+					}
+				}
+			}
+			any_player = {
+				limit = {
+					FROM = { is_primary_heir = PREV }
+				}
+				chronicle = {
+					entry = CHRONICLE_MARRIED_MOTHER_IMPORTANT
+					portrait = [New.GetID]
+				}
+			}
+		}
+		if = {
+			limit = {
+				new_character = {
+					father_even_if_dead = { always = yes }
+					OR = {
+						father_even_if_dead = {
+							PREV = {
+								mother_even_if_dead = {
+									NOT = { higher_tier_than = PREVPREV }
+								}
+							}
+						}
+						NOT = { mother_even_if_dead = { always = yes } }
+					}
+				}
+			}
+			any_player = {
+				limit = {
+					FROM = { is_primary_heir = PREV }
+				}
+				chronicle = {
+					entry = CHRONICLE_MARRIED_FATHER_IMPORTANT
+					portrait = [New.GetID]
+				}
+			}
+		}
+		if = {
+			limit = {
+				new_character = {
+					NOT = { father_even_if_dead = { always = yes } }
+					NOT = { mother_even_if_dead = { always = yes } }
+				}
+			}
+			any_player = {
+				limit = {
+					FROM = { is_primary_heir = PREV }
+				}
+				chronicle = {
+					entry = CHRONICLE_MARRIED_NO_PARENT
+					portrait = [New.GetID]
+				}
+			}
+		}
+	}
+}
+
+# Divorce
+character_event = {
+	id = CM.10037
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			ai = no
+			FROM = { 
+				ai = no 
+			}
+		}
+	}
+
+	immediate = {
+		# Chronicle entries with a religious head
+		if = {
+			limit = {
+				new_character = {
+					always = yes 
+				}
+			}
+			if = {
+				limit = {
+					ai = no
+				}
+				chronicle = {
+					entry = CHRONICLE_DIVORCED
+					portrait = [From.GetID]
+				}
+			}
+			FROM = {
+				if = {
+					limit = {
+						ai = no
+					}
+					chronicle = {
+						entry = CHRONICLE_DIVORCED
+						portrait = [From.GetID]
+					}
+				}
+			}
+			break = yes
+		}
+		 # Chronicle entries without a religious head
+		if = {
+			limit = {
+				ai = no
+			}
+			chronicle = {
+				entry = CHRONICLE_DIVORCED_NO_HEAD
+				portrait = [From.GetID]
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					ai = no
+				}
+				chronicle = {
+					entry = CHRONICLE_DIVORCED_NO_HEAD
+					portrait = [From.GetID]
+				}
+			}
+		}
+	}
+}
+
+# Peace, attacker won
+character_event = {
+	id = CM.10038
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			ai = no
+			FROM = { ai = no }
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_WAR_WON
+					portrait = [Prev.GetID]
+				}
+			}
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_WAR_WON
+				portrait = [From.GetID]
+			}
+		}
+	}
+}
+
+# Inherit major title   - # ROOT is the character, FROM is the title, FROMFROM is the old holder
+character_event = {
+	id = CM.10039
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { higher_tier_than = FROM }
+			}
+			chronicle = {
+				entry = CHRONICLE_INHERIT_MAJOR_TITLE
+				picture = GFX_evt_throne_room
+			}
+		}
+	}
+}
+
+# Peace, whitepeace
+character_event = {
+	id = CM.10040
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			ai = no
+			FROM = { ai = no }
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_WAR_WHITEPEACE
+					portrait = [Prev.GetID]
+				}
+			}
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_WAR_WHITEPEACE
+				portrait = [From.GetID]
+			}
+		}
+	}
+}
+
+# Peace, defender won
+character_event = {
+	id = CM.10041
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			ai = no
+			FROM = { ai = no }
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_WAR_LOST
+					portrait = [Prev.GetID]
+				}
+			}
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_WAR_LOST
+				portrait = [From.GetID]
+			}
+		}
+	}
+}
+
+
+
+#############################################################################################
+# Random content if chronicle is empty at year end (On Action on_create_chronicle_if_empty) #
+#############################################################################################
+
+# Dragon Sighted
+character_event = {
+	id = CM.10500
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10501 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10501
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0001
+				type = MONSTER_SIGHTED
+			}
+		}
+	}
+}
+
+# Giant sighted
+character_event = {
+	id = CM.10502
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10503 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10503
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0002
+				type = MONSTER_SIGHTED
+			}
+		}
+	}
+}
+
+# Sea serpents sighted
+character_event = {
+	id = CM.10504
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10505 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10505
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0003
+				type = MONSTER_SIGHTED
+			}
+		}
+	}
+}
+
+# Strange shapes seen dancing on the moon
+character_event = {
+	id = CM.10506
+	
+	hide_window = yes
+	
+	is_triggered_only = yes 
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_FILL0004
+			type = MONSTER_SIGHTED
+		}
+	}
+}
+
+# Ten feet tall woman
+character_event = {
+	id = CM.10507
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10508 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10508
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0005
+				type = MONSTER_SIGHTED
+			}
+		}
+	}
+}
+
+# Raining blood
+character_event = {
+	id = CM.10509
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10510 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10510
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0006
+				type = FREAK_NATURAL_EVENT
+			}
+		}
+	}
+}
+
+# Strange plague kills rabbits
+character_event = {
+	id = CM.10511
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10512 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10512
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0007
+				type = FREAK_NATURAL_EVENT
+			}
+		}
+	}
+}
+
+# Earthquake
+character_event = {
+	id = CM.10513
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10514 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10514
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0008
+				type = NATURAL_DISASTER
+			}
+		}
+	}
+}
+
+# Flood
+character_event = {
+	id = CM.10515
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10516 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10516
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0009
+				type = NATURAL_DISASTER
+			}
+		}
+	}
+}
+
+# Two suns were seen
+character_event = {
+	id = CM.10517
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10518 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10518
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0010
+				type = FREAK_NATURAL_EVENT
+			}
+		}
+	}
+}
+
+# Goat with three heads was born
+character_event = {
+	id = CM.10519
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10520 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10520
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0011
+				type = MONSTER_SIGHTED
+			}
+		}
+	}
+}
+
+# Bird invasion
+character_event = {
+	id = CM.10521
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10522 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10522
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0012
+				type = FREAK_NATURAL_EVENT
+			}
+		}
+	}
+}
+
+# Many children born in province
+character_event = {
+	id = CM.10523
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10524 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10524
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0013
+				type = POPULATION_EVENT
+			}
+		}
+	}
+}
+
+# Province celebrates beloved ruler
+character_event = {
+	id = CM.10525
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_demesne_province = {
+			province_event = { id = CM.10526 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10526
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0014
+				type = POPULATION_EVENT
+			}
+		}
+	}
+}
+
+# A star falls from the sky
+character_event = {
+	id = CM.10527
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		random_realm_province = {
+			province_event = { id = CM.10528 }
+		}
+	}
+}
+
+province_event = {
+	id = CM.10528
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			chronicle = {
+				entry = CHRONICLE_FILL0015
+				type = FREAK_NATURAL_EVENT
+			}
+		}
+	}
+}
+
+# Bountiful harvest
+character_event = {
+	id = CM.10529
+	
+	is_triggered_only = yes 
+	
+	hide_window = yes
+	
+	immediate = {
+		chronicle = {
+			entry = CHRONICLE_FILL0016
+			type = POPULATION_EVENT
+		}
+	}
+}
+	
+

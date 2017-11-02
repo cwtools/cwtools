@@ -1,0 +1,3652 @@
+###################################
+#
+# Events for Feudal Life
+#
+# Id 4000-4499 is reserved
+#
+# Fired from on actions
+#
+###################################
+#
+# Written by Sara Wendel-Örtqvist
+
+################################################################################
+# Events just for lowly counts. (some for dukes)
+################################################################################
+
+# Who Owns The Pig?
+character_event = {
+	id = 4000
+	desc = EVTDESC4000
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		tier = count
+		in_command = no
+		NOT = { religion_group = muslim }
+		NOT = { religion_group = jewish_group }
+		OR = {
+			trait = greedy
+			trait = midas_touched
+			trait = gluttonous
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			prestige = 15
+		}
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = { #Ignore
+		name = EVTOPTA4000
+		add_trait = just
+	}
+	
+	option = {
+		name = EVTOPTB4000
+		tooltip_info = just
+		trigger = {
+			trait = just
+			NOT = {
+				trait = wroth
+			}
+		}
+		add_character_modifier = {
+			name = the_judger
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4000
+		scaled_wealth = 0.05
+	}
+}
+
+### Blasphemy! ###
+character_event = {
+	id = 4040
+	desc = EVTDESC4040
+	picture = GFX_evt_bishop
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	war = no
+	
+	trigger = {
+		in_command = no
+		piety = 50
+		tier = count
+		NOT = {
+			has_character_modifier = church_unfunny
+		}
+		job_spiritual = {
+			is_priest = yes
+			piety = 50
+			OR = {
+				trait = celibate
+				trait = chaste
+				trait = zealous
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+	}
+	
+	option = { 
+		name = EVTOPTA4040 #Ignore
+		add_character_modifier = {
+			name = church_unfunny
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4040 #Imprisonment
+		add_character_modifier = {
+			name = imprison_lawbreakers
+			duration = 60
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4040 #Punish cook
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+		}
+		add_character_modifier = {
+			name = punish_cook
+			duration = 60
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4040 #Hanged
+		tooltip_info = zealous
+		trigger = {
+			trait = zealous
+		}
+		add_character_modifier = {
+			name = kill_lawbreakers
+			duration = 60
+		}
+	}
+}
+
+### Blasphemy! - Muslim ###
+character_event = {
+	id = 4041
+	desc = EVTDESC4041
+	picture = GFX_evt_bishop
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	war = no
+	
+	trigger = {
+		in_command = no
+		piety = 50
+		tier = count
+		NOT = {
+			has_character_modifier = church_unfunny
+		}
+		job_spiritual = {
+			is_priest = yes
+			OR = {
+				piety = 50
+				trait = zealous
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+	}
+	
+	option = { 
+		name = EVTOPTA4040 #Ignore
+		add_character_modifier = {
+			name = unfunny_imam
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4040 #Imprisonment
+		add_character_modifier = {
+			name = imprison_lawbreakers
+			duration = 60
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4040 #Punish cook
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+		}
+		add_character_modifier = {
+			name = punish_cook
+			duration = 60
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4040 #Hanged
+		tooltip_info = zealous
+		trigger = {
+			trait = zealous
+		}
+		add_character_modifier = {
+			name = kill_lawbreakers
+			duration = 60
+		}
+	}
+}
+
+#Wolf hunting - Luparii
+character_event = {
+	id = 4085
+	desc = EVTDESC4085
+	picture = GFX_evt_hunt
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		NOT = {	religion_group = muslim }
+		NOT = {	religion_group = jewish_group }
+		in_command = no
+		tier = count
+		NOT = {
+			trait = stressed
+		}
+		NOT = {
+			trait = depressed
+		}
+		any_vassal = {
+			war = no
+			prisoner = no
+			age = 20
+			OR = {
+				trait = slothful
+				trait = content
+				trait = craven
+			}
+		}
+		any_vassal = {
+			war = no
+			prisoner = no
+			age = 20
+			OR = {
+				trait = diligent
+				trait = ambitious
+				trait = brave
+			}
+		}
+		NOT = {
+			has_character_modifier = mod_bloodlust
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = brave
+		}
+		modifier = {
+			factor = 5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.75
+			trait = craven
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4085
+		random_vassal = {
+			limit = {
+				war = no
+				prisoner = no
+				age = 16
+				OR = {
+					trait = slothful
+					trait = content
+					trait = craven
+				}
+			}
+			opinion = {
+				modifier = opinion_relieved
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4085
+		random_vassal = {
+			limit = {
+				OR = {
+					trait = diligent
+					trait = ambitious
+					trait = brave
+				}
+			}
+			opinion = {
+				modifier = opinion_delighted
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4085
+		#tooltip_info = 
+		trigger = {
+			OR = {
+				trait = diligent
+				trait = ambitious
+				trait = brave
+			}
+		}
+		add_character_modifier = {
+			name = mod_bloodlust
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4085
+		tooltip_info = diligent
+		trigger = {
+			trait = diligent
+		}
+		random_courtier = {
+			limit = {
+				OR = {
+					has_job_title = job_marshal
+					has_job_title = job_spymaster
+				}
+			}
+			opinion = {
+				modifier = diligent_pos
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+
+#Witch!
+character_event = {
+	id = 4036
+	desc = EVTDESC4036
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		tier = count
+		NOT = {
+			has_character_modifier = the_pious
+			has_character_modifier = modifier_witch
+			has_character_modifier = tortured_witch
+			has_character_modifier = the_kind
+		}
+		any_courtier = {
+			is_priest = yes
+			piety = 100
+		}
+		OR = {
+			trait = zealous
+			trait = cynical
+		}
+		OR = {
+			trait = chaste
+			trait = lustful
+			religion_group = muslim
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			prestige = 15
+		}
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = { 
+		name = EVTOPTA4036 #Ignore
+		add_character_modifier = {
+			name = the_kind
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4036 #Ordeal by water
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = modifier_witch
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4036 #Torture
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = tortured_witch
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4036 #Beautiful = witch
+		add_character_modifier = {
+			name = the_pious
+			duration = 180
+		}
+	}
+}
+
+#Cattle Rustling
+character_event = {
+	id = 4035
+	desc = EVTDESC4035
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		tier = count
+	
+		NOR = {
+			has_character_modifier = the_cruel
+			has_character_flag = in_seclusion
+		}
+		any_courtier = {
+			OR = {
+				has_job_title = job_spymaster
+				has_job_title = job_marshal
+			}
+			OR = {
+				learning = 12
+				martial = 12
+				intrigue = 12
+			}
+			is_smart_trigger = yes
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			prestige = 150
+		}
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = { #Ignore
+		name = EVTOPTA4035
+		piety = 10
+	}
+	
+	option = {
+		name = EVTOPTB4035 #Cut off hands
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = the_cruel
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4035 #Kill!
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = kill_lawbreakers
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4035 #Prison!
+		add_character_modifier = {
+			name = imprison_lawbreakers
+			duration = 180
+		}
+	}
+}
+
+#Band O'Brothers
+character_event = {
+	id = 4010
+	desc = EVTDESC4010
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		tier = count
+
+		NOT = {
+			has_character_modifier = the_greedy
+		}
+		any_courtier = {
+			OR = {
+				has_job_title = job_spymaster
+				has_job_title = job_marshal
+			}
+			OR = {
+				learning = 12
+				martial = 12
+				intrigue = 12
+			}
+		}
+	}
+	
+	weight_multiplier= {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = { 
+		name = EVTOPTA4010 #Ignore
+		prestige = -5
+	}
+	
+	option = {
+		name = EVTOPTB4010
+		any_courtier = {
+			limit = {
+				OR = {
+					has_job_title = job_spymaster
+					has_job_title = job_marshal
+				}
+				OR = {
+					learning = 12
+					martial = 12
+					intrigue = 12
+				
+				}
+			}
+			opinion = {
+				modifier = perfect_punishment
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4010 #Decapitation
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = wroth
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		prestige = 15
+		any_courtier = {
+			limit = {
+				OR = {
+					has_job_title = job_spymaster
+					has_job_title = job_marshal
+				}
+				OR = {
+					learning = 12
+					martial = 12
+					intrigue = 12
+				
+				}
+			}
+			opinion = {
+				modifier = opinion_cruel
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4010
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+			NOT = {
+				trait = cruel
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_trait = cruel
+	}
+	
+	option = {
+		name = EVTOPTE4010
+		trigger = {
+			NOT = {
+				trait = arbitrary
+			}
+			NOT = {
+				trait = diligent
+			}
+			NOT = {
+				trait = just
+			}
+		}
+		add_trait = diligent
+	}
+}
+
+#Kidnapping : Start
+character_event = {
+	id = 4045
+	desc = EVTDESC4045
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_intrigue
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	max_age = 60
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		OR = {
+			tier = count
+			tier = duke
+		}
+		OR = {
+			trait = brave
+			trait = wroth
+		}
+		location = {
+			any_province_lord = {
+				prisoner = no
+				treasury = 50
+				prestige = 50
+				NOT = {
+					character = ROOT
+				}
+				NOT = {
+					trait = incapable
+				}
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+				same_realm = ROOT
+				OR = {
+					trait = trusting
+					is_dumb_trigger = yes
+					NOT = {
+						trait = paranoid
+					}
+					NOT = {
+						trait = deceitful
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.01
+			trait = slothful
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4045
+		location = {
+			random_province_lord = {
+				limit = {
+					prisoner = no
+					treasury = 50
+					prestige = 50
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						trait = incapable
+					}
+					NOT = {
+						spouse = {
+							character = ROOT
+						}
+					}
+					same_realm = ROOT
+					OR = {
+						trait = trusting
+						is_dumb_trigger = yes
+						NOT = {
+							trait = paranoid
+						}
+						NOT = {
+							trait = deceitful
+						}
+					}
+				}
+				character_event = {
+					id = 4046
+					tooltip = EVTTOOLTIP4046
+				}
+			}
+		}
+	}
+}
+
+#Kidnapping: Lord
+character_event = {
+	id = 4046
+	desc = EVTDESC4046
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = EVTOPTA4046
+		FROM = {
+			character_event = {
+				id = 4047
+				days = 4
+				tooltip = EVTTOOLTIP4047
+			}
+		}
+	}
+}
+	
+#Kidnapping: ROOT
+character_event = {
+	id = 4047
+	desc = EVTDESC4047
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4047
+		add_trait = content
+		FROM = { add_trait = ambitious }
+	}
+	
+	option = {
+		name = EVTOPTB4047
+		add_trait = just
+	}
+	
+	option = {
+		name = EVTOPTC4047 #Imprisonment
+		FROM = {
+			opinion = {
+				modifier = perfect_punishment
+				who = ROOT
+				years = 1
+			}
+		}
+		add_trait = cruel
+	}
+	
+	option = {
+		name = EVTOPTD4047
+		FROM = {
+			opinion = {
+				modifier = opinion_furious
+				who = ROOT
+				years = 1
+			}
+		}
+		add_trait = arbitrary
+	}
+}
+
+#I spy a spy!
+character_event = {
+	id = 4050
+	desc = EVTDESC4050
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		OR = {
+			tier = duke
+			tier = count
+		}
+		NOT = {
+			has_character_modifier = the_cruel
+		}
+		job_spymaster = {
+			OR = {
+				is_smart_trigger = yes
+				trait = deceitful
+			}
+			OR = {
+				diplomacy = 9
+				intrigue = 9
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = diligent
+		}
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+	}
+	
+	option = { #Ignore
+		name = EVTOPTA4050
+		piety = 10
+	}
+	
+	option = {
+		name = EVTOPTB4050 #Behead him!
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = the_ruthless
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4050 #Imprisonment
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = wroth
+			}
+		}
+		add_character_modifier = {
+			name = spy_imprison
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4050
+		#tooltip_info = 
+		trigger = {
+			OR = {
+				trait = diligent
+				is_strong_trigger = yes
+			}
+			NOT = {
+				is_weak_trigger = yes
+			}
+			NOT = {
+				trait = arbitrary
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = the_strong
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTE4050 #Eyes removed
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		add_character_modifier = {
+			name = the_cruel
+			duration = 180
+		}
+	}
+}
+
+#Dragon!
+character_event = {
+	id = 4055
+	desc = EVTDESC4055
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		tier = count
+		any_vassal = {
+			war = no
+			prisoner = no
+			age = 20
+			OR = {
+				trait = ambitious
+				trait = brave
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = brave
+		}
+		modifier = {
+			factor = 5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.66
+			trait = craven
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4055
+		scaled_wealth = -0.05
+		prestige = -10
+	}
+	
+	option = {
+		name = EVTOPTB4055
+		change_martial = 1
+	}
+	
+	option = {
+		name = EVTOPTC4055
+		add_character_modifier = {
+			name = the_perturbed
+			duration = 365
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4055
+		any_vassal = {
+			limit = {
+				war = no
+				prisoner = no
+				age = 16
+				OR = {
+					trait = ambitious
+					trait = brave
+				}
+			}
+			opinion = {
+				modifier = brave_pos
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+
+
+################################################################################
+# Event Chain: Poachers
+################################################################################
+#Poachers! Start
+character_event = {
+	id = 4020
+	desc = EVTDESC4020
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+
+	only_playable = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		tier = count
+		NOR = {
+			has_character_modifier = the_merciful
+			has_character_modifier = in_seclusion
+		}
+		OR = {
+			NOT = {
+				martial = 8
+			}
+			learning = 6
+			trait = charitable
+		}
+		job_spymaster = {
+			OR = {
+				martial = 15
+				intrigue = 10
+				learning = 11
+			}
+		}
+		job_marshal = {
+			OR = {
+				martial = 15
+				intrigue = 10
+				learning = 11
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			prestige = 150
+		}
+		modifier = {
+			factor = 3
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+
+	option = {
+		name = EVTOPTA4020 #Ignore it
+		ai_chance = { factor = 20 }
+		add_character_modifier = {
+			name = the_merciful
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4020 #Ask someone to do something about it!
+		ai_chance = { factor = 80 }
+			any_courtier = {	
+				limit = {
+				OR = {
+					has_job_title = job_spymaster
+					has_job_title = job_marshal
+				}
+				OR = {
+					martial = 15
+					intrigue = 10
+					learning = 11
+				}
+			}
+			character_event = {
+				id = 4021
+				days = 10
+				tooltip = EVTTOOLTIP4021
+			}
+		}
+	}
+}
+
+#Poachers! Courtier
+character_event = {
+	id = 4021
+	desc = EVTDESC4021
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4021 #Release them
+		ai_chance = { factor = 20 }
+		piety = 10
+	}
+	
+	option = {
+		name = EVTOPTB4021 #Hand them over to my liege
+		ai_chance = { factor = 80 }
+		FROM = {
+			character_event = {
+				id = 4022
+				days = 5
+				tooltip = EVTTOOLTIP4022
+			}
+		}
+	}
+}
+
+#Poachers: Liege
+character_event = {
+	id = 4022
+	desc = EVTDESC4022
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = { #Ignore
+		name = EVTOPTA4022
+		ai_chance = { factor = 50 }
+		prestige = 5
+	}
+	
+	option = {
+		name = EVTOPTB4022 #Hanged with silken rope
+		tooltip_info = just
+		trigger = {
+			trait = just
+			NOT = {
+				trait = wroth
+			}
+		}
+		prestige = 10
+		FROM = {
+			set_character_flag = hanged_poachers
+			character_event = {
+				id = 4023
+				days = 2
+				tooltip = EVTTOOLTIP4023
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4022 #Release them!
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = diligent
+			}
+		}
+		prestige = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4022 #Kill them
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+			NOT = {
+				trait = just
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			set_character_flag = dead_poachers
+			character_event = {
+				id = 4023
+				days = 2
+				tooltip = EVTTOOLTIP4023
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTE4022 #Ears cut off
+		tooltip_info = diligent
+		trigger = {
+			trait = diligent
+			NOT = {
+				trait = arbitrary
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			set_character_flag = ears_off
+			character_event = {
+				id = 4023
+				days = 2
+				tooltip = EVTTOOLTIP4023
+			}
+		}
+	}
+}
+
+#Poachers: Marshal/Spymaster protests
+character_event = {
+	id = 4023
+	desc = EVTDESC4023
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4023 #Good
+		trigger = {
+			has_character_flag = hanged_poachers
+		}
+		clr_character_flag = hanged_poachers
+		FROM = {
+			character_event = {
+				id = 4024
+				tooltip = EVTTOOLTIP4024
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4023 #Bad
+		trigger = {
+			has_character_flag = hanged_poachers
+		}
+		clr_character_flag = hanged_poachers
+		FROM = {
+			character_event = {
+				id = 4025
+				tooltip = EVTTOOLTIP4025
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC4023 #Good
+		trigger = {
+			has_character_flag = ears_off
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		clr_character_flag = ears_off
+		FROM = {
+			character_event = {
+				id = 4024
+				tooltip = EVTTOOLTIP4024
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD4023 #Bad
+		trigger = {
+			has_character_flag = ears_off
+		}
+		clr_character_flag = ears_off
+		FROM = {
+			character_event = {
+				id = 4025
+				tooltip = EVTTOOLTIP4025
+			}
+		}
+	}
+	option = {
+		name = EVTOPTE4023 #Good
+		trigger = {
+			has_character_flag = dead_poachers
+		}
+		clr_character_flag = dead_poachers
+		FROM = {
+			character_event = {
+				id = 4024
+				tooltip = EVTTOOLTIP4024
+			}
+		}
+	}
+	option = {
+		name = EVTOPTF4023 #Bad
+		trigger = {
+			has_character_flag = dead_poachers
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		clr_character_flag = dead_poachers
+		FROM = {
+			character_event = {
+				id = 4025
+				tooltip = EVTTOOLTIP4025
+			}
+		}
+	}
+}
+
+#Poachers: Good Punishment
+character_event = {
+	id = 4024
+	desc = EVTDESC4024
+	picture = GFX_evt_holy_emperor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4024
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+#Poachers: Bad Punishment
+character_event = {
+	id = 4025
+	desc = EVTDESC4025
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4025
+		FROM = {
+			opinion = {
+				modifier = opinion_cruel
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+################################################################################
+# Event Chain: Courtier gets robbed
+################################################################################
+#I have been robbed!
+character_event = {
+	id = 4005
+	desc = EVTDESC4005
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		treasury = 100
+		is_ruler = no
+		OR = {
+			trait = trusting
+			trait = charitable
+			is_dumb_trigger = yes
+		}
+		host = {
+			age = 20
+			prisoner = no
+			NOT = {
+				character = ROOT
+			}
+			NOT = {
+				trait = incapable
+			}
+			any_demesne_province = {
+				OR = {
+					has_province_modifier = highway_robber_band
+					has_province_modifier = thieves_guild
+				}
+			}
+		}
+		
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2.5
+			trait = trusting
+		}
+		modifier = {
+			factor = 1.7
+			trait = charitable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4005
+		treasury = -20
+		host = {
+			character_event = {
+				id = 4006 
+				days = 7
+				tooltip = EVTTOOLTIP4006
+			}
+		}
+	}
+}
+
+#Mercy, cried the thief
+character_event = {
+	id = 4006
+	desc = EVTDESC4006
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4006
+		ai_chance = { factor = 10 }
+		FROM = {
+			opinion = {
+				modifier = opinion_mocked
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4006 #Imprisonment
+		tooltip_info = just
+		trigger = {
+			trait = just
+		}
+		ai_chance = { factor = 40 }
+		FROM = {
+			set_character_flag = prisoner_in
+			character_event = {
+				id = 4007
+				days = 7
+				tooltip = EVTTOOLTIP4007
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4006 #Hanged
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+		}
+		ai_chance = { factor = 20 }
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			set_character_flag = heads_up
+			character_event = {
+				id = 4007
+				days = 7
+				tooltip = EVTTOOLTIP4007
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4006 #Hands cut off
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		ai_chance = { factor = 30 }
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			set_character_flag = hands_off
+			character_event = {
+				id = 4007
+				days = 7
+				tooltip = EVTTOOLTIP4007
+			}
+		}
+	}
+}
+
+#Punished!
+character_event = {
+	id = 4007
+	desc = EVTDESC4007
+	picture = GFX_evt_beheading
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4007
+		trigger = {
+			has_character_flag = heads_up
+		}
+		ai_chance = { factor = 40 }
+		clr_character_flag = heads_up
+		FROM = {
+			character_event = {
+				id = 4008
+				days = 7
+				tooltip = EVTTOOLTIP4008 #Good Punishment
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4007
+		trigger = {
+			has_character_flag = heads_up
+		}
+		ai_chance = { factor = 60 }
+		clr_character_flag = heads_up
+		FROM = {
+			character_event = {
+				id = 4009
+				days = 7
+				tooltip = EVTTOOLTIP4009 #Bad Punishment
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC4007
+		trigger = {
+			has_character_flag = hands_off
+		}
+		ai_chance = { factor = 30 }
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		clr_character_flag = hands_off
+		FROM = {
+			character_event = {
+				id = 4008
+				days = 7
+				tooltip = EVTTOOLTIP4008 #Good Punishment
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD4007
+		trigger = {
+			has_character_flag = hands_off
+		}
+		ai_chance = { factor = 70 }
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		clr_character_flag = hands_off
+		FROM = {
+			character_event = {
+				id = 4009
+				days = 7
+				tooltip = EVTTOOLTIP4009 #Bad Punishment
+			}
+		}
+	}
+	option = {
+		name = EVTOPTE4007
+		trigger = {
+			has_character_flag = prisoner_in
+		}
+		ai_chance = { factor = 70 }
+		clr_character_flag = prisoner_in
+		FROM = {
+			character_event = {
+				id = 4008
+				days = 7
+				tooltip = EVTTOOLTIP4008 #Good Punishment
+			}
+		}
+	}
+	option = {
+		name = EVTOPTF4007
+		trigger = {
+			has_character_flag = prisoner_in
+		}
+		ai_chance = { factor = 30 }
+		clr_character_flag = prisoner_in
+		FROM = {
+			character_event = {
+				id = 4009
+				days = 7
+				tooltip = EVTTOOLTIP4009 #Bad Punishment
+			}
+		}
+	}
+}
+
+#Good Punishment
+character_event = {
+	id = 4008
+	desc = EVTDESC4008
+	picture = GFX_evt_holy_emperor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4008
+		FROM = {
+			opinion = {
+				modifier = opinion_good_punishment
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+#Bad Punishment
+character_event = {
+	id = 4009
+	desc = EVTDESC4009
+	picture = GFX_evt_lunatic
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4009
+		FROM = {
+			opinion = {
+				modifier = opinion_bad_punishment
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+################################################################################
+# Event Chain: Unfaithful Husband
+################################################################################
+#Unfaithful Husband: Start
+character_event = {
+	id = 4015
+	desc = EVTDESC4015
+	picture = GFX_evt_quarrel
+	
+	only_playable = no
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	is_triggered_only = yes
+	war = no
+	is_married = yes
+	
+	trigger = {
+		in_command = no
+		is_ruler = no
+		host = {
+			age = 20
+			prisoner = no
+			war = no
+			in_command = no
+			OR = {
+				tier = count
+				tier = duke
+				tier = king
+			}
+			NOT = {
+				character = ROOT
+			}
+			NOT = {
+				spouse = {
+					character = ROOT
+				}
+			}
+			NOT = {
+				trait = incapable
+			}
+			NOT = {
+				has_character_modifier = the_judger
+			}				
+		}
+		spouse = {
+			trait = lustful
+			is_abroad = no
+			prisoner = no
+			is_alive = yes
+			OR = {
+				tier = baron
+				tier = count
+				NOT = {
+					tier = duke
+				}
+			}
+			NOR = {
+				tier = king
+				tier = emperor
+			}
+			OR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_cuckolded_private }
+				has_opinion_modifier = { who = ROOT modifier = opinion_unfaithful_private }
+				has_opinion_modifier = { who = ROOT modifier = opinion_cuckolded }
+				has_opinion_modifier = { who = ROOT modifier = opinion_unfaithful_wife }
+				has_opinion_modifier = { who = ROOT modifier = opinion_unfaithful_husband }
+				NOT = { opinion = { who = ROOT value = 30 } }
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2.5
+			trait = lustful
+		}
+		modifier = {
+			factor = 2
+			trait = just
+		}
+		modifier = {
+			factor = 0.66
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.75
+			trait = chaste
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4015
+		host = {
+			character_event = {
+				id = 4016
+				days = 7
+				tooltip = EVTTOOLTIP4016
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4015
+		prestige = -5
+		piety = 10
+	}
+}
+
+#Unfaithful Husband: Host
+character_event = {
+	id = 4016
+	desc = EVTDESC4016
+	picture = GFX_evt_quarrel
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_character_modifier = {
+			name = the_judger
+			duration = 700
+		}
+	}
+	
+	option = { 
+		name = EVTOPTA4016 #Ignore
+		FROM = {
+			opinion = {
+				modifier = insulted
+				who = ROOT
+				years = 1
+			}
+			character_event = {
+				id = 4017
+				days = 2
+				tooltip = EVTTOOLTIP4017 #The spouse is not punished
+			}
+		}
+		FROM = {
+			spouse = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4016 #Throw him into the dungeon!
+		tooltip_info = just
+		trigger = {
+			trait = just
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+			character_event = {
+				id = 4018
+				days = 2
+				tooltip = EVTTOOLTIP4018 #The spouse is punished
+			}
+		}
+		FROM = {
+			spouse = {
+				imprison = ROOT
+				opinion = {
+					modifier = insulted
+					who = ROOT
+					years = 1
+				}
+				character_event = {
+					id = 4019
+					days = 2
+					tooltip = EVTTOOLTIP4019 #The spouse is not happy
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4016 #Infidelty = crime?
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = dull
+			}
+		}
+		add_trait = dull
+	}
+	
+	option = {
+		name = EVTOPTD4016 #Locked in the stock
+		piety = 10
+		FROM = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+			character_event = {
+				id = 4018
+				days = 2
+				tooltip = EVTTOOLTIP4018 #The spouse is punished
+			}
+		}
+		FROM = {
+			spouse = {
+				opinion = {
+					modifier = insulted
+					who = ROOT
+					years = 1
+				}
+				character_event = {
+					id = 4019
+					days = 2
+					tooltip = EVTTOOLTIP4019  #The spouse is not happy
+				}
+			}
+		}
+	}
+}
+
+#The spouse is not punished
+character_event = {
+	id = 4017
+	desc = EVTDESC4017
+	picture = GFX_evt_quarrel
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4017
+		prestige = -10
+	}
+}
+
+#The spouse is punished
+character_event = {
+	id = 4018
+	desc = EVTDESC4018
+	picture = GFX_evt_quarrel
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4018
+		prestige = 10
+	}
+}
+
+#The spouse is not happy
+character_event = {
+	id = 4019
+	desc = EVTDESC4019
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4019
+		prestige = -15
+		spouse = {
+			reverse_opinion = {
+				modifier = opinion_betrayed
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+
+################################################################################
+#Falconry
+character_event = {
+	id = 4060
+	desc = EVTDESC4060
+	picture = GFX_evt_falconing
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOT = { religion = jain }
+		OR = {
+			trait = falconer
+			trait = hunter
+			trait = scholar
+		}
+		any_vassal = {
+			prisoner = no
+			age = 20
+			OR = {
+				trait = falconer
+				trait = hunter
+				NOT = {
+					trait = craven
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			trait = brave
+		}
+		modifier = {
+			factor = 5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.75
+			trait = craven
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4060
+		prestige = 15
+	}
+	
+	option = {
+		name = EVTOPTB4060
+		random_vassal = {
+			limit = {
+				war = no
+				prisoner = no
+				age = 16
+				OR = {
+					trait = falconer
+					trait = hunter
+					NOT = {
+						trait = craven
+					}
+				}
+			}
+			opinion = {
+				modifier = brave_pos
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4060
+		random_vassal = {
+			limit = {
+				OR = {
+					trait = falconer
+					trait = hunter
+					NOT = {
+						trait = craven
+					}
+				}
+				age = 16
+			}
+			opinion = {
+				modifier = opinion_oblivious
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+#Deer Park ID 4075 - moved to hunting_events.txt
+
+#Satirical Puppet Show ID 4105 - moved to summer_fair_events.txt
+	
+#Banquette: Start
+character_event = {
+	id = 4110
+	desc = EVTDESC4110
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	friends = yes
+	
+	trigger = {
+		in_command = no
+		any_friend = {
+			age = 20
+			prisoner = no
+			NOT = {
+				character = ROOT
+			}
+			NOT = {
+				trait = incapable
+			}
+			reverse_opinion = { who = ROOT value = 25 }
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+		modifier = {
+			factor = 3
+			trait = wroth
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.75
+			trait = charitable
+		}
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = {
+				age = 20
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+				NOT = {
+					trait = incapable
+				}
+				reverse_opinion = { who = ROOT value = 25 }
+			}
+			set_character_flag = invitation_pending
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4110
+		random_vassal = {
+			limit = {
+				has_character_flag = invitation_pending
+			}
+			character_event = {
+				id = 4111
+				days = 3
+				random = 3
+				tooltip = EVTTOOLTIP4111
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4110
+		random_vassal = {
+			limit = {
+				has_character_flag = invitation_pending
+			}
+			random = {
+				chance = 70
+				character_event = {
+					id = 4112
+					days = 3
+					random = 3
+					tooltip = EVTTOOLTIP4112
+				}
+			}
+		}
+	}
+}
+
+#Banquette: Invited
+character_event = {
+	id = 4111
+	desc = EVTDESC4111
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4111
+		FROM = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = {
+				set_character_flag = guest_declined
+				character_event = {
+					id = 4114
+					days = 3
+					random = 3
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4111
+		FROM = {
+			opinion = {
+				modifier = opinion_satisfied
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = {
+				set_character_flag = guest_accepted
+				character_event = {
+					id = 4114
+					days = 3
+					random = 3
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC4111
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = {
+				set_character_flag = guest_happy
+				character_event = {
+					id = 4114
+					days = 3
+					random = 3
+				}
+			}
+		}
+	}
+}
+
+#Banquette: Not Invited
+character_event = {
+	id = 4112
+	desc = EVTDESC4112
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4112
+		piety = 10
+	}
+	
+	option = {
+		name = EVTOPTB4112
+		FROM = {
+			reverse_opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4112
+		FROM = {
+			character_event = {
+				id = 4113
+				days = 2
+				random = 2
+				tooltip = EVTTOOLTIP4113
+			}
+		}
+	}
+}
+
+#Banquette: The Bad End
+character_event = {
+	id = 4113
+	desc = EVTDESC4113
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4113 #So?
+		FROM = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4113 #I'm sorry
+		FROM = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+#Banquette: The Good End?
+character_event = {
+	id = 4114
+	desc = EVTDESC4114
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4114
+		trigger = {
+			has_character_flag = guest_declined
+		}
+		clr_character_flag = guest_declined
+		opinion = {
+			modifier = opinion_sad
+			who = FROM
+			years = 2
+		}
+	}
+	option = {
+		name = EVTOPTB4114
+		trigger = {
+			has_character_flag = guest_accepted
+		}
+		clr_character_flag = guest_accepted
+		FROM = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 3
+			}
+		}
+		opinion = {
+			modifier = opinion_glad
+			who = FROM
+			years = 1
+		}
+	}
+	option = {
+		name = EVTOPCF4114
+		trigger = {
+			has_character_flag = guest_happy
+		}
+		clr_character_flag = guest_happy
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		opinion = {
+			modifier = opinion_happy
+			who = FROM
+			years = 2
+		}
+	}
+}
+
+#Market Day
+character_event = {
+	id = 4115
+	desc = EVTDESC4115
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOR = {
+			tier = king
+			tier = emperor
+			trait = depressed
+			trait = stressed
+			has_character_modifier = big_spender
+		}
+		treasury = 30
+		any_vassal = {
+			higher_tier_than = BARON
+			OR = {
+				trait = greedy
+				trait = gregarious
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2.5
+			trait = gregarious
+		}
+
+		modifier = {
+			factor = 1.5
+			trait = charitable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4115
+		scaled_wealth = -0.1
+		add_character_modifier = {
+			name = big_spender
+			years = 5
+		}		
+	}
+	
+	option = {
+		name = EVTOPTB4115
+		tooltip_info = greedy
+		trigger = {
+			trait = greedy
+			NOR = {
+				trait = cynical
+				trait = zealous
+			}
+		}
+		prestige = 50
+		add_trait = cynical
+	}
+	
+	option = {
+		name = EVTOPTD4115
+		trigger = {
+			OR = {
+				trait = arbitrary
+				trait = greedy
+			}
+			NOT = {
+				trait = shy
+			}
+		}
+		add_character_modifier = {
+			name = bargainer
+			years = 5
+		}
+		random = {
+			chance = 30
+			add_trait = shy
+			hidden_tooltip = {
+				character_event = {
+					id = 38263 #Notify Shy
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTE4115
+		trigger = {
+			NOR = {
+				trait = greedy
+				trait = arbitrary
+				trait = kind
+			}
+		}
+		add_trait = kind
+		prestige = 50
+		random_list = {
+			50 = {}
+			30 = {
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+			20 = {
+				add_trait = drunkard
+				hidden_tooltip = {
+					character_event = {
+						id = 38286 #Notify Drunkard
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTF4115
+		prestige = 50
+		random_vassal = {
+			limit = {
+				higher_tier_than = BARON
+				OR = {
+					trait = greedy
+					trait = gregarious
+				}
+			}
+			opinion = {
+				modifier = opinion_irritated
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Jousting
+character_event = {
+	id = 4120
+	desc = EVTDESC4120
+	picture = GFX_evt_joust
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_men = yes
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	war = no
+	friends = yes
+	rivals = yes
+	
+	trigger = {
+		in_command = no
+		any_courtier = {
+			martial = 15
+			reverse_opinion = { who = ROOT value = 25 }
+		}
+		NOT = {
+			has_character_modifier = the_pompous
+		}
+		NOT = {
+			has_character_modifier = the_cynical
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2.5
+			trait = arbitrary
+		}
+		
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4120
+		prestige = 10
+	}
+	
+	option = {
+		name = EVTOPTB4120
+		add_character_modifier = {
+			name = the_cynical
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4120
+		tooltip_info = proud
+		trigger = {
+			trait = proud
+			any_courtier = {
+				martial = 15
+			}
+		}
+		random_courtier = {
+			limit = {
+				martial = 15
+				reverse_opinion = { who = ROOT value = 25 }
+			}
+			opinion = {
+				modifier = proud_pos
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4120
+		tooltip_info = brave
+		trigger = {
+			trait = brave
+			NOT = {
+				trait = cynical
+			}
+		}
+		prestige = 15
+	}
+	
+	option = {
+		name = EVTOPTE4120
+		tooltip_info = gregarious
+		trigger = {
+			trait = gregarious
+			NOT = {
+				trait = brave
+			}
+		}
+		add_character_modifier = {
+			name = the_pompous
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTF4120
+		trigger = {
+			NOT = {
+				trait = charitable
+			}
+		}
+		add_trait = charitable
+	}
+}
+
+#Tournaments
+character_event = {
+	id = 4125
+	desc = EVTDESC4125
+	picture = GFX_evt_joust
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	war = no
+	
+	trigger = {
+		in_command = no
+		martial = 15
+		intrigue = 10
+		OR = {
+			tier = duke
+			tier = count
+		}
+		NOT = {
+			has_character_modifier = the_cynical
+		}
+		NOT = {
+			has_character_modifier = the_pitiful
+		}
+		any_vassal = {
+			opinion = { who = ROOT value = 20 }
+			trait = brave
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+	
+		modifier = {
+			factor = 2.5
+			trait = charitable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4125
+		add_character_modifier = {
+			name = the_cynical
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4125
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		scaled_wealth = -0.05
+		prestige = 15
+	}
+	
+	option = {
+		name = EVTOPTC4125
+		tooltip_info = slow
+		trigger = {
+			is_dumb_trigger = yes
+		}
+		add_character_modifier = {
+			name = the_pitiful
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTD4125
+		tooltip_info = gregarious
+		trigger = {
+			trait = gregarious
+		}
+		piety = 10
+	}
+	
+	option = {
+		name = EVTOPTE4125
+		random_vassal = {
+			limit = {
+				opinion = { who = ROOT value = 20 }
+				trait = brave
+			}
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+#Festivals
+character_event = {
+	id = 4130
+	desc = EVTDESC4130
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		num_of_rivals = 1
+		NOT = {
+			tier = king
+			tier = emperor
+		}
+		NOT = {
+			trait = stressed
+		}
+		NOT = {
+			has_character_modifier = the_cynical
+		}
+		NOT = {
+			has_character_modifier = the_pitiful
+		}
+		any_vassal = { 
+			opinion = { who = ROOT value = 25 }
+			OR = {
+				trait = honest
+				trait = proud
+				trait = greedy
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4130
+		random_vassal = {
+			limit = {
+				opinion = { who = ROOT value = 25 }
+				OR = {
+					trait = honest
+					trait = proud
+					trait = greedy
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4130
+		tooltip_info = cynical
+		trigger = {
+			trait = cynical
+		}
+		add_character_modifier = {
+			name = the_cynical
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4130
+		add_trait = gregarious
+	}
+	
+	option = {
+		name = EVTOPTD4130
+		#tooltip_info = 
+		trigger = {
+			trait = gregarious
+			trait = kind
+		}
+		add_character_modifier = {
+			name = magnanimous_person
+			duration = 90
+		}
+	}
+}
+
+#Wedding
+character_event = {
+	id = 4135
+	desc = EVTDESC4135
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOT = {
+			tier = king
+		}
+		NOT = {
+			tier = emperor
+		}
+		any_vassal = {
+			at_location = ROOT
+			age = 50
+			spouse = {
+				is_abroad = no
+				prisoner = no
+				is_alive = yes
+				NOT = {
+					age = 25
+				}
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+		
+		modifier = {
+			factor = 3
+			trait = wroth
+		}
+
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4135
+		add_character_modifier = {
+			name = the_eager
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4135
+		random_vassal = {
+			limit = {
+				at_location = ROOT
+				age = 50
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+					NOT = {
+						age = 25
+					}
+				}
+			}
+			opinion = {
+				modifier = opinion_pitiful
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4135
+		add_trait = gluttonous
+	}
+}
+
+#Funeral Procession ID 4140 - moved to mourning_events.txt
+
+#Bard
+character_event = {
+	id = 4145
+	desc = EVTDESC4145
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOT = {
+			has_character_modifier = the_cynical
+		}
+		NOT = {
+			has_character_modifier = the_amiable
+		}
+		any_vassal = {
+			NOT = {
+				family = ROOT
+			}
+			diplomacy = 15
+			OR = {
+				trait = gregarious
+				trait = kind
+				trait = charitable
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = paranoid
+		}
+		
+		modifier = {
+			factor = 0.8
+			trait = trusting
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4145
+		add_character_modifier = {
+			name = the_cynical
+			duration = 180
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4145
+		random_vassal = {
+			limit = {
+				NOT = {
+					family = ROOT
+				}
+				diplomacy = 15
+				OR = {
+					trait = gregarious
+					trait = kind
+					trait = charitable
+				}
+			}
+			set_character_flag = liege_wroth
+			character_event = {
+				id = 4146
+				days = 2
+				tooltip = EVTTOOLTIP4146
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4145
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = shy
+			}
+		}
+		add_trait = shy
+	}
+	
+	option = {
+		name = EVTOPTD4145
+		random_vassal = {
+			limit = {
+				NOT = {
+					family = ROOT
+				}
+				diplomacy = 15
+				OR = {
+					trait = gregarious
+					trait = kind
+					trait = charitable
+				}
+			}
+			set_character_flag = liege_gregarious
+			character_event = {
+				id = 4146
+				days = 2
+				tooltip = EVTTOOLTIP4146
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTE4145
+		tooltip_info = poet
+		trigger = {
+			trait = poet
+		}
+		add_character_modifier = {
+			name = the_amiable
+			duration = 180
+		}
+	}
+}
+
+#Bard: Courtier reacts to Liege: wroth or gregarious
+character_event = {
+	id = 4146
+	desc = EVTDESC4146
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4146
+		trigger = {
+			has_character_flag = liege_wroth
+		}
+		clr_character_flag = liege_wroth
+		FROM = {
+			character_event = {
+				id = 4147
+				days = 2
+				tooltip = EVTTOOLTIP4147
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB4146
+		trigger = {
+			has_character_flag = liege_gregarious
+		}
+		clr_character_flag = liege_gregarious
+		FROM = {
+			character_event = {
+				id = 4148
+				days = 2
+				tooltip = EVTTOOLTIP4148
+			}
+		}
+	}
+}
+
+#Bard: Wroth - The End
+character_event = {
+	id = 4147
+	desc = EVTDESC4147
+	picture = GFX_evt_jugglers
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4147
+		FROM = {
+			opinion = {
+				modifier = opinion_cruel
+				who = ROOT
+			}
+		}
+		random = {
+			chance = 50
+			remove_trait = wroth
+			add_character_modifier = {
+				name = mod_ashamed
+				duration = 60
+			}
+		}
+	}
+}
+
+#Bard: Gregarious - The End
+character_event = {
+	id = 4148
+	desc = EVTDESC4148
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4148
+		FROM = {
+			opinion = {
+				modifier = opinion_munificent
+				who = ROOT
+				months = 12
+			}
+		}
+		add_character_modifier = {
+			name = magnanimous_person
+			duration = 90
+		}
+	}
+}
+
+#A Lord Returns to Sing about the Queen of Elfland
+character_event = {
+	id = 4150
+	desc = EVTDESC4150
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	war = no
+	
+	trigger = {
+		in_command = no
+		father_even_if_dead = {
+			is_alive = no
+		}
+		is_dumb_trigger = no
+		NOT = {
+			trait = kind
+			has_character_modifier = the_suspicious
+			has_character_modifier = the_kind
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = trusting
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4150
+		add_trait = kind
+	}
+	
+	option = {
+		name = EVTOPTB4150
+		tooltip_info = cynical
+		trigger = {
+			trait = cynical
+			NOT = {
+				trait = paranoid
+			}
+		}
+		add_trait = paranoid
+	}
+	
+	option = {
+		name = EVTOPTC4150
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		prestige = -10
+		change_martial = 1
+	}
+	
+	option = {
+		name = EVTOPTD4150
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+			NOT = {
+				trait = gregarious
+			}
+		}
+		add_character_modifier = {
+			name = the_suspicious
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTE4150
+		ai_chance = {
+			factor = 0
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			age = 65
+			female = no
+			attributes = {
+				learning = 8
+			}
+		}
+		new_character = {
+			give_nickname = nick_the_clueless
+		}
+	}
+	
+	option = {
+		name = EVTOPTF4150
+		tooltip_info = gregarious
+		trigger = {
+			trait = gregarious
+			NOT = {
+				trait = wroth
+			}
+		}
+		add_character_modifier = {
+			name = the_kind
+			duration = 90
+		}
+	}
+}
+
+#Troubadours - Travelling musician who sang of courtly love
+character_event = {
+	id = 4155
+	desc = EVTDESC4155
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOT = {
+			has_character_modifier = the_sullen
+		}
+		any_vassal = {
+			learning = 15
+		}
+		NOT = { has_character_modifier = in_seclusion }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+		
+		modifier = {
+			factor = 2.5
+			trait = charitable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4155
+		tooltip_info = cynical
+		trigger = {
+			trait = cynical
+			NOT = {
+				trait = kind
+			}
+		}
+		add_character_modifier = {
+			name = the_sullen
+			duration = 90
+		}
+	}
+	
+	option = {
+		name = EVTOPTB4155
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+			NOT = {
+				trait = temperate
+			}
+		}
+		prestige = 5
+	}
+	
+	option = {
+		name = EVTOPTC4155
+		tooltip_info = temperate
+		trigger = {
+			trait = temperate
+			NOT = {
+				trait = cynical
+			}
+		}
+		change_learning = 1
+	}
+	
+	option = {
+		name = EVTOPTD4155
+		tooltip_info = kind
+		trigger = {
+			trait = kind
+			NOT = {
+				trait = wroth
+			}
+		}
+		change_intrigue = 1
+	}
+	
+	option = {
+		name = EVTOPTE4155
+		trigger = {
+			trait = gregarious
+			any_vassal = {
+				learning = 15
+				NOT = { trait = incapable }
+				prisoner = no
+			}
+		}
+		random_vassal = {
+			limit = {
+				learning = 15
+				NOT = { trait = incapable }
+				prisoner = no
+			}
+			opinion = {
+				modifier = gregarious_pos
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTF4155
+		scaled_wealth = -0.05
+		add_trait = charitable
+	}
+}
+
+#Travelling Acrobats ID 4160 - moved to feast_events.txt
+
+
+#Travelling Dancer - moved to feast_events.txt
+
+
+#Performing Bear ID 4170 - moved to summer_fair_events.txt
+
+#Bal des Ardents
+character_event = {
+	id = 4175
+	desc = EVTDESC4175
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		OR = {
+			trait = lunatic
+			trait = possessed
+			trait = infirm
+			trait = drunkard
+		}
+		any_vassal = {
+			trait = diligent
+		}
+		any_vassal = {
+			trait = ambitious
+			trait = wroth
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	weight_multiplier = {
+		days = 3
+		
+		modifier = {
+			factor = 2
+			trait = infirm
+		}
+		modifier = {
+			factor = 5
+			trait = incapable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA4175
+		add_maimed_trait_effect = yes
+	}
+	
+	option = {
+		name = EVTOPTB4175
+		random = {
+			chance = 60
+			
+			add_trait = wounded
+			hidden_tooltip = { character_event = { id = 38280 } }
+		}
+		random_vassal = {
+			limit = {
+				trait = diligent
+			}
+			reverse_opinion = {
+				modifier = opinion_my_saviour
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC4175
+		random = {
+			chance = 70
+			
+			add_trait = wounded
+			hidden_tooltip = { character_event = { id = 38280 } }
+		}
+		random_courtier = {
+			limit = {
+				trait = ambitious
+				trait = wroth
+			}
+			reverse_opinion = {
+				modifier = opinion_fool_courtier
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}

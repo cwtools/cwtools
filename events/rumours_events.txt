@@ -1,0 +1,5345 @@
+###################################
+#
+# Events for Rumours
+#
+# Id 69000 - 69999 is reserved
+#
+#
+###################################
+#
+# Designed by Johan Andersson
+# Written by Sara Wendel-Örtqvist
+
+###  Homosexual ### 
+
+#Suspected Sodomite: Any Courtier
+character_event = {
+	id = 69000
+	desc = EVTDESC69000
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			NOT = {
+				has_character_flag = suspected_sodomite
+			}
+			is_female = no
+			age = 16
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			OR = {
+				NOT = {
+					martial = 2
+				}
+				trait = craven
+				trait = poet
+				trait = gardener
+			}
+			NOT = {
+				num_of_children = 1
+			}
+			NOT = {
+				trait = homosexual
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69000
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				OR = {
+					NOT = {
+						martial = 2
+					}
+					trait = craven
+					trait = poet
+					trait = gardener
+				}
+				NOT = {
+					num_of_children = 1
+				}
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			character_event = {
+				id = 69001
+				days = 3
+				tooltip = EVTTOOLTIP69001
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69000
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				OR = {
+					NOT = {
+						martial = 2
+					}
+					trait = craven
+					trait = poet
+					trait = gardener
+				}
+				NOT = {
+					num_of_children = 1
+				}
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			set_character_flag = suspected_sodomite
+			character_event = {
+				id = 69080
+				days = 3
+				tooltip = EVTTOOLTIP69080
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69000
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				OR = {
+					NOT = {
+						martial = 2
+					}
+					trait = craven
+					trait = poet
+					trait = gardener
+				}
+				NOT = {
+					num_of_children = 1
+				}
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			character_event = {
+				id = 69002
+				days = 3
+				tooltip = EVTTOOLTIP69002
+			}
+		}
+	}
+}
+
+#Suspected Sodomite: Target is confronted
+character_event = {
+	id = 69001
+	desc = EVTDESC69001
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69001 #Deny
+		set_character_flag = suspected_sodomite
+		FROM = {
+			opinion = {
+				modifier = denied_sodomite_rumour
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTB69001 #Embrace
+		add_trait = homosexual
+	}
+}
+
+#Suspected Sodomite: Target is blackmailed
+character_event = {
+	id = 69002
+	desc = EVTDESC69002
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69002
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = EVTOPTB69002
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = suspected_sodomite_rumour
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+}
+
+#Suspected Sodomite: Ruler
+character_event = {
+	id = 69003
+	desc = EVTDESC69003
+	picture = GFX_evt_whispers
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			NOT = {
+				has_character_flag = impotent_man
+			}
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			OR = {
+				NOT = {
+					martial = 2
+				}
+				trait = craven
+				trait = poet
+				trait = gardener
+			}
+			NOT = {
+				num_of_children = 1
+			}
+			NOT = {
+				trait = homosexual
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+
+	option = {
+		name = EVTOPTA69003
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				is_priest = no
+				age = 16
+				OR = {
+					NOT = {
+						martial = 2
+					}
+					trait = craven
+					trait = poet
+					trait = gardener
+				}
+				NOT = {
+					num_of_children = 1
+				}
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			character_event = {
+				id = 69004
+				days = 3
+				tooltip = EVTTOOLTIP69004
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69003
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				OR = {
+					NOT = {
+						martial = 2
+					}
+					trait = craven
+					trait = poet
+					trait = gardener
+				}
+				NOT = {
+					num_of_children = 1
+				}
+				NOT = {
+					trait = homosexual
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			set_character_flag = suspected_sodomite
+			character_event = {
+				id = 69080
+				days = 3
+				tooltip = EVTTOOLTIP69080
+			}
+		}
+	}
+}
+
+#Suspected Sodomite: Ruler confront Target
+character_event = {
+	id = 69004
+	desc = EVTDESC69004
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69004 #Deny
+		set_character_flag = suspected_sodomite
+		FROM = {
+			opinion = {
+				modifier = denied_sodomite_rumour
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTB69004 #Embrace
+		add_trait = homosexual
+	}
+}
+
+#People think I am homosexual! Brothel
+character_event = {
+	id = 69005
+	desc = EVTDESC69005
+	picture = GFX_evt_brothel
+	
+	only_men = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_sodomite
+	
+	trigger = {
+		OR = {
+			NOT = {
+				martial = 2
+			}
+			trait = craven
+			trait = poet
+			trait = gardener
+		}
+		NOT = {
+			num_of_children = 1
+		}
+		NOT = {
+			trait = homosexual
+		}
+		NOT = {
+			has_character_modifier = whoremaster
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69005 #Go to brothels
+		piety = -10
+		add_character_modifier = {
+			name = whoremaster
+			duration = 365
+		}
+	}
+	option = {
+		name = EVTOPTB69005 #Talk about it
+		prestige = -10
+	}
+}
+
+#People think I am homosexual! A Churchman denounces you
+character_event = {
+	id = 69006
+	desc = EVTDESC69006
+	picture = GFX_evt_whispers
+	
+	only_men = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_sodomite
+	religion_group = christian
+	
+	trigger = {
+		OR = {
+			NOT = {
+				martial = 2
+			}
+			trait = craven
+			trait = poet
+			trait = gardener
+		}
+		NOT = {
+			num_of_children = 1
+		}
+		NOT = {
+			trait = homosexual
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69006
+		piety = -10
+	}
+	option = {
+		name = EVTOPTB69006
+		prestige = -10
+	}
+}
+
+#People think I am homosexual! Self-doubts
+character_event = {
+	id = 69007
+	desc = EVTDESC69007
+	picture = GFX_evt_whispers
+	
+	only_men = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_sodomite
+	
+	trigger = {
+		OR = {
+			NOT = {
+				martial = 2
+			}
+			trait = craven
+			trait = poet
+			trait = gardener
+		}
+		NOT = {
+			num_of_children = 1
+		}
+		NOT = {
+			trait = homosexual
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69007
+		add_trait = stressed
+	}
+}
+
+#People think I am homosexual! An Imam denounces you
+character_event = {
+	id = 69008
+	desc = EVTDESC69006
+	picture = GFX_evt_whispers
+	
+	only_men = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = suspected_sodomite
+	
+	trigger = {
+		OR = {
+			NOT = {
+				martial = 2
+			}
+			trait = craven
+			trait = poet
+			trait = gardener
+		}
+		NOT = {
+			num_of_children = 1
+		}
+		NOT = {
+			trait = homosexual
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69006
+		piety = -10
+	}
+	option = {
+		name = EVTOPTB69006
+		prestige = -10
+	}
+}
+
+### Incest ### 
+
+#Suspected of Incest: Any courtier
+character_event = {
+	id = 69010
+	desc = EVTDESC69010
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			religion_group = muslim
+			religion_group = zoroastrian_group
+		}
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			at_location = ROOT
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				has_character_flag = suspected_of_incest
+			}
+			NOT = {
+				trait = chaste
+			}
+			NOT = {
+				age = 40
+			}
+			any_sibling = {
+				is_female = yes
+				at_location = ROOT
+				age = 16
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					trait = chaste
+				}
+				reverse_opinion = { who = PREV value = 75 }
+				opinion = { who = PREV value = 75 }
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69010
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				at_location = ROOT
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = PREV value = 75 }
+					opinion = { who = PREV value = 75 }
+				}
+			}
+			character_event = {
+				id = 69011
+				days = 3
+				tooltip = EVTTOOLTIP69011
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69010
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				at_location = ROOT
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = PREV value = 75 }
+					opinion = { who = PREV value = 75 }
+				}
+			}
+			set_character_flag = suspected_of_incest
+			character_event = {
+				id = 69081
+				days = 3
+				tooltip = EVTTOOLTIP69081
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC69010
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				at_location = ROOT
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = PREV value = 75 }
+					opinion = { who = PREV value = 75 }
+				}
+			}
+		}
+		character_event = {
+			id = 69012
+			days = 3
+			tooltip = EVTTOOLTIP69012
+		}
+	}
+}
+
+#Suspected of Incest: Target is confronted
+character_event = {
+	id = 69011
+	desc = EVTDESC69011
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69011
+		set_character_flag = suspected_of_incest
+		FROM = {
+			opinion = {
+				modifier = denied_incest_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69011
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = yes
+				age = 16
+				NOT = {
+					age = 50
+				}
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					trait = celibate
+				}
+			}
+			character_event = {
+				id = 69013
+				days = 3
+				tooltip = EVTTOOLTIP69013
+			}
+		}
+	}
+}
+
+#Suspected of Incest: Target is blackmailed
+character_event = {
+	id = 69012
+	desc = EVTDESC69012
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69012
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69012
+		set_character_flag = suspected_of_incest
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					AND = {
+						sibling = ROOT
+						is_female = yes
+					}
+				}
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = suspected_of_incest_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Suspected of Incest: Affair with female courtier
+character_event = {
+	id = 69013
+	desc = EVTDESC69013
+	picture = GFX_evt_lovers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69013
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				FROM = {
+					reverse_opinion = { who = ROOT value = 25 }
+				}
+			}
+		}
+		FROM = {
+			character_event = {
+				id = 453
+				days = 3
+				tooltip = EVTTOOLTIP453
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69013
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.01
+				FROM = {
+					NOT = {
+						reverse_opinion = { who = ROOT value = 25 }
+					}
+				}
+			}
+		}
+		FROM = {
+			character_event = {
+				id = 454
+				days = 3
+				tooltip = EVTTOOLTIP454
+			}
+		}
+	}
+}
+
+#Suspected of Incest: Start
+character_event = {
+	id = 69014
+	desc = EVTDESC69010
+	picture = GFX_evt_whispers
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { religion_group = zoroastrian_group }
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			at_location = ROOT
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				has_character_flag = suspected_of_incest
+			}
+			NOT = {
+				trait = chaste
+			}
+			NOT = {
+				age = 40
+			}
+			any_sibling = {
+				prisoner = no
+				is_female = yes
+				at_location = ROOT
+				age = 16
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					trait = chaste
+				}
+				reverse_opinion = { who = ROOT value = 75 }
+				opinion = { who = ROOT value = 75 }
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69010
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				at_location = ROOT
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = ROOT value = 75 }
+					opinion = { who = ROOT value = 75 }
+				}
+			}
+			character_event = {
+				id = 69011
+				days = 3
+				tooltip = EVTTOOLTIP69011
+			}
+			random_sibling = {
+				limit = {
+					prisoner = no
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = ROOT value = 75 }
+					opinion = { who = ROOT value = 75 }
+				}
+				set_character_flag = sister_suspected_of_incest
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69010
+		ai_chance = {
+			factor = 90
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				at_location = ROOT
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = ROOT value = 75 }
+					opinion = { who = ROOT value = 75 }
+				}
+			}
+			random_sibling = {
+				limit = {
+					prisoner = no
+					is_female = yes
+					at_location = ROOT
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = chaste
+					}
+					reverse_opinion = { who = ROOT value = 75 }
+					opinion = { who = ROOT value = 75 }
+				}
+				set_character_flag = sister_suspected_of_incest
+			}
+			set_character_flag = suspected_of_incest
+			character_event = {
+				id = 69081
+				days = 3
+				tooltip = EVTTOOLTIP69081
+			}
+		}
+	}
+}
+
+#Suspect of Incest: Confessor takes you aside
+character_event = {
+	id = 69015
+	desc = EVTDESC69015
+	picture = GFX_evt_whispers
+	
+	only_men = yes
+	min_age = 16
+	max_age = 40
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	has_character_flag = suspected_of_incest
+	
+	trigger = {
+		NOT = {
+			has_character_modifier = suspected_of_incest_timer
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69015
+		clr_character_flag = suspected_of_incest
+		piety = 10
+		if = {
+			limit = {
+				NOT = {
+					religion_group = muslim
+				}
+			}
+			add_trait = chaste
+		}
+		if = {
+			limit = {
+				religion_group = muslim
+			}
+			piety = 5
+		}
+	}
+	option = {
+		name = EVTOPTB69015
+		piety = -10
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = suspected_of_incest_timer
+				duration = 90
+				hidden = yes
+			}
+		}
+	}
+}
+
+#Suspect of Incest: Child notices you and sister alone in a tower
+character_event = {
+	id = 69016
+	desc = EVTDESC69016
+	picture = GFX_evt_whispers
+	
+	only_men = yes
+	min_age = 16
+	max_age = 40
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_of_incest
+	
+	trigger = {
+		any_sibling = {
+			has_character_flag = sister_suspected_of_incest
+		}
+		any_realm_character = {
+			prisoner = no
+			NOT = {
+				father = {
+					character = ROOT
+				}
+			}
+			NOT = {
+				mother = {
+					sibling = ROOT
+				}
+			}
+			age = 6
+			NOT = {
+				age = 15
+			}
+			can_be_maimed_trigger = yes
+			NOT = { trait = incapable }
+			NOT = { trait = blinded }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69016 #The things I do for love
+		clr_character_flag = suspected_of_incest
+		random_realm_character = {
+			limit = {
+				prisoner = no
+				NOT = {
+					father = {
+						character = ROOT
+					}
+				}
+				NOT = {
+					mother = {
+						sibling = ROOT
+					}
+				}
+				age = 6
+				NOT = {
+					age = 15
+				}
+				can_be_maimed_trigger = yes
+				NOR = {
+					trait = incapable
+					trait = blinded
+				}
+			}
+			add_maimed_trait_effect = yes
+		}
+	}
+	option = {
+		name = EVTOPTB69016 #Ignore the child
+		clr_character_flag = suspected_of_incest
+		if = {
+			limit = {
+				religion = catholic
+			}
+			random = {
+				chance = 25
+				character_event = {
+					id = 69017
+					days = 7
+					tooltip = EVTTOOLTIP69017
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					religion = catholic
+				}
+			}
+			piety = -10
+		}
+	}
+}
+
+#Suspect of Incest: Child talks
+character_event = {
+	id = 69017
+	desc = EVTDESC69017
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69017
+		character_event = {
+			id = 38022
+			days = 5
+			tooltip = EVTTOOLTIP38022
+		}
+		random_sibling = {
+			limit = {
+				has_character_flag = sister_suspected_of_incest
+			}
+			clr_character_flag = sister_suspected_of_incest
+			character_event = {
+				id = 38022
+				days = 5
+				tooltip = EVTTOOLTIP38022
+			}
+		}
+	}
+}
+
+### IMPOTENCE ###
+
+#Impotence: Any Courtier
+character_event = {
+	id = 69020
+	desc = EVTDESC69020
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 30
+			is_married = yes
+			spouse = {
+				is_abroad = no
+				prisoner = no
+				is_alive = yes
+				is_pregnant = no
+				NOT = {
+					age = 45
+				}
+			}
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				num_of_children = 1
+			}
+			NOT = {
+				has_character_flag = impotent_man
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69020
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				is_female = no
+				prisoner = no
+				age = 30
+				is_married = yes
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					num_of_children = 1
+				}
+			}
+			character_event = {
+				id = 69021
+				days = 3
+				tooltip = EVTTOOLTIP69021
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69020
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 30
+				is_married = yes
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					num_of_children = 1
+				}
+			}
+			set_character_flag = impotent_man
+			character_event = {
+				id = 69082
+				days = 3
+				tooltip = EVTTOOLTIP69082
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69020
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 30
+				is_married = yes
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					num_of_children = 1
+				}
+			}
+			character_event = {
+				id = 69022
+				days = 3
+				tooltip = EVTTOOLTIP69022
+			}
+		}
+	}
+}
+
+#Impotence: Target is confronted
+character_event = {
+	id = 69021
+	desc = EVTDESC69021
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69021 #Deny
+		set_character_flag = impotent_man
+		add_trait = stressed
+		FROM = {
+			opinion = {
+				modifier = denied_impotence_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69021 #Admit
+		prestige = -20
+		random = {
+			chance = 20
+			
+			if = {
+				limit = {
+					NOT = {
+						religion_group = muslim
+					}
+				}
+				add_trait = chaste
+				hidden_tooltip = {
+					character_event = {
+						id = 38274 #Notify Chaste
+					}
+				}
+			}
+			if = {
+				limit = {
+					religion_group = muslim
+				}
+				piety = 5
+			}
+		}
+	}
+}
+
+#Impotence: Target is blackmailed
+character_event = {
+	id = 69022
+	desc = EVTDESC69022
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69022
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69022
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = not_a_real_man
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+}
+
+#Impotence: Ruler
+character_event = {
+	id = 69023
+	desc = EVTDESC69020
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 30
+			is_married = yes
+			spouse = {
+				is_abroad = no
+				prisoner = no
+				is_alive = yes
+			}
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				num_of_children = 1
+			}
+			NOT = {
+				has_character_flag = impotent_man
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69020
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 30
+				is_married = yes
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					num_of_children = 1
+				}
+			}
+			character_event = {
+				id = 69021
+				days = 3
+				tooltip = EVTTOOLTIP69021
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69020
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 30
+				is_married = yes
+				spouse = {
+					is_abroad = no
+					prisoner = no
+					is_alive = yes
+				}
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					num_of_children = 1
+				}
+			}
+			set_character_flag = impotent_man
+			character_event = {
+				id = 69082
+				days = 3
+				tooltip = EVTTOOLTIP69082
+			}
+		}
+	}
+}
+
+#People laugh behind your back
+character_event = {
+	id = 69024
+	desc = EVTDESC69024
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	only_men = yes
+	has_character_flag = impotent_man
+	
+	trigger = {
+		NOT = {
+			num_of_children = 1
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69024
+		prestige = -10
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = laughing_timer
+				duration = 365
+				hidden = yes
+			}
+		}
+	}
+}
+
+### ADULTERY ###
+
+#Adultery: Any Courtier
+character_event = {
+	id = 69030
+	desc = EVTDESC69030
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			diplomacy = 12
+			is_married = yes
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			any_courtier = {
+				prisoner = no
+				is_female = yes
+				age = 16
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					trait = celibate
+				}
+				NOT = {
+					family = PREV
+				}
+				opinion = { who = PREV value = 40 }
+				reverse_opinion = { who = PREV value = 40 }
+				spouse = {
+					NOT = {
+						character = PREV
+					}
+				}
+			}
+			NOT = {
+				num_of_children = 1
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69030
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				diplomacy = 12
+				is_married = yes
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_courtier = {
+					prisoner = no
+					is_female = yes
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = celibate
+					}
+					NOT = {
+						family = PREV
+					}
+					opinion = { who = PREV value = 40 }
+					reverse_opinion = { who = PREV value = 40 }
+					spouse = {
+						NOT = {
+							character = PREV
+						}
+					}
+				}
+			}
+			character_event = {
+				id = 69031
+				days = 3
+				tooltip = EVTTOOLTIP69031
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69030
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				diplomacy = 12
+				is_married = yes
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_courtier = {
+					prisoner = no
+					is_female = yes
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						trait = celibate
+					}
+					NOT = {
+						family = PREV
+					}
+					opinion = { who = PREV value = 40 }
+					reverse_opinion = { who = PREV value = 40 }
+					spouse = {
+						NOT = {
+							character = PREV
+						}
+					}
+				}
+			}
+			set_character_flag = committed_adultery
+			character_event = {
+				id = 69083
+				days = 3
+				tooltip = EVTTOOLTIP69083
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69030
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				diplomacy = 12
+				is_married = yes
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_courtier = {
+					prisoner = no
+					is_female = yes
+					age = 16
+					NOT = {
+						age = 40
+					}
+					NOT = {
+						family = PREV
+					}
+					opinion = { who = PREV value = 40 }
+					reverse_opinion = { who = PREV value = 40 }
+					spouse = {
+						NOT = {
+							character = PREV
+						}
+					}
+				}
+			}
+			character_event = {
+				id = 69036
+				days = 3
+				tooltip = EVTTOOLTIP69036 #Blackmailed
+			}
+		}
+	}
+}
+
+#Adultery: Target is confronted
+character_event = {
+	id = 69031
+	desc = EVTDESC69031
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69031 #Deny
+		set_character_flag = committed_adultery
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = yes
+				age = 16
+				NOT = {
+					age = 40
+				}
+				NOT = {
+					trait = celibate
+				}
+				NOT = {
+					family = ROOT
+				}
+				opinion = { who = ROOT value = 40 }
+				reverse_opinion = { who = ROOT value = 40 }
+				spouse = {
+					NOT = {
+						character = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_lover = { character = root }
+				}
+				character_event = {
+					id = 64086
+					tooltip = "EVTTOOLTIP64086"
+				}
+			}
+			opinion = {
+				modifier = opinion_denied_love
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69031 #Don't say a word
+		FROM = {
+			character_event = {
+				id = 69032
+				days = 3
+				tooltip = EVTTOOLTIP69032
+			}
+		}
+	}
+}
+
+#Adultery: tell spouse or no?
+character_event = {
+	id = 69032
+	desc = EVTDESC69032
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69032
+		FROM = {
+			spouse = {
+				character_event = {
+					id = 69033
+					days = 3
+					tooltip = EVTTOOLTIP69033
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69032
+	}
+}
+
+#Adultery: Spouse is told
+character_event = {
+	id = 69033
+	desc = EVTDESC69033
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69033
+		spouse = {
+			character_event = {
+				id = 69034
+				days = 3
+				tooltip = EVTTOOLTIP69034
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69033
+		spouse = {
+			character_event = {
+				id = 69035
+				days = 3
+				tooltip = EVTTOOLTIP69035
+			}
+		}
+	}
+}
+
+#Adultery: Spouse mad as hell
+character_event = {
+	id = 69034
+	desc = EVTDESC69034
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69034
+		FROM = {
+			opinion = {
+				modifier = opinion_mad_as_hell
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Adultery: Spouse forgives
+character_event = {
+	id = 69035
+	desc = EVTDESC69035
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69035
+		FROM = {
+			opinion = {
+				modifier = opinion_forgive
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Adultery: Target is blackmailed
+character_event = {
+	id = 69036
+	desc = EVTDESC69036
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69036
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69036
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					character = PREV
+				}
+			}
+			opinion = {
+				modifier = committed_adultery_rumour
+				who = PREV
+				years = 3
+			}
+		}	
+	}
+}
+
+#Adultery: Ruler
+character_event = {
+	id = 69037
+	desc = EVTDESC69030
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			is_married = yes
+			age = 16
+			diplomacy = 12
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			any_courtier = {
+				prisoner = no
+				is_female = yes
+				NOT = {
+					family = PREV
+				}
+				opinion = { who = PREV value = 40 }
+				reverse_opinion = { who = PREV value = 40 }
+				spouse = {
+					NOT = {
+						character = PREV
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69030
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				is_married = yes
+				age = 16
+				diplomacy = 12
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_courtier = {
+					prisoner = no
+					is_female = yes
+					NOT = {
+						family = PREV
+					}
+					opinion = { who = PREV value = 40 }
+					reverse_opinion = { who = PREV value = 40 }
+					spouse = {
+						NOT = {
+							character = PREV
+						}
+					}
+				}
+			}
+			character_event = {
+				id = 69031
+				days = 3
+				tooltip = EVTTOOLTIP69031
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69030
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				is_married = yes
+				age = 16
+				diplomacy = 12
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				any_courtier = {
+					prisoner = no
+					is_female = yes
+					NOT = {
+						family = PREV
+					}
+					opinion = { who = PREV value = 40 }
+					reverse_opinion = { who = PREV value = 40 }
+					spouse = {
+						NOT = {
+							character = PREV
+						}
+					}
+				}
+			}
+			set_character_flag = committed_adultery
+			character_event = {
+				id = 69083
+				days = 3
+				tooltip = EVTTOOLTIP69083
+			}
+		}
+	}
+}
+
+#Adultery: Spouse speaks badly about you to the children
+character_event = {
+	id = 69038
+	desc = EVTDESC69038
+	picture = GFX_evt_quarrel
+	
+	capable_only = yes
+	prisoner = no
+	has_character_flag = committed_adultery
+	
+	trigger = {
+		num_of_children = 2
+		any_child = {
+			age = 6
+		}
+		spouse = {
+			is_abroad = no
+			prisoner = no
+			is_alive = yes
+			has_opinion_modifier = { who = ROOT modifier = opinion_mad_as_hell }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69038
+		any_child = {
+			limit = {
+				age = 6
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+#Spouse confronts lover
+character_event = {
+	id = 69039
+	desc = EVTDESC69039
+	picture = GFX_evt_quarrel
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		any_lover = {
+			NOT = {
+				spouse = {
+					character = ROOT
+				}
+			}
+		}
+		spouse = {
+			has_opinion_modifier = { who = ROOT modifier = opinion_mad_as_hell }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+			save_event_target_as = problem_lover
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69039
+		event_target:problem_lover = {
+			opinion = {
+				modifier = opinion_reassured_of_love
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69039 #Confess to wife
+		clr_character_flag = committed_adultery
+		event_target:problem_lover = {
+			remove_lover = ROOT
+		}
+		spouse = {
+			remove_opinion = { who = ROOT modifier = opinion_mad_as_hell }
+			opinion = {
+				modifier = opinion_forgive
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+### OCCULTISM ###
+
+#Occultism: Any Courtier
+character_event = {
+	id = 69040
+	desc = EVTDESC69040
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			religion_group = christian
+			learning = 10
+			NOT = {
+				piety = 50
+			}
+			NOT = {
+				trait = zealous
+			}
+			NOT = {
+				has_character_flag = suspected_occultist
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			is_smart_trigger = yes
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69040
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = christian
+				learning = 10
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					trait = zealous
+				}
+				NOT = {
+					has_character_flag = suspected_occultist
+				}
+			}
+			character_event = {
+				id = 69041
+				days = 3
+				tooltip = EVTTOOLTIP69041
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69040
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = christian
+				learning = 10
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					trait = zealous
+				}
+				NOT = {
+					has_character_flag = suspected_occultist
+				}
+			}
+			set_character_flag = suspected_occultist
+			character_event = {
+				id = 69084
+				days = 3
+				tooltip = EVTTOOLTIP69084
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69040
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = christian
+				learning = 10
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					trait = zealous
+				}
+				NOT = {
+					has_character_flag = suspected_occultist
+				}
+			}
+			character_event = {
+				id = 69042
+				days = 3
+				tooltip = EVTTOOLTIP69042
+			}
+		}
+	}
+}
+
+#Occultism: Target is confronted
+character_event = {
+	id = 69041
+	desc = EVTDESC69041
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69041
+		set_character_flag = suspected_occultist
+		FROM = {
+			opinion = {
+				modifier = denied_occultist_rumour
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTB69041
+		prestige = -20
+	}
+}
+
+#Occultism: Target is blackmailed
+character_event = {
+	id = 69042
+	desc = EVTDESC69042
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69042
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69042
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		set_character_flag = suspected_occultist
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = suspected_occultist_rumour
+				who = PREV
+				years = 3
+			}
+		}	
+	}
+}
+
+#Occultism: Ruler
+character_event = {
+	id = 69043
+	desc = EVTDESC69040
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			religion_group = christian
+			learning = 10
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				piety = 50
+			}
+			NOT = {
+				trait = zealous
+			}
+			NOT = {
+				has_character_flag = suspected_occultist
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69040
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = christian
+				learning = 10
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					trait = zealous
+				}
+				NOT = {
+					has_character_flag = suspected_occultist
+				}
+			}
+			character_event = {
+				id = 69041
+				days = 3
+				tooltip = EVTTOOLTIP69041
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69040
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = christian
+				learning = 10
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					trait = zealous
+				}
+				NOT = {
+					has_character_flag = suspected_occultist
+				}
+			}
+			set_character_flag = suspected_occultist
+			character_event = {
+				id = 69084
+				days = 3
+				tooltip = EVTTOOLTIP69084
+			}
+		}
+	}
+}
+
+#A child is missing, you are suspect
+character_event = {
+	id = 69044
+	desc = EVTDESC69044
+	picture = GFX_evt_scandal
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_occultist
+	
+	trigger = {
+		any_courtier = {
+			prisoner = no
+			age = 5
+			NOT = {
+				age = 15
+			}
+		}
+		NOT = {
+			has_character_modifier = missing_child_timer
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = missing_child_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69044
+		random = {
+			chance = 25
+			
+			add_trait = cynical
+		}
+	}
+	option = {
+		name = EVTOPTB69044
+		random_list = {
+			50 = {
+				piety = -15
+			}
+			50 = {
+				prestige = -15
+			}
+		}			
+	}
+}
+
+#Whisper in the dark
+character_event = {
+	id = 69045
+	desc = EVTDESC69045
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_occultist
+	
+	trigger = {
+		NOT = {
+			has_character_modifier = voice_in_darkness_timer
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = voice_in_darkness_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69045
+		set_character_flag = occultist_flagged
+		prestige = 1
+	}
+	option = {
+		name = EVTOPTB69045
+		piety = 1
+	}
+}
+
+#Confessor talks to suspected occultist
+character_event = {
+	id = 69046
+	desc = EVTDESC69046
+	picture = GFX_evt_bishop
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	has_character_flag = suspected_occultist
+	
+	trigger = {
+		NOT = {
+			has_character_modifier = confessor_and_occultist_timer
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = confessor_and_occultist_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69046
+		add_trait = zealous
+		piety = 1
+	}
+	option = {
+		name = EVTOPTB69046
+		add_character_modifier = {
+			name = ignored_confessor
+			duration = 730
+		}
+	}
+}
+
+#Dabble in the dark arts
+character_event = {
+	id = 69047
+	desc = EVTDESC69047
+	picture = GFX_evt_torture
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = suspected_occultist
+	
+	trigger = {
+		has_character_flag = occultist_flagged
+		NOT = {
+			has_character_modifier = dabble_dark_arts_timer
+		}
+		NOT = {
+			trait = possessed
+		}
+		NOT = {
+			trait = stressed
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = dabble_dark_arts_timer
+				duration = 90
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69047
+		trigger = {
+			NOT = {
+				trait = paranoid
+			}
+		}
+		random_list = {
+			25 = {
+				add_trait = fair
+				hidden_tooltip = {
+					character_event = {
+						id = 38301 #Notify Fair
+					}
+				}
+			}
+			25 = {
+				change_martial = 1
+			}
+			25 = {
+				add_trait = paranoid
+				hidden_tooltip = {
+					character_event = {
+						id = 38275 #Notify 
+					}
+				}
+			}
+			25 = {
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify 
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69047
+		clr_character_flag = suspected_occultist
+		clr_character_flag = occultist_flagged
+		piety = 10
+	}
+	option = {
+		name = EVTOPTC69047
+		trigger = {
+			trait = paranoid
+			religion_group = christian
+		}
+		tooltip_info = paranoid
+		piety = -5
+		random = {
+			chance = 33
+			
+			add_trait = possessed
+			character_event = { id = 38315 } # Notify Possessed
+		}
+	}
+}
+
+### INCOMPETENCE AT WORK ###
+
+#Incompetence at work: Chancellor
+character_event = {
+	id = 69050
+	desc = EVTDESC69050
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_chancellor = {
+			prisoner = no
+			is_female = no
+			age = 16
+			NOT = {
+				diplomacy = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69050
+		ai_chance = {
+			factor = 10
+		}
+		job_chancellor = {
+			character_event = {
+				id = 69051
+				tooltip = EVTTOOLTIP69051
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69050
+		ai_chance = {
+			factor = 50
+		}
+		job_chancellor = {
+			character_event = {
+				id = 69085
+				days = 3
+				tooltip = EVTTOOLTIP69085
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69050
+		trigger = {
+			job_chancellor = {
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_chancellor = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Chancellor
+character_event = {
+	id = 69051
+	desc = EVTDESC69051
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69051
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 5
+		}
+		random = {
+			chance = 25
+			
+			change_diplomacy = 1
+		}
+	}
+}
+
+#Incompetence at work: Marshal
+character_event = {
+	id = 69052
+	desc = EVTDESC69052
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_marshal = {
+			NOT = {
+				martial = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69052
+		ai_chance = {
+			factor = 10
+		}
+		job_marshal = {
+			character_event = {
+				id = 69053
+				tooltip = EVTTOOLTIP69053
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69052
+		ai_chance = {
+			factor = 50
+		}
+		job_marshal = {
+			character_event = {
+				id = 69086
+				days = 3
+				tooltip = EVTTOOLTIP69086
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69052
+		trigger = {
+			job_marshal = {
+				NOT = {
+					martial = 12
+				}
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_marshal = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Marshal
+character_event = {
+	id = 69053
+	desc = EVTDESC69053
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69053
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 5
+		}
+		random = {
+			chance = 25
+			
+			change_martial = 1
+		}
+	}
+}
+
+#Incompetence at work: Steward
+character_event = {
+	id = 69054
+	desc = EVTDESC69054
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_treasurer = {
+			is_female = no
+			age = 16
+			NOT = {
+				stewardship = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69054
+		ai_chance = {
+			factor = 10
+		}
+		job_treasurer = {
+			character_event = {
+				id = 69055
+				tooltip = EVTTOOLTIP69055
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69054
+		ai_chance = {
+			factor = 50
+		}
+		job_treasurer = {
+			character_event = {
+				id = 69087
+				days = 3
+				tooltip = EVTTOOLTIP69087
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69054
+		trigger = {
+			job_treasurer = {
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_treasurer = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Steward
+character_event = {
+	id = 69055
+	desc = EVTDESC69055
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69055
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 3
+		}
+		random = {
+			chance = 25
+			
+			change_stewardship = 1
+		}
+	}
+}
+
+#Incompetence at work: Spymaster
+character_event = {
+	id = 69056
+	desc = EVTDESC69056
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_spymaster = {
+			is_female = no
+			age = 16
+			NOT = {
+				intrigue = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69056
+		ai_chance = {
+			factor = 10
+		}
+		job_spymaster = {
+			character_event = {
+				id = 69057
+				tooltip = EVTTOOLTIP69057
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69056
+		ai_chance = {
+			factor = 50
+		}
+		job_spymaster = {
+			character_event = {
+				id = 69088
+				days = 3
+				tooltip = EVTTOOLTIP69088
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69056
+		trigger = {
+			job_spymaster = {
+				is_female = no
+				age = 16
+				NOT = {
+					intrigue = 12
+				}
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_spymaster = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Spymaster
+character_event = {
+	id = 69057
+	desc = EVTDESC69057
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69057
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 3
+		}
+		random = {
+			chance = 25
+			
+			change_intrigue = 1
+		}
+	}
+}
+
+#Incompetence at work: Lord Spiritual
+character_event = {
+	id = 69058
+	desc = EVTDESC69058
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_spiritual = {
+			is_female = no
+			age = 16
+			NOT = {
+				learning = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69058
+		ai_chance = {
+			factor = 10
+		}
+		job_spiritual = {
+			character_event = {
+				id = 69059
+				tooltip = EVTTOOLTIP69059
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69058
+		ai_chance = {
+			factor = 50
+		}
+		job_spiritual = {
+			character_event = {
+				id = 69089
+				days = 3
+				tooltip = EVTTOOLTIP69089
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69058
+		trigger = {
+			job_spiritual = {
+				NOT = {
+					learning = 12
+				}
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_spiritual = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Lord Spiritual
+character_event = {
+	id = 69059
+	desc = EVTDESC69059
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69059
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 3
+		}
+		random = {
+			chance = 25
+			
+			change_learning = 1
+		}
+	}
+}
+
+### LACK OF PIETY ###
+
+### Lack of Piety: Any Courtier ###
+character_event = {
+	id = 69060
+	desc = EVTDESC69060
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			age = 16
+			religion_group = christian
+			NOT = {
+				has_character_flag = flag_unchristian
+			}
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				piety = 50
+			}
+			NOT = {
+				learning = 8
+			}
+			NOT = {
+				trait = zealous
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+		random_courtier = {
+			limit = {
+				prisoner = no
+				age = 16
+				religion_group = christian
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_unchristian
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			save_event_target_as = 69060_target_courtier
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69060
+		ai_chance = {
+			factor = 10
+		}
+		event_target:69060_target_courtier = {
+			character_event = {
+				id = 69061
+				days = 3
+				tooltip = EVTTOOLTIP69061
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69060
+		ai_chance = {
+			factor = 50
+		}	
+		event_target:69060_target_courtier = {
+			set_character_flag = flag_unchristian
+			character_event = {
+				id = 69090
+				days = 3
+				tooltip = EVTTOOLTIP69090
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69060
+		ai_chance = {
+			factor = 40
+		}
+		event_target:69060_target_courtier = {
+			character_event = {
+				id = 69062
+				days = 3
+				tooltip = EVTTOOLTIP69062
+			}
+		}
+	}
+}
+
+#Lack of Piety: Target is confronted
+character_event = {
+	id = 69061
+	desc = EVTDESC69061
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69061
+		add_character_modifier = {
+			name = good_deeds
+			duration = 730
+		}
+	}
+	option = {
+		name = EVTOPTB69061
+		set_character_flag = flag_unchristian
+		piety = -10
+	}
+}
+
+#Lack of Piety: Target is blackmailed
+character_event = {
+	id = 69062
+	desc = EVTDESC69062
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69062
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69062
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = opinion_unchristian
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+}
+
+#Lack of Piety: Ruler
+character_event = {
+	id = 69063
+	desc = EVTDESC69060
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = christian
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			NOT = {
+				has_character_flag = flag_unchristian
+			}
+			age = 16
+			religion_group = christian
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				piety = 50
+			}
+			NOT = {
+				learning = 8
+			}
+			NOT = {
+				trait = zealous
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69060
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					has_character_flag = flag_unchristian
+				}
+				age = 16
+				religion_group = christian
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			character_event = {
+				id = 69061
+				tooltip = EVTTOOLTIP69061
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69060
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					has_character_flag = flag_unchristian
+				}
+				age = 16
+				religion_group = christian
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			set_character_flag = flag_unchristian
+			character_event = {
+				id = 69090
+				days = 3
+				tooltip = EVTTOOLTIP69090
+			}
+		}
+	}
+}
+
+#Dad/Mom, why will you burn in hell?
+character_event = {
+	id = 69064
+	desc = EVTDESC69064
+	picture = GFX_evt_bishop
+	
+	capable_only = yes
+	prisoner = no
+	has_character_flag = flag_unchristian
+	
+	trigger = {
+		NOT = {
+			has_character_modifier = unchristian_timer
+		}
+		any_child = {
+			learning = 3
+			age = 5
+			NOT = {
+				age = 15
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69064
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = unchristian_timer
+				duration = 90
+				hidden = yes
+			}
+		}
+		random = {
+			chance = 25
+			
+			add_trait = cynical
+			hidden_tooltip = {
+				character_event = {
+					id = 38258 #Notify Cynical
+				}
+			}
+		}
+		random_child = {
+			limit = {
+				learning = 3
+				age = 5
+				NOT = {
+					age = 15
+				}
+			}
+			random = {
+				chance = 25
+			
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+				opinion = {
+					modifier = opinion_dislike
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69064
+		clr_character_flag = flag_unchristian
+		change_learning = 1
+		change_intrigue = -1
+	}
+}
+
+### Legate from the pope ###
+character_event = {
+	id = 69065
+	desc = EVTDESC69065
+	picture = GFX_evt_bishop
+	
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = flag_unchristian
+	religion = catholic
+	
+	trigger = {
+		NOT = {
+			piety = 100
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69065
+		scaled_wealth = -0.2
+		clr_character_flag = flag_unchristian
+	}
+	option = {
+		name = EVTOPTB69065
+		piety = -10
+		clr_character_flag = flag_unchristian
+	}
+	option = {
+		name = EVTOPTC69065
+		prestige = -10
+		clr_character_flag = flag_unchristian
+	}
+}
+
+### Scolded by the Caliph ###
+character_event = {
+	id = 69066
+	desc = EVTDESC69066
+	picture = GFX_evt_jerusalem
+	
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = flag_nomuslim
+	
+	trigger = {
+		NOT = {
+			piety = 100
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69066
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 5
+				scaled_wealth = 0.5
+			}
+			modifier = {
+				factor = 0.01
+				NOT = { scaled_wealth = 0.5 }
+			}
+		}
+		piety = 5
+		scaled_wealth = -0.075
+		clr_character_flag = flag_nomuslim
+	}
+	option = {
+		name = EVTOPTB69065
+		piety = -10
+		clr_character_flag = flag_nomuslim
+	}
+	option = {
+		name = EVTOPTC69065
+		prestige = -10
+		clr_character_flag = flag_nomuslim
+	}
+}
+
+### COWARDLINESS ###
+
+#Cowardliness: Any Courtier
+character_event = {
+	id = 69070
+	desc = EVTDESC69070
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				has_character_flag = flag_suspected_coward
+			}
+			NOT = {
+				has_character_modifier = proving_bravery
+			}
+			NOT = {
+				has_character_modifier = suspected_coward
+			}
+			OR = {
+				trait = craven
+				NOT = {
+					martial = 8
+				}
+			}
+			NOT = {
+				trait = brave
+			}
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69070
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_suspected_coward
+				}
+				NOT = {
+					has_character_modifier = proving_bravery
+				}
+				NOT = {
+					has_character_modifier = suspected_coward
+				}
+				is_female = no
+				age = 16
+				OR = {
+					trait = craven
+					NOT = {
+						martial = 8
+					}
+				}
+				NOT = {
+					trait = brave
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			character_event = {
+				id = 69071
+				days = 3
+				tooltip = EVTTOOLTIP69071
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69070
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_suspected_coward
+				}
+				NOT = {
+					has_character_modifier = proving_bravery
+				}
+				NOT = {
+					has_character_modifier = suspected_coward
+				}
+				is_female = no
+				age = 16
+				OR = {
+					trait = craven
+					NOT = {
+						martial = 8
+					}
+				}
+				NOT = {
+					trait = brave
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			set_character_flag = flag_suspected_coward
+			character_event = {
+				id = 69091
+				days = 3
+				tooltip = EVTTOOLTIP69091
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69070
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_suspected_coward
+				}
+				NOT = {
+					has_character_modifier = proving_bravery
+				}
+				NOT = {
+					has_character_modifier = suspected_coward
+				}
+				is_female = no
+				age = 16
+				OR = {
+					trait = craven
+					NOT = {
+						martial = 8
+					}
+				}
+				NOT = {
+					trait = brave
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			character_event = {
+				id = 69072
+				days = 3
+				tooltip = EVTTOOLTIP69072
+			}
+		}
+	}
+}
+
+#Cowardliness: Target is confronted
+character_event = {
+	id = 69071
+	desc = EVTDESC69071
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69071
+		add_character_modifier = {
+			name = proving_bravery
+			duration = 1825
+		}
+	}
+	option = {
+		name = EVTOPTB69071
+		set_character_flag = suspected_coward
+		FROM = {
+			opinion = {
+				modifier = denied_coward_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Cowardliness: Target is blackmailed
+character_event = {
+	id = 69072
+	desc = EVTDESC69072
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69072
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69072
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = suspected_coward_rumour
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+}
+
+#Cowardliness: Ruler
+character_event = {
+	id = 69073
+	desc = EVTDESC69070
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				has_character_flag = flag_suspected_coward
+			}
+			NOT = {
+				has_character_modifier = proving_bravery
+			}
+			NOT = {
+				has_character_modifier = suspected_coward
+			}
+			OR = {
+				trait = craven
+				NOT = {
+					martial = 8
+				}
+			}
+			NOT = {
+				trait = brave
+			}
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	option = {
+		name = EVTOPTA69070
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_suspected_coward
+				}
+				NOT = {
+					has_character_modifier = proving_bravery
+				}
+				NOT = {
+					has_character_modifier = suspected_coward
+				}
+				is_female = no
+				age = 16
+				OR = {
+					trait = craven
+					NOT = {
+						martial = 8
+					}
+				}
+				NOT = {
+					trait = brave
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			character_event = {
+				id = 69071
+				days = 3
+				tooltip = EVTTOOLTIP69071
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69070
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_suspected_coward
+				}
+				NOT = {
+					has_character_modifier = proving_bravery
+				}
+				NOT = {
+					has_character_modifier = suspected_coward
+				}
+				is_female = no
+				age = 16
+				OR = {
+					trait = craven
+					NOT = {
+						martial = 8
+					}
+				}
+				NOT = {
+					trait = brave
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			set_character_flag = flag_suspected_coward
+			character_event = {
+				id = 69091
+				days = 3
+				tooltip = EVTTOOLTIP69091
+			}
+		}
+	}
+}
+
+#You seem to be taking uneccesary risks when practising with the sword
+character_event = {
+	id = 69074
+	desc = EVTDESC69074
+	picture = GFX_evt_melee
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_modifier = proving_bravery
+		trait = craven
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69074 #I need to
+		random_list = {
+			60 = {
+			}
+			30 = {
+				remove_trait = craven
+			}
+			10 = {
+				add_trait = wounded
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB69074
+		prestige = -5
+		remove_character_modifier = proving_bravery
+	}
+}
+
+#Women laugh behind your back
+character_event = {
+	id = 69075
+	desc = EVTDESC69075
+	picture = GFX_evt_scandal
+	
+	capable_only = yes
+	prisoner = no
+	has_character_flag = flag_suspected_coward
+	
+	trigger = {
+		has_character_modifier = suspected_coward
+		NOT = {
+			trait = craven
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69075 #Admit that you are a coward
+		if = {
+			limit = { NOT = { trait = berserker } }
+			add_trait = craven
+		}
+		prestige = -5
+		remove_character_modifier = suspected_coward
+		clr_character_flag = flag_suspected_coward
+	}
+	option = {
+		name = EVTOPTB69075
+		remove_character_modifier = suspected_coward
+		add_character_modifier = {
+			name = proving_bravery
+			duration = 1825 #5 years
+		}
+	}
+}
+
+#We have proven our bravery!
+character_event = {
+	id = 69076
+	desc = EVTDESC69076
+	picture = GFX_evt_melee
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		OR = {
+			has_character_modifier = suspected_coward
+			has_character_modifier = proving_bravery
+		}
+		trait = brave
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA69076
+		remove_character_modifier = suspected_coward
+		remove_character_modifier = proving_bravery
+	}
+}
+
+#Suspected Sodomite Notification
+character_event = {
+	id = 69080
+	desc = EVTDESC69080
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69080
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					trait = homosexual
+				}
+			}
+			opinion = {
+				modifier = suspected_sodomite_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Suspected Incest Notification
+character_event = {
+	id = 69081
+	desc = EVTDESC69081
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69081
+		any_courtier = {
+			limit = {
+				prisoner = no
+				NOT = {
+					sibling = ROOT
+				}
+			}
+			opinion = {
+				modifier = suspected_of_incest_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Suspected Impotence Notification
+character_event = {
+	id = 69082
+	desc = EVTDESC69082
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69082
+		any_courtier = {
+			opinion = {
+				modifier = not_a_real_man
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Suspected Adultery Notification
+character_event = {
+	id = 69083
+	desc = EVTDESC69083
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69083
+		any_courtier = {
+			opinion = {
+				modifier = committed_adultery_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_mad_as_hell
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Suspected Occultist Notification
+character_event = {
+	id = 69084
+	desc = EVTDESC69084
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69084
+		any_courtier = {
+			opinion = {
+				modifier = suspected_occultist_rumour
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Incompetence: Chancellor Notification
+character_event = {
+	id = 69085
+	desc = EVTDESC69085
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69085
+		any_courtier = {
+			opinion = {
+				modifier = opinion_ruler_do_not_trust_him
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Incompetence: Marshal Notification
+character_event = {
+	id = 69086
+	desc = EVTDESC69086
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69086
+		any_courtier = {
+			opinion = {
+				modifier = opinion_ruler_do_not_trust_him
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Incompetence: Steward Notification
+character_event = {
+	id = 69087
+	desc = EVTDESC69087
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69087
+		any_courtier = {
+			opinion = {
+				modifier = opinion_ruler_do_not_trust_him
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Incompetence: Spymaster Notification
+character_event = {
+	id = 69088
+	desc = EVTDESC69088
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69088
+		any_courtier = {
+			opinion = {
+				modifier = opinion_ruler_do_not_trust_him
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Incompetence: Lord Spiritual Notification
+character_event = {
+	id = 69089
+	desc = EVTDESC69089
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69089
+		any_courtier = {
+			opinion = {
+				modifier = opinion_ruler_do_not_trust_him
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Lack of Piety Notification
+character_event = {
+	id = 69090
+	desc = EVTDESC69090
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69090
+		any_courtier = {
+			opinion = {
+				modifier = opinion_unchristian
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Coward Notification
+character_event = {
+	id = 69091
+	desc = EVTDESC69091
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69091
+		any_courtier = {
+			opinion = {
+				modifier = suspected_coward_rumour
+				who = PREV
+				years = 5
+			}
+		}
+		add_character_modifier = {
+			name = suspected_coward
+			duration = 1825
+		}
+	}
+}
+
+### Incompetence at work: Chief Mufti - Muslim ###
+character_event = {
+	id = 69095
+	desc = EVTDESC69095
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		job_spiritual = {
+			is_female = no
+			age = 16
+			NOT = {
+				learning = 12
+			}
+			liege = {
+				ROOT = {
+					NOT = { has_opinion_modifier = { who = PREV modifier = opinion_unappreciated } }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69058
+		ai_chance = {
+			factor = 10
+		}
+		job_spiritual = {
+			character_event = {
+				id = 69096
+				tooltip = EVTTOOLTIP69059
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69058
+		ai_chance = {
+			factor = 50
+		}
+		job_spiritual = {
+			character_event = {
+				id = 69089
+				days = 3
+				tooltip = EVTTOOLTIP69089
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69058
+		trigger = {
+			job_spiritual = {
+				NOT = {
+					learning = 12
+				}
+				treasury = 20
+			}
+		}
+		treasury = 20
+		job_spiritual = {
+			treasury = -20
+			opinion = {
+				modifier = opinion_money_stolen
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+#Chief Mufti
+character_event = {
+	id = 69096
+	desc = EVTDESC69096
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69059
+		opinion = {
+			modifier = opinion_unappreciated
+			who = FROM
+			years = 3
+		}
+		random = {
+			chance = 25
+			
+			change_learning = 1
+		}
+	}
+}
+
+### Lack of Piety: Any Courtier - Muslim ###
+character_event = {
+	id = 69100
+	desc = EVTDESC69100
+	picture = GFX_evt_whispers
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		intrigue = 10
+		is_ruler = no
+		NOT = {
+			has_character_flag = rumour_spreader
+		}
+		any_courtier = {
+			prisoner = no
+			is_female = no
+			age = 16
+			religion_group = muslim
+			NOT = {
+				has_character_flag = flag_nomuslim
+			}
+			NOT = {
+				reverse_opinion = { who = ROOT value = 50 }
+			}
+			NOT = {
+				piety = 50
+			}
+			NOT = {
+				learning = 8
+			}
+			NOT = {
+				trait = zealous
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = rumour_spreader
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			intrigue = 15
+		}
+		modifier = {
+			factor = 2
+			intrigue = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPTA69060
+		ai_chance = {
+			factor = 10
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				age = 16
+				religion_group = muslim
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_nomuslim
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			character_event = {
+				id = 69101
+				days = 3
+				tooltip = EVTTOOLTIP69061
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB69100
+		ai_chance = {
+			factor = 50
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+				age = 16
+				religion_group = muslim
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_nomuslim
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			set_character_flag = flag_nomuslim
+			character_event = {
+				id = 69090
+				days = 3
+				tooltip = EVTTOOLTIP69090
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC69060
+		ai_chance = {
+			factor = 40
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				age = 16
+				religion_group = muslim
+				NOT = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+				NOT = {
+					has_character_flag = flag_nomuslim
+				}
+				NOT = {
+					piety = 50
+				}
+				NOT = {
+					learning = 8
+				}
+				NOT = {
+					trait = zealous
+				}
+			}
+			character_event = {
+				id = 69102
+				days = 3
+				tooltip = EVTTOOLTIP69062
+			}
+		}
+	}
+}
+
+#Lack of Piety: Target is confronted
+character_event = {
+	id = 69101
+	desc = EVTDESC69101
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69061
+		add_character_modifier = {
+			name = good_deeds
+			duration = 730
+		}
+	}
+	option = {
+		name = EVTOPTB69061
+		set_character_flag = flag_nomuslim
+		piety = -10
+	}
+}
+
+#Lack of Piety: Target is blackmailed
+character_event = {
+	id = 69102
+	desc = EVTDESC69102
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA69062
+		ai_chance = {
+			factor = 50
+
+			modifier = {
+				factor = 2
+				treasury = 50
+			}
+		}
+		treasury = -50
+		FROM = {
+			treasury = 50
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB69062
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				NOT = {
+					treasury = 50
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 3
+		}
+		any_courtier = {
+			limit = {
+				prisoner = no
+				religion_group = muslim
+				NOT = {
+					character = ROOT
+				}
+			}
+			opinion = {
+				modifier = opinion_nomuslim
+				who = ROOT
+				years = 3
+			}
+		}	
+	}
+}

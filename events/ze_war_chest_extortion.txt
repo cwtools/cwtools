@@ -1,0 +1,810 @@
+###########################################
+#                                         #
+# War Chest Extortion events			  #
+# by Alexander Oltner                     #
+# ID      	              				  #
+#                                         #
+###########################################
+
+namespace = ZE
+
+# Extort Subjects Hub
+character_event = {
+	id = ZE.21000
+	desc = EVTDESC_ZE_21000
+	picture = GFX_evt_noble_in_castle
+
+	is_triggered_only = yes
+	
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				NOR = {
+					has_province_modifier = extra_tax 
+					has_province_modifier = extra_tax_kind
+				}
+				any_province_holding = {
+					OR = {
+						holding_type = city
+						holding_type = temple
+						holding_type = castle
+						holding_type = tribal
+					}
+				}
+			}
+			save_event_target_as = extra_tax_target
+		}
+		
+		random_demesne_province = {
+			limit = {
+				any_province_holding = {
+					holding_type = temple
+					num_of_buildings = 4
+					holder_scope = {
+						NOT = { character = ROOT } 
+						tier = baron
+						liege = { character = ROOT }
+					}
+				}
+			}
+			random_province_holding = {
+				limit = {
+					holding_type = temple
+					num_of_buildings = 4
+					holder_scope = {
+						NOT = { character = ROOT } 
+						tier = baron
+						liege = { character = ROOT }
+					}
+				}
+				save_event_target_as = seize_church_target
+			}
+		}
+		
+		random_realm_character = {
+			limit = {
+				liege = { character = ROOT }
+				NOT = { is_close_relative = ROOT }
+				is_adult = yes
+				prisoner = no
+				is_landed = no
+				wealth = 100
+				NOR = {
+					has_character_modifier = extort_timer
+					is_married = ROOT 
+					dynasty = ROOT
+					is_friend = ROOT
+					holds_favor_on = ROOT
+				}
+			}
+			save_event_target_as = extortion_target
+		}
+	}
+	
+	# Extra Tax on peasants of a random Demesne Province
+	option = {
+		name = EVTOPTA_ZE_21000
+		
+		ai_chance = {
+			factor = 33
+		}
+		
+		trigger = {
+			event_target:extra_tax_target = { always = yes }
+		}
+		
+		custom_tooltip = {
+				text = extort_tyrant_custom_tooltip
+				hidden_tooltip = {
+					any_realm_character = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_tyrant
+							months = 60
+						}
+					}
+				}
+			}
+		
+		character_event = {	id = ZE.21100 tooltip = EVTTOOLTIP_ZE_21100 }
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 7
+					}
+				}
+			wealth = 150
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 6
+					}
+				}
+			wealth = 130
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 5
+					}
+				}
+			wealth = 110
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 4
+					}
+				}
+			wealth = 90
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 3
+					}
+				}
+			wealth = 70
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extra_tax_target = {
+						num_of_settlements = 2
+					}
+				}
+			wealth = 50
+			break = yes
+		}
+		
+		wealth = 30
+		
+	}
+	
+	# Extort Rich Character
+	option = {
+		name = EVTOPTB_ZE_21000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 2
+				NOT = { opinion = { who = event_target:extortion_target value = -25 } }
+			}
+			modifier = {
+				factor = 0.5
+				opinion = { who = event_target:extortion_target value = 50 }
+			}
+		}
+		
+		trigger = {
+			event_target:extortion_target = { always = yes }
+		}
+		custom_tooltip = {
+			text = extort_tyrant_custom_tooltip
+			hidden_tooltip = {
+				any_realm_character = {
+					opinion = {
+						who = ROOT
+						modifier = opinion_tyrant
+						months = 60
+					}
+				}
+			}
+		}	
+		
+		character_event = {	id = ZE.21200 tooltip = EVTTOOLTIP_ZE_21200 }
+		
+		hidden_tooltip = {
+			event_target:extortion_target = {
+				add_character_modifier = {
+				   modifier = extort_timer
+				   years = 15
+				   hidden = yes
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				event_target:extortion_target = {
+						wealth = 700
+					}
+				}
+			event_target:extortion_target = {
+				wealth = -350
+			}
+			wealth = 350
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extortion_target = {
+						wealth = 500
+						NOT = { wealth = 700 }
+					}
+				}
+			event_target:extortion_target = {
+				wealth = -250
+			}
+			wealth = 250
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extortion_target = {
+						wealth = 300
+						NOT = { wealth = 500 }
+					}
+				}
+			event_target:extortion_target = {
+				wealth = -150
+			}
+			wealth = 150
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				event_target:extortion_target = {
+						wealth = 100
+						NOT = { wealth = 300 }
+					}
+				}
+			event_target:extortion_target = {
+				wealth = -50
+			}
+			wealth = 50
+			break = yes
+		}
+		
+	}
+	
+	# Seize Church Assets
+	option = {
+		name = EVTOPTC_ZE_21000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 1.5
+				trait = cynical
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = humble
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = zealous
+			}
+		}
+		
+		trigger = {
+			NOT = { has_character_modifier = seize_church_assets_timer }
+			event_target:seize_church_target = { always = yes }
+		}
+		
+		custom_tooltip = {
+			text = extort_tyrant_custom_tooltip
+			hidden_tooltip = {
+				any_realm_character = {
+					opinion = {
+						who = ROOT
+						modifier = opinion_tyrant
+						months = 60
+					}
+				}
+			}
+		}
+		
+		character_event = {	id = ZE.21300 tooltip = EVTTOOLTIP_ZE_21300 }
+		
+		event_target:seize_church_target = {
+			destroy_random_building = THIS
+		}
+		
+		if = {
+			limit = {
+				government = tribal_government
+			}
+			wealth = 50
+		}
+		
+		if = {
+			limit = {
+				NOT = { government = tribal_government }
+			}
+			wealth = 100
+		}
+		
+		if = {
+			limit = {
+				religion_group = muslim
+			}
+			piety = -150
+		}
+		
+		if = {
+			limit = {
+				NOT = { religion_group = muslim }
+			}
+			piety = -50
+		}
+		
+		hidden_tooltip = {
+			add_character_modifier = {
+			   modifier = seize_church_assets_timer
+			   years = 1
+			   hidden = yes
+			}
+		}
+	}
+	
+	# Back Out
+	option = {
+		name = EVTOPTD_ZE_21000
+		
+		ai_chance = {
+			factor = 1
+		}
+		
+	}
+}
+
+# Extra Tax on Demesne Province
+character_event = {
+	id = ZE.21100
+	desc = EVTDESC_ZE_21100
+	picture = GFX_evt_noble_haughty_talking_to_peasants
+
+	is_triggered_only = yes
+	
+	# High stewardship can trade revolt risk for less tax
+	option = {
+		name = EVTOPTA_ZE_21100
+		tooltip_info = stewardship
+		
+		trigger = {
+			stewardship = 15
+		}
+		
+		event_target:extra_tax_target = {
+			add_province_modifier = {
+				modifier = extra_tax_kind
+				duration = 1825
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = just
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				95 = {
+
+				}
+			}
+		}
+	}
+	
+	# Peasants upset
+	option = {
+		name = EVTOPTB_ZE_21100
+		
+		if = {
+			limit = {
+				trait = just
+			}
+			remove_trait = just
+		}
+		
+		event_target:extra_tax_target = {
+			add_province_modifier = {
+				modifier = extra_tax
+				duration = 1825
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = just
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				10 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				90 = {
+
+				}
+			}
+		}
+	}
+}
+
+# Extort landless subject
+character_event = {
+	id = ZE.21200
+	desc = EVTDESC_ZE_21200
+	picture = GFX_evt_poke_king_in_chest
+
+	is_triggered_only = yes
+	
+	# Less upset at the cost of prestige
+	option = {
+		name = EVTOPTA_ZE_21200
+		tooltip_info = diplomacy
+		
+		trigger = {
+			diplomacy = 15
+		}
+		
+		if = {
+			limit = {
+				trait = proud
+			}
+			remove_trait = proud
+		}
+		
+		prestige = -250
+		
+		event_target:extortion_target = {
+			opinion = {
+					modifier = opinion_money_stolen
+					who = ROOT
+					years = 15
+				}
+			custom_tooltip = {
+				text = extort_dynasty_upset_custom_tooltip
+				hidden_tooltip = {
+					any_dynasty_member = {
+						limit = {
+							NOT = { dynasty = none }
+							NOT = { character = event_target:extortion_target }
+						}
+						opinion = {
+							modifier = disrespects_dynasty
+							who = ROOT
+							years = 15
+						}
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = just
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				95 = {
+
+				}
+			}
+		}
+	}
+	
+	# Target + Dynasty Upset
+	option = {
+		name = EVTOPTB_ZE_21200
+		
+		if = {
+			limit = {
+				trait = kind
+			}
+			remove_trait = kind
+		}
+		
+		event_target:extortion_target = {
+			if = {
+				limit = {
+					is_rival = ROOT
+				}
+				opinion = {
+					who = ROOT
+					modifier = opinion_evil_tyrant
+					years = 15
+				}
+			}
+			if = {
+				limit = {
+					NOT = { is_rival = ROOT }
+				}
+				add_rival = ROOT
+			}
+			custom_tooltip = {
+				text = extort_dynasty_upset_custom_tooltip
+				hidden_tooltip = {
+					any_dynasty_member = {
+						limit = {
+							NOT = { dynasty = none }
+							NOT = { character = event_target:extortion_target }
+						}
+						opinion = {
+							modifier = opinion_hatred
+							who = ROOT
+							years = 15
+						}
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = just
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				10 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				90 = {
+
+				}
+			}
+		}
+	}
+}
+
+# Seize church assets
+character_event = {
+	id = ZE.21300
+	desc = EVTDESC_ZE_21300
+	picture = GFX_evt_bribe_accepted
+
+	is_triggered_only = yes
+	
+	# Fool clergy into thinking this is the will of god
+	option = {
+		name = EVTOPTA_ZE_21300
+		tooltip_info = intrigue
+		
+		trigger = {
+			intrigue = 15
+		}
+		
+		if = {
+			limit = {
+				trait = honest
+			}
+			remove_trait = honest
+		}
+		
+		add_character_modifier = {
+			name = annoyed_religious
+			duration = 730
+		}
+		
+		event_target:seize_church_target = {
+			add_holding_modifier = {
+				modifier = seize_church_assets
+				duration = 1825
+			}
+			holder_scope = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_angry
+					years = 15
+				}
+			}
+		}
+		
+		religion_head = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_shocked
+				years = 15
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = humble
+					trait = charitable
+					trait = zealous
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				5 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				95 = {
+
+				}
+			}
+		}
+	}
+	
+	# Blaspheme thoroughly!
+	option = {
+		name = EVTOPTB_ZE_21300
+		
+		if = {
+			limit = {
+				trait = humble
+			}
+			remove_trait = humble
+		}
+		
+		add_character_modifier = {
+			name = annoyed_religious
+			duration = 1460
+		}
+		
+		event_target:seize_church_target = {
+			add_holding_modifier = {
+				modifier = seize_church_assets
+				duration = 1825
+			}
+			
+			holder_scope = {
+				if = {
+					limit = {
+						is_rival = ROOT
+					}
+					opinion = {
+						who = ROOT
+						modifier = opinion_evil_tyrant
+						years = 15
+					}
+				}
+				if = {
+					limit = {
+						NOT = { is_rival = ROOT }
+					}
+					add_rival = ROOT
+				}
+			}
+		}
+		
+		religion_head = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_shocked
+				years = 15
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					trait = humble
+					trait = charitable
+					trait = zealous
+				}
+				NOT = { trait = depressed } 
+			}
+			random_list = {
+				10 = {
+					if = {
+						limit = {
+							trait = stressed 
+						}
+					add_trait = depressed
+					hidden_tooltip = { character_event = { id = 38288 } }
+					}
+					if = {
+						limit = {
+							NOT = { trait = stressed } 
+						}
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+					}
+				}
+				90 = {
+
+				}
+			}
+		}
+	}
+}

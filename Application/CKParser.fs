@@ -76,7 +76,7 @@ module CKParser =
 
     //let x = run (many line) "#test\nasd\ntest"
     //let y = runParserOnFile events () "wol_business_events.txt" System.Text.Encoding.UTF8
-    let y = runParserOnFile all () "wol_business_events.txt" System.Text.Encoding.UTF8
+    let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
     let tabs n = String.replicate n "\t"
 
@@ -91,5 +91,7 @@ module CKParser =
         | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
-    let prettyPrint e =
-        printKeyValueList e 0
+    let prettyPrint =
+        function
+        | Success (v,_,_) -> printKeyValueList v 0
+        | Failure (msg, _, _) -> msg

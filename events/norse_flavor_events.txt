@@ -1,0 +1,1586 @@
+#############################################
+#
+# VARIOUS FLAVOR EVENTS
+# ID 79000-79100
+#
+#############################################
+
+# by Milla Isaksson
+#############################################
+
+
+# Shieldmaiden comes to the aid of her liege (from event 79010)
+character_event = {
+	id = 79000
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_79000_A
+		trigger = { FROM = { has_character_flag = protected_liege } }
+	}
+	desc = {
+		text = EVTDESC_79000_B
+		trigger = { FROM = { has_character_flag = protected_liege_well } }
+	}
+
+	option = {
+		name = EVTOPTA_79000
+		custom_tooltip = { text = EVTOPTA_79000_TOOLTIP }
+		add_character_modifier = {
+			name = lucky_to_be_alive
+			duration = 365
+		}
+		hidden_tooltip = { FROM = { clr_character_flag = protected_liege } }
+
+		trigger = { FROM = { has_character_flag = protected_liege } }
+	}
+	option = {
+		name = EVTOPTB_79000
+		custom_tooltip = { text = EVTOPTA_79000_TOOLTIP }
+				
+		opinion = {
+			who = FROM
+			modifier = opinion_loyal_shieldmaiden
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_was_praised
+			}
+			add_character_modifier = {
+				name = favored_shieldmaiden
+				duration = 1095
+			}
+			clr_character_flag = protected_liege_well
+		}
+
+		trigger = { FROM = { has_character_flag = protected_liege_well } }
+	}
+}
+
+### Shieldmaiden fights alongside her liege, but is struck down
+character_event = { 
+	id = 79001
+	desc = EVTDESC_79001
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			religion = norse_pagan
+			religion = norse_pagan_reformed
+		}
+		age = 16
+		NOT = { trait = incapable }
+
+		any_courtier = {
+			trait = shieldmaiden
+			NOT = { trait = incapable }						
+			prisoner = no
+			has_minor_title = title_commander
+		}
+	}
+	
+	immediate = {
+		random_realm_character = {
+			limit = {
+				liege = { character = ROOT }
+				trait = shieldmaiden
+				NOT = { trait = incapable }
+				prisoner = no
+				has_minor_title = title_commander
+			}
+			save_event_target_as = my_shieldmaiden
+		}
+	}
+
+	option = {
+		name = EVTOPTA_79001
+		custom_tooltip = { text = EVTOPTA_79001_TOOLTIP }
+
+		hidden_tooltip = {
+			ROOT = { save_event_target_as = shieldmaiden_liege }
+			event_target:my_shieldmaiden = {
+				character_event = { id = 79002 }
+			}
+		}
+	}
+}
+
+#Shieldmaiden is injured
+character_event = {
+	id = 79002
+	desc = EVTDESC_79002
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_79002
+		custom_tooltip = { text = EVTOPTA_79002_TOOLTIP }
+		add_maimed_trait_effect = yes
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 79003 days = 10 random = 10 }
+			}
+		}
+	}
+}
+
+#Liege looks for Shieldmaiden, finds her alone, offers support
+character_event = {
+	id = 79003
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_war
+
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:my_shieldmaiden = {
+			is_alive = yes
+			prisoner = no
+			NOT = { trait = incapable }
+			trait = shieldmaiden
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_79003_A
+		trigger = { FROM = { trait = maimed } }
+	}
+	desc = {
+		text = EVTDESC_79003_B
+		trigger = { FROM = { trait = one_eyed } }
+	}
+	desc = {
+		text = EVTDESC_79003_C
+		trigger = { FROM = { trait = one_legged } }
+	}
+	desc = {
+		text = EVTDESC_79003_D
+		trigger = { FROM = { trait = one_handed } }
+	}
+	desc = {
+		text = EVTDESC_79003_E
+		trigger = { FROM = { trait = disfigured } }
+	}
+	desc = {
+		text = EVTDESC_79003_F
+		trigger = { FROM = { trait = mangled } }
+	}
+	desc = { #Fallback
+		text = EVTDESC_79003_G
+		trigger = {
+			FROM = {
+				NOT = {
+					trait = maimed
+					trait = one_eyed
+					trait = one_legged
+					trait = one_handed
+					trait = disfigured
+					trait = mangled
+				}
+			}
+		}
+	}
+	#Let my physician look at you
+	option = {
+		name = EVTOPTA_79003
+		custom_tooltip = { text = EVTOPTA_79003_TOOLTIP }
+		
+		tooltip = {
+			FROM = {
+				add_character_modifier = {
+					name = lucky_to_be_alive
+					duration = -1
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:my_shieldmaiden = {
+				set_character_flag = was_diagnosed_lucky
+				character_event = { id = 79004 }
+			}
+		}
+	}
+
+	#You're amazing
+	option = {
+		name = EVTOPTB_79003
+		custom_tooltip = { text = EVTOPTB_79003_TOOLTIP }
+
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_budding_friendship
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_budding_friendship
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:my_shieldmaiden = {
+				set_character_flag = was_offered_friendship
+				character_event = { id = 79004 }
+			}
+		}
+	}
+
+	#You're the best shieldmaiden ever
+	option = {
+		name = EVTOPTC_79003
+		custom_tooltip = { text = EVTOPTC_79003_TOOLTIP }
+
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_loyal_shieldmaiden
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_was_praised
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:my_shieldmaiden = {
+				set_character_flag = was_praised
+				character_event = { id = 79004 }
+			}
+		}
+	}
+}
+
+#Shieldmaiden is offered support
+character_event = {
+	id = 79004
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79004_A
+		trigger = { has_character_flag = was_diagnosed_lucky }
+	}
+	desc = {
+		text = EVTDESC_79004_B
+		trigger = { has_character_flag = was_offered_friendship }
+	}
+	desc = {
+		text = EVTDESC_79004_C
+		trigger = { has_character_flag = was_praised }
+	}
+	
+	option = {
+		name = EVTOPTA_79004
+		
+		if = {
+			limit = { has_character_flag = was_diagnosed_lucky }
+
+			add_character_modifier = {
+				name = lucky_to_be_alive
+				duration = -1
+			}
+		}
+		if = {
+			limit = { has_character_flag = was_offered_friendship }
+
+			opinion = {
+				who = FROM
+				modifier = opinion_budding_friendship
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_budding_friendship
+				}
+			}
+		}
+		if = {
+			limit = { has_character_flag = was_praised }
+
+			opinion = {
+				who = FROM
+				modifier = opinion_was_praised
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_loyal_shieldmaiden
+				}
+			}
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 79005 days = 70 random = 30 } 
+			}
+		}
+	}
+}
+
+
+#Liege and Shieldmaiden walk through gardens, are surprised by kitten
+character_event = {
+	id = 79005
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_war
+
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:my_shieldmaiden = {
+			is_alive = yes
+			prisoner = no
+			NOT = { trait = incapable }
+			trait = shieldmaiden
+		}
+	}
+
+	desc = {
+		text = EVTDESC_79005_A
+		trigger = { FROM = { has_character_flag = was_diagnosed_lucky } }
+	}
+	desc = {
+		text = EVTDESC_79005_B
+		trigger = { FROM = { has_character_flag = was_offered_friendship } }
+	}
+	desc = {
+		text = EVTDESC_79005_C
+		trigger = { FROM = { has_character_flag = was_praised } }
+	}
+	
+	#Oooh, can I keep it?
+	option = {
+		name = EVTOPTA_79005
+		custom_tooltip = { text = EVTOPTA_79005_TOOLTIP }
+		
+		add_character_modifier = {
+			name = pet_cat
+			duration = -1
+		}
+		hidden_tooltip = { character_event = { id = 77802 days = 3000 random = 2000 } } # Cat dies
+
+		tooltip = { add_friend = FROM }
+
+		hidden_tooltip = {
+			FROM = {
+				set_character_flag = liege_took_cat
+				character_event = { id = 79006 }
+			}
+		}
+		trigger = { NOT = {	has_character_modifier = pet_cat } }
+	}
+
+	#Shieldmaiden should keep it!
+	option = {
+		name = EVTOPTB_79005
+		custom_tooltip = { text = EVTOPTB_79005_TOOLTIP }
+
+		tooltip = {		
+			FROM = {
+				add_character_modifier = {
+					name = pet_cat
+					duration = -1
+				}
+			}
+		}
+
+		tooltip = { add_friend = FROM }
+
+		hidden_tooltip = {
+			FROM = {
+				set_character_flag = I_got_cat
+				character_event = { id = 79006 }
+			}
+		}
+		trigger = { FROM = { NOT = { has_character_modifier = pet_cat } } }
+	}
+
+	#Give it to my child!
+	option = {
+		name = EVTOPTC_79005
+		custom_tooltip = { text = EVTOPTC_79005_TOOLTIP }
+
+		random_child = {
+			limit = {
+				at_location = ROOT
+				is_adult = no
+				 NOT = { has_character_modifier = pet_cat }
+			}
+					
+			add_character_modifier = {
+				name = pet_cat
+				duration = -1
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_gave_me_pet
+			}
+
+			hidden_tooltip = { character_event = { id = 77802 days = 3000 random = 2000 } } # Cat dies
+			#Send notification event along the lines of "I got a cat today!"
+
+		}
+		hidden_tooltip = {
+			FROM = {
+				clr_character_flag = was_diagnosed_lucky
+				clr_character_flag = was_offered_friendship
+				clr_character_flag = was_praised
+			}
+		}
+
+		trigger = {
+			any_courtier = {			
+				is_child_of = ROOT
+				at_location = ROOT
+				is_adult = no
+				NOT = { has_character_modifier = pet_cat }
+			}
+		}
+	}
+
+	#Let it be
+	option = {
+		name = EVTOPTD_79005
+		custom_tooltip = { text = EVTOPTD_79005_TOOLTIP }
+		
+		tooltip = { add_friend = FROM }
+
+		hidden_tooltip = {
+			FROM = {
+				set_character_flag = no_cat
+				character_event = { id = 79006 }
+			}
+		}
+	}
+}
+
+#Shieldmaiden post cat incident
+character_event = {
+	id = 79006
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79006_A
+		trigger = { has_character_flag = liege_got_cat }
+	}
+	desc = {
+		text = EVTDESC_79006_B
+		trigger = { has_character_flag = I_got_cat }
+	}
+	desc = {
+		text = EVTDESC_79006_C
+		trigger = { has_character_flag = no_cat }
+	}
+	
+	option = {
+		name = { 
+			text = EVTOPTA_79006 
+			trigger = { has_character_flag = liege_got_cat }
+		}
+		name = { 
+			text = EVTOPTB_79006 
+			trigger = { has_character_flag = I_got_cat }
+		}
+		name = { 
+			text = EVTOPTC_79006 
+			trigger = { has_character_flag = no_cat }
+		}
+
+		if = {
+			limit = { has_character_flag = I_got_cat }
+			add_character_modifier = {
+				name = pet_cat
+				duration = -1
+			}
+			hidden_tooltip = { character_event = { id = 77802 days = 3000 random = 2000 } } # Cat dies		
+		}
+
+		add_friend = FROM
+
+		clr_character_flag = was_diagnosed_lucky
+		clr_character_flag = was_offered_friendship
+		clr_character_flag = was_praised
+		clr_character_flag = liege_got_cat
+		clr_character_flag = I_got_cat
+		clr_character_flag = no_cat
+	}
+}
+
+#Shieldmaiden training montage
+character_event = {
+	id = 79007
+	desc = EVTDESC_79007
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	min_age = 16
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			religion = norse_pagan
+			religion = norse_pagan_reformed
+		}
+		trait = shieldmaiden
+
+		NOR = { 
+			martial = 17
+			has_character_modifier = fell_into_the_river
+			has_character_modifier = lost_dog
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			NOT = { martial = 17 }
+			factor = 5.0
+		}
+		modifier = {
+			trait = ambitious
+			factor = 2.0
+		}	
+	}
+
+	option = { #I'll go rowing every morning	
+		name = EVTOPTA_79007
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.1
+					martial = 10
+				}
+				modifier = {
+					factor = 1.1
+					martial = 12
+				}
+				modifier = {
+					factor = 1.1
+					martial = 14
+				}
+				modifier = {
+					factor = 1.1
+					martial = 16
+				}
+				change_martial = 1
+			}
+			50 = {
+				add_character_modifier = {
+					name = fell_into_the_river
+					duration = 730
+				}
+			}
+		}
+	}
+
+	option = { #I'll take runs with my dog!
+		name = EVTOPTB_79007
+		random_list = {
+			30 = {
+				modifier = {
+					factor = 1.1
+					martial = 10
+				}
+				modifier = {
+					factor = 1.1
+					martial = 12
+				}
+				modifier = {
+					factor = 1.1
+					martial = 14
+				}
+				modifier = {
+					factor = 1.1
+					martial = 16
+				}
+				change_martial = 2
+			}
+			70 = {
+				add_character_modifier = {
+					name = lost_dog
+					duration = -1
+				}
+				hidden_tooltip = { character_event = { id = 79008 days = 30 random = 30 } } # dog returns
+			}
+		}
+		trigger = {
+			has_character_modifier = pet_hunting_dog
+		}
+	}
+
+	option = { #Brand new armor is the way to go!
+		name = EVTOPTC_79007
+		scaled_wealth = -0.4
+		add_character_modifier = {
+			name = fake_it_til_you_make_it
+			duration = 730
+		}
+	}
+	
+	option = {
+		name = EVTOPTD_79007
+		custom_tooltip = { text = EVTOPTD_79007_TOOLTIP }
+	}
+}
+
+
+#Shieldmaiden gets dog back (or not, if it died already)
+character_event = {
+	id = 79008
+	picture = GFX_evt_hunting_scene
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESC_79008_A
+		picture = GFX_evt_hunting_scene
+		trigger = { has_character_modifier = pet_hunting_dog }
+	}
+	desc = {
+		text = EVTDESC_79008_B
+		picture = GFX_evt_emissary
+		trigger = { NOT = { has_character_modifier = pet_hunting_dog } }
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = {
+			text = EVTOPTA_79008
+			trigger = { has_character_modifier = pet_hunting_dog }
+		}
+		name = {
+			text = EVTOPTB_79008
+			trigger = { NOT = { has_character_modifier = pet_hunting_dog } }
+		}
+		remove_character_modifier = lost_dog
+	}
+}
+
+###Shieldmaiden intervenes in combat for her liege
+character_event = {
+	id = 79009
+	desc = EVTDESC_79009
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			religion = norse_pagan
+			religion = norse_pagan_reformed
+		}
+		trait = shieldmaiden
+
+		liege = {
+			at_location = ROOT
+			age = 16
+			prisoner = no
+			NOT = { has_character_modifier = lucky_to_be_alive }
+		}
+		NOT = {
+			trait = incapable
+			prisoner = no
+			has_character_modifier = favored_shieldmaiden
+			has_character_modifier = bad_shieldmaiden
+			has_character_modifier = clumsy_shieldmaiden
+			has_character_modifier = inattentive_soldier
+		}
+	}
+
+	immediate = {
+		liege = {
+			save_event_target_as = my_liege
+		}
+	}
+
+	option = { #Throw my shield (defensive)
+		name = EVTOPTA_79009
+		custom_tooltip = { text = EVTOPTA_79009_TOOLTIP }
+		random_list = {
+			30 = {
+				modifier = {
+					factor = 1.1
+					combat_rating = 1
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 2
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 3
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 4
+				}
+				modifier = {
+					factor = 1.1
+					martial = 11
+				}
+				modifier = {
+					factor = 1.1
+					martial = 12
+				}
+				modifier = {
+					factor = 1.1
+					martial = 14
+				}
+				modifier = {
+					factor = 1.1
+					martial = 16
+				}
+				modifier = {
+					factor = 1.1
+					martial = 18
+				}
+				modifier = {
+					factor = 1.1
+					martial = 20
+				}
+				#success
+				hidden_tooltip = { change_martial = 1 }
+				set_character_flag = protected_liege
+				character_event = { id = 79010 tooltip = EVTOPTA_79009_TOOLTIP_1 } # decent outcome
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					trait = severely_injured
+				}
+				modifier = {
+					factor = 2
+					NOT = { combat_rating = 1 }
+				}
+				#fail
+				set_character_flag = failed_to_protect_liege
+				character_event = { id = 79010 tooltip = EVTOPTA_79009_TOOLTIP_2 } # bad outcome
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.2
+				trait = craven
+			}
+			modifier = {
+				factor = 1.2
+				trait = shy
+			}
+			modifier = {
+				factor = 1.2
+				trait = paranoid
+			}
+			modifier = {
+				factor = 1.2
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { martial = 10 }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { martial = 12 }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { martial = 15 }
+			}
+		}
+	}
+
+	option = { #Throw my spear (offensive)
+		name = EVTOPTB_79009
+		custom_tooltip = { text = EVTOPTB_79009_TOOLTIP }
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 1.1
+					combat_rating = 1
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 2
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 3
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 4
+				}
+				modifier = {
+					factor = 1.1
+					martial = 11
+				}
+				modifier = {
+					factor = 1.1
+					martial = 12
+				}
+				modifier = {
+					factor = 1.1
+					martial = 14
+				}
+				modifier = {
+					factor = 1.1
+					martial = 16
+				}
+				modifier = {
+					factor = 1.1
+					martial = 18
+				}
+				modifier = {
+					factor = 1.1
+					martial = 20
+				}
+				#success
+				hidden_tooltip = { change_martial = 2 }
+				set_character_flag = protected_liege_well
+				character_event = { id = 79010 tooltip = EVTOPTB_79009_TOOLTIP_1 } # great outcome
+			}
+			20 = {
+				#fail
+				set_character_flag = failed_terribly_to_protect_liege
+				character_event = { id = 79010 tooltip = EVTOPTB_79009_TOOLTIP_2 } # terrible outcome
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				is_friend = event_target:my_liege
+			}
+			modifier = {
+				factor = 10
+				is_lover = event_target:my_liege
+			}
+			modifier = {
+				factor = 1.2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 1.2
+				trait = brave
+			}
+			modifier = {
+				factor = 1.2
+				trait = just
+			}
+			modifier = {
+				factor = 1.2
+				martial = 15
+			}
+			modifier = {
+				factor = 1.2
+				martial = 17
+			}
+		}
+	}
+
+	option = { # Let them die (betrayal!)
+		name = EVTOPTC_79009
+		custom_tooltip = { text = EVTOPTC_79009_TOOLTIP }
+		
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { NOT = { martial = 7 } }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { NOT = { martial = 5 } }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { NOT = { martial = 3 } }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { NOT = { martial = 1 } }
+				}
+				modifier = {
+					factor = 2
+					event_target:my_liege = { 
+						OR = {
+							trait = slow
+							trait = imbecile
+							trait = dull
+						}
+					}
+				}
+
+				set_character_flag = liege_bites_the_dust
+				character_event = { id = 79011 tooltip = EVTOPTC_79009_TOOLTIP_1 } # liege is slain on the battlefield
+			}
+
+			10 = {
+				modifier = {
+					factor = 2
+					event_target:my_liege = { trait = duelist }
+				}				
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { combat_rating = 1 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { combat_rating = 2 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { combat_rating = 3 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { combat_rating = 4 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 10 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 12 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 14 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 16 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 18 }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:my_liege = { martial = 20 }
+				}
+				set_character_flag = liege_is_confounded
+				character_event = { id = 79011 tooltip = EVTOPTC_79009_TOOLTIP_2 } # liege handles themselves well, survives
+			}
+		}
+
+		trigger = {
+			OR = {
+				trait = deceitful
+				AND = {
+					NOT = { 
+						opinion = {
+							who = event_target:my_liege
+							value = 25
+						}
+					}
+					NOT = {
+						trait = kind 
+						trait = honest
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 10
+				NOT = {
+					opinion = {
+						who = event_target:my_liege
+						value = -25
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				event_target:my_liege = {
+					current_heir = {
+						character = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				is_rival = event_target:my_liege
+			}
+			modifier = {
+				factor = 0.5
+				event_target:my_liege = {
+					is_close_relative = ROOT
+   				}
+			}
+			modifier = {
+				factor = 1.1
+				has_focus = focus_intrigue
+			}
+			modifier = {
+				factor = 1.1
+				trait = arbitrary
+			}
+		}
+	}
+}
+
+#Shieldmaiden: Battle aftermath (no betrayal)
+character_event = {
+	id = 79010
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79010_A
+		picture = GFX_evt_melee
+		trigger = { has_character_flag = protected_liege }
+	}
+	desc = {
+		text = EVTDESC_79010_B
+		picture = GFX_evt_melee
+		trigger = { has_character_flag = failed_to_protect_liege }
+	}
+	desc = {
+		text = EVTDESC_79010_C
+		picture = GFX_evt_melee
+		trigger = { has_character_flag = protected_liege_well }
+	}
+	desc = {
+		text = EVTDESC_79010_D
+		picture = GFX_evt_melee
+		trigger = { has_character_flag = failed_terribly_to_protect_liege }
+	}
+
+	option = { #I succeeded!
+		name = EVTOPTA_79010
+
+		tooltip = {
+			event_target:my_liege = {
+				add_character_modifier = {
+					name = lucky_to_be_alive
+					duration = 365
+				}
+			}
+		}
+
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79000 } } } # you have your liege's back
+		trigger = { has_character_flag = protected_liege }
+	}
+
+	option = { #I failed - liege is maimed
+		name = EVTOPTB_79010
+		custom_tooltip = { text = EVTOPTB_79010_TOOLTIP }
+
+		tooltip = {
+			event_target:my_liege = {
+				add_maimed_trait_effect = yes
+			}
+			add_character_modifier = {
+				name = inattentive_soldier
+				duration = 1095
+			}
+		}
+
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79013 } } } # liege is maimed, but survives
+
+		trigger = { has_character_flag = failed_to_protect_liege }
+	}
+
+	option = { #I succeeded greatly!
+		name = EVTOPTC_79010
+		custom_tooltip = { text = EVTOPTC_79010_TOOLTIP }
+
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_loyal_shieldmaiden
+				}
+			}	
+			opinion = {
+				who = event_target:my_liege
+				modifier = opinion_was_praised
+			}
+			add_character_modifier = {
+				name = favored_shieldmaiden
+				duration = 3650
+			}
+		}
+
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79000 } } } # you are praised
+		trigger = { has_character_flag = protected_liege_well }
+	}
+
+	option = { #I failed terribly!
+		name = EVTOPTD_79010
+		custom_tooltip = { text = EVTOPTD_79010_TOOLTIP }
+
+		tooltip = { 
+			add_maimed_trait_effect = yes
+			add_character_modifier = {
+				name = clumsy_shieldmaiden
+				duration = 1095
+			}
+		}
+
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79013 } } } # you are maimed
+		trigger = { has_character_flag = failed_terribly_to_protect_liege }
+	}
+}
+
+#Shieldmaiden betrayed liege, aftermath
+character_event = {
+	id = 79011
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79011_A
+		trigger = { has_character_flag = liege_bites_the_dust }
+	}
+	desc = {
+		text = EVTDESC_79011_B
+		trigger = { has_character_flag = liege_is_confounded }
+	}
+
+	option = { #Success! They got hurt/died
+		name = EVTOPTA_79011
+
+		tooltip = {
+			event_target:my_liege = {
+				death = {
+					death_reason = death_battle
+				}
+			}
+		}
+
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79012 } } } # liege is notified
+		
+		trigger = { has_character_flag = liege_bites_the_dust }
+	}
+
+	option = { #I failed - I'm suspected of being a crappy shieldmaiden
+		name = EVTOPTB_79011
+
+		tooltip = {
+			add_character_modifier = {
+				name = bad_shieldmaiden
+				duration = 1095
+			}
+		}
+		hidden_tooltip = { event_target:my_liege = { character_event = { id = 79012 } } } # liege is notified
+
+		trigger = {
+			has_character_flag = liege_is_confounded
+		}
+	}
+}
+
+
+#Liege: liege is killed
+character_event = {
+	id = 79012
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79012_A
+		trigger = { FROM = { has_character_flag = liege_bites_the_dust } }
+	}
+	desc = {
+		text = EVTDESC_79012_B
+		trigger = { FROM = { has_character_flag = liege_is_confounded } }
+	}
+
+	option = { #I am killed on the battlefield - OH NOES
+		name = EVTOPTA_79012
+
+		hidden_tooltip = { FROM = { clr_character_flag = liege_bites_the_dust } }
+
+		death = { death_reason = death_battle }
+		
+		trigger = {
+			FROM = { has_character_flag = liege_bites_the_dust }
+		}
+	}
+
+	option = { # My Shieldmaiden is the worst bodyguard ever
+		name = EVTOPTB_79012
+
+		FROM = {
+			add_character_modifier = {
+				name = bad_shieldmaiden
+				duration = 1095
+			}
+		}
+
+		hidden_tooltip = { FROM = { clr_character_flag = liege_is_confounded } }
+
+		trigger = {
+			FROM = { has_character_flag = liege_is_confounded }
+		}
+	}
+}
+
+#Liege: shieldmaiden or liege is injured/maimed
+character_event = {
+	id = 79013
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESC_79013_A
+		trigger = { FROM = { has_character_flag = failed_to_protect_liege } }
+	}
+	desc = {
+		text = EVTDESC_79013_B
+		trigger = { FROM = { has_character_flag = failed_terribly_to_protect_liege } }
+	}
+
+
+	option = { #I am badly injured
+		name = EVTOPTA_79013
+		custom_tooltip = { text = EVTOPTA_79013_TOOLTIP }
+
+		add_maimed_trait_effect = yes
+		FROM = {
+			add_character_modifier = {
+				name = inattentive_soldier
+				duration = 1095
+			}
+		}
+
+
+		hidden_tooltip = { FROM = { clr_character_flag = failed_to_protect_liege } }
+		
+		trigger = {
+			FROM = { has_character_flag = failed_to_protect_liege }
+		}
+	}
+
+	option = { # My shieldmaiden is injured
+		name = EVTOPTB_79013
+		custom_tooltip = { text = EVTOPTB_79013_TOOLTIP }
+
+		FROM = {
+			add_maimed_trait_effect = yes
+			add_character_modifier = {
+				name = clumsy_shieldmaiden
+				duration = 1095
+			}
+		}
+
+		hidden_tooltip = { FROM = { clr_character_flag = failed_terribly_to_protect_liege } }
+
+		trigger = {
+			FROM = { has_character_flag = failed_terribly_to_protect_liege }
+		}
+	}
+}
+
+### Appointing a Shieldmaiden (sent to potential Shieldmaiden)
+character_event = {
+	id = 79020
+	desc = EVTDESC_79020
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = { #heck yeah
+		name = EVTOPTA_79020
+		set_character_flag = special_marshal		
+		add_trait = shieldmaiden
+
+		prestige = 100
+		
+		opinion = {
+			who = FROMFROM
+			modifier = opinion_shieldmaiden
+		}
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = 79021 }
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = { #well, I don't wanna
+		name = EVTOPTB_79020
+		custom_tooltip = { text = EVTOPTB_79020_TOOLTIP }
+
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = 79022 }
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1000
+				OR = {
+					trait = severely_injured
+					trait = one_eyed
+					trait = blinded
+					trait = one_legged
+					trait = one_handed
+					trait = disfigured
+					trait = mangled
+					trait = maimed
+					trait = wounded
+				}
+			}
+			modifier = {
+				factor = 100
+				NOT = {
+					opinion = {
+						who = event_target:my_liege
+						value = 0
+					}
+				}
+			}
+		}
+	}
+}
+
+### Shieldmaiden accepts (sent to liege)
+character_event = {
+	id = 79021
+	desc = EVTDESC_79021
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_79021
+		hidden_tooltip = {
+			wealth = -50
+			prestige = 50
+		}
+	}
+}
+
+### Shieldmaiden refuses (sent to liege)
+character_event = {
+	id = 79022
+	desc = EVTDESC_79022
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_79022
+		hidden_tooltip = {
+			FROM = {
+				add_character_modifier = {
+ 					modifier = recently_relieved_shieldmaiden_timer
+ 					days = 365
+ 					hidden = yes
+				}
+			}
+		}
+	}
+}
+
+### Relieving Shieldmaiden of her duties (sent to target Shieldmaiden)
+character_event = {
+	id = 79023
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_79023_A
+		trigger = { has_character_modifier = fell_into_the_river }
+	}
+	desc = {
+		text = EVTDESC_79023_B
+		trigger = { has_character_modifier = favored_shieldmaiden }
+	}
+	desc = {
+		text = EVTDESC_79023_C
+		trigger = { has_character_modifier = inattentive_soldier }
+	}
+	desc = {
+		text = EVTDESC_79023_D
+		trigger = {
+			OR = {
+				trait = severely_injured
+				has_character_modifier = lucky_to_be_alive
+				trait = one_eyed
+				trait = blinded
+				trait = one_legged
+				trait = one_handed
+				trait = disfigured
+				trait = mangled
+				trait = maimed
+				trait = wounded
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_79023_E
+		trigger = { 
+			NOR = {
+				has_character_modifier = clumsy_shieldmaiden
+				has_character_modifier = fell_into_the_river
+			}
+		}
+	}
+
+	option = { #I understand
+		name = EVTOPTA_79023
+		custom_tooltip = { text = EVTOPTA_79023_TOOLTIP }
+		
+		#hidden_tooltip = {
+			random_list = {
+				500 = {
+					modifier = {
+						factor = 0
+						NOT = { had_character_flag = { flag = special_marshal years = 20 } }
+					}
+					give_nickname = nick_the_valkyrie
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NOT = { had_character_flag = { flag = special_marshal days = 90 } }
+					}
+					give_nickname = nick_the_shieldmaiden
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						NOR = { 
+							has_character_modifier = clumsy_shieldmaiden
+							has_character_modifier = fell_into_the_river
+							has_character_modifier = inattentive_soldier
+						}
+					}
+					give_nickname = nick_the_clumsy
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NAND = {
+							trait = brave
+							had_character_flag = { flag = special_marshal days = 90 }
+						}
+					}
+					give_nickname = nick_the_fearless
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NAND = {
+							trait = impaler
+							had_character_flag = { flag = special_marshal days = 90 }
+						}
+					}
+					give_nickname = nick_the_impaler
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NAND = {
+							martial = 18
+							had_character_flag = { flag = special_marshal days = 90 }
+						}
+					}
+					give_nickname = nick_bloodaxe
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NAND = {
+							has_character_modifier = favored_shieldmaiden
+							had_character_flag = { flag = special_marshal years = 5 }
+							NOT = { age = 30 }
+						}
+					}
+					give_nickname = nick_the_legendary
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NAND = {
+							has_character_modifier = favored_shieldmaiden
+							had_character_flag = { flag = special_marshal days = 90 }
+						}
+					}
+					give_nickname = nick_the_defender
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						NOR = {
+							trait = severely_injured
+							has_character_modifier = lucky_to_be_alive
+							trait = one_eyed
+							trait = blinded
+							trait = one_legged
+							trait = one_handed
+							trait = disfigured
+							trait = mangled
+							trait = maimed
+							trait = wounded
+						}
+					}
+					give_nickname = nick_the_survivor
+				}
+			}
+			remove_opinion = {
+				who = FROMFROM
+				modifier = opinion_shieldmaiden
+			}
+		#}
+
+		clr_character_flag = special_marshal		
+		remove_trait = shieldmaiden
+
+	}
+}

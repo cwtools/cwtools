@@ -1,0 +1,1613 @@
+#########################################################
+#
+# Way of Life - Family Events
+#
+# Written by Henrik Fåhraeus
+#
+# ID Range: WoL.3000 to WoL.3999
+#
+# Diplomacy skill can "level up" with this focus,
+# though Carousing is better for that purpose.
+#
+# Can give the Gamer trait and the 
+# "Family Patriarch/Matriarch" modifier
+#
+#########################################################
+
+namespace = WoL
+
+# Family event level up chance
+character_event = {
+	id = WoL.3000
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Way of Life"
+	}
+	
+	immediate = {
+		
+		# Chance of trait adjustments
+		if = {
+			limit = {
+				NOT = { trait = proud }
+				NOT = { trait = humble }
+				random = 85 # 15% chance
+			}
+			add_trait = proud
+			character_event = { id = 38261 } # Proud notification
+		}
+		
+		if = {
+			limit = {
+				trait = humble
+				random = 50
+			}
+			remove_trait = humble
+			character_event = { id = 38312 } # Humble loss notification
+		}
+		
+		# Chance of Diplo boosters
+		character_event = { id = WoL.3001 days = 7 } 
+		
+		# Chance of levelling up Family skills
+		if = {
+			limit = {
+				OR = {
+					has_character_modifier = wol_patriarch_2
+					has_character_modifier = wol_matriarch_2
+				}
+			}
+			random = {
+				chance = 5
+				character_event = { id = WoL.3003 days = 4 } # Gain the Gamer or Socializer trait?
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_modifier = wol_patriarch_1
+			}
+			random = {
+				chance = 20
+				remove_character_modifier = wol_patriarch_1
+				add_character_modifier = {
+					modifier = wol_patriarch_2
+					duration = -1
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_modifier = wol_matriarch_1
+			}
+			random = {
+				chance = 20
+				remove_character_modifier = wol_matriarch_1
+				add_character_modifier = {
+					modifier = wol_matriarch_2
+					duration = -1
+				}
+			}
+			break = yes
+		}
+		
+		random = {
+			chance = 50
+			if = {
+				limit = { is_female = yes }
+				add_character_modifier = {
+					modifier = wol_matriarch_1
+					duration = -1
+				}
+			}
+			if = {
+				limit = { is_female = no }
+				add_character_modifier = {
+					modifier = wol_patriarch_1
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+# Chance of Diplomacy boosts
+character_event = {
+	id = WoL.3001
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				trait = naive_appeaser
+			}
+			random = {
+				chance = 10
+				set_character_flag = int_ed_boost
+				character_event = { id = WoL.3002 }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = underhanded_rogue
+			}
+			random = {
+				chance = 5
+				set_character_flag = int_ed_boost
+				character_event = { id = WoL.3002 }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = charismatic_negotiator
+			}
+			random = {
+				chance = 1
+				set_character_flag = int_ed_boost
+				character_event = { id = WoL.3002 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = WoL.3002
+	
+	picture = GFX_evt_family
+	border = GFX_event_normal_frame_diplomacy
+	
+	desc = EVTDESC_WOL_3002
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_3002
+		
+		if = {
+			limit = {
+				has_character_flag = int_ed_boost
+				trait = naive_appeaser
+			}
+			hidden_tooltip = { remove_trait = naive_appeaser }
+			add_trait = underhanded_rogue
+			clr_character_flag = int_ed_boost
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = int_ed_boost
+				trait = underhanded_rogue
+			}
+			hidden_tooltip = { remove_trait = underhanded_rogue }
+			add_trait = charismatic_negotiator
+			clr_character_flag = int_ed_boost
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = int_ed_boost
+				trait = charismatic_negotiator
+			}
+			hidden_tooltip = { remove_trait = charismatic_negotiator }
+			add_trait = grey_eminence
+			clr_character_flag = int_ed_boost
+			break = yes
+		}
+	}
+}
+
+# Gamer or Socializer gained!
+character_event = {
+	id = WoL.3003
+	desc = EVTDESC_WOL_3003
+	
+	picture = GFX_evt_family
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { lifestyle_traits = 1 }
+		NOT = { has_character_flag = wol_no_to_diplomacy_trait }
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_3003
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = socializer
+		
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_nickname = no
+				}
+				random_list = {
+					10 = { give_nickname = nick_the_affable }
+					10 = { give_nickname = nick_the_jovial }
+					10 = { give_nickname = nick_the_jolly }
+					10 = { give_nickname = nick_the_gracious }
+				}
+			}
+		}
+		
+#		log = "WoL.3003: [Root.GetTitledName] achieves the lifestyle Socializer!"
+	}
+	option = {
+		name = EVTOPTB_WOL_3003
+		add_trait = gamer
+		ai_chance = {
+			factor = 100
+		}
+		
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_nickname = no
+				}
+				random_list = {
+					10 = { give_nickname = nick_the_shrewd }
+					10 = { give_nickname = nick_the_lucky }
+					10 = { give_nickname = nick_the_wily }
+					10 = { give_nickname = nick_the_fox }
+				}
+			}
+		}
+		
+#		log = "WoL.3003: [Root.GetTitledName] achieves the lifestyle Game Master!"
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_3003
+		ai_chance = {
+			factor = 0
+		}
+		set_character_flag = wol_no_to_diplomacy_trait
+	}
+}
+
+###################################################
+# RANDOM FAMILY EVENTS
+###################################################
+
+# Relations with the spouse improved
+character_event = {
+	id = WoL.3010
+	
+	desc = EVTDESC_WOL_3010
+	picture = GFX_evt_family
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	is_married = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+		any_spouse = {
+			is_alive = yes
+			NOT = { is_lover = ROOT }
+			NOT = { is_rival = ROOT }
+			NOT = { trait = incapable }
+			prisoner = no
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.33
+			has_character_modifier = wol_seducer_1
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = wol_seducer_2
+		}
+		modifier = {
+			factor = 4.0
+			OR = {
+				trait = seducer
+				trait = seductress
+			}
+		}
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+		modifier = {
+			factor = 1.33
+			trait = fair
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				is_alive = yes
+				NOT = { is_lover = ROOT }
+				NOT = { is_rival = ROOT }
+				NOT = { trait = incapable }
+				prisoner = no
+			}
+			save_event_target_as = target_spouse
+		}
+		random = {
+			chance = 50
+			character_event = { id = WoL.3000 } # Chance to "level up"
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_3010
+		
+		if = {
+			limit = {
+				NOT = {
+					event_target:target_spouse = {
+						personal_opinion = {
+							who = ROOT
+							value = 40
+						}
+					}
+				}
+			}
+			event_target:target_spouse = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_marital_love
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = event_target:target_spouse
+						value = 40
+					}
+				}
+			}
+			opinion = {
+				who = event_target:target_spouse
+				modifier = opinion_marital_love
+			}
+		}
+		
+		if = {
+			limit = {
+				personal_opinion = {
+					who = event_target:target_spouse
+					value = 40
+				}
+				reverse_personal_opinion = {
+					who = event_target:target_spouse
+					value = 40
+				}
+			}
+			add_lover = event_target:target_spouse
+#			log = "WoL.3010: [Root.GetTitledName] falls in love with spouse."
+		}
+	}
+}
+
+# Relations with sibling improves
+character_event = {
+	id = WoL.3020
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+		any_sibling = {
+			is_alive = yes
+			NOT = { is_friend = ROOT }
+			NOT = { trait = incapable }
+			NOT = { trait = inbred }
+			NOT = { trait = imbecile }
+			prisoner = no
+			OR = {
+				age = 13
+				AND = {
+					age = 4
+					host = { character = ROOT }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+	}
+	
+	immediate = {
+		random_sibling = {
+			limit = {
+				is_alive = yes
+				NOT = { is_friend = ROOT }
+				NOT = { trait = incapable }
+				NOT = { trait = inbred }
+				NOT = { trait = imbecile }
+				prisoner = no
+				OR = {
+					age = 13
+					AND = {
+						age = 4
+						host = { character = ROOT }
+					}
+				}
+			}
+			character_event = { id = WoL.3021 }
+		}
+		random = {
+			chance = 50
+			character_event = { id = WoL.3000 } # Chance to "level up"
+		}
+	}
+}
+
+# Ping the sibling
+character_event = {
+	id = WoL.3021
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.3022 }
+		}
+	}
+}
+
+# The shown event
+character_event = {
+	id = WoL.3022
+	
+	picture = GFX_evt_family
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_WOL_3022
+		trigger = {
+			FROM = {
+				age = 13
+				host = { character = ROOT }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_WOL_3022_ABROAD
+		trigger = {
+			FROM = {
+				age = 13
+				host = { NOT = { character = ROOT } }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_WOL_3022_CHILD
+		trigger = {
+			FROM = { NOT = { age = 13 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+		
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_family_love
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+		if = {
+			limit = {
+				personal_opinion = {
+					who = FROM
+					value = 50
+				}
+				reverse_personal_opinion = {
+					who = FROM
+					value = 50
+				}
+				FROM = {
+					is_adult = yes
+				}
+			}
+			add_friend = FROM
+#			log = "WoL.3022: [Root.GetTitledName] becomes friend with sibling [From.GetTitledName]."
+		}
+	}
+}
+
+# Relations with parent improves
+character_event = {
+	id = WoL.3030
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+		OR = {
+			father = {
+				is_alive = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = {
+					personal_opinion = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			mother = {
+				is_alive = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = {
+					personal_opinion = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+	}
+	
+	immediate = {
+		random = {
+			chance = 50
+			character_event = { id = WoL.3000 } # Chance to "level up"
+		}
+		
+		if = {
+			limit = {
+				father = {
+					is_alive = yes
+					prisoner = no
+					NOT = { trait = incapable }
+					NOT = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			father = { character_event = { id = WoL.3031 } }
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				mother = {
+					is_alive = yes
+					prisoner = no
+					NOT = { trait = incapable }
+					NOT = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			mother = { character_event = { id = WoL.3031 } }
+		}
+	}
+}
+
+# Ping the parent
+character_event = {
+	id = WoL.3031
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = { is_female = yes } # Just to get different event pictures
+				character_event = { id = WoL.3032 } 
+			}
+			if = {
+				limit = { is_female = no } # Just to get different event pictures
+				character_event = { id = WoL.3033 } 
+			}
+		}
+	}
+}
+
+# The shown event - female
+character_event = {
+	id = WoL.3032
+	
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3032
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+		
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_family_love
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+#		log = "WoL.3032: [Root.GetTitledName] befriends parent [From.GetTitledName]."
+	}
+}
+
+# The shown event - male
+character_event = {
+	id = WoL.3033
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3032
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+		
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_family_love
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+#		log = "WoL.3033: [Root.GetTitledName] befriends parent [From.GetTitledName]."
+	}
+}
+
+# Relations with child improves
+character_event = {
+	id = WoL.3040
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+		any_child = {
+			is_alive = yes
+			NOT = { trait = incapable }
+			NOT = { trait = inbred }
+			NOT = { trait = imbecile }
+			prisoner = no
+			OR = {
+				age = 13
+				AND = {
+					age = 4
+					host = { character = ROOT }
+				}
+			}
+			NOT = {
+				personal_opinion = {
+					who = ROOT
+					value = 50
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				is_alive = yes
+				NOT = { trait = incapable }
+				NOT = { trait = inbred }
+				NOT = { trait = imbecile }
+				prisoner = no
+				OR = {
+					age = 13
+					AND = {
+						age = 4
+						host = { character = ROOT }
+					}
+				}
+				NOT = {
+					personal_opinion = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			character_event = { id = WoL.3041 }
+		}
+		random = {
+			chance = 50
+			character_event = { id = WoL.3000 } # Chance to "level up"
+		}
+	}
+}
+
+# Ping the child
+character_event = {
+	id = WoL.3041
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.3042 }
+		}
+	}
+}
+
+# The shown event
+character_event = {
+	id = WoL.3042
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_WOL_3042
+		trigger = {
+			FROM = {
+				age = 13
+				host = { character = ROOT }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_WOL_3042_ABROAD
+		trigger = {
+			FROM = {
+				age = 13
+				host = { NOT = { character = ROOT } }
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_WOL_3042_CHILD
+		trigger = {
+			FROM = { NOT = { age = 13 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+		
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						personal_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_family_love
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+#		log = "WoL.3042: [Root.GetTitledName] befriends child [From.GetTitledName]."
+	}
+}
+
+# Relations between two of my close dynasty members improve - hidden set-up
+character_event = {
+	id = WoL.3048
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+	}
+	
+	immediate = {
+		save_event_target_as = target_initiator
+		random_dynasty_member = {
+			limit = {
+				is_adult = yes
+				is_alive = yes
+				NOT = { trait = incapable }
+				NOT = { trait = inbred }
+				NOT = { trait = imbecile }
+				prisoner = no
+				is_close_relative = ROOT
+				OR = {
+					AND = {				
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					AND = {				
+						is_female = yes
+						ROOT = {
+							NOR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					ROOT = { has_law = true_cognatic_succession }
+					is_primary_heir = ROOT
+				}
+			}
+			save_event_target_as = target_second
+			character_event = { id = WoL.3049 }
+		}
+	}
+}
+
+# Find the other close dynasty member
+character_event = {
+	id = WoL.3049
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random_dynasty_member = {
+			limit = {
+				is_adult = yes
+				is_alive = yes
+				NOT = { trait = incapable }
+				NOT = { trait = inbred }
+				NOT = { trait = imbecile }
+				prisoner = no
+				NOT = { character = FROM }
+				is_close_relative = FROM
+				NOT = { is_friend = ROOT }
+				OR = {
+					AND = {				
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					AND = {				
+						is_female = yes
+						ROOT = {
+							NOR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					ROOT = { has_law = true_cognatic_succession }
+					is_primary_heir = ROOT
+				}
+			}
+			save_event_target_as = target_first
+			FROM = { character_event = { id = WoL.3050 } }
+		}
+	}
+}
+
+# Relations between two of my close dynasty members improve
+character_event = {
+	id = WoL.3050
+	
+	desc = EVTDESC_WOL_3050
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:target_first = {
+			character_event = { id = WoL.3051 }
+		}
+		random = {
+			chance = 50
+			character_event = { id = WoL.3000 } # Chance to "level up"
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+	}
+}
+
+# Fire for the first dynasty member
+character_event = {
+	id = WoL.3051
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3051
+	
+	option = {
+		name = EVTOPTA_WOL_3051 # Good idea
+		ai_chance = {
+			factor = 100
+		}
+		
+		hidden_tooltip = {
+			event_target:target_second = {
+				character_event = { id = WoL.3052 days = 7 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_3051 # I have no wish to see that idiot
+		ai_chance = {
+			factor = 0
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.3053 days = 7 }
+			}
+			event_target:target_second = {
+				character_event = { id = WoL.3055 days = 7 }
+			}
+		}
+	}
+}
+
+# Fire for the second dynasty member
+character_event = {
+	id = WoL.3052
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3052
+	
+	show_from_from = yes
+	
+	option = {
+		name = EVTOPTA_WOL_3051 # Good idea
+		ai_chance = {
+			factor = 100
+		}
+		
+		if = {
+			limit = {
+				NOT = { is_rival = FROM }
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = { is_rival = FROM }
+				personal_opinion = {
+					who = FROM
+					value = 50
+				}
+				reverse_personal_opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+			tooltip = { add_friend = FROM }
+		}
+		
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = WoL.3057 }
+			}
+			FROM = {
+				character_event = { id = WoL.3056 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_3051 # I have no wish to see that idiot
+		ai_chance = {
+			factor = 0
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = WoL.3055 }
+			}
+			FROMFROM = {
+				character_event = { id = WoL.3054 }
+			}
+		}
+	}
+}
+
+# Notify initiatior - first dynasty member refused
+character_event = {
+	id = WoL.3053
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3053
+	
+	option = {
+		name = EVTOPTA_WOL_3053
+		opinion = {
+			who = FROM
+			modifier = opinion_disappointed
+			months = 36
+		}
+	}
+}
+
+# Notify initiatior - second dynasty member refused
+character_event = {
+	id = WoL.3054
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3054
+	
+	option = {
+		name = EVTOPTA_WOL_3053
+		opinion = {
+			who = FROM
+			modifier = opinion_disappointed
+			months = 36
+		}
+	}
+}
+
+# Notify dynasty member - other dynasty member refused
+character_event = {
+	id = WoL.3055
+	
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3055
+	
+	option = {
+		name = EVTOPTA_WOL_3055
+		opinion = {
+			who = FROM
+			modifier = opinion_disappointed
+			months = 36
+		}
+	}
+}
+
+# Notify first dynasty member of successful conciliation
+character_event = {
+	id = WoL.3056
+	
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3056
+	
+	option = {
+		name = EVTOPTA_WOL_3056
+		
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			break = yes
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					personal_opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_family_love
+			}
+		}
+		
+		if = {
+			limit = {
+				personal_opinion = {
+					who = FROM
+					value = 50
+				}
+				reverse_personal_opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+			add_friend = FROM
+#			log = "WoL.3056: [Root.GetTitledName] becomes friend with dynasty member [From.GetTitledName]."
+		}
+	}
+}
+
+# Notify the initiator of success
+character_event = {
+	id = WoL.3057
+	
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_WOL_3057
+	
+	option = {
+		name = EVTOPTA_WOL_3022
+	}
+}
+
+# Two of your non-adult children start liking each other more - hidden start
+character_event = {
+	id = WoL.3059
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		has_focus = focus_family
+		has_regent = no
+		in_command = no
+		is_ill = no
+		num_of_children = 2
+		any_child = {
+			age = 5
+			is_adult = no
+			is_alive = yes
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 2.0
+		}
+		modifier = {
+			factor = 0.66
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.33
+			trait = kind
+		}
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				is_adult = no
+				is_alive = yes
+				age = 5
+				NOT = { trait = incapable }
+				NOT = { trait = inbred }
+				NOT = { trait = imbecile }
+				prisoner = no
+				host = { character = ROOT }
+				OR = {
+					AND = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					AND = {				
+						is_female = yes
+						ROOT = {
+							NOR = {
+								has_law = agnatic_succession
+								has_law = cognatic_succession
+							}
+						}
+					}
+					is_primary_heir = ROOT
+					ROOT = { has_law = true_cognatic_succession }
+				}
+			}
+			
+			ROOT = { set_character_flag = found_second }
+			save_event_target_as = target_second
+			
+			ROOT = {
+				random_child = {
+					limit = {
+						is_adult = no
+						is_alive = yes
+						age = 5
+						NOT = { trait = incapable }
+						NOT = { trait = inbred }
+						NOT = { trait = imbecile }
+						prisoner = no
+						NOT = { character = PREVPREV }
+						host = { character = ROOT }
+						OR = {
+							AND = {				
+								is_female = no
+								ROOT = {
+									OR = {
+										has_law = agnatic_succession
+										has_law = cognatic_succession
+									}
+								}
+							}
+							AND = {				
+								is_female = yes
+								ROOT = {
+									NOR = {
+										has_law = agnatic_succession
+										has_law = cognatic_succession
+									}
+								}
+							}
+							ROOT = { has_law = true_cognatic_succession }
+							is_primary_heir = ROOT
+						}
+						NOT = { is_friend = PREVPREV }
+						NOT = {
+							personal_opinion = {
+								who = PREVPREV
+								value = 50
+							}
+						}
+					}
+					ROOT = { set_character_flag = found_first }
+					save_event_target_as = target_first
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = found_second
+				has_character_flag = found_first
+			}
+			clr_character_flag = found_second
+			clr_character_flag = found_first
+			random = {
+				chance = 33
+				character_event = { id = WoL.3000 } # Chance to "level up"
+			}
+			character_event = { id = WoL.3060 }
+		}
+	}
+}
+
+# Two of your non-adult children start liking each other more
+character_event = {
+	id = WoL.3060
+	
+	desc = EVTDESC_WOL_3060
+	
+	picture = GFX_evt_child_sword
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_3060
+		
+#		log = "WoL.3060: Fires, valid for [target_second.GetTitledName] and [target_first.GetTitledName]."
+		
+		event_target:target_second = {
+			if = {
+				limit = {
+					NOT = {
+						personal_opinion = {
+							who = event_target:target_first
+							value = 50
+						}
+					}
+				}
+				opinion = {
+					who = event_target:target_first
+					modifier = opinion_family_love
+					months = 360
+				}
+			}
+		}
+		
+		event_target:target_first = {
+			if = {
+				limit = {
+					NOT = {
+						personal_opinion = {
+							who = event_target:target_second
+							value = 50
+						}
+					}
+				}
+				opinion = {
+					who = event_target:target_second
+					modifier = opinion_family_love
+					months = 360
+				}
+			}
+			if = {
+				limit = {
+					personal_opinion = {
+						who = event_target:target_second
+						value = 50
+					}
+					reverse_personal_opinion = {
+						who = event_target:target_second
+						value = 50
+					}
+				}
+				add_friend = event_target:target_second
+#				log = "WoL.3060: [target_second.GetTitledName] becomes friend with sibling [target_first.GetTitledName]."
+			}
+		}
+	}
+}

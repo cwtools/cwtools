@@ -1,0 +1,1499 @@
+###########################################
+#                                         #
+# Way of Life Rulership Events            #
+#                                         #
+# ID WoL.12000-WoL.12999                  #
+#                                         #
+###########################################
+
+namespace = WoL
+
+# Rulership Level Up
+character_event = {
+	id = WoL.12500
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				OR = {
+					trait = indulgent_wastrel
+					trait = thrifty_clerk
+					trait = fortune_builder
+				}
+				random = 85
+			}
+			character_event = { id = WoL.12501 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						NOT = { religion = jain }
+						trait = administrator
+					}
+				}
+				NOT = { has_character_modifier = wol_raja_dharma }
+				random = 85
+			}
+			character_event = { id = WoL.12502 }
+		}
+		if = {
+			limit = {
+				NOT = { trait = just }
+				random = 85
+			}
+			character_event = { id = WoL.12503 }
+		}
+		if = {
+			limit = {
+				NOT = { trait = diligent }
+				random = 85
+			}
+			character_event = { id = WoL.12504 }
+		}
+		if = {
+			limit = {
+				NOT = { trait = ambitious }
+				random = 85
+			}
+			character_event = { id = WoL.12505 }
+		}
+	}
+}
+
+# Stewardship Education Level Up
+character_event = {
+	id = WoL.12501
+	desc = EVTDESC_WoL_12501
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = { trait = indulgent_wastrel }
+			hidden_tooltip = { remove_trait = indulgent_wastrel }
+			add_trait = thrifty_clerk
+			break = yes
+		}
+		if = {
+			limit = { trait = thrifty_clerk }
+			hidden_tooltip = { remove_trait = thrifty_clerk }
+			add_trait = fortune_builder
+			break = yes
+		}
+		if = {
+			limit = { trait = fortune_builder }
+			hidden_tooltip = { remove_trait = fortune_builder }
+			add_trait = midas_touched
+			if = {
+				limit = { has_nickname = no }
+				give_nickname = nick_the_lawgiver
+			}
+			break = yes
+		}
+	}
+}
+
+# Administrator Level Up
+character_event = {
+	id = WoL.12502
+	desc = EVTDESC_WoL_12502
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = {
+				NOT = {
+					has_character_modifier = wol_steward_1
+					has_character_modifier = wol_steward_2
+					trait = administrator
+				}
+			}
+			add_character_modifier = {
+				modifier = wol_steward_1
+				duration = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = { has_character_modifier = wol_steward_1 }
+			remove_character_modifier = wol_steward_1
+			add_character_modifier = {
+				modifier = wol_steward_2
+				duration = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				has_character_modifier = wol_steward_2
+				NOT = { lifestyle_traits = 1 }
+			}
+			remove_character_modifier = wol_steward_2
+			add_trait = administrator
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = administrator 
+				religion = jain
+			}
+			add_character_modifier = {
+				modifier = wol_raja_dharma
+				duration = -1
+			}
+			break = yes
+		}
+	}
+}
+
+# More Just
+character_event = {
+	id = WoL.12503
+	desc = EVTDESC_WoL_12503
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = { trait = arbitrary }
+			remove_trait = arbitrary
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = arbitrary } }
+			add_trait = just
+			if = {
+				limit = { has_nickname = no }
+				give_nickname = nick_the_just
+			}
+			break = yes
+		}
+	}
+}
+
+# More Diligent
+character_event = {
+	id = WoL.12504
+	desc = EVTDESC_WoL_12504
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = { trait = slothful }
+			remove_trait = slothful
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = slothful } }
+			add_trait = diligent
+			break = yes
+		}
+	}
+}
+
+# More Ambitious
+character_event = {
+	id = WoL.12505
+	desc = EVTDESC_WoL_12505
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EXCELLENT
+		if = {
+			limit = { trait = content }
+			remove_trait = content
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = content } }
+			add_trait = ambitious
+			break = yes
+		}
+	}
+}
+
+# Legendary Wisdom
+character_event = {
+	id = WoL.12506
+	desc = EVTDESC_WoL_12506
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		trait = administrator
+		stewardship = 12
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EXCELLENT
+		add_character_modifier = {
+			modifier = wol_legendary_wisdom
+			duration = -1
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_wise_guy
+		}
+	}
+}
+
+# Respected Ruler
+character_event = {
+	id = WoL.12507
+	desc = EVTDESC_WoL_12507
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		trait = administrator
+		stewardship = 8
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EXCELLENT
+		add_character_modifier = {
+			modifier = wol_respected_ruler
+			duration = -1
+		}
+	}
+}
+
+### The Architect
+
+# Architect (HIDDEN)
+province_event = {
+	id = WoL.12000
+	hide_window = yes
+	
+	trigger = {
+		owner = {
+			ai = no
+			has_focus = focus_rulership
+			is_ruler = yes
+			is_tribal = no
+			is_nomadic = no
+			wealth = 400
+			NOT = { has_character_flag = architect_offer }
+			NOT = { has_character_modifier = in_seclusion }
+		}
+		has_empty_holding = yes
+		NOT = { has_global_flag = rulership_castle }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	immediate = {
+		owner = { set_global_flag = rulership_castle }
+		if = {
+			limit = { 
+				owner = { job_treasurer = { stewardship = 5 } }
+			}
+			random_list = {
+				75 = { 
+					owner = { 
+						character_event = { id = WoL.12003 }
+						set_character_flag = architect_offer
+					}
+				}
+				25 = { 
+					owner = { 
+						character_event = { id = WoL.12002 }
+						set_character_flag = architect_offer
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { owner = { job_treasurer = { stewardship = 5 } } }
+			}
+			owner = {
+				character_event = { id = WoL.12001 }
+				set_character_flag = architect_offer
+			}
+		}
+	}
+}
+
+# Architect brought before court
+character_event = {
+	id = WoL.12001
+	desc = EVTDESC_WoL_12001
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_12001
+		wealth = -400
+		custom_tooltip = { text = castle_construction_begins }
+		set_character_flag = building_castle
+		FROM = {
+			set_province_flag = castle_province
+		}
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = WoL.12007 days = 260 } }
+				25 = { character_event = { id = WoL.12006 days = 260 } }
+				25 = {
+					random_list = {
+						50 = { character_event = { id = WoL.12004 days = 260 } }
+						50 = { character_event = { id = WoL.12005 days = 260 } }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WoL_12001
+		custom_tooltip = { text = architect_refused }
+		clr_global_flag = rulership_castle
+	}
+}
+
+# Architect brought before court
+character_event = {
+	id = WoL.12002
+	desc = EVTDESC_WoL_12002
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_12001
+		wealth = -400
+		custom_tooltip = { text = castle_construction_begins }
+		set_character_flag = building_castle
+		FROM = {
+			set_province_flag = castle_province
+		}
+		hidden_tooltip = {
+			random_list = {
+				40 = { character_event = { id = WoL.12004 days = 260 } }
+				40 = { character_event = { id = WoL.12005 days = 260 } }
+				20 = { character_event = { id = WoL.12007 days = 260 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_12001
+		custom_tooltip = { text = architect_refused }
+		clr_global_flag = rulership_castle
+	}
+}
+
+# Architect brought before court
+character_event = {
+	id = WoL.12003
+	desc = EVTDESC_WoL_12003
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_12001
+		wealth = -400
+		custom_tooltip = { text = castle_construction_begins }
+		set_character_flag = building_castle
+		FROM = {
+			set_province_flag = castle_province
+		}
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = WoL.12006 days = 260 } }
+				40 = { character_event = { id = WoL.12007 days = 260 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_12001
+		custom_tooltip = { text = architect_refused }
+		clr_global_flag = rulership_castle
+	}
+}
+
+# Architect caught absconding with money
+character_event = {
+	id = WoL.12004
+	desc = EVTDESC_WoL_12004
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = building_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12004
+		wealth = 150
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 42
+			religion = ROOT
+			culture = ROOT
+			trait = slothful
+			trait = deceitful
+			trait = indulgent_wastrel
+		}
+		new_character = {
+			prisoner = yes
+		}
+		FROMFROM = { clr_province_flag = castle_province }
+		clr_global_flag = rulership_castle
+		clr_character_flag = building_castle
+	}
+}
+
+# Construction more costly than estimated
+character_event = {
+	id = WoL.12005
+	desc = EVTDESC_WoL_12005
+	picture = GFX_evt_construction_site
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = building_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12005
+		wealth = -100
+		hidden_tooltip = { character_event = { id = WoL.12008 days = 60 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_12005
+		wealth = 200
+		custom_tooltip = { text = construction_ceases }
+		FROMFROM = { clr_province_flag = castle_province }
+		clr_global_flag = rulership_castle
+		clr_character_flag = building_castle
+	}
+}
+
+# Castle finished with less resources
+character_event = {
+	id = WoL.12006
+	desc = EVTDESC_WoL_12006
+	picture = GFX_evt_magnificent_castle
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = building_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12006
+		FROMFROM = {
+			build_holding = {
+				type = castle
+				holder = ROOT
+			}
+			clr_province_flag = castle_province
+		}
+		wealth = 100
+		clr_global_flag = rulership_castle
+		clr_character_flag = building_castle
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+# Castle finished
+character_event = {
+	id = WoL.12007
+	desc = EVTDESC_WoL_12007
+	picture = GFX_evt_magnificent_castle
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = building_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12007
+		FROMFROM = {
+			build_holding = {
+				type = castle
+				holder = ROOT
+			}
+			clr_province_flag = castle_province
+		}
+		clr_global_flag = rulership_castle
+		clr_character_flag = building_castle
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+# Castle finished after delay
+character_event = {
+	id = WoL.12008
+	desc = EVTDESC_WoL_12008
+	picture = GFX_evt_magnificent_castle
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = building_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12008
+		FROMFROMFROM = {
+			build_holding = {
+				type = castle
+				holder = ROOT
+			}
+			clr_province_flag = castle_province
+		}
+		clr_global_flag = rulership_castle
+		clr_character_flag = building_castle
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+# No free holding slots
+character_event = {
+	id = WoL.12009
+	desc = EVTDESC_WoL_12009
+	picture = GFX_evt_construction_site
+	border = GFX_event_normal_frame_economy
+	
+	ai = no
+	has_character_flag = building_castle
+	
+	trigger = {
+		any_demesne_province = { 
+			has_province_flag = castle_province
+			has_empty_holding = no
+		}	
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clr_character_flag = building_castle
+		random_demesne_province = { 
+			limit = { has_province_flag = castle_province }
+			clr_province_flag = castle_province
+		}
+		clr_global_flag = rulership_castle
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12009
+		wealth = 350
+	}
+}
+
+### Depressed
+character_event = {
+	id = WoL.12010
+	desc = EVTDESC_WoL_12010
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		NOT = { trait = depressed }
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12010
+		add_trait = depressed
+	}
+}
+
+### Stressed
+character_event = {
+	id = WoL.12011
+	desc = EVTDESC_WoL_12011
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		NOT = { trait = stressed }
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12011
+		add_trait = stressed
+	}
+}
+
+### The Murders
+
+# Peasant Dragged Before Court
+character_event = {
+	id = WoL.12015
+	desc = EVTDESC_WoL_12015
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		NOT = { has_character_flag = in_seclusion }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12015
+		custom_tooltip = { text = peasant_hanged }
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				set_character_flag = peasant_hanged_innocent
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_12015
+		custom_tooltip = { text = peasant_imprisoned }
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				set_character_flag = peasant_imprisoned_innocent
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_WoL_12015
+		custom_tooltip = { text = peasant_set_free }
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				set_character_flag = peasant_freed_guilty
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_WoL_12015
+		custom_tooltip = { text = peasant_tortured }
+		tooltip_info = impaler
+		trigger = { trait = impaler }
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = WoL.12018 days = 15 } }
+				50 = { character_event = { id = WoL.12019 days = 15 } }
+			}
+		}
+	}
+}
+
+# Another Murder (Peasant Hanged)
+character_event = {
+	id = WoL.12016
+	desc = EVTDESC_WoL_12016
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_economy
+
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	has_character_flag = peasant_hanged_innocent
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		clr_character_flag = peasant_hanged_innocent
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12016
+		if = {
+			limit = { has_nickname = no }
+			give_nickname = nick_the_rash
+		}
+		prestige = -20
+	}
+}
+
+# Another Murder (Peasant Set Free)
+character_event = {
+	id = WoL.12017
+	desc = EVTDESC_WoL_12017
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_economy
+
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	has_character_flag = peasant_freed_guilty
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		clr_character_flag = peasant_freed_guilty
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12017
+		prestige = -20
+	}
+}
+
+# Peasant admits under torture
+character_event = {
+	id = WoL.12018
+	desc = EVTDESC_WoL_12018
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_12018
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				set_character_flag = peasant_tortured_innocent
+			}
+		}
+	}
+}
+
+# Peasant does not admit under torture
+character_event = {
+	id = WoL.12019
+	desc = EVTDESC_WoL_12019
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_12019
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				set_character_flag = peasant_tortured_innocent
+			}
+		}
+	}
+}
+
+# Another Murder (Peasant died during torture)
+character_event = {
+	id = WoL.12020
+	desc = EVTDESC_WoL_12020
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_economy
+
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	has_character_flag = peasant_tortured_innocent
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		clr_character_flag = peasant_tortured_innocent
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12020
+		prestige = -20
+	}
+}
+
+# Another Murder (Peasant imprisoned)
+character_event = {
+	id = WoL.12021
+	desc = EVTDESC_WoL_12021
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_economy
+
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	has_character_flag = peasant_imprisoned_innocent
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		clr_character_flag = peasant_imprisoned_innocent
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12021
+		prestige = -20
+	}
+}
+
+# Another Murder (Peasant died in dungeon)
+character_event = {
+	id = WoL.12022
+	desc = EVTDESC_WoL_12022
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_economy
+
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	has_character_flag = peasant_imprisoned_innocent
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		clr_character_flag = peasant_imprisoned_innocent
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12022
+		prestige = -20
+	}
+}
+
+### Noble Feud (HIDDEN)
+character_event = {
+	id = WoL.12025
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	ai = yes
+	
+	trigger = {
+		liege = {
+			has_focus = focus_rulership
+			NOT = { trait = incapable }
+			NOT = { is_close_relative = ROOT }
+			NOT = { has_character_flag = noble_feuder }
+			is_adult = yes
+			spouse = { NOT = { character = ROOT } }
+			any_vassal = {
+				is_adult = yes
+				prisoner = no
+				is_ruler = yes
+				NOT = { trait = incapable }
+				NOT = { is_close_relative = PREV }
+				spouse = { NOT = { character = PREV } }
+				NOT = {
+					character = ROOT
+					opinion = { who = ROOT value = -30 }
+					reverse_opinion = { who = ROOT value = -30 }
+					has_character_flag = noble_feuder
+				}
+				ai = yes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	immediate = {
+		save_event_target_as = feuding_noble_1
+		set_character_flag = noble_feuder
+		liege = {
+			random_vassal = {
+				limit = {
+					is_adult = yes
+					prisoner = no
+					is_ruler = yes
+					NOT = { trait = incapable }
+					NOT = { is_close_relative = PREV }
+					spouse = { NOT = { character = PREV } }
+					NOT = {
+						character = ROOT
+						opinion = { who = ROOT value = -30 }
+						reverse_opinion = { who = ROOT value = -30 }
+					}
+					ai = yes
+				}
+				save_event_target_as = feuding_noble_2
+				set_character_flag = noble_feuder
+			}
+			character_event = { id = WoL.12026 }
+		}
+	}
+}
+
+# Noble Feud
+character_event = {
+	id = WoL.12026
+	desc = EVTDESC_WoL_12026
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+#	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_12026
+		event_target:feuding_noble_1 = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:feuding_noble_2 = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_12026
+		event_target:feuding_noble_2 = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:feuding_noble_1 = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_12026
+		prestige = 50
+		event_target:feuding_noble_1 = {
+			opinion = {
+				modifier = opinion_upset
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:feuding_noble_2 = {
+			opinion = {
+				modifier = opinion_upset
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+### Farm Fire
+character_event = {
+	id = WoL.12027
+	desc = EVTDESC_WoL_12027
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		any_vassal = {
+			is_adult = yes
+			prisoner = no
+			is_ruler = yes
+			NOT = { trait = incapable }
+			NOT = { is_close_relative = ROOT }
+			spouse = { NOT = { character = ROOT } }
+			ai = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	immediate = {
+		random_vassal = {
+			limit = {
+				is_adult = yes
+				prisoner = no
+				is_ruler = yes
+				NOT = { trait = incapable }
+				NOT = { is_close_relative = ROOT }
+				spouse = { NOT = { character = ROOT } }
+				ai = yes
+			}
+			save_event_target_as = farm_fire_noble
+		}
+	}
+
+	option = {
+		name = EVTOPTA_WoL_12027
+		event_target:farm_fire_noble = { 
+			wealth = -50
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_12027
+		capital_scope = {
+			add_province_modifier = {
+				name = peasant_unrest
+				duration = 365
+			}
+		}
+		event_target:farm_fire_noble = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_12027
+		wealth = -50
+		event_target:farm_fire_noble = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+### Witch
+character_event = {
+	id = WoL.12028
+	desc = EVTDESC_WoL_12028
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		any_demesne_province = {
+			always = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			save_event_target_as = witch_province
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12028
+		event_target:witch_province = {
+			add_province_modifier = {
+				name = peasants_protected
+				duration = 365
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+		piety = 30
+	}
+	option = {
+		name = EVTOPTB_WoL_12028
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = yes
+			age = 28
+			religion = ROOT
+			culture = ROOT
+			trait = ugly
+			trait = kind
+			trait = charitable
+			trait = humble
+			trait = honest
+			trait = shy
+			trait = trusting
+			trait = naive_appeaser
+		}
+		new_character = {
+			prisoner = yes
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_12028
+		event_target:witch_province = {
+			add_province_modifier = {
+				name = peasant_unrest
+				duration = 365
+			}
+		}
+		culture_techpoints = 50
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+### Drunkard
+character_event = {
+	id = WoL.12029
+	desc = EVTDESC_WoL_12029
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_rulership
+		any_vassal = {
+			is_adult = yes
+			prisoner = no
+			is_ruler = yes
+			NOT = { trait = incapable }
+			NOT = { is_close_relative = ROOT }
+			spouse = { NOT = { character = ROOT } }
+			trait = drunkard
+			ai = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			save_event_target_as = drunken_rampage
+		}
+		random_vassal = {
+			limit = {
+				is_adult = yes
+				prisoner = no
+				is_ruler = yes
+				NOT = { trait = incapable }
+				NOT = { is_close_relative = ROOT }
+				spouse = { NOT = { character = ROOT } }
+				trait = drunkard
+				ai = yes
+			}
+			save_event_target_as = noble_drunkard
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_12029
+		prestige = 30
+		event_target:noble_drunkard = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 2
+			}
+			wealth = -50
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_12029
+		prestige = -30
+		event_target:drunken_rampage = {
+			add_province_modifier = {
+				name = merchants_unhappy
+				duration = 365
+			}
+		}
+		event_target:noble_drunkard = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_12029
+		wealth = -50
+		event_target:noble_drunkard = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}
+
+### City Brigands (AI Mayor)
+character_event = {
+	id = WoL.12030
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	ai = yes
+	
+	trigger = {
+		is_republic = yes
+		liege = {
+			has_focus = focus_rulership
+			NOT = { trait = incapable }
+			NOT = { is_close_relative = ROOT }
+			is_adult = yes
+			spouse = { NOT = { character = ROOT } }
+			any_vassal = {
+				is_adult = yes
+				prisoner = no
+				is_ruler = yes
+				is_republic = no
+				NOT = { trait = incapable }
+				NOT = { is_close_relative = PREV }
+				spouse = { NOT = { character = PREV } }
+				NOT = { character = ROOT }
+				ai = yes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+	}
+	
+	immediate = {
+		save_event_target_as = brigands_mayor
+		primary_title = { save_event_target_as = mayor_city }
+		liege = { 
+			random_vassal = {
+				limit = {
+					is_adult = yes
+					prisoner = no
+					is_ruler = yes
+					is_republic = no
+					NOT = { trait = incapable }
+					NOT = { is_close_relative = PREV }
+					spouse = { NOT = { character = PREV } }
+					NOT = { character = ROOT }
+					ai = yes
+				}
+				save_event_target_as = brigands_noble
+			}
+			character_event = { id = WoL.12031 }
+		}
+	}
+}
+
+# City Brigands
+character_event = {
+	id = WoL.12031
+	desc = EVTDESC_WoL_12031
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	#hide_from = yes
+	
+	option = {
+		name = EVTOPTA_WoL_12031
+		event_target:brigands_noble = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = { wealth = 50 }
+		}
+		event_target:brigands_mayor = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = { wealth = -50 }
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_12031
+		event_target:brigands_noble = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:brigands_mayor = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_12031
+		wealth = -50
+		event_target:brigands_noble = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+			hidden_tooltip = { wealth = 50 }
+		}
+		event_target:brigands_mayor = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.12500 days = 1 } }
+	}
+}

@@ -1,0 +1,1284 @@
+################################################
+#
+# Events for Bastards
+#
+# ID 76000 - 76999 is reserved
+#
+#
+#################################################
+#
+# Written by Sara Wendel-Örtqvist
+
+#Irresistable young wench
+character_event = {
+	id = 76000
+	desc = "EVTDESC76000"
+	picture = GFX_evt_lovers
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	max_age = 25
+	only_men = yes
+	only_rulers = yes
+	capable_only = yes
+	is_married = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOR = {
+			trait = chaste
+			trait = celibate
+			trait = homosexual
+			trait = eunuch
+			has_lover = yes
+		}
+		fertility = 0.6
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			trait = lustful
+		}
+		modifier = {
+			factor = 2
+			trait = gregarious
+		}
+		
+		modifier = {
+			factor = 0.5
+			trait = shy
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA76000"
+		piety = -10
+		if = {
+			limit = {
+				NOT = {
+					trait = lustful
+				}
+			}
+			random = {
+				chance = 50
+				
+				add_trait = lustful
+				hidden_tooltip = {
+					character_event = {
+						id = 38272 #Notify Lustful
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76000"
+		if = {
+			limit = {
+				religion_group = muslim
+			}
+			piety = 5
+		}
+		if = {
+			limit = {
+				NOT = {
+					religion_group = muslim
+				}
+			}
+			add_trait = chaste
+		}
+	}
+}
+
+#Unwed daughter
+character_event = {
+	id = 76005
+	desc = EVTDESC76005
+	picture = GFX_evt_pregnancy
+	border = GFX_event_normal_frame_intrigue
+	
+	only_playable = yes
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_child = {
+			is_councillor = no
+			is_female = yes
+			is_alive = yes
+			age = 16
+			NOT = { age = 45 }
+			is_married = no
+			fertility = 0.6
+			NOT = {
+				trait = chaste
+			}
+			NOT = {
+				trait = celibate
+			}
+			NOT = {
+				trait = homosexual
+			}
+		}
+		any_courtier = {
+			has_job_title = job_spymaster
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76005"
+		character_event = {
+			id = 76006
+			tooltip = "EVTTOOLTIP76006"
+		}
+	}
+	option = {
+		name = "EVTOPTB76005"
+		random_child = {
+			limit = {
+				is_female = yes
+				age = 16
+				NOT = { age = 45 }
+				is_married = no
+				fertility = 0.4
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					trait = celibate
+				}
+				NOT = {
+					trait = homosexual
+				}
+			}
+			create_character = {
+				age = 0
+				trait = bastard
+			}
+			new_character = {
+				set_mother = PREV
+			}
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 5
+			}
+		}
+		prestige = -5
+		add_trait = kind
+	}
+	option = {
+		name = "EVTOPTC76005"
+		random_child = {
+			limit = {
+				is_female = yes
+				age = 16
+				NOT = { age = 45 }
+				is_married = no
+				fertility = 0.4
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					trait = celibate
+				}
+				NOT = {
+					trait = homosexual
+				}
+			}
+			opinion = {
+				modifier = opinion_betrayed
+				who = ROOT
+				years = 5
+			}
+			if = {
+				limit = {
+					NOT = {
+						religion_group = muslim
+					}
+				}
+				add_trait = chaste
+			}
+			health = -1
+		}
+		random = {
+			chance = 25
+			
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event = {
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+	}
+}
+ 
+#Spymaster advice you
+character_event = {
+	id = 76006
+	desc = "EVTDESC76006"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76006"
+		scaled_wealth = -0.33
+		add_trait = deceitful
+		random = {
+			chance = 10
+			
+			add_trait = kinslayer
+			hidden_tooltip = {
+				character_event = {
+					id = 38287 #Notify Kinslayer
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76006"
+		scaled_wealth = -0.2
+		piety = -10
+		random = {
+			chance = 33
+			
+			add_trait = arbitrary
+			hidden_tooltip = {
+				character_event = {
+					id = 38266 #Notify Arbitrary
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC76006"
+		add_trait = trusting
+		job_spymaster = {
+			character_event = {
+				id = 76007
+				tooltip = "EVTTOOLTIP76007"
+			}
+		}
+	}
+}
+
+#Spymaster is trusted to deal with liege's daughter's bastard child
+character_event = {
+	id = 76007
+	desc = "EVTDESC76007"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76007"
+		prestige = 50
+		add_trait = proud
+		random = {
+			chance = 15
+			
+			FROM = {
+				character_event = {
+					id = 76008
+					tooltip = "EVTTOOLTIP76008"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76007"
+		change_intrigue = 1
+		FROM = {
+			random_child = {
+				limit = {
+					is_councillor = no
+					is_female = yes
+					age = 16
+					NOT = { age = 45 }
+					is_abroad = no
+					is_married = no
+					fertility = 0.6
+					NOT = {
+						trait = chaste
+					}
+					NOT = {
+						trait = celibate
+					}
+					NOT = {
+						trait = homosexual
+					}
+				}
+				create_character = {
+					age = 0
+					trait = bastard
+				}
+				new_character = {
+					set_mother = PREV
+				}
+				opinion = {
+					modifier = opinion_saved_me_and_child
+					who = ROOT
+					years = 5
+				}
+			}
+			character_event = {
+				id = 76009
+				tooltip = "EVTTOOLTIP76009"
+			}
+		}
+	}
+}
+
+#Spymaster let child and daughter live
+character_event = {
+	id = 76008
+	desc = "EVTDESC76008"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76008"
+		add_trait = deceitful
+		FROM = {
+			imprison = ROOT
+		}
+	}
+	option = {
+		name = "EVTOPTB76008"
+		add_trait = honest
+		prestige = -20
+	}
+	option = {
+		name = "EVTOPTC76008"
+		random_child = {
+			limit = {
+				is_councillor = no
+				is_female = yes
+				age = 16
+				NOT = { age = 45 }
+				is_abroad = no
+				is_married = no
+				fertility = 0.6
+				NOT = {
+					trait = chaste
+				}
+				NOT = {
+					trait = celibate
+				}
+				NOT = {
+					trait = homosexual
+				}
+			}
+			create_character = {
+				age = 0
+				trait = bastard
+			}
+			new_character = {
+				set_mother = PREV
+			}
+		}
+	}
+}
+
+#Spymaster let daugther and bastard child live
+character_event = {
+	id = 76009
+	desc = "EVTDESC76009"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76009"
+		prestige = -5
+	}
+}
+
+#Get rid of a bastard?
+character_event = {
+	id = 76010
+	desc = "EVTDESC76010"
+	picture = GFX_evt_beheading
+	border = GFX_event_normal_frame_intrigue
+	
+	only_rulers = yes
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			NOT = {
+				trait = bastard
+			}
+		}
+		any_child = {
+			trait = bastard
+			age = 0
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76010"
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				num_of_children = 5
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { num_of_children = 5 }
+			}
+		}
+		random_child = {
+			limit = {
+				trait = bastard
+				age = 0
+				NOT = {
+					age = 16
+				}
+			}
+			set_character_flag = ruler_wants_me_dead
+			random = {
+				chance = 15
+				
+				clr_character_flag = ruler_wants_me_dead
+				death = {
+					death_reason = death_murder_fall
+					killer = ROOT
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76010"
+		add_trait = honest
+	}
+}
+
+#Recognise bastard son as a legitimate heir?
+character_event = {
+	id = 76015
+	desc = "EVTDESC76015"
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	war = no
+	
+	trigger = {
+		in_command = no
+		any_child = {
+			trait = bastard
+			is_female = no
+			is_ruler = no
+			age = 16
+			is_abroad = no
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76015"
+		random_child = {
+			limit = {
+				trait = bastard
+				is_female = no
+				is_ruler = no
+				age = 16
+				is_abroad = no
+			}
+			opinion = {
+				modifier = denounced_child
+				who = ROOT
+				years = 5
+			}
+			random = {
+				chance = 33
+				
+				add_trait = wroth
+				hidden_tooltip = {
+					character_event = {
+						id = 38254 #Notify Wroth
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76015"
+		random_child = {
+			limit = {
+				trait = bastard
+				is_female = no
+				is_ruler = no
+				age = 16
+				is_abroad = no
+			}
+			random = {
+				chance = 33
+				
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC76015"
+		random_child = {
+			limit = {
+				trait = bastard
+				is_female = no
+				is_ruler = no
+				age = 16
+				is_abroad = no
+			}
+			remove_trait = bastard
+			add_trait = legit_bastard
+		}
+	}
+}
+
+#Bastard son ask to be included in the succession
+character_event = {
+	id = 76020
+	desc = "EVTDESC76020"
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = bastard
+		NOR = {
+			trait = lustful
+			trait = gluttonous
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = proud
+			trait = content
+		}
+		father = {
+			war = no
+			in_command = no
+			is_alive = yes
+			is_ruler = yes
+			is_liege_of = ROOT
+			opinion = { who = ROOT value = 30 }
+			at_location = ROOT
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76020"
+		father = {
+			set_character_flag = legitimise_bastard_son
+			character_event = {
+				id = 76021
+				tooltip = "EVTTOOLTIP76021"				
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76020"
+		piety = 10
+		add_trait = content
+	}
+}
+
+#Father is asked to legitimise bastard
+character_event = {
+	id = 76021
+	desc = "EVTDESC76021"
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA76021"
+		FROM = {
+			hidden_tooltip = {
+				set_character_flag = father_didnt_legitimise
+				character_event = {
+					id = 76022
+				}
+			}
+			opinion = {
+				modifier = denounced_child
+				who = ROOT
+				years = 5
+			}
+			random = {
+				chance = 33
+				
+				add_trait = wroth
+				hidden_tooltip = {
+					character_event = {
+						days = 2
+						id = 38254 #Notify Wroth
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76021"
+		FROM = {
+			hidden_tooltip = {
+				set_character_flag = father_legitimise
+				character_event = {
+					id = 76022
+				}
+			}
+			remove_trait = bastard
+			add_trait = legit_bastard
+		}
+	}
+}
+
+#Father answers son
+character_event = {
+	id = 76022
+	desc = "EVTDESC76022"
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76022"
+		trigger = {
+			has_character_flag = father_didnt_legitimise
+		}
+		clr_character_flag =  father_didnt_legitimise
+		opinion = {
+			modifier = denounced_child
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB76022"
+		trigger = {
+			has_character_flag =  father_legitimise
+		}
+		clr_character_flag =  father_legitimise
+		opinion = {
+			modifier = opinion_glad
+			who = FROM
+			years = 5
+		}
+	}
+}
+
+#I have a bastard child
+character_event = {
+	id = 76025
+	desc = "EVTDESC76025"
+	picture = GFX_evt_birth
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	only_women = yes
+	is_triggered_only = yes
+	is_married = no
+	
+	trigger = {
+		NOT = {
+			has_character_flag = raising_bastard
+		}
+		father = {
+			is_alive = yes
+			is_ruler = yes
+			is_liege_of = ROOT
+		}
+		any_child = {
+			age = 5
+			NOT = {
+				age = 16
+			}
+			trait = bastard
+			father = {
+				is_abroad = yes
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76025"
+		set_character_flag = raising_bastard
+		father = {
+			character_event = {
+				id = 76026
+				tooltip = "EVTTOOLTIP76026"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76025"
+		set_character_flag = raising_bastard
+		add_trait = stressed
+	}
+}
+
+#Daughter asks for help with bastard child
+character_event = {
+	id = 76026
+	desc = "EVTDESC76026"
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76026"
+		prestige = -20
+		FROM = {
+			prestige = -10
+			opinion = {
+				modifier = opinion_crestfallen
+				who = ROOT
+				years = 5
+			}
+		}
+		if = {
+			limit = {
+				trait = kind
+			}
+			remove_trait = kind
+			prestige = -20
+		}
+	}
+	option = {
+		name = "EVTOPTB76026"
+		prestige = -20
+		FROM = {
+			random_child = {
+				limit = {
+					trait = bastard
+				}
+				prestige = -10
+				opinion = {
+					modifier = opinion_crestfallen
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC76026"
+		prestige = -20
+		FROM = {
+			random_child = {
+				limit = {
+					trait = bastard
+				}
+				father = {
+					opinion = {
+						modifier = opinion_angry
+						who = ROOT
+						years = 5
+					}
+					if = {
+						limit = {
+							is_ruler = yes
+						}
+						character_event = {
+							id = 76027
+							tooltip = "EVTTOOLTIP76027"
+						}
+					}
+					if = {
+						limit = {
+							is_ruler = no
+							father = {
+								is_ruler = yes
+							}
+						}
+						character_event = {
+							id = 76028
+							tooltip = "EVTTOOLTIP76028"
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Father to bastard is angry
+character_event = {
+	id = 76027
+	desc = "EVTDESC76027"
+	picture = GFX_evt_birth
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76027"
+		piety = 10
+		prestige = -25
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB76027"
+		piety = -5
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+	}
+}
+
+#Grandfather is angry
+character_event = {
+	id = 76028
+	desc = "EVTDESC76028"
+	picture = GFX_evt_birth
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76028"
+		piety = 10
+		prestige = -25
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB76028"
+		piety = -5
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 5
+		}
+	}
+}
+
+#A dream is born and a sword sharpened
+character_event = {
+	id = 76030
+	desc = "EVTDESC76030"
+	picture = GFX_evt_child_sword
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	min_age = 16
+	
+	trigger = {
+		trait = bastard
+		NOT = {
+			trait = ambitious
+		}
+		OR = {
+			diplomacy = 6
+			learning = 6
+			intrigue = 6
+			stewardship = 6
+			martial = 6
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76030"
+		add_trait = ambitious
+	}
+}
+
+#I am teased about my inferior status
+character_event = {
+	id = 76035
+	desc = "EVTDESC76035"
+	picture = GFX_evt_child_bully
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 6
+	max_age = 16
+	lacks_dlc = "Conclave"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = bastard
+		father = {
+			is_ruler = yes
+			is_liege_of = ROOT
+			any_child = {
+				age = 6
+				NOT = {
+					age = 16
+				}
+				NOT = {
+					trait = bastard
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76035"
+		any_courtier = {
+			limit = {
+				age = 6
+				NOT = {
+					age = 16
+				}
+			}
+			opinion = {
+				modifier = opinion_despised_fighting_bastard
+				who = ROOT
+				years = 2
+			}
+		}
+		random = {
+			chance = 30
+			
+			add_trait = wroth
+			hidden_tooltip = {
+				character_event = {
+					id = 38254 #Notify Wroth
+				}
+			}
+		}
+		random = {
+			chance = 10
+			
+			change_martial = 1
+		}
+	}
+	option = {
+		name = "EVTOPTB76035"
+		random_list = {
+			50 = {
+				add_trait = craven
+				hidden_tooltip = {
+					character_event = {
+						id = 38257 #Notify Craven
+					}
+				}
+			}
+			40 = {
+				change_learning = 1
+			}
+			10 = {
+				any_courtier = {
+					limit = {
+						age = 6
+						NOT = {
+							age = 16
+						}
+					}
+					opinion = {
+						modifier = opinion_despised_hiding_bastard
+						who = ROOT
+						years = 2
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC76035"
+		random_list = {
+			50 = {
+				change_diplomacy = 1
+			}
+			30 = {
+				add_trait = shy
+				hidden_tooltip = {
+					character_event = {
+						id = 38263 #Notify Shy
+					}
+				}
+			}
+			20 = {
+				any_courtier = {
+					limit = {
+						age = 6
+						NOT = {
+							age = 16
+						}
+					}
+					opinion = {
+						modifier = despised_bastard
+						who = ROOT
+						years = 2
+					}
+				}	
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD76035"
+		random_list = {
+			50 = {
+				change_intrigue = 1
+			}
+			30 = {
+				any_courtier = {
+					limit = {
+						age = 6
+						NOT = {
+							age = 16
+						}
+					}
+					opinion = {
+						modifier = despised_bastard
+						who = ROOT
+						years = 2
+					}
+				}
+			}
+			20 = {
+				add_trait = deceitful
+				hidden_tooltip = {
+					character_event = {
+						id = 38255 #Notify Deceitful
+					}
+				}
+			}
+		}
+	}
+}
+
+# I'm a bastard, what does that mean?
+character_event = {
+	id = 76040
+	desc = "EVTDESC76040"
+	picture = GFX_evt_guardian
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 11
+	lacks_dlc = "Conclave"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = bastard
+		has_guardian = yes
+		NOT = {
+			has_character_flag = asked_about_bastard
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA76040"
+		set_character_flag = asked_about_bastard
+		guardian = {
+			character_event = {
+				id = 76041
+				tooltip = "EVTTOOLTIP76041"
+			}
+		}
+	}
+}
+
+#Guardian is asked what being bastard means
+character_event = {
+	id = 76041
+	desc = "EVTDESC76041"
+	picture = GFX_evt_guardian
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA76041"
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+		}
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = chaste
+					hidden_tooltip = {
+						character_event = {
+							id = 38274 #Notify Chaste
+						}
+						ROOT = {
+							character_event = {
+								id = 38174 #Notify child is Chaste
+							}
+						}
+					}
+				}
+				20 = {
+					add_trait = zealous
+					hidden_tooltip = {
+						character_event = {
+							id = 38269 #Notify Zealous
+						}
+						ROOT = {
+							character_event = {
+								id = 38169 #Notify child is Zealous
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB76041"
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = humble
+					hidden_tooltip = {
+						character_event = {
+							id = 38260 #Notify Humble
+						}
+						ROOT = {
+							character_event = {
+								id = 38160 #Notify child is Humble
+							}
+						}
+					}
+				}
+				20 = {
+					add_trait = shy
+					hidden_tooltip = {
+						character_event = {
+							id = 38263 #Notify Shy
+						}
+						ROOT = {
+							character_event = {
+								id = 38163 #Notify child is Shy
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC76041"
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = ambitious
+					hidden_tooltip = {
+						character_event = {
+							id = 38278 #Notify Ambitious
+						}
+						ROOT = {
+							character_event = {
+								id = 38178 #Notify child is Ambitious
+							}
+						}
+					}
+				}
+				20 = {
+					add_trait = proud
+					hidden_tooltip = {
+						character_event = {
+							id = 38261 #Notify Proud
+						}
+						ROOT = {
+							character_event = {
+								id = 38161 #Notify child is Proud
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD76041"
+		trigger = {
+			religion_group = muslim
+		}
+		FROM = {
+			random_list = {
+				80 = {
+				}
+				20 = {
+					add_trait = zealous
+					hidden_tooltip = {
+						character_event = {
+							id = 38269 #Notify Zealous
+						}
+						ROOT = {
+							character_event = {
+								id = 38169 #Notify child is Zealous
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

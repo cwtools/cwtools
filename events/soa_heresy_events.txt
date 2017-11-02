@@ -1,0 +1,1512 @@
+###########################################
+#
+# Heresy Events - Sons of Abraham
+#
+# ID SoA 4000-4999 is reserved
+#
+###########################################
+# Written by Henrik Fåhraeus
+###########################################
+
+namespace = SoA
+
+###################################################
+# Heresy Appears in Province
+###################################################
+
+# Heresy Appears in Province
+province_event = {
+	id = SoA.4000
+	desc = EVTDESC39000
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		is_heretic = no
+		
+		has_heresies = yes
+		
+		# Heretic top lieges must spread the faith themselves
+		owner = {
+			top_liege = {
+				NOT = { is_heresy_of = ROOT }
+			}
+		}
+		
+		num_of_settlements = 1
+		any_province_holding = {
+			NOT = { holding_type = nomad }
+		}
+		
+		NOT = { religion_authority = 0.9 }
+	}
+	
+	mean_time_to_happen = {
+		months = 9600 # 800 years
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.7
+		}
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.9
+		}
+		modifier = {
+			factor = 3.0
+			OR = {
+				province_id = 333 # Rome
+				province_id = 497 # Thrace
+				province_id = 719 # Mecca
+			}
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.5 }
+		}
+		
+		modifier = {
+			factor = 0.5
+			any_neighbor_province = {
+				is_land = yes
+				is_heresy_of = ROOT
+			}
+		}
+		modifier = {
+			factor = 0.25
+			any_neighbor_province = {
+				is_land = yes
+				is_heresy_of = ROOT
+				has_province_modifier = heretic_stronghold
+			}
+		}
+	}
+	
+	immediate = {
+	
+		# Prefer a neighboring heresy
+		random_neighbor_province = {
+			limit = {
+				is_land = yes
+				is_heresy_of = ROOT
+			}
+			ROOT = {
+				religion = PREV
+			}
+		}
+	
+		# Prefer an existing heresy in the realm
+		if = {
+			limit = {
+				is_heretic = no
+			}
+			owner = {
+				top_liege = {
+					random_realm_province = {
+						limit = {
+							is_land = yes
+							is_heresy_of = ROOT
+						}
+						ROOT = {
+							religion = PREV
+						}
+					}
+				}
+			}
+		}
+	
+		# ...otherwise, just pick a heresy
+		if = {
+			limit = {
+				is_heretic = no
+			}
+			become_heretic = yes
+		}
+		
+		# Two years of much higher revolt risk
+		add_province_modifier = {
+			name = religious_unrest
+			duration = 730
+		}
+		
+		# One heretic province in the realm is the epicentre of the heresy
+		if = {
+			limit = {
+				owner = {
+					top_liege = {
+						NOT = {
+							any_realm_province = {
+								religion = ROOT
+								has_province_modifier = heretic_stronghold
+							}
+						}
+					}
+				}
+			}
+			add_province_modifier = {
+				name = heretic_stronghold # Ten years of even higher revolt risk
+				duration = 3650
+			}
+		}
+		
+		# Notify the lieges
+		owner = {
+			any_liege = {
+				character_event = { id = 39400 }
+			}
+		}
+		owner = {
+			if = {
+				limit = { ai = no }
+				chronicle = {
+					entry = CHRONICLE_HERESY_SPREAD
+					picture = GFX_evt_heretic
+				}
+			}
+		}
+		owner = {
+			any_liege = {
+				if = {
+					limit = { ai = no }
+					chronicle = {
+						entry = CHRONICLE_HERESY_SPREAD
+						picture = GFX_evt_heretic
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA39000 # The owner is of the parent religion
+		trigger = { owner = { is_parent_religion = ROOT } }
+		
+		owner = { piety = -10 }
+	}
+	
+	option = {
+		name = EVTOPTB39000 # The owner is of the same heresy
+		trigger = { owner = { religion = ROOT } }
+	}
+	
+	option = {
+		name = EVTOPTC_SOA_4000 # The owner is of some other religion
+		trigger = {
+			owner = {
+				NOT = { religion = ROOT }
+				NOT = { is_parent_religion = ROOT }
+			}
+		}
+	}
+}
+
+###################################################
+# Character picks up province religion
+###################################################
+
+# SoA.4020 - Character picks up province religion, if it's in the same religion group but not the top liege's religion
+#	- Notify liege: SoA 4021
+
+# Character converts to local religion
+character_event = {
+	id = SoA.4020
+	desc = EVTDESC_SOA_4020
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	max_age = 50
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { religion_group = pagan_group }
+
+		is_heretic = no # Heretics, already people of strong conviction, never change religion spontaneously
+
+		is_theocracy = no	
+		
+		can_change_religion = yes
+
+		NOT = { religion_authority = 0.9 }
+		
+		
+		NOR = {
+			is_inaccessible_trigger = yes
+			trait = zealous
+		}
+			
+		
+		location = {
+			NOT = { religion_group = pagan_group }
+			religion_group = ROOT
+			NOT = { religion = ROOT }
+			OR = {
+				is_heretic = yes
+				religion_authority = ROOT # The local religion has at least the same authority as my religion
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		modifier = {
+			factor = 0.25
+			trait = cynical
+			independent = no
+			location = {
+				ROOT = {
+					top_liege = {
+						religion = PREVPREV
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.7
+		}
+		modifier = {
+			factor = 1.5
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.9
+		}
+		modifier = {
+			factor = 4.0
+			NOT = { is_heresy_of = ROOT }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.5 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4020
+		ai_chance = { factor = 100 }
+		
+		hidden_tooltip = {
+			if = {
+				limit = {
+					independent = no
+					liege = {
+						religion = ROOT
+					}
+				}
+				liege = {
+					character_event = { id = SoA.4021 days = 3 }
+				}
+			}
+		}
+		
+		location = {
+			reverse_religion = ROOT
+		}
+		hidden_tooltip = {
+			if = {
+				limit = { religion_group = indian_group }
+				set_character_flag = india_converted
+				character_event = { id = RoI.30120 } # Set religious branch randomly
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SOA_4020
+		ai_chance = { factor = 0 }
+	}
+}
+
+# SoA.4021 - Liege response
+character_event = {
+	id = SoA.4021
+	desc = EVTDESC_SOA_4021
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Demand reconversion
+		name = EVTOPTA_SOA_4021
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10.0
+				trait = zealous
+			}
+		}
+		FROM = {
+			letter_event = { id = SoA.4022 days = 7 tooltip = EVTTOOLTIP_SOA_4022 }
+		}
+	}
+	option = { # Let it slide
+		name = EVTOPTB_SOA_4021
+		ai_chance = { factor = 100 }
+	}
+	option = { # Debate for reconversion
+		name = EVTOPTC_SOA_4021
+		tooltip_info = learning
+		trigger = {
+			learning = 7
+		}
+		ai_chance = {
+			factor = 1000
+			modifier = {
+				factor = 5.0
+				trait = zealous
+			}
+		}
+		FROM = {
+			letter_event = { id = SoA.4025 days = 7 tooltip = EVTTOOLTIP_SOA_4025 }
+		}
+	}
+}
+
+# SoA.4022 - Reconversion demanded
+letter_event = {
+	id = SoA.4022
+	desc = EVTDESC_SOA_4022
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		opinion = {
+			who = FROM
+			modifier = opinion_demanded_conversion
+		}
+	}
+	
+	option = { # Accept
+		name = ACCEPT
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				NOT = {
+					opinion = {
+						who = FROM
+						value = -50
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					opinion = {
+						who = FROM
+						value = 0
+					}
+				}
+			}
+			modifier = {
+				factor = 4.0
+				opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+		}
+		
+		religion = FROM
+		hidden_tooltip = {
+			if = {
+				limit = { religion_group = indian_group }
+				set_character_flag = india_converted
+				character_event = { id = RoI.30121 } # Set religious branch to liege's branch
+			}
+		}
+
+		
+		
+		FROM = {
+			letter_event = { id = SoA.4023 tooltip = EVTTOOLTIP_SOA_4023 }
+		}
+	}
+	option = { # Refuse
+		name = DECLINE
+		ai_chance = {
+			factor = 50
+		}
+		
+		FROM = {
+			letter_event = { id = SoA.4024 tooltip = EVTTOOLTIP_SOA_4024 }
+		}
+	}
+}
+
+# SoA.4023 - Liege notified, conversion accepted
+letter_event = {
+	id = SoA.4023
+	desc = EVTDESC_SOA_4023
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# SoA.4024 - Liege notified, conversion refused
+letter_event = {
+	id = SoA.4024
+	desc = EVTDESC_SOA_4024
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTC_SOA_4024
+	}
+}
+
+# SoA.4025 - Reconversion debate
+letter_event = {
+	id = SoA.4025
+	desc = EVTDESC_SOA_4025
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Accept
+		name = ACCEPT
+		ai_chance = {
+			factor = 100
+		}
+		
+		religion = FROM
+		
+		FROM = {
+			letter_event = { id = SoA.4026 tooltip = EVTTOOLTIP_SOA_4023 }
+		}
+	}
+	option = { # Refuse
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+		
+		FROM = {
+			letter_event = { id = SoA.4024 tooltip = EVTTOOLTIP_SOA_4024 }
+		}
+	}
+}
+
+# SoA.4026 - Acceptance notification
+letter_event = {
+	id = SoA.4026
+	desc = EVTDESC_SOA_4026
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+######################################################################################################
+# Courtier with minority religion attempts to convert another character at court
+######################################################################################################
+
+# SoA.4030 - Courtier with minority religion attempts to convert another character at court
+character_event = {
+	id = SoA.4030
+	desc = OK
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_ruler = no
+		
+		liege = {
+			NOT = { religion = ROOT }
+			religion_group = ROOT
+			NOT = { religion_authority = 0.9 }
+		}
+		
+		any_courtier = {
+			age = 16
+			prisoner = no
+			NOT = { trait = incapable }
+			OR = {
+				same_liege = ROOT
+				is_liege_of = ROOT
+			}
+			ROOT = {
+				liege = {
+					religion = PREVPREV
+				}
+			}
+			mercenary = no
+			holy_order = no
+		}
+		
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 10.0
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.25
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 3.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 0.75
+			liege = {
+				NOT = { religion_authority = 0.2 }
+			}
+		}
+		modifier = {
+			factor = 0.75
+			liege = {
+				NOT = { religion_authority = 0.4 }
+			}
+		}
+		modifier = {
+			factor = 2.0
+			liege = {
+				religion_authority = 0.6
+			}
+		}
+		modifier = {
+			factor = 2.0
+			liege = {
+				religion_authority = 0.8
+			}
+		}
+		modifier = {
+			factor = 6.0
+			is_heretic = no
+		}
+	}
+	
+	option = {
+		name = OK
+		random_courtier = {
+			limit = {
+				age = 16
+				prisoner = no
+				NOT = { trait = incapable }
+				mercenary = no
+				holy_order = no
+				OR = {
+					same_liege = ROOT
+					is_liege_of = ROOT
+				}
+				ROOT = {
+					liege = {
+						religion = PREVPREV
+					}
+				}
+			}
+			character_event = { id = SoA.4031 }
+		}
+	}
+}
+
+# SoA.4031 - Character is approached about conversion
+character_event = {
+	id = SoA.4031
+	desc = EVTDESC_SOA_4031
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Accept
+		name = EVTOPTA_SOA_4031
+		ai_chance = {
+			factor = 100 
+			modifier = {
+				factor = 0.1
+				NOT = {
+					opinion = {
+						who = FROM
+						value = 0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+			}
+			modifier = {
+				factor = 2.0
+				opinion = {
+					who = FROM
+					value = 25
+				}
+			}
+			modifier = {
+				factor = 2.0
+				opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+			modifier = {
+				factor = 2.0
+				opinion = {
+					who = FROM
+					value = 75
+				}
+			}
+		}
+		
+		religion = FROM
+		hidden_tooltip = { 
+			if = {
+				limit = { religion_group = indian_group }
+				set_character_flag = india_converted
+				character_event = { id = RoI.30122 }
+			}
+		}
+	}
+	
+	option = { # Refuse
+		name = EVTOPTB_SOA_4031
+		trigger = {
+			OR = {
+				NOT = { learning = 7 }
+				NOT = { is_liege_of = FROM }
+			}
+		}
+		ai_chance = {
+			factor = 100 
+		}
+	}
+	
+	option = { # Debate for reconversion
+		name = EVTOPTC_SOA_4031
+		tooltip_info = learning
+		trigger = {
+			learning = 7
+			is_liege_of = FROM
+		}
+		ai_chance = {
+			factor = 100
+		}
+		FROM = {
+			letter_event = { id = SoA.4025 days = 7 tooltip = EVTTOOLTIP_SOA_4025 }
+		}
+	}
+	
+	option = { # Imprison (if liege)
+		name = EVTOPTD_SOA_4031
+		trigger = {
+			is_liege_of = FROM
+		}
+		ai_chance = {
+			factor = 100 
+			modifier = {
+				factor = 0
+				opinion = {
+					who = FROM
+					value = 0
+				}
+			}
+			modifier = {
+				factor = 3.0
+				NOT = {
+					opinion = {
+						who = FROM
+						value = -25
+					}
+				}
+			}
+		}
+		
+		reverse_imprison = FROM
+	}
+	
+	option = { # Refuse and blab to liege (if not liege)
+		name = EVTOPTE_SOA_4031
+		trigger = {
+			NOT = { is_liege_of = FROM }
+			intrigue = 7
+		}
+		
+		ai_chance = {
+			factor = 100 
+			modifier = {
+				factor = 0
+				opinion = {
+					who = FROM
+					value = 0
+				}
+			}
+			modifier = {
+				factor = 3.0
+				NOT = {
+					opinion = {
+						who = FROM
+						value = -25
+					}
+				}
+			}
+		}
+		
+		FROM = {
+			liege ={ 
+				letter_event = { id = SoA.4032 days = 7 }
+			}
+		}
+	}
+}
+
+# SoA.4032 - Liege learns of conversion attempt
+letter_event = {
+	id = SoA.4032
+	desc = EVTDESC_SOA_4032
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Demand reconversion
+		name = EVTOPTA_SOA_4021
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10.0
+				trait = zealous
+			}
+		}
+		FROMFROM = {
+			letter_event = { id = SoA.4022 days = 7 tooltip = EVTTOOLTIP_SOA_4022 }
+		}
+	}
+	
+	option = { # Let it slide
+		name = EVTOPTB_SOA_4021
+		ai_chance = { factor = 100 }
+	}
+	
+	option = { # Debate for reconversion
+		name = EVTOPTC_SOA_4032
+		tooltip_info = learning
+		trigger = {
+			learning = 7
+		}
+		ai_chance = {
+			factor = 1000
+			modifier = {
+				factor = 5.0
+				trait = zealous
+			}
+		}
+		FROMFROM = {
+			letter_event = { id = SoA.4025 days = 7 tooltip = EVTTOOLTIP_SOA_4025 }
+		}
+	}
+}
+
+######################################################################################################
+# Heretic province worries parent religion Head
+######################################################################################################
+
+# SoA.4100 - Heretic province worries parent religion Head (hidden province event)
+#	Immediate: SoA 4101 (head)
+
+province_event = {
+	id = SoA.4100
+	hide_window = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		is_heretic = yes
+		
+		owner = {
+			is_nomadic = no
+			top_liege = {
+				is_parent_religion = ROOT
+			}
+		}
+		
+		parent_religion_head = {
+			character = yes # There is a head of the parent religion
+			wealth = 100
+		}
+		
+		NOT = { has_province_modifier = theological_dialogue }
+		NOT = { has_province_modifier = active_inquisition }
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		modifier = {
+			factor = 3.0 # Do not spam human players with this
+			parent_religion_head = {
+				ai = no
+			}
+		}
+	}
+	
+	immediate = {
+		parent_religion_head = {
+			character_event = { id = SoA.4101 }
+		}
+	}
+}
+
+# SoA.4101 - Heretic province worries parent religion Head
+#	- A: Send in the Inquisition! Costs 100 gold. SoA 4110.
+#	- B: Dispatch Legate to Ruler: (top liege) SoA 4120.
+#	- C: Open Dialogue. (High learning) Costs 50 gold. SoA 4130.
+#	- D: Do nothing
+
+character_event = {
+	id = SoA.4101
+	desc = EVTDESC_SOA_4101
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Send in the Inquisition!
+		name = EVTOPTA_SOA_4101
+		ai_chance = {
+			factor = 200
+			modifier = {
+				factor = 10
+				trait = cruel
+			}
+			modifier = {
+				factor = 3
+				trait = zealous
+			}
+		}
+		
+		wealth = -100
+		
+		FROM = {
+			province_event = { id = SoA.4110 tooltip = EVTTOOLTIP_SOA_4110 }
+		}
+	}
+	
+	option = { # Dispatch Legate to Ruler
+		name = EVTOPTB_SOA_4101
+		trigger = {
+			NOT = {
+				FROM = {
+					owner = {
+						top_liege = { character = ROOT }
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					character_event = { id = SoA.4120 days = 2 tooltip = EVTTOOLTIP_SOA_4120 }
+				}
+			}
+		}
+	}
+	
+	option = { # Open Dialogue
+		name = EVTOPTC_SOA_4101
+		tooltip_info = learning
+		trigger = {
+			learning = 7
+		}
+		
+		ai_chance = {
+			factor = 1000
+		}
+		
+		wealth = -50
+		
+		FROM = {
+			province_event = { id = SoA.4130 tooltip = EVTTOOLTIP_SOA_4130 }
+		}
+	}
+	
+	option = { # Do nothing
+		name = EVTOPTD_SOA_4101
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+# SoA.4110 - Inquisition arrives in province.
+province_event = {
+	id = SoA.4110
+	desc = EVTDESC_SOA_4110
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_province_modifier = {
+			name = active_inquisition
+			days = 730
+		}
+		random_list = {
+			50 = {
+				province_event = {
+					id = SoA.4111 days = 730
+				}
+			}
+			50 = {
+				province_event = {
+					id = SoA.4113 days = 730
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4110
+	}
+}
+
+# SoA.4111 - Inquisition fails! Fire SoA.4112 to the head of religion.
+province_event = {
+	id = SoA.4111
+	desc = EVTDESC_SOA_4111
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_heretic = yes
+	}
+	
+	immediate = {
+		remove_province_modifier = active_inquisition
+		FROMFROM = {
+			character_event = {
+				id = SoA.4112
+			}
+		}
+		add_province_modifier = {
+			name = religious_unrest
+			days = 365
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4111
+	}
+}
+
+# SoA.4112 - Notification: Inquisition fails! Loss of authority. 
+character_event = {
+	id = SoA.4112
+	desc = EVTDESC_SOA_4112
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_4112
+		religion_authority = {
+			modifier = failed_inquisition
+		}
+	}
+}
+
+# SoA.4113 - Inquisition succeeds. Fire SoA.4114 to the head of religion.
+province_event = {
+	id = SoA.4113
+	desc = EVTDESC_SOA_4113
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_heretic = yes
+	}
+	
+	immediate = {
+		religion = FROMFROM
+		remove_province_modifier = active_inquisition
+		remove_province_modifier = religious_unrest
+		remove_province_modifier = heretic_stronghold
+	
+		FROMFROM = {
+			character_event = {
+				id = SoA.4114
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4113
+	}
+}
+
+# SoA.4114 - Notification: Inquisition succeeds!
+character_event = {
+	id = SoA.4114
+	desc = EVTDESC_SOA_4114
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+			
+	option = {
+		name = EVTOPTA_SOA_4114
+		religion_authority = {
+			modifier = successful_inquisition
+		}
+	}
+}
+
+# SoA.4120 - Legate berates ruler about heretic province
+character_event = {
+	id = SoA.4120
+	desc = EVTDESC_SOA_4120
+	picture = GFX_evt_pope
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_character_modifier = {
+			name = promised_to_clear_out_heresy
+#			hidden = yes
+			duration = 3650
+		}
+		FROMFROM = {
+			add_province_modifier = {
+				name = promised_to_clear_out_heresy
+#				hidden = yes
+				duration = 3650
+			}
+		}
+	}
+			
+	option = {
+		name = EVTOPTA_SOA_4120
+	}
+}
+
+# SoA.4121 - The heresy is eradicated in the county. On-action.
+province_event = {
+	id = SoA.4121
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_province_modifier = promised_to_clear_out_heresy
+		owner = {
+			top_liege = {
+				religion = ROOT
+				has_character_modifier = promised_to_clear_out_heresy
+			}
+		}
+	}
+	
+	immediate = {
+		remove_province_modifier = promised_to_clear_out_heresy
+		religion_head = {
+			character_event = {
+				id = SoA.4122
+			}
+		}
+	}
+}
+
+# SoA.4122 - The heresy has been eradicated in the county.
+character_event = {
+	id = SoA.4122
+	desc = EVTDESC_SOA_4122
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			owner = {
+				top_liege = {
+					reverse_opinion = {
+						who = ROOT
+						modifier = opinion_grateful
+						months = 120
+					}
+				}
+			}
+		}
+	}
+			
+	option = { # Reward the ruler with money
+		name = EVTOPTA_SOA_4122
+		trigger = {
+			wealth = 100
+		}
+		ai_chance = { factor = 10 }
+		
+		wealth = -100
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					character_event = {
+						id = SoA.4123 tooltip = EVTTOOLTIP_SOA_4123
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Reward the ruler with piety
+		name = EVTOPTB_SOA_4122
+		ai_chance = { factor = 10 }
+		FROM = {
+			owner = {
+				top_liege = {
+					character_event = {
+						id = SoA.4124 tooltip = EVTTOOLTIP_SOA_4124
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Lift the excommunication
+		name = EVTOPTC_SOA_4122
+		trigger = {
+			FROM = {
+				owner = {
+					top_liege = {
+						excommunicated_for = ROOT
+					}
+				}
+			}
+		}
+		ai_chance = { factor = 1000 }
+		FROM = {
+			owner = {
+				top_liege = {
+					character_event = {
+						id = SoA.4125 tooltip = EVTTOOLTIP_SOA_4125
+					}
+				}
+			}
+		}
+	}
+}
+
+# SoA.4123 - Reward the ruler with money
+character_event = {
+	id = SoA.4123
+	desc = EVTDESC_SOA_4123
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_4123
+		wealth = 100
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 120
+		}
+	}
+}
+
+# SoA.4124 - Reward the ruler with piety
+character_event = {
+	id = SoA.4124
+	desc = EVTDESC_SOA_4124
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_4123
+		piety = 200
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 120
+		}
+	}
+}
+
+# SoA.4125 - Excommunication is lifted
+character_event = {
+	id = SoA.4125
+	desc = EVTDESC_SOA_4125
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_4123
+		
+		excommunicate = no
+		
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 120
+		}
+	}
+}
+
+# SoA.4130 - Theologians arrive in the province.
+province_event = {
+	id = SoA.4130
+	desc = EVTDESC_SOA_4130
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_province_modifier = {
+			name = theological_dialogue
+			days = 730
+		}
+		random_list = {
+			50 = {
+				province_event = {
+					id = SoA.4131 days = 730
+				}
+			}
+			50 = {
+				province_event = {
+					id = SoA.4133 days = 730
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4130
+	}
+}
+
+# SoA.4131 - Dialogue fails! Fire SoA.4132 to the head of religion.
+province_event = {
+	id = SoA.4131
+	desc = EVTDESC_SOA_4131
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_heretic = yes
+	}
+	
+	immediate = {
+		remove_province_modifier = theological_dialogue
+		FROMFROM = {
+			character_event = {
+				id = SoA.4132
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4131
+	}
+}
+
+# SoA.4132 - Notification: Dialogue fails! Loss of authority. 
+character_event = {
+	id = SoA.4132
+	desc = EVTDESC_SOA_4132
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+			
+	option = {
+		name = EVTOPTA_SOA_4132
+		religion_authority = {
+			modifier = failed_heretic_dialogue
+		}
+	}
+}
+
+# SoA.4133 - Dialogue succeeds. Fire SoA.4134 to the head of religion.
+province_event = {
+	id = SoA.4133
+	desc = EVTDESC_SOA_4133
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_heretic = yes
+	}
+	
+	immediate = {
+		religion = FROMFROM
+		remove_province_modifier = theological_dialogue
+		remove_province_modifier = religious_unrest
+		remove_province_modifier = heretic_stronghold
+	
+		FROMFROM = {
+			character_event = {
+				id = SoA.4134
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_4133
+	}
+}
+
+# SoA.4134 - Notification: Dialogue succeeds!
+character_event = {
+	id = SoA.4134
+	desc = EVTDESC_SOA_4134
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+			
+	option = {
+		name = EVTOPTA_SOA_4134
+		religion_authority = {
+			modifier = successful_heretic_dialogue
+		}
+	}
+}
+
+# SoA.4200 - A heresy has become the new orthodoxy. On-action. There are temporary characters in FROM and FROMFROM with the correct religions set.
+narrative_event = {
+	id = SoA.4200
+	title = EVTTITLE_SOA_4200
+	desc = EVTDESC_SOA_4200
+	picture = GFX_evt_bishop
+	border = GFX_event_narrative_frame_religion
+	hide_from = yes
+	
+	major = yes
+	
+	is_triggered_only = yes
+			
+	option = {
+		name = EVTOPTA_SOA_4200
+		trigger = {
+			religion = FROM
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_HERESY_TAKEOVER_PLAYER_IS_NEW
+				portrait = [Root.GetID]
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SOA_4200
+		trigger = {
+			religion = FROMFROM
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_HERESY_TAKEOVER_PLAYER_IS_OLD
+				portrait = [Root.GetID]
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_SOA_4200
+		trigger = {
+			NOT = { religion = FROM }
+			NOT = { religion = FROMFROM }
+		}
+	}
+}

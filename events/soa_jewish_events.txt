@@ -1,0 +1,1190 @@
+###################################
+#
+# THE SONS OF ABRAHAM 
+# - Jewish Events
+#
+###################################
+
+namespace = SoA
+
+# Third Temple Construction Begun
+character_event = {
+	id = SoA.100
+	desc = EVTDESC_SoA_100
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_100
+		custom_tooltip = { text = third_temple_construction }
+	}
+}
+
+# Third Temple Built
+province_event = {
+	id = SoA.10199
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { narrative_event = { id = SoA.101 } }
+	}
+}
+
+narrative_event = {
+	id = SoA.101
+	title = EVTNAME_SoA_101
+	desc = EVTDESC_SoA_101
+	picture = GFX_evt_jerusalem_captured_jews
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	major_trigger = {
+		ai = no
+		religion = jewish
+	}
+	
+	immediate = {
+		set_global_flag = third_temple_built
+		clr_global_flag = building_third_temple
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_101
+	}
+}
+
+# Creation of Israel
+narrative_event = {
+	id = SoA.102
+	title = EVTNAME_SoA_102
+	desc = EVTDESC_SoA_102
+	picture = GFX_evt_jerusalem_captured_jews
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_kingdom_of_david
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_102
+		primary_title = {
+			k_israel = {
+				grant_title = ROOT
+				copy_title_laws = PREV
+			}
+		}
+	}
+}
+
+# Jews Expelled
+character_event = {
+	id = SoA.105
+	desc = EVTDESC_SoA_105
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_105
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = { 
+					OR = {
+						ai = no
+						has_character_modifier = borrowed_from_jews
+					}
+				}
+				character_event = { id = SoA.107 }
+			}
+		}
+	}
+}
+
+# Jews Welcomed Back
+character_event = {
+	id = SoA.106
+	desc = EVTDESC_SoA_106
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_106
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = { ai = no }
+				character_event = { id = SoA.108 }
+			}
+		}
+	}
+}
+
+# Jews Welcomed Back due to ruler now being Jewish!
+character_event = {
+	id = SoA.566
+	desc = EVTDESC_SoA_566
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	religion_group = jewish_group
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_character_modifier = expelled_jewish
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	option = {
+		name = EVTOPTA_SoA_566
+		prestige = 50
+		remove_character_modifier = expelled_jewish
+		custom_tooltip = {
+			text = jews_are_welcome
+		}
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = { ai = no }
+				character_event = { id = SoA.108 }
+			}
+		}
+	}
+}
+
+# Jews Expelled (Notifier for Vassals)
+character_event = {
+	id = SoA.107
+	desc = EVTDESC_SoA_107
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_107
+		trigger = {
+			NOT = { has_character_modifier = borrowed_from_jews }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_107
+		trigger = {
+			has_character_modifier = borrowed_from_jews
+		}
+		remove_character_modifier = borrowed_from_jews
+	}
+}
+
+# Jews Welcomed Back (Notifier for Vassals)
+character_event = {
+	id = SoA.108
+	desc = EVTDESC_SoA_108
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_107
+	}
+}
+
+### Jewish Court Events
+
+# Jewish Diplomat Appears at Court (Ashkenazi)
+character_event = {
+	id = SoA.200
+	desc = EVTDESC_SoA_200
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+			culture = khazar
+		}
+		NOT = { 
+			capital_scope = {
+				region = world_europe_west_iberia
+			}
+		}
+		NOT = { has_character_modifier = expelled_jewish }
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 1100
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = ashkenazi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = charismatic_negotiator
+			attributes = {
+				diplomacy = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = socializer
+				}
+				30 = {
+					add_trait = socializer
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+# Jewish Administrator Appears at Court (Ashkenazi)
+character_event = {
+	id = SoA.201
+	desc = EVTDESC_SoA_201
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+			culture = khazar
+		}	
+		NOT = { 
+			capital_scope = {
+				region = world_europe_west_iberia
+			}
+		}
+		NOT = { has_character_modifier = expelled_jewish }
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 1100
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = ashkenazi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = fortune_builder
+			attributes = {
+				stewardship = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = administrator
+				}
+				30 = {
+					add_trait = administrator
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+# Jewish Spy Appears at Court (Ashkenazi)
+character_event = {
+	id = SoA.202
+	desc = EVTDESC_SoA_202
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+			culture = khazar
+		}
+		NOT = { 
+			capital_scope = {
+				region = world_europe_west_iberia
+			}
+		}
+		NOT = { has_character_modifier = expelled_jewish }
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 1100
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = ashkenazi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = intricate_webweaver
+			attributes = {
+				intrigue = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = schemer
+				}
+				30 = {
+					add_trait = schemer
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+# Jewish Diplomat Appears at Court (Sephardi)
+character_event = {
+	id = SoA.203
+	desc = EVTDESC_SoA_200
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		capital_scope = {
+			region = world_europe_west_iberia
+		}
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+		}	
+		NOT = { 
+			has_character_modifier = expelled_jewish
+			trait = incapable
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 750
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = sephardi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = charismatic_negotiator
+			attributes = {
+				diplomacy = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = socializer
+				}
+				30 = {
+					add_trait = socializer
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+# Jewish Administrator Appears at Court (Sephardi)
+character_event = {
+	id = SoA.204
+	desc = EVTDESC_SoA_201
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		capital_scope = {
+			region = world_europe_west_iberia
+		}
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+		}	
+		NOT = { 
+			has_character_modifier = expelled_jewish
+			trait = incapable
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 750
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = sephardi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = fortune_builder
+			attributes = {
+				stewardship = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = administrator
+				}
+				30 = {
+					add_trait = administrator
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+# Jewish Spy Appears at Court (Sephardi)
+character_event = {
+	id = SoA.205
+	desc = EVTDESC_SoA_202
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_playable = yes
+	capable_only = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		capital_scope = {
+			region = world_europe_west_iberia
+		}
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = zoroastrian_group
+			religion_group = jewish_group
+		}	
+		NOT = { 
+			has_character_modifier = expelled_jewish
+			trait = incapable
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 750
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			culture = sephardi
+			dynasty = culture
+			religion = jewish
+			female = no
+			age = 30
+			trait = intricate_webweaver
+			attributes = {
+				intrigue = 10
+			}
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			remove_trait = socializer
+			remove_trait = gamer
+			remove_trait = hedonist
+			remove_trait = duelist
+			remove_trait = hunter
+			remove_trait = strategist
+			remove_trait = administrator
+			remove_trait = architect
+			remove_trait = gardener
+			remove_trait = schemer
+			remove_trait = impaler
+			remove_trait = seductress
+			remove_trait = scholar
+			remove_trait = theologian
+			remove_trait = mystic
+			random_list = {
+				70 = {
+					add_trait = schemer
+				}
+				30 = {
+					add_trait = schemer
+					add_trait = shrewd
+				}
+			}
+			save_event_target_as = jewish_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_200
+		custom_tooltip = {
+			text = jewish_courtier_tooltip
+		}
+	}
+}
+
+### Jewish Expulsion Events
+
+# Loss of economic tech
+character_event = {
+	id = SoA.300
+	desc = EVTDESC_SoA_300
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+	
+	trigger = {
+		has_character_modifier = expelled_jewish
+	}
+	
+	mean_time_to_happen = {
+		months = 680
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_300
+		economy_techpoints = -50
+	}
+}
+
+# Loss of cultural tech
+character_event = {
+	id = SoA.301
+	desc = EVTDESC_SoA_301
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+	
+	trigger = {
+		has_character_modifier = expelled_jewish
+	}
+	
+	mean_time_to_happen = {
+		months = 680
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_301
+		culture_techpoints = -50
+	}
+}
+
+# Loss of military tech
+character_event = {
+	id = SoA.302
+	desc = EVTDESC_SoA_302
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+	
+	trigger = {
+		has_character_modifier = expelled_jewish
+	}
+	
+	mean_time_to_happen = {
+		months = 680
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_302
+		military_techpoints = -50
+	}
+}
+
+### Jewish Passover
+
+# Invitation Sent
+character_event = {
+	id = SoA.500
+	desc = EVTDESC_SoA_500
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_500
+		any_vassal = {
+			limit = {
+				religion = jewish
+				age = 16
+				prisoner = no
+				war = no
+				NOT = { trait = incapable }
+			}
+			character_event = { id = SoA.501 days = 2 tooltip = EVTTOOLTIP_SoA_501 }
+		}
+		custom_tooltip = { text = passover_invitations_sent }
+		hidden_tooltip = { character_event = { id = SoA.503 days = 10 } }
+		hidden_tooltip = { character_event = { id = SoA.504 days = 12 } }
+	}
+}
+
+# Invitation Received
+character_event = {
+	id = SoA.501
+	desc = EVTDESC_SoA_501
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_SoA_501
+		ai_chance = {
+			factor = 80
+			modifier  = {
+				factor = 0.1
+				ai = yes
+				is_inaccessible_trigger = yes
+			}
+			modifier = {
+				factor = 0
+				NOT = {	opinion = { who = ROOT value = -20 } }
+			}
+		}
+		custom_tooltip = { text = passover_accepted }
+		set_character_flag = attending_passover
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = SoA.503 days = 8 } }
+		hidden_tooltip = { character_event = { id = SoA.599 days = 20 } } # Safety catch flag clearing
+	}
+	option = {
+		name = EVTOPTB_SoA_501
+		ai_chance = {
+			factor = 20
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_refused_passover
+				who = ROOT
+			}
+		}
+		custom_tooltip = { text = passover_declined }
+		hidden_tooltip = {
+			FROM = { character_event = { id = SoA.502 } }
+		}
+	}
+}
+
+# Invitation Refused
+character_event = {
+	id = SoA.502
+	desc = EVTDESC_SoA_502
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_502
+		opinion = {
+			modifier = opinion_refused_passover
+			who = FROM
+		}
+	}
+}
+
+# Passover Sedar Begins
+character_event = {
+	id = SoA.503
+	desc = EVTDESC_SoA_503
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_503
+	}
+}
+
+# Passover Sedar Ends (Host)
+character_event = {
+	id = SoA.504
+	desc = EVTDESC_SoA_504
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_504
+		any_vassal = {
+			limit = { has_character_flag = attending_passover }
+			opinion = {
+				modifier = opinion_passover
+				who = ROOT
+			}
+		}
+		hidden_tooltip = {
+			any_vassal = {
+				limit = { has_character_flag = attending_passover }
+				character_event = { id = SoA.505 }
+			}
+		}
+		add_character_modifier = {
+			name = held_passover_timer
+			duration = 1825
+			hidden = yes
+		}
+		prestige = 100
+		piety = 100
+		clr_character_flag = holding_passover
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Passover Sedar Ends (Guest)
+character_event = {
+	id = SoA.505
+	desc = EVTDESC_SoA_505
+	picture = GFX_evt_synagogue
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_504
+		clr_character_flag = attending_passover
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# The Priesthood Restored
+narrative_event = {
+	id = SoA.550
+	title = EVTNAME_SoA_550
+	desc = EVTDESC_SoA_550
+	picture = GFX_evt_synagogue
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_550
+		trigger = {
+			religion_group = jewish_group
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_6004
+		trigger = {
+			NOT = {
+				religion_group = jewish_group
+				religion_group = muslim
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_6004
+		trigger = {
+			religion_group = muslim
+		}
+	}
+}
+
+### Jewish Councillor Events
+
+# Chancellor (Hidden)
+character_event = {
+	id = SoA.560
+	hide_window = yes
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = jewish_group
+	
+	trigger = {
+		has_job_title = job_chancellor
+		employer = {
+			NOT = { religion_group = jewish_group }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_focus = focus_scholarship
+				liege = { has_focus = focus_scholarship }
+			}
+		}
+	}
+	
+	immediate = {
+		employer = {
+			character_event = { id = SoA.561 }
+		}
+	}
+}
+
+# Chancellor
+character_event = {
+	id = SoA.561
+	desc = EVTDESC_SoA_561
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_561
+		culture_techpoints = 50
+	}
+}
+
+# Steward (Hidden)
+character_event = {
+	id = SoA.562
+	hide_window = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = jewish_group
+	
+	trigger = {
+		has_job_title = job_treasurer
+		employer = {
+			NOT = { religion_group = jewish_group }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_focus = focus_scholarship
+				liege = { has_focus = focus_scholarship }
+			}
+		}
+	}
+	
+	immediate = {
+		employer = {
+			character_event = { id = SoA.563 }
+		}
+	}
+}
+
+# Steward
+character_event = {
+	id = SoA.563
+	desc = EVTDESC_SoA_563
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_561
+		economy_techpoints = 50
+	}
+}
+
+# Spymaster (Hidden)
+character_event = {
+	id = SoA.564
+	hide_window = yes
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = jewish_group
+	
+	trigger = {
+		has_job_title = job_spymaster
+		employer = {
+			NOT = { religion_group = jewish_group }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_focus = focus_scholarship
+				liege = { has_focus = focus_scholarship }
+			}
+		}
+	}
+	
+	immediate = {
+		employer = {
+			character_event = { id = SoA.565 }
+		}
+	}
+}
+
+# Spymaster
+character_event = {
+	id = SoA.565
+	desc = EVTDESC_SoA_565
+	picture = GFX_evt_jewish_market
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_561
+		military_techpoints = 50
+	}
+}
+
+###########################################
+# Flag management                         #
+###########################################
+
+# Safety catch - clears character flags and modifiers
+character_event = {
+	id = SoA.599
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = do_not_disturb
+		clr_character_flag = holding_passover
+		clr_character_flag = attending_passover
+	}
+}
+

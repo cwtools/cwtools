@@ -1,0 +1,1410 @@
+# v1.10: Old Gods Events: 62300 - 62999
+
+# Written by Henrik Fåhraeus
+
+# Called from on_action: on_prepared_invasion_aborts
+# The target character is in FROM
+character_event = {
+
+	id = 62300
+	desc = EVTDESC62300
+	
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	immediate = {
+		remove_opinion = {
+			who = FROM
+			modifier = preparing_to_invade
+		}
+		FROM = {
+			remove_opinion = {
+				who = ROOT
+				modifier = preparing_to_invade_me
+			}
+		}
+		disband_event_forces = prepared_invasion
+	}
+
+	option = {
+		name = EVTOPTA62300
+	}
+}
+
+# Called from on_action: on_prepared_invasion_expires
+# The target character is in FROM
+character_event = {
+
+	id = 62310
+	desc = EVTDESC62310
+	
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	immediate = {
+		remove_opinion = {
+			who = FROM
+			modifier = preparing_to_invade
+		}
+		FROM = {
+			remove_opinion = {
+				who = ROOT
+				modifier = preparing_to_invade_me
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_war = {
+						any_attacker = { character = FROM } 
+					}
+				}
+			}
+			disband_event_forces = prepared_invasion
+		}
+	}
+
+	option = {
+		name = EVTOPTA62310
+		if = {
+			limit = {
+				NOT = {
+					any_war = {
+						any_attacker = { character = FROM } 
+					}
+				}
+			}
+			prestige = -200
+			piety = -50
+			any_realm_lord = {
+				limit = {
+					religion = ROOT
+				}
+				opinion = {
+					who = ROOT
+					modifier = opinion_failed_invasion
+				}
+			}
+		}
+	}
+}
+
+# Troops flock to your banner
+# Called from on_action: on_prepared_invasion_monthly
+# The target character is in FROM
+character_event = {
+	id = 62320
+	desc = EVTDESC62320
+	
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	# On_action, so BIG is MORE OFTEN!
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.25
+			martial = 15
+		}
+		modifier = {
+			factor = 1.25
+			martial = 20
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 15
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 20
+		}
+		modifier = {
+			factor = 1.25
+			prestige = 1000
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { diplomacy = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { diplomacy = 7 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { prestige = 100 }
+		}
+		modifier = {
+			factor = 0.75
+			lower_tier_than = DUKE
+		}
+		modifier = {
+			factor = 0
+			relative_power = {
+				who = FROM
+				power = 4.0
+			}
+		}
+		modifier = {
+			factor = 0.5
+			relative_power = {
+				who = FROM
+				power = 2.0
+			}
+		}
+		modifier = {
+			factor = 0.25
+			relative_power = {
+				who = FROM
+				power = 3.0
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA62320
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.1
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_fleet = {
+					province = closest
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.1
+					match_min = 7
+					earmark = prepared_invasion
+				}
+			}
+		}
+	}
+}
+
+# A hero and his retinue appear in your court
+# Called from on_action: on_prepared_invasion_monthly
+# The target character is in FROM
+character_event = {
+	id = 62321
+	desc = EVTDESC62321
+	
+	hide_from = yes
+	
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	# On_action, so BIG is MORE OFTEN
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.25
+			martial = 15
+		}
+		modifier = {
+			factor = 1.25
+			martial = 20
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 15
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 20
+		}
+		modifier = {
+			factor = 1.25
+			prestige = 1000
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { diplomacy = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { diplomacy = 7 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { prestige = 100 }
+		}
+		modifier = {
+			factor = 0.75
+			lower_tier_than = DUKE
+		}
+		modifier = {
+			factor = 0
+			relative_power = {
+				who = FROM
+				power = 4.0
+			}
+		}
+		modifier = {
+			factor = 0.5
+			relative_power = {
+				who = FROM
+				power = 2.0
+			}
+		}
+		modifier = {
+			factor = 0.25
+			relative_power = {
+				who = FROM
+				power = 3.0
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA62321
+		capital_scope = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = ROOT
+				female = no
+				age = 30
+				attributes = {
+					martial = 8
+				}
+				trait = brave
+				trait = zealous
+				trait = brilliant_strategist
+				trait = holy_warrior
+			}
+			new_character = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.15
+#					earmark = prepared_invasion
+					attrition = 1.0
+				}
+			}
+		}
+		
+		spawn_fleet = {
+			province = closest
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.15
+			match_min = 10
+			earmark = prepared_invasion
+		}
+	}
+}
+
+# A smaller force arrives for the invasion
+# Called from on_action: on_prepared_invasion_monthly
+# The target character is in FROM
+character_event = {
+	id = 62322
+	desc = EVTDESC62320
+	
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	# On_action, so BIG is MORE OFTEN
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.25
+			martial = 15
+		}
+		modifier = {
+			factor = 1.25
+			martial = 20
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 15
+		}
+		modifier = {
+			factor = 1.25
+			diplomacy = 20
+		}
+		modifier = {
+			factor = 1.25
+			prestige = 1000
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { diplomacy = 10 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { diplomacy = 7 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { prestige = 100 }
+		}
+		modifier = {
+			factor = 0.75
+			lower_tier_than = DUKE
+		}
+		modifier = {
+			factor = 0
+			relative_power = {
+				who = FROM
+				power = 4.0
+			}
+		}
+		modifier = {
+			factor = 0.5
+			relative_power = {
+				who = FROM
+				power = 2.0
+			}
+		}
+		modifier = {
+			factor = 0.25
+			relative_power = {
+				who = FROM
+				power = 3.0
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA62320
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.075
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_fleet = {
+					province = closest
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.075
+					match_min = 5
+					earmark = prepared_invasion
+				}
+			}
+		}
+	}
+}
+
+# Notification from decision 'convert_to_attacker_religion'
+letter_event = {
+	id = 62800
+	desc = EVTDESC62800
+	
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62800
+		if = {
+			limit = {
+				FROM = { tier = COUNT }
+			}
+			piety = 50
+		}
+		if = {
+			limit = {
+				FROM = { tier = DUKE }
+			}
+			piety = 100
+		}
+		if = {
+			limit = {
+				FROM = { tier = KING }
+			}
+			piety = 300
+		}
+		if = {
+			limit = {
+				FROM = { tier = EMPEROR }
+			}
+			piety = 1000
+		}
+	}
+}
+
+# Special event for Bagsecg of Jylland to invade Mercia with "the Great Summer Army"
+character_event = {
+	id = 62900
+	desc = EVTDESC62900
+	
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_normal_frame_war
+	
+	min_age = 16
+	only_playable = yes
+	only_men = yes
+	only_capable = yes
+	prisoner = no
+	religion = norse_pagan
+	culture = norse
+	war = no
+	
+	trigger = {
+		character = 163113 # Bagsecg
+		NOT = { has_character_flag = bagsecgs_invasion }
+		d_hereford = { # Mercia
+			holder_scope = {
+				culture = saxon
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		set_character_flag = bagsecgs_invasion
+	}
+
+	option = {
+		name = EVTOPTA62900 # Invade Mercia
+		
+		ai_chance = {
+			factor = 70
+		}
+		
+		custom_tooltip = {
+			text = EVTOPTA62900_TT
+			# Prepare the invasion (these opinions control the mechanic)
+			hidden_tooltip = {
+				d_hereford = { # Mercia
+					holder_scope = {
+						reverse_opinion = {
+							who = ROOT
+							modifier = preparing_to_invade
+						}
+						opinion = {
+							who = ROOT
+							modifier = preparing_to_invade_me
+						}
+						letter_event = { id = 62901 }
+					}
+				}
+				add_character_modifier = { 
+					name = launched_prepared_invasion
+					hidden = yes
+					days = -1 
+				}
+			}
+		}
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.75
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.75
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.75
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_fleet = {
+					province = PREV
+					owner = ROOT
+					earmark = prepared_invasion
+					troops =
+					{
+						galleys = { 20 20 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB62900 # Invade Wessex
+		
+		trigger = {
+			d_somerset = { # Wessex
+				holder_scope = {
+					culture = saxon
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		custom_tooltip = {
+			text = EVTOPTB62900_TT
+			# Prepare the invasion
+			hidden_tooltip = {
+				d_somerset = { # Wessex
+					holder_scope = {
+						reverse_opinion = {
+							who = ROOT
+							modifier = preparing_to_invade
+						}
+						opinion = {
+							who = ROOT
+							modifier = preparing_to_invade_me
+						}
+						letter_event = { id = 62901 }
+					}
+				}
+				add_character_modifier = { 
+					name = launched_prepared_invasion
+					hidden = yes
+					days = -1 
+				}
+			}
+		}
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_fleet = {
+					province = PREV
+					owner = ROOT
+					earmark = prepared_invasion
+					troops =
+					{
+						galleys = { 10 10 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC62900 # Invade Scotland
+		
+		trigger = {
+			k_scotland = {
+				holder_scope = {
+					culture = scottish
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		custom_tooltip = {
+			text = EVTOPTC62900_TT
+			# Prepare the invasion
+			hidden_tooltip = {
+				k_scotland = {
+					holder_scope = {
+						reverse_opinion = {
+							who = ROOT
+							modifier = preparing_to_invade
+						}
+						opinion = {
+							who = ROOT
+							modifier = preparing_to_invade_me
+						}
+						letter_event = { id = 62901 }
+					}
+				}
+				add_character_modifier = { 
+					name = launched_prepared_invasion
+					hidden = yes
+					days = -1 
+				}
+			}
+		}
+		
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.5
+					earmark = prepared_invasion
+					attrition = 1.0
+				}
+				spawn_fleet = {
+					province = PREV
+					owner = ROOT
+					earmark = prepared_invasion
+					troops =
+					{
+						galleys = { 10 10 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD62900
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		prestige = -100
+	}
+}
+
+letter_event = {
+	id = 62901
+	desc = EVTDESC62901
+	
+	border = GFX_event_letter_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62901
+	}
+}
+
+# Special event for the Magyars to form Hungary
+# Triggered by Decision: create_hungary
+narrative_event = {
+	id = 62910
+	title = EVTNAME62910
+	desc = EVTDESC62910
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	
+	option = {
+		name = EVTOPTA62910
+	}
+	
+	immediate = {	
+		k_magyar = {
+			any_direct_de_jure_vassal_title = {
+				de_jure_liege = k_hungary
+			}
+		}
+		k_hungary = {
+			grant_title = ROOT
+			copy_title_laws = k_magyar
+			copy_title_history = k_magyar
+			set_name=""
+			adjective=""
+		}
+		k_magyar = {
+			destroy_landed_title = THIS
+		}
+		
+		if = {
+			limit = {
+				NOT = { has_landed_title = c_pest }
+			}
+			c_pest = {
+				usurp_title = ROOT
+				location = {
+					ROOT = {
+						capital = PREV 
+					}
+				}
+			}
+			k_hungary = {				
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Zeus"
+							OR = {
+								has_law = crown_authority_0
+								has_law = crown_authority_1
+								has_law = crown_authority_2
+								has_law = crown_authority_3
+								has_law = crown_authority_4
+							}
+						}
+					}
+					add_law = crown_authority_0
+				}
+			}
+		}
+		
+		any_playable_ruler = {
+			limit = {
+				NOT = { has_landed_title = k_hungary }
+				ai = no
+			}
+			narrative_event = { id = 62911 }
+		}
+		
+		any_realm_province = {
+			limit = {
+				kingdom = {
+					title = k_hungary
+				}
+			}
+			culture = hungarian
+			religion = ROOT
+		}
+		
+		# The Hungarian culture in the Ukraine is lost
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		random_realm_province = {
+			limit = {
+				culture = hungarian
+				kingdom = {
+					OR = {
+						title = k_taurica
+						title = k_ruthenia
+						title = k_cuman
+						title = k_alania
+					}
+				}
+				any_neighbor_province = {
+					NOT = { culture = hungarian }
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { culture = hungarian }
+				}
+				reverse_culture = PREV
+				reverse_religion = PREV
+			}
+		}
+		
+		# Lose control of the Ukraininan lands
+		any_realm_province = {
+			limit = {
+				OR = {
+					kingdom = {
+						OR = {
+							title = k_taurica
+							title = k_ruthenia
+							title = k_cuman
+							title = k_alania
+						}
+					}
+					duchy = {
+						title = d_moldau
+					}
+				}
+				owner = {
+					# Human vassals get to keep their stuff
+					OR = {
+						ai = yes
+						character = ROOT
+					}
+				}
+			}
+			county = {
+				create_character = {
+					random_traits = yes
+					dynasty = none
+					religion = PREV
+					culture = PREV
+					female = no
+					age = 25
+					trait = peasant_leader
+				}
+				new_character = {
+					usurp_title_plus_barony_if_unlanded = PREV
+					set_defacto_liege = THIS
+				}
+			}
+		}
+		
+		any_claim = {
+			remove_claim = ROOT
+		}
+	}
+}
+
+# Informed about the Creation of Hungary
+narrative_event = {
+	id = 62911
+	title = EVTNAME62911
+	desc = EVTDESC62911
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62911
+	}
+}
+
+# Special event for Asturias to create León
+# Triggered by Decision: create_leon
+character_event = {
+	id = 62920
+	title = EVTNAME62920
+	desc = EVTDESC62920
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62920
+	}
+}
+
+# Informed about the Creation of Leon
+character_event = {
+	id = 62921
+	title = EVTNAME62920
+	desc = EVTDESC62921
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62921
+	}
+}
+
+character_event = {
+	id = 62922
+	title = EVTNAME62922
+	desc = EVTDESC62922
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62922
+	}
+}
+
+# Informed about the Creation of Castille
+character_event = {
+	id = 62923
+	title = EVTNAME62923
+	desc = EVTDESC62923
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62923
+	}
+}
+
+character_event = {
+	id = 62924
+	title = EVTNAME62924
+	desc = EVTDESC62924
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62922
+	}
+}
+
+# Informed about the Creation of Portugal
+character_event = {
+	id = 62925
+	title = EVTNAME62925
+	desc = EVTDESC62925
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62923
+	}
+}
+
+character_event = {
+	id = 62926
+	title = EVTNAME62926
+	desc = EVTDESC62926
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62922
+	}
+}
+
+# Informed about the Creation of Aragon
+character_event = {
+	id = 62927
+	title = EVTNAME62927
+	desc = EVTDESC62927
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62923
+	}
+}
+
+
+# Special event for West Francia to be renamed to France
+character_event = {
+	id = 62930
+	title = EVTNAME62930
+	desc = EVTDESC62930
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = k_france
+		NOT = { dynasty = 25061 } # Karling dynasty
+		NOT = { has_global_flag = west_francia_renamed }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA62930
+		set_global_flag = west_francia_renamed
+		k_france = {
+			set_name=""
+			adjective=""
+		}
+	}
+}
+
+# Special event for East Francia to be renamed to Germany
+character_event = {
+	id = 62931
+	title = EVTNAME62931
+	desc = EVTDESC62931
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = k_germany
+		NOT = { dynasty = 25061 } # Karling dynasty
+		NOT = { has_global_flag = east_francia_renamed }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA62931
+		set_global_flag = east_francia_renamed
+		k_germany = {
+			set_name=""
+			adjective=""
+		}
+	}
+}
+
+# Special event for Middle Francia to be renamed to Austrasia - Since Lothair doesn't exist to name it Lotharingia
+character_event = {
+	id = 62932
+	title = EVTNAME62932
+	desc = EVTDESC62932
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = k_lotharingia
+		NOT = { dynasty = 25061 } # Karling dynasty
+		NOT = { has_global_flag = middle_francia_renamed }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA62931
+		set_global_flag = middle_francia_renamed
+		k_lotharingia = {
+			set_name="AUSTRASIA"
+			adjective="AUSTRASIA_ADJ"
+		}
+	}
+}
+
+# Event where the sons of Lodbrok exact their revenge on Aella
+character_event = {
+	id = 62950
+	hide_window = yes
+	
+	min_age = 16
+	only_men = yes
+	prisoner = yes
+	culture = saxon
+	
+	trigger = {
+		character = 163103 # Aella
+		host = {
+			OR = {
+				character = 163108 # Björn Ironside
+				character = 163110 # Sigurd
+				character = 163111 # Ivar
+				character = 163112 # Halfdan
+				character = 163119 # Ubbe
+			}
+		}
+		NOT = { has_character_flag = aella_punished }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = aella_punished
+		host = {
+			character_event = { id = 62951 }
+		}
+	}
+}
+
+character_event = {
+	id = 62951
+	title = EVTNAME62951
+	desc = EVTDESC62951
+	
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62951 # Blood Eagle
+		ai_chance = {
+			factor = 100
+		}
+		FROM = {
+			death = {
+				death_reason = death_execution_blood_eagle
+				killer = ROOT
+			}
+		}
+		prestige = 500
+	}
+	option = {
+		name = EVTOPTB62951 # Sacrifice
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			death = {
+				death_reason = death_sacrificed_norse
+				killer = ROOT
+			}
+		}
+		piety = 250
+	}
+	option = {
+		name = EVTOPTC62951 # Blinding & Castration
+		trigger = {
+			NOT = { lifestyle_traits = 1 }
+			NOT = { has_dlc = "Way of Life" }
+		}
+		ai_chance = {
+			factor = 0
+		}
+		
+		prestige = 500
+		add_trait = impaler
+		
+		tooltip = {
+			FROM = {
+				add_trait = eunuch
+				if = {
+					limit = {
+						trait = one_eyed
+					}
+					remove_trait = one_eyed
+				}
+				add_trait = blinded
+				add_trait = wounded
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = 62952 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD62951 # Other plans
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+
+character_event = {
+	id = 62952
+	title = EVTNAME62951
+	desc = EVTDESC62952
+	
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62952
+		add_trait = eunuch
+		if = {
+			limit = {
+				trait = one_eyed
+			}
+			remove_trait = one_eyed
+		}
+		add_trait = blinded
+		add_trait = wounded
+		
+		hidden_tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_hate
+				years = 100
+			}
+		}
+	}
+}

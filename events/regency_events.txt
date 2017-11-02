@@ -1,0 +1,3307 @@
+###################################
+#
+# Regency Events: 61000 - 61999
+#
+###################################
+# by Henrik Fåhraeus
+# and Henrik Eklund
+###################################
+
+# Regent embezzles money
+character_event = {
+	id = 61000
+	desc = EVTDESC61000
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		independent = no
+		liege = { wealth = 20 }
+		NOT = { trait = charitable }
+		NOT = { trait = honest }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.25
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.25
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 0.75
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61000 # Embezzle
+		ai_chance = { factor = 100 }
+		liege = { wealth = -20 }
+		wealth = 20
+		random_list = {
+			50 = {
+				# Got away with it!
+			}
+			40 = {
+				liege = { character_event = { id = 61001 days = 4 tooltip = EVTTOOLTIP61001 } } # Liege suspects
+				if = {
+					limit = { NOT = { has_job_title = job_treasurer }  }
+					liege = { job_treasurer = { character_event = { id = 61002 days = 4 tooltip = EVTTOOLTIP61002 } } } # The Steward suspects
+				}
+			}
+			10 = {
+				liege = { character_event = { id = 61003 days = 4 tooltip = EVTTOOLTIP61003 } } # Liege has proof
+				if = {
+					limit = { NOT = { has_job_title = job_treasurer }  }
+					liege = { job_treasurer = { character_event = { id = 61004 days = 4 tooltip = EVTTOOLTIP61004 } } } # The Steward has proof
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB61000 # I dare not!
+		ai_chance = { factor = 0 }
+		piety = 1
+	}
+}
+
+character_event = {
+	id = 61001
+	desc = EVTDESC61001
+	
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61001 # But there is no proof...
+		opinion = { who = FROM modifier = opinion_corrupt years = 5  }
+	}
+}
+
+character_event = {
+	id = 61002
+	desc = EVTDESC61002
+	
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61001 # But there is no proof...
+		opinion = { who = FROM modifier = opinion_corrupt years = 5  }
+	}
+}
+
+character_event = {
+	id = 61003
+	desc = EVTDESC61003
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61003 # Treachery!
+		opinion = { who = FROM modifier = opinion_dishonorable years = 6  }
+	}
+}
+
+character_event = {
+	id = 61004
+	desc = EVTDESC61004
+	
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61003 # Treachery!
+		opinion = { who = FROM modifier = opinion_dishonorable years = 6  }
+	}
+}
+
+### NEW REGENCY EVENTS ###
+
+#Regency: Regent steals holding.
+character_event = {
+	id = 61100
+	desc = EVTDESC61100
+	picture = GFX_evt_lunatic
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		is_feudal = yes
+		independent = no
+		NOT = { trait = honest }
+		liege = { 
+			demesne_size = 5
+			age = 16
+			trait = incapable
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 380
+		modifier = {
+			factor = 0.25
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.25
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 0.75
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61100 #Grab holding.
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61101 tooltip = EVTTOOLTIP61101 }
+		}
+	}
+	option = {
+		name = EVTOPTB61100 #Do not grab holding.
+		ai_chance = { factor = 0 }
+		ROOT = { piety = 40 }
+	}
+}
+
+#Regency: Ruler informed of holding loss.
+character_event = {
+	id = 61101
+	desc = EVTDESC61101
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61101
+		random_demesne_title = {
+			limit = {
+				NOT = {	tier = duke }
+				NOT = {	tier = king }
+				NOT = {	tier = emperor }
+				NOT = {
+					location = { is_capital = yes }
+				}
+			}
+		grant_title = FROM
+		}
+	}
+	option = {
+		name = EVTOPTB61101
+		random_demesne_title = {
+			limit = {
+				NOT = {	tier = duke }
+				NOT = {	tier = king }
+				NOT = {	tier = emperor }
+				NOT = {
+					location = { is_capital = yes }
+				}
+			}
+		grant_title = FROM
+		}
+	}
+}
+
+#Regency: Regent gives Ruler's money to charity.
+character_event = {
+	id = 61105
+	desc = EVTDESC61105
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		independent = no
+		liege = { 
+			wealth = 50
+			age = 16
+			trait = incapable
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.25
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.25
+			trait = kind
+		}
+		modifier = {
+			factor = 0.75
+			trait = just
+		}
+		modifier = {
+			factor = 2.0
+			trait = cruel
+		}
+		modifier = {
+			factor = 2.0
+			trait = greedy
+		}
+	}
+		
+	option = {
+		name = EVTOPTA61105 #Give the money.
+		ai_chance = { factor = 100 }
+		ROOT = { piety = 30 }
+			liege = {
+				character_event = {	id = 61106 tooltip = EVTTOOLTIP61106 }
+			}
+	}
+	option = {
+		name = EVTOPTB61105 #Do not give the money.
+		ai_chance = { factor = 0 }
+		ROOT = { piety = -30 }
+	}
+}
+
+#Regency: Ruler is informed of Regent giving money to charity.
+character_event = {
+	id = 61106
+	desc = EVTDESC61106
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_economy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61106
+		ROOT = { scaled_wealth = -0.25 }
+		ROOT = { piety = 60 }
+	}
+}
+
+#Regency: Regent is a better administrator than you ever were.
+character_event = {
+	id = 61110
+	desc = EVTDESC61110
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_economy
+	
+	min_age = 16
+	prisoner = no
+	only_rulers = yes
+	
+	trigger = {
+		any_courtier = {
+			has_minor_title = title_regent
+		stewardship = 13
+		}
+		NOT = { stewardship = 6 }
+		trait = incapable
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		modifier = {
+			factor = 0.25
+			trait = diligent
+		}
+		modifier = {
+			factor = 2.0
+			trait = greedy
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61110
+		scaled_wealth = 0.25
+	}
+}
+
+### REGENCY SERIES, OLD RULER HUMILIATED ###
+
+#Regency: Regent humiliates Ruler.
+character_event = {
+	id = 61120
+	desc = EVTDESC61120
+	picture = GFX_evt_lunatic
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		independent = no
+		NOR	= {
+			opinion = { who = liege value = -30 }
+			has_character_flag = mean_regent
+		}
+		liege = { 
+			age = 16
+			trait = incapable
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.25
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.25
+			trait = envious
+		}
+		modifier = {
+			factor = 0.50
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.50
+			trait = greedy
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61120
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61121 tooltip = EVTTOOLTIP61121 }
+			random_courtier = {
+				limit = {
+					opinion = { who = liege value = -25 }
+				}
+				opinion = {
+					modifier = opinion_approves
+					who = ROOT
+					years = 1
+				}
+			}
+		}
+		hidden_tooltip = {
+			ROOT = { set_character_flag = mean_regent }
+		}
+	}
+	option = {
+		name = EVTOPTB61120
+		ai_chance = { factor = 0 }
+		root = { piety = 30 }
+	}
+}
+
+#Regency: Ruler is humiliated by Regent.
+character_event = {
+	id = 61121
+	desc = EVTDESC61121
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61121
+		add_character_modifier = {
+			name = mod_ashamed
+			duration = 365
+		}
+		if = {
+			limit = {
+				any_courtier = {
+					NOT = { has_character_flag = mean_regent }
+					trait = just
+					opinion = { who = liege value = 10 	}
+				}
+			}
+			random_courtier = {
+				limit = {
+					trait = just
+					NOT = { has_character_flag = mean_regent }
+					opinion = { who = liege value = 10 	}
+				}
+				character_event = {	id = 61122 days = 14 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61121
+		add_character_modifier = {
+			name = mod_ashamed
+			duration = 365
+		}
+		if = {
+			limit = {
+				any_courtier = {
+					NOT = { has_character_flag = mean_regent }
+					trait = just
+					opinion = { who = liege value = 10 	}
+				}
+			}
+			random_courtier = {
+				limit = {
+					trait = just
+					NOT = { has_character_flag = mean_regent }
+					opinion = { who = liege value = 10 	}
+				}
+				character_event = {	id = 61122 days = 14 }
+			}
+		}
+	}
+}
+
+#Regency: Vassal upset at treatment of Ruler.
+character_event = {
+	id = 61122
+	desc = EVTDESC61122
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61122
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61123 tooltip = EVTTOOLTIP61123 }
+		hidden_tooltip = {
+			ROOT = { set_character_flag = valiant_vassal }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61122
+		ai_chance = { factor = 0 }
+		root = { piety = -40 }
+	}
+}
+
+#Regency: Ruler approached by vassal.
+character_event = {
+	id = 61123
+	desc = EVTDESC61123
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61123
+		ai_chance = { factor = 100 }
+		FROM = {
+			character_event = {	id = 61124 days = 14 tooltip = EVTTOOLTIP61124 }
+		}
+	}
+	option = {
+		name = EVTOPTB61123
+		ai_chance = { factor = 0 }
+		random_courtier = {
+			limit = { has_character_flag = valiant_vassal }
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+#Regency: Vassal gets approval, makes move.
+character_event = {
+	id = 61124
+	desc = EVTDESC61124
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61124
+		random_list = {
+			60 = {
+				character_event = {	id = 61125 tooltip = EVTTOOLTIP61125 }
+			}
+			40 = {
+				character_event = {	id = 61127 tooltip = EVTTOOLTIP61127 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61124
+		random_list = {
+			60 = {
+				character_event = {	id = 61126 tooltip = EVTTOOLTIP61126 }
+			}
+			40 = {
+				character_event = {	id = 61127 tooltip = EVTTOOLTIP61127 }
+			}
+		}
+	}
+}
+
+#Regency: Vassal defeats Regent, becomes new Regent.
+character_event = {
+	id = 61125
+	desc = EVTDESC61125
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61125
+		clr_character_flag = valiant_vassal
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = mean_regent }
+				character_event = {	id = 61129 tooltip = EVTTOOLTIP61129 }
+			}
+			character_event = {	id = 61131 }
+			random_courtier = {
+				limit = { has_character_flag = valiant_vassal }
+				give_minor_title = title_regent
+			}
+		}
+	}
+}
+
+#Regency: Vassal defeats Regent, Regent loses title, goes to next in Regent succession.
+character_event = {
+	id = 61126
+	desc = EVTDESC61125
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61125
+		clr_character_flag = valiant_vassal
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = mean_regent }
+				character_event = {	id = 61129 tooltip = EVTTOOLTIP61129 }
+			}
+			character_event = {	id = 61131 }
+			random_courtier = {
+				limit = {
+					NOT = { has_minor_title = title_regent }
+					prisoner = no 
+					age = 16
+				}
+				give_minor_title = title_regent
+			}
+		}
+	}
+}
+
+#Regency: Vassal fails, is jailed.
+character_event = {
+	id = 61127
+	desc = EVTDESC61127
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61127
+			liege = {
+				random_courtier = {
+					limit = {
+						has_character_flag = mean_regent
+					}
+					character_event = {	id = 61128 }
+				}
+				character_event = {	id = 61130 }
+			}
+	}
+}
+
+#Regency: Regent successful in keeping title.
+character_event = {
+	id = 61128
+	desc = EVTDESC61128
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61128
+		clr_character_flag = mean_regent
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = valiant_vassal }
+				imprison = yes
+				clr_character_flag = valiant_vassal
+			}
+		}
+	}
+}
+
+#Regency: Regent is jailed.
+character_event = {
+	id = 61129
+	desc = EVTDESC61129
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61129
+		imprison = yes
+		clr_character_flag = mean_regent
+	}
+}
+
+#Regency: Ruler informed of failure to replace Regent.
+character_event = {
+	id = 61130
+	desc = EVTDESC61130
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61130
+		ROOT = { prestige = -50 }
+	}
+	option = {
+		name = EVTOPTB61130
+		ROOT = { prestige = -50 }
+	}
+}
+
+#Regency: Ruler informed of success in replacing Regent.
+character_event = {
+	id = 61131
+	desc = EVTDESC61131
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61131
+		prestige = 50
+	}
+	option = {
+		name = EVTOPTB61131
+		prestige = 50
+	}
+}
+
+#Regency: Ruler, if child, kills Regent.
+character_event = {
+	id = 61135
+	desc = EVTDESC61135
+	picture = GFX_evt_child_sword
+
+	min_age = 4
+	max_age = 15
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { has_character_flag = pushed_regent }
+		is_nomadic = no
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		modifier = {
+			factor = 0.25
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.50
+			trait = wroth
+		}
+		modifier = {
+			factor = 0.75
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61135
+		ai_chance = { factor = 0 }
+		set_character_flag = pushed_regent
+		random_list = {
+			50 = {
+				random_courtier = {
+					limit = { has_minor_title = title_regent }
+					death = {
+						death_reason = death_murder_unknown_fall
+						killer = ROOT
+					}
+				}
+			}
+			50 = { 
+				random_courtier = {
+					limit = { has_minor_title = title_regent }
+					add_trait = wounded
+					opinion = {
+						modifier = opinion_mad_as_hell
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61135
+		ai_chance = { factor = 100 }
+		set_character_flag = pushed_regent
+		piety = 30
+	}
+}
+
+### REGENCY SERIES, YOUNG RULER DECLARED INSANE ###
+
+#Regency: Regent attempts to declare ruler insane when he's not.
+character_event = {
+	id = 61140
+	desc = EVTDESC61140
+	picture = GFX_evt_child_play
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		diplomacy = 10
+		intrigue = 10
+		NOT = {
+			opinion = { who = liege value = -15 }
+		}
+		liege = {
+			age = 5
+			NOT = { 
+				trait = lunatic
+				age = 16 
+			}
+		}
+		NOT = {
+			has_character_flag = declared_ruler_insane
+			has_minor_title = title_ruler_consort
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 340
+		modifier = {
+			factor = 0.25
+			trait = envious
+		}
+		modifier = {
+			factor = 0.25
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.50
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.75
+			trait = greedy
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61140
+		ai_chance = { factor = 100 }
+		set_character_flag = declared_ruler_insane
+		random_list = {
+			35 = {
+				character_event = {	id = 61145 tooltip = EVTTOOLTIP61145 }
+				hidden_tooltip = {
+					liege = {
+						character_event = {	id = 61151 }
+						}
+				}
+			}
+			65 = {
+				character_event = {	id = 61146 tooltip = EVTTOOLTIP61146 }
+				hidden_tooltip = {
+					liege = {
+						character_event = {	id = 61150 }
+						}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61140
+		ai_chance = { factor = 0 }
+		set_character_flag = declared_ruler_insane
+		piety = 30
+	}
+}
+
+#Regency: Regent attempts to declare ruler insane.
+character_event = {
+	id = 61141
+	desc = EVTDESC61141
+	picture = GFX_evt_child_play
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		independent = no
+		NOR = { 
+			trait = lunatic 
+			has_character_flag = declared_ruler_insane
+		}
+		liege = {
+			age = 5
+			NOT = { age = 16 }
+			trait = lunatic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.25
+			trait = just
+		}
+		modifier = {
+			factor = 0.25
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = honest
+		}
+		modifier = {
+			factor = 2.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 2.0
+			trait = shy
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61141
+		ai_chance = { factor = 100 }
+		set_character_flag = declared_ruler_insane
+		random_list = {
+			35 = {
+				character_event = {	id = 61142 tooltip = EVTTOOLTIP61145 }
+				hidden_tooltip = {
+					liege = {
+						character_event = {	id = 61151 }
+						}
+				}
+			}
+			65 = {
+				character_event = {	id = 61146 tooltip = EVTTOOLTIP61146 }
+				hidden_tooltip = {
+					liege = {
+						character_event = {	id = 61150 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61141
+		ai_chance = { factor = 0 }
+		set_character_flag = declared_ruler_insane
+		liege = {
+			opinion = {
+				modifier = opinion_defended_me
+				who = ROOT
+				years = 4
+			}
+		}
+	}
+}
+
+#Regency: The insane ruler is imprisoned.
+character_event = {
+	id = 61142
+	desc = EVTDESC61142
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61142
+		liege = {
+			add_trait = incapable
+			add_character_modifier = { 
+				name = house_arrest
+				duration = -1
+			}
+		}
+	}
+}
+
+#Regency: The non-insane ruler is imprisoned.
+character_event = {
+	id = 61145
+	desc = EVTDESC61145
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61145
+		liege = {
+			add_trait = incapable
+			add_character_modifier = { 
+					name = house_arrest
+					duration = -1
+				}
+		}
+		hidden_tooltip = {
+			character_event = {
+				id = 61155
+				days = 5500
+			}
+		}
+	}
+}
+
+#Regency: Regent informed attempt to have ruler declared insane fails.
+character_event = {
+	id = 61146
+	desc = EVTDESC61146
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61146
+		trigger = {
+			liege = {
+				NOT = { trait = lunatic }
+			}
+		}
+		liege = {
+			opinion = {
+				modifier = scheming_bastard
+				who = ROOT
+				years = 30
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61146
+		trigger = {
+			liege = { trait = lunatic }
+		}
+		liege = {
+			opinion = {
+				modifier = scheming_bastard
+				who = ROOT
+				years = 30
+			}
+		}
+	}
+}
+
+#Regency: Ruler informed attempt to have ruler declared insane fails.
+character_event = {
+	id = 61150
+	desc = EVTDESC61150
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61150
+		prestige = 30
+	}
+	option = {
+		name = EVTOPTB61150
+		tooltip_info = lunatic
+		trigger = { trait = lunatic }
+		prestige = 30
+	}
+}
+
+#Regency: Ruler informed he has been declared insane.
+character_event = {
+	id = 61151
+	desc = EVTDESC61151
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61151
+		set_character_flag = imprisoned_by_regent
+		prestige = -30
+	}
+	option = {
+		name = EVTOPTB61151
+		tooltip_info = lunatic
+		trigger = { trait = lunatic }
+		set_character_flag = imprisoned_by_regent
+		prestige = -30
+	}
+}
+
+#Regency: Regent replaced, Ruler is set free.
+character_event = {
+	id = 61152
+	desc = EVTDESC61152
+	picture = GFX_evt_emissary
+	
+	only_playable = yes
+	has_character_flag = imprisoned_by_regent
+	
+	trigger = {
+		has_regent = yes
+		any_courtier = {
+			has_minor_title = title_regent
+			NOT = { has_character_flag = declared_ruler_insane }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA61152
+		remove_trait = incapable
+		remove_character_modifier = house_arrest
+		clr_character_flag = imprisoned_by_regent
+		any_courtier = {
+			limit = { has_character_flag = declared_ruler_insane }
+			clr_character_flag = declared_ruler_insane
+		}
+	}
+	option = {
+		name = EVTOPTB61152
+		tooltip_info = lunatic
+		trigger = { trait = lunatic }
+		remove_trait = incapable
+		remove_character_modifier = house_arrest
+		clr_character_flag = imprisoned_by_regent
+		any_courtier = {
+			limit = { has_character_flag = declared_ruler_insane }
+			clr_character_flag = declared_ruler_insane
+		}
+	}
+}
+
+#Regency: Regent has opportunity to steal throne.
+character_event = {
+	id = 61155
+	desc = EVTDESC61155
+	picture = GFX_evt_shadowy_cabal
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		independent = no
+		liege = { has_character_flag = imprisoned_by_regent }
+	}
+	
+	option = {
+		name = EVTOPTA61155
+		ai_chance = { factor = 0 }
+		random_list = {
+			40 = {
+				character_event = {	id = 61156 tooltip = EVTTOOLTIP61156 }
+			}
+			60 = {
+				character_event = {	id = 61157 tooltip = EVTTOOLTIP61157 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61155
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = EVTOPTC61155
+		ai_chance = { factor = 0 }
+		liege = {
+			remove_trait = incapable
+			remove_character_modifier = house_arrest
+			clr_character_flag = imprisoned_by_regent
+		}
+	}
+}
+
+#Regency: Regent informed he has stolen throne.
+character_event = {
+	id = 61156
+	desc = EVTDESC61156
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61156
+		liege = {
+			character_event = {	id = 61161 tooltip = EVTTOOLTIP61161 }
+		}
+	}
+}
+
+#Regency: Regent informed he failed to steal throne.
+character_event = {
+	id = 61157
+	desc = EVTDESC61157
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61157
+		liege = {
+			character_event = {	id = 61160 tooltip = EVTTOOLTIP61160 }
+		}
+	}
+}
+
+#Regency: Ruler informed Regent failed to steal throne.
+character_event = {
+	id = 61160
+	desc = EVTDESC61160
+	picture = GFX_evt_recovery
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61160
+		remove_trait = incapable
+		remove_character_modifier = house_arrest
+		clr_character_flag = imprisoned_by_regent
+	}
+}
+
+#Regency: Ruler informed Regent stole throne.
+character_event = {
+	id = 61161
+	desc = EVTDESC61161
+	picture = GFX_evt_drunk
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61161
+		random_courtier = {
+			limit = { has_minor_title = title_regent }
+			inherit = ROOT
+		}
+		clr_character_flag = imprisoned_by_regent
+		remove_character_modifier = house_arrest
+		imprison = FROM
+	}
+}
+
+#Regency: Ruler escapes from tower.
+character_event = {
+	id = 61165
+	desc = EVTDESC61165
+	picture = GFX_evt_emissary
+	
+	min_age = 16
+	capable_only = no
+	has_character_flag = imprisoned_by_regent
+	
+	trigger = {
+	
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		modifier = {
+			factor = 0.15
+			is_smart_trigger = yes
+		}
+		modifier = {
+			factor = 0.25
+			trait = brave
+		}
+		modifier = {
+			factor = 0.50
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.50
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 2.0
+			trait = craven
+		}
+		modifier = {
+			factor = 3.0
+			OR = {
+				trait = slow
+				trait = dull
+			}
+		}
+		modifier = {
+			factor = 5.0
+			trait = imbecile
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61165
+		remove_trait = incapable
+		remove_character_modifier = house_arrest
+		clr_character_flag = imprisoned_by_regent
+		random_courtier = {
+			limit = { has_minor_title = title_regent }
+			imprison = yes
+			hidden_tooltip = { 
+				character_event = {	id = 61170 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61165
+		tooltip_info = lunatic
+		trigger = { trait = lunatic }
+		character_event = {	id = 61166 tooltip = EVTTOOLTIP61166 }
+	}
+}
+
+#Regency: Ruler escorted back to tower.
+character_event = {
+	id = 61166
+	desc = EVTDESC61166
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61166
+		random_list = {
+			50 = { add_trait = possessed }
+			50 = { }
+		}
+	}
+}
+
+#Regency: Regent informed Ruler is reinstated after escaping.
+character_event = {
+	id = 61170
+	desc = EVTDESC61170
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61170
+		imprison = yes
+	}
+}
+
+### REGENCY SERIES, REGENT TRIES TO KILL YOUNG RULER ###
+
+## Regent sends Ruler to scrub roof.
+character_event = {
+	id = 61190
+	desc = EVTDESC61190
+	picture = GFX_evt_castle_construction
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		OR = {
+			is_primary_heir = yes
+			any_child = { is_primary_heir = yes }
+		}
+		NOT = {
+			opinion = { who = liege value = -5 }
+			has_character_flag = regent_schemer
+			has_minor_title = title_queen_mother
+			has_minor_title = title_ruler_consort
+		}
+		liege = {
+			age = 5
+			NOT = { age = 16 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 160
+		modifier = {
+			factor = 0.25
+			trait = envious
+		}
+		modifier = {
+			factor = 0.25
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.50
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61190
+		ai_chance = { factor = 100 }
+		set_character_flag = regent_schemer
+		liege = {
+			character_event = {	id = 61191 tooltip = EVTTOOLTIP61191 }
+		}
+	}
+	option = {
+		name = EVTOPTB61190
+		ai_chance = { factor = 0 }
+		piety = 20
+	}
+}
+
+## Ruler is sent to scrub roof.
+character_event = {
+	id = 61191
+	desc = EVTDESC61191
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61191
+		random_list = {
+			80 = {
+				character_event = {	id = 61192 tooltip = EVTTOOLTIP61192 }
+			}
+			20 = {
+				death = {
+					death_reason = death_murder_unknown_fall
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+## Ruler scrubs roof successfully.
+character_event = {
+	id = 61192
+	desc = EVTDESC61192
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61192
+		hidden_tooltip = {
+			random_courtier = {
+				limit = {
+					has_minor_title = title_regent
+					has_character_flag = regent_schemer
+				}
+				character_event = {
+					id = 61195
+					days = 18
+					random = 10
+				}
+			}
+		}
+		piety = 20
+	}
+}
+
+## Regent sends Ruler into forest.
+character_event = {
+	id = 61195
+	desc = EVTDESC61195
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_minor_title = title_regent
+		liege = { character = FROM }
+	}
+	
+	option = {
+		name = EVTOPTA61195
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61196 tooltip = EVTTOOLTIP61191 }
+		}
+	}
+	option = {
+		name = EVTOPTB61195
+		ai_chance = { factor = 0 }
+		clr_character_flag = regent_schemer
+		piety = 20
+	}
+}
+
+## Ruler is sent to forest.
+character_event = {
+	id = 61196
+	desc = EVTDESC61196
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61196
+		random_list = {
+			80 = {
+				character_event = {	id = 61197 tooltip = EVTTOOLTIP61197 }
+			}
+			20 = {
+				death = {
+					death_reason = death_murder_unknown
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+## Ruler returns from forest.
+character_event = {
+	id = 61197
+	desc = EVTDESC61197
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61197
+		hidden_tooltip = {
+			random_courtier = {
+				limit = {
+					has_minor_title = title_regent
+					has_character_flag = regent_schemer
+				}
+				character_event = {
+					id = 61200
+					days = 18
+					random = 10
+				}
+			}
+		}
+		prestige = 20
+	}
+}
+
+## Regent sends Ruler away by carriage.
+character_event = {
+	id = 61200
+	desc = EVTDESC61200
+	picture = GFX_evt_carriage
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_minor_title = title_regent
+		liege = { character = FROM }
+	}
+	
+	option = {
+		name = EVTOPTA61200
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61201 tooltip = EVTTOOLTIP61191 }
+		}
+	}
+	option = {
+		name = EVTOPTB61200
+		ai_chance = { factor = 0 }
+		clr_character_flag = regent_schemer
+		piety = 20
+	}
+}
+
+## Ruler is sent away on the carriage.
+character_event = {
+	id = 61201
+	desc = EVTDESC61201
+	picture = GFX_evt_carriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61201
+		random_list = {
+			80 = {
+				character_event = {	id = 61202 tooltip = EVTTOOLTIP61202 }
+			}
+			20 = {
+				death = {
+					death_reason = death_murder_unknown_fall
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+## Ruler survives the carriage ride.
+character_event = {
+	id = 61202
+	desc = EVTDESC61202
+	picture = GFX_evt_carriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61202
+		hidden_tooltip = {
+			random_courtier = {
+				limit = {
+					has_minor_title = title_regent
+					has_character_flag = regent_schemer
+				}
+				character_event = {
+					id = 61205
+					days = 18
+					random = 10
+				}
+			}
+		}
+		prestige = 20
+	}
+}
+
+## Regent pushes guard on Ruler.
+character_event = {
+	id = 61205
+	desc = EVTDESC61205
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		liege = { character = FROM }
+	}
+
+	option = {
+		name = EVTOPTA61205
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61206 tooltip = EVTTOOLTIP61191 }
+		}
+	}
+	option = {
+		name = EVTOPTB61205
+		ai_chance = { factor = 0 }
+		clr_character_flag = regent_schemer
+		piety = 20
+	}
+}
+
+## Ruler has guard pushed on him.
+character_event = {
+	id = 61206
+	desc = EVTDESC61206
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61206
+		random_list = {
+			80 = {
+				character_event = {	id = 61207 tooltip = EVTTOOLTIP61207 }
+			}
+			20 = {
+				death = {
+					death_reason = death_murder_unknown
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+## Ruler survives guard.
+character_event = {
+	id = 61207
+	desc = EVTDESC61207
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61207
+		hidden_tooltip = {
+			random_courtier = {
+				limit = {
+					has_minor_title = title_regent
+					has_character_flag = regent_schemer
+				}
+				character_event = {
+					id = 61210
+					days = 18
+					random = 10
+				}
+			}
+		}
+		prestige = 20
+	}
+}
+
+## Regent storms Ruler's room with dagger.
+character_event = {
+	id = 61210
+	desc = EVTDESC61210
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_minor_title = title_regent
+		liege = { character = FROM }
+	}
+
+	option = {
+		name = EVTOPTA61210
+		ai_chance = { factor = 100 }
+		liege = {
+			character_event = {	id = 61211 tooltip = EVTTOOLTIP61211 }
+		}
+	}
+	option = {
+		name = EVTOPTB61210
+		ai_chance = { factor = 0 }
+		clr_character_flag = regent_schemer
+		piety = 20
+	}
+}
+
+## Ruler is attacked by Regent.
+character_event = {
+	id = 61211
+	desc = EVTDESC61211
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61211
+		random_list = {
+			80 = {
+				character_event = {	id = 61212 tooltip = EVTTOOLTIP61212 }
+			}
+			20 = {
+				death = {
+					death_reason = death_murder
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+## Ruler survives.
+character_event = {
+	id = 61212
+	desc = EVTDESC61212
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61212
+		random_courtier = {
+			limit = {
+				NOT = { has_minor_title = title_regent }
+				prisoner = no 
+				age = 16
+			}
+			give_minor_title = title_regent
+		}
+		random_courtier = {
+			limit = { has_character_flag = regent_schemer }
+			character_event = {	id = 61213 tooltip = EVTTOOLTIP61213 }
+			clr_character_flag = regent_schemer
+		}
+	}
+}
+
+## Regent is imprisoned.
+character_event = {
+	id = 61213
+	desc = EVTDESC61213
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		imprison = FROM
+	}
+	
+	option = {
+		name = EVTOPTA61213
+		random = {
+			chance = 80
+			add_trait = lunatic
+			hidden_tooltip = {
+				character_event = { id = 38304 } # notify lunatic
+			}
+		}
+	}
+}
+
+## REGENCY SERIES, COURTIER WANTS TO REPLACE REGENT ##
+
+## Courtier thinks he/she would do a better job than current Regent.
+character_event = {
+	id = 61215
+	desc = EVTDESC61215
+	picture = GFX_evt_emissary
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	only_men = yes
+	war = no
+	
+	trigger = {
+		OR = {
+			liege = {
+				age = 1
+				NOT = { age = 14 }
+			}
+			liege = { trait = incapable }
+		}
+		
+		in_command = no
+		NOT = { has_minor_title = title_regent }
+		host = { character = liege }
+		is_ill = no
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.25
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.25
+			trait = duelist
+		}
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 2.0
+			trait = shy
+		}
+		modifier = {
+			factor = 3.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 4.0
+			trait = content
+		}
+	}
+	
+	option = { # Challenge to duel
+		name = EVTOPTA61215
+		tooltip_info = duelist
+		trigger = { trait = duelist }
+		ai_chance = { factor = 60 }
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	
+					id = 61221 
+					tooltip = EVTTOOLTIP61221
+					days = 2
+				}
+			}
+		}
+	}
+	option = { # Try to grab Regency
+		name = EVTOPTB61215
+		ai_chance = { factor = 30 }
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	id = 61216 tooltip = EVTTOOLTIP61216 }
+			}
+		}
+	}
+	option = { # Never mind
+		name = EVTOPTC61215
+		ai_chance = { factor = 10 }
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				opinion = {
+					who = ROOT
+					modifier = opinion_glad
+					years = 2
+				}
+			}
+		}
+	}
+}
+
+## Regent is informed that Courtier is trying to plead case at court.
+character_event = {
+	id = 61216
+	desc = EVTDESC61216
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61216
+		tooltip_info = duelist
+		trigger = { trait = duelist }
+		ai_chance = {
+			factor = 80
+		}
+		FROM = {
+			character_event = {	id = 61222 tooltip = EVTTOOLTIP61221 }
+		}
+	}
+	option = {
+		name = EVTOPTB61216
+		ai_chance = {
+			factor = 20
+		}
+		random_list = {
+			50 = { # Remains Regent
+				character_event = {	id = 61219 tooltip = EVTTOOLTIP61219 }
+				hidden_tooltip = {
+					FROM = {
+						character_event = {	id = 61218 }
+					}
+				}
+			}
+			50 = { # Loses Regency
+				character_event = {	id = 61220 tooltip = EVTTOOLTIP61220 }
+				hidden_tooltip = {
+					FROM = {
+						character_event = {	id = 61217 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC61216
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = {	id = 61217 tooltip = EVTTOOLTIP61217 }
+		}
+	}
+}
+
+## Courtier informed he/she won the case and is now new regent.	
+character_event = {
+	id = 61217
+	desc = EVTDESC61217
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61217
+		give_minor_title = title_regent
+		hidden_tooltip = {
+			liege = {
+				character_event = {	id = 61236 }
+			}
+		}
+	}
+}
+
+## Courtier informed he/she lost the case at court.	
+character_event = {
+	id = 61218
+	desc = EVTDESC61218
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61218
+		prestige = -40
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				opinion = {
+					who = ROOT
+					modifier = opinion_angry
+					years = 3
+				}
+			}
+		}
+	}
+}
+
+## Regent informed he/she won the case and remains regent.
+character_event = {
+	id = 61219
+	desc = EVTDESC61219
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61219
+		prestige = 40
+	}
+}
+
+## Regent informed he/she lost the case and has been replaced.
+character_event = {
+	id = 61220
+	desc = EVTDESC61220
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61220
+		prestige = -30
+	}
+}
+
+## Regent informed courtier has challenged him to duel over regency.
+character_event = {
+	id = 61221
+	desc = EVTDESC61221
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = { # Accept
+		name = EVTOPTA61221
+		ai_chance = { factor = 80 }
+		FROM = {
+			character_event = {	id = 61223 tooltip = EVTTOOLTIP61223 }
+			set_character_flag = duelist_courtier
+		}
+	}
+	option = { # Refuse
+		name = EVTOPTB61221
+		ai_chance = { factor = 0 }
+		prestige = -60
+		liege = {
+			any_courtier = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_coward
+					years = 1
+				}
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				character_event = {	id = 61245 }
+			}
+		}
+	}
+	option = { # Surrender regency
+		name = EVTOPTC61221
+		ai_chance = { factor = 20 }
+		prestige = -20
+		FROM = { give_minor_title = title_regent }
+		hidden_tooltip = {
+			FROM = {
+				character_event = {	id = 61246 }
+			}
+		}
+	}
+}
+
+## Courtier informed Regent challenges to duel.	
+character_event = {
+	id = 61222
+	desc = EVTDESC61222
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61222
+		ai_chance = { factor = 100 }
+		set_character_flag = duelist_courtier
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	
+					id = 61224 
+					tooltip = EVTTOOLTIP61223
+					days = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61222
+		ai_chance = { factor = 0 }
+		prestige = -40
+	}
+}
+
+## Courtier informed Regent accepts duel, they fight!
+character_event = {
+	id = 61223
+	desc = EVTDESC61223
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61224
+		ai_chance = { factor = 80 }
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					NOT = { martial = 7 }
+				}
+		 	}
+			random_list = {
+				10 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				10 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				40 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				40 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 7 - 14
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				17 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				17 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				33 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				33 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					NOT = { martial = 7 }
+				}
+			}
+			random_list = {
+				17 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				17 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				33 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				33 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 7 - 14
+			limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				33 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				33 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				17 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				17 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					NOT = { martial = 7 }
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 7 - 14
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				33 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				33 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				17 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				17 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				40 = {
+					FROM = {
+						character_event = {	id = 61225 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				40 = {
+					FROM = {
+						character_event = {	id = 61226 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				10 = {
+					character_event = {	id = 61228 tooltip = EVTTOOLTIP61228 }
+				}
+				10 = {
+					character_event = {	id = 61229 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61223
+		ai_chance = { factor = 20 }
+		FROM = {
+			character_event = {	id = 61231 tooltip = EVTTOOLTIP61231 }
+		}
+	}
+}
+
+## Regent informed courtier accepts duel, they fight!	
+character_event = {
+	id = 61224
+	desc = EVTDESC61224
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61224
+		ai_chance = { factor = 80 }
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					NOT = { martial = 7 }
+				}
+		 	}
+			random_list = {
+				10 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				10 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				40 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				40 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 7 - 14
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				17 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				17 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				33 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				33 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 15+ MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+		 		martial = 15
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					NOT = { martial = 7 }
+				}
+			}
+			random_list = {
+				17 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				17 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				33 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				33 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 7 - 14
+			limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 7 - 14 MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+				NOT = { martial = 15 }
+		 		martial = 7
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				33 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				33 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				17 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				17 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 1 - 6
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					NOT = { martial = 7 }
+				}
+		 	}
+			random_list = {
+				25 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				25 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				25 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				25 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 7 - 14
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					martial = 7
+					NOT = { martial = 15 }
+				}
+		 	}
+			random_list = {
+				33 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				33 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				17 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				17 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+		if = {					#HAS 1 - 6 MARTIAL, OPPONENT HAS 15+
+		 	limit = { 
+				NOT = { martial = 7 }
+				FROM = {
+					martial = 15
+				}
+		 	}
+			random_list = {
+				40 = {
+					FROM = {
+						character_event = {	id = 61228 tooltip = EVTTOOLTIP61225 }
+					}
+				}
+				40 = {
+					FROM = {
+						character_event = {	id = 61229 tooltip = EVTTOOLTIP61226 }
+					}
+				}
+				10 = {
+					character_event = {	id = 61225 tooltip = EVTTOOLTIP61228 }
+				}
+				10 = {
+					character_event = {	id = 61226 tooltip = EVTTOOLTIP61229 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB61224
+		ai_chance = { factor = 20 }
+		FROM = {
+			character_event = {	id = 61231 tooltip = EVTTOOLTIP61231 }
+		}
+	}
+}
+
+## Regent informed he wins.
+character_event = {
+	id = 61225
+	desc = EVTDESC61225
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61225
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = duelist_courtier }
+				character_event = {	id = 61232 tooltip = EVTTOOLTIP61232 }
+				clr_character_flag = duelist_courtier
+			}
+		}
+		prestige = 20
+	}
+}
+
+## Regent informed he wins, courtier maimed.
+character_event = {
+	id = 61226
+	desc = EVTDESC61226
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61226 #Spare opponent
+		ai_chance = { factor = 80 }
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = duelist_courtier }
+				character_event = {	id = 61230 tooltip = EVTTOOLTIP61230 }
+				clr_character_flag = duelist_courtier
+			}
+		}
+		piety = 40
+	}
+	option = {
+		name = EVTOPTB61226 #Kill opponent
+		ai_chance = { factor = 20 }
+		liege = {
+			random_courtier = {
+				limit = { has_character_flag = duelist_courtier }
+				character_event = {	id = 61232 tooltip = EVTTOOLTIP61232 }
+				clr_character_flag = duelist_courtier
+			}
+		}
+		prestige = 20
+	}
+}
+
+## Regent loses, is maimed.
+character_event = {
+	id = 61227
+	desc = EVTDESC61227
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61227
+		add_maimed_trait_effect = yes
+		prestige = -20
+	}
+}
+
+## Courtier informed he wins.
+character_event = {
+	id = 61228
+	desc = EVTDESC61225
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61228
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	id = 61232 tooltip = EVTTOOLTIP61232 }
+			}
+		}
+		hidden_tooltip = {
+			liege = {
+				character_event = {	id = 61235 }
+			}
+		}
+		give_minor_title = title_regent
+		clr_character_flag = duelist_courtier
+		prestige = 20
+	}
+}
+
+## Courtier informed he wins, regent maimed.
+character_event = {
+	id = 61229
+	desc = EVTDESC61226
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61229 #Spare opponent
+		ai_chance = { factor = 80 }
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	id = 61227 tooltip = EVTTOOLTIP61230 }
+			}
+		}
+		hidden_tooltip = {
+			liege = {
+				character_event = {	id = 61235 }
+			}
+		}
+		give_minor_title = title_regent
+		clr_character_flag = duelist_courtier
+		piety = 40
+	}
+	option = {
+		name = EVTOPTB61229 #Kill opponent
+		ai_chance = { factor = 20 }
+		liege = {
+			random_courtier = {
+				limit = { has_minor_title = title_regent }
+				character_event = {	id = 61232 tooltip = EVTTOOLTIP61232 }
+			}
+		}
+		hidden_tooltip = {
+			liege = {
+				character_event = {	id = 61235 }
+			}
+		}
+		give_minor_title = title_regent
+		clr_character_flag = duelist_courtier
+		prestige = 20
+	}
+}
+
+## Courtier loses, is maimed.
+character_event = {
+	id = 61230
+	desc = EVTDESC61230
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61230
+		add_maimed_trait_effect = yes
+		prestige = -20
+	}
+}
+
+## Opponent doesn't show up for duel.
+character_event = {
+	id = 61231
+	desc = EVTDESC61231
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61231
+		prestige = 20
+	}
+}
+
+## Is killed in duel.
+character_event = {
+	id = 61232
+	desc = EVTDESC61232
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61232
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+## Ruler informed about the new Regent after duel.
+character_event = {
+	id = 61235
+	desc = EVTDESC61235
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4017
+	}
+}
+
+## Ruler informed about the new Regent after intrigue.
+character_event = {
+	id = 61236
+	desc = EVTDESC61236
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA4017
+	}
+}
+
+## Courtier informed Regent refuses challenge.
+character_event = {
+	id = 61245
+	desc = EVTDESC61245
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61245
+		prestige = 20
+	}
+}
+
+## Courtier informed Regent voluntarily abdicates title.
+character_event = {
+	id = 61246
+	desc = EVTDESC61246
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61246
+		prestige = 20
+	}
+}
+
+## Queen or Queen Mother takes over Regency ##
+
+## Queen takes over regency.
+character_event = {
+	id = 61237
+	desc = EVTDESC61237
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	only_women = yes
+	is_married = yes
+	
+	trigger = {
+		NOT = { has_minor_title = title_regent }
+		has_minor_title = title_ruler_consort
+		spouse = {
+			prisoner = no
+			is_alive = yes
+			is_abroad = no
+			is_ruler = yes
+		}
+		spouse = {
+			OR = {
+				NOT = { age = 15 }
+				trait = incapable
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.25
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 3.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 5.0
+			trait = content
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61237
+		give_minor_title = title_regent
+		hidden_tooltip = {
+			spouse = {
+				character_event = { id = 61239 }
+			}
+		}
+	}
+}
+
+## Queen Mother takes over regency.
+character_event = {
+	id = 61238
+	desc = EVTDESC61238
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	only_women = yes
+	
+	trigger = {
+		NOT = { has_minor_title = title_regent }
+		has_minor_title = title_queen_mother
+		liege = {
+			OR = {
+				NOT = { age = 15 }
+				trait = incapable
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.25
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 3.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 5.0
+			trait = content
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61238
+		give_minor_title = title_regent
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = 61240 }
+			}
+		}
+	}
+}
+
+## Ruler informed that Queen takes over regency.
+character_event = {
+	id = 61239
+	desc = EVTDESC61239
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTB61239
+	}
+}
+
+## Ruler informed that Queen Mother is taking over regency.
+character_event = {
+	id = 61240
+	desc = EVTDESC61240
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+## The Regent Lowers Crown Authority in a Kingdom
+character_event = {
+	id = 61300
+	desc = EVTDESC61300
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	only_playable = yes # Only titled Regents do this
+	lacks_dlc = "Zeus"
+	
+	trigger = {
+		is_landed = yes
+		has_minor_title = title_regent
+		NOT = { trait = content }
+		liege = {
+			higher_tier_than = DUKE
+			NOT = { has_character_flag = regent_lowered_CA }
+			any_demesne_title = {
+				tier = KING
+				OR = {
+					has_law = crown_authority_1
+					has_law = crown_authority_2
+					has_law = crown_authority_3
+					has_law = crown_authority_4
+				}
+				ROOT = {
+					primary_title = {
+						kingdom = {
+							title = PREVPREVPREV
+						}
+					}
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.25
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.25
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.5
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2.0
+			trait = charitable
+		}
+		modifier = {
+			factor = 3.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61300
+		ai_chance = { factor = 100 }
+		liege = {
+			random_demesne_title = {
+				limit = {
+					tier = KING
+					OR = {
+						has_law = crown_authority_1
+						has_law = crown_authority_2
+						has_law = crown_authority_3
+						has_law = crown_authority_4
+					}
+					ROOT = {
+						primary_title = {
+							kingdom = {
+								title = PREVPREVPREV
+							}
+						}
+					}
+				}
+				if = {
+					limit = { has_law = crown_authority_1 }
+					add_law = crown_authority_0
+				}
+				if = {
+					limit = { has_law = crown_authority_2 }
+					add_law = crown_authority_1
+				}
+				if = {
+					limit = { has_law = crown_authority_3 }
+					add_law = crown_authority_2
+				}
+				if = {
+					limit = { has_law = crown_authority_4 }
+					add_law = crown_authority_3
+				}
+			}
+			hidden_tooltip = {
+				character_event = { id = 61301 }
+				set_character_flag = regent_lowered_CA
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB61300
+		ai_chance = { factor = 0 }
+	}
+}
+
+## Ruler informed that Regent has Lowered CA in a Kingdom
+character_event = {
+	id = 61301
+	desc = EVTDESC61301
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61301
+		opinion = {
+			who = FROM
+			modifier = opinion_regent_lowered_CA
+		}
+	}
+}
+
+## The Regent Lowers Crown Authority in an Empire
+character_event = {
+	id = 61302
+	desc = EVTDESC61302
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	only_playable = yes # Only titled Regents do this
+	lacks_dlc = "Zeus"
+	
+	trigger = {
+		is_landed = yes
+		has_minor_title = title_regent
+		NOT = { trait = content }
+		liege = {
+			higher_tier_than = DUKE
+			NOT = { has_character_flag = regent_lowered_CA }
+			any_demesne_title = {
+				tier = EMPEROR
+				OR = {
+					has_law = crown_authority_1
+					has_law = crown_authority_2
+					has_law = crown_authority_3
+					has_law = crown_authority_4
+				}
+				ROOT = {
+					primary_title = {
+						empire = {
+							title = PREVPREVPREV
+						}
+					}
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.25
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.25
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.5
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2.0
+			trait = charitable
+		}
+		modifier = {
+			factor = 3.0
+			trait = just
+		}
+	}
+	
+	option = {
+		name = EVTOPTA61300
+		ai_chance = { factor = 100 }
+		liege = {
+			random_demesne_title = {
+				limit = {
+					tier = EMPEROR
+					OR = {
+						has_law = crown_authority_1
+						has_law = crown_authority_2
+						has_law = crown_authority_3
+						has_law = crown_authority_4
+					}
+					ROOT = {
+						primary_title = {
+							empire= {
+								title = PREVPREVPREV
+							}
+						}
+					}
+				}
+				if = {
+					limit = { has_law = crown_authority_1 }
+					add_law = crown_authority_0
+				}
+				if = {
+					limit = { has_law = crown_authority_2 }
+					add_law = crown_authority_1
+				}
+				if = {
+					limit = { has_law = crown_authority_3 }
+					add_law = crown_authority_2
+				}
+				if = {
+					limit = { has_law = crown_authority_4 }
+					add_law = crown_authority_3
+				}
+			}
+			hidden_tooltip = {
+				character_event = { id = 61303 }
+				set_character_flag = regent_lowered_CA
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB61300
+		ai_chance = { factor = 0 }
+	}
+}
+
+## Ruler informed that Regent has Lowered CA in an Empire
+character_event = {
+	id = 61303
+	desc = EVTDESC61303
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA61301
+		opinion = {
+			who = FROM
+			modifier = opinion_regent_lowered_CA
+		}
+	}
+}

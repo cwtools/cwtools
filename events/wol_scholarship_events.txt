@@ -1,0 +1,1216 @@
+###########################################
+#                                         #
+# Way of Life scholarship events          #
+#                                         #
+# ID WoL.6000-WoL.6999                    #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = WoL
+
+###########################################
+# Building observatory                    #
+# ID WoL.6000-WoL.6099                    #
+###########################################
+
+# Confirm building
+character_event = {
+	id = WoL.6000
+	desc = EVTDESC_WoL_6000
+	picture = GFX_evt_construction_site
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6000
+		hidden_tooltip = { character_event = { id = WoL.6010 days = 180 } }
+	}
+}
+
+# Observatory is ready
+character_event = {
+	id = WoL.6010
+	desc = EVTDESC_WoL_6010
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6010
+		hidden_tooltip = { character_event = { id = WoL.6020 days = 180 } }
+		clr_character_flag = building_observatory
+		set_character_flag = built_observatory
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_stargazer
+		}
+		add_character_modifier = {
+			name = studying_the_stars
+			duration = -1
+		}
+	}
+}
+
+# Split event - heliocentrism or weird?
+character_event = {
+	id = WoL.6020
+	desc = EVTDESC_WoL_6020
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6020
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 2
+				trait = cynical
+			}
+		}
+		prestige = 10
+		hidden_tooltip = { character_event = { id = WoL.6100 days = 180 } } # Heliocentrism - how do the celestial bodies move?
+	}
+	option = {
+		name = EVTOPTB_WoL_6020
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10
+				trait = possessed
+			}
+			modifier = {
+				factor = 10
+				trait = lunatic
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+		}
+		trigger = {
+			NOT = {
+				has_game_rule = {
+					name = supernatural_events
+					value = off
+				}
+			}
+		}
+		prestige = 5
+		hidden_tooltip = { character_event = { id = WoL.6300 days = 180 } } # Weird - maybe there's someone out there
+	}
+}
+
+###########################################
+# Heliocentric studies                    #
+# ID WoL.6100-WoL.6299                    #
+###########################################
+
+# Starts believing in heliocentrist theory
+character_event = {
+	id = WoL.6100
+	desc = EVTDESC_WoL_6100
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6100
+		military_techpoints = 30
+		if = {
+			limit = {
+				OR = {
+					religion_group = christian
+					religion_group = muslim
+				}
+			}
+			if = {
+				limit = {
+					NOT = { trait = zealous }
+					NOT = { trait = cynical }
+				}
+				random = {
+					chance = 50
+					add_trait = cynical
+					hidden_tooltip = {
+						character_event = { id = 38258 } # Notification
+					}
+				}
+			}
+			if = {
+				limit = {
+					trait = zealous
+				}
+				random = {
+					chance = 50
+					remove_trait = zealous
+					hidden_tooltip = {
+						character_event = { id = 38310 } # Notification
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = diligent } }
+			random = {
+				chance = 20
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = { id = 38256 } # Notification
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.6110 days = 180 } }
+	}
+}
+
+# Research more expensive than expected, need new equipment
+character_event = {
+	id = WoL.6110
+	desc = EVTDESC_WoL_6110
+	picture = GFX_evt_scientist
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6110 # Buy what's needed and continue research
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { wealth = 30 }
+			}
+		}
+		wealth = -30
+		hidden_tooltip = { character_event = { id = WoL.6120 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6110  # Abandon research
+		ai_chance = {
+			factor = 1
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Friend or family member worries about dangerous research
+character_event = {
+	id = WoL.6120
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					any_courtier = {
+						ai = yes
+						is_adult = yes
+						trait = zealous
+						at_location = ROOT
+						NOT = { religion = zun_pagan }
+						NOT = { religion = zun_pagan_reformed }
+						NOT = { religion = buddhist }
+						OR = {
+							mother = { character = ROOT }
+							father = { character = ROOT }
+							any_child = { character = ROOT }
+							AND = {
+								any_sibling = { character = ROOT }
+								NOT = { is_rival = ROOT }
+							}
+							is_friend = ROOT
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.6130 days = 180 }
+			break = yes                                         # NOTE
+		}
+		
+		random_courtier = {
+			limit = {
+				is_adult = yes
+				trait = zealous
+				at_location = ROOT
+				NOT = { religion = zun_pagan }
+				NOT = { religion = zun_pagan_reformed }
+				NOT = { religion = buddhist }
+				OR = {
+					mother = { character = ROOT }
+					father = { character = ROOT }
+					any_child = { character = ROOT }
+					AND = {
+						any_sibling = { character = ROOT }
+						NOT = { is_rival = ROOT }
+					}
+					is_friend = ROOT
+				}
+			}
+			character_event = { id = WoL.6121 } # Friend or family is worried
+		}
+	}
+}
+
+# Friend or family bounce event
+character_event = {
+	id = WoL.6121
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { character_event = { id = WoL.6122 } }
+	}
+}
+
+# Respond to worried friend/relative
+character_event = {
+	id = WoL.6122
+	desc = EVTDESC_WoL_6122
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6122 # Don't worry
+		if = {
+			limit = {
+				NOT = { trait = stressed }
+				NOT = { trait = brave }
+				NOT = { trait = lunatic }
+			}
+			random = {
+				chance = 10
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_worried
+			who = FROM
+			years = 2
+		}
+		hidden_tooltip = { character_event = { id = WoL.6130 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6122  # Get your nose out of my business!
+		prestige = 30
+		reverse_opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 2
+		}
+		hidden_tooltip = { character_event = { id = WoL.6130 days = 180 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_6122 # Alright, I'll stop it (lies)
+		trigger = {
+			NOT = { trait = honest }
+		}
+		if = {
+			limit = { NOT = { trait = deceitful } }
+			add_trait = deceitful
+		}
+		hidden_tooltip = { character_event = { id = WoL.6130 days = 180 } }
+	}
+}
+
+# Work is great stimulus to knowledge about how world works
+character_event = {
+	id = WoL.6130
+	desc = EVTDESC_WoL_6130
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6130
+		military_techpoints = 100
+		hidden_tooltip = { character_event = { id = WoL.6140 days = 180 } }
+	}
+}
+
+# Technical problems with observations - persist or give up?
+character_event = {
+	id = WoL.6140
+	desc = EVTDESC_WoL_6140
+	picture = GFX_evt_scientist
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6140 # Persist!
+		if = {
+			limit = { NOT = { trait = diligent } }
+			random = {
+				chance = 30
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 10
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.6150 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6140 # Give up on this silly pursuit
+		if = {
+			limit = {
+				NOT = { trait = slothful }
+				NOT = { trait = diligent }
+			}
+			add_trait = slothful
+		}
+		if = {
+			limit = {
+				NOT = { trait = slothful }
+				trait = diligent
+			}
+			remove_trait = diligent
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Religious authorities find out
+character_event = {
+	id = WoL.6150
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				religion_head = { is_alive = yes }
+				religion_head = { ai = yes }
+				NOT = { religion = zun_pagan_reformed }
+			}
+			religion_head = {
+				character_event = { id = WoL.6151 } # Religious head opines
+			}
+			break = yes
+		}
+		character_event = { id = WoL.6160 } # Else skip to next
+	}
+}
+
+# Religious head
+character_event = {
+	id = WoL.6151
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { letter_event = { id = WoL.6152 } }
+	}
+}
+
+# A letter from religious head - respond
+letter_event = {
+	id = WoL.6152
+	desc = EVTDESC_WoL_6152
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6152 # Tell them to get lost
+		prestige = 50
+		piety = -50
+		if = {
+			limit = { NOT = { trait = brave } }
+			add_trait = brave
+		}
+		reverse_opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 10
+		}
+		add_character_modifier = {
+			name = annoyed_religious
+			years = 2
+		}
+		hidden_tooltip = { character_event = { id = WoL.6160 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6152 # The best answer is silence
+		piety = -20
+		reverse_opinion = {
+			modifier = opinion_irritated
+			who = FROM
+			years = 5
+		}
+		hidden_tooltip = { character_event = { id = WoL.6160 days = 180 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_6152 # Stop my heretical research
+		reverse_opinion = {
+			modifier = opinion_pleased
+			who = FROM
+			years = 3
+		}
+		add_character_modifier = {
+			name = religious_appreciate
+			years = 2
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Work Gives even more amazing knowledge
+character_event = {
+	id = WoL.6160
+	desc = EVTDESC_WoL_6160
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6160
+		change_learning = 1
+		military_techpoints = 100
+		hidden_tooltip = { character_event = { id = WoL.6170 days = 180 } }
+	}
+}
+
+# Breakthrough - you have proven that the earth is round and revolves around the sun!
+character_event = {
+	id = WoL.6170
+	desc = EVTDESC_WoL_6170
+	picture = GFX_evt_scientist
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6170 # Publish findings
+		prestige = 300
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			remove_character_modifier = studying_the_stars
+			add_trait = scholar
+		}
+		if = {
+			limit = { has_nickname = no }
+			random_list = {
+				10 = {
+					give_nickname = nick_the_wise
+				}
+				10 = {
+					give_nickname = nick_the_able
+				}
+				10 = {
+					give_nickname = nick_the_scholar
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						OR = {
+							religion = zun_pagan
+							religion = zun_pagan_reformed
+							religion = buddhist
+						}
+					}
+					give_nickname = nick_priest_hater
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { religion = zun_pagan }
+				NOT = { religion = zun_pagan_reformed }
+				NOT = { religion = buddhist }
+			}
+			add_character_modifier = {
+				name = annoyed_religious
+				years = -1
+			}
+		}
+		any_realm_character = {
+			limit = {
+				OR = {
+					is_priest = yes
+					trait = zealous
+				}
+				NOT = { religion = zun_pagan }
+				NOT = { religion = zun_pagan_reformed }
+				NOT = { religion = buddhist }
+			}
+			opinion = {
+				modifier = opinion_heretic
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_6170 # Keep it secret but continue dedicating myself to knowledge
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			remove_character_modifier = studying_the_stars
+			add_trait = scholar
+		}
+	}
+	option = {
+		name = EVTOPTC_WoL_6170 # Very interesting but I'm done with this
+		remove_character_modifier = studying_the_stars
+		add_character_modifier = {
+			name = heliocentrist_scholar
+			duration = -1
+		}
+	}
+	option = {
+		name = EVTOPTD_WoL_6170 # This is heretical - I must burn it!
+		trigger = {
+			NOT = { religion = zun_pagan }
+			NOT = { religion = zun_pagan_reformed }
+			NOT = { religion = buddhist }
+		}
+		remove_character_modifier = studying_the_stars
+		if = {
+			limit = {
+				NOT = { trait = zealous }
+				NOT = { trait = cynical }
+			}
+			add_trait = zealous
+		}
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+		}
+	}
+}
+
+
+###########################################
+# Weird studies                           #
+# ID WoL.6300-WoL.6499                    #
+###########################################
+
+# Starts believing in cosmic "things" out there
+character_event = {
+	id = WoL.6300
+	desc = EVTDESC_WoL_6300
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6300
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			add_trait = paranoid
+		}
+		if = {
+			limit = { NOT = { trait = diligent } }
+			random = {
+				chance = 30
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.6310 days = 180 } }
+	}
+}
+
+# Research more expensive than expected, need new equipment
+character_event = {
+	id = WoL.6310
+	desc = EVTDESC_WoL_6110
+	picture = GFX_evt_ritual_scroll
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6110 # Buy what's needed and continue research
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { wealth = 30 }
+			}
+		}
+		wealth = -30
+		hidden_tooltip = { character_event = { id = WoL.6320 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6110  # Abandon research
+		ai_chance = {
+			factor = 1
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Friend or family member worries about dangerous research
+character_event = {
+	id = WoL.6320
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					any_courtier = {
+						ai = yes
+						trait = zealous
+						at_location = ROOT
+						OR = {
+							mother = { character = ROOT }
+							father = { character = ROOT }
+							any_child = { character = ROOT }
+							AND = {
+								any_sibling = { character = ROOT }
+								NOT = { is_rival = ROOT }
+							}
+							is_friend = ROOT
+						}
+					}
+				}
+			}
+			character_event = { id = WoL.6329 days = 180 }
+			break = yes                                         # NOTE
+		}
+		
+		random_courtier = {
+			limit = {
+				trait = zealous
+				at_location = ROOT
+				OR = {
+					mother = { character = ROOT }
+					father = { character = ROOT }
+					any_child = { character = ROOT }
+					AND = {
+						any_sibling = { character = ROOT }
+						NOT = { is_rival = ROOT }
+					}
+					is_friend = ROOT
+				}
+			}
+			character_event = { id = WoL.6321 } # Friend or family is worried
+		}
+	}
+}
+
+# Friend or family bounce event
+character_event = {
+	id = WoL.6321
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { character_event = { id = WoL.6322 } }
+	}
+}
+
+# Respond to worried friend/relative
+character_event = {
+	id = WoL.6322
+	desc = EVTDESC_WoL_6322
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6322 # Don't worry
+		reverse_opinion = {
+			modifier = opinion_worried
+			who = FROM
+			years = 2
+		}
+		hidden_tooltip = { character_event = { id = WoL.6329 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6322  # I am communing with other worlds here!
+		prestige = 30
+		reverse_opinion = {
+			modifier = opinion_afraid
+			who = FROM
+			years = 2
+		}
+		hidden_tooltip = { character_event = { id = WoL.6329 days = 180 } }
+	}
+	option = {
+		name = EVTOPTC_WoL_6322 # Alright, I'll stop it (lies)
+		trigger = {
+			NOT = { trait = honest }
+		}
+		if = {
+			limit = { NOT = { trait = deceitful } }
+			add_trait = deceitful
+		}
+		hidden_tooltip = { character_event = { id = WoL.6329 days = 180 } }
+	}
+}
+
+# Research needs more info, hears about strange scholar in arab desert, decides to travel there
+character_event = {
+	id = WoL.6329
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_regent = yes
+					in_command = yes
+					has_character_flag = do_not_disturb
+				}
+			}
+			repeat_event = { id = WoL.6329 days = 30 } # Fire again with no scope changes
+			break = yes
+		}
+		character_event = { id = WoL.6330 }
+	}
+}
+
+character_event = {
+	id = WoL.6330
+	desc = EVTDESC_WoL_6330
+	picture = GFX_evt_ritual_scroll
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6330 # Go there and see him
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { scaled_wealth = 0.3 }
+			}
+		}
+		scaled_wealth = -0.2
+		hidden_tooltip = { narrative_event = { id = WoL.6331 days = 90 } }
+		set_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTB_WoL_6330  # Abandon research, this is too much
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = { NOR = { trait = craven trait = berserker } }
+			add_trait = craven
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Meets strange arab scholar, speaks late hours, he tells you of Abdul the Mad and offers to sell you a copy of the strange book that killed him
+narrative_event = {
+	id = WoL.6331
+	desc = EVTDESC_WoL_6331
+	title = EVTTITLE_WoL_6331
+	picture = GFX_evt_lunatic
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_6331 # Buy it!
+		ai_chance = {
+			factor = 0
+		}
+		culture_techpoints = 30
+		wealth = -100
+		add_character_modifier = {
+			name = the_necronomicon
+			duration = -1
+		}
+		clr_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = WoL.6340 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6331  # No thanks
+		ai_chance = {
+			factor = 1
+		}
+		culture_techpoints = 30
+		clr_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = WoL.6340 days = 180 } }
+	}
+}
+
+# Weird death event for owner of Necronomicon (on action on_death)
+character_event = {
+	id = WoL.6335
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_modifier = the_necronomicon
+	}
+
+	immediate = {
+		current_heir = {
+			character_event = { id = WoL.6336 days = 7 }
+		}
+	}
+}
+
+# Heir hears of predecessor's library being raided and strange book disappeared, servants dead in a most horrible and strange way
+character_event = {
+	id = WoL.6336
+	desc = EVTDESC_WoL_6336
+	picture = GFX_evt_ritual_scroll
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_6336
+	}
+}
+
+# Weird - disturbances in observatory - persist or give up?
+character_event = {
+	id = WoL.6340
+	desc = EVTDESC_WoL_6340
+	picture = GFX_evt_ritual_scroll
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6340 # Persist!
+		if = {
+			limit = { NOT = { trait = diligent } }
+			random = {
+				chance = 30
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 20
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_character_modifier = the_necronomicon }
+			hidden_tooltip = { character_event = { id = WoL.6350 days = 180 } }
+			break = yes
+		}
+		hidden_tooltip = { character_event = { id = WoL.6360 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6340 # Give up on this silly pursuit
+		if = {
+			limit = {
+				NOT = { trait = slothful }
+				NOT = { trait = diligent }
+			}
+			add_trait = slothful
+		}
+		if = {
+			limit = {
+				NOT = { trait = slothful }
+				trait = diligent
+			}
+			remove_trait = diligent
+		}
+		remove_character_modifier = studying_the_stars
+	}
+}
+
+# Starts going weird in studies of Necronomicon - choose to go deeper or lunatic or not
+character_event = {
+	id = WoL.6350
+	desc = EVTDESC_WoL_6350
+	picture = GFX_evt_ritual_scroll
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6350 # Leave it on the shelf, it's too scary
+		culture_techpoints = 20
+		hidden_tooltip = { character_event = { id = WoL.6360 days = 180 } }
+	}
+	option = {
+		name = EVTOPTB_WoL_6350 # Go deeper
+		culture_techpoints = 200
+		if = {
+			limit = { NOT = { trait = lunatic } }
+			random = {
+				chance = 30
+				add_trait = lunatic
+				hidden_tooltip = {
+					character_event = { id = 38304 } # notify lunatic
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			random = {
+				chance = 30
+				add_trait = paranoid
+				hidden_tooltip = {
+					character_event = {
+						id = 38275 #Notify Paranoid
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_nickname = no }
+			random_list = {
+				10 = {
+					give_nickname = nick_the_scholar
+				}
+				10 = {
+					give_nickname = nick_the_strange
+				}
+				10 = {
+					give_nickname = nick_the_devil
+				}
+				10 = {
+					give_nickname = nick_the_accursed
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						NOT = { religion_group = christian }
+					}
+					give_nickname = nick_the_black
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = WoL.6360 days = 180 } }
+	}
+}
+
+# Studies makes you feel more knowledgeable and wise
+character_event = {
+	id = WoL.6360
+	desc = EVTDESC_WoL_6360
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6360
+		change_learning = 1
+		culture_techpoints = 100
+		hidden_tooltip = { character_event = { id = WoL.6370 days = 180 } }
+	}
+}
+
+# Breakthrough - you KNOW things!
+character_event = {
+	id = WoL.6370
+	desc = EVTDESC_WoL_6370
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_focus = focus_scholarship
+		prisoner = no
+		NOT = { trait = incapable }
+	}
+
+	option = {
+		name = EVTOPTA_WoL_6370 # Keep it secret but continue dedicating myself to knowledge
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			remove_character_modifier = studying_the_stars
+			add_trait = mystic
+		}
+		if = {
+			limit = { has_nickname = no }
+			random_list = {
+				10 = {
+					give_nickname = nick_the_scholar
+				}
+				10 = {
+					give_nickname = nick_the_strange
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_6370 # Very interesting but there are other things in life
+		remove_character_modifier = studying_the_stars
+		add_character_modifier = {
+			name = weird_scholar
+			duration = -1
+		}
+	}
+}
+

@@ -12,24 +12,12 @@ open FParsec
 type HomeController () =
     inherit Controller()
 
+    static let ck2 = Events.parseAll
+
     member this.Index () =
-        let ck2 = CKParser.y
-        match ck2 with
-        | Success (v,_,_) ->
-            this.View(model = CKParser.prettyPrint v)
-        | Failure (msg,_,_) ->
-            this.View(model = sprintf "%O" msg)
+        eprintfn "Test"
+        this.View(ck2)  
         
-
-    member this.About () =
-        this.ViewData.["Message"] <- "Your application description page."
-        let ck2 = sprintf "%A" CKParser.y
-        this.ViewData.["Message"] <- ck2
-        this.View()
-
-    member this.Contact () =
-        this.ViewData.["Message"] <- "Your contact page."
-        this.View()
 
     member this.Error () =
         this.View();

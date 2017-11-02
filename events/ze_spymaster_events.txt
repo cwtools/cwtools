@@ -1,0 +1,1349 @@
+###########################################
+#                                         #
+# Zeus | Spymaster flavor events		  #
+# ID ZE.2050-2099	                      #
+#                                         #
+###########################################
+
+# Written by Joel Hansson
+
+namespace = ZE
+
+# Stealing from realm coffers
+character_event = {
+	id = ZE.2060
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 16
+	capable_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOR = {
+			has_character_flag = had_royal_coffers_robbed
+			is_inaccessible_trigger = yes
+			trait = blinded
+		}
+		prisoner = no
+		OR = {
+			job_chancellor = {
+				NOR = { 
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_character_flag = caught_stealing_from_coffers
+				}
+				prisoner = no
+				OR = {
+					trait = arbitrary
+					AND = {
+						trait = greedy
+						NOT = { trait = just }
+					}
+				}
+				NOT = {
+					opinion = {
+						who = ROOT
+						value = 35
+					}
+				}
+			}
+			job_marshal = {
+				NOR = { 
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_character_flag = caught_stealing_from_coffers
+				}
+				prisoner = no
+				OR = {
+					trait = arbitrary
+					AND = {
+						trait = greedy
+						NOT = { trait = just }
+					}
+				}
+				NOT = {
+					opinion = {
+						who = ROOT
+						value = 35
+					}
+				}
+			}
+			job_treasurer = {
+				NOR = { 
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_character_flag = caught_stealing_from_coffers
+				}
+				prisoner = no
+				OR = {
+					trait = arbitrary
+					AND = {
+						trait = greedy
+						NOT = { trait = just }
+					}
+				}
+				NOT = {
+					opinion = {
+						who = ROOT
+						value = 35
+					}
+				}
+			}
+			job_spymaster = {
+				NOR = { 
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_character_flag = caught_stealing_from_coffers
+				}
+				prisoner = no
+				OR = {
+					trait = arbitrary
+					AND = {
+						trait = greedy
+						NOT = { trait = just }
+					}
+				}
+				NOT = {
+					opinion = {
+						who = ROOT
+						value = 35
+					}
+				}
+			}
+			job_spiritual = {
+				NOR = { 
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_character_flag = caught_stealing_from_coffers
+				}
+				prisoner = no
+				OR = {
+					trait = arbitrary
+					AND = {
+						trait = greedy
+						NOT = { trait = just }
+					}
+				}
+				NOT = {
+					opinion = {
+						who = ROOT
+						value = 35
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		save_event_target_as = councillor_liege
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						job_chancellor = {
+							NOR = { 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+							prisoner = no
+							OR = {
+								trait = arbitrary
+								AND = {
+									trait = greedy
+									NOT = { trait = just }
+								}
+							}
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 35
+								}
+							}
+						}
+					}
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						job_marshal = {
+							NOR = { 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+							prisoner = no
+							OR = {
+								trait = arbitrary
+								AND = {
+									trait = greedy
+									NOT = { trait = just }
+								}
+							}
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 35
+								}
+							}
+						}
+					}
+				}
+				job_marshal = {
+					character_event = { id = ZE.2061 }
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						job_treasurer = {
+							NOR = { 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+							prisoner = no
+							OR = {
+								trait = arbitrary
+								AND = {
+									trait = greedy
+									NOT = { trait = just }
+								}
+							}
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 35
+								}
+							}
+						}
+					}
+				}
+				job_treasurer = {
+					character_event = { id = ZE.2061 }
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						job_spymaster = {
+							NOR = { 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+							prisoner = no
+							OR = {
+								trait = arbitrary
+								AND = {
+									trait = greedy
+									NOT = { trait = just }
+								}
+							}
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 35
+								}
+							}
+						}
+					}
+				}
+				job_spymaster = {
+					character_event = { id = ZE.2061 }
+				}
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						job_spiritual = {
+							NOR = { 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+							prisoner = no
+							OR = {
+								trait = arbitrary
+								AND = {
+									trait = greedy
+									NOT = { trait = just }
+								}
+							}
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 35
+								}
+							}
+						}
+					}
+				}
+				job_spiritual = {
+					character_event = { id = ZE.2061 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2061
+	desc = {
+		text = EVTDESC_ZE_2061A
+		trigger = {
+			liege = { NOT = { has_character_flag = had_royal_coffers_robbed } }
+		}
+	}
+	desc = {
+		text = EVTDESC_ZE_2061B
+		trigger = {
+			liege = { has_character_flag = had_royal_coffers_robbed }
+		}
+	}
+	picture = GFX_evt_eavesdropping
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_job_title = yes
+		liege = {
+			character = event_target:councillor_liege
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2061
+		liege = {
+			set_character_flag = had_royal_coffers_robbed
+			tooltip = {
+				transfer_scaled_wealth = {
+					value = 0.05
+					min = 5
+					to = ROOT
+				}
+			}
+			hidden_tooltip = {
+				random_list = {
+					60 = { # No trace
+						character_event = { id = ZE.2062 }
+						ROOT = {
+							repeat_event = { id = ZE.2061 days = 200 random = 50 }
+						}
+					}
+					40 = { # Caught red-handed
+						modifier = {
+							factor = 1.5
+							trait = paranoid
+						}
+						character_event = { id = ZE.2063 }
+						clr_character_flag = had_royal_coffers_robbed
+					}
+					40 = { # Steward tracks down the money trace
+						modifier = {
+							factor = 0
+							job_treasurer = {
+								ai = no
+								OR = {
+									NOT = { trait = diligent }
+									character = ROOT
+								}
+							}
+						}
+						character_event = { id = ZE.2062 }
+						character_event = { id = ZE.2064 days = 30 }
+						clr_character_flag = had_royal_coffers_robbed
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2061
+	}
+}
+
+character_event = {
+	id = ZE.2062
+	desc = {
+		text = EVTDESC_ZE_2062A
+		trigger = {
+			liege = { NOT = { has_character_flag = had_royal_coffers_robbed } }
+		}
+	}
+	desc = {
+		text = EVTDESC_ZE_2062B
+		trigger = {
+			liege = { has_character_flag = had_royal_coffers_robbed }
+		}
+	}
+	picture = GFX_evt_stressed_ruler
+	border = GFX_event_normal_frame_intrigue 
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2062
+		tooltip = {
+			scaled_wealth = {
+				value = -0.05
+				min = -5
+			}
+		}
+		hidden_tooltip = {
+			transfer_scaled_wealth = {
+				value = 0.05
+				to = FROM
+				min = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2062
+		tooltip = {
+			scaled_wealth = {
+				value = -0.05
+				min = -5
+			}
+		}
+		hidden_tooltip = {
+			transfer_scaled_wealth = {
+				value = 0.05
+				to = FROM
+				min = 5
+			}
+		}
+		add_trait = paranoid
+	}
+}
+
+character_event = {
+	id = ZE.2063
+	desc = {
+		text = EVTDESC_ZE_2063A
+		trigger = {
+			NOT = { trait = paranoid }
+		}
+	}
+	desc = {
+		text = EVTDESC_ZE_2063B
+		trigger = {
+			trait = paranoid
+		}
+	}
+	picture = GFX_evt_bribe_accepted
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = {
+			NOT = {
+				holds_favor_on = FROM
+			}
+		}
+		name = EVTOPTA_ZE_2063
+		add_favor = FROM
+		hidden_tooltip = {
+			FROM = {
+				set_character_flag = favor_given
+				set_character_flag = caught_stealing_from_coffers
+				character_event = { id = ZE.2065 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2063
+		FROM = {
+			reverse_opinion = {
+				modifier = abuse_of_office
+				who = ROOT
+				years = 3
+			}
+			imprison = ROOT
+		}
+	}
+
+	option = {
+		name = EVTOPTA_ZE_2064
+		hidden_tooltip = {
+			FROM = {
+				reverse_opinion = {
+					modifier = abuse_of_office
+					who = ROOT
+					years = 3
+				}
+				set_character_flag = caught_stealing_from_coffers
+				character_event = { id = ZE.2065 }
+			}
+		}
+		
+	}
+}
+
+character_event = {
+	id = ZE.2064
+	desc = EVTDESC_ZE_2064
+	picture = GFX_evt_accused
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			has_job_title = yes
+			liege = {
+				character = event_target:councillor_liege
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2064
+		FROM = {
+			reverse_opinion = {
+				modifier = abuse_of_office
+				who = ROOT
+				years = 3
+			}
+			character_event = { id = ZE.2066 }
+			set_character_flag = caught_stealing_from_coffers
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2064
+		FROM = {
+			reverse_opinion = {
+				modifier = abuse_of_office
+				who = ROOT
+				years = 3
+			}
+			imprison = ROOT
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2065
+	desc = EVTDESC_ZE_2065
+	picture = GFX_evt_powerful_ruler
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2065
+		trigger = {
+			NOT = { has_character_flag = favor_given }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2065
+		trigger = {
+			has_character_flag = favor_given
+		}
+		clr_character_flag = favor_given
+		tooltip = {
+			reverse_add_favor = FROM
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2066
+	desc = EVTDESC_ZE_2066
+	picture = GFX_evt_powerful_ruler
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2066
+	}
+}
+
+# Using spy network to blackmail people
+character_event = {
+	id = ZE.2070
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 16
+	capable_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOT = {
+			is_inaccessible_trigger = yes
+		}
+		prisoner = no
+		job_spymaster = {
+			NOR = {
+				trait = honest
+				is_inaccessible_trigger = yes
+				opinion = { who = liege value = -74 }
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 2
+			job_spymaster = { trait = deceitful }
+		}
+		modifier = {
+			factor = 2
+			job_spymaster = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.5
+			job_spymaster = { trait = craven }
+		}
+		modifier = {
+			factor = 0.5
+			job_spymaster = { trait = slothful }
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			40 = {
+				modifier = {
+					NOT = {
+						any_courtier = {
+							ai = yes
+							prisoner = no
+							NOT = { trait = incapable }
+							NOT = { is_inaccessible_trigger = yes }
+							NOT = {
+								ROOT = {
+									job_spymaster = {
+										character = PREVPREV
+									}
+								}
+							}
+						}
+					}
+					factor = 0
+				}
+				random_courtier = {
+					limit = {
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+						NOT = { is_inaccessible_trigger = yes }
+						NOT = {
+							ROOT = {
+								job_spymaster = {
+									character = PREVPREV
+								}
+							}
+						}
+					}
+					save_event_target_as = blackmailed_target
+				}
+			}
+			60 = {
+				modifier = {
+					NOT = {
+						any_vassal = {
+							ai = yes
+							prisoner = no
+							NOT = { trait = incapable }
+							NOT = { is_inaccessible_trigger = yes }
+							NOT = {
+								ROOT = {
+									job_spymaster = {
+										character = PREVPREV
+									}
+								}
+							}
+						}
+					}
+					factor = 0
+				}
+				random_vassal = {
+					limit = {
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+						NOT = { is_inaccessible_trigger = yes }
+						NOT = {
+							ROOT = {
+								job_spymaster = {
+									character = PREVPREV
+								}
+							}
+						}
+					}
+					save_event_target_as = blackmailed_target
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					event_target:blackmailed_target = { always = yes }
+				}
+			}
+			break = yes # failed to find a target to blackmail
+		}
+		character_event = { id = ZE.2071 }
+	}
+}
+
+character_event = {
+	id = ZE.2071
+	desc = EVTDESC_ZE_2071
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:blackmailed_target = {
+			if = {
+				limit = {
+					is_ruler = yes
+				}
+				wealth = -100
+				ROOT = {
+					job_spymaster = {
+						wealth = 100
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_ruler = no
+				}
+				wealth = -50
+				ROOT = {
+					job_spymaster = {
+						wealth = 50
+					}
+				}
+			}
+			ROOT = {
+				job_spymaster = {
+					reverse_opinion = {
+						who = PREVPREV
+						modifier = opinion_blackmailed
+						years = 15
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2071
+		event_target:blackmailed_target = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_pleased
+				years = 3
+			}
+		}
+		job_spymaster = {
+			reverse_opinion = {
+				who = ROOT
+				modifier = abuse_of_office
+				years = 3
+			}
+			remove_title = job_spymaster
+			prestige = -50
+			piety = -50
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2071
+		event_target:blackmailed_target = {	
+			opinion = {
+				who = ROOT
+				modifier = opinion_corrupt
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ZE_2071
+		trigger = {
+			intrigue = 12
+		}
+		tooltip_info = intrigue
+		event_target:blackmailed_target = {
+			wealth = -25
+			opinion = {
+				who = ROOT
+				modifier = opinion_blackmailed
+				years = 15
+			}
+		}
+		wealth = 25
+	}
+}
+
+# Precautionary safety measures
+character_event = {
+	id = ZE.2075
+	desc = EVTDESC_ZE_2075
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 16
+	capable_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOR = { 
+			has_character_flag = had_spymaster_safety_help
+			is_inaccessible_trigger = yes
+			trait = blinded
+		}
+		prisoner = no
+		job_spymaster = {
+			NOT = { is_inaccessible_trigger = yes }
+			OR = {
+				trait = diligent
+				trait = lunatic
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 3
+			any_known_plotter = {
+				target = ROOT
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = had_spymaster_safety_help
+		job_spymaster = {
+			save_event_target_as = safety_measure_spymaster
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2075
+		scaled_wealth = -0.15
+		custom_tooltip = {
+			text = EVTTOOLTIP_ZE_2075
+			hidden_tooltip = {
+				random_list = {
+					10 = {
+						character_event = { id = ZE.2076 days = 100 random = 60 }
+					}
+					10 = {
+						character_event = { id = ZE.2077 days = 100 random = 60 }
+					}
+					80 = {
+						modifier = {
+							factor = 0
+							event_target:safety_measure_spymaster = {
+								NOT = { trait = lunatic }
+							}
+						}
+						character_event = { id = ZE.2078 days = 100 random = 60 }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2075
+		job_spymaster = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2076
+	desc = {
+		text = EVTDESCA_ZE_2076
+		trigger = {
+			NOT = { has_character_flag = safety_measure_failure }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_2076
+		trigger = {
+			has_character_flag = safety_measure_failure
+		}
+	}
+	picture = GFX_evt_shadow
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			30 = {
+				modifier = {
+					factor = 7
+					event_target:safety_measure_spymaster = {
+						NOR = {
+							intrigue = 10
+							trait = diligent
+						}
+					}
+				}
+				set_character_flag = safety_measure_failure
+			}
+			70 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2076
+		trigger = {
+			NOT = { has_character_flag = safety_measure_failure }
+		}
+		add_character_modifier = {
+			modifier = prepared_home
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2076
+		trigger = {
+			has_character_flag = safety_measure_failure
+		}
+		if = {
+			limit = {
+				NOR = { 
+					is_maimed_trigger = yes
+					trait = wounded
+				}
+			}
+			random = {
+				chance = 40
+				add_trait = wounded
+				hidden_tooltip = {
+					character_event = { id = 38280 } # notify wounded
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2077
+	desc = {
+		text = EVTDESCA_ZE_2077
+		trigger = {
+			NOT = { has_character_flag = safety_measure_failure }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_2077
+		trigger = {
+			has_character_flag = safety_measure_failure
+		}
+	}
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			30 = {
+				modifier = {
+					factor = 7
+					event_target:safety_measure_spymaster = {
+						NOR = {
+							intrigue = 10
+							trait = diligent
+						}
+					}
+				}
+				set_character_flag = safety_measure_failure
+			}
+			70 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2077
+		trigger = {
+			NOT = { has_character_flag = safety_measure_failure }
+		}
+		add_character_modifier = {
+			modifier = guard_dogs
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2077
+		trigger = {
+			has_character_flag = safety_measure_failure
+			NOT = {
+				any_sibling = {
+					is_female = yes
+					at_location = ROOT
+					ai = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = wounded
+					is_maimed_trigger = yes
+				}
+			}
+			random = {
+				chance = 15
+				add_trait = wounded
+				hidden_tooltip = {
+					character_event = { id = 38280 } # notify wounded
+				}
+			}
+		}
+		event_target:safety_measure_spymaster = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_disappointed
+				years = 3
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ZE_2077
+		trigger = {
+			has_character_flag = safety_measure_failure
+			any_sibling = {
+				is_female = yes
+				at_location = ROOT
+				ai = yes
+			}
+		}
+		random_sibling = {
+			limit = {
+				is_female = yes
+				at_location = ROOT
+				ai = yes
+			}
+			if = {
+				limit = {
+					NOR = {
+						trait = wounded
+						is_maimed_trigger = yes
+					}
+				}
+				random = {
+					chance = 15
+					add_trait = wounded
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2078
+	desc = EVTDESC_ZE_2078
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2078
+		add_character_modifier = {
+			modifier = bad_breath
+			years = 1
+		}
+		hidden_tooltip = {
+			character_event = {
+				id = ZE.2080
+				days = 100
+				random = 50
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2080
+	desc = EVTDESC_ZE_2080
+	picture = GFX_evt_shadow
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2080
+		if = {
+			limit = {
+				NOT = { trait = impaler }
+			}
+			add_character_modifier = {
+				modifier = suspected_impaler
+				years = 3
+			}
+		}
+		hidden_tooltip = {
+			character_event = { 
+				id = ZE.2081
+				days = 100
+				random = 50
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2080
+		event_target:safety_measure_spymaster = {
+			reverse_opinion = {
+				who = ROOT
+				modifier = opinion_disappointed
+				years = 5
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2081
+	desc = EVTDESC_ZE_2081
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_2081
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		scaled_wealth = -0.05
+		hidden_tooltip = {
+			character_event = {
+				id = ZE.2082
+				days = 100
+				random = 50
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2081
+		trigger = {
+			trait = zealous
+		}
+		scaled_wealth = -0.05
+		piety = 30
+		hidden_tooltip = {
+			character_event = {
+				id = ZE.2082
+				days = 100
+				random = 50
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ZE_2081
+		scaled_wealth = -0.05
+		event_target:safety_measure_spymaster = {
+			reverse_opinion = {
+				who = ROOT
+				modifier = opinion_disappointed
+				years = 5
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2082
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		job_spymaster = {
+			character = event_target:safety_measure_spymaster
+		}
+	}
+	
+	immediate = {
+		job_spiritual = {
+			if = {
+				limit = {
+					prisoner = no
+					is_adult = yes
+					NOR = {
+						trait = incapable
+						is_inaccessible_trigger = yes
+					}
+				}
+				save_event_target_as = spiritual
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					event_target:spiritual = {
+						always = yes
+					}
+				}
+			}
+			random_vassal = {
+				limit = {
+					is_theocracy = yes
+					prisoner = no
+					is_adult = yes
+					NOR = { 
+						is_inaccessible_trigger = yes
+						trait = incapable
+					}
+				}
+				save_event_target_as = spiritual
+			}
+			if = {
+				limit = {
+					NOT = {
+						event_target:spiritual = {
+							always = yes
+						}
+					}
+				}
+				break = yes # no matching character found for interaction
+			}
+		}
+		character_event = {
+			id = ZE.2083
+		}
+	}
+}
+
+character_event = {
+	id = ZE.2083
+	desc = EVTDESC_ZE_2083
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_intrigue 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_2083
+		event_target:spiritual = {
+			opinion = {
+				modifier = opinion_pleased
+				who = ROOT
+				years = 3
+			}
+		}
+		event_target:safety_measure_spymaster = {
+			remove_title = job_spymaster
+			prestige = -50
+			piety = -50
+			imprison = ROOT
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_2083
+		event_target:spiritual = {
+			opinion = {
+				modifier = opinion_disapprove
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ZE_2083
+		trigger = {
+			OR = {
+				diplomacy = 12
+				AND = {
+					diplomacy = 9
+					event_target:spiritual = {
+						trait = arbitrary
+					}
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			value = 0.2
+			to = event_target:spiritual
+		}
+		add_character_modifier = {
+			modifier = sanctuary
+			years = 10
+		}
+		prestige = -30
+	}
+}

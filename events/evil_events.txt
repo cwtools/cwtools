@@ -1,0 +1,623 @@
+#############################################
+#
+# Evil events
+#
+# Event ID 68000-68999 is reserved
+#
+#############################################
+# Written by Johan Andersson
+# Adjusted by Henrik Fåhraeus
+
+#If in the red  => increase revolt risk in a province.
+province_event = {
+	id = 68000
+	desc = "EVTDESC68000"
+	picture = "GFX_evt_bandits"
+	
+	notification = yes
+	
+	trigger = {
+		NOT = { owner = { wealth = 0 } }
+		NOT = { has_province_modifier = incompetent_rule } 
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		#lower if really bad demesne efficiency
+		modifier = {
+			factor = 0.9
+			NOT = { owner = { wealth = -50 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { wealth = -100 } }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { owner = { wealth = -200 } }
+		}
+		modifier = {
+			factor = 0.3
+			NOT = { owner = { wealth = -300 } }
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { owner = { wealth = -500 } }
+		}
+
+		#traits affect this
+		modifier = {
+			factor = 1.5
+			owner = { trait = ambitious }
+		}		
+		modifier = {
+			factor = 5.0
+			owner = { trait = just }
+		}		
+		modifier = {
+			factor = 0.5
+			owner = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = greedy }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = cruel }
+		}		
+		modifier = {
+			factor = 0.1
+			owner = { trait = slothful }
+		}
+		modifier = {
+			factor = 0.2
+			owner = { trait = incapable }
+		}
+		modifier = {
+			factor = 0.1
+			owner = { trait = infirm }
+		}
+
+		#modify by stewardship and intrigue	
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 15 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 10 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 5 } }
+		}	
+		modifier = {
+			factor = 2.0
+			owner = { realm_stewardship = 25 }
+		}
+		modifier = {
+			factor = 1.5
+			owner = { realm_stewardship = 20 }
+		}
+		modifier = {
+			factor = 2.0
+			owner = { realm_intrigue = 25 }
+		}
+		modifier = {
+			factor = 1.5
+			owner = { realm_intrigue = 20 }
+		}
+	}
+	
+	immediate = {
+		add_province_modifier = {
+			name = incompetent_rule
+			duration = -1
+		}
+	}
+
+	option = {
+		name = "EVTOPTA68000"
+	}
+}
+
+province_event = {
+	id = 68001
+	desc = "EVTDESC68001"
+	picture = "GFX_evt_council"
+	
+	notification = yes
+	
+	trigger = {
+		owner = { wealth = 0 }
+		has_province_modifier = incompetent_rule
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			owner = { realm_stewardship = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { realm_intrigue = 20 }
+		}
+	
+		modifier = {
+			factor = 0.75
+			owner = { trait = just }
+		}			
+	}
+	
+	immediate = {
+		remove_province_modifier = incompetent_rule
+	}
+
+	option = {
+		name = "EVTOPTA68001"
+		trigger = {
+			owner = {
+				religion_group = christian
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB68001"
+		trigger = {
+			owner = {
+				religion_group = muslim
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTA88283"
+		trigger = {
+			owner = {
+				NOT = { religion_group = christian }
+				NOT = { religion_group = muslim }
+			}
+		}
+	}
+}
+
+# Establishment of thieves_guild in a province, if budget in the red
+province_event = {
+	id = 68010
+	desc = "EVTDESC68010"
+	picture = "GFX_evt_bandits"
+	
+	notification = yes
+	
+	trigger = {
+		NOT = { owner = { wealth = 0 } }
+		NOT = { has_province_modifier = thieves_guild } 
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		#lower if really bad demesne efficiency
+		modifier = {
+			factor = 0.9
+			NOT = { owner = { wealth = -50 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { wealth = -100 } }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { owner = { wealth = -200 } }
+		}
+		modifier = {
+			factor = 0.3
+			NOT = { owner = { wealth = -300 } }
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { owner = { wealth = -500 } }
+		}
+		
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 15 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 10 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_stewardship = 5 } }
+		}
+		
+		modifier = {
+			factor = 1.5
+			owner = { realm_stewardship = 20 }
+		}
+		modifier = {
+			factor = 2.0
+			owner = { realm_stewardship = 25 }
+		}
+
+		#traits affect this
+		modifier = {
+			factor = 1.5
+			owner = { trait = ambitious }
+		}		
+		modifier = {
+			factor = 5.0
+			owner = { trait = just }
+		}		
+		modifier = {
+			factor = 0.5
+			owner = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = greedy }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = cruel }
+		}		
+		modifier = {
+			factor = 0.1
+			owner = { trait = slothful }
+		}
+		modifier = {
+			factor = 0.2
+			owner = { trait = incapable }
+		}
+		modifier = {
+			factor = 0.1
+			owner = { trait = infirm }
+		}
+	}
+	
+	immediate = {
+		add_province_modifier = {
+			name = thieves_guild
+			duration = -1
+		}
+	}
+
+	option = {
+		name = "EVTOPTA68010"
+	}
+}
+
+# Destruction of thieves_guild in a province
+province_event = {
+	id = 68011
+	desc = "EVTDESC68011"
+	
+	picture = "GFX_evt_burning_house"
+	
+	notification = yes
+	
+	trigger = {
+		owner = { wealth = 0 }
+		has_province_modifier = thieves_guild
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			owner = { realm_stewardship = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { realm_intrigue = 20 }
+		}
+	
+		modifier = {
+			factor = 0.75
+			owner = { trait = just }
+		}			
+	}
+	
+	immediate = {
+		remove_province_modifier = thieves_guild
+	}
+
+	option = {
+		name = "EVTOPTA68011"
+	}
+}
+
+# Establishment of smugglers_ring in a province, if red budget
+province_event = {
+	id = 68020
+	desc = "EVTDESC68020"
+	
+	notification = yes
+	
+	trigger = {
+		NOT = { owner = { wealth = 0 } }
+		NOT = { has_province_modifier = smugglers_ring }
+	}
+	
+	picture = "GFX_evt_bandits"
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		#lower if really bad demesne efficiency
+		modifier = {
+			factor = 0.9
+			NOT = { owner = { wealth = -50 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { wealth = -100 } }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { owner = { wealth = -200 } }
+		}
+		modifier = {
+			factor = 0.3
+			NOT = { owner = { wealth = -300 } }
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { owner = { wealth = -500 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_diplomacy = 15 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_diplomacy = 10 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_diplomacy = 5 } }
+		}
+		
+		modifier = {
+			factor = 1.5
+			owner = { realm_diplomacy = 20 }
+		}
+		modifier = {
+			factor = 2.0
+			owner = { realm_diplomacy = 25 }
+		}
+
+		#traits affect this
+		modifier = {
+			factor = 1.5
+			owner = { trait = ambitious }
+		}		
+		modifier = {
+			factor = 5.0
+			owner = { trait = just }
+		}		
+		modifier = {
+			factor = 0.5
+			owner = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = greedy }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = cruel }
+		}		
+		modifier = {
+			factor = 0.1
+			owner = { trait = slothful }
+		}
+		modifier = {
+			factor = 0.2
+			owner = { trait = incapable }
+		}
+		modifier = {
+			factor = 0.1
+			owner = { trait = infirm }
+		}
+	}
+	
+	immediate = {
+		add_province_modifier = {
+			name = smugglers_ring
+			duration = -1
+		}
+	}
+
+	option = {
+		name = "EVTOPTA68020"
+	}
+}
+
+# Destruction of smugglers_ring in a province
+province_event = {
+	id = 68021
+	desc = "EVTDESC68021"
+	
+	notification = yes
+	
+	picture = "GFX_evt_burning_house"
+	
+	trigger = {
+		owner = { wealth = 0 }
+		has_province_modifier = smugglers_ring
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			owner = { realm_diplomacy = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { realm_intrigue = 20 }
+		}
+	
+		modifier = {
+			factor = 0.75
+			owner = { trait = just }
+		}			
+	}
+	
+	immediate = {
+		remove_province_modifier = smugglers_ring
+	}
+
+	option = {
+		name = "EVTOPTA68021"
+	}
+}
+
+#Establishment of highway_robber_band in a province, if red budget
+province_event = {
+	id = 68030
+	desc = "EVTDESC68030"
+	
+	notification = yes
+	
+	picture = "GFX_evt_bandits"
+	
+	trigger = {
+		NOT = { owner = { wealth = 0 } }
+		NOT = { has_province_modifier = highway_robber_band } 
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.9
+			NOT = { owner = { wealth = -50 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { wealth = -100 } }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { owner = { wealth = -200 } }
+		}
+		modifier = {
+			factor = 0.3
+			NOT = { owner = { wealth = -300 } }
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { owner = { wealth = -500 } }
+		}
+		
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_martial = 15 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_martial = 10 } }
+		}
+		modifier = {
+			factor = 0.7
+			NOT = { owner = { realm_martial = 5 } }
+		}
+		modifier = {
+			factor = 1.5
+			owner = { realm_martial = 20 }
+		}
+		modifier = {
+			factor = 2.0
+			owner = { realm_martial = 25 }
+		}
+
+		#traits affect this
+		modifier = {
+			factor = 1.5
+			owner = { trait = ambitious }
+		}		
+		modifier = {
+			factor = 5.0
+			owner = { trait = just }
+		}		
+		modifier = {
+			factor = 0.5
+			owner = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = greedy }
+		}
+		modifier = {
+			factor = 0.7
+			owner = { trait = cruel }
+		}		
+		modifier = {
+			factor = 0.1
+			owner = { trait = slothful }
+		}
+		modifier = {
+			factor = 0.2
+			owner = { trait = incapable }
+		}
+		modifier = {
+			factor = 0.1
+			owner = { trait = infirm }
+		}
+	}
+	
+	immediate = {
+		add_province_modifier = {
+			name = highway_robber_band
+			duration = -1
+		}
+	}
+
+	option = {
+		name = "EVTOPTA68030"
+	}
+}
+
+# Destruction of highway_robber_band in a province
+province_event = {
+	id = 68031
+	desc = "EVTDESC68031"
+	picture = "GFX_evt_burning_house"
+	
+	notification = yes
+	
+	trigger = {
+		owner = { wealth = 0 }
+		has_province_modifier = highway_robber_band
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			owner = { realm_martial = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { realm_intrigue = 20 }
+		}
+	
+		modifier = {
+			factor = 0.75
+			owner = { trait = just }
+		}			
+	}
+	
+	immediate = {
+		remove_province_modifier = highway_robber_band
+	}
+
+	option = {
+		name = "EVTOPTA68031"
+	}
+}

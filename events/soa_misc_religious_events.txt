@@ -1,0 +1,4316 @@
+
+###########################################
+#                                         #
+# SoA minor religious events              #             
+#                                         #
+# ID SoA.5200-SoA.5399                    #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = SoA
+
+###########################################
+#                                         #
+# Relics - ID SoA.5200-SoA.5209           #
+#                                         #
+###########################################
+
+
+# Plunders relic in war
+character_event = {
+	id = SoA.5200
+	desc = EVTDESC_SoA_5200
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_playable = yes
+	religion_group = christian
+	war = yes
+	has_dlc = "Sons of Abraham"
+	
+	trigger = {
+		in_command = yes
+		is_landed = yes
+		NOT = {
+			has_character_modifier = owns_relic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 10000
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5200
+		add_character_modifier = {
+			name = owns_relic
+			duration = -1
+			inherit = yes
+		}
+		piety = 10
+	}
+	option = {
+		name = EVTOPTB_SoA_5200
+		add_trait = charitable
+		piety = 10
+	}
+}
+
+# Buys relic at market
+character_event = {
+	id = SoA.5201
+	desc = EVTDESC_SoA_5201
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_playable = yes
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		wealth = 20
+		NOT = {
+			has_character_modifier = owns_relic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5201
+		wealth = -10
+		add_character_modifier = {
+			name = owns_relic
+			duration = -1
+			inherit = yes
+		}
+		piety = 10
+	}
+	option = {
+		name = EVTOPTB_SoA_5201
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 20
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Given relic by priest who feels he cannot protect it at his little church
+character_event = {
+	id = SoA.5202
+	desc = EVTDESC_SoA_5202
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_playable = yes
+	
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		NOT = {
+			has_character_modifier = owns_relic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5202
+		add_character_modifier = {
+			name = owns_relic
+			duration = -1
+			inherit = yes
+		}
+		piety = 10
+	}
+}
+
+# Misplaced relic
+character_event = {
+	id = SoA.5203
+	desc = EVTDESC_SoA_5203
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_playable = yes
+	religion_group = christian
+
+	trigger = {
+		OR = {
+			is_dumb_trigger = yes
+			trait = slothful
+		}
+		has_dlc = "Sons of Abraham"
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 2500
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5203
+		remove_character_modifier = owns_relic
+	}
+}
+
+# Relic is stolen by raiders
+character_event = {
+	id = SoA.5204
+	desc = EVTDESC_SoA_5204
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		is_landed = yes
+		has_dlc = "Sons of Abraham"
+		NOT = {
+			any_demesne_province = {
+				controlled_by = ROOT
+			}
+		}
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 50
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5204
+		remove_character_modifier = owns_relic
+	}
+}
+
+# Relic mixed up with other bones
+character_event = {
+	id = SoA.5205
+	desc = EVTDESC_SoA_5205
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 10000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5205
+		remove_character_modifier = owns_relic
+	}
+	option = {
+		name = EVTOPTB_SoA_5205
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		random = {
+			chance = 30
+			add_trait = arbitrary
+			hidden_tooltip = {
+				character_event = {
+					id = 38266 #Notify Arbitrary
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5205
+		tooltip_info = learning
+		trigger = {
+			learning = 13
+		}
+	}
+}
+
+# Use relic to heal sickness?
+character_event = {
+	id = SoA.5206
+	desc = EVTDESC_SoA_5206
+	picture = GFX_evt_illness
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	is_sick = yes
+	religion_group = christian
+	
+	trigger = {
+		trait = ill
+		has_dlc = "Sons of Abraham"
+		NOT = {
+			has_dlc = "Reapers"
+		}
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5206
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		random = {
+			chance = 20
+			remove_trait = ill
+			if = {
+				limit = {
+					NOT = {
+						trait = zealous
+					}
+				}
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5206
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		random = {
+			chance = 20
+			remove_trait = ill
+			if = {
+				limit = {
+					NOT = {
+						trait = cynical
+					}
+				}
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Bring relic out to bless the fields
+character_event = {
+	id = SoA.5207
+	desc = EVTDESC_SoA_5207
+	picture = GFX_evt_stone_church
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		month = 4
+		NOT = { month = 7 }
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5207
+		random_demesne_province = {
+			add_province_modifier = {
+				name = appeased_religious
+				duration = 1800
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5207
+			if = {
+				limit = {
+					NOT = {
+						trait = cynical
+					}
+				}
+				add_trait = cynical
+			}
+	}
+}
+
+# Commerce with relics
+character_event = {
+	id = SoA.5208
+	desc = EVTDESC_SoA_5208
+	picture = GFX_evt_market
+	border = GFX_event_normal_frame_religion
+
+	ai = no
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		NOT = {
+			has_character_modifier = defied_church
+		}
+		NOT = {
+			has_character_modifier = church_appreciates
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2500
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5208
+		piety = 10
+		scaled_wealth = -0.1
+		add_character_modifier = {
+				name = church_appreciates
+				duration = 24
+			}
+	}
+	option = {
+		name = EVTOPTB_SoA_5208
+			add_character_modifier = {
+				name = defied_church
+				duration = 24
+			}
+	}
+	option = {
+		name = EVTOPTC_SoA_5208
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		scaled_wealth = 0.2
+		add_character_modifier = {
+			name = defied_church
+			duration = 24
+		}
+		if = {
+			limit = { NOT = { trait = greedy } }
+			add_trait = greedy
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 30
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Donate owned relic to church?
+character_event = {
+	id = SoA.5209
+	desc = EVTDESC_SoA_5209
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_character_modifier = owns_relic
+	}
+	
+	mean_time_to_happen = {
+		months = 3000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5209
+		remove_character_modifier = owns_relic
+		piety = 30
+			if = {
+				limit = { NOT = { trait = humble } }
+				add_trait = humble
+			}
+	}
+	option = {
+		name = EVTOPTB_SoA_5209
+		remove_character_modifier = owns_relic
+		piety = 30
+		prestige = 30
+		add_character_modifier = {
+			name = church_appreciates
+			duration = 36
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5209
+		add_character_modifier = {
+			name = defied_church
+			duration = 36
+		}
+	}
+}
+
+# Remove relic modifier if no longer Christian
+character_event = {
+	id = SoA.5229
+	desc = EVTDESC_SoA_5229
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_playable = yes
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_character_modifier = owns_relic
+		NOT = { religion_group = christian }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5229
+		remove_character_modifier = owns_relic
+		prestige = 30
+	}
+	option = {
+		name = EVTOPTB_SoA_5229
+		remove_character_modifier = owns_relic
+		wealth = 30
+	}
+	option = {
+		name = EVTOPTC_SoA_5229
+		remove_character_modifier = owns_relic
+		hidden_tooltip = {
+		any_realm_character = {
+				limit = { religion_group = christian }
+				opinion = {
+					modifier = insulted
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+		custom_tooltip = { text = insulted_realm_christians }
+	}
+}
+
+###########################################
+#                                         #
+# Monks events - ID SoA.5210-SoA.5239     #
+#                                         #
+###########################################
+
+
+# Monks make fantastic beer
+character_event = {
+	id = SoA.5210
+	desc = EVTDESC_SoA_5210
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		OR = {
+			location = {
+				region = world_europe_west
+			}
+			location = {
+				region = world_europe_south
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2500
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5210
+		random = {
+			chance = 50
+			change_learning = 1
+		}
+		if = {
+			limit = { NOT = { trait = drunkard } }
+			random = {
+				chance = 20
+				add_trait = drunkard
+				hidden_tooltip = {
+					character_event = {
+						id = 38286 #Notify Drunkard
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5210
+		if = {
+			limit = { NOT = { trait = temperate } }
+			random = {
+				chance = 20
+				add_trait = temperate
+				hidden_tooltip = {
+					character_event = {
+						id = 38276 #Notify Temperate
+					}
+				}
+			}
+		}
+	}
+}
+
+# Monks make great wine
+character_event = {
+	id = SoA.5211
+	desc = EVTDESC_SoA_5211
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		location = {
+			OR = {
+				region = world_europe_west
+				region = world_europe_south
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2500
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5211
+		random = {
+			chance = 50
+			change_learning = 1
+		}
+		if = {
+			limit = { NOT = { trait = drunkard } }
+			random = {
+				chance = 20
+				add_trait = drunkard
+				hidden_tooltip = {
+					character_event = {
+						id = 38286 #Notify Drunkard
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5211
+		if = {
+			limit = { NOT = { trait = temperate } }
+			random = {
+				chance = 20
+				add_trait = temperate
+				hidden_tooltip = {
+					character_event = {
+						id = 38276 #Notify Temperate
+					}
+				}
+			}
+		}
+	}
+}
+
+# Monks have healing herbs
+character_event = {
+	id = SoA.5212
+	desc = EVTDESC_SoA_5212
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	is_sick = yes
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		trait = ill
+		piety = 1
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5212
+		random = {
+			chance = 30
+			remove_trait = ill
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5212
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			add_trait = paranoid
+		}
+	}
+}
+
+# Monk is fantastic painter
+character_event = {
+	id = SoA.5213
+	desc = EVTDESC_SoA_5213
+	picture = GFX_evt_stone_church
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { trait = blinded }
+	}
+	
+	mean_time_to_happen = {
+		months = 5000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5213
+		wealth = -10
+		prestige = 30
+	}
+	option = {
+		name = EVTOPTB_SoA_5213
+	}
+}
+
+# Monks produce beautiful books
+character_event = {
+	id = SoA.5214
+	desc = EVTDESC_SoA_5214
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { trait = blinded }
+	}
+	
+	mean_time_to_happen = {
+		months = 4000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5214
+		wealth = -40
+		prestige = 30
+		random = {
+			chance = 20
+			change_learning = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5214
+		
+	}
+}
+
+# Local monks come to visit often
+character_event = {
+	id = SoA.5215
+	desc = EVTDESC_SoA_5215
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		NOT = { has_character_modifier = in_seclusion }
+	}
+	
+	mean_time_to_happen = {
+		months = 4000
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5215
+		piety = 20
+		random = {
+			chance = 30
+			change_learning = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5215
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+	}
+}
+
+# Child wants to be monk/nun - select child
+character_event = {
+	id = SoA.5216
+
+	hide_window = yes
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	ai = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		
+		any_child = {
+			is_ruler = no
+			age = 13
+			NOT = { age = 16 }
+			NOT = { trait = cynical }
+			NOT = { trait = monk }
+			NOT = { trait = nun }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1000
+	}
+
+	immediate = {
+		random_child = {
+			limit = {
+				is_ruler = no
+				age = 13
+				NOT = { age = 16 }
+				NOT = { trait = cynical }
+				NOT = { trait = monk }
+				NOT = { trait = nun }
+			}
+			character_event = { id = SoA.5217 }
+		}
+	}
+}
+
+# Child bounce event
+character_event = {
+	id = SoA.5217
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	immediate = {
+		FROM = {
+			character_event = { id = SoA.5218 }
+		}
+	}
+}
+
+# Child wants to be monk/nun - parent response
+character_event = {
+	id = SoA.5218
+	desc = EVTDESC_SoA_5218
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5218
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			if = {
+				limit = {
+					is_female = yes
+				}
+				add_trait = nun
+			}
+			if = {
+				limit = {
+					is_female = no
+				}
+				add_trait = monk
+			}
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 100
+			}
+		}
+		custom_tooltip = { text = EVTTOOLTIPA_SOA_5218 }
+	}
+	option = {
+		name = EVTOPTB_SoA_5218
+		ai_chance = {
+			factor = 100
+		}
+		FROM = {
+			add_trait = stressed
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 3
+			}
+		}
+		custom_tooltip = { text = EVTTOOLTIPB_SOA_5218 }
+	}
+}
+
+# Donate to local monastery
+character_event = {
+	id = SoA.5219
+	desc = EVTDESC_SoA_5219
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		scaled_wealth = 0.1
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5219
+		wealth = -30
+		piety = 30
+	}
+	option = {
+		name = EVTOPTB_SoA_5219
+		piety = -5
+	}
+}
+
+###########################################
+#                                         #
+# Miracle events - ID SoA.5240-SoA.5259   #
+#                                         #
+###########################################
+
+# Stigmata
+character_event = {
+	id = SoA.5240
+	desc = EVTDESC_SoA_5240
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 5000
+		modifier = {
+			factor = 0.3
+			has_focus = focus_theology
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5240
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+		piety = 10
+	}
+	option = {
+		name = EVTOPTB_SoA_5240
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 50
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 20
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+	}
+}
+
+# I saw the Virgin
+character_event = {
+	id = SoA.5241
+	desc = EVTDESC_SoA_5241
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 5000
+		modifier = {
+			factor = 0.3
+			has_focus = focus_theology
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5241
+		trigger = {
+			NOT = {
+				trait = cynical
+			}
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+				add_trait = zealous
+		}
+		piety = 30
+	}
+	option = {
+		name = EVTOPTB_SoA_5241
+		trigger = {
+			NOT = {
+				trait = zealous
+			}
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 30
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Virgin birth
+character_event = {
+	id = SoA.5242
+	desc = EVTDESC_SoA_5242
+	picture = GFX_evt_pregnancy
+	border = GFX_event_normal_frame_religion
+
+	only_women = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 17
+	max_age = 45
+	religion_group = christian
+	is_married = yes
+	has_dlc = "Sons of Abraham"
+
+	trigger = {
+		is_pregnant = no
+		spouse = {
+			trait = chaste
+			trait = celibate
+		}
+		NOT = {
+			trait = chaste
+		}
+		NOT = {
+			trait = celibate
+		}
+		NOT = {
+			trait = homosexual
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+			modifier = {
+				factor = 0.5
+				trait = lustful
+		}
+			modifier = {
+				factor = 0.8
+				trait = hedonist
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5242
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+		hidden_tooltip = { spouse = { character_event = { id = SoA.5243 } } }
+	}
+	option = {
+		name = EVTOPTB_SoA_5242
+		if = {
+			limit = { NOT = { trait = deceitful } }
+				add_trait = deceitful
+		}
+		hidden_tooltip = { spouse = { character_event = { id = SoA.5243 } } }
+	}
+}
+
+# Husband notified of virgin birth
+character_event = {
+	id = SoA.5243
+	desc = EVTDESC_SoA_5243
+	picture = GFX_evt_pregnancy
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5243
+		spouse = {
+			impregnate = ROOT
+			add_trait = pregnant
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5243
+		spouse = {
+			impregnate = ROOT
+			add_trait = pregnant
+		}
+		opinion = {
+				modifier = opinion_angry
+				who = FROM
+				years = 5
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5243
+		spouse = {
+			impregnate = 0
+			add_trait = pregnant
+		}
+		opinion = {
+				modifier = opinion_angry
+				who = FROM
+				years = 5
+		}
+	}
+}
+
+# Exorcism
+character_event = {
+	id = SoA.5244
+	desc = EVTDESC_SoA_5244
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		trait = possessed
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 400
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5244
+		random = {
+			chance = 40
+			remove_trait = possessed
+			clr_character_flag = demon_child
+			clr_character_flag = demon_child_fake
+			clr_character_flag = child_exorcism
+			remove_character_modifier = voice_of_satan
+			remove_character_modifier = voice_of_jesus
+			remove_character_modifier = holy_comet
+			remove_character_modifier = lycanthropy
+			if = {
+				limit = { NOT = { trait = zealous } }
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+		random = {
+			chance = 20
+			if = {
+				limit = {
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = ill
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				add_symptom_effect = yes
+			}
+		}
+		random = {
+			chance = 10
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5244
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			add_trait = paranoid
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5244
+		random = {
+			chance = 20
+			remove_trait = possessed
+			clr_character_flag = demon_child
+			clr_character_flag = demon_child_fake
+			clr_character_flag = child_exorcism
+			remove_character_modifier = voice_of_satan
+			remove_character_modifier = voice_of_jesus
+			remove_character_modifier = holy_comet
+			remove_character_modifier = lycanthropy
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Immoral priest events                   #
+# ID SoA.5300-SoA.5339                    #
+#                                         #
+###########################################
+
+# Christian becoming a wicked priest
+character_event = {
+
+	id = SoA.5300
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no	
+	religion_group = christian
+
+	trigger = {
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_christian
+		}
+		is_priest = yes
+		has_dlc = "Sons of Abraham"
+		OR = {
+			trait = cynical
+			trait = lustful
+			trait = gluttonous
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = proud
+			trait = lunatic
+			trait = possessed
+			trait = homosexual
+			trait = hedonist
+		}
+	}
+
+	immediate = {
+		add_trait = bad_priest_christian
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+			}
+			random_list = {
+				70 = {
+					give_nickname = nick_the_wicked
+				}
+				10 = {
+					give_nickname = nick_the_black
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+	}
+}
+
+# Muslim becoming a wicked caliph
+character_event = {
+	id = SoA.5301
+	desc = EVTDESC_SoA_5301
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no	
+	religion_group = muslim
+	
+	trigger = {
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_muslim
+		}
+		controls_religion = yes
+		has_dlc = "Sons of Abraham"
+		OR = {
+			trait = cynical
+			trait = lustful
+			trait = gluttonous
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = proud
+			trait = lunatic
+			trait = possessed
+			trait = hedonist
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5301
+		add_trait = bad_priest_muslim
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+			}
+			give_nickname = nick_the_wicked
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+	}
+}
+
+# Norse becoming an unworthy priest
+character_event = {
+	id = SoA.5302
+	desc = EVTDESC_SoA_5302
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	min_age = 16
+	only_capable = yes
+	prisoner = no	
+	religion_group = pagan_group
+	
+	trigger = {
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_norse
+		}
+		OR = {
+			religion = norse_pagan
+			religion = norse_pagan_reformed
+		}
+		OR = {
+			is_priest = yes
+			has_landed_title = d_norse_pagan_reformed
+		}
+		has_dlc = "Sons of Abraham"
+		OR = {
+			trait = cynical
+			trait = gluttonous
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = craven
+			trait = lunatic
+			trait = possessed
+			trait = hedonist
+			trait = arbitrary
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5302
+		add_trait = bad_priest_norse
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+			}
+			give_nickname = nick_the_unready
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+	}
+}
+
+# Tengri becoming an unworthy priest
+character_event = {
+	id = SoA.5303
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no	
+	religion_group = pagan_group
+
+	trigger = {
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_tengri
+		}
+		OR = {
+			religion = tengri_pagan
+			religion = tengri_pagan_reformed
+		}
+		OR = {
+			is_priest = yes
+			has_landed_title = d_tengri_pagan_reformed
+		}
+		OR = {
+			trait = cynical
+			trait = arbitrary
+			trait = paranoid
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = lunatic
+			trait = cruel
+		}
+		has_dlc = "Sons of Abraham"
+	}
+
+	immediate = {
+		add_trait = bad_priest_tengri
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+			}
+			give_nickname = nick_the_wicked
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+	}
+}
+
+# Zoroastrian becoming an immoral priest
+character_event = {
+	id = SoA.5304
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = zoroastrian_group
+
+	trigger = {
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_zoroastrian
+		}
+		OR = {
+			is_priest = yes
+			controls_religion = yes
+		}
+		OR = {
+			trait = cynical
+			trait = arbitrary
+			trait = greedy
+			trait = slothful
+			trait = envious
+			trait = wroth
+			trait = proud
+			trait = lunatic
+			trait = possessed
+			trait = cruel
+		}
+		has_dlc = "Sons of Abraham"
+	}
+
+	immediate = {
+		add_trait = bad_priest_zoroastrian
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+			}
+			give_nickname = nick_the_wicked
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+	}
+}
+
+# Aztec becoming an unworthy priest
+character_event = {
+	id = SoA.5305
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = pagan_group
+
+	trigger = {
+		is_priest = yes
+		OR = {
+			religion = aztec
+			religion = aztec_reformed
+		}
+		NOR = {
+			intrigue = 3
+			diplomacy = 3
+			trait = bad_priest_aztec
+		}
+		OR = {
+			trait = cynical
+			trait = craven
+			trait = kind
+			trait = slothful
+			trait = gluttonous
+			trait = lustful
+			trait = hedonist
+			trait = lunatic
+			trait = possessed
+			trait = arbitrary
+		}
+		has_dlc = "Sons of Abraham"
+	}
+
+	immediate = {
+		add_trait = bad_priest_aztec
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				NOT = { trait = possessed }
+				NOT = { trait = lunatic }
+				NOT = { trait = craven }
+				NOT = { trait = kind }
+			}
+			give_nickname = nick_the_unready
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = possessed
+			}
+			give_nickname = nick_the_bewitched
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				trait = lunatic
+			}
+			give_nickname = nick_the_mad
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				has_nickname = no
+				OR = {
+					trait = craven
+					trait = kind
+				}
+			}
+			give_nickname = nick_the_kind
+		}
+	}
+}
+
+# Check for Cadaver Synod
+character_event = {
+	id = SoA.5306
+
+	hide_window = yes
+
+	is_triggered_only = yes                # Checked for pope on death on_event
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_landed_title = k_papal_state
+		trait = bad_priest_christian
+		NOT = { year = 1049 }
+	}
+
+	immediate = {
+		give_nickname = nick_the_accursed
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion = catholic
+				}
+			narrative_event = { id = SoA.5307 days = 300 }
+		}
+	}
+}
+
+# The Cadaver Synod
+narrative_event = {
+	id = SoA.5307
+	title = EVTNAME_SoA_5307
+	desc = EVTDESC_SoA_5307
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5307
+	}
+}
+
+# Wicked Pope or Patriarch!
+character_event = {
+	id = SoA.5311
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		controls_religion = yes
+		has_dlc = "Sons of Abraham"
+		trait = bad_priest_christian
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_player = {
+			limit = {
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5312 days = 8 random = 7 }         # Notify players
+		}
+	}
+}
+
+# Wicked Pope or Patriarch player notification
+character_event = {
+	id = SoA.5312
+	desc = EVTDESC_SoA_5312
+	picture = GFX_evt_pope_feast
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5312
+	}
+}
+
+# Wicked Caliph!
+character_event = {
+	id = SoA.5313
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = muslim
+
+	trigger = {
+		controls_religion = yes
+		has_dlc = "Sons of Abraham"
+		trait = bad_priest_muslim
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5314 days = 8 random = 7 }         # Notify player
+		}
+	}
+}
+
+# Wicked Caliph player notification
+character_event = {
+	id = SoA.5314
+	desc = EVTDESC_SoA_5314
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5314
+	}
+}
+
+# Unworthy Fylkir!
+character_event = {
+	id = SoA.5315
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = norse_pagan_reformed
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_landed_title = d_norse_pagan_reformed
+		trait = bad_priest_norse
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5316 days = 8 random = 7 }         # Notify player
+		}
+	}
+}
+
+# Unworthy Fylkir player notification
+character_event = {
+	id = SoA.5316
+	desc = EVTDESC_SoA_5316
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5316
+	}
+}
+
+# Unworthy Head Priest! (Tengri)
+character_event = {
+	id = SoA.5317
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = tengri_pagan_reformed
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_landed_title = d_tengri_pagan_reformed
+		trait = bad_priest_tengri
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5318 days = 8 random = 7 }         # Notify player
+		}
+	}
+}
+
+# Unworthy Head Priest player notification (Tengri)
+character_event = {
+	id = SoA.5318
+	desc = EVTDESC_SoA_5318
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5318
+	}
+}
+
+# Immoral Moabadan-Moabad!
+character_event = {
+	id = SoA.5319
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = zoroastrian_group
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		controls_religion = yes
+		trait = bad_priest_zoroastrian
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5320 days = 8 random = 7 }         # Notify player
+		}
+	}
+}
+
+# Immoral Moabadan-Moabad player notification
+character_event = {
+	id = SoA.5320
+	desc = EVTDESC_SoA_5320
+	picture = GFX_evt_marriage_zoroastrian_group
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5320
+	}
+}
+
+# Unworthy Head Priest! (Aztec)
+character_event = {
+	id = SoA.5321
+	
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion = aztec_reformed
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		has_landed_title = d_aztec_reformed
+		trait = bad_priest_aztec
+		NOT = { has_character_modifier = bad_rel_head }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		add_character_modifier = {
+			name = bad_rel_head
+			duration = -1
+			hidden = yes
+		}
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				religion_head = {
+					character = ROOT
+				}
+			}
+			character_event = { id = SoA.5322 days = 8 random = 7 }         # Notify player
+		}
+	}
+}
+
+# Unworthy Head Priest player notification (Aztec)
+character_event = {
+	id = SoA.5322
+	desc = EVTDESC_SoA_5322
+	picture = GFX_evt_throne_room
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5322
+	}
+}
+
+
+###########################################
+#                                         #
+# Cluny Abbey                             #
+# ID SoA.5340-SoA.5343                    #
+#                                         #
+###########################################
+
+# Cluny priests are very influential
+character_event = {
+	id = SoA.5340
+
+	hide_window = yes
+
+	only_rulers = yes
+	min_age = 16
+	ai = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		is_priest = yes
+		year = 950
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		has_landed_title = b_cluny
+		
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		piety = 50
+		prestige = 25
+	}
+}
+
+# Donate to Cluny Abbey
+narrative_event = {
+	id = SoA.5341
+	title = EVTNAME_SoA_5341
+	desc = EVTDESC_SoA_5341
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_narrative_frame_religion
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		wealth = 200
+		has_dlc = "Sons of Abraham"
+		year = 950
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		b_cluny = {
+			holder_scope = {
+				is_priest = yes
+				religion = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+		modifier = {
+			factor = 0.3
+			has_focus = focus_theology
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5341
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOT = { wealth = 600 } }
+			wealth = -100
+			prestige = 50
+			piety = 50
+			b_cluny = {
+				holder_scope = {
+					wealth = 100
+				}
+			}
+		}
+		if = {
+			limit = {
+				wealth = 600
+			}
+			wealth = -300
+			prestige = 100
+			piety = 100
+			b_cluny = {
+				holder_scope = {
+					wealth = 300
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5341
+		ai_chance = {
+			factor = 80
+		}
+	}
+}
+
+# Visit Cluny?
+narrative_event = {
+	id = SoA.5342
+	title = EVTNAME_SoA_5342
+	desc = EVTDESC_SoA_5342
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_narrative_frame_religion
+
+	ai = no
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		year = 950
+		in_command = no
+		NOT = { trait = blinded }
+		b_cluny = {
+			holder_scope = {
+				is_priest = yes
+				religion = ROOT
+			}
+		}
+		OR = {
+			religion = catholic
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+			religion = cathar
+		}
+		distance = {
+			where = 225	# Cluny
+			value = 300	# Not too far away
+		}
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+		modifier = {
+			factor = 0.5
+			has_focus = focus_theology
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5342
+		wealth = -10
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { narrative_event = { id = SoA.5343 days = 10 } }
+	}
+	option = {
+		name = EVTOPTB_SoA_5342
+		piety = -5
+	}
+}
+
+# Visiting Cluny
+narrative_event = {
+	id = SoA.5343
+	title = EVTNAME_SoA_5343
+	desc = EVTDESC_SoA_5343
+	picture = GFX_evt_monastery_nuns
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = do_not_disturb
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5343
+		random = {
+			chance = 20
+			change_stewardship = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5343
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			random = {
+				chance = 50
+				add_trait = scholar
+			}
+		}
+		random = {
+			chance = 20
+			change_learning = 1
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5343
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			random = {
+				chance = 50
+				add_trait = hedonist
+			}
+		}
+				random = {
+			chance = 20
+			change_intrigue = 1
+		}
+	}
+	option = {
+		name = EVTOPTD_SoA_5343
+		piety = 30
+		add_character_modifier = {
+			name = the_pious
+			duration = 240
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Mount Athos                             #
+# ID SoA.5344-SoA.5349                    #
+#                                         #
+###########################################
+
+# Priests at Mount Athos are very influential
+character_event = {
+	id = SoA.5344
+
+	hide_window = yes
+
+	only_rulers = yes
+	ai = yes
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		year = 885
+		is_priest = yes
+		has_landed_title = b_mntathos
+		OR = {
+			religion = orthodox
+			religion = bogomilist
+			religion = nestorian
+			religion = monothelite
+			religion = iconoclast
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		piety = 50
+		prestige = 25
+	}
+}
+
+# Donate to Mount Athos monasteries
+narrative_event = {
+	id = SoA.5345
+	title = EVTNAME_SoA_5345
+	desc = EVTDESC_SoA_5345
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_narrative_frame_religion
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+
+	trigger = {
+		wealth = 200
+		has_dlc = "Sons of Abraham"
+		year = 885
+		b_mntathos = {
+			holder_scope = {
+				is_priest = yes
+				religion = ROOT
+			}
+		}
+		OR = {
+			religion = orthodox
+			religion = bogomilist
+			religion = nestorian
+			religion = monothelite
+			religion = iconoclast
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+		modifier = {
+			factor = 0.3
+			has_focus = focus_theology
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5345
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOT = { wealth = 600 } }
+			wealth = -100
+			prestige = 50
+			piety = 50
+		}
+		if = {
+			limit = {
+				wealth = 600
+			}
+			wealth = -300
+			prestige = 100
+			piety = 100
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5345
+		ai_chance = {
+			factor = 80
+		}
+	}
+}
+
+# Visit Mount Athos?
+narrative_event = {
+	id = SoA.5346
+	title = EVTNAME_SoA_5346
+	desc = EVTDESC_SoA_5346
+	picture = GFX_evt_icon
+	border = GFX_event_narrative_frame_religion
+
+	ai = no
+	prisoner = no
+	only_capable = yes
+	only_men = yes
+	min_age = 16
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		year = 885
+		in_command = no
+		NOT = { trait = blinded }
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { is_inaccessible_trigger = yes }
+		b_mntathos = {
+			holder_scope = {
+				is_priest = yes
+				religion = ROOT
+			}
+		}
+		OR = {
+			religion = orthodox
+			religion = bogomilist
+			religion = nestorian
+			religion = monothelite
+			religion = iconoclast
+		}
+		distance = {
+			where = 491	# Mount Athos
+			value = 300	# Not too far away
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+		modifier = {
+			factor = 0.5
+			has_focus = focus_theology
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5346
+		wealth = -10
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { narrative_event = { id = SoA.5347 days = 10 } }
+	}
+	option = {
+		name = EVTOPTB_SoA_5346
+		piety = -5
+	}
+}
+
+# Visiting Mount Athos
+narrative_event = {
+	id = SoA.5347
+	title = EVTNAME_SoA_5347
+	desc = EVTDESC_SoA_5347
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = do_not_disturb
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5347
+		random = {
+			chance = 20
+			change_stewardship = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5347
+		random = {
+			chance = 20
+			change_learning = 1
+		}
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			random = {
+				chance = 50
+				add_trait = scholar
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5347
+		piety = 30
+		add_character_modifier = {
+			name = the_pious
+			duration = 240
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Jeanne d'Arc events                     #
+# ID SoA.5350-SoA.5399                    #
+#                                         #
+###########################################
+
+character_event = {
+	id = SoA.5350
+
+	hide_window = yes
+
+	ai = no
+	only_rulers = yes
+	only_independent = yes
+	prisoner = no
+	min_age = 16
+	religion_group = christian
+	has_dlc = "Sons of Abraham"
+	war = yes
+	
+	trigger = {
+		NOR = {
+				has_game_rule = {
+					name = gender
+					value = all
+				}
+				has_law = status_of_women_4
+				religion = cathar
+				religion = messalian
+		}
+		year = 1000
+		OR = {
+			tier = emperor
+			tier = king
+		}
+		is_republic = no
+		is_priest = no
+		
+		primary_title = {
+			culture = ROOT
+		}
+		NOT = { has_global_flag = jeanne_darc_spawned }
+	}
+	
+	mean_time_to_happen = {
+		months = 3000
+	}
+
+	immediate = {
+		set_global_flag = jeanne_darc_spawned
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+			trait = zealous
+			trait = celibate
+			trait = chaste
+			trait = honest
+			trait = brave
+			trait = trusting
+			trait = brilliant_strategist
+			trait = inspiring_leader
+			trait = aggressive_leader
+			attributes = {
+				diplomacy = 15
+				martial = 20
+				stewardship = 5
+				intrigue = 3
+				learning = 3
+			}
+		}
+		new_character = {
+			set_character_flag = is_jeanne_darc
+			set_character_flag = special_marshal
+			if = {
+				limit = { culture = frankish }
+				set_name = Jeanne
+				give_nickname = nick_darc
+			}
+			if = {
+				limit = { NOT = { culture = frankish } }
+				give_nickname = nick_the_maid
+			}
+			add_character_modifier = {
+				name = voice_of_jesus
+				duration = -1
+			}
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+				years = 100
+			}
+			character_event = { id = SoA.5351 }
+		}
+	}
+}
+
+# Jeanne event
+character_event = {
+	id = SoA.5351
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			random_realm_province = { province_event = { id = SoA.5352 } }
+		}
+	}
+}
+
+# Jeanne's home province
+province_event = {
+	id = SoA.5352
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_province_flag = home_of_jeanne_darc
+		FROMFROM = { narrative_event = { id = SoA.5353 } }
+	}
+}
+
+# Notify monarch of this new servant of the crown
+narrative_event = {
+	id = SoA.5353
+	title = EVTNAME_SoA_5353
+	desc = EVTDESC_SoA_5353
+	picture = GFX_evt_large_army
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5353
+		custom_tooltip = { text = jeanne_arrives_message }
+		hidden_tooltip = {
+			FROMFROM  = {
+				character_event = { id = SoA.5354  days = 90 random = 60 }
+			}
+		}
+	}
+}
+
+# Jeanne d'Arc - Nobles react
+character_event = {
+	id = SoA.5354
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+			liege = { narrative_event = { id = SoA.5355 } }
+	}
+}
+	
+narrative_event = {
+	id = SoA.5355
+	title = EVTNAME_SoA_5355
+	desc = EVTDESC_SoA_5355
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5355
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = {
+					is_priest = no
+					is_republic = no
+					NOT = { trait = charitable }
+					NOT = { trait = kind }
+					NOT = { trait = humble }
+				}
+				hidden_tooltip = {
+					opinion = {
+						modifier = opinion_angry
+						who = ROOT
+						months = 18
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = most_lords_angry }
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5356 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5355
+		trigger = {
+			diplomacy = 15
+		}
+		prestige = 10
+		tooltip_info = diplomacy
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5356 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5355
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prisoner = yes
+			clr_character_flag = special_marshal
+			hidden_tooltip = { character_event = { id = SoA.5390 days = 5 } }    # Trial for heresy!
+		}
+	}
+}
+
+# Jeanne d'Arc approaches liege to talk of God and life
+character_event = {
+	id = SoA.5356
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5357 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5357
+	title = EVTNAME_SoA_5357
+	desc = EVTDESC_SoA_5357
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5357
+		hidden_tooltip = { narrative_event = { id = SoA.5358 } }
+	}
+	option = {
+		name = EVTOPTB_SoA_5357
+		piety = 30
+		add_trait = zealous
+		hidden_tooltip = { narrative_event = { id = SoA.5359 } }
+	}
+	option = {
+		name = EVTOPTC_SoA_5357
+		prestige = 30
+		FROM = {
+			prestige = -30
+		}
+		hidden_tooltip = { narrative_event = { id = SoA.5360 } }
+	}
+	option = {
+		name = EVTOPTD_SoA_5357
+		custom_tooltip = {
+			text = TOOLTIP_SoA_5357
+		}
+		trigger = {
+			trait = lustful
+			trait = cynical
+			intrigue = 10
+			is_female = no
+		}
+		random_list = {
+			20 = {
+				add_lover = FROM
+				FROM = {
+					remove_trait = celibate
+					prestige = -50
+					if = {
+						limit = { has_nickname = nick_the_maid }
+						give_nickname = nick_the_bold
+					}
+				}
+				hidden_tooltip = { narrative_event = { id = SoA.5361 } }
+			}
+			80 = {
+				hidden_tooltip = { narrative_event = { id = SoA.5362 } }
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5358
+	title = EVTNAME_SoA_5358
+	desc = EVTDESC_SoA_5358
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5358
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5363 days = 90 random = 60 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5359
+	title = EVTNAME_SoA_5359
+	desc = EVTDESC_SoA_5359
+	picture = GFX_evt_knight_kneeling
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5359
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5363 days = 90 random = 60 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5360
+	title = EVTNAME_SoA_5360
+	desc = EVTDESC_SoA_5360
+	picture = GFX_evt_bad_news_female
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5360
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5363 days = 90 random = 60 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5361
+	title = EVTNAME_SoA_5361
+	desc = EVTDESC_SoA_5361
+	picture = GFX_evt_lovers
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5361
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5363 days = 90 random = 60 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5362
+	title = EVTNAME_SoA_5362
+	desc = EVTDESC_SoA_5362
+	picture = GFX_evt_bad_news_female
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5362
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5363 days = 90 random = 60 } }
+		}
+	}
+}
+
+# Peasants like Jeanne
+character_event = {
+	id = SoA.5363
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5364 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5364
+	title = EVTNAME_SoA_5364
+	desc = EVTDESC_SoA_5364
+	picture = GFX_evt_stone_church
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5364
+		add_character_modifier = {
+				name = realm_religious_fervor
+				duration = 365
+			}
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5365 days = 90 random = 60 } }
+		}
+	}
+}
+
+# Jeanne comes with advice to liege
+character_event = {
+	id = SoA.5365
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5366 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5366
+	title = EVTNAME_SoA_5366
+	desc = EVTDESC_SoA_5366
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5366
+		piety = 30
+		military_techpoints = 50
+		any_realm_lord = {
+			limit = {
+				is_priest = no
+				is_republic = no
+				NOT = { trait = brilliant_strategist }
+				NOT = { trait = skilled_tactician }
+				NOT = { trait = humble }
+			}
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_angry
+					who = ROOT
+					months = 18
+				}
+			}
+		}
+		custom_tooltip = { text = most_lords_angry }
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5367 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5366
+		prestige = 30
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			prestige = -30
+			hidden_tooltip = { character_event = { id = SoA.5367 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5366
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prisoner = yes
+			clr_character_flag = special_marshal
+			hidden_tooltip = { character_event = { id = SoA.5390 days = 5 } }    # Trial for heresy!
+		}
+	}
+}
+
+# Jeanne d'Arc - Church reacts
+character_event = {
+	id = SoA.5367
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5368 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5368
+	title = EVTNAME_SoA_5368
+	desc = EVTDESC_SoA_5368
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5368
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = {
+					is_priest = yes
+					NOT = { trait = charitable }
+					NOT = { trait = kind }
+					NOT = { trait = humble }
+				}
+				hidden_tooltip = {
+					opinion = {
+						modifier = opinion_angry
+						who = ROOT
+						months = 18
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = most_clergy_angry }
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5369 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5368
+		trigger = {
+			diplomacy = 15
+		}
+		prestige = 20
+		tooltip_info = diplomacy
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5369 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5368
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prisoner = yes
+			clr_character_flag = special_marshal
+			hidden_tooltip = { character_event = { id = SoA.5390 days = 5 } }    # Trial for heresy!
+		}
+	}
+}
+
+# Jeanne d'Arc - Jeanne's ways affect liege
+character_event = {
+	id = SoA.5369
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5370 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5370
+	title = EVTNAME_SoA_5370
+	desc = EVTDESC_SoA_5370
+	picture = GFX_evt_princess_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5370
+		piety = 30
+		if = {
+			limit = { NOT = { trait = zealous } }
+			random = {
+				chance = 20
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5371 days = 90 random = 60 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5370
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 30
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			hidden_tooltip = { character_event = { id = SoA.5371 days = 90 random = 60 } }
+		}
+	}
+}
+
+# Jeanne d'Arc - Nobles complain again - issue of low birth
+character_event = {
+	id = SoA.5371
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		any_independent_ruler = {
+			any_realm_province = {
+				limit = { has_province_flag = home_of_jeanne_darc }
+				province_event = { id = SoA.5372 }
+			}
+		}
+	}
+}
+
+province_event = {
+	id = SoA.5372
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROMFROM = { narrative_event = { id = SoA.5373 } }
+	}
+}
+
+narrative_event = {
+	id = SoA.5373
+	title = EVTNAME_SoA_5373
+	desc = EVTDESC_SoA_5373
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5373
+			any_realm_lord = {
+				limit = {
+					is_priest = no
+					is_republic = no
+					NOT = { trait = charitable }
+					NOT = { trait = kind }
+					NOT = { trait = humble }
+				}
+				hidden_tooltip = {
+					opinion = {
+						modifier = opinion_angry
+						who = ROOT
+						months = 18
+					}
+				}
+			}
+		custom_tooltip = { text = most_lords_angry }
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			hidden_tooltip = { character_event = { id = SoA.5396 days = 1460 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5373
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prestige = -100
+			hidden_tooltip = { character_event = { id = SoA.5396 days = 1460 } }
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5373
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+				NOT = { has_nickname = nick_darc }
+			}
+			prestige = 200
+			dynasty = 849 # New dynasty
+			hidden_tooltip = { character_event = { id = SoA.5396 days = 1460 } }
+		}
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+				has_nickname = nick_darc
+			}
+			prestige = 100
+			give_nickname = nick_the_maid
+			dynasty = 848 # d'Arc
+			hidden_tooltip = { character_event = { id = SoA.5396 days = 1460 } }
+		}
+	}
+	option = {
+		name = EVTOPTD_SoA_5373
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prisoner = yes
+			clr_character_flag = special_marshal
+			hidden_tooltip = { character_event = { id = SoA.5390 days = 5 } }    # Trial for heresy!
+		}
+	}
+}
+
+# If Jeanne d'Arc marries
+character_event = {
+	id = SoA.5380
+	
+	hide_window = yes
+
+	ai = no
+	religion_group = christian
+	
+	trigger = {
+		has_global_flag = jeanne_darc_spawned
+		NOT = { has_global_flag = jeanne_darc_married }
+		any_courtier = {
+			has_character_flag = is_jeanne_darc
+			is_married = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			character_event = { id = SoA.5381 }
+		}
+	}
+}
+
+character_event = {
+	id = SoA.5381
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			narrative_event = { id = SoA.5382 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5382
+	title = EVTNAME_SoA_5382
+	desc = EVTDESC_SoA_5382
+	picture = GFX_evt_marriage
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5382
+		set_global_flag = jeanne_darc_married
+		FROM = {
+			clr_character_flag = special_marshal
+			remove_title = job_marshal
+			if = {
+				limit = { has_nickname = nick_the_maid }
+				give_nickname = nick_the_bold
+			}
+		}
+	}
+}
+
+# If Jeanne d'Arc has a child
+character_event = {
+	id = SoA.5383
+	
+	hide_window = yes
+
+	ai = no
+	religion_group = christian
+	
+	trigger = {
+		has_global_flag = jeanne_darc_spawned
+		NOT = { has_global_flag = jeanne_darc_mother }
+		any_courtier = {
+			has_character_flag = is_jeanne_darc
+			num_of_children = 1
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			character_event = { id = SoA.5384 }
+		}
+	}
+}
+
+character_event = {
+	id = SoA.5384
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			narrative_event = { id = SoA.5385 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5385
+	title = EVTNAME_SoA_5385
+	desc = EVTDESC_SoA_5385
+	picture = GFX_evt_birth
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5385
+		set_global_flag = jeanne_darc_mother
+		FROM = {
+			if = {
+				limit = { has_nickname = nick_the_maid }
+				give_nickname = nick_the_bold
+			}
+		}
+	}
+}
+
+# Trial of Jeanne d'Arc begins
+character_event = {
+	id = SoA.5390
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5391 }
+		}
+	}
+}
+
+narrative_event = {
+	id = SoA.5391
+	title = EVTNAME_SoA_5391
+	desc = EVTDESC_SoA_5391
+	picture = GFX_evt_scandal
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5391
+		hidden_tooltip = {
+			any_courtier = {
+				limit = { has_character_flag = is_jeanne_darc }
+				hidden_tooltip = { character_event = { id = SoA.5450 days = 30 random = 30 } }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = SoA.5450
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = {
+			narrative_event = { id = SoA.5392 }
+		}
+	}
+}
+
+# Trial of Jeanne d'Arc - give verdict
+narrative_event = {
+	id = SoA.5392
+	title = EVTNAME_SoA_5392
+	desc = EVTDESC_SoA_5392
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5392
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			set_character_flag = jeanne_guilty
+			hidden_tooltip = { character_event = { id = SoA.5393 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5392
+		any_courtier = {
+			limit = { has_character_flag = is_jeanne_darc }
+			set_character_flag = jeanne_innocent
+			hidden_tooltip = { character_event = { id = SoA.5393 } }
+		}
+	}
+}
+
+character_event = {
+	id = SoA.5393
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_character_flag = jeanne_guilty
+			}
+			liege = {
+				narrative_event = { id = SoA.5394 }
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = jeanne_innocent
+			}
+			liege = {
+				narrative_event = { id = SoA.5395 }
+			}
+		}
+	}
+}
+
+# Jeanne d'Arc is burned at the stake
+narrative_event = {
+	id = SoA.5394
+	title = EVTNAME_SoA_5394
+	desc = EVTDESC_SoA_5394
+	picture = GFX_evt_riots_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5394
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			death = {
+				death_reason = death_execution_burning
+			}
+		}
+	}
+}
+
+# Jeanne d'Arc aquitted
+narrative_event = {
+	id = SoA.5395
+	title = EVTNAME_SoA_5395
+	desc = EVTDESC_SoA_5395
+	picture = GFX_evt_monastery_nuns
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5395
+		any_courtier = {
+			limit = {
+				has_character_flag = is_jeanne_darc
+			}
+			prisoner = no
+			add_trait = nun
+			hidden_tooltip = { character_event = { id = SoA.5396 days = 1460 } }
+		}
+	}
+}
+
+# Stormy times over for Jeanne d'Arc
+character_event = {
+	id = SoA.5396
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		any_independent_ruler = {
+			any_realm_province = {
+				limit = { has_province_flag = home_of_jeanne_darc }
+				province_event = { id = SoA.5397 }
+			}
+		}
+	}
+}
+
+province_event = {
+	id = SoA.5397
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			liege = {
+				narrative_event = { id = SoA.5398 }
+			}
+		}
+	}
+}
+
+# Notification of stormy times over for Jeanne d'Arc
+narrative_event = {
+	id = SoA.5398
+	title = EVTNAME_SoA_5398
+	desc = EVTDESC_SoA_5398
+	picture = GFX_evt_princess_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5398
+	}
+}
+
+###########################################
+#                                         #
+# Unfortunate crusade-related events      #
+# ID SoA.5400-SoA.5409                    #
+#                                         #
+###########################################
+
+# Massacre at Beziers - fires from on_siege_over_winner
+narrative_event = {
+	id = SoA.5400
+	title = EVTNAME_SoA_5400
+	desc = EVTDESC_SoA_5400
+	picture = GFX_evt_burning_house
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+
+	only_rulers = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		any_war = {
+			using_cb = crusade
+		}
+		top_liege = {
+			is_parent_religion = ROOT
+		}
+		FROM = {
+			holder_scope = {
+				is_heretic = yes
+				is_republic = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5400
+		if = {
+			limit = { NOT = { trait = cruel } }
+			add_trait = cruel
+		}
+		wealth = 30
+		FROM = {
+			destroy_random_building = yes
+			destroy_random_building = yes
+			holder_scope = {
+				any_courtier = {
+					limit = {
+						at_location = FROM
+					}
+					random = {
+						chance = 50
+						death = {
+							death_reason = death_murder
+							killer = ROOT
+						}
+					}
+				}
+				if = {
+					limit = {
+						at_location = FROM
+					}
+					random = {
+						chance = 50
+						death = {
+							death_reason = death_murder
+							killer = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5400
+		if = {
+			limit = { NOT = { trait = kind } }
+			random = {
+				chance = 30
+				add_trait = kind
+				hidden_tooltip = {
+					character_event = {
+						id = 38268 #Notify Kind
+					}
+				}
+			}
+		}
+	}
+}
+
+# Shepherds' Crusade
+narrative_event = {
+	id = SoA.5401
+	title = EVTNAME_SoA_5401
+	desc = EVTDESC_SoA_5401
+	picture = GFX_evt_peasants
+	border = GFX_event_narrative_frame_war
+	
+	only_playable = yes
+	religion_group = christian
+	war = yes
+	has_dlc = "Sons of Abraham"
+	
+	trigger = {
+		higher_tier_than = DUKE
+		OR = {
+			religion = catholic
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+			religion = cathar
+		}
+		any_war = {
+			using_cb = crusade
+		}
+		any_war = {
+			NOT = {
+				OR = {
+					using_cb = depose_liege
+					using_cb = bid_for_independence
+				}
+			}
+		}
+		NOT = { has_global_flag = shepherds_crusade }
+	}
+
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		set_global_flag = shepherds_crusade
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5401
+		trigger = {
+			wealth = 500
+		}
+		wealth = -500
+	}
+	
+	option = {
+		name = EVTOPTC_SoA_5401
+		set_global_flag = shepherds_crusade_active
+		random_realm_province = { province_event = { id = SoA.5405 } }
+	}
+}
+
+province_event = {
+	id = SoA.5405
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = FROM
+			culture = hungarian
+			female = no
+			age = 60
+			trait = martial_cleric
+			trait = zealous
+			trait = monk
+		}
+		new_character = {
+			set_character_flag = shepherds_crusade_leader
+			set_character_flag = special_marshal
+			give_nickname = nick_the_master_of_hungary
+			prestige = 50
+			piety = 200
+			create_title = {
+				tier = DUKE
+				landless = yes
+				temporary = yes
+				rebel = yes
+				culture = ROOT
+				name = "SHEPHERDS_CRUSADE"
+				holder = THIS
+			}
+			spawn_unit = {
+				owner = THIS
+				#leader = THIS
+				province = ROOT
+				home = ROOT
+				troops = {
+					light_infantry = { 10000 10000 }
+				}
+				attrition = 1.0
+				disband_on_peace = yes
+			}
+			spawn_unit = {
+				owner = THIS
+				province = ROOT
+				home = ROOT
+				troops = {
+					light_infantry = { 10000 10000 }
+				}
+				attrition = 1.0
+				disband_on_peace = yes
+			}
+			spawn_unit = {
+				owner = THIS
+				province = ROOT
+				home = ROOT
+				troops = {
+					light_infantry = { 10000 10000 }
+				}
+				attrition = 1.0
+				disband_on_peace = yes
+			}
+			set_defacto_liege = FROM
+			FROM = {
+				capital_scope = {
+					holder_scope = {
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = depose_liege
+						}
+					}
+				}
+			}
+			character_event = { id = SoA.5402 days = 365 random = 180 } # Collapse which will come later
+		}
+	}
+}
+
+# Shepherds crusade collapses
+character_event = {
+	id = SoA.5402
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		any_war = {
+				limit = {
+					attacker = { character = ROOT }
+				}
+			end_war = invalid
+		}
+		death = {
+			death_reason = death_accident
+		}
+		clr_global_flag = shepherds_crusade_active
+		FROMFROM = {
+			character_event = { id = SoA.5403 }
+		}
+	}
+}
+
+# Notify player of Shepherds crusade collapse
+character_event = {
+	id = SoA.5403
+	desc = EVTDESC_SoA_5403
+	picture = GFX_evt_stone_church
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5403
+	}
+}
+
+# Shepherds' Crusade kills a local Jew or priest. Fired from 'on_siege_over_loc_chars'.
+# Siege winner unit owner in the 'new_character' scope, lost holding title in FROM, local character in ROOT.
+character_event = {
+	id = SoA.5406
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			religion_group = jewish_group
+			is_priest = yes
+		}
+		new_character = {
+			rebel = yes
+			has_character_flag = shepherds_crusade_leader
+		}
+	}
+	
+	immediate = {
+		random = {
+			chance = 50
+			new_character = {
+				ROOT = {
+					death = {
+						death_reason = death_rabble
+						killer = PREV
+					}
+				}
+			}
+			any_liege = { # Inform the victim's lieges
+				character_event = {
+					id = SoA.5409
+				}
+			}
+		}
+	}
+}
+
+# Liege notified of killing of character by Shepherds' Crusade
+character_event = {
+	id = SoA.5409
+	desc = EVTDESC_SoA_5409
+	picture = GFX_evt_beheading
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5409
+	}
+}
+
+###########################################
+#                                         #
+# Religious tolerance events              #
+# ID SoA.5410-SoA.                        #
+#                                         #
+###########################################
+
+# Tolerant character making Christian friend
+character_event = {
+	id = SoA.5410
+	desc = EVTDESC_SoA_5410
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = sympathy_christendom
+		has_dlc = "Sons of Abraham"
+		any_courtier = {
+			religion_group = christian
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5410
+		any_courtier = {
+			limit = {
+				religion_group = christian
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+		}
+	}
+}
+
+# Tolerant character making Muslim friend
+character_event = {
+	id = SoA.5411
+	desc = EVTDESC_SoA_5411
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = sympathy_islam
+		has_dlc = "Sons of Abraham"
+		any_courtier = {
+			religion_group = muslim
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5411
+		random_courtier = {
+			limit = {
+				religion_group = muslim
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+		}
+	}
+}
+
+# Tolerant character making Pagan friend
+character_event = {
+	id = SoA.5412
+	desc = EVTDESC_SoA_5412
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = sympathy_pagans
+		has_dlc = "Sons of Abraham"
+		any_courtier = {
+			religion_group = pagan_group
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5412
+		random_courtier = {
+			limit = {
+				religion_group = pagan_group
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+		}
+	}
+}
+
+# Tolerant character making Zoroastrian friend
+character_event = {
+	id = SoA.5413
+	desc = EVTDESC_SoA_5413
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = sympathy_zoroastrianism
+		has_dlc = "Sons of Abraham"
+		any_courtier = {
+			religion_group = zoroastrian_group
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5413
+		random_courtier = {
+			limit = {
+				religion_group = zoroastrian_group
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+		}
+	}
+}
+
+# Tolerant character making Jewish friend
+character_event = {
+	id = SoA.5414
+	desc = EVTDESC_SoA_5414
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = sympathy_judaism
+		has_dlc = "Sons of Abraham"
+		any_courtier = {
+			religion_group = jewish_group
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5414
+		random_courtier = {
+			limit = {
+				religion_group = jewish_group
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+		}
+	}
+}
+
+# Zealous character insults other religions
+character_event = {
+	id = SoA.5420
+	desc = EVTDESC_SoA_5420
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	
+	trigger = {
+		trait = zealous
+		trait = wroth
+		NOT = { diplomacy = 5 }
+		has_dlc = "Sons of Abraham"
+		higher_tier_than = COUNT
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5420
+		hidden_tooltip = {
+			any_realm_character = {
+				limit = {
+					NOT = { religion_group = ROOT }
+					prisoner = no
+					is_adult = yes
+					NOT = { trait = incapable }
+					NOT = { is_friend = ROOT }
+				}
+				opinion = {
+					modifier = insulted
+					who = ROOT
+					years = 1
+				}
+			}
+		}
+		custom_tooltip = { text = insulted_realm_infidels }
+	}
+}
+
+# Muslim tolerance towards Judaism and Christianity
+character_event = {
+	id = SoA.5425
+	desc = EVTDESC_SoA_5425
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+
+	trigger = {
+		NOR = {
+			trait = zealous
+			trait = holy_warrior
+			trait = ashari
+			trait = mujahid
+		}
+		OR = {
+			NOT = { trait = sympathy_judaism }
+			NOT = { trait = sympathy_christendom }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		modifier = {
+			factor = 0.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.5
+			trait = mutazilite
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_5425
+		if = {
+			limit = { NOT = { trait = sympathy_judaism } }
+			add_trait = sympathy_judaism
+		}
+		if = {
+			limit = { NOT = { trait = sympathy_christendom } }
+			add_trait = sympathy_christendom
+		}
+	}
+}
+

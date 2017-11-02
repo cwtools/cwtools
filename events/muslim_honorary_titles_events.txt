@@ -1,0 +1,5853 @@
+################################################
+#
+# Events for Muslim Honorary Titles Events
+#
+# ID 105000 - 105999 is reserved
+#
+# The basic events are triggered by on actions
+#
+#################################################
+#
+# Written by Sara Wendel-Örtqvist
+
+### CHIEF QADI ###
+	
+### Woman asks Chief Qadi for a divorce ###
+character_event = {
+	id = 105000
+	desc = "EVTDESC105000"
+	picture = GFX_evt_quarrel #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	only_women = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	is_married = yes
+	
+	trigger = {
+		NOT = {
+			has_character_modifier = qadi_divorce_timer
+		}
+		NOT = {
+			has_character_flag = qadi_granted_divorce
+		}
+		spouse = {
+			OR = {
+				trait = wroth
+				trait = cruel
+				trait = arbitrary
+				trait = greedy
+				NOT = { reverse_opinion = { who = ROOT value = 0 } }
+			}
+			NOT = {
+				has_minor_title = title_chief_qadi
+			}
+		}
+		liege = {
+			OR = {
+				any_courtier = {
+					has_minor_title = title_chief_qadi
+				}
+				any_vassal = {
+					has_minor_title = title_chief_qadi
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 200
+		
+		modifier = {
+			factor = 5
+			trait = content
+		}
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 2
+			num_of_children = 2
+		}
+		modifier = {
+			factor = 3
+			num_of_children = 4
+		}
+		modifier = {
+			factor = 4
+			num_of_children = 6
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = qadi_divorce_timer
+				duration = 1095
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105000"
+		ai_chance = {
+			factor = 40
+		}
+		if = {
+			limit = {
+				liege = {
+					any_courtier = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+			}
+			liege = {
+				random_courtier = {
+					limit = {
+						has_minor_title = title_chief_qadi
+					}
+					character_event = {
+						id = 105001
+						days = 1
+						random = 3
+						tooltip = "EVTTOOLTIP105001"
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				liege = {
+					NOT = {
+						any_courtier = {
+							has_minor_title = title_chief_qadi
+						}
+					}
+					any_vassal = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+			}
+			liege = {
+				random_vassal = {
+					limit = {
+						has_minor_title = title_chief_qadi
+					}
+					character_event = {
+						id = 105001
+						days = 1
+						random = 3
+						tooltip = "EVTTOOLTIP105001"
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB105000"
+		ai_chance = {
+			factor = 60
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			add_trait = content
+		}
+		if = {
+			limit = {
+				trait = content
+			}
+			random = {
+				chance = 20
+				add_trait = depressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38288 #Notify Depressed
+					}
+				}
+			}
+		}
+	}
+}
+
+#Court Qadi is asked by the woman to grant her a divorce
+character_event = {
+	id = 105001
+	desc = "EVTDESC105001"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105001" #Yes
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 4
+				trait = just
+			}
+		}
+		FROM = {
+			character_event = {
+				id = 105002
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIP105002"
+			}
+			hidden_tooltip = {
+				spouse = {
+					character_event = {
+						id = 105005
+						days = 1
+						random = 3
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105001" #No
+		ai_chance = {
+			factor = 60
+			
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+		FROM = {
+			character_event = {
+				id = 105003
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIP105003"
+			}
+		}
+	}
+}
+
+#Woman is granted divorce
+character_event = {
+	id = 105002
+	desc = "EVTDESC105002"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105002"
+		trigger = {
+			is_pregnant = no
+		}
+		ai_chance = {
+			factor = 20
+
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				spouse = {
+					NOT = { reverse_opinion = { who = ROOT value = 0 } }
+				}
+			}
+		}
+		set_character_flag = qadi_granted_divorce
+		hidden_tooltip = {
+			remove_character_modifier = qadi_divorce_timer
+		}
+		add_character_modifier = {
+			name = iddah_period
+			duration = -1
+		}
+	}
+	option = {
+		name = "EVTOPTB105002"  #Pregnant, must wait until child is born
+		trigger = {
+			is_pregnant = yes
+		}
+		ai_chance = {
+			factor = 20
+			
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				spouse = {
+					NOT = { reverse_opinion = { who = ROOT value = 0 } }
+				}
+			}
+		}
+		set_character_flag = qadi_granted_divorce
+		hidden_tooltip = {
+			remove_character_modifier = qadi_divorce_timer
+		}
+		add_character_modifier = {
+			name = iddah_period
+			duration = -1
+		}
+	}
+	option = {
+		name = "EVTOPTC105002" #I have changed my mind
+		ai_chance = {
+			factor = 60
+		}
+		spouse = {
+			set_character_flag = reconsidered_divorce
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105007
+				days = 1
+				random = 2
+				tooltip = "EVTTOOLTIPB105007"
+			}
+		}
+	}
+}
+
+#Woman won't get the Chief Qadi's approval
+character_event = {
+	id = 105003
+	desc = "EVTDESC105003"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105003"
+		opinion = {
+			modifier = opinion_very_disappointed
+			who = FROM
+			years = 5
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = depressed
+				}
+			}
+			add_trait = depressed
+		}
+	}
+}
+
+#Woman gets divorced
+character_event = {
+	id = 105004
+	desc = "EVTDESC105004"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	only_women = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = qadi_granted_divorce
+	
+	trigger = {
+		is_pregnant = no
+		has_character_modifier = iddah_period
+		had_character_flag = {
+			flag = qadi_granted_divorce
+			days = 30
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "EVTOPTA105004"
+		remove_character_modifier = iddah_period
+		clr_character_flag = qadi_granted_divorce
+		spouse = {
+			remove_spouse = ROOT
+		}
+	}
+	option = {
+		name = "EVTOPTB105004"
+		remove_character_modifier = iddah_period
+		clr_character_flag = qadi_granted_divorce
+		spouse = {
+			set_character_flag = reconsidered_divorce
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105007
+				days = 1
+				random = 2
+				tooltip = "EVTTOOLTIPB105007"
+			}
+		}
+	}
+}
+
+#Spouse finds out about divorce
+character_event = {
+	id = 105005
+	desc = "EVTDESC105005"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105005" #if that's what she wants...
+		prestige = -10
+	}
+	option = {
+		name = "EVTOPTB105005" #NO! I won't allow it!
+		spouse = {
+			character_event = {
+				id = 105006
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIP105006"
+			}
+		}
+	}
+}
+
+#Woman is asked by spouse to reconsider
+character_event = {
+	id = 105006
+	desc = "EVTDESC105006"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105006" #I want that divorce!
+		FROM = {
+			set_character_flag = wants_divorce
+			character_event = {
+				id = 105007
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIPA105007"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105006" #Okay
+		remove_character_modifier = iddah_period
+		clr_character_flag = qadi_granted_divorce
+		FROM = {
+			set_character_flag = reconsidered_divorce
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105007
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIPB105007"
+			}
+		}
+	}
+}
+
+#Spouse: Woman's answer
+character_event = {
+	id = 105007
+	desc = "EVTDESC105007"
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105007"
+		trigger = {
+			has_character_flag = wants_divorce
+		}
+		clr_character_flag = wants_divorce
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 2
+		}
+	}
+	option = {
+		name = "EVTOPTB105007"
+		trigger = {
+			has_character_flag = reconsidered_divorce
+		}
+		clr_character_flag = reconsidered_divorce
+		tooltip = {
+			opinion = {
+				modifier = opinion_glad
+				who = FROM
+				years = 5
+			}
+		}
+	}
+}
+
+### Suggest a Chief Qadi ###
+character_event = {
+	id = 105010
+	desc = "EVTDESC105010"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	religion_group = muslim
+	war = no
+	
+	trigger = {
+		in_command = no
+		independent = no
+		NOT = {
+			has_minor_title = title_chief_qadi
+		}
+		NOT = {
+			has_character_flag = qadi_suggester
+		}
+		NOT = {
+			has_character_flag = new_qadi_suggester
+		}
+		liege = {
+			uses_decadence = yes
+			NOT = {
+				has_character_modifier = suggested_qadi_timer
+			}
+			NOT = {
+				has_character_modifier = suggested_new_qadi_timer
+			}
+			NOT = {
+				character = ROOT
+			}
+			prisoner = no
+			primary_title = {
+				OR = {
+					tier = king
+					tier = emperor
+				}
+			}
+			religion_group = muslim
+			NOT = {
+				any_vassal = {
+					has_minor_title = title_chief_qadi
+				}
+			}
+			NOT = {
+				any_courtier = {
+					has_minor_title = title_chief_qadi
+				}
+			}
+			OR = {
+				any_vassal = {
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+				}
+				any_courtier = {
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+				ROOT = {
+					is_female = no
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		
+		modifier = {
+			factor = 0.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2
+			trait = slothful
+		}
+		modifier = {
+			factor = 2
+			trait = content
+		}
+	}
+	
+	immediate = {
+		set_character_flag = qadi_suggester
+		hidden_tooltip = {
+			liege = {
+				add_character_modifier = {
+					name = suggested_qadi_timer
+					duration = 730
+					hidden = yes
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105010" #Suggest a courtier
+		trigger = {
+			liege = {
+				any_courtier = {
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					NOT = { character = PREV }
+					NOT = { character = ROOT }
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+		liege = {
+			random_courtier = {
+				limit = {
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					NOT = { character = PREV }
+					NOT = { character = ROOT }
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+				save_event_target_as = target_suggested_qadi
+				set_character_flag = suggested_qadi
+			}
+			set_character_flag = suggested_qadi_courtier
+			character_event = {
+				id = 105011
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105011"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105010" #Suggest yourself
+		trigger = {
+			is_female = no
+			NOT = {
+				has_minor_title = title_chief_qadi
+			}
+			OR = {
+				trait = detached_priest
+				trait = martial_cleric
+				trait = scholarly_theologian
+				trait = mastermind_theologian
+			}
+		}
+		save_event_target_as = target_suggested_qadi
+		liege = {
+			set_character_flag = suggested_qadi_from
+			character_event = {
+				id = 105011
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105011"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105010" #Suggest a vassal
+		trigger = {
+			liege = {
+				any_vassal = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+				}
+			}
+		}
+		liege = {
+			random_vassal = {
+				limit = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+				}
+				save_event_target_as = target_suggested_qadi
+				set_character_flag = suggested_qadi
+			}
+			set_character_flag = suggested_qadi_vassal
+			character_event = {
+				id = 105011
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105011"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105010" #Do nothing
+	}
+}
+
+#Liege listens to suggestions
+character_event = {
+	id = 105011
+	desc = "EVTDESC105011"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTE105011" #OK
+		ai_chance = {
+			factor = 40
+		}
+		event_target:target_suggested_qadi = {
+			give_minor_title = title_chief_qadi
+			if = {
+				limit = {
+					FROM = { character = PREV }
+				}
+				character_event = {
+					id = 105014
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIPA105014"
+				}
+				break = yes
+			}
+			character_event = {
+				id = 105012
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105012"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTF105011" #No
+		ai_chance = {
+			factor = 60
+		}
+		FROM = {
+			if = {
+				limit = { 
+					character = event_target:target_suggested_qadi }
+				opinion = {
+					modifier = opinion_disappointed
+					who = ROOT
+					years = 5
+				}
+				character_event = {
+					id = 105014
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIPB105014"
+				}
+				break = yes
+			}
+			character_event = {
+				id = 105013
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPA105013"
+			}
+		}
+	}
+}
+
+#Vassal/Courtier gets title thanks to ROOT
+character_event = {
+	id = 105012
+	desc = "EVTDESC105012"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA105012
+		tooltip = {
+			give_minor_title = title_chief_qadi
+		}
+		FROMFROM = {
+			reverse_opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105013
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105013"
+			}
+		}
+	}
+}
+
+#ROOT is thanked/dismissed
+character_event = {
+	id = 105013
+	desc = EVTDESC105013
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA105013
+		trigger = {
+			event_target:target_suggested_qadi = {
+				has_minor_title = title_chief_qadi
+			}
+		}
+		prestige = 15
+		event_target:target_suggested_qadi = {
+			tooltip = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTB105013
+		trigger = {
+			event_target:target_suggested_qadi = {
+				NOT = { has_minor_title = title_chief_qadi }
+			}
+		}
+		prestige = -5
+	}
+}
+
+#ROOT gains title/is dismissed
+character_event = {
+	id = 105014
+	desc = "EVTDESC105014"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105014"
+		trigger = {
+			has_minor_title = title_chief_qadi
+		}
+		tooltip = {
+			give_minor_title = title_chief_qadi
+		}
+		prestige = 20
+		opinion = {
+			modifier = opinion_grateful
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105014"
+		trigger = {
+			NOT = { has_minor_title = title_chief_qadi }
+		}
+		prestige = -5
+		tooltip = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = FROM
+				years = 5
+			}
+		}
+	}
+}
+
+### Suggest a new Chief Qadi ###
+character_event = {
+	id = 105020
+	desc = "EVTDESC105020"
+	picture = GFX_evt_emissary #Placeholder!
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	war = no
+	
+	trigger = {
+		in_command = no
+		NOT = {
+			has_minor_title = title_chief_qadi
+		}
+		NOT = {
+			has_character_flag = new_qadi_suggester
+		}
+		NOT = {
+			has_character_flag = qadi_suggester
+		}
+		liege = {
+			uses_decadence = yes
+			prisoner = no
+			primary_title = {
+				OR = {
+					tier = king
+					tier = emperor
+				}
+			}
+			religion_group = muslim
+			NOT = {
+				has_character_modifier = suggested_new_qadi_timer
+			}
+			NOT = {
+				has_character_modifier = suggested_qadi_timer
+			}
+			NOT = {
+				character = ROOT
+			}
+			any_vassal = {
+				has_minor_title = title_chief_qadi
+				NOT = {
+					learning = 15
+				}
+				OR = {
+					trait = arbitrary
+					trait = slothful
+				}
+			}
+			OR = {
+				any_courtier = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+				any_vassal = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+				}
+				ROOT = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					is_female = no
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+					NOT = {
+						trait = content
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 350
+		
+		modifier = {
+			factor = 0.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2
+			trait = slothful
+		}
+		modifier = {
+			factor = 2
+			trait = content
+		}
+	}
+	
+	immediate = {
+		set_character_flag = new_qadi_suggester
+		hidden_tooltip = {
+			liege = {
+				add_character_modifier = {
+					name = suggested_new_qadi_timer
+					duration = 730
+					hidden = yes
+				}
+			}
+		}
+		liege = {
+			if = {
+				limit = {
+					any_vassal = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+				random_vassal = {
+					limit = { has_minor_title = title_chief_qadi }
+					save_event_target_as = old_qadi
+					break = yes
+				}
+			}
+			if = {
+				limit = {
+					any_courtier = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+				random_courtier = {
+					limit = { has_minor_title = title_chief_qadi }
+					save_event_target_as = old_qadi
+					break = yes
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105020" #Suggest a courtier
+		trigger = {
+			liege = {
+				any_courtier = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+		liege = {
+			random_courtier = {
+				limit = {
+					age = 16
+					religion_group = muslim
+					is_female = no
+					prisoner = no
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+				save_event_target_as = target_suggested_qadi
+			}
+			character_event = {
+				id = 105021
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105021"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105020" #Suggest yourself
+		trigger = {
+			NOT = {
+				has_minor_title = title_chief_qadi
+			}
+			is_female = no
+			OR = {
+				trait = detached_priest
+				trait = martial_cleric
+				trait = scholarly_theologian
+				trait = mastermind_theologian
+			}
+		}
+		save_event_target_as = target_suggested_qadi
+		liege = {
+			character_event = {
+				id = 105021
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105021"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105020" #Suggest a vassal
+		trigger = {
+			liege = {
+				any_vassal = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+				}
+			}
+		}
+		liege = {
+			random_vassal = {
+				limit = {
+					NOT = {
+						has_minor_title = title_chief_qadi
+					}
+					age = 16
+					is_female = no
+					religion_group = muslim
+					prisoner = no
+					NOT = {
+						character = ROOT
+					}
+					NOT = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+					OR = {
+						trait = detached_priest
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+					learning = 15
+					NOT = {
+						trait = arbitrary
+					}
+					NOT = {
+						trait = slothful
+					}
+				}
+				save_event_target_as = target_suggested_qadi
+			}
+		}
+		liege = {
+			character_event = {
+				id = 105021
+				days = 2
+				random = 4
+				tooltip = "EVTTOOLTIP105021"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105020" #Do nothing
+	}
+}
+
+#Liege listens to suggestions
+character_event = {
+	id = 105021
+	desc = "EVTDESC105021"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTC105021" #OK
+		ai_chance = {
+			factor = 40
+		}
+		event_target:old_qadi = {
+			remove_title = title_chief_qadi
+			if = {
+				limit = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_chief_qadi }
+				}
+				remove_opinion = { who = ROOT modifier = opinion_chief_qadi }
+			}
+			character_event = {
+				id = 105025
+				days = 1
+				tooltip = "EVTTOOLTIP105025"
+			}
+		}
+		event_target:target_suggested_qadi = {
+			give_minor_title = title_chief_qadi
+			if = {
+				limit = { FROM = { character = PREV } }
+				character_event = {
+					id = 105024
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIPA105014"
+				}
+				break = yes
+			}
+			character_event = {
+				id = 105022
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105022"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105021" #No
+		ai_chance = {
+			factor = 60
+		}
+		FROM = {
+			if = {
+				limit = { character = event_target:target_suggested_qadi }
+				opinion = {
+					modifier = opinion_disappointed
+					who = ROOT
+					years = 5
+				}
+				character_event = {
+					id = 105024
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIPB105014"
+				}
+				break = yes
+			}
+			character_event = {
+				id = 105023
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPA105013"
+			}
+		}
+	}
+}
+
+#Vassal/Courtier gets title thanks to ROOT
+character_event = {
+	id = 105022
+	desc = "EVTDESC105012"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105012"
+		tooltip = {
+			give_minor_title = title_chief_qadi
+		}
+		FROM = {
+			FROM = {
+				reverse_opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+				character_event = {
+					id = 105023
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIPB105013"
+				}
+			}
+		}
+	}
+}
+
+#ROOT is thanked/dismissed
+character_event = {
+	id = 105023
+	desc = "EVTDESC105023"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105023"
+		trigger = {
+			event_target:target_suggested_qadi = {
+				has_minor_title = title_chief_qadi
+			}
+		}
+		prestige = 15
+		FROM = {
+			tooltip = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTB105023"
+		trigger = {
+			event_target:target_suggested_qadi = {
+				NOT = { has_minor_title = title_chief_qadi }
+			}
+		}
+		prestige = -5
+	}
+}
+
+#ROOT gains title/is dismissed
+character_event = {
+	id = 105024
+	desc = "EVTDESC105024"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105014"
+		trigger = {
+			has_minor_title = title_chief_qadi
+		}
+		tooltip = {
+			give_minor_title = title_chief_qadi
+		}
+		prestige = 20
+		opinion = {
+			modifier = opinion_grateful
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105014"
+		trigger = {
+			NOT = { has_minor_title = title_chief_qadi }
+		}
+		prestige = -5
+		tooltip = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = FROM
+				years = 5
+			}
+		}
+	}
+}
+
+#Former Chief Qadi is fired
+character_event = {
+	id = 105025
+	desc = "EVTDESC105025"
+	picture = GFX_evt_emissary #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105025"
+		tooltip = {
+			remove_title = title_chief_qadi
+		}
+		prestige = -10
+		FROM = {
+			FROM = {
+				reverse_opinion = {
+					modifier = opinion_angry
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+}
+
+### Chief Qadi and the drunkard ###
+character_event = {
+	id = 105030
+	desc = "EVTDESC105030"
+	picture = GFX_evt_drunk
+	border = GFX_event_normal_frame_religion
+	
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	religion_group = muslim
+	war = no
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_chief_qadi
+		liege = {
+			any_realm_character = {
+				NOR = {
+					character = PREV
+					character = ROOT
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+				war = no
+				in_command = no
+				religion_group = muslim
+				age = 16
+				trait = drunkard
+				prisoner = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 200
+		
+		modifier = {
+			factor = 5
+			trait = drunkard
+		}
+		
+		modifier = {
+			factor = 0.5
+			trait = zealous
+		}
+	}
+
+	immediate = {
+		liege = {
+			random_realm_character = {
+				limit = {
+					NOR = {
+						character = PREV
+						character = ROOT
+						trait = incapable
+						is_inaccessible_trigger = yes
+					}
+					war = no
+					in_command = no
+					religion_group = muslim
+					age = 16
+					trait = drunkard
+					prisoner = no
+				}
+				save_event_target_as = target_drunkard
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105030"
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+			modifier = {
+				factor = 0.5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = impaler
+			}
+			modifier = {
+				factor = 1.2
+				trait = just
+			}
+		}
+		liege = {
+			event_target:target_drunkard = {
+				random = {
+					chance = 5
+					remove_trait = drunkard
+				}
+				random = {
+					chance = 30
+					add_trait = wounded
+					hidden_tooltip = {
+						character_event = {
+							id = 38280 #Notify Wounded
+						}
+					}
+				}
+				character_event = {
+					id = 105031
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIP105031"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105030"
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 0.5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.5
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.5
+				trait = impaler
+			}
+		}
+		liege = {
+			event_target:target_drunkard = {
+				opinion = {
+					modifier = opinion_merciful_qadi
+					who = ROOT
+					years = 5
+				}
+				random = {
+					chance = 25
+					remove_trait = drunkard
+				}
+				character_event = {
+					id = 105032
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIP105032"
+				}
+			}
+			any_realm_character = {
+				limit = {
+					piety = 100
+					trait = zealous
+					religion_group = muslim
+					NOT = {
+						trait = drunkard
+					}
+				}
+				opinion = {
+					modifier = opinion_arbitrary_qadi
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105030"
+		ai_chance = {
+			factor = 50
+		}
+		piety = -10
+	}	
+}
+
+#Drunkard is flogged eighty lashes
+character_event = {
+	id = 105031
+	desc = "EVTDESC105031"
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105031"
+		trigger = {
+			trait = wounded
+			trait = drunkard
+		}
+		prestige = -5
+		tooltip = {
+			add_trait = wounded
+		}
+	}
+	option = {
+		name = "EVTOPTB105031"
+		trigger = {
+			trait = wounded
+			NOT = {
+				trait = drunkard
+			}
+		}
+		prestige = -5
+		tooltip = {
+			add_trait = wounded
+		}
+		tooltip = {
+			remove_trait = drunkard
+		}		
+	}
+	option = {
+		name = "EVTOPTC105031"
+		trigger = {
+			NOT = {
+				trait = wounded
+			}
+			trait = drunkard
+		}
+		prestige = -5
+	}
+	option = {
+		name = "EVTOPTD105031"
+		trigger = {
+			NOT = {
+				trait = wounded
+			}
+			NOT = {
+				trait = drunkard
+			}
+		}
+		prestige = -5
+		tooltip = {
+			remove_trait = drunkard
+		}		
+	}
+}
+
+#Drunkard is pardoned
+character_event = {
+	id = 105032
+	desc = "EVTDESC105032"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105032"
+		trigger = {
+			trait = drunkard
+		}
+		scaled_wealth = -0.025
+		tooltip = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105032"
+		trigger = {
+			NOT = {
+				trait = drunkard
+			}
+		}
+		scaled_wealth = -0.025
+		tooltip = {
+			remove_trait = drunkard
+		}
+		tooltip = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+### Chief Qadi and Zina ###
+character_event = {
+	id = 105035
+	desc = EVTDESC105035
+	picture = GFX_evt_lovers
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	religion_group = muslim
+	
+	trigger = {
+		has_lover = no
+		liege = { religion_group = muslim }
+		NOT = {
+			has_character_modifier = ignored_muslim_sins
+		}
+		NOT = {
+			has_minor_title = title_chief_qadi
+		}
+		liege = {
+			NOT = {
+				character = ROOT
+			}
+			OR = {
+				tier = king
+				tier = emperor
+			}
+			OR = {
+				any_courtier = {
+					has_minor_title = title_chief_qadi
+					NOT = { is_inaccessible_trigger = yes }
+				}
+				any_vassal = {
+					has_minor_title = title_chief_qadi
+					NOT = { is_inaccessible_trigger = yes }
+				}
+			}
+			any_vassal = {
+				is_female = no
+				has_lover = yes
+				NOT = {
+					trait = homosexual
+				}
+				religion_group = muslim
+				OR = {
+					trait = lustful
+					trait = deceitful
+					NOT = {
+						trait = zealous
+					}
+				}
+				spouse = {
+					is_alive = yes
+					religion_group = muslim
+					NOT = {
+						any_lover = {
+							character = PREVPREV
+						}
+					}
+				}
+				NOT = { is_inaccessible_trigger = yes }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.5
+			trait = just
+		}
+		modifier = {
+			factor = 0.5
+			trait = zealous
+		}
+	}
+
+	immediate = {
+		liege = {
+			random_vassal = {
+				limit = {
+					is_female = no
+					has_lover = yes
+					NOT = {
+						trait = homosexual
+					}
+					religion_group = muslim
+					OR = {
+						trait = lustful
+						trait = deceitful
+						NOT = {
+							trait = zealous
+						}
+					}
+					spouse = {
+						is_alive = yes
+						religion_group = muslim
+						NOT = {
+							any_lover = {
+								character = PREVPREV
+							}
+						}
+					}
+					NOT = { is_inaccessible_trigger = yes }
+				}
+				save_event_target_as = unfaithful_vassal
+			}
+			if = {
+				limit = {
+					any_courtier = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+				random_courtier = {
+					limit = {
+						has_minor_title = title_chief_qadi
+					}
+					save_event_target_as = chief_qadi
+					break = yes
+				}
+			}
+			if = {
+				limit = {
+					any_vassal = {
+						has_minor_title = title_chief_qadi
+					}
+				}
+				random_vassal = {
+					limit = {
+						has_minor_title = title_chief_qadi
+					}
+					save_event_target_as = chief_qadi
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105035"
+		event_target:unfaithful_vassal = {
+		}
+		event_target:chief_qadi = {
+			character_event = {
+				id = 105036
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105036"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105035"
+		event_target:unfaithful_vassal = {
+			character_event = {
+				id = 105037
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105037"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105035"
+		add_character_modifier = {
+			name = ignored_muslim_sins
+			duration = 365
+		}
+	}
+}
+
+#Root told Chief Qadi
+character_event = {
+	id = 105036
+	desc = "EVTDESC105036"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105036" #Confront
+		event_target:unfaithful_vassal = {
+			character_event = {
+				id = 105038
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105038"
+			}			
+		}
+		hidden_tooltip = {
+			FROM = {
+				set_character_flag = qadi_confront
+				character_event = {
+					id = 105039
+					days = 2
+					random = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105036" #Ask ROOT to take care of it himself
+		trigger = {
+			NOT = {
+				has_character_flag = asked_qadi_zina
+			}
+		}
+		FROM = {
+			set_character_flag = permission_zina
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 2
+			}
+			character_event = {
+				id = 105039
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105039"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105036" #Ignore the subject
+		FROM = {
+			set_character_flag = qadi_ignored
+			opinion = {
+				modifier = opinion_very_disappointed
+				who = ROOT
+				years = 2
+			}
+			character_event = {
+				id = 105039
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105039"
+			}
+		}
+	}
+}
+
+#Root told suspect
+character_event = {
+	id = 105037
+	desc = "EVTDESC105037"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105037" #Try to bribe ROOT to keep quiet
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0.01
+				NOT = { scaled_wealth = 0.5 }
+			}
+			modifier = {
+				factor = 5
+				scaled_wealth = 2
+			}
+		}
+		tooltip = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 0.25
+			}
+		}
+		FROM = {
+			set_character_flag = money_silenced
+			character_event = {
+				id = 105040
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105040"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105037" #Promise to break it up with lover
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0.01
+				NOT = { scaled_wealth = 0.5 }
+			}
+			modifier = {
+				factor = 5
+				scaled_wealth = 2
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.5
+				trait = lustful
+			}
+		}
+		set_character_flag = lost_loving_feeling
+		character_event = {
+			id = 64045
+			tooltip = "EVTTOOLTIP64045" 
+		}
+		FROM = {
+			set_character_flag = lover_silenced
+			character_event = {
+				id = 105040
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPB105040"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105037" #Refuse to do anything about it
+		FROM = {
+			set_character_flag = ignored_threat
+			character_event = {
+				id = 105040
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPC105040"
+			}
+		}		
+	}
+}
+
+#Chief Qadi confronts zina
+character_event = {
+	id = 105038
+	desc = "EVTDESC105038"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105038" #Deny
+		random_list = {
+			50 = {
+				FROM = {
+					set_character_flag = convinced_innocence
+					character_event = {
+						id = 105041
+						days = 2
+						random = 2
+						tooltip = "EVTTOOLTIPA105041"
+					}
+				}
+			}
+			50 = {
+				FROM = {
+					set_character_flag = not_convinced_innocence
+					character_event = {
+						id = 105041
+						days = 2
+						random = 2
+						tooltip = "EVTTOOLTIPB105041"
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105038" #Promise to break it up with lover
+		random = {
+			chance = 20
+			set_character_flag = lost_loving_feeling
+			set_character_flag = no_lover_no_cry
+			character_event = {
+				id = 64045
+				tooltip = "EVTTOOLTIP64045" 
+			}
+		}
+		FROM = {
+			character_event = {
+				id = 105042
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105042"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105038" #Don't deny it
+		FROM = {
+			character_event = {
+				id = 105043
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105043"
+			}
+		}
+	}
+}
+
+#ROOT: Chief Qadi confront/ignores/other
+character_event = {
+	id = 105039
+	desc = "EVTDESC105039"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105039"
+		trigger = {
+			has_character_flag = qadi_ignored
+			NOT = {
+				has_character_flag = permission_zina
+			}
+			NOT = {
+				has_character_flag = qadi_confront
+			}
+		}
+		clr_character_flag = qadi_ignored
+		tooltip = {
+			opinion = {
+				modifier = opinion_very_disappointed
+				who = FROM
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105039"
+		trigger = {
+			has_character_flag = permission_zina
+			NOT = {
+				has_character_flag = qadi_ignored
+			}
+			NOT = {
+				has_character_flag = qadi_confront
+			}
+		}
+		clr_character_flag = permission_zina
+		tooltip = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = FROM
+				years = 2
+			}
+		}
+		event_target:unfaithful_vassal = {
+			character_event = {
+				id = 105037
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105037"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105039"
+		trigger = {
+			has_character_flag = qadi_confront
+			NOT = {
+				has_character_flag = permission_zina
+			}
+			NOT = {
+				has_character_flag = qadi_ignored
+			}
+		}
+		clr_character_flag = qadi_confront
+		piety = 10
+		FROM = {
+			opinion = {
+				modifier = opinion_good_work
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Root: accused offered money/promised to break up with lover/refused to do anything
+character_event = {
+	id = 105040
+	desc = "EVTDESC105040"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOTPA105040"
+		trigger = {
+			has_character_flag = money_silenced
+			NOT = {
+				has_character_flag = ignored_threat
+			}
+			NOT = {
+				has_character_flag = lover_silenced
+			}
+		}
+		clr_character_flag = money_silenced
+		FROM = {
+			transfer_scaled_wealth = {
+				to = ROOT
+				value = 0.25
+			}
+		}
+	}
+	option = {
+		name = "EVTOTPB105040" #Tell Chief Qadi
+		trigger = {
+			has_character_flag = money_silenced
+			NOT = {
+				has_character_flag = ignored_threat
+			}
+			NOT = {
+				has_character_flag = lover_silenced
+			}
+		}
+		clr_character_flag = ignored_threat
+		event_target:chief_qadi = {
+			set_character_flag = asked_qadi_zina
+			character_event = {
+				id = 105036
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105036"
+			}
+		}
+	}
+	option = {
+		name = "EVTOTPC105040" #Tell Chief Qadi
+		trigger = {
+			has_character_flag = ignored_threat
+			NOT = {
+				has_character_flag = money_silenced
+			}
+			NOT = {
+				has_character_flag = lover_silenced
+			}
+		}
+		clr_character_flag = ignored_threat
+		event_target:chief_qadi = {
+			set_character_flag = asked_qadi_zina
+			character_event = {
+				id = 105036
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105036"
+			}
+		}
+	}
+	option = {
+		name = "EVTOTPD105040" #Stop caring
+		trigger = {
+			has_character_flag = ignored_threat
+			NOT = {
+				has_character_flag = money_silenced
+			}
+			NOT = {
+				has_character_flag = lover_silenced
+			}
+		}
+		clr_character_flag = ignored_threat
+		piety = -5
+	}
+	option = {
+		name = "EVTOTPE105040" #Tell Chief Qadi
+		trigger = {
+			has_character_flag = lover_silenced
+			NOT = {
+				has_character_flag = money_silenced
+			}
+			NOT = {
+				has_character_flag = ignored_threat
+			}
+		}
+		clr_character_flag = lover_silenced
+		event_target:chief_qadi = {
+			character_event = {
+				id = 105036
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIP105036"
+			}
+		}
+	}
+	option = {
+		name = "EVTOTPF105040" #Stop caring
+		trigger = {
+			has_character_flag = lover_silenced
+			NOT = {
+				has_character_flag = money_silenced
+			}
+			NOT = {
+				has_character_flag = ignored_threat
+			}
+		}
+		clr_character_flag = lover_silenced
+		piety = -5
+	}
+}
+
+#Chief Qadi: suspect declared innocence
+character_event = {
+	id = 105041
+	desc = "EVTDESC105041"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105041"
+		trigger = {
+			has_character_flag = convinced_innocence
+		}
+		clr_character_flag = convinced_innocence
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = qadi_merciful
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPA105044"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105041"
+		trigger = {
+			has_character_flag = not_convinced_innocence
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.05
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.05
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+		clr_character_flag = not_convinced_innocence
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = qadi_merciful
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPB105044"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105041"
+		trigger = {
+			has_character_flag = not_convinced_innocence
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 0.05
+				trait = just
+			}
+			modifier = {
+				factor = 0.05
+				trait = kind
+			}
+			modifier = {
+				factor = 0.05
+				trait = trusting
+			}
+		}
+		clr_character_flag = not_convinced_innocence
+		FROM = {
+			random = {
+				chance = 30
+				add_trait = wounded
+				hidden_tooltip = {
+					character_event = {
+						id = 38280 #Notify Wounded
+					}
+				}
+			}
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPC105044"
+			}
+		}
+	}
+}
+
+#Chief Qadi: accused promised to break it up with lover
+character_event = {
+	id = 105042
+	desc = "EVTDESC105042"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105042"
+		trigger = {
+			FROM = {
+				NOT = {
+					has_character_flag = no_lover_no_cry
+				}
+			}
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.05
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.05
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = qadi_merciful
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPB105044"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105042"
+		trigger = {
+			FROM = {
+				NOT = {
+					has_character_flag = no_lover_no_cry
+				}
+			}
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.05
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.05
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+		FROM = {
+			random = {
+				chance = 30
+				add_trait = wounded
+				hidden_tooltip = {
+					character_event = {
+						id = 38280 #Notify Wounded
+					}
+				}
+			}
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPC105044"
+			}
+			random_lover = {
+				random = {
+					chance = 30
+					add_trait = wounded
+					hidden_tooltip = {
+						character_event = {
+							id = 38280 #Notify Wounded
+						}
+					}
+				}
+				character_event = {
+					id = 64045
+					days = 1
+					tooltip = "EVTTOOLTIP64045"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105042"
+		trigger = {
+			FROM = {
+				has_character_flag = no_lover_no_cry
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = qadi_believe_merciful
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPA105044"
+			}
+		}
+	}
+}
+
+#Chief Qadi: accused did not deny it
+character_event = {
+	id = 105043
+	desc = "EVTDESC105043"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105043"
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.05
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.05
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = qadi_merciful
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPE105044"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105043"
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 0.05
+				trait = just
+			}
+			modifier = {
+				factor = 0.05
+				trait = kind
+			}
+			modifier = {
+				factor = 0.05
+				trait = trusting
+			}
+		}
+		FROM = {
+			random = {
+				chance = 30
+				add_trait = wounded
+				hidden_tooltip = {
+					character_event = {
+						id = 38280 #Notify Wounded
+					}
+				}
+			}
+			character_event = {
+				id = 105044
+				days = 1
+				tooltip = "EVTTOOLTIPC105044"
+			}
+		}
+	}
+}
+
+#Accused gets his/her punishment?
+character_event = {
+	id = 105044
+	desc = "EVTDESC105044"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105044"
+		trigger = {
+			trait = wounded
+			NOT = {
+				has_character_flag = qadi_merciful
+			}
+		}
+		clr_character_flag = zina_suspected
+		tooltip = {
+			add_trait = wounded
+		}
+		prestige = -15
+		random = {
+			chance = 20
+			random_lover = {
+				limit = {
+					NOT = { spouse = { character = ROOT } }
+				}
+				remove_lover = ROOT
+			}
+		}
+		any_vassal = {
+			limit = {
+				has_lover = no
+				trait = zealous
+				religion_group = muslim
+			}
+			opinion = {
+				modifier = opinion_committed_zina
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105044"
+		trigger = {
+			has_character_flag = qadi_merciful
+		}
+		clr_character_flag = qadi_merciful
+		tooltip = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = FROM
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105044"
+		trigger = {
+			has_character_flag = qadi_believe_merciful
+		}
+		clr_character_flag = zina_suspected
+		clr_character_flag = qadi_believe_merciful
+		tooltip = {
+			opinion = {
+				modifier = opinion_merciful_qadi
+				who = FROM
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105044"
+		trigger = {
+			NOT = {
+				trait = wounded
+			}
+			NOT = {
+				has_character_flag = qadi_merciful
+			}
+		}
+		clr_character_flag = zina_suspected
+		prestige = -15
+		random = {
+			chance = 20
+			random_lover = {
+				limit = {
+					NOT = { spouse = { character = ROOT } }
+				}
+				remove_lover = ROOT
+			}
+		}
+		any_vassal = {
+			limit = {
+				has_lover = no
+				trait = zealous
+				religion_group = muslim
+			}
+			opinion = {
+				modifier = opinion_committed_zina
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+### COURT CALLIGRAPHER ###
+
+#Court Calligrapher is asked to decorate the mosque
+character_event = {
+	id = 105050
+	desc = "EVTDESC105050"
+	picture = GFX_evt_courtiers_talking #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	religion_group = muslim
+	war = no
+	
+	trigger = {
+		in_command = no
+		any_demesne_province = {
+			any_province_holding = {
+				holding_type = temple
+				owner = { character = ROOT }
+			}
+		}
+		NOT = {
+			has_minor_title = title_court_calligrapher
+		}
+		liege = {
+			religion_group = muslim
+			NOT = {
+				character = ROOT
+			}
+			OR = {
+				any_vassal = {
+					in_command = no
+					has_minor_title = title_court_calligrapher
+					religion_group = muslim
+					age = 16
+					NOT = {
+						has_character_modifier= mosque_calligrapher_timer
+					}
+					NOT = {
+						reverse_has_opinion_modifier = { 
+							who = ROOT
+							modifier = opinion_disappointed_calligrapher
+						}
+					}
+					NOT = { is_inaccessible_trigger = yes }
+				}
+				any_courtier = {
+					in_command = no
+					has_minor_title = title_court_calligrapher
+					religion_group = muslim
+					age = 16
+					NOT = {
+						has_character_modifier= mosque_calligrapher_timer
+					}
+					NOT = {
+						reverse_has_opinion_modifier = { 
+							who = ROOT
+							modifier = opinion_disappointed_calligrapher
+						}
+					}
+					NOT = { is_inaccessible_trigger = yes }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		
+		modifier = {
+			factor = 2
+			trait = paranoid
+		}
+		modifier = {
+			factor = 2
+			trait = cynical
+		}
+		
+		modifier = {
+			factor = 0.5
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			has_minor_title = title_chief_architect
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = mosque_calligrapher_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+		liege = {
+			if = {
+				limit = {
+					any_courtier = {
+						has_minor_title = title_court_calligrapher
+					}
+				}
+				random_courtier = {
+					limit = { has_minor_title = title_court_calligrapher }
+					save_event_target_as = court_calligrapher
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					any_vassal = {
+						has_minor_title = title_court_calligrapher
+					}
+				}
+				random_vassal = {
+					limit = { has_minor_title = title_court_calligrapher }
+					save_event_target_as = court_calligrapher
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105050"
+		event_target:court_calligrapher = {
+			character_event = {
+				id = 105051
+				days = 3
+				random = 2
+				tooltip = "EVTTOOLTIP105051"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105050"
+	}
+}
+
+#CC is asked
+character_event = {
+	id = 105051
+	desc = "EVTDESC105051"
+	picture = GFX_evt_courtiers_talking #Placeholder?
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105051" #Yes
+		if = {
+			limit = {
+				OR = {
+					trait = scholar
+					trait = poet
+					learning = 15
+				}
+			}
+			random_list = {
+				70 = {
+					FROM = {
+						set_character_flag = good_work_calligrapher
+						character_event = {
+							id = 105052
+							days = 7
+							random = 7
+							tooltip = "EVTTOOLTIPA105052" #Good work
+						}
+					}
+				}
+				30 = {
+					FROM = {
+						set_character_flag = bad_work_calligrapher
+						character_event = {
+							id = 105052
+							days = 7
+							random = 7
+							tooltip = "EVTTOOLTIPB105052" #Bad work
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { learning = 15 }
+				NOT = {
+					trait = poet
+				}
+				NOT = {
+					trait = scholar
+				}
+			}
+			random_list = {
+				50 = {
+					FROM = {
+						set_character_flag = good_work_calligrapher
+						character_event = {
+							id = 105052
+							days = 7
+							random = 7
+							tooltip = "EVTTOOLTIPA105052" #Good work
+						}
+					}
+				}
+				50 = {
+					FROM = {
+						set_character_flag = bad_work_calligrapher
+						character_event = {
+							id = 105052
+							days = 7
+							random = 7
+							tooltip = "EVTTOOLTIPB105052" #Bad work
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105051" #No
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_disappointed_calligrapher
+				years = 5
+			}
+			character_event = {
+				id = 105053
+				days = 7
+				random = 7
+				tooltip = "EVTTOOLTIPB105053" #Disappointed
+			}
+		}
+	}
+}
+	
+#ROOT: Court Calligrapher did a good/bad work
+character_event = {
+	id = 105052
+	desc = "EVTDESC105052"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105052" #Good work!
+		trigger = {
+			has_character_flag = good_work_calligrapher
+		}
+		clr_character_flag = good_work_calligrapher
+		FROM = {
+			tooltip = {
+				prestige = 20
+				piety = 10
+			}
+			set_character_flag = perfect_work_calligrapher
+			reverse_opinion = {
+				modifier = opinion_grateful_calligrapher
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105054
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105054"
+			}
+			liege = {
+				set_character_flag = perfect_work_calligrapher
+				character_event = {
+					id = 105055
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIPA105055"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105052" #Horrible!
+		trigger = {
+			has_character_flag = bad_work_calligrapher
+		}
+		clr_character_flag = bad_work_calligrapher
+		FROM = {
+			tooltip = {
+				prestige = -10
+				piety = -5
+			}
+			reverse_opinion = {
+				modifier = opinion_disappointed_calligrapher
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = dissatisfied_calligrapher
+			character_event = {
+				id = 105054
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPB105054"
+			}
+			liege = {
+				set_character_flag = dissatisfied_calligrapher
+				character_event = {
+					id = 105055
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIPB105055"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105052" #Pretend it's bad
+		trigger = {
+			has_character_flag = good_work_calligrapher
+		}
+		clr_character_flag = good_work_calligrapher
+		FROM = {
+			tooltip = {
+				prestige = -5
+			}
+			reverse_opinion = {
+				modifier = opinion_dissatisfied_calligrapher
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = no_good_calligrapher
+			character_event = {
+				id = 105054
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPB105054"
+			}
+			liege = {
+				set_character_flag = no_good_calligrapher
+				character_event = {
+					id = 105055
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIPB105055"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105052" #Pretend it's good
+		trigger = {
+			has_character_flag = bad_work_calligrapher
+		}
+		clr_character_flag = bad_work_calligrapher
+		FROM = {
+			tooltip = {
+				prestige = 10
+			}
+			reverse_opinion = {
+				modifier = opinion_satisfied
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = satisfied_work_calligrapher
+			character_event = {
+				id = 105054
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105054"
+			}
+			liege = {
+				set_character_flag = satisfied_work_calligrapher
+				character_event = {
+					id = 105055
+					days = 2
+					random = 2
+					tooltip = "EVTTOOLTIPA105055"
+				}
+			}
+		}
+	}
+}
+
+#ROOT: Calligrapher said no
+character_event = {
+	id = 105053
+	desc = "EVTDESC105053"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105053"
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_disappointed_calligrapher
+				years = 5
+			}
+		}
+	}
+}
+
+#Court Calligrapher: Gets answer from ROOT
+character_event = {
+	id = 105054
+	desc = "EVTDESC105054"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105054"
+		trigger = {
+			has_character_flag = satisfied_work_calligrapher
+		}
+		clr_character_flag = satisfied_work_calligrapher
+		add_character_modifier = {
+			name = mod_satisfied_work_calligrapher
+			duration = 912
+		}
+		opinion = {
+			modifier = opinion_satisfied
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105054"
+		trigger = {
+			has_character_flag = no_good_calligrapher
+		}
+		clr_character_flag = no_good_calligrapher
+		add_character_modifier = {
+			name = mod_bad_work_calligrapher
+			duration = 365
+		}
+		opinion = {
+			modifier = opinion_dissatisfied_calligrapher
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTC105054"
+		trigger = {
+			has_character_flag = dissatisfied_calligrapher
+		}
+		clr_character_flag = dissatisfied_calligrapher
+		add_character_modifier = {
+			name = mod_dissatisfied_calligrapher
+			duration = 365
+		}
+		opinion = {
+			modifier = opinion_disappointed_calligrapher
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTD105054"
+		trigger = {
+			has_character_flag = perfect_work_calligrapher
+		}
+		clr_character_flag = perfect_work_calligrapher
+		add_character_modifier = {
+			name = mod_perfect_work_calligrapher
+			duration = 1825
+		}
+		prestige = 20
+		piety = 10
+		reverse_opinion = {
+			modifier = opinion_grateful_calligrapher
+			who = ROOT
+			years = 5
+		}
+	}
+}
+
+#Liege: is satisfied/irritated
+character_event = {
+	id = 105055
+	desc = "EVTDESC105055"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105055"
+		trigger = {
+			has_character_flag = satisfied_work_calligrapher
+		}
+		clr_character_flag = satisfied_work_calligrapher
+		prestige = 5
+	}
+	option = {
+		name = "EVTOPTB105055"
+		trigger = {
+			has_character_flag = no_good_calligrapher
+		}
+		clr_character_flag = no_good_calligrapher
+		prestige = -5
+	}
+	option = {
+		name = "EVTOPTC105055"
+		trigger = {
+			has_character_flag = dissatisfied_calligrapher
+		}
+		clr_character_flag = dissatisfied_calligrapher
+		prestige = -10
+	}
+	option = {
+		name = "EVTOPTD105055"
+		trigger = {
+			has_character_flag = perfect_work_calligrapher
+		}
+		clr_character_flag = perfect_work_calligrapher
+		prestige = 20
+	}
+}
+
+### Court Calligrapher created fine Hilya ###
+character_event = {
+	id = 105060
+	desc = "EVTDESC105060"
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_court_calligrapher
+		OR = {
+			trait = scholar
+			trait = poet
+			learning = 20
+		}
+		NOT = {
+			has_character_modifier = beautiful_hilya
+		}
+		liege = {
+			in_command = no
+			NOT = {
+				character = ROOT
+			}
+			religion_group = muslim
+			piety = 100
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 500
+		
+		modifier = {
+			factor = 0.5
+			trait = zealous
+		}
+		modifier = {
+			factor = 2
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2
+			trait = slothful
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105060"
+		trigger = {
+			liege = {
+				NOT = {
+					rightful_religious_head = PREV
+				}
+			}
+			NOT = {
+				rightful_religious_head = ROOT
+			}
+		}
+		piety = 20
+		rightful_religious_head_scope = {
+			opinion = {
+				modifier = opinion_good_work
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105061
+				days = 7
+				random = 7
+				tooltip = "EVTTOOLTIPA105061"
+			}
+		}
+		add_character_modifier = {
+			name = beautiful_hilya
+			duration = 730
+		}
+	}
+	option = {
+		name = "EVTOPTB105060"
+		add_character_modifier = {
+			name = beautiful_hilya
+			duration = 730
+		}
+		prestige = 20
+		liege = {
+			opinion = {
+				modifier = opinion_good_work
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105061
+				days = 7
+				random = 7
+				tooltip = "EVTTOOLTIPB105061"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105060"
+		add_character_modifier = {
+			name = beautiful_hilya
+			duration = 30
+		}
+		scaled_wealth = 0.5
+	}
+}
+
+#Caliph/Liege gets Hilya from ROOT
+character_event = {
+	id = 105061
+	desc = "EVTDESC105061"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105061"
+		tooltip = {
+			opinion = {
+				modifier = opinion_good_work
+				who = FROM
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105061"
+		tooltip = {
+			opinion = {
+				modifier = opinion_good_work
+				who = FROM
+				years = 5
+			}
+		}
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 0.25
+		}
+		FROM = {
+			piety = 10
+		}
+	}
+	option = {
+		name = "EVTOPTC105061"
+		ai_chance = {
+			factor = 0
+		}
+		remove_opinion = { who = FROM modifier = opinion_good_work }
+	}
+}
+
+### Court Calligrapher: Golden Qu'ran ###
+character_event = {
+	id = 105065
+	desc = "EVTDESC105065"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 30
+	only_men = yes
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_court_calligrapher
+		NOT = {
+			has_character_modifier = calligrapher_swindle_timer
+		}
+		liege = {
+			scaled_wealth = 2
+			in_command = no
+			NOT = {
+				character = ROOT
+			}
+			religion_group = muslim
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 500
+		
+		modifier = {
+			factor = 0.5
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			trait = honest
+		}
+		modifier = {
+			factor = 2
+			trait = charitable
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = calligrapher_swindle_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105065" #Finance the whole book
+		ai_chance = {
+			factor = 30
+			
+			modifier = {
+				factor = 3
+				trait = greedy
+			}
+			modifier = {
+				factor = 0.05
+				trait = charitable
+			}
+		}
+		liege = {
+			set_character_flag = finance_golden_quran
+			character_event = {
+				id = 105066
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105066"
+			}
+		}			
+	}
+	option = {
+		name = "EVTOPTB105065" #Finance part of it
+		ai_chance = {
+			factor = 30
+			
+			modifier = {
+				factor = 3
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.05
+				trait = honest
+			}
+		}
+		liege = {
+			set_character_flag = finance_quran
+			character_event = {
+				id = 105066
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPB105066"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105065" #Don't do it
+		ai_chance = {
+			factor = 30
+			
+			modifier = {
+				factor = 3
+				trait = charitable
+			}
+			modifier = {
+				factor = 3
+				trait = honest
+			}
+		}
+		piety = 10
+		if = {
+			limit = {
+				trait = greedy
+			}
+			remove_trait = greedy
+		}
+	}
+}
+
+#Liege: Finance Golden Qu'ran?
+character_event = {
+	id = 105066
+	desc = "EVTDESC105066"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105066" #Yes
+		trigger = {
+			has_character_flag = finance_golden_quran
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				NOT = {
+					scaled_wealth = 3
+				}
+			}
+		}
+		clr_character_flag = finance_golden_quran
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 1
+		}
+		FROM = {
+			set_character_flag = liege_finance_golden_quran
+			character_event = {
+				id = 105067
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105067"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105066" #Yes
+		trigger = {
+			has_character_flag = finance_quran
+		}
+		clr_character_flag = finance_quran
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 0.05
+				NOT = {
+					scaled_wealth = 2
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 0.5
+		}
+		FROM = {
+			set_character_flag = liege_finance_quran
+			character_event = {
+				id = 105067
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPA105067"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105066" #No
+		clr_character_flag = finance_quran
+		clr_character_flag = finance_golden_quran
+		FROM = {
+			set_character_flag = liege_refused_finance
+			character_event = {
+				id = 105067
+				days = 2
+				random = 2
+				tooltip = "EVTTOOLTIPB105067"
+			}
+		}
+	}
+}
+
+#Court Calligrapher: Got the money or not?
+character_event = {
+	id = 105067
+	desc = "EVTDESC105067"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105067"
+		trigger = {
+			has_character_flag = liege_finance_golden_quran
+		}
+		FROM = {
+			tooltip = {
+				transfer_scaled_wealth = {
+					to = ROOT
+					value = 1
+				}
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					FROM = {
+						OR = {
+							intrigue = 20
+							job_spymaster = {
+								intrigue = 20
+							}
+						}
+					}
+				}
+				random = {
+					chance = 50
+					FROM = {
+						character_event = {
+							id = 105068
+							days = 180
+							random = 2
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105067"
+		trigger = {
+			has_character_flag = liege_finance_quran
+		}
+		FROM = {
+			tooltip = {
+				transfer_scaled_wealth = {
+					to = ROOT
+					value = 0.5
+				}
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					FROM = {
+						OR = {
+							intrigue = 20
+							job_spymaster = {
+								intrigue = 20
+							}
+						}
+					}
+				}
+				random = {
+					chance = 50
+					FROM = {
+						character_event = {
+							id = 105068
+							days = 180
+							random = 2
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105067"
+		trigger = {
+			has_character_flag = liege_refused_finance
+		}
+		prestige = -5
+	}
+}
+
+#Liege: No sign of Golden Qu'ran
+character_event = {
+	id = 105068
+	desc = "EVTDESC105068"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		FROM = {
+			is_alive = yes
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105068" #Imprison CC
+		FROM = {
+			imprison = ROOT
+			remove_title = title_court_calligrapher
+			hidden_tooltip = {
+				set_character_flag = imprisoned_calligrapher
+				character_event = {
+					id = 105069
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105068" #Banish CC
+		FROM = {
+			banish = yes
+			remove_title = title_court_calligrapher
+			hidden_tooltip = {
+				set_character_flag = banished_calligrapher
+				character_event = {
+					id = 105069
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105068" #Make him pay
+		FROM = {
+			clear_wealth = yes
+			remove_title = title_court_calligrapher
+			hidden_tooltip = {
+				set_character_flag = poor_calligrapher
+				character_event = {
+					id = 105069
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105068"
+		trigger = {
+			NOT = {
+				trait = paranoid
+			}
+		}
+		prestige = -5
+	}
+}
+
+#CC is imprisoned/banished/robbed of all wealth
+character_event = {
+	id = 105069
+	desc = "EVTDESC105069"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105069"
+		trigger = {
+			has_character_flag = imprisoned_calligrapher
+		}
+		clr_character_flag = imprisoned_calligrapher
+		tooltip = {
+			remove_title = title_court_calligrapher
+			imprison = FROM
+		}
+	}
+	option = {
+		name = "EVTOPTB105069"
+		trigger = {
+			has_character_flag = banished_calligrapher
+		}
+		clr_character_flag = banished_calligrapher
+		tooltip = {
+			remove_title = title_court_calligrapher
+			banish = yes
+		}
+	}
+	option = {
+		name = "EVTOPTC105069"
+		trigger = {
+			has_character_flag = poor_calligrapher
+		}
+		clr_character_flag = poor_calligrapher
+		tooltip = {
+			remove_title = title_court_calligrapher
+			clear_wealth = yes
+		}
+	}
+}
+
+### COURT MUSICIAN ###
+
+### Court Musician presents a song for the liege/liege's spouse ###
+character_event = {
+	id = 105075
+	desc = "EVTDESC105075"
+	picture = GFX_evt_spymaster
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_court_musician
+		NOT = {
+			has_character_modifier = musician_song_timer
+		}
+		OR = {
+			trait = poet
+			diplomacy = 15
+		}
+		liege = {
+			religion_group = muslim
+			NOT = {
+				character = ROOT
+			}
+			OR = {
+				tier = king
+				tier = emperor
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = musician_song_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105075"
+		trigger = {
+			is_female = no
+			liege = {
+				spouse = {
+					is_female = yes
+					is_alive = yes
+					age = 20
+					NOT = {
+						age = 30
+					}
+					NOT = {
+						trait = ugly
+					}
+				}
+			}
+		}
+		liege = {
+			spouse = {
+				character_event = {
+					id = 105076
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIP105076"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105075"
+		liege = {
+			set_character_flag = musician_song
+			character_event = {
+				id = 105077
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPA105077"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105075"
+		add_character_modifier = {
+			name = diligent_musician
+			duration = 365
+		}
+	}
+}
+
+#Liege's spouse: CM gave me song
+character_event = {
+	id = 105076
+	desc = "EVTDESC105076"
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105076"
+		FROM = {
+			reverse_opinion = {
+				modifier = opinion_beautiful_song
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = wonderful_song
+			character_event = {
+				id = 105078
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105078"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105076"
+		spouse = {
+			set_character_flag = musician_song_spouse
+			character_event = {
+				id = 105077
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105077"
+			}
+		}
+	}
+}
+
+#Liege/spouse: gets the song/spouse got the song
+character_event = {
+	id = 105077
+	desc = "EVTDESC105077"
+	picture = GFX_evt_emissary
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105077"
+		trigger = {
+			has_character_flag = musician_song_spouse
+		}
+		clr_character_flag = musician_song_spouse
+		tooltip = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 0.05
+			}
+		}
+		FROM = {
+			set_character_flag = song_spouse_fine
+			character_event = {
+				id = 105078
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105078"
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTB105077"
+		trigger = {
+			has_character_flag = musician_song_spouse
+		}
+		clr_character_flag = musician_song_spouse
+		FROM = {
+			imprison = ROOT
+		}
+		FROM = {
+			set_character_flag = imprison_musician
+			character_event = {
+				id = 105078
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPC105078"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105077"
+		trigger = {
+			has_character_flag = musician_song		
+		}
+		clr_character_flag = musician_song	
+		opinion = {
+			modifier = opinion_beautiful_song
+			who = FROM
+			years = 5
+		}
+		FROM = {
+			set_character_flag = wonderful_song
+			character_event = {
+				id = 105078
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105078"
+			}
+		}
+	}
+}
+
+#Court Musician: Liege's Spouse's reaction
+character_event = {
+	id = 105078
+	desc = "EVTDESC105078"
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105078"
+		trigger = {
+			has_character_flag = wonderful_song
+		}
+		clr_character_flag = wonderful_song
+		reverse_opinion = {
+			modifier = opinion_beautiful_song
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105078"
+		trigger = {
+			has_character_flag = song_spouse_fine
+		}
+		clr_character_flag = song_spouse_fine
+		FROM = {
+			transfer_scaled_wealth = {
+				to = ROOT
+				value = 0.05
+			}
+			spouse = {
+				opinion = {
+					modifier = opinion_beautiful_song
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105078"
+		trigger = {
+			has_character_flag = imprison_musician
+		}
+		clr_character_flag = imprison_musician
+		tooltip = {
+			imprison = FROM
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_seduce_spouse
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+### COURT POET ###
+
+### Court Poet writes poem ###
+character_event = {
+	id = 105100
+	desc = "EVTDESC105100"
+	picture = GFX_evt_garden
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_court_poet
+		NOT = {
+			has_character_modifier = poet_verse_timer
+		}
+		OR = {
+			trait = poet
+			diplomacy = 15
+		}
+		liege = {
+			religion_group = muslim
+			NOT = {
+				character = ROOT
+			}
+			OR = {
+				tier = king
+				tier = emperor
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = poet_verse_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105100"
+		trigger = {
+			is_female = no
+			liege = {
+				spouse = {
+					is_female = yes
+					is_alive = yes
+					age = 20
+					NOT = {
+						age = 30
+					}
+					NOT = {
+						trait = ugly
+					}
+				}
+			}
+		}
+		liege = {
+			spouse = {
+				character_event = {
+					id = 105101
+					days = 3
+					random = 3
+					tooltip = "EVTTOOLTIP105101"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105100"
+		liege = {
+			set_character_flag = poet_poetry
+			character_event = {
+				id = 105102
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPA105102"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105100"
+		add_character_modifier = {
+			name = diligent_poet
+			duration = 365
+		}
+	}
+}
+
+#Liege's spouse: Court Poet gave me a poem
+character_event = {
+	id = 105101
+	desc = "EVTDESC105101"
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105101"
+		FROM = {
+			reverse_opinion = {
+				modifier = opinion_beautiful_poem
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = wonderful_poem
+			character_event = {
+				id = 105103
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105103"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105101"
+		spouse = {
+			set_character_flag = poet_poetry_spouse
+			character_event = {
+				id = 105102
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105102"
+			}
+		}
+	}
+}
+
+#Liege/spouse: gets the poem/spouse got the poem
+character_event = {
+	id = 105102
+	desc = "EVTDESC105102"
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105102"
+		trigger = {
+			has_character_flag = poet_poetry_spouse
+		}
+		clr_character_flag = poet_poetry_spouse
+		tooltip = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 0.05
+			}
+		}
+		FROM = {
+			set_character_flag = poem_spouse_fine
+			character_event = {
+				id = 105103
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105103"
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTB105102"
+		trigger = {
+			has_character_flag = poet_poetry_spouse
+		}
+		clr_character_flag = poet_poetry_spouse
+		FROM = {
+			imprison = ROOT
+		}
+		FROM = {
+			set_character_flag = imprison_poet
+			character_event = {
+				id = 105103
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPC105103"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105102"
+		trigger = {
+			has_character_flag = poet_poetry		
+		}
+		clr_character_flag = poet_poetry
+		opinion = {
+			modifier = opinion_beautiful_poem
+			who = FROM
+			years = 5
+		}
+		FROM = {
+			set_character_flag = liege_wonderful_poem
+			character_event = {
+				id = 105103
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105103"
+			}
+		}
+	}
+}
+
+#Court Musician: Liege and liege's Spouse's reaction
+character_event = {
+	id = 105103
+	desc = "EVTDESC105103"
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105103"
+		trigger = {
+			has_character_flag = wonderful_poem
+		}
+		clr_character_flag = wonderful_poem
+		reverse_opinion = {
+			modifier = opinion_beautiful_poem
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105103"
+		trigger = {
+			has_character_flag = poem_spouse_fine
+		}
+		clr_character_flag = poem_spouse_fine
+		FROM = {
+			transfer_scaled_wealth = {
+				to = ROOT
+				value = 0.05
+			}
+			spouse = {
+				opinion = {
+					modifier = opinion_beautiful_poem
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105103"
+		trigger = {
+			has_character_flag = imprison_poet
+		}
+		clr_character_flag = imprison_poet
+		tooltip = {
+			imprison = FROM
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_seduce_spouse
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105103"
+		trigger = {
+			has_character_flag = liege_wonderful_poem
+		}
+		clr_character_flag = liege_wonderful_poem
+		tooltip = {
+			opinion = {
+				modifier = opinion_beautiful_poem
+				who = FROM
+				years = 5
+			}
+		}
+	}
+}
+
+### CUPBEARER ###
+
+### Cupbearer: Poison Host ###
+character_event = {
+	id = 105150
+	desc = "EVTDESC105150"
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	war = no
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_cupbearer
+		OR = {
+			intrigue = 15
+			diplomacy = 15
+			trait = deceitful
+			trait = envious
+		}
+		NOT = {
+			has_character_modifier = cupbearer_poison_timer
+		}
+		host = {
+			is_liege_of = ROOT
+			in_command = no
+			at_location = ROOT
+			NOT = { reverse_opinion = { who = ROOT value = 0 } }
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 0.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			trait = honest
+		}
+		modifier = {
+			factor = 2
+			trait = charitable
+		}			
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = cupbearer_poison_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105150"
+		host = {
+			if = {
+				limit = {
+					trait = paranoid
+				}
+				random_list = {
+					70 = {
+						set_character_flag = failed_poison
+						character_event = {
+							id = 105151
+							tooltip = "EVTTOOLTIP105151"
+						}
+					}
+					15 = {
+						if = {
+							limit = {
+								NOT = {
+									has_dlc = "Reapers"
+								}
+							}
+						add_trait = ill
+						}
+						if = {
+							limit = {
+								has_dlc = "Reapers"
+							}
+						set_character_flag = disease_not_serious
+						add_trait = vomiting
+						character_event = { id = RIP.11005 days = 10 random = 30 }
+						}
+						hidden_tooltip = {
+							character_event = {
+								id = 38290
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = poison_ill
+								character_event = {
+									id = 105151
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					10 = {
+						add_trait = lunatic
+						hidden_tooltip = {
+							character_event = {
+								id = 38304 #Notify Lunatic
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = poison_lunatic
+								character_event = {
+									id = 105151
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					5 = {
+						death = {
+							death_reason = death_murder_unknown_poison
+							killer = ROOT
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						trait = paranoid
+					}
+				}
+				random_list = {
+					50 = {
+						set_character_flag = failed_poison
+						character_event = {
+							id = 105151
+							tooltip = "EVTTOOLTIP105151"
+						}
+					}
+					25 = {
+						if = {
+							limit = {
+								NOT = {
+									has_dlc = "Reapers"
+								}
+							}
+						add_trait = ill
+						}
+						if = {
+							limit = {
+								has_dlc = "Reapers"
+							}
+						set_character_flag = disease_not_serious
+						add_trait = vomiting
+						character_event = { id = RIP.11005 days = 10 random = 30 }
+						}
+						hidden_tooltip = {
+							character_event = {
+								id = 38290
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = poison_ill
+								character_event = {
+									id = 105151
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					20 = {
+						add_trait = lunatic
+						hidden_tooltip = {
+							character_event = {
+								id = 38304 #Notify Lunatic
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = poison_lunatic
+								character_event = {
+									id = 105151
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					5 = {
+						death = {
+							death_reason = death_murder_unknown_poison
+							killer = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105150"
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			remove_trait = deceitful
+		}
+		if = {
+			limit = {
+				trait = envious
+			}
+			remove_trait = envious
+		}
+	}
+}
+
+#Host finds out/is poisoned
+character_event = {
+	id = 105151
+	desc = "EVTDESC105151"
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105151"
+		trigger = {
+			has_character_flag = poison_lunatic
+		}
+		clr_character_flag = poison_lunatic
+		FROM = {
+			imprison = ROOT
+			set_character_flag = lunatic_imprison
+			tooltip = {
+				remove_title = title_cupbearer
+			}
+			character_event = {
+				id = 105152
+				tooltip = "EVTTOOLTIPA105152"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105151"
+		trigger = {
+			has_character_flag = failed_poison
+		}
+		clr_character_flag = failed_poison
+		FROM = {
+			imprison = ROOT
+			set_character_flag = failed_imprison
+			tooltip = {
+				remove_title = title_cupbearer
+			}
+			character_event = {
+				id = 105152
+				tooltip = "EVTTOOLTIPB105152"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105151"
+		trigger = {
+			has_character_flag = poison_ill
+		}
+		clr_character_flag = poison_ill
+		FROM = {
+			imprison = ROOT
+			set_character_flag = ill_imprison
+			tooltip = {
+				remove_title = title_cupbearer
+			}
+			character_event = {
+				id = 105152
+				tooltip = "EVTTOOLTIPC105152"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105151"
+		trigger = {
+			has_character_flag = poison_lunatic
+		}
+		clr_character_flag = poison_lunatic
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTE105151"
+		trigger = {
+			has_character_flag = failed_poison
+		}
+		clr_character_flag = failed_poison
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTF105151"
+		trigger = {
+			has_character_flag = poison_ill
+		}
+		clr_character_flag = poison_ill
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+}
+
+#Cupbearer is imprisoned
+character_event = {
+	id = 105152
+	desc = "EVTDESC105152"
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105152"
+		trigger = {
+			has_character_flag = ill_imprison
+		}
+		clr_character_flag = ill_imprison
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_cupbearer
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105152"
+		trigger = {
+			has_character_flag = failed_imprison
+		}
+		clr_character_flag = failed_imprison
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_cupbearer
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTC105152"
+		trigger = {
+			has_character_flag = lunatic_imprison
+		}
+		clr_character_flag = lunatic_imprison
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_cupbearer
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+}
+
+### CHIEF ARCHITECT ###
+
+### Chief Architect: Suggest improvements to castle ###
+character_event = {
+	id = 105200
+	desc = "EVTDESC105200"
+	picture = GFX_evt_castle_construction
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_chief_architect
+		NOT = {
+			has_character_modifier = architect_improvement_timer
+		}
+		NOT = {
+			has_character_modifier = diligent_architect
+		}
+		liege = {
+			at_location = ROOT
+			scaled_wealth = 2
+			in_command = no
+			NOT = {
+				character = ROOT
+			}
+			religion_group = muslim
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 0.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			trait = honest
+		}
+		modifier = {
+			factor = 2
+			trait = charitable
+		}			
+	}
+	
+	option = {
+		name = "EVTOPTA105200"
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = architect_improvement_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+		liege = {
+			character_event = {
+				id = 105201
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIP105201"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105200"
+		add_character_modifier = {
+			name = diligent_architect
+			duration = 365
+		}
+	}
+}
+
+#Liege: CA asks if improvements is OK
+character_event = {
+	id = 105201
+	desc = "EVTDESC105201"
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105201" #Yes
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 0.25
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = all_improvements
+			character_event = {
+				id = 105202
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPA105202"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105201" #No
+		FROM = {
+			set_character_flag = no_improvement
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+			character_event = {
+				id = 105202
+				days = 3
+				random = 3
+				tooltip = "EVTTOOLTIPB105202"
+			}
+		}
+	}
+}
+
+#Chief Architect: Keep the money or not?/no money
+character_event = {
+	id = 105202
+	desc = "EVTDESC105202"
+	picture = GFX_evt_castle_construction
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105202"
+		trigger = {
+			has_character_flag = no_improvement
+		}
+		clr_character_flag = no_improvement
+		tooltip = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = FROM
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105202" #Keep it!
+		trigger = {
+			has_character_flag = all_improvements
+		}
+		clr_character_flag = all_improvements
+		FROM = {
+			transfer_scaled_wealth = {
+				to = ROOT
+				value = 0.25
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					FROM = {
+						OR = {
+							intrigue = 20
+							job_spymaster = {
+								intrigue = 20
+							}
+						}
+					}
+				}
+				random = {
+					chance = 50
+					FROM = {
+						character_event = {
+							id = 105203
+							days = 180
+							random = 2
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105202" #Do something useful with it
+		trigger = {
+			has_character_flag = all_improvements
+		}
+		liege = {
+			random_realm_province = {
+				add_province_modifier = {
+					name = architect_improvements
+					duration = 730
+				}
+			}
+		}
+	}
+}
+
+#Liege: No sign of improvements
+character_event = {
+	id = 105203
+	desc = "EVTDESC105203"
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		FROM = {
+			is_alive = yes
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105203" #Imprison CA
+		FROM = {
+			imprison = ROOT
+			remove_title = title_chief_architect
+			hidden_tooltip = {
+				set_character_flag = imprisoned_architect
+				character_event = {
+					id = 105204
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105203" #Banish CA
+		FROM = {
+			banish = yes
+			remove_title = title_chief_architect
+			hidden_tooltip = {
+				set_character_flag = banished_architect
+				character_event = {
+					id = 105204
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105203" #Make him pay
+		FROM = {
+			clear_wealth = yes
+			remove_title = title_chief_architect
+			hidden_tooltip = {
+				set_character_flag = poor_architect
+				character_event = {
+					id = 105204
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105203"
+		random_realm_province = {
+			add_province_modifier = {
+				name = architect_improvements
+				duration = 365
+			}
+		}
+	}
+}
+
+#Chief Architect is imprisoned/banished/robbed of all wealth
+character_event = {
+	id = 105204
+	desc = "EVTDESC105204"
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105204"
+		trigger = {
+			has_character_flag = imprisoned_architect
+		}
+		clr_character_flag = imprisoned_architect
+		tooltip = {
+			imprison = FROM
+		}
+	}
+	option = {
+		name = "EVTOPTB105204"
+		trigger = {
+			has_character_flag = banished_architect
+		}
+		clr_character_flag = banished_architect
+		tooltip = {
+			banish = yes
+		}
+	}
+	option = {
+		name = "EVTOPTC105204"
+		trigger = {
+			has_character_flag = poor_architect
+		}
+		clr_character_flag = poor_architect
+		tooltip = {
+			clear_wealth = yes
+		}
+	}
+}
+
+### FOOD TASTER ###
+
+### Food Taster: Poison host ###
+character_event = {
+	id = 105250
+	desc = "EVTDESC105250"
+	picture = GFX_evt_courtiers_talking
+	
+	min_age = 16
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		has_minor_title = title_food_taster
+		OR = {
+			intrigue = 15
+			diplomacy = 15
+			trait = deceitful
+			trait = envious
+		}
+		NOT = {
+			has_character_modifier = food_taster_poison_timer
+		}
+		host = {
+			is_liege_of = ROOT
+			in_command = no
+			at_location = ROOT
+			NOT = { reverse_opinion = { who = ROOT value = 0 } }
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		
+		modifier = {
+			factor = 0.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.5
+			trait = envious
+		}
+		modifier = {
+			factor = 0.5
+			trait = paranoid
+		}
+		modifier = {
+			factor = 0.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			trait = honest
+		}
+		modifier = {
+			factor = 2
+			trait = charitable
+		}	
+		modifier = {
+			factor = 2
+			trait = trusting
+		}	
+		modifier = {
+			factor = 2
+			trait = zealous
+		}			
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = food_taster_poison_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA105250"
+		host = {
+			if = {
+				limit = {
+					trait = paranoid
+				}
+				random_list = {
+					70 = {
+						set_character_flag = poison_failed
+						character_event = {
+							id = 105251
+							tooltip = "EVTTOOLTIP105251"
+						}
+					}
+					15 = {
+						if = {
+							limit = {
+								NOT = {
+									has_dlc = "Reapers"
+								}
+							}
+						add_trait = ill
+						}
+						if = {
+							limit = {
+								has_dlc = "Reapers"
+							}
+						set_character_flag = disease_not_serious
+						add_trait = vomiting
+						character_event = { id = RIP.11005 days = 10 random = 30 }
+						}
+						hidden_tooltip = {
+							character_event = {
+								id = 38290
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = ill_poison
+								character_event = {
+									id = 105251
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					10 = {
+						add_trait = lunatic
+						hidden_tooltip = {
+							character_event = {
+								id = 38304 #Notify Lunatic
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = lunatic_poison
+								character_event = {
+									id = 105251
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					5 = {
+						death = {
+							death_reason = death_murder_unknown_poison
+							killer = ROOT
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						trait = paranoid
+					}
+				}
+				random_list = {
+					50 = {
+						set_character_flag = poison_failed
+						character_event = {
+							id = 105251
+							tooltip = "EVTTOOLTIP105251"
+						}
+					}
+					25 = {
+						if = {
+							limit = {
+								NOT = {
+									has_dlc = "Reapers"
+								}
+							}
+						add_trait = ill
+						}
+						if = {
+							limit = {
+								has_dlc = "Reapers"
+							}
+						set_character_flag = disease_not_serious
+						add_trait = vomiting
+						character_event = { id = RIP.11005 days = 10 random = 30 }
+						}
+						hidden_tooltip = {
+							character_event = {
+								id = 38290
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = ill_poison
+								character_event = {
+									id = 105251
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					20 = {
+						add_trait = lunatic
+						hidden_tooltip = {
+							character_event = {
+								id = 38304 #Notify Lunatic
+							}
+							if = {
+								limit = {
+									OR = {
+										intrigue = 15
+										job_spymaster = {
+											intrigue = 15
+										}
+									}
+								}
+								set_character_flag = lunatic_poison
+								character_event = {
+									id = 105251
+									days = 3
+									random = 3
+								}
+							}
+						}
+					}
+					5 = {
+						death = {
+							death_reason = death_murder_unknown_poison
+							killer = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105250"
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			remove_trait = deceitful
+		}
+		if = {
+			limit = {
+				trait = envious
+			}
+			remove_trait = envious
+		}
+	}
+}
+
+#Host finds out/is poisoned
+character_event = {
+	id = 105251
+	desc = "EVTDESC105251"
+	picture = GFX_evt_spymaster
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105151"
+		trigger = {
+			has_character_flag = lunatic_poison
+		}
+		clr_character_flag = lunatic_poison
+		FROM = {
+			imprison = ROOT
+			set_character_flag = imprison_lunatic
+			tooltip = {
+				remove_title = title_food_taster
+			}
+			character_event = {
+				id = 105253
+				tooltip = "EVTTOOLTIPA105253"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB105151"
+		trigger = {
+			has_character_flag = poison_failed
+		}
+		clr_character_flag = poison_failed
+		FROM = {
+			imprison = ROOT
+			set_character_flag = imprison_failed_poison
+			tooltip = {
+				remove_title = title_food_taster
+			}
+			character_event = {
+				id = 105253
+				tooltip = "EVTTOOLTIPB105253"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC105151"
+		trigger = {
+			has_character_flag = ill_poison
+		}
+		clr_character_flag = ill_poison
+		FROM = {
+			imprison = ROOT
+			set_character_flag = imprison_ill
+			tooltip = {
+				remove_title = title_food_taster
+			}
+			character_event = {
+				id = 105253
+				tooltip = "EVTTOOLTIPC105253"
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD105251"
+		trigger = {
+			has_character_flag = lunatic_poison
+		}
+		clr_character_flag = lunatic_poison
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTE105151"
+		trigger = {
+			has_character_flag = poison_failed
+		}
+		clr_character_flag = poison_failed
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+	option = {
+		name = "EVTOPTF105151"
+		trigger = {
+			has_character_flag = ill_poison
+		}
+		clr_character_flag = ill_poison
+		FROM = {
+			death = {
+				death_reason = death_execution
+			}
+		}		
+	}
+}
+
+#Cupbearer is imprisoned
+character_event = {
+	id = 105253
+	desc = "EVTDESC105253"
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA105253"
+		trigger = {
+			has_character_flag = imprison_ill
+		}
+		clr_character_flag = imprison_ill
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_food_taster
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTB105253"
+		trigger = {
+			has_character_flag = imprison_failed_poison
+		}
+		clr_character_flag = imprison_failed_poison
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_food_taster
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = "EVTOPTC105253"
+		trigger = {
+			has_character_flag = imprison_lunatic
+		}
+		clr_character_flag = imprison_lunatic
+		tooltip = {
+			imprison = FROM
+		}
+		remove_title = title_food_taster
+		reverse_opinion = {
+			modifier = opinion_poisoner
+			who = FROM
+			years = 5
+		}
+	}
+}

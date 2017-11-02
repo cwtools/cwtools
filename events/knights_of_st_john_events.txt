@@ -1,0 +1,822 @@
+###########################################
+#
+# Holy Order Events
+#
+# ID 8500-8599 is reserved
+#
+###########################################
+
+
+########################################
+# The Knights of St. John
+########################################
+
+### Krak des Chevaliers ###
+
+# Grand Master writes a letter
+character_event = {
+	id = 8500
+	desc = "EVTDESC8500"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_independent = yes
+	prisoner = no
+	only_capable = yes
+	religion_group = christian
+	
+	trigger = {
+		# The Hospitallers exist
+		is_title_active = d_knights_hospitaler
+		primary_title = {
+			title = d_knights_hospitaler
+		}
+		
+		# The settlement has not been built yet
+		b_krakdeschevaliers = {
+			has_holder = no
+		}
+
+		# Archa
+		765 = {
+			owner = {
+				NOT = { character = ROOT }
+				religion = catholic
+				NOT = { has_character_flag = denied_krakdeschevaliers }
+				NOT = { has_character_flag = no_land_to_religious_orders }
+				top_liege = { NOT = { has_character_flag = no_land_to_religious_orders } }
+			}
+			NOT = { num_of_settlements = 7 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = "EVTOPTA8500"
+		765 = {
+			owner = { letter_event = { id = 8501 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = 8501
+	desc = "EVTDESC8501"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8501"
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		hidden_tooltip = { 765 = { province_event = { id = 8502 days = 1 } } }
+	}
+	option = {
+		name = "EVTOPTB8501"
+		piety = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 10
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+		set_character_flag = denied_krakdeschevaliers
+	}
+	option = {
+		name = "EVTOPTC8501"
+		piety = -25
+		set_character_flag = no_land_to_religious_orders
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			# To the religious order
+			FROM = { letter_event = { id = 8800 days = 1 } }
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = 8502
+	desc = "EVTDESC8502"
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8502"
+		build_holding = {
+		   title = b_krakdeschevaliers
+		   type = castle
+		   holder = FROMFROM
+		}
+		hidden_tooltip = {
+			owner = {
+				set_character_flag = event_8502
+				narrative_event = { id = 8503 days = 7 }
+			}
+			any_player = {
+				limit = {
+					NOT = { character = FROM }
+					OR = {
+						religion_group = christian
+						war_with = FROM
+						capital_scope = {
+							NOT = {
+								distance = {
+								where = ROOT
+								value = 100	# Means we live fairly near the province where the castle is built
+								}
+							}
+						}
+					}
+				}
+				narrative_event = { id = 8503 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = 8503
+	title = "EVTNAME8503"
+	desc = "EVTDESC8503"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8503"
+		trigger = {
+			has_character_flag = event_8502
+		}
+		clr_character_flag = event_8502
+		prestige = 100
+	}
+	option = {
+		name = "EVTOPTB8503"
+		trigger = {
+			NOT = { has_character_flag = event_8502 }
+			religion = catholic
+		}
+	}
+	option = {
+		name = "EVTOPTC8503"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTD8503"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = catholic }
+		}
+	}
+}
+
+
+### Margat ###
+
+# Grand Master writes a letter
+character_event = {
+	id = 8505
+	desc = "EVTDESC8505"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_independent = yes
+	prisoner = no
+	only_capable = yes
+	religion_group = christian
+	
+	trigger = {
+		# The Hospitallers exist
+		is_title_active = d_knights_hospitaler
+		primary_title = {
+			title = d_knights_hospitaler
+		}
+		
+		# The settlement has not been built yet
+		b_margat = {
+			has_holder = no
+		}
+
+		# Tortosa
+		766 = {
+			owner = {
+				NOT = { character = ROOT }
+				religion = catholic
+				NOT = { has_character_flag = denied_margat }
+				NOT = { has_character_flag = no_land_to_religious_orders }
+				top_liege = { NOT = { has_character_flag = no_land_to_religious_orders } }
+			}
+			NOT = { num_of_settlements = 7 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = "EVTOPTA8500"
+		766 = {
+			owner = { letter_event = { id = 8506 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = 8506
+	desc = "EVTDESC8506"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8501"
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		hidden_tooltip = { 766 = { province_event = { id = 8507 days = 1 } } }
+	}
+	option = {
+		name = "EVTOPTB8501"
+		piety = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 10
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+		set_character_flag = denied_margat
+	}
+	option = {
+		name = "EVTOPTC8501"
+		piety = -25
+		set_character_flag = no_land_to_religious_orders
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			# To the religious order
+			FROM = { letter_event = { id = 8800 days = 1 } }
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = 8507
+	desc = "EVTDESC8507"
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8502"
+		build_holding = {
+		   title = b_margat
+		   type = castle
+		   holder = FROMFROM
+		}
+		hidden_tooltip = {
+			owner = {
+				set_character_flag = event_8507
+				narrative_event = { id = 8508 days = 7 }
+			}
+			any_player = {
+				limit = {
+					NOT = { character = FROM }
+					OR = {
+						religion_group = christian
+						war_with = FROM
+						capital_scope = {
+							NOT = {
+								distance = {
+								where = ROOT
+								value = 100	# Means we live fairly near the province where the castle is built
+								}
+							}
+						}
+					}
+				}
+				narrative_event = { id = 8508 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = 8508
+	title = "EVTNAME8508"
+	desc = "EVTDESC8508"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8503"
+		trigger = {
+			has_character_flag = event_8507
+		}
+		clr_character_flag = event_8507
+		prestige = 100
+	}
+	option = {
+		name = "EVTOPTB8503"
+		trigger = {
+			NOT = { has_character_flag = event_8507 }
+			religion = catholic
+		}
+	}
+	option = {
+		name = "EVTOPTC8503"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTD8503"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = catholic }
+		}
+	}
+}
+
+
+### Belvoir ###
+
+# Grand Master writes a letter
+character_event = {
+	id = 8510
+	desc = "EVTDESC8510"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_independent = yes
+	prisoner = no
+	only_capable = yes
+	religion_group = christian
+	
+	trigger = {
+		
+		# The Hospitallers exist
+		is_title_active = d_knights_hospitaler
+		primary_title = {
+			title = d_knights_hospitaler
+		}
+		
+		# The settlement has not been built yet
+		b_belvoir = {
+			has_holder = no
+		}
+
+		# Safed
+		769 = {
+			owner = {
+				NOT = { character = ROOT }
+				religion = catholic
+				NOT = { has_character_flag = denied_belvoir }
+				NOT = { has_character_flag = no_land_to_religious_orders }
+				top_liege = { NOT = { has_character_flag = no_land_to_religious_orders } }
+			}
+			NOT = { num_of_settlements = 7 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = "EVTOPTA8500"
+		769 = {
+			owner = { letter_event = { id = 8511 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = 8511
+	desc = "EVTDESC8511"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8501"
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		hidden_tooltip = { 769 = { province_event = { id = 8512 days = 1 } } }
+	}
+	option = {
+		name = "EVTOPTB8501"
+		piety = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 10
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+		set_character_flag = denied_belvoir
+	}
+	option = {
+		name = "EVTOPTC8501"
+		piety = -25
+		set_character_flag = no_land_to_religious_orders
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			# To the religious order
+			FROM = { letter_event = { id = 8800 days = 1 } }
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = 8512
+	desc = "EVTDESC8512"
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8502"
+		build_holding = {
+		   title = b_belvoir
+		   type = castle
+		   holder = FROMFROM
+		}
+		hidden_tooltip = {
+			owner = {
+				set_character_flag = event_8512
+				narrative_event = { id = 8513 days = 7 }
+			}
+			any_player = {
+				limit = {
+					NOT = { character = FROM }
+					OR = {
+						religion_group = christian
+						war_with = FROM
+						capital_scope = {
+							NOT = {
+								distance = {
+								where = ROOT
+								value = 100	# Means we live fairly near the province where the castle is built
+								}
+							}
+						}
+					}
+				}
+				narrative_event = { id = 8513 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = 8513
+	title = "EVTNAME8513"
+	desc = "EVTDESC8513"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8503"
+		trigger = {
+			has_character_flag = event_8512
+		}
+		clr_character_flag = event_8512
+		prestige = 100
+	}
+	option = {
+		name = "EVTOPTB8503"
+		trigger = {
+			NOT = { has_character_flag = event_8512 }
+			religion = catholic
+		}
+	}
+	option = {
+		name = "EVTOPTC8503"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTD8503"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = catholic }
+		}
+	}
+}
+
+
+### Beth Gibelin ###
+
+# Grand Master writes a letter
+character_event = {
+	id = 8515
+	desc = "EVTDESC8515"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	only_independent = yes
+	prisoner = no
+	only_capable = yes
+	religion_group = christian
+	
+	trigger = {
+		# The Hospitallers exist
+		is_title_active = d_knights_hospitaler
+		primary_title = {
+			title = d_knights_hospitaler
+		}
+		
+		# The settlement has not been built yet
+		b_bethgibelin = {
+			has_holder = no
+		}
+
+		# Hebron
+		776 = {
+			owner = {
+				NOT = { character = ROOT }
+				religion = catholic
+				NOT = { has_character_flag = denied_bethgibelin }
+				NOT = { has_character_flag = no_land_to_religious_orders }
+				top_liege = { NOT = { has_character_flag = no_land_to_religious_orders } }
+			}
+			NOT = { num_of_settlements = 7 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = "EVTOPTA8500"
+		776 = {
+			owner = { letter_event = { id = 8516 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = 8516
+	desc = "EVTDESC8516"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8501"
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		hidden_tooltip = { 776 = { province_event = { id = 8517 days = 1 } } }
+	}
+	option = {
+		name = "EVTOPTB8501"
+		piety = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 10
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+		set_character_flag = denied_bethgibelin
+	}
+	option = {
+		name = "EVTOPTC8501"
+		piety = -25
+		set_character_flag = no_land_to_religious_orders
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			# To the religious order
+			FROM = { letter_event = { id = 8800 days = 1 } }
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = 8517
+	desc = "EVTDESC8517"
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8502"
+		build_holding = {
+		   title = b_bethgibelin
+		   type = castle
+		   holder = FROMFROM
+		}
+		hidden_tooltip = {
+			owner = {
+				set_character_flag = event_8517
+				narrative_event = { id = 8518 days = 7 }
+			}
+			any_player = {
+				limit = {
+					NOT = { character = FROM }
+					OR = {
+						religion_group = christian
+						war_with = FROM
+						capital_scope = {
+							NOT = {
+								distance = {
+								where = ROOT
+								value = 100	# Means we live fairly near the province where the castle is built
+								}
+							}
+						}
+					}
+				}
+				narrative_event = { id = 8518 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = 8518
+	title = "EVTNAME8518"
+	desc = "EVTDESC8518"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8503"
+		trigger = {
+			has_character_flag = event_8517
+		}
+		clr_character_flag = event_8517
+		prestige = 100
+	}
+	option = {
+		name = "EVTOPTB8503"
+		trigger = {
+			NOT = { has_character_flag = event_8517 }
+			religion = catholic
+		}
+	}
+	option = {
+		name = "EVTOPTC8503"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTD8503"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = catholic }
+		}
+	}
+}

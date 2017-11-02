@@ -1,0 +1,862 @@
+###########################################
+#                                         #
+# RoI India tiger hunt events             #
+#                                         #
+# ID RoI.2000-RoI.2999                    #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = RoI
+
+# Invite vassals to hunt
+character_event = {
+	id = RoI.2000
+	desc = EVTDESC_RoI_2000
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2000
+		any_vassal = {
+			limit = {
+				prisoner = no
+				war = no
+				in_command = no
+				NOT = { trait = incapable }
+				age = 16
+				NOT = { has_character_flag = do_not_disturb }
+			}
+			letter_event = {
+				id = RoI.2001
+				tooltip = EVTTOOLTIP1_RoI_2000
+			}
+		}
+		hidden_tooltip = { character_event = { id = RoI.2020 days = 12 } } # Hunt begins
+		hidden_tooltip = { character_event = { id = RoI.2500 days = 42 } } # Hunt ends
+	}
+}
+
+# Vassal receives invitation to hunt
+letter_event = {
+	id = RoI.2001
+	desc = EVTDESC_RoI_2001
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_RoI_2001 # Go
+		ai_chance = {
+			factor = 2
+			modifier  = {
+				factor = 5
+				has_focus = focus_hunting
+			}
+			modifier  = {
+				factor = 0.1
+				is_inaccessible_trigger = yes
+			}
+			modifier  = {
+				factor = 2
+				opinion = { who = from value = -30 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = -15 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = 0 }
+			}
+		}
+		set_character_flag = do_not_disturb
+
+		hidden_tooltip = { character_event = { id = RoI.2019 days = 12 } } # Hidden - arrives to hunt
+		hidden_tooltip = { character_event = { id = RoI.2999 days = 43 } } # Safety event for clearing all flags
+		custom_tooltip = { text = EVTTOOLTIP1_RoI_2001 }
+
+#		FROM = {
+#			letter_event = {
+#				id = RoI.2002
+#				days = 3
+#				tooltip = EVTTOOLTIP1_RoI_2001
+#			}
+#		}
+	}
+	option = {
+		name = EVTOPTB_RoI_2001 # Don't go
+		ai_chance = {
+			factor = 1
+			modifier  = {
+				factor = 0
+				opinion = { who = from value = 25 }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+		}
+		FROM = {
+			letter_event = {
+				id = RoI.2003
+				days = 3
+				tooltip = EVTTOOLTIP1_RoI_2001
+			}
+		}
+	}
+}
+
+# Vassal will come to the hunt
+#letter_event = {
+#	id = RoI.2002
+#	desc = EVTDESC_RoI_2002
+#	picture = GFX_evt_feast
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = EVTOPTA_RoI_2002
+#	}
+#}
+
+# Vassal refuses to come to the hunt
+letter_event = {
+	id = RoI.2003
+	desc = EVTDESC_RoI_2003
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2003
+		opinion = {
+			modifier = opinion_dislike
+			who = FROM
+			years = 2
+		}
+	}
+}
+
+###########################################
+# Hunt begins and ends                    #
+###########################################
+
+
+# Vassal arrives to hunt
+character_event = {
+	id = RoI.2019
+	desc = EVTDESC_RoI_2019
+	picture = GFX_evt_ruler_riding_elephant
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2019
+		set_character_flag = hunting_tigers
+		add_character_modifier = {
+			name = hunt_timer
+			duration = 395
+			hidden = yes
+		}
+		hidden_tooltip = {
+			random_list = { # Check for social events
+				10 = { character_event = { id = RoI.2100 days = 7 random = 5 } } # Gain friend
+				10 = { character_event = { id = RoI.2102 days = 7 random = 5 } } # Gain rival
+				10 = { character_event = { id = RoI.2104 days = 7 random = 5 } } # Plays cards
+				50 = {} # No social event
+			}
+			random_list = { # Check for tiger events
+				10 = { character_event = { id = RoI.2110 days = 18 random = 7 } } # Tiger surprises hunter
+				10 = { character_event = { id = RoI.2120 days = 18 random = 7 } } # Finds tiger
+				10 = {} # No tiger event
+			}
+		}
+	}
+}
+
+# Hunt begins
+character_event = {
+	id = RoI.2020
+	desc = EVTDESC_RoI_2020
+	picture = GFX_evt_ruler_riding_elephant
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2020
+		set_character_flag = hunting_tigers
+		add_character_modifier = {
+			name = hunt_timer
+			duration = 395
+			hidden = yes
+		}
+		hidden_tooltip = {
+			random_list = { # Check for social events
+				10 = { character_event = { id = RoI.2100 days = 10 } } # Gain friend
+				10 = { character_event = { id = RoI.2102 days = 10 } } # Gain rival
+				10 = { character_event = { id = RoI.2104 days = 10 } } # Plays cards
+				50 = {} # No social event
+			}
+			random_list = { # Check for tiger events
+				10 = { character_event = { id = RoI.2110 days = 10 } } # Tiger surprises hunter
+				10 = { character_event = { id = RoI.2120 days = 10 } } # Tiger surprises hunter
+				10 = {} # No tiger event
+			}
+		}
+	}
+}
+
+# Hunt ends
+character_event = {
+	id = RoI.2500
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { has_character_flag = killed_tiger }
+			character_event = { id = RoI.2501 }
+			any_vassal = {
+				limit = { has_character_flag = hunting_tigers }
+				character_event = { id = RoI.2501 }
+			}
+			break = yes
+		}
+		if = {
+			limit = { NOT = { has_character_flag = killed_tiger } }
+			character_event = { id = RoI.2502 }
+			any_vassal = {
+				limit = { has_character_flag = hunting_tigers }
+				character_event = { id = RoI.2502 }
+			}
+		}
+	}
+}
+
+# Got tiger
+character_event = {
+	id = RoI.2501
+	desc = EVTDESC_RoI_2501
+	picture = GFX_evt_india_temple
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2501
+		prestige = 20
+		clr_character_flag = holding_tiger_hunt
+		clr_character_flag = killed_tiger
+		clr_character_flag = hunting_tigers
+		clr_character_flag = do_not_disturb
+		add_character_modifier = {
+			name = good_hunt
+			days = 180
+		}
+	}
+}
+
+# Didn't get tiger
+character_event = {
+	id = RoI.2502
+	desc = EVTDESC_RoI_2502
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2502
+		prestige = -10
+		clr_character_flag = holding_tiger_hunt
+		clr_character_flag = hunting_tigers
+		clr_character_flag = do_not_disturb
+	}
+}
+
+###########################################
+# Flag management events                  #
+###########################################
+
+# Clear all character flags and modifiers
+character_event = {
+	id = RoI.2999
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = holding_tiger_hunt
+		clr_character_flag = killed_tiger
+		clr_character_flag = hunting_tigers
+		clr_character_flag = do_not_disturb
+	}
+}
+
+###########################################
+# Random events during hunt               #
+###########################################
+
+# Gets drunk and makes a friend
+character_event = {
+	id = RoI.2100
+	desc = EVTDESC_RoI_2100
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			trait = temperate
+			trait = shy
+		}
+		NOT = { num_of_friends = 5 }
+		any_realm_character = {
+			ai = yes
+			has_character_flag = hunting_tigers
+			OR = {
+				is_liege_of = ROOT
+				liege = { is_liege_of = ROOT }
+				ROOT = { is_liege_of = THIS }
+			}
+			NOT = { is_friend = ROOT }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_RoI_2100
+		random_realm_character = {
+			limit = {
+				ai = yes
+				has_character_flag = hunting_tigers
+				OR = {
+					is_liege_of = ROOT
+					liege = { is_liege_of = ROOT }
+					ROOT = { is_liege_of = THIS }
+				}
+				NOT = { is_friend = ROOT }
+			}
+			add_friend = ROOT
+			hidden_tooltip = { character_event = { id = RoI.2101 } }
+		}
+	}
+}
+
+# New friend
+character_event = {
+	id = RoI.2101
+	desc = EVTDESC_RoI_2100
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2100
+		add_friend = FROM
+	}
+}
+	
+# Gets drunk and makes an enemy
+character_event = {
+	id = RoI.2102
+	desc = EVTDESC_RoI_2102
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { num_of_rivals = 5 }
+		OR = {
+			trait = drunkard
+			AND = {
+				NOT = { trait = temperate }
+				OR = {
+					trait = wroth
+					trait = paranoid
+					trait = envious
+					trait = zealous
+				}
+			}
+		}
+		any_realm_character = {
+			has_character_flag = hunting_tigers
+			ai = yes
+			OR = {
+				is_liege_of = ROOT
+				liege = { is_liege_of = ROOT }
+				ROOT = { is_liege_of = THIS }
+			}
+			NOT = { is_rival = ROOT }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_RoI_2102
+		random_realm_character = {
+			limit = {
+				ai = yes
+				has_character_flag = hunting_tigers
+				OR = {
+					is_liege_of = ROOT
+					liege = { is_liege_of = ROOT }
+					ROOT = { is_liege_of = THIS }
+				}
+			}
+			add_rival = ROOT
+			opinion = {
+				modifier = grievously_offended
+				who = ROOT
+				years = 10
+			}
+			ROOT = {
+				opinion = {
+					modifier = grievously_offended
+					who = PREV
+					years = 10
+				}
+			}
+			hidden_tooltip = { character_event = { id = RoI.2103 } }
+		}
+	}
+}
+
+# New enemy
+character_event = {
+	id = RoI.2103
+	desc = EVTDESC_RoI_2102
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2102
+		tooltip = { add_rival = FROM }
+	}
+}
+	
+# Plays cards
+character_event = {
+	id = RoI.2104
+	desc = EVTDESC_RoI_2104
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+
+	option = { # Play high stakes
+		name = EVTOPTA_RoI_2104
+		set_character_flag = cards_high_stakes
+		hidden_tooltip = {
+			if = {
+				limit = {
+					OR = {
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				character_event = { id = RoI.2105 } # Always loses
+			}
+			if = {
+				limit = { 
+					OR = {
+						trait = slow
+						trait = dull
+					} 
+				}
+				random_list = {
+					50 = { character_event = { id = RoI.2105 } } # Loses
+					50 = { character_event = { id = RoI.2106 } } # Breaks even
+				}
+			}
+			if= {
+				limit = {
+					is_dumb_trigger = no
+					NOT = { trait = inbred }
+					is_smart_trigger = no
+				}
+				random_list = {
+					33 = { character_event = { id = RoI.2105 } } # Loses
+					33 = { character_event = { id = RoI.2106 } } # Breaks even
+					33 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+			if = {
+				limit = { 
+					OR = {
+						trait = quick
+						trait = shrewd
+					}
+				}
+				random_list = {
+					10 = { character_event = { id = RoI.2105 } } # Loses
+					30 = { character_event = { id = RoI.2106 } } # Breaks even
+					60 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+			if = {
+				limit = { trait = genius }
+				random_list = {
+					20 = { character_event = { id = RoI.2106 } } # Breaks even
+					80 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+		}
+	}
+	option = { # Play low stakes
+		name = EVTOPTB_RoI_2104
+		set_character_flag = cards_low_stakes
+		hidden_tooltip = {
+			if = {
+				limit = {
+					OR = {
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				character_event = { id = RoI.2105 } # Always loses
+			}
+			if = {
+				limit = { 
+					OR = {
+						trait = slow
+						trait = dull
+					}
+				}
+				random_list = {
+					50 = { character_event = { id = RoI.2105 } } # Loses
+					50 = { character_event = { id = RoI.2106 } } # Breaks even
+				}
+			}
+			if= {
+				limit = {
+					NOT = { trait = inbred }
+					is_dumb_trigger = no
+					is_smart_trigger = no
+				}
+				random_list = {
+					33 = { character_event = { id = RoI.2105 } } # Loses
+					33 = { character_event = { id = RoI.2106 } } # Breaks even
+					33 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+			if = {
+				limit = { 
+					OR = {
+						trait = quick
+						trait = shrewd
+					} 
+				}
+				random_list = {
+					10 = { character_event = { id = RoI.2105 } } # Loses
+					30 = { character_event = { id = RoI.2106 } } # Breaks even
+					60 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+			if = {
+				limit = { trait = genius }
+				random_list = {
+					20 = { character_event = { id = RoI.2106 } } # Breaks even
+					80 = { character_event = { id = RoI.2107 } } # Wins
+				}
+			}
+		}
+	}
+}
+
+# Loses at cards
+character_event = {
+	id = RoI.2105
+	desc = EVTDESC_RoI_2105
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2105
+		if = {
+			limit = { has_character_flag = cards_high_stakes }
+			scaled_wealth = -0.5
+		}
+		if = {
+			limit = { has_character_flag = cards_low_stakes }
+			scaled_wealth = -0.2
+		}
+	}
+}
+
+# Breaks even at cards
+character_event = {
+	id = RoI.2106
+	desc = EVTDESC_RoI_2106
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2106
+	}
+}
+
+# Wins at cards
+character_event = {
+	id = RoI.2107
+	desc = EVTDESC_RoI_2107
+	picture = GFX_evt_throne_room
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_2107
+		if = {
+			limit = { has_character_flag = cards_high_stakes }
+			scaled_wealth = 0.5
+		}
+		if = {
+			limit = { has_character_flag = cards_low_stakes }
+			scaled_wealth = 0.2
+		}
+	}
+}
+
+
+
+# Tiger surprises hunters
+character_event = {
+	id = RoI.2110
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { trait = hunter }
+	}
+	
+	immediate = {
+		random_list = {
+			30 = {
+				character_event = { id = RoI.2111 } # Tiger is killed by soldiers
+			}
+			10 = {
+				character_event = { id = RoI.2112 } # Tiger kills servant
+			}
+			10 = {
+				character_event = { id = RoI.2113 }  # Tiger kills AI character
+			}
+		}
+	}
+}
+
+# Tiger surprises hunters - tiger is killed by soldiers
+character_event = {
+	id = RoI.2111
+	desc = EVTDESC_RoI_2111
+	picture = GFX_evt_tiger
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2111
+		set_character_flag = killed_tiger
+	}
+}
+
+# Tiger surprises hunters - tiger kills servant
+character_event = {
+	id = RoI.2112
+	desc = EVTDESC_RoI_2112
+	picture = GFX_evt_tiger
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2112
+		prestige = -10
+	}
+}
+
+# Tiger surprises hunters - tiger kills AI character
+character_event = {
+	id = RoI.2113
+	desc = EVTDESC_RoI_2113
+	picture = GFX_evt_tiger
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2112
+		random_realm_character = {                            # Tiger kills AI character
+			limit = {
+				ai = yes
+				has_character_flag = hunting_tigers
+				OR = {
+					is_liege_of = ROOT
+					liege = { is_liege_of = ROOT }
+					ROOT = { is_liege_of = THIS }
+				}
+			}
+			death = {
+				death_reason = death_accident_tiger
+			}
+		}
+	}
+}
+
+# Party finds tiger
+character_event = {
+	id = RoI.2120
+	desc = EVTDESC_RoI_2120
+	picture = GFX_evt_tiger
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2120 # Kill it myself
+		trigger = {
+			NOT = { trait = wounded }
+			NOT = { is_maimed_trigger = yes }
+			NOT = { trait = craven }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					OR = {
+						trait = hunter
+						trait = duelist
+						is_strong_trigger = yes
+						trait = varangian
+						trait = berserker
+						has_character_modifier = killed_an_old_one
+					}
+				}
+				random_list = {
+					80 = { character_event = { id = RoI.2121 } } # Kills tiger
+					15 = { character_event = { id = RoI.2122 } } # Fails to kill tiger
+					5 = { character_event = { id = RoI.2123 } } # Wounded trying to kill tiger
+				}
+			}
+			if = {
+				limit = {
+					NOT = { trait = hunter }
+					NOT = { trait = duelist }
+					is_strong_trigger = no
+					NOT = { trait = varangian }
+					NOT = { trait = berserker }
+					NOT = { has_character_modifier = killed_an_old_one }
+				}
+				random_list = {
+					40 = { character_event = { id = RoI.2121 } } # Kills tiger
+					50 = { character_event = { id = RoI.2122 } } # Fails to kill tiger
+					10 = { character_event = { id = RoI.2123 } } # Wounded trying to kill tiger
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_2120 # Let the soldiers do it
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = RoI.2124 } } # Soldiers kill tiger
+				20 = { character_event = { id = RoI.2125 } } # Soldiers fail to kill tiger
+			}
+		}
+	}
+}
+
+# Kills tiger
+character_event = {
+	id = RoI.2121
+	desc = EVTDESC_RoI_2121
+	picture = GFX_evt_tiger
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2121
+		prestige = 30
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			add_trait = hunter
+		}
+		set_character_flag = killed_tiger
+		if = {
+			limit = {
+				NOT = { has_character_flag = achievement_i_can_see_its_stripes }
+				ai = no
+			}
+			set_character_flag = achievement_i_can_see_its_stripes
+		}
+	}
+}
+
+# Fails to kill tiger
+character_event = {
+	id = RoI.2122
+	desc = EVTDESC_RoI_2122
+	picture = GFX_evt_tiger
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2122
+		prestige = -10
+	}
+}
+
+# Is wounded trying to kill tiger
+character_event = {
+	id = RoI.2123
+	desc = EVTDESC_RoI_2123
+	picture = GFX_evt_tiger
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2123
+		random_list = {
+			90 = { add_trait = wounded }
+			10 = { add_maimed_trait_effect = yes }
+		}
+	}
+}
+
+# Soldiers kill tiger
+character_event = {
+	id = RoI.2124
+	desc = EVTDESC_RoI_2124
+	picture = GFX_evt_tiger
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2124
+		set_character_flag = killed_tiger
+	}
+}
+
+# Soldiers fail to kill tiger
+character_event = {
+	id = RoI.2125
+	desc = EVTDESC_RoI_2125
+	picture = GFX_evt_tiger
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_2125
+	}
+}
+
+
+
+
+
+
+	

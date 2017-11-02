@@ -1,0 +1,816 @@
+###########################################
+#                                         #
+# ZE Mercenary Events                     #
+# ID ZE.10000 - ZE.10999                  #
+#                                         #
+###########################################
+
+# Written by -
+
+namespace = ZE
+
+character_event = {
+	id = ZE.10000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		mercenary = yes
+		primary_title = {
+			has_title_flag = ze_dyn_merc
+			band_creator = {
+				OR = {
+					is_feudal = yes
+					is_republic = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_character_flag = is_mercenary_leader }
+			}
+			set_character_flag = is_mercenary_leader
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = mercenary_ambition_1
+					has_character_flag = mercenary_ambition_2
+					has_character_flag = mercenary_ambition_3
+					has_character_flag = mercenary_ambition_4
+					has_character_flag = mercenary_ambition_5
+					has_character_flag = mercenary_ambition_6
+					has_character_flag = mercenary_ambition_7
+					has_character_flag = mercenary_ambition_8
+					has_character_flag = mercenary_ambition_9
+				}
+			}
+			set_character_flag = mercenary_ambition_1
+		}
+		# Ambition up chance
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 4
+					has_character_flag = denied_last_request
+				}
+				modifier = {
+					factor = 1.3
+					trait = cruel
+				}
+				modifier = {
+					factor = 1.2
+					trait = wroth
+				}
+				modifier = {
+					factor = 1.4
+					trait = deceitful
+				}
+				modifier = {
+					factor = 1.6
+					trait = ambitious
+				}
+				modifier = {
+					factor = 0.6
+					trait = just
+				}
+				modifier = {
+					factor = 0.6
+					trait = kind
+				}
+				modifier = {
+					factor = 0.4
+					trait = content
+				}
+				modifier = {
+					factor = 1.5
+					primary_title = {
+						band_creator = {
+							ROOT = {
+								relative_power = {
+									who = PREV
+									power = 0.7
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					primary_title = {
+						band_creator = {
+							ROOT = {
+								relative_power = {
+									who = PREV
+									power = 1
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					primary_title = {
+						band_creator = {
+							ROOT = {
+								relative_power = {
+									who = PREV
+									power = 1.3
+								}
+							}
+						}
+					}
+				}
+				
+				increase_mercenary_ambition_level_effect = yes
+			}
+			60 = { }
+		}
+		clr_character_flag = denied_last_request
+		# Random mercenary event
+		random_list = {
+			10 = { ### Improve on military education
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = misguided_warrior
+						trait = tough_soldier
+						trait = skilled_tactician
+					}
+				}
+				character_event = { id = ZE.10001 }
+			}
+			10 = { ### Remove Craven
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOT = { trait = craven }
+				}
+				character_event = { id = ZE.10003 }
+			}
+			10 = { ### add brave
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = craven
+						trait = brave
+					}
+				}
+				character_event = { id = ZE.10005 }
+			}
+			10 = { ### add diligent
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = diligent
+						trait = slothful
+					}
+				}
+				character_event = { id = ZE.10007 }
+			}
+			10 = { ### Remove kind
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOT = {
+						trait = kind
+					}
+				}
+				character_event = { id = ZE.10009 }
+			}
+			10 = { ### Remove humble
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOT = {
+						trait = humble
+					}
+				}
+				character_event = { id = ZE.10011 }
+			}
+			10 = { ### add lustful
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = chaste
+						trait = lustful
+					}
+				}
+				character_event = { id = ZE.10013 }
+			}
+			10 = { ### add wroth
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = wroth
+						trait = patient
+					}
+				}
+				character_event = { id = ZE.10015 }
+			}
+			10 = { ### add cruel
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = cruel
+						trait = kind
+					}
+				}
+				character_event = { id = ZE.10017 }
+			}
+			10 = { ### become wounded
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOR = {
+						trait = wounded
+						is_maimed_trigger = yes
+					}
+				}
+				character_event = { id = ZE.10019 }
+			}
+			10 = { ### add maimed
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOT = { can_be_maimed_trigger = yes }
+				}
+				character_event = { id = ZE.10021 }
+			}
+			10 = { ### add adventurer
+				modifier = {
+					factor = 0
+					### reverse trigger
+					NOT = { trait = adventurer }
+				}
+				character_event = { id = ZE.10023 }
+			}
+			10 = { ### Ask for more money
+				modifier = {
+					factor = 0
+					NOT = {
+						primary_title = {
+							had_title_flag = {
+								flag = mercenary_unemployment
+								years = 3
+							}
+						}
+					}
+					### reverse trigger
+				}
+				modifier = {
+					factor = 1.3
+					primary_title = {
+						had_title_flag = {
+							flag = mercenary_unemployment
+							years = 10
+						}
+					}
+				}
+				modifier = {
+					factor = 1.2
+					OR = {
+						has_character_flag = mercenary_ambition_4
+						has_character_flag = mercenary_ambition_5
+						has_character_flag = mercenary_ambition_6
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					OR = {
+						has_character_flag = mercenary_ambition_5
+						has_character_flag = mercenary_ambition_6
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					OR = {
+						has_character_flag = mercenary_ambition_6
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 1.3
+					OR = {
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 1.3
+					OR = {
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				character_event = { id = ZE.10030 }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_character_flag = mercenary_ambition_5
+						has_character_flag = mercenary_ambition_6
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { primary_title = { mercenary_siphon_factor = 0.05 } }
+				}
+				character_event = { id = ZE.10070 } # Start to pay less
+			}
+			20 = {
+				character_event = { id = ZE.11010 } # Demand more soldiers
+			}
+			20 = {
+				character_event = { id = ZE.11000 } # Ask to marry child of band creator
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_character_flag = mercenary_ambition_6
+						has_character_flag = mercenary_ambition_7
+						has_character_flag = mercenary_ambition_8
+						has_character_flag = mercenary_ambition_9
+					}
+				}
+				modifier = {
+					factor = 2
+					has_character_flag = mercenary_ambition_7
+				}
+				modifier = {
+					factor = 4
+					has_character_flag = mercenary_ambition_8
+				}
+				modifier = {
+					factor = 8
+					has_character_flag = mercenary_ambition_9
+				}
+				character_event = { id = ZE.10075 } # Break Free
+			}
+			100 = { } # Nothing happened
+		}
+	}
+}
+
+### Improve on military education
+character_event = {
+	id = ZE.10001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				trait = skilled_tactician
+			}
+			remove_trait = skilled_tactician
+			add_trait = brilliant_strategist
+		}
+		if = {
+			limit = {
+				trait = tough_soldier
+			}
+			remove_trait = tough_soldier
+			add_trait = skilled_tactician
+		}
+		if = {
+			limit = {
+				trait = misguided_warrior
+			}
+			remove_trait = misguided_warrior
+			add_trait = tough_soldier
+		}
+	}
+}
+
+### Remove Craven
+character_event = {
+	id = ZE.10003
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_trait = craven
+	}
+}
+
+### add brave
+character_event = {
+	id = ZE.10005
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = brave
+	}
+}
+
+### add diligent
+character_event = {
+	id = ZE.10007
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = diligent
+	}
+}
+
+### Remove kind
+character_event = {
+	id = ZE.10009
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_trait = kind
+	}
+}
+
+### Remove humble
+character_event = {
+	id = ZE.10011
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_trait = humble
+	}
+}
+
+
+### add lustful
+character_event = {
+	id = ZE.10013
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = lustful
+	}
+}
+
+### add wroth
+character_event = {
+	id = ZE.10015
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = wroth
+	}
+}
+
+### add cruel
+character_event = {
+	id = ZE.10017
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = cruel
+	}
+}
+
+### become wounded
+character_event = {
+	id = ZE.10019
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_maimed_trigger = yes }
+			}
+			add_trait = wounded
+		}
+	}
+}
+
+### add maimed
+character_event = {
+	id = ZE.10021
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_maimed_trait_effect = yes
+	}
+}
+
+### add adventurer
+character_event = {
+	id = ZE.10023
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_trait = adventurer
+	}
+}
+
+
+### Demand more money
+character_event = {
+	id = ZE.10030
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		primary_title = {
+			band_creator = {
+				letter_event = { id = ZE.10031 }
+			}
+		}
+	}
+}
+
+# Band creator gets my demand
+letter_event = {
+	id = ZE.10031
+	desc = EVTDESC_ZE_10031
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_10031
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 0.1
+			min = 5
+		}
+		hidden_tooltip = {
+			FROM = {
+				primary_title = {
+					clr_title_flag = mercenary_unemployment
+				}
+				if = {
+					limit = {
+						OR = {
+							has_character_flag = mercenary_ambition_6
+							has_character_flag = mercenary_ambition_7
+							has_character_flag = mercenary_ambition_8
+							has_character_flag = mercenary_ambition_9
+						}
+					}
+					random_list = {
+						30 = { # ask for even more money
+							modifier = {
+								factor = 1.3
+								has_character_flag = mercenary_ambition_7
+							}
+							modifier = {
+								factor = 1.7
+								has_character_flag = mercenary_ambition_8
+							}
+							modifier = {
+								factor = 2.5
+								has_character_flag = mercenary_ambition_9
+							}
+							modifier = {
+								factor = 1.5
+								trait = greedy
+							}
+							character_event = { id = ZE.10032 days = 90 }
+						}
+						60 = {}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_10031
+		random = {
+			chance = 50
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event ={
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+		FROM = {
+			set_character_flag = denied_last_request
+			opinion = {
+				who = ROOT
+				modifier = opinion_denied_request
+				months = 60
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.10032
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			letter_event = { id = ZE.10033 }
+		}
+	}
+}
+
+letter_event = {
+	id = ZE.10033
+	desc = EVTDESC_ZE_10033
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_10033
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 0.1
+			min = 5
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ZE_10033
+		FROM = {
+			set_character_flag = denied_last_request
+			opinion = {
+				who = ROOT
+				modifier = opinion_upset
+				years = 3
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ZE_10033
+		trigger = {
+			diplomacy = 12
+		}
+		tooltip_info = diplomacy 
+	}
+}
+
+character_event = {
+	id = ZE.10038
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		primary_title = {
+			clr_title_flag = mercenary_unemployment
+			clr_title_flag = not_hired
+		}
+	}
+}
+
+
+character_event = {
+	id = ZE.10039
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		primary_title = {
+			set_title_flag = mercenary_unemployment
+			set_title_flag = not_hired
+		}
+	}
+}
+
+### Start to pay less
+character_event = {
+	id = ZE.10070
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		primary_title = {
+			band_creator = {
+				letter_event = { id = ZE.10071 }
+			}
+		}
+	}
+}
+
+# Creator gets info
+letter_event = {
+	id = ZE.10071
+	desc = EVTDESC_ZE_10071
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_10071
+		FROM = {
+			primary_title = {
+				adjust_siphon_factor = -0.02
+			}
+		}
+		random = {
+			chance = 30
+			add_trait = charitable
+			hidden_tooltip = {
+				character_event = { id = 38273 } # notify charitable
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_10071
+		FROM = {
+			primary_title = {
+				adjust_siphon_factor = -0.01
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_10071
+		trigger = {
+			learning = 12
+		}
+		tooltip_info = learning
+		hidden_tooltip = {
+			FROM = {
+				increase_mercenary_ambition_level_effect = yes
+			}
+		}
+	}
+}
+
+# Break Free
+character_event = {
+	id = ZE.10075
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		primary_title = {
+			band_creator =  {
+				letter_event = { id = ZE.10076 }
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = ZE.10076
+	desc = EVTDESC_ZE_10076
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_10076
+		FROM = {
+			primary_title = {
+				cut_mercenary_creator_relation = yes
+			}
+		}
+	}
+}

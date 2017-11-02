@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Application/CKParser.fs"/>
+    <Compile Include="Application/Events.fs"/>
     <Compile Include="Controllers/HomeController.fs"/>
     <Compile Include="Models/ErrorViewModel.fs"/>
     <Compile Include="Startup.fs"/>

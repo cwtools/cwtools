@@ -1,0 +1,439 @@
+###################################
+#
+# THE SONS OF ABRAHAM 
+# - Muslim School Events
+#
+###################################
+
+# Adopts Mu'tazila
+character_event = {
+	id = SoA.600
+	desc = EVTDESC_SoA_600
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_600
+		add_trait = mutazilite
+		if = {
+			limit = {
+				primary_title = { higher_tier_than = COUNT }
+			}
+			economy_techpoints = 25
+			culture_techpoints = 25
+			military_techpoints = 25
+		}
+	}
+}
+
+# Adopts Ash'ari
+character_event = {
+	id = SoA.601
+	desc = EVTDESC_SoA_601
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_SoA_600
+		add_trait = ashari
+		piety = 100
+	}
+}
+
+# Ash'ari liege has Mu'tazila vassal (Hidden)
+character_event = {
+	id = SoA.602
+	
+	hide_window = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_rulers = yes
+	only_men = yes
+	religion_group = muslim
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		NOR = {
+			liege = {
+				war = yes
+			}
+			trait = incapable
+			is_inaccessible_trigger = yes
+			prisoner = yes
+		}
+		trait = mutazilite
+		liege = { 
+			trait = ashari 
+			NOT = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_rejected_school }
+			}
+		}
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = SoA.603 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 640
+	}
+}
+
+# Ash'ari liege has Mu'tazila vassal
+character_event = {
+	id = SoA.603
+	desc = EVTDESC_SoA_603
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_603
+		FROM = { 
+			letter_event = { id = SoA.604 days = 3 tooltip = EVTTOOLTIP_SoA_604 }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_603
+	}
+}
+
+# Mu'tazila vassal receives letter
+letter_event = {
+	id = SoA.604
+	desc = EVTDESC_SoA_604
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_604
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.5
+				decadence = 40
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 60
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 80
+			}
+		}
+		FROM = { 
+			letter_event = { id = SoA.605 days = 3 tooltip = EVTTOOLTIP_SoA_605 }
+		}
+		remove_trait = mutazilite
+		add_trait = ashari
+	}
+	option = {
+		name = EVTOPTB_SoA_604
+		ai_chance = {
+			factor = 1
+		}
+		FROM = { 
+			opinion = {
+				modifier = opinion_rejected_school
+				who = ROOT
+			}
+			letter_event = { id = SoA.606 days = 3 tooltip = EVTTOOLTIP_SoA_606 }
+		}
+	}
+}
+
+# Mu'tazila vassal complies
+letter_event = {
+	id = SoA.605
+	desc = EVTDESC_SoA_605
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_605
+		tooltip = {
+			FROM = {
+				remove_trait = mutazilite
+				add_trait = ashari
+			}
+		}
+	}
+}
+
+# Mu'tazila vassal refuses
+letter_event = {
+	id = SoA.606
+	desc = EVTDESC_SoA_606
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_606
+	}
+}
+
+# Mu'tazila liege has Ash'ari vassal (Hidden)
+character_event = {
+	id = SoA.610
+	
+	hide_window = yes
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_rulers = yes
+	only_men = yes
+	religion_group = muslim
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		NOR = {
+			liege = {
+				war = yes
+			}
+			trait = incapable
+			is_inaccessible_trigger = yes
+			prisoner = yes
+		}
+		trait = ashari
+		liege = { 
+			trait = mutazilite
+			NOT = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_rejected_school }
+			}
+		}
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = SoA.611 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 640
+	}
+}
+
+# Mu'tazila liege has Ash'ari vassal
+character_event = {
+	id = SoA.611
+	desc = EVTDESC_SoA_611
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_611
+		FROM = { 
+			letter_event = { id = SoA.612 days = 3 tooltip = EVTTOOLTIP_SoA_612 }
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_611
+	}
+}
+
+# Ash'ari vassal receives letter
+letter_event = {
+	id = SoA.612
+	desc = EVTDESC_SoA_612
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_612
+		ai_chance = {
+			factor = 1
+		}
+		FROM = { 
+			letter_event = { id = SoA.613 days = 3 tooltip = EVTTOOLTIP_SoA_613 }
+		}
+		remove_trait = ashari
+		add_trait = mutazilite
+	}
+	option = {
+		name = EVTOPTB_SoA_612
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.5
+				decadence = 40
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 60
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 80
+			}
+		}
+		FROM = { 
+			opinion = {
+				modifier = opinion_rejected_school
+				who = ROOT
+			}
+			letter_event = { id = SoA.614 days = 3 tooltip = EVTTOOLTIP_SoA_614 }
+		}
+	}
+}
+
+# Ash'ari vassal complies
+letter_event = {
+	id = SoA.613
+	desc = EVTDESC_SoA_613
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_613
+		tooltip = {
+			FROM = {
+				remove_trait = ashari
+				add_trait = mutazilite
+			}
+		}
+	}
+}
+
+# Ash'ari vassal refuses
+letter_event = {
+	id = SoA.614
+	desc = EVTDESC_SoA_614
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_614
+	}
+}
+
+# Cynical Ash'ari considers Mu'tazila
+character_event = {
+	id = SoA.620
+	desc = EVTDESC_SoA_620
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_rulers = yes
+	only_men = yes
+	religion_group = muslim
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		trait = ashari
+		trait = cynical
+	}
+	
+	mean_time_to_happen = {
+		months = 140
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_620
+		ai_chance = {
+			factor = 1
+		}
+		remove_trait = ashari
+		add_trait = mutazilite
+	}
+	option = {
+		name = EVTOPTB_SoA_620
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.5
+				decadence = 40
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 60
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 80
+			}
+		}
+		remove_trait = cynical
+		add_trait = zealous
+	}
+}
+
+# Zealous Mu'tazila considers Ash'ari
+character_event = {
+	id = SoA.621
+	desc = EVTDESC_SoA_621
+	picture = GFX_evt_kaaba
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	only_rulers = yes
+	only_men = yes
+	religion_group = muslim
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		trait = mutazilite
+		trait = zealous
+	}
+	
+	mean_time_to_happen = {
+		months = 140
+	}
+	
+	option = {
+		name = EVTOPTA_SoA_620
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.5
+				decadence = 40
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 60
+			}
+			modifier = {
+				factor = 1.5
+				decadence = 80
+			}
+		}
+		remove_trait = mutazilite
+		add_trait = ashari
+	}
+	option = {
+		name = EVTOPTB_SoA_621
+		ai_chance = {
+			factor = 1
+		}
+		remove_trait = zealous
+		add_trait = cynical
+	}
+}

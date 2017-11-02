@@ -1,0 +1,891 @@
+namespace = RIP
+
+#Ordering torture by racks
+character_event = {
+	id = RIP.20001
+	desc = EVTDSC_RIP_20001
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20001
+
+		tooltip = {
+			from = {
+				jailor_torture_effect = yes
+			}
+		}
+	}
+}
+
+#Getting tortured by racks
+character_event = {
+	id = RIP.20002
+	desc = EVTDSC_RIP_20002
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20002
+		prisoner_torture_effect = yes
+	}
+}
+
+#Ordering torture by whipping
+character_event = {
+	id = RIP.20003
+	desc = EVTDSC_RIP_20003
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20003
+
+		tooltip = {
+			from = {
+				jailor_torture_effect = yes
+			}
+		}
+	}
+}
+
+#Getting tortured by whipping
+character_event = {
+	id = RIP.20004
+	desc = EVTDSC_RIP_20004
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20004
+
+		prisoner_torture_effect = yes
+	}
+}
+
+#Ordering torture by rats
+character_event = {
+	id = RIP.20005
+	desc = EVTDSC_RIP_20005
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20005
+
+		tooltip = {
+			from = {
+				jailor_torture_effect = yes
+			}
+		}
+	}
+}
+
+#Getting tortured by rats
+character_event = {
+	id = RIP.20006
+	desc = EVTDSC_RIP_20006
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20006
+
+		prisoner_torture_effect = yes
+	}
+}
+
+#Ordering torture, lunatic
+character_event = {
+	id = RIP.20007
+	desc = EVTDSC_RIP_20007
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20007
+
+		FROM = { 
+			random_list = {
+				50 = {
+					opinion = {
+						modifier = opinion_tickled_me_right
+						who = ROOT
+					}
+				}
+				50 = {
+					opinion = {
+						modifier = opinion_tickled_me_wrong
+						who = ROOT
+					}
+				}
+			}
+
+			tooltip = {
+				random = {
+					chance = 20
+		 			add_trait = stressed
+					hidden_tooltip = {
+						character_event = {
+							id = 38282 #Notify Stressed
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Getting tortured, lunatic
+character_event = {
+	id = RIP.20008
+	desc = EVTDSC_RIP_20008
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_lunatic
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20008
+		random = {
+			chance = 20
+			if = {
+		   		limit = { NOT = { trait = stressed } }
+		 		add_trait = stressed
+		 		hidden_tooltip = { character_event = { id = 38282 } }
+		 	}
+		}
+	}
+}
+
+#Ordering torture by heat exposure
+character_event = {
+	id = RIP.20009
+	desc = EVTDSC_RIP_20009
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20009
+		tooltip = {
+			from = {
+				random_list = {
+					60 = {
+		 				add_trait = stressed
+		 			}
+					30 = {
+		 				add_trait = fatigue
+						set_character_flag = disease_not_serious
+						character_event = { id = RIP.11011 days = 100 random = 300 }
+					}
+					5 = {
+						add_trait = lunatic
+					}
+					5 = {
+						#nothing
+					}
+				}
+			}
+		}	
+	}
+}
+
+ #Getting tortured by heat exposure
+character_event = {
+	id = RIP.20010
+	desc = EVTDSC_RIP_20010
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20010
+
+		add_character_modifier = { name = tortured years = 2 }
+
+		random_list = {
+			60 = {
+				if = {
+   					limit = { NOT = { trait = stressed } }
+ 					add_trait = stressed
+ 					hidden_tooltip = { character_event = { id = 38282 } }
+ 				}
+ 			}
+			30 = {
+				if = {
+   					limit = { NOT = { trait = fatigue } }
+
+   					tooltip = { add_trait = fatigue }
+ 					
+ 					hidden_tooltip = { 
+ 						if = {
+ 							limit = {
+	 							NOR = {
+	 								has_character_flag = developing_illness
+	 								has_character_flag = disease_not_serious
+	 							}
+	 						}
+
+ 						set_character_flag = disease_not_serious 
+						character_event = { id = RIP.11011 days = 100 random = 300 }
+ 						}
+ 						add_trait = fatigue
+ 					}
+ 				}
+			}
+			5 = {
+				if = {
+   					limit = { NOT = { trait = lunatic } }
+ 					add_trait = lunatic
+ 					hidden_tooltip = { character_event = { id = 38304 } }
+ 				}
+			}
+			5 = {
+				#nothing
+			}
+		}
+	}
+}
+
+#Ordering torture by cold exposure
+character_event = {
+	id = RIP.20011
+	desc = EVTDSC_RIP_20011
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20011
+		tooltip = {
+			from = {
+				random_list = {
+					60 = {
+						add_trait = stressed
+		 			}
+					30 = {
+						set_character_flag = disease_not_serious
+		 				add_trait = cough
+						character_event = { id = RIP.11002 days = 10 random = 30 }
+					}
+					5 = {
+						add_trait = lunatic
+					}
+					5 = {
+						#nothing
+					}
+				}
+			}
+		}
+	}
+}
+
+#Getting tortured by cold exposure
+character_event = {
+	id = RIP.20012
+	desc = EVTDSC_RIP_20012
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	hide_from = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20012
+
+		add_character_modifier = { name = tortured years = 2 }
+
+		random_list = {
+			60 = {
+				if = {
+   					limit = { NOT = { trait = stressed } }
+ 					add_trait = stressed
+ 					hidden_tooltip = { character_event = { id = 38282 } }
+ 				}
+ 			}
+			30 = {
+				if = {
+   					limit = { NOT = { trait = cough } }
+
+   					tooltip = { add_trait = cough }
+
+ 					hidden_tooltip = { 
+ 						if = {
+ 							limit = {
+	 							NOR = {
+	 								has_character_flag = developing_illness
+	 								has_character_flag = disease_not_serious
+	 								has_character_flag = got_pneumonia
+	 							}
+	 						}
+
+ 							random_list = {
+								80 = { set_character_flag = disease_not_serious }
+								20 = { set_character_flag = got_pneumonia } 
+							}
+						}
+						#adds cough
+						character_event = { id = RIP.5000 } 
+ 					}
+ 				}
+			}
+			5 = {
+				if = {
+   					limit = { NOT = { trait = lunatic } }
+ 					add_trait = lunatic
+ 					hidden_tooltip = { character_event = { id = 38304 } }
+ 				}
+			}
+			5 = {
+				#nothing
+			}
+		}
+	}
+}
+
+#Performing mutilation, leg
+character_event = {
+	id = RIP.20013
+	desc = EVTDSC_RIP_20013
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20013
+		tooltip = {
+			from = {
+				add_trait = one_legged
+				jailor_mutilate_effect = yes
+			}
+		}
+	}
+}
+
+#Getting mutilated, loosing a leg
+character_event = {
+	id = RIP.20014
+	desc = EVTDSC_RIP_20014
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20014
+
+		add_trait = one_legged
+		hidden_tooltip = { character_event = { id = RIP.11503 } }
+		prisoner_mutilate_effect = yes
+	}
+}
+
+#Performing mutilation, hand
+character_event = {
+	id = RIP.20015
+	desc = EVTDSC_RIP_20015
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20015
+		tooltip = {
+			from = {
+				add_trait = one_handed
+				jailor_mutilate_effect = yes
+			}
+		}
+	}
+}
+#Getting mutilated, loosing a hand
+character_event = {
+	id = RIP.20016
+	desc = EVTDSC_RIP_20016
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20016
+
+		add_trait = one_handed
+		hidden_tooltip = { character_event = { id = RIP.11502 } }
+		prisoner_mutilate_effect = yes
+	}
+}
+
+#Performing mutilation, eye
+character_event = {
+	id = RIP.20017
+	desc = EVTDSC_RIP_20017
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20017
+		tooltip = {
+			from = {
+				add_trait = one_eyed
+				jailor_mutilate_effect = yes
+			}
+		}
+	}
+}
+
+#Getting mutilated, loosing an eye
+character_event = {
+	id = RIP.20018
+	desc = EVTDSC_RIP_20018
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20018
+
+		add_trait = one_eyed
+		hidden_tooltip = { character_event = { id = RIP.11501 } }
+		prisoner_mutilate_effect = yes
+	}
+}
+
+#Performing mutilation, disfigurement
+character_event = {
+	id = RIP.20019
+	desc = EVTDSC_RIP_20019
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20019
+		tooltip = {
+			from = {
+				add_trait = disfigured
+				jailor_mutilate_effect = yes
+			}
+		}
+	}
+}
+
+#Getting mutilated, disfigurement
+character_event = {
+	id = RIP.20020
+	desc = EVTDSC_RIP_20020
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20020
+
+		add_trait = disfigured
+		hidden_tooltip = { character_event = { id = RIP.11504 } }
+		prisoner_mutilate_effect = yes
+	}
+}
+
+#Performing mutilation, castration
+character_event = {
+	id = RIP.20021
+	desc = EVTDSC_RIP_20021
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20021
+		tooltip = {
+			from = {
+				add_trait = eunuch
+				
+				if = { 
+					limit = { NOR = { trait = craven trait = berserker } }
+					random = {
+						chance = 20
+						add_trait = craven
+						hidden_tooltip = {
+							character_event = {
+								id = 38257 #Notify Craven
+							}
+						}
+					}
+				}
+			
+				jailor_mutilate_effect = yes
+			}
+		}
+	}
+}
+
+#Getting mutilated, castration
+character_event = {
+	id = RIP.20022
+	desc = EVTDSC_RIP_20022
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_torture
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20022
+
+		add_trait = eunuch
+		
+		if = {
+			limit = { NOR = { trait = craven trait = berserker } }
+			random = {
+				chance = 20
+				add_trait = craven
+				hidden_tooltip = { character_event = { id = 38257 } } #Notify Craven
+			}
+		}
+	
+		random_list = {
+			80 = {
+				if = {
+					limit = { NOT = { trait = stressed } }
+					add_trait = stressed
+					hidden_tooltip = { character_event = { id = 38282 } }
+				}
+			}
+			10 = {
+				if = {
+					limit = { NOT = { trait = lunatic } }
+					add_trait = lunatic
+					hidden_tooltip = { character_event = { id = 38304 } }
+				}
+			}
+			10 = {
+				#no effect
+			}
+		}
+	}	
+}
+
+
+#Reading poem 1 to prisoner
+character_event = {
+	id = RIP.20023
+	desc = EVTDSC_RIP_20023
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20023
+		tooltip = {
+			from = {
+				random = {
+					chance = 5
+					add_trait = lunatic
+					hidden_tooltip = {
+						character_event = { id = 38304 } # notify lunatic
+					}
+				}
+			}
+		}
+	}
+}
+
+#Getting read poem 1
+character_event = {
+	id = RIP.20024
+	desc = EVTDSC_RIP_20024
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20024
+		random = {
+			chance = 5
+			if = { limit = { NOT = { trait = lunatic } }
+				add_trait = lunatic
+				hidden_tooltip = {
+					character_event = { id = 38304 }
+				}
+			}
+		}
+	}
+}
+
+#Reading poem 2 to prisoner
+character_event = {
+	id = RIP.20025
+	desc = EVTDSC_RIP_20025
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20025
+		tooltip = {
+			from = {
+				random = {
+					chance = 5
+					add_trait = lunatic
+					hidden_tooltip = {
+						character_event = { id = 38304 } # notify lunatic
+					}
+				}
+			}
+		}
+	}
+}
+
+#Getting read poem 2
+character_event = {
+	id = RIP.20026
+	desc = EVTDSC_RIP_20026
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20026
+		random = {
+			chance = 5
+			if = { limit = { NOT = { trait = lunatic } }
+				add_trait = lunatic
+				hidden_tooltip = {
+					character_event = { id = 38304 }
+				}
+			}
+		}
+	}
+}
+
+#Reading poem 3 to prisoner
+character_event = {
+	id = RIP.20027
+	desc = EVTDSC_RIP_20027
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20027
+		tooltip = {
+			from = {
+				random = {
+					chance = 5
+					add_trait = lunatic
+					hidden_tooltip = {
+						character_event = { id = 38304 } # notify lunatic
+					}
+				}
+			}
+		}
+	}
+}
+
+#Getting read poem 3
+character_event = {
+	id = RIP.20028
+	desc = EVTDSC_RIP_20028
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_recieve_letter
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_20028
+		random = {
+			chance = 5
+			if = { limit = { NOT = { trait = lunatic } }
+				add_trait = lunatic
+				hidden_tooltip = {
+					character_event = { id = 38304 }
+				}
+			}
+		}
+	}
+}
+
+
+# Jailor Tar 'n' Feather
+character_event = {
+	id = RIP.15001
+	desc = EVTDESCRIP.15001
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15001
+		tooltip = {
+			from = {
+				jailor_humiliation_effect = yes
+			}
+		}
+	}
+}
+# Prisoner Tar 'n' Feather
+character_event = {
+	id = RIP.15002
+	desc = EVTDESCRIP.15002
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15002
+		prisoner_humiliation_effect = yes
+	}
+}
+
+# Jailor Stocks
+character_event = {
+	id = RIP.15003
+	desc = EVTDESCRIP.15003
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15003
+		tooltip = {
+			from = {
+				jailor_humiliation_effect = yes
+			}
+		}
+	}
+}
+# Prisoner Stocks
+character_event = {
+	id = RIP.15004
+	desc = EVTDESCRIP.15004
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15004
+		prisoner_humiliation_effect = yes
+	}
+}
+
+# Jailor Walk of Shame
+character_event = {
+	id = RIP.15005
+	desc = EVTDESCRIP.15005
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15005
+		tooltip = {
+			from = {
+				jailor_humiliation_effect = yes
+			}
+		}
+	}
+}
+
+# Prisoner Walk of Shame
+character_event = {
+	id = RIP.15006
+	desc = EVTDESCRIP.15006
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15006
+		prisoner_humiliation_effect = yes
+	}
+}
+
+# Jailor Tar 'n' Feather NOMAD
+character_event = {
+	id = RIP.15007
+	desc = EVTDESCRIP.15007
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15007
+		tooltip = {
+			from = {
+				jailor_humiliation_effect = yes
+			}
+		}
+	}
+}
+
+# Prisoner Tar 'n' Feather NOMAD
+character_event = {
+	id = RIP.15008
+	desc = EVTDESCRIP.15008
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARIP.15008
+		prisoner_humiliation_effect = yes
+	}
+}

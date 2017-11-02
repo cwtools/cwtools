@@ -1,0 +1,4550 @@
+###########################################
+#                                         #
+# RIP Physician Events           		  #
+# ID RIP.11050-RIP.11500                  #
+#                                         #
+###########################################
+
+# Written by Alexander Oltner
+
+namespace = RIP
+
+### Look for a Court Physician
+
+character_event = {
+	id = RIP.11050
+	desc = EVTDESC_RIP_11050
+	picture = GFX_evt_courier
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = looking_for_court_physician
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11050
+		hidden_tooltip = { character_event = { id = RIP.11051 days = 10 random = 10 } }
+	}
+}
+
+# Found a Court Physician
+character_event = {
+	id = RIP.11051
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = looking_for_court_physician
+		set_character_flag = found_court_physician
+		random_list = {
+			4 = { # Drunk Village Physician (Unschooled, 18+ Learning)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_village_drunkard
+						NOT = { had_character_flag = { flag = got_physician_village_drunkard days = 3650 } }
+					}
+				}
+				random_list = {
+					75 = { # Same Religion & Culture as ROOT
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 20
+							}
+							health = 6
+							trait = detached_priest
+							trait = drunkard
+							flag = is_court_physician
+							flag = physician_village_drunkard
+						}
+						new_character = {
+							remove_trait = temperate
+							remove_trait = scholar
+							remove_trait = mystic
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								add_trait = decadent
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Ashkenazi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 20
+							}
+							health = 6
+							trait = detached_priest
+							trait = drunkard
+							flag = ai_flag_refuse_conversion
+							flag = is_court_physician
+							flag = physician_village_drunkard
+						}
+						new_character = {
+							remove_trait = temperate
+							remove_trait = scholar
+							remove_trait = mystic
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Sephardi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								NOT = {
+									capital_scope = {
+										region = world_europe_west_iberia
+									}
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 20
+							}
+							health = 6
+							trait = detached_priest
+							trait = drunkard
+							flag = ai_flag_refuse_conversion
+							flag = is_court_physician
+							flag = physician_village_drunkard
+						}
+						new_character = {
+							remove_trait = temperate
+							remove_trait = scholar
+							remove_trait = mystic
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			} 
+			5 = { # Ship's Physician (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_ships_physician
+						NOT = { had_character_flag = { flag = got_physician_ships_physician days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							port = yes
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						port = yes
+					}
+					save_event_target_as = physician_port_target
+				}
+				random_list = {
+					75 = { # Same Religion & Culture as ROOT
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 30
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 10
+							}
+							health = 6
+							trait = underhanded_rogue 
+							trait = physician
+							trait = one_legged
+							trait = greedy
+							flag = is_court_physician
+							flag = physician_ships_physician
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = mystic
+							remove_trait = poet
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = scholar
+							add_character_modifier = {
+								modifier = pet_parrot
+								duration = -1
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								remove_trait = scholar
+								add_trait = mutazilite
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							give_nickname = nick_the_sea_devil
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Ashkenazi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 30
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 10
+							}
+							health = 6
+							trait = underhanded_rogue 
+							trait = physician
+							trait = one_legged
+							trait = greedy
+							flag = is_court_physician
+							flag = physician_ships_physician
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = mystic
+							remove_trait = poet
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = scholar
+							add_character_modifier = {
+								modifier = pet_parrot
+								duration = -1
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							give_nickname = nick_the_sea_devil
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Sephardi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								NOT = {
+									capital_scope = {
+										region = world_europe_west_iberia
+									}
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 30
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 10
+							}
+							health = 6
+							trait = underhanded_rogue 
+							trait = physician
+							trait = one_legged
+							trait = greedy
+							flag = is_court_physician
+							flag = physician_ships_physician
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = mystic
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = scholar
+							add_character_modifier = {
+								modifier = pet_parrot
+								duration = -1
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							give_nickname = nick_the_sea_devil
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			5 = { # Wise Hermit Dwarf (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_wise_dwarf
+						NOT = { had_character_flag = { flag = got_physician_wise_dwarf days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							OR = {
+								terrain = forest
+								terrain = jungle
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						OR = {
+							terrain = forest
+							terrain = jungle
+						}
+					}
+					save_event_target_as = physician_forest_target
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 40
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 8
+						martial = 1
+					}
+					health = 6
+					trait = martial_cleric 
+					trait = physician
+					trait = ugly
+					trait = dwarf
+					trait = shrewd
+					trait = shy
+					flag = is_court_physician
+					flag = physician_wise_dwarf
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = fair
+					remove_trait = gregarious
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_trait = mystic
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					remove_trait = scholar
+					become_heretic = yes
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+				
+			}
+			8 = { # Jewish Exile (Physician or Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_jewish_exile
+						NOT = { had_character_flag = { flag = got_physician_jewish_exile days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					has_character_modifier = expelled_jewish
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						religion_group = christian
+						religion_group = muslim
+						religion_group = zoroastrian_group
+						religion_group = jewish_group
+						culture = khazar
+					}
+				}
+				random_list = {
+					50 = { # Jewish Religion & Culture (Ashkenazi & Physician)
+						modifier = {
+							factor = 0
+							capital_scope = {
+								region = world_europe_west_iberia
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 24
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 6
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = physician
+							flag = is_court_physician
+							flag = physician_jewish_exile
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = mystic
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add Scholar
+								50 = {
+									add_trait = scholar
+									change_learning = -2
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Jewish Religion & Culture (Sephardi & Physician)
+						modifier = {
+							factor = 0
+							NOT = {
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 24
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 6
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = physician
+							flag = is_court_physician
+							flag = physician_jewish_exile
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = mystic
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add scholar
+								50 = {
+									add_trait = scholar
+									change_learning = -2
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Jewish Religion & Culture (Ashkenazi & Mystic)
+						modifier = {
+							factor = 0
+							capital_scope = {
+								region = world_europe_west_iberia
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 24
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 6
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_jewish_exile
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+									change_learning = -2
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Jewish Religion & Culture (Sephardi & Mystic)
+						modifier = {
+							factor = 0
+							NOT = {
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 24
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 6
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_jewish_exile
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = charitable
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+									change_learning = -2
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			} 
+			5 = { # Condemned Sorcerer (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_condemned_sorcerer
+						NOT = { had_character_flag = { flag = got_physician_condemned_sorcerer days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						job_spymaster = {
+							always = yes
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							any_province_holding = {
+								holding_type = city
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = city
+						}
+					}
+					random_province_holding = {
+						limit = {
+							holding_type = city
+						}
+					save_event_target_as = sorcerer_city_target
+					}
+				}
+				random_list = {
+					75 = { # Same Religion & Culture as ROOT
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 28
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 9
+							}
+							health = 6
+							trait = naive_appeaser
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_condemned_sorcerer
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								80 = {
+								}
+								20 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							become_heretic = yes
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Ashkenazi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 28
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = naive_appeaser
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_condemned_sorcerer
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								80 = {
+								}
+								20 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Sephardi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								NOT = {
+									capital_scope = {
+										region = world_europe_west_iberia
+									}
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 28
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = naive_appeaser
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_condemned_sorcerer
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								80 = {
+								}
+								20 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			5 = { # Cynical Clergyman (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_cynical_clergyman
+						NOT = { had_character_flag = { flag = got_physician_cynical_clergyman days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							any_province_holding = {
+								holding_type = temple
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = temple
+						}
+					}
+					random_province_holding = {
+						limit = {
+							holding_type = temple
+						}
+					save_event_target_as = clergyman_temple_target
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 60
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 4
+					}
+					health = 7
+					trait = mastermind_theologian 
+					trait = mystic
+					trait = cynical
+					flag = is_court_physician
+					flag = physician_cynical_clergyman
+				}
+				new_character = {
+					remove_trait = zealous
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					random_list = { # Random chance to add Physician
+						50 = {
+							add_trait = physician
+							change_learning = -2
+						}
+						50 = {
+							
+						}
+					}
+					random_list = { # Random chance to add Physician
+						50 = {
+							add_trait = physician
+						}
+						50 = {
+							
+						}
+					}
+					if = {
+						limit = {
+							religion_group = christian
+						}
+						add_trait = monk
+						give_nickname = nick_the_monk
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Chinese Doctor (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_chinese_doctor
+						NOT = { had_character_flag = { flag = got_physician_chinese_doctor days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							trade_route = silk_road
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						trade_route = silk_road
+					}
+				save_event_target_as = chinese_silk_road_target
+				}
+				create_character = {
+					religion = buddhist
+					culture = khitan
+					dynasty = none
+					age = 50
+					random_traits = yes
+					female = no
+					attributes = {
+						diplomacy = 2
+						learning = 8
+					}
+					health = 7
+					trait = charismatic_negotiator 
+					trait = mystic
+					trait = poet
+					trait = mahayana_buddhist
+					flag = is_court_physician
+					flag = physician_chinese_doctor
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = scholar
+					remove_trait = falconer
+					remove_trait = vajrayana_buddhist
+					remove_trait = theravada_buddhist
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					random_list = { # Random chance to add Physician
+						50 = {
+							add_trait = physician
+						}
+						50 = {
+							
+						}
+					}
+					random_list = { # Random chance to be Nestorian
+						50 = {
+							religion = nestorian
+						}
+						50 = {
+							
+						}
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Travelling Arab Scholar (Scholar or Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_arab_scholar
+						NOT = { had_character_flag = { flag = got_physician_arab_scholar days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							has_trade_post = yes
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						religion_group = christian
+						religion_group = muslim
+						religion_group = zoroastrian_group
+						religion_group = jewish_group
+						religion_group = indian_group
+					}
+				}
+				any_realm_province = {
+					limit = {
+						has_trade_post = yes
+					}
+				save_event_target_as = arab_scholar_trade_post_target
+				}
+				random_list = {
+					25 = { # Arabic Sunni (Mutazilite)
+						create_character = {
+							culture = bedouin_arabic
+							religion = sunni
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mutazilite
+							flag = is_court_physician
+							flag = physician_arab_scholar
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = mystic
+							remove_trait = scholar
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Berber Kharijite (Mystic)
+						create_character = {
+							culture = maghreb_arabic
+							religion = kharijite
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_arab_scholar
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Egyptian Shia (Mutazilite)
+						create_character = {
+							culture = egyptian_arabic
+							religion = shiite
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mutazilite
+							flag = is_court_physician
+							flag = physician_arab_scholar
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = mystic
+							remove_trait = scholar
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Levantine Druze (Mystic)
+						create_character = {
+							culture = levantine_arabic
+							religion = druze
+							dynasty = culture
+							age = 35
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 8
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							flag = is_court_physician
+							flag = physician_arab_scholar
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+								}
+								50 = {
+									
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			5 = { # Beloved Wise Man (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_beloved_wise_man
+						NOT = { had_character_flag = { flag = got_physician_beloved_wise_man days = 3650 } }
+					}
+				}
+				random_list = {
+					75 = {
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 70
+							random_traits = yes
+							female = no
+							attributes = {
+								diplomacy = 2
+								learning = 6
+							}
+							health = 7
+							trait = mastermind_theologian 
+							trait = physician
+							trait = kind
+							trait = charitable
+							trait = quick
+							trait = celibate
+							flag = is_court_physician
+							flag = physician_beloved_wise_man
+						}
+						new_character = {
+							remove_trait = greedy
+							remove_trait = wroth
+							remove_trait = cruel
+							remove_trait = lustful
+							remove_trait = dull
+							remove_trait = slow
+							remove_trait = imbecile
+							remove_trait = genius
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = scholar
+							random_list = { # Random chance to add Scholar
+								30 = {
+									add_trait = scholar
+									change_learning = -2
+								}
+								70 = {
+									
+								}
+							}
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								remove_trait = scholar
+								add_trait = mutazilite
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = {
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 70
+							random_traits = yes
+							female = yes
+							attributes = {
+								diplomacy = 2
+								learning = 6
+							}
+							health = 7
+							trait = mastermind_theologian 
+							trait = physician
+							trait = kind
+							trait = charitable
+							trait = quick
+							trait = celibate
+							flag = is_court_physician
+							flag = physician_beloved_wise_man
+						}
+						new_character = {
+							remove_trait = greedy
+							remove_trait = wroth
+							remove_trait = cruel
+							remove_trait = lustful
+							remove_trait = dull
+							remove_trait = slow
+							remove_trait = imbecile
+							remove_trait = genius
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = scholar
+							random_list = { # Random chance to add Scholar
+								30 = {
+									add_trait = scholar
+									change_learning = -2
+								}
+								70 = {
+									
+								}
+							}
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								remove_trait = scholar
+								add_trait = mutazilite
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			4 = { # Wandering Genius (18+ Learning)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_wandering_genius
+						NOT = { had_character_flag = { flag = got_physician_wandering_genius days = 3650 } }
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = random
+					dynasty = none
+					age = 43
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 12
+					}
+					health = 6
+					trait = mastermind_theologian 
+					trait = genius
+					trait = adventurer
+					trait = one_eyed
+					trait = celibate
+					flag = is_court_physician
+					flag = physician_wandering_genius
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = dull
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = quick
+					remove_trait = lustful
+					give_nickname = nick_the_wise
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Erudite Herbalist (High Learning)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_erudite_herbalist
+						NOT = { had_character_flag = { flag = got_physician_erudite_herbalist days = 3650 } }
+					}
+				}
+				random_list = {
+					75 = {
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 51
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 9
+							}
+							health = 5
+							trait = martial_cleric 
+							trait = erudite
+							trait = gardener
+							flag = is_court_physician
+							flag = physician_erudite_herbalist
+						}
+						new_character = {
+							remove_trait = mystic
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								remove_trait = scholar
+								add_trait = mutazilite
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = {
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 51
+							random_traits = yes
+							female = yes
+							attributes = {
+								learning = 9
+							}
+							health = 5
+							trait = martial_cleric 
+							trait = erudite
+							trait = gardener
+							flag = is_court_physician
+							flag = physician_erudite_herbalist
+						}
+						new_character = {
+							remove_trait = mystic
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							if = {
+								limit = {
+									religion_group = muslim
+								}
+								remove_trait = scholar
+								add_trait = mutazilite
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			5 = { # Pagan Mystic (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_pagan_mystic
+						NOT = { had_character_flag = { flag = got_physician_pagan_mystic days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					religion_group = pagan_group
+				}
+				random_list = {
+					50 = { # Tengri Mystic
+						modifier = {
+							factor = 0
+							NOR = {
+								capital_scope = {
+									region = world_india
+								}
+								capital_scope = {
+									region = world_steppe
+								}
+								capital_scope = {
+									region = world_asia_minor
+								}
+								capital_scope = {
+									region = world_persia
+								}
+							}
+						}
+						create_character = {
+							culture = cuman
+							religion = tengri_pagan
+							dynasty = none
+							age = 33
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 5
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							trait = zealous
+							flag = is_court_physician
+							flag = physician_pagan_mystic
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = cynical
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Slavic Mystic
+						modifier = {
+							factor = 0
+							NOR = {
+								capital_scope = {
+									region = world_europe_east
+								}
+								capital_scope = {
+									region = world_europe_south_east
+								}
+								capital_scope = {
+									region = world_asia_minor
+								}
+							}
+						}
+						create_character = {
+							culture = croatian
+							religion = slavic_pagan
+							dynasty = none
+							age = 33
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 5
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							trait = zealous
+							flag = is_court_physician
+							flag = physician_pagan_mystic
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = cynical
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Norse Mystic
+						modifier = {
+							factor = 0
+							NOR = {
+								capital_scope = {
+									region = world_europe_north
+								}
+								capital_scope = {
+									region = world_europe_west
+								}
+								capital_scope = {
+									region = world_europe_south
+								}
+							}
+						}
+						create_character = {
+							culture = norse
+							religion = norse_pagan
+							dynasty = none
+							age = 33
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 5
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							trait = zealous
+							flag = is_court_physician
+							flag = physician_pagan_mystic
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = cynical
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # African Mystic
+						modifier = {
+							factor = 0
+							NOR = {
+								capital_scope = {
+									region = world_africa
+								}
+								capital_scope = {
+									region = world_middle_east
+								}
+							}
+						}
+						create_character = {
+							culture = manden
+							religion = west_african_pagan
+							dynasty = none
+							age = 33
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 5
+							}
+							health = 6
+							trait = martial_cleric 
+							trait = mystic
+							trait = zealous
+							flag = is_court_physician
+							flag = physician_pagan_mystic
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							remove_trait = cynical
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			5 = { # Insane Zealot (Scholar)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_insane_zealot
+						NOT = { had_character_flag = { flag = got_physician_insane_zealot days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							any_province_holding = {
+								holding_type = temple
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = temple
+						}
+					}
+					random_province_holding = {
+						limit = {
+							holding_type = temple
+						}
+					save_event_target_as = zealot_temple_target
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 54
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 2
+					}
+					health = 6
+					trait = mastermind_theologian 
+					trait = scholar
+					trait = zealous
+					trait = cruel
+					trait = possessed
+					trait = stubborn
+					flag = is_court_physician
+					flag = physician_insane_zealot
+				}
+				new_character = {
+					remove_trait = cynical
+					remove_trait = kind
+					remove_trait = mystic
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					random_list = { # Random chance to add Physician
+						50 = {
+							add_trait = physician
+							change_learning = -2
+						}
+						50 = {
+							
+						}
+					}
+					if = {
+						limit = {
+							religion_group = christian
+						}
+						add_trait = monk
+					}
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Well-Traveled Pilgrim (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_well_traveled_pilgrim
+						NOT = { had_character_flag = { flag = got_physician_well_traveled_pilgrim days = 3650 } }
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 41
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 6
+					}
+					health = 6
+					trait = scholarly_theologian 
+					trait = mystic
+					trait = pilgrim
+					trait = scarred
+					trait = humble
+					flag = is_court_physician
+					flag = physician_well_traveled_pilgrim
+				}
+				new_character = {
+					remove_trait = scholar
+					remove_trait = proud
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					random_list = { # Random chance to add Physician
+						50 = {
+							add_trait = physician
+							change_learning = -2
+						}
+						50 = {
+							
+						}
+					}
+					if = {
+						limit = {
+							religion_group = christian
+						}
+						add_trait = monk
+					}
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = pilgrim
+						add_trait = hajjaj
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Student of Medicine (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_student_of_medicine
+						NOT = { had_character_flag = { flag = got_physician_student_of_medicine days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							any_province_holding = {
+								holding_type = city
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = city
+						}
+					}
+					random_province_holding = {
+						limit = {
+							holding_type = city
+						}
+					save_event_target_as = student_city_target
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 19
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 2
+					}
+					health = 6
+					trait = martial_cleric 
+					trait = physician
+					flag = is_court_physician
+					flag = physician_student_of_medicine
+				}
+				new_character = {
+					remove_trait = mystic
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					random_list = { # Flavor Randomization
+						80 = { 
+							# Nothing
+						}
+						10 = { 
+							add_trait = legit_bastard
+						}
+						10 = { 
+							add_trait = drunkard
+						}
+					}
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			4 = { # Blind Miracle Worker (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_blind_miracle_worker
+						NOT = { had_character_flag = { flag = got_physician_blind_miracle_worker days = 3650 } }
+					}
+				}
+				random_list = {
+					75 = { # Same Religion & Culture as ROOT
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 37
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 15
+							}
+							health = 6
+							trait = martial_cleric
+							trait = mystic
+							trait = blinded
+							flag = is_court_physician
+							flag = physician_blind_miracle_worker
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							give_nickname = nick_the_blind
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Ashkenazi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								capital_scope = {
+									region = world_europe_west_iberia
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = ashkenazi
+							religion = jewish
+							dynasty = culture
+							age = 37
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 10
+							}
+							health = 6
+							trait = martial_cleric
+							trait = mystic
+							trait = blinded
+							flag = is_court_physician
+							flag = physician_blind_miracle_worker
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							give_nickname = nick_the_blind
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					25 = { # Jewish Religion & Culture (Sephardi)
+						modifier = {
+							factor = 0
+							OR = {
+								has_character_modifier = expelled_jewish
+								NOT = {
+									capital_scope = {
+										region = world_europe_west_iberia
+									}
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							NOR = {
+								religion_group = christian
+								religion_group = muslim
+								religion_group = zoroastrian_group
+								religion_group = jewish_group
+								culture = khazar
+							}
+						}
+						create_character = {
+							culture = sephardi
+							religion = jewish
+							dynasty = culture
+							age = 37
+							random_traits = yes
+							female = no
+							attributes = {
+								learning = 10
+							}
+							health = 6
+							trait = martial_cleric
+							trait = mystic
+							trait = blinded
+							flag = is_court_physician
+							flag = physician_blind_miracle_worker
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							give_nickname = nick_the_blind
+							random_list = { # Randomize Religion
+								90 = { 
+									religion = jewish
+								}
+								5 = { 
+									religion = samaritan
+								}
+								5 = { 
+									religion = karaite
+								}
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			4 = { # Field Surgeon (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_field_surgeon
+						NOT = { had_character_flag = { flag = got_physician_field_surgeon days = 3650 } }
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 30
+					random_traits = yes
+					female = no
+					attributes = {
+						martial = 8
+						learning = 15
+					}
+					health = 6
+					trait = tough_soldier 
+					trait = physician
+					trait = scarred
+					trait = robust
+					trait = wroth
+					trait = cruel
+					flag = is_court_physician
+					flag = physician_field_surgeon
+				}
+				new_character = {
+					remove_trait = mystic
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					remove_trait = weak
+					remove_trait = feeble
+					remove_trait = kind
+					remove_trait = patient
+					random_list = { # Flavor Randomization
+						20 = { 
+							# Nothing
+						}
+						20 = {
+							add_trait = one_handed
+						}
+						20 = {
+							add_trait = one_eyed
+						}
+						20 = { 
+							add_trait = legit_bastard
+						}
+						20 = { 
+							add_trait = drunkard
+						}
+					}
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Schooled Eunuch (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_schooled_eunuch
+						NOT = { had_character_flag = { flag = got_physician_schooled_eunuch days = 3650 } }
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 26
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 10
+					}
+					health = 6
+					trait = flamboyant_schemer 
+					trait = shrewd
+					trait = eunuch
+					trait = physician
+					trait = gluttonous
+					flag = is_court_physician
+					flag = physician_schooled_eunuch
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = mystic
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					remove_trait = temperate
+					remove_trait = dull
+					remove_trait = slow
+					remove_trait = imbecile
+					if = {
+						limit = {
+							religion_group = muslim
+						}
+						remove_trait = scholar
+						add_trait = mutazilite
+					}
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			5 = { # Pus-Sucking Nun (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_pus_sucking_nun
+						NOT = { had_character_flag = { flag = got_physician_pus_sucking_nun days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { religion_group = christian }
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							any_province_holding = {
+								holding_type = temple
+							}
+						}
+					}
+				}
+				any_realm_province = {
+					limit = {
+						any_province_holding = {
+							holding_type = temple
+						}
+					}
+					random_province_holding = {
+						limit = {
+							holding_type = temple
+						}
+					save_event_target_as = nun_temple_target
+					}
+				}
+				create_character = {
+					religion = ROOT
+					culture = ROOT
+					dynasty = none
+					age = 41
+					random_traits = yes
+					female = yes
+					attributes = {
+						learning = 6
+					}
+					health = 10
+					trait = scholarly_theologian 
+					trait = celibate
+					trait = nun
+					trait = physician
+					trait = kind
+					flag = is_court_physician
+					flag = physician_pus_sucking_nun
+					flag = ai_flag_refuse_conversion
+					flag = immune_bubonic_plague
+					flag = immune_smallpox
+				}
+				new_character = {
+					remove_trait = mystic
+					remove_trait = physician
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = theologian
+					remove_trait = cruel
+					remove_trait = lustful
+					give_nickname = nick_the_holy
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			7 = { # Witch (Mystic)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_witch
+						NOT = { had_character_flag = { flag = got_physician_witch days = 3650 } }
+					}
+				}
+				random_list = {
+					50 = { # Same Religion & Culture as ROOT + Attractive
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 21
+							random_traits = yes
+							female = yes
+							attributes = {
+								learning = 12
+								intrigue = 6
+							}
+							health = 6
+							trait = intricate_webweaver
+							trait = mystic
+							trait = fair
+							flag = is_court_physician
+							flag = physician_witch
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = ugly
+							random_list = { # Random chance to add Physician
+								10 = {
+									add_trait = physician
+									change_learning = -2
+								}
+								90 = {
+									
+								}
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+					50 = { # Same Religion & Culture as ROOT + Disfigured
+						create_character = {
+							religion = ROOT
+							culture = ROOT
+							dynasty = none
+							age = 53
+							random_traits = yes
+							female = yes
+							attributes = {
+								learning = 8
+								intrigue = 6
+							}
+							health = 6
+							trait = intricate_webweaver
+							trait = mystic
+							trait = disfigured
+							flag = is_court_physician
+							flag = physician_witch
+						}
+						new_character = {
+							remove_trait = scholar
+							remove_trait = socializer
+							remove_trait = gamer
+							remove_trait = hedonist
+							remove_trait = duelist
+							remove_trait = hunter
+							remove_trait = strategist
+							remove_trait = administrator
+							remove_trait = architect
+							remove_trait = gardener
+							remove_trait = schemer
+							remove_trait = impaler
+							remove_trait = seducer
+							remove_trait = seductress
+							remove_trait = theologian
+							remove_trait = fair
+							random_list = { # Random chance to add Physician
+								50 = {
+									add_trait = physician
+									change_learning = -2
+								}
+								50 = {
+									
+								}
+							}
+							if = {
+								limit = {
+									religion_group = indian_group
+								}
+								add_trait = brahmin
+								character_event = { id = RoI.30121 }
+							}
+							random_list = { # Is the Physician a Quack?
+								90 = {
+								}
+								10 = {
+									set_character_flag = physician_is_quack
+								}
+							}
+							save_event_target_as = recruited_physician_target
+							character_event = { id = RIP.11052 }
+						}
+					}
+				}
+			}
+			4 = { # Horse M.D.
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_horse_md
+						NOT = { had_character_flag = { flag = got_physician_horse_md days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = lunatic }
+				}
+				modifier = {
+					factor = 0
+					ai = yes
+				}
+				modifier = {
+					factor = 0
+					has_game_rule = {
+						name = supernatural_events
+						value = off
+					}
+				}
+				create_character = {
+					name = "Horse M.D."
+					age = 16
+					religion = ROOT
+					culture = horse
+					race = horse
+					dynasty = NONE
+					trait = horse
+					trait = imbecile
+					trait = stubborn
+					trait = fair
+					trait = strong
+					flag = is_court_physician
+					flag = physician_horse_md
+				}
+				new_character = {
+					if = {
+						limit = {
+							religion_group = indian_group
+						}
+						add_trait = brahmin
+						character_event = { id = RoI.30121 }
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			
+			4 = { # Travelling Nestorian (High Learning)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_travelling_nestorian
+						NOT = { had_character_flag = { flag = got_physician_travelling_nestorian days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						capital_scope = {
+							region = world_india
+						}
+						capital_scope = {
+							region = world_steppe
+						}
+						capital_scope = {
+							region = world_persia
+						}
+						capital_scope = {
+							region = world_middle_east_jerusalem
+						}
+						capital_scope = {
+							region = world_middle_east_arabia
+						}
+					}
+				}
+				create_character = {
+					culture = persian
+					religion = nestorian
+					dynasty = none
+					age = 42
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 8
+					}
+					health = 6
+					trait = scholarly_theologian 
+					trait = theologian
+					trait = zealous
+					flag = is_court_physician
+					flag = physician_travelling_nestorian
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = cynical
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = mystic
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			
+			4 = { # Mazdan Doctor (Physician)
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_mazdan_doctor
+						NOT = { had_character_flag = { flag = got_physician_mazdan_doctor days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						capital_scope = {
+							region = world_india
+						}
+						capital_scope = {
+							region = world_steppe
+						}
+						capital_scope = {
+							region = world_persia
+						}
+						capital_scope = {
+							region = world_middle_east_jerusalem
+						}
+						capital_scope = {
+							region = world_middle_east_arabia
+						}
+					}
+				}
+				create_character = {
+					culture = persian
+					religion = zoroastrian
+					dynasty = none
+					age = 51
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 7
+					}
+					health = 6
+					trait = scholarly_theologian 
+					trait = physician
+					trait = erudite
+					flag = is_court_physician
+					flag = physician_mazdan_doctor
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = mystic
+					remove_trait = theologian
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+			
+			4 = { # Manichean Merchant
+				modifier = {
+					factor = 0
+					AND = {
+						has_character_flag = got_physician_manichean_merchant
+						NOT = { had_character_flag = { flag = got_physician_manichean_merchant days = 3650 } }
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							trade_route = silk_road
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					religion_group = zoroastrian_group
+				}
+				create_character = {
+					culture = khitan
+					religion = manichean
+					dynasty = none
+					age = 38
+					random_traits = yes
+					female = no
+					attributes = {
+						learning = 6
+					}
+					health = 6
+					trait = thrifty_clerk 
+					flag = is_court_physician
+					flag = physician_manichean_merchant
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					remove_trait = scholar
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seducer
+					remove_trait = seductress
+					remove_trait = mystic
+					remove_trait = theologian
+					random_list = { # Is the Physician a Quack?
+						90 = {
+						}
+						10 = {
+							set_character_flag = physician_is_quack
+						}
+					}
+					save_event_target_as = recruited_physician_target
+					character_event = { id = RIP.11052 }
+				}
+			}
+		}
+	}
+}
+
+# Court Physician ping
+character_event = {
+	id = RIP.11052
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { character_event = { id = RIP.11053 } }
+	}
+}
+
+# Notify player of Court Physician
+character_event = {
+	id = RIP.11053
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_RIP_11053_VILLAGE_DRUNKARD
+		picture = GFX_evt_drunk
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_village_drunkard }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_SHIPS_PHYSICIAN
+		picture = GFX_evt_busy_trading_dock_republic
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_ships_physician }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_WISE_DWARF
+		picture = GFX_evt_performing_experiments
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_wise_dwarf }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_JEWISH_EXILE
+		picture = GFX_evt_jewish_market
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_jewish_exile }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_CONDEMNED_SORCERER
+		picture = GFX_evt_heretic
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_condemned_sorcerer }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_CYNICAL_CLERGYMAN
+		picture = GFX_evt_monk
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_cynical_clergyman }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_CHINESE_DOCTOR
+		picture = GFX_evt_chinese_emissary
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_chinese_doctor }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_ARAB_SCHOLAR
+		picture = GFX_evt_council_speaker
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_arab_scholar }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_BELOVED_WISE_MAN
+		picture = GFX_evt_scientist
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_beloved_wise_man }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_WANDERING_GENIUS
+		picture = GFX_evt_desert
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_wandering_genius }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_ERUDITE_HERBALIST
+		picture = GFX_evt_wise_woman
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_erudite_herbalist }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_PAGAN_MYSTIC
+		picture = GFX_evt_shaman
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_pagan_mystic }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_INSANE_ZEALOT
+		picture = GFX_evt_experiments_failed
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_insane_zealot }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_WELL_TRAVELLED_PILGRIM
+		picture = GFX_evt_pilgrims_epic_journey
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_well_traveled_pilgrim }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_STUDENT_OF_MEDICINE
+		picture = GFX_evt_doctor_crazy_treatment
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_student_of_medicine }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_BLIND_MIRACLE_WORKER
+		picture = GFX_evt_religious_exultation
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_blind_miracle_worker }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_FIELD_SURGEON
+		picture = GFX_evt_bloody_tools
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_field_surgeon }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_SCHOOLED_EUNUCH
+		picture = GFX_evt_feast
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_schooled_eunuch }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_PUS_SUCKING_NUN
+		picture = GFX_evt_monastery_nuns
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_pus_sucking_nun }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_WITCH
+		picture = GFX_evt_wise_woman
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_witch }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_HORSE_MD
+		picture = GFX_evt_horse_friend
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_horse_md }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_TRAVELLING_NESTORIAN
+		picture = GFX_evt_monk_muslim
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_travelling_nestorian }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_MAZDAN_DOCTOR
+		picture = GFX_evt_council_arabic
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_mazdan_doctor }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_MANICHEAN_MERCHANT
+		picture = GFX_evt_market
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_manichean_merchant }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_village_drunkard }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_village_drunkard
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.1
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_ships_physician }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_ships_physician
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.3
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTD_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_wise_dwarf }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_wise_dwarf
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		piety = -25
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.05
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTE_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_jewish_exile }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_jewish_exile
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.2
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTF_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_condemned_sorcerer }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_condemned_sorcerer
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		prestige = -25
+		piety = -25
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_very_grateful
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTG_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_cynical_clergyman }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_cynical_clergyman
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		add_character_modifier = {
+			name = annoyed_religious
+			years = 1
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTH_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_chinese_doctor }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_chinese_doctor
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.2
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTI_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_arab_scholar }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_arab_scholar
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.15
+		}
+		if = {
+			limit = {
+				NOT = {
+					religion_group = muslim
+				}
+			}
+			add_character_modifier = {
+				name = annoyed_religious
+				years = 1
+			}
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTJ_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_beloved_wise_man }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_beloved_wise_man
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		scaled_wealth = { value = -0.2 min = -10 }
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTK_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_wandering_genius }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_wandering_genius
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.35
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTL_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_erudite_herbalist }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_erudite_herbalist
+			if = { 
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.05
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTM_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_pagan_mystic }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_pagan_mystic
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		piety = -25
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.05
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTN_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_insane_zealot }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_insane_zealot
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		piety = 50
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.05
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTO_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_well_traveled_pilgrim }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_well_traveled_pilgrim
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.15
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTP_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_student_of_medicine }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_student_of_medicine
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.03
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTQ_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_blind_miracle_worker }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_blind_miracle_worker
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.2
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTR_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_field_surgeon }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_field_surgeon
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.3
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTS_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_schooled_eunuch }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_schooled_eunuch
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.15
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTT_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_pus_sucking_nun }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_pus_sucking_nun
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		scaled_wealth = { value = -0.3 min = -10 }
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTU_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_witch }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_witch
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		piety = -25
+		random_list = {
+			90 = {
+			}
+			10 = {
+				add_trait = infection
+				hidden_tooltip = {
+					character_event = { id = RIP.11001 days = 365 random = 1095 }
+				}
+			}
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTV_RIP_11053
+		tooltip_info = lunatic
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_horse_md }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_horse_md
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		prestige = -50
+		event_target:recruited_physician_target = {
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_my_master
+					who = ROOT
+					years = 100
+				}
+				reverse_opinion = {
+					modifier = opinion_my_horse
+					who = ROOT
+					years = 100
+				}
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTW_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_travelling_nestorian }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_travelling_nestorian
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.2
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTX_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_mazdan_doctor }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_mazdan_doctor
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		transfer_scaled_wealth = {
+			to = event_target:recruited_physician_target
+			min = 10
+			value = 0.25
+		}
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_glad
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+	
+	option = {
+		name = EVTOPTY_RIP_11053
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_manichean_merchant }
+		}
+		hidden_tooltip = {
+			set_character_flag = got_physician_manichean_merchant
+			if = {
+				limit = {
+					any_courtier_or_vassal = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+				}
+				any_courtier_or_vassal = {
+					limit = {
+						liege = { character = ROOT }
+						has_minor_title = title_court_physician
+					}
+					remove_title = title_court_physician
+				}
+			}
+		}
+		prestige = -25
+		piety = -25
+		event_target:recruited_physician_target = {
+			opinion = {
+				modifier = opinion_very_grateful
+				who = ROOT
+				years = 5
+			}
+			give_minor_title = title_court_physician
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11053
+		
+		ai_chance = {
+			factor = 0
+		}
+		
+		hidden_tooltip = {
+			event_target:recruited_physician_target = { 
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}

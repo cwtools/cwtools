@@ -1,0 +1,1226 @@
+###########################################
+#                                         #
+# ZE Various Events                       #
+# ID ZE.1000-ZE.1999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = ZE
+
+###########################################
+# The Disobedient Daughter                #
+# ID ZE.1000-ZE.1999                      #
+###########################################
+
+
+### Daughter becomes disobedient - undesired marriage
+character_event = {
+	id = ZE.1010
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Zeus"
+		FROM = {
+			is_female = yes
+			NOT = { new_character = { is_lover = FROM } }
+			OR = {
+				trait = possessed
+				is_smart_trigger = yes
+				trait = celibate
+				trait = diligent
+				trait = wroth
+				trait = proud
+				trait = brave
+				trait = ambitious
+				trait = homosexual
+			}
+			NOR = {
+				is_dumb_trigger = yes
+				trait = inbred
+				trait = humble
+				trait = slothful
+				trait = craven
+				trait = shy
+				trait = content
+				trait = trusting
+				trait = blinded
+			}
+			OR = {
+				father = {
+					character = ROOT
+					ai = no
+				}
+				mother = {
+					character = ROOT
+					ai = no
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 3
+			OR = {
+				trait = celibate
+				trait = homosexual
+			}
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			set_character_flag = disobedient_daughter
+		}
+		character_event = { id = ZE.1011 days = 2 }
+	}
+}
+
+# If already disobedient and forced to marry
+character_event = {
+	id = ZE.1015
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Zeus"
+		FROM = {
+			has_character_flag = disobedient_daughter
+			NOT = { new_character = { is_lover = FROM } }
+		}
+	}
+	
+	immediate = {
+		employer = { character_event = { id = ZE.1011 } }
+	}
+}
+
+# Daughter protests against marriage
+character_event = {
+	id = ZE.1011
+	title = EVTTITLE_ZE_1011
+	desc = EVTDESC_ZE_1011
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1011  # Tell her she must accept it
+		FROMFROM = {
+			set_character_flag = disobedient_daughter_unhappy
+			if = {
+				limit = {
+					has_lover = no
+					NOT = { trait = celibate }
+				}
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								trait = celibate
+								has_lover = yes
+							}
+						}
+						add_trait = celibate
+					}
+					10 = {
+						custom_tooltip = { text = disobedient_daughter_takes_lover }
+						ROOT = {
+							random_courtier = {
+								limit = {
+									is_ill = no
+									NOT = { trait = incapable }
+									NOT = { trait = celibate }
+									NOT = { trait = ugly }
+									NOT = { age = 50 }
+								}
+								add_lover = FROMFROM
+							}
+						}
+					}
+					10 = {
+					}
+				}
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_angry
+				years = 3
+			}
+			spouse = {
+				reverse_opinion = {
+					who = FROMFROM
+					modifier = opinion_hate
+					years = 100
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_1011  # Annul the marriage immediately
+		piety = -50
+		prestige = -100
+		FROMFROM = {
+			piety = -50
+			prestige = -50
+			spouse = {
+				save_event_target_as = target_spurned_spouse
+				employer = {
+					opinion = {
+						who = ROOT
+						modifier = grievously_offended
+						years = 5
+					}
+					hidden_tooltip = { character_event = { id = ZE.1012 } }
+				}
+			}
+			remove_spouse = spouse
+		}
+	}
+}
+
+# Employer of spurned spouse notified of annulled marriage
+character_event = {
+	id = ZE.1012
+	title = EVTTITLE_ZE_1011
+	desc = EVTDESC_ZE_1012
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1012
+		tooltip = {
+			event_target:target_spurned_spouse = {
+				remove_spouse = FROMFROM
+			}
+			opinion = {
+				who = FROM
+				modifier = grievously_offended
+				years = 5
+			}
+		}
+	}
+}
+
+
+# Daughter becomes disobedient - parent killed lover  (from on_death)
+character_event = {
+	id = ZE.1030
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_men = yes
+
+	trigger = {
+		has_dlc = "Zeus"
+		has_lover = yes
+		OR = {
+			death_execution_trigger = yes
+			death_murder_known_trigger = yes
+			death_reason = death_dungeon
+			death_sacrificed_trigger = yes
+		}
+		any_lover = {
+			OR = {
+				father = {
+					ROOT = { killer = { character = PREVPREV } }
+					ai = no
+				}
+				mother = {
+					ROOT = { killer = { character = PREVPREV } }
+					ai = no
+				}
+			}
+			is_female = yes
+			NAND = {
+				ROOT = { death_sacrificed_trigger = yes }
+				trait = zealous
+				ROOT = { killer = { religion = PREVPREV } }
+			}
+			OR = {
+				trait = possessed
+				is_smart_trigger = yes
+				trait = celibate
+				trait = diligent
+				trait = wroth
+				trait = proud
+				trait = brave
+				trait = ambitious
+				trait = homosexual
+			}
+			NOR = {
+				is_dumb_trigger = yes
+				trait = inbred
+				trait = humble
+				trait = slothful
+				trait = craven
+				trait = shy
+				trait = content
+				trait = trusting
+				trait = blinded
+			}
+		}
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				is_female = yes
+				OR = {
+					father = {
+						ROOT = { killer = { character = PREVPREV } }
+						ai = no
+					}
+					mother = {
+						ROOT = { killer = { character = PREVPREV } }
+						ai = no
+					}
+				}
+				NAND = {
+					ROOT = { death_sacrificed_trigger = yes }
+					trait = zealous
+					ROOT = { killer = { religion = PREVPREV } }
+				}
+				OR = {
+					trait = possessed
+					is_smart_trigger = yes
+					trait = celibate
+					trait = diligent
+					trait = wroth
+					trait = proud
+					trait = brave
+					trait = ambitious
+					trait = homosexual
+				}
+				NOR = {
+					is_dumb_trigger = yes
+					trait = inbred
+					trait = humble
+					trait = slothful
+					trait = craven
+					trait = shy
+					trait = content
+					trait = trusting
+					trait = blinded
+				}
+			}
+			save_event_target_as = target_daughter_killed_her_friend
+		}
+		random = {
+			chance = 30
+			killer = { character_event = { id = ZE.1031 days = 5 } }
+		}
+	}
+}
+
+# Daughter angry at killer of lover
+character_event = {
+	id = ZE.1031
+	desc = EVTDESC_ZE_1031
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1031  # I didn't think you'd mind...
+		event_target:target_daughter_killed_her_friend = {
+			opinion = {
+				who = ROOT
+				modifier = evil_murderer
+				years = 10
+			}
+			set_character_flag = disobedient_daughter
+			set_character_flag = disobedient_daughter_unhappy
+		}
+	}
+}
+
+# Daughter becomes disobedient - parent killed friend
+character_event = {
+	id = ZE.1040
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Zeus"
+		any_friend = {
+			is_female = yes
+			OR = {
+				ROOT = { death_execution_trigger = yes }
+				ROOT = { death_murder_known_trigger = yes }
+				ROOT = { death_reason = death_dungeon }
+				AND = {
+					OR = {
+						NOT = { trait = zealous }
+						NOT = { ROOT = { killer = { religion = PREVPREV } } }
+					}
+					ROOT = { death_sacrificed_trigger = yes }
+				}
+			}
+			OR = {
+				trait = possessed
+				is_smart_trigger = yes
+				trait = celibate
+				trait = diligent
+				trait = wroth
+				trait = proud
+				trait = brave
+				trait = ambitious
+				trait = homosexual
+			}
+			NOR = {
+				is_dumb_trigger = yes
+				trait = inbred
+				trait = humble
+				trait = slothful
+				trait = craven
+				trait = shy
+				trait = content
+				trait = trusting
+				trait = blinded
+			}
+			OR = {
+				father = {
+					ROOT = { killer = { character = PREVPREV } }
+					ai = no
+				}
+				mother = {
+					ROOT = { killer = { character = PREVPREV } }
+					ai = no
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = {
+				is_female = yes
+				OR = {
+					ROOT = { death_execution_trigger = yes }
+					ROOT = { death_murder_known_trigger = yes }
+					ROOT = { death_reason = death_dungeon }
+					AND = {
+						OR = {
+							NOT = { trait = zealous }
+							NOT = { ROOT = { killer = { religion = PREVPREV } } }
+						}
+						ROOT = { death_sacrificed_trigger = yes }
+					}
+				}
+				OR = {
+					trait = possessed
+					is_smart_trigger = yes
+					trait = celibate
+					trait = diligent
+					trait = wroth
+					trait = proud
+					trait = brave
+					trait = ambitious
+					trait = homosexual
+				}
+				NOR = {
+					is_dumb_trigger = yes
+					trait = inbred
+					trait = humble
+					trait = slothful
+					trait = craven
+					trait = shy
+					trait = content
+					trait = trusting
+					trait = blinded
+				}
+				OR = {
+					father = {
+						ROOT = { killer = { character = PREVPREV } }
+						ai = no
+					}
+					mother = {
+						ROOT = { killer = { character = PREVPREV } }
+						ai = no
+					}
+				}
+			}
+			save_event_target_as = target_daughter_killed_her_friend
+		}
+		random = {
+			chance = 30
+			killer = { character_event = { id = ZE.1041 days = 5 } }
+		}
+	}
+}
+
+# Daughter angry at killer of friend
+character_event = {
+	id = ZE.1041
+	desc = EVTDESC_ZE_1031
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1031  # I didn't think you'd mind...
+		event_target:target_daughter_killed_her_friend = {
+			opinion = {
+				who = ROOT
+				modifier = evil_murderer
+				years = 10
+			}
+			set_character_flag = disobedient_daughter
+			set_character_flag = disobedient_daughter_unhappy
+		}
+	}
+}
+
+
+# Disobedient daughter is discontent and acts on it...  (yearly pulse)
+character_event = {
+	id = ZE.1100
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		any_child = {
+			is_ruler = no
+			is_female = yes
+			is_ill = no
+			NOT = { trait = incapable }
+			NOT = { is_inaccessible_trigger = yes }
+			liege = { character = ROOT }
+			has_character_flag = disobedient_daughter
+			has_character_flag = disobedient_daughter_unhappy
+		}
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				is_ruler = no
+				is_female = yes
+				is_ill = no
+				NOT = { trait = incapable }
+				NOT = { is_inaccessible_trigger = yes }
+				liege = { character = ROOT }
+				has_character_flag = disobedient_daughter
+				has_character_flag = disobedient_daughter_unhappy
+			}
+			character_event = { id = ZE.1101 }
+		}
+	}
+}
+
+# Daughter selects action
+character_event = {
+	id = ZE.1101
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {				# Murders spouse in sleep
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						is_married = no
+						spouse = { is_lover = ROOT }
+					}
+				}
+				modifier = {
+					factor = 0
+					spouse = { ai = no }
+				}
+				modifier = {
+					factor = 0
+					trait = kind
+				}
+				modifier = {
+					factor = 2
+					trait = wroth
+				}
+				modifier = {
+					factor = 2
+					trait = cruel
+				}
+				modifier = {
+					factor = 0.5
+					spouse = {
+						attribute_diff = {
+							attribute = intrigue
+							character = PREV
+							value = 4
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					spouse = {
+						attribute_diff = {
+							attribute = intrigue
+							character = PREV
+							value = 8
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					spouse = {
+						attribute_diff = {
+							attribute = intrigue
+							character = PREV
+							value = -4
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					spouse = {
+						attribute_diff = {
+							attribute = intrigue
+							character = PREV
+							value = -8
+						}
+					}
+				}
+				father = {
+					if = {
+						limit = { ai = no }
+						character_event = { id = ZE.1120 }
+						break = yes
+					}
+				}
+				mother = {
+					if = {
+						limit = { ai = no }
+						character_event = { id = ZE.1120 }
+					}
+				}
+			}
+			2 = { # Kills spouse in single combat - only if she is more skilled
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						is_married = no
+						spouse = { is_lover = ROOT }
+						spouse = {
+							combat_rating_diff = { who = ROOT value = 0 }
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					spouse = { ai = no }
+				}
+				modifier = {
+					factor = 0
+					trait = craven
+				}
+				modifier = {
+					factor = 10
+					spouse = {
+						combat_rating_diff = { who = ROOT value = -4 }
+					}
+				}
+				modifier = {
+					factor = 1.5
+					trait = brave
+				}
+				father = {
+					if = {
+						limit = {
+							ai = no
+							is_liege_of = ROOT
+						}
+						character_event = { id = ZE.1130 }
+						break = yes
+					}
+				}
+				mother = {
+					if = {
+						limit = {
+							ai = no
+							is_liege_of = ROOT
+						}
+						character_event = { id = ZE.1130 }
+					}
+				}
+			}
+			5 = { # Elope and settle abroad (divorce spouse, marry any unmarried lover)
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					spouse = { ai = no }
+				}
+				modifier = {
+					factor = 0
+					trait = craven
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_independent_ruler = {
+							religion_group = ROOT
+							ai = yes
+						}
+					}
+				}
+				character_event = { id = ZE.1140 }
+			}
+			5 = { # Elope and start pirate band (mercs, divorce spouse, marry any lover)
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					spouse = { ai = no }
+				}
+				modifier = {
+					factor = 0
+					trait = craven
+				}
+				modifier = {
+					factor = 2
+					martial = 9
+				}
+				modifier = {
+					factor = 3
+					martial = 15
+				}
+				father = {
+					if = {
+						limit = {
+							ai = no
+							is_liege_of = ROOT
+						}
+						character_event = { id = ZE.1150 }
+						break = yes
+					}
+				}
+				mother = {
+					if = {
+						limit = {
+							ai = no
+							is_liege_of = ROOT
+						}
+						character_event = { id = ZE.1150 }
+					}
+				}
+			}
+			10 = { # Take new lover (remove any chaste trait)
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						liege = {
+							any_courtier = {
+								ai = yes
+								is_valid_romance_target = ROOT
+								prisoner = no
+								NOT = { character = ROOT }
+								NOT = { num_of_lovers = 5 }
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					num_of_lovers = 5
+				}
+				modifier = {
+					factor = 0
+					trait = celibate
+				}
+				modifier = {
+					factor = 3
+					trait = lustful
+				}
+				modifier = {
+					factor = 1.5
+					trait = gregarious
+				}
+				modifier = {
+					factor = 1.5
+					trait = fair
+				}
+				remove_trait = chaste
+				liege = {
+					random_courtier = {
+						limit = {
+							ai = yes
+							is_valid_romance_target = ROOT
+							prisoner = no
+							NOT = { character = ROOT }
+							NOT = { num_of_lovers = 5 }
+						}
+						end_inaccessibility_effect = yes
+						add_lover = ROOT
+					}
+				}
+			}
+			10 = { # Make spouse stressed, depressed or insane...
+				modifier = {
+					factor = 0
+					prisoner = yes
+				}
+				modifier = {
+					factor = 0
+					is_married = no
+				}
+				modifier = {
+					factor = 0
+					spouse = { ai = no }
+				}
+				modifier = {
+					factor = 0
+					trait = kind
+				}
+				modifier = {
+					factor = 0.5
+					trait = humble
+				}
+				modifier = {
+					factor = 2
+					trait = lunatic
+				}
+				modifier = {
+					factor = 2
+					trait = possessed
+				}
+				modifier = {
+					factor = 2
+					trait = wroth
+				}
+				modifier = {
+					factor = 2
+					trait = cruel
+				}
+				spouse = {
+					if = {
+						limit = {
+							trait = depressed
+						}
+						add_trait = lunatic
+					}
+					if = {
+						limit = {
+							NOT = { trait = lunatic }
+							trait = stressed
+						}
+						add_trait = depressed
+					}
+					if = {
+						limit = {
+							NOT = { trait = lunatic }
+							NOT = { trait = depressed }
+						}
+						add_trait = stressed
+					}
+				}
+			}
+			10 = { # Become a heretic, spit on parent's religion
+				modifier = {
+					factor = 0
+					NOT = { religion = FROM }
+				}
+				modifier = {
+					factor = 0
+					religion_group = pagan_group
+				}
+				modifier = {
+					factor = 0.5
+					trait = zealous
+				}
+				modifier = {
+					factor = 2
+					trait = cynical
+				}
+				modifier = {
+					factor = 2
+					trait = brave
+				}
+				character_event = { id = ZE.1180 }
+			}
+			5 = { # If imprisoned, commit suicide in prison
+				modifier = {
+					factor = 0
+					prisoner = no
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = stressed }
+					NOT = { trait = depressed }
+					NOT = { trait = lunatic }
+				}
+				modifier = {
+					factor = 3
+					trait = depressed
+				}
+				modifier = {
+					factor = 2
+					trait = lunatic
+				}
+				character_event = { id = ZE.1190 }
+			}
+			30 = { # No action
+			}
+		}
+	}
+}
+
+# Murdered her spouse
+character_event = {
+	id = ZE.1120
+	desc = EVTDESC_ZE_1120
+	picture = GFX_evt_illness
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1120  # Is it true?
+		FROM = {
+			spouse = {
+				death = {
+					death_reason = death_murder_unknown_poison
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+# Attacked and killed spouse
+character_event = {
+	id = ZE.1130
+	desc = EVTDESC_ZE_1130
+	picture = GFX_evt_quarrel
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1130  # Oh my!
+		FROM = {
+			spouse = {
+				death = {
+					death_reason = death_murder
+					killer = FROM
+				}
+			}
+		}
+	}
+}
+
+# Elopes and settles abroad
+character_event = {
+	id = ZE.1140
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_independent_ruler = {
+			limit = {
+				religion_group = ROOT
+				ai = yes
+			}
+			random_realm_province = {
+				limit = {
+					has_empty_holding = yes
+				}
+				province_event = { id = ZE.1141 }
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ZE.1141
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			father = {
+				if = {
+					limit = { is_liege_of = ROOT }
+					character_event = { id = ZE.1142 }
+				}
+			}
+			mother = {
+				if = {
+					limit = { is_liege_of = ROOT }
+					character_event = { id = ZE.1142 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ZE.1142
+	desc = EVTDESC_ZE_1142
+	picture = GFX_evt_rider_adventure
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1142
+		FROMFROM = {
+			end_inaccessibility_effect = yes #removes in_hiding or in_seclusion
+			remove_spouse = spouse
+			random_lover = {
+				limit = {
+					ai = yes
+					is_married = no
+					is_female = no
+				}
+				add_spouse_matrilineal = PREV
+			}
+		}
+		FROM = {
+			build_holding = {
+			   type = castle
+			   holder = FROMFROM
+			}
+			owner = {
+				FROMFROM = { set_defacto_liege = PREV }
+			}
+		}
+	}
+}
+
+# Elopes and starts mercenary/pirate band
+character_event = {
+	id = ZE.1150
+	title = EVTTITLE_ZE_1150
+	desc = EVTDESC_ZE_1150
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1150
+		FROM = {
+			end_inaccessibility_effect = yes
+			remove_spouse = spouse
+			random_lover = {
+				limit = {
+					ai = yes
+					is_married = no
+					is_female = no
+				}
+				add_spouse_matrilineal = PREV
+			}
+			hidden_tooltip = {
+				add_trait = adventurer
+				set_character_flag = special_marshal
+				if = {
+					limit = { has_nickname = no }
+					random_list = {
+						10 = { give_nickname = nick_the_red }
+						10 = { give_nickname = nick_the_sea_devil }
+						10 = { give_nickname = nick_the_lioness }
+						10 = { give_nickname = nick_the_flail_of }
+						10 = { give_nickname = nick_the_scourge_of }
+						10 = { give_nickname = nick_the_bold }
+						10 = { give_nickname = nick_the_fearless }
+					}
+				}
+			}
+			create_title = {
+				tier = DUKE
+				name = DISOBEDIENT_DAUGHTER_MERC_BAND
+				landless = yes
+				temporary = yes
+				adventurer = yes
+				custom_created = yes
+				culture = THIS
+				holder = THIS
+				mercenary = yes
+				army_template = mercenary_princess_composition
+				ruler = "CAPTAIN"
+				ruler_female = "CAPTAIN"
+				foa = "CAPTAIN_FOA"
+			}
+			set_defacto_liege = THIS
+		}
+	}
+}
+
+# Becomes heretic
+character_event = {
+	id = ZE.1180
+	desc = EVTDESC_ZE_1180
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1180
+		FROM = { become_heretic = yes }
+	}
+}
+
+# Commits suicide in prison
+character_event = {
+	id = ZE.1190
+	desc = EVTDESC_ZE_1190
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ALAS
+		FROM = {
+			death = {
+				death_reason = death_suicide
+			}
+		}
+	}
+}
+
+
+### Disobedient daughter asks to marry lover
+character_event = {
+	id = ZE.1300
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		any_child = {
+			is_female = yes
+			prisoner = no
+			is_ill = no
+			is_married = no
+			any_lover = {
+				ai = yes
+				is_female = no
+			}
+			NOT = { trait = incapable }
+			liege = { character = ROOT }
+			has_character_flag = disobedient_daughter
+		}
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				is_female = yes
+				prisoner = no
+				is_ill = no
+				is_married = no
+				any_lover = {
+					ai = yes
+					is_female = no
+				}
+				NOT = { trait = incapable }
+				liege = { character = ROOT }
+				has_character_flag = disobedient_daughter
+			}
+			character_event = { id = ZE.1301 }
+		}
+	}
+}
+
+# Daughter asks to marry lover
+character_event = {
+	id = ZE.1301
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				ai = yes
+				is_female = no
+			}
+			save_event_target_as = target_daughter_wants_to_marry
+		}
+		character_event = { id = ZE.1302 }
+	}
+}
+
+# Parent responds to marriage request
+character_event = {
+	id = ZE.1302
+	desc = EVTDESC_ZE_1302
+	picture = GFX_evt_daughter_asking_father
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_1302  # Yes
+		FROM = { clr_character_flag = disobedient_daughter_unhappy }
+		event_target:target_daughter_wants_to_marry = {
+			add_spouse = FROM
+		}
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			years = 5
+		}
+	}
+	option = {
+		name = EVTOPTA_ZE_1302  # No
+		FROM = { set_character_flag = disobedient_daughter_unhappy }
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_angry
+			years = 5
+		}
+	}
+}

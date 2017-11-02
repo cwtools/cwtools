@@ -1,0 +1,8079 @@
+###########################################
+#                                         #
+# RIP Treatment Events           		  #
+# ID RIP.11000-RIP.11050                  #
+#                                         #
+###########################################
+
+# Written by Markus Olsén
+# Additional writing by Mathilda Bjarnehed & Milla Isaksson
+
+namespace = RIP
+
+#Severely wounded removed
+character_event = {
+	id = RIP.11000
+	picture = GFX_evt_garden
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+
+	trigger = {
+		trait = severely_injured
+	}
+
+	desc = {
+		picture = GFX_evt_recovery
+		text = EVTDESCA_RIP_11000
+		trigger = { NOT = { has_character_flag = pending_infection } }
+	}
+
+	desc = {
+		picture = GFX_evt_bloody_tools
+		text = EVTDESCB_RIP_11000
+		trigger = { has_character_flag = pending_infection }
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_11000
+		trigger = { NOT = { has_character_flag = pending_infection } }
+		remove_trait = severely_injured
+	}
+
+	option = {
+		name = EVTOPTB_RIP_11000
+		trigger = { has_character_flag = pending_infection }
+		remove_trait = severely_injured
+		add_trait = infection
+		hidden_tooltip = {
+			clr_character_flag = pending_infection
+			character_event = { id = RIP.11001 days = 365 random = 1095 }
+		}
+	}
+}
+
+#####################################################
+#Symptoms and Diseases removed after given time		#
+#####################################################
+
+#RIP.11001 Removing infection
+#RIP.11002 Removing cough
+#RIP.11003 Removing fever
+#RIP.11004 Removing diarrhea
+#RIP.11005 Removing vomiting
+#RIP.11006 Removing chest pain
+#RIP.11007 Removing cramps
+#RIP.11008 Removing rash
+#RIP.11009 Removing headache
+#RIP.11010 Removing abdominal pain
+#RIP.11011 Removing fatigue
+#RIP.11012 Removing malaise
+
+# Removing infection
+character_event = {
+	id = RIP.11001
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11001
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = infection
+		hidden_tooltip = {
+			if = {
+				limit = { trait = wounded }
+				character_event = { id = 6081 days = 14 random = 30 } # wound should heal soon after
+			}
+		}
+	}
+}
+
+# Removing cough
+character_event = {
+	id = RIP.11002
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11002
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	trigger = {
+		trait = cough
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = cough
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing fever
+character_event = {
+	id = RIP.11003
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11003
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = fever
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = fever
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing diarrhea
+character_event = {
+	id = RIP.11004
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11004
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = diarrhea
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = diarrhea
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing vomiting
+character_event = {
+	id = RIP.11005
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11005
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = vomiting
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = vomiting
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing chest pain
+character_event = {
+	id = RIP.11006
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11006
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = chest_pain
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = chest_pain
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing cramps
+character_event = {
+	id = RIP.11007
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11007
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = cramps
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = cramps
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing rash
+character_event = {
+	id = RIP.11008
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11008
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = rash
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = rash
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing headache
+character_event = {
+	id = RIP.11009
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11009
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = headache
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = headache
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing abdominal pain
+character_event = {
+	id = RIP.11010
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11010
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = abdominal_pain
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = abdominal_pain
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing fatigue
+character_event = {
+	id = RIP.11011
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11011
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = fatigue
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = fatigue
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+# Removing malaise
+character_event = {
+	id = RIP.11012
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11012
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = malaise
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = malaise
+		clr_character_flag = disease_not_serious
+		hidden_tooltip = {
+			remove_character_modifier = symptom_treatment_1
+			remove_character_modifier = symptom_treatment_2
+			remove_character_modifier = symptom_treatment_3
+			remove_character_modifier = symptom_treatment_4
+		}
+	}
+}
+
+######################
+# Diseases			 #
+######################
+#RIP.11015 Removing flu
+#RIP.11016 Removing dysentery
+#RIP.11017 Removing gout
+#RIP.11018 Removing food_poisoning
+#RIP.11019 Removing rabies
+#RIP.11020 Removing cancer
+
+# Removing flu
+character_event = {
+	id = RIP.11015
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11015
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = flu 
+		OR = {
+			had_character_flag = { flag = manifest_flu days = 30 } 
+			NOT = { has_character_flag = manifest_flu }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = flu
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_flu
+		clr_character_flag = manifest_flu
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing dysentery
+character_event = {
+	id = RIP.11016
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11016
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = dysentery 
+		OR = {
+			had_character_flag = { flag = manifest_dysentery days = 30 } 
+			NOT = { has_character_flag = manifest_dysentery }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = dysentery
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_dysentery
+		clr_character_flag = manifest_dysentery
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing gout
+character_event = {
+	id = RIP.11017
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11017
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = gout 
+		health = 6
+		OR = {
+			had_character_flag = { flag = manifest_gout days = 2000 }
+			NOT = { has_character_flag = manifest_gout }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+		
+		modifier = {
+			factor = 0.5
+			health = 7
+		}
+		modifier = {
+			factor = 0.5
+			health = 8
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = gout
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_gout
+		clr_character_flag = manifest_gout
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing food poisoning
+character_event = {
+	id = RIP.11018
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11018
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = food_poisoning
+		OR = {
+			had_character_flag = { flag = manifest_food_poisoning days = 30 } 
+			NOT = { has_character_flag = manifest_food_poisoning }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 90
+		
+		modifier = {
+			factor = 2
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 2
+			trait = hedonist 
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = food_poisoning
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_food_poisoning
+		clr_character_flag = manifest_food_poisoning
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing rabies
+character_event = {
+	id = RIP.11019
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11019
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = rabies 
+		OR = {
+			had_character_flag = { flag = manifest_rabies days = 2000 } 
+			NOT = { has_character_flag = manifest_rabies }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 25000 #good luck!
+		
+		modifier = {
+			factor = 0.5
+			health = 8
+		}
+		modifier = {
+			factor = 0.5
+			health = 9
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = rabies
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_rabies
+		clr_character_flag = manifest_rabies
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing cancer
+character_event = {
+	id = RIP.11020
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11020
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = cancer 
+		OR = {
+			had_character_flag = { flag = manifest_cancer days = 2000 }
+			NOT = { has_character_flag = manifest_cancer }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2400
+		
+		modifier = {
+			factor = 0.5
+			health = 7
+		}
+		modifier = {
+			factor = 0.5
+			health = 8
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = cancer
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_cancer
+		clr_character_flag = manifest_cancer
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+#OLD DISEASES
+# Removing pneumonia
+character_event = {
+	id = RIP.11021
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11021
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		base_health = 4
+		trait = pneumonic 
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_pneumonia days = 30 }
+			NOT = { has_character_flag = manifest_pneumonia }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 4
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 5 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4 }
+		}
+		modifier = {
+			factor = 1.5
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 8
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = pneumonic
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_pneumonia
+		clr_character_flag = manifest_pneumonia
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing Great Pox
+character_event = {
+	id = RIP.11022
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11022
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = syphilitic 
+		health = 6
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_syphilis days = 2000 }
+			NOT = { has_character_flag = manifest_syphilis }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 25000
+		
+		modifier = {
+			factor = 0.5
+			health = 8
+		}
+		modifier = {
+			factor = 0.5
+			health = 9
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = syphilitic
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_syphilis
+		clr_character_flag = manifest_syphilis
+		set_character_flag = immune_syphilis
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+# Removing leprosy
+#character_event = {
+#	id = RIP.11023
+#	picture = GFX_evt_recovery
+#	desc = EVTDESC_RIP_11023
+#	border = GFX_event_normal_frame_religion
+#	
+#	is_sick = yes
+#
+#	trigger = { 
+#		trait = leper 
+#		has_dlc = "Reapers"
+#	}
+#
+#	option = {
+#		name = EVTOPTA_RIP_11001
+#		remove_trait = leper
+#		clr_character_flag = developing_illness
+#		clr_character_flag = got_leprosy 
+#	}
+#}
+
+# Removing tuberculosis
+character_event = {
+	id = RIP.11024
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11024
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_tuberculosis 
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_tuberculosis days = 60 }
+			NOT = { has_character_flag = manifest_tuberculosis }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_tuberculosis
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_tuberculosis
+		clr_character_flag = manifest_tuberculosis
+		set_character_flag = immune_tuberculosis
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing typhoid fever
+character_event = {
+	id = RIP.11025
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11025
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_typhoid_fever 
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_typhoid_fever days = 30 }
+			NOT = { has_character_flag = manifest_typhoid_fever }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 4
+		
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_typhoid_fever
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_typhoid_fever
+		clr_character_flag = manifest_typhoid_fever
+		set_character_flag = immune_typhoid_fever
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing typhus
+character_event = {
+	id = RIP.11026
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11026
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_typhus
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_typhus days = 60 }
+			NOT = { has_character_flag = manifest_typhus }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_typhus
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_typhus
+		clr_character_flag = manifest_typhus
+		set_character_flag = immune_typhus
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing bubonic plague
+character_event = {
+	id = RIP.11027
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11027
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_bubonic_plague
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_bubonic_plague days = 30 }
+			NOT = { has_character_flag = manifest_bubonic_plague }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 3
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_bubonic_plague
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_bubonic_plague
+		clr_character_flag = manifest_bubonic_plague
+		set_character_flag = immune_bubonic_plague
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+			if = {
+				limit = {
+					ai = no
+				}
+				set_character_flag = achievement_i_got_better
+			}
+		}
+	}
+}
+# Removing measles
+character_event = {
+	id = RIP.11028
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11028
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_measles 
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_measles days = 30 }
+			NOT = { has_character_flag = manifest_measles }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5
+		
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_measles
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_measles
+		clr_character_flag = manifest_measles
+		set_character_flag = immune_measles
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing smallpox
+character_event = {
+	id = RIP.11029
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11029
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = { 
+		trait = has_small_pox 
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_small_pox days = 30 }
+			NOT = { has_character_flag = manifest_small_pox }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5
+		
+		modifier = {
+			factor = 0.75
+			base_health = 5.1
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 6.0
+		}
+		modifier = {
+			factor = 0.5
+			base_health = 7.0
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { base_health = 5.0 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { base_health = 4.1 }
+		}
+		modifier = {
+			factor = 0.66
+			NOT = { age = 20 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 30 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 40 }
+		}
+		modifier = {
+			factor = 2.0
+			age = 50
+		}
+		modifier = {
+			factor = 2.0
+			age = 70
+		}
+		modifier = {
+			factor = 2.0
+			is_ill = yes
+		}
+		modifier = {
+			factor = 4.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 5.0
+			trait = incapable
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_small_pox
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_smallpox
+		clr_character_flag = manifest_small_pox
+		set_character_flag = immune_smallpox
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+# Removing Aztec disease (Syphilis)
+character_event = {
+	id = RIP.11030
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11030
+	border = GFX_event_normal_frame_religion
+	
+	is_sick = yes
+
+	trigger = {
+		trait = has_aztec_disease
+		health = 6
+		has_dlc = "Reapers"
+		OR = {
+			had_character_flag = { flag = manifest_aztec_disease days = 2000 }
+			NOT = { has_character_flag = manifest_aztec_disease }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 25000
+		
+		modifier = {
+			factor = 0.5
+			health = 8
+		}
+		modifier = {
+			factor = 0.5
+			health = 9
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_11001
+		remove_trait = has_aztec_disease
+		clear_disease_level_effect = yes
+		clr_character_flag = developing_illness
+		clr_character_flag = got_aztec_disease
+		clr_character_flag = manifest_aztec_disease
+		set_character_flag = immune_aztec_disease
+		hidden_tooltip = {
+			remove_treatment_modifiers_effect = yes
+		}
+	}
+}
+
+
+######################################################################################
+# Diagnosis events
+######################################################################################
+# RIP.11021
+
+# Ping doctor
+character_event = {
+	id = RIP.11031
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_minor_title = title_court_physician
+		FROM = {
+			OR = {
+				character_disease_trigger = yes
+				AND = {
+					trait = leper
+					has_character_flag = new_leper_character
+				}
+				AND = {
+					NOR = { 
+						has_character_modifier = symptom_treatment_1
+						has_character_modifier = symptom_treatment_2
+						has_character_modifier = symptom_treatment_3
+						has_character_modifier = symptom_treatment_4
+					}
+					OR = {
+						NOT = { has_character_flag = being_treated }
+						had_character_flag = { flag = being_treated days = 20 }
+					}
+					OR = {
+						trait = cough
+						trait = fever
+						trait = diarrhea
+						trait = vomiting
+						trait = chest_pain
+						trait = cramps
+						trait = rash
+						trait = headache
+						trait = abdominal_pain
+						trait = fatigue
+						trait = malaise
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = { has_character_flag = seclusion_treatment_approved }
+					has_character_modifier = in_seclusion
+					has_epidemic_disease_trigger = yes
+					host = { NOT = { character = PREV } }
+				}
+			}
+			save_event_target_as = court_physician
+			FROM = {
+				save_event_target_as = epidemic_victim
+			}
+			liege = { character_event = { id = RIP.12014 } }
+			break = yes
+		}
+		FROM = { set_character_flag = being_treated }
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						trait = cough
+						trait = fever
+						trait = diarrhea
+						trait = vomiting
+						trait = chest_pain
+						trait = cramps
+						trait = rash
+						trait = headache
+						trait = abdominal_pain
+						trait = fatigue
+						trait = malaise
+					}
+				}
+			}
+			FROM = {
+				character_event = { id = RIP.11045 days = 1 random = 2 }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					trait = leper
+					has_character_flag = new_leper_character
+				}
+			}
+			FROM = {
+				character_event = { id = RIP.11062 days = 2 random = 4 }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					character_disease_trigger = yes
+				}
+			}
+			FROM = {
+				character_event = { id = RIP.11035 days = 2 random = 4 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = RIP.11032
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	# We target the court physician and send event back
+	immediate = {
+		event_target:court_physician = { 
+			character_event = { id = RIP.11031 }
+		}
+	}
+}
+
+character_event = {
+	id = RIP.11035
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11035
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	trigger = {
+		character_disease_trigger = yes
+	}
+	
+	immediate = {
+		remove_character_modifier = symptom_treatment_1
+		remove_character_modifier = symptom_treatment_2
+		remove_character_modifier = symptom_treatment_3
+		remove_character_modifier = symptom_treatment_4
+	}
+
+	# Experimental treatment from great doctor
+	option = {
+		name = EVTOPTA_RIP_11035
+		custom_tooltip = {
+			text = EVTOPTA_RIP_11035_TOOLTIP # Explain experimental treatment 
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 10
+				is_unimportant_trigger = yes
+				OR = {
+					FROM = { physician_bad_trigger = yes }
+					FROM = {
+						NOT = { learning = 10 }
+					}
+				}
+			}
+			
+			modifier = {
+				factor = 2
+				is_strong_trigger = yes
+			}
+			
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+			
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = shy
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = cynical
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = mystic
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = humble
+			}
+		}
+		
+		trigger = {
+			is_adult = yes
+			OR = {
+				FROM = { learning = 18 }
+				FROM = { physician_good_trigger = yes }
+			}
+			NOR = { 
+				trait = craven 
+				trait = brave 
+			}
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				#Good  experimental treatment
+				40 = {
+					modifier = {
+						factor = 1.2
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 0.6
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_good_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 0 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 25 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 50 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 75 }
+						}
+					}
+
+					random_list = {
+						#Regular treatment
+						80 = { set_character_flag = good_treatment_outcome }
+						#Drastic treatment
+						20 = {
+							modifier = {
+								factor = 4
+								OR = {
+									FROM = { NOT = { learning = 15 } }
+									FROM = { trait = wroth }
+									FROM = { trait = arbitrary }
+									FROM = { trait = brave }
+									FROM = { trait = ambitious }
+									FROM = { learning = 25 }
+									FROM = { physician_good_trigger = yes }
+								}
+							}
+							set_character_flag = amazing_treatment_outcome
+						}
+					}
+				}
+				#Bad experimental treatment
+				60 = {
+					modifier = {
+						factor = 0.8
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.4
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = 0 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -25 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -50 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -75 } }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = { physician_good_trigger = yes }
+					}
+
+					random_list = {
+						#Regular treatment
+						80 = { set_character_flag = bad_treatment_outcome }
+						#Drastic treatment
+						20 = {
+							modifier = {
+								factor = 4
+								OR = {
+									FROM = { NOT = { learning = 15 } }
+									FROM = { trait = wroth }
+									FROM = { trait = arbitrary }
+									FROM = { trait = brave }
+									FROM = { trait = ambitious }
+									FROM = { learning = 25 }
+									FROM = { physician_good_trigger = yes }
+								}
+							}
+							set_character_flag = terrible_treatment_outcome
+						}
+					}
+				}
+			}
+
+			character_event = { id = RIP.11040 days = 3 }
+		}
+	}
+
+	# experimental treatment when BRAVE
+	option = {
+		name = EVTOPTF_RIP_11035
+		custom_tooltip = {
+			text = EVTOPTF_RIP_11035_TOOLTIP #explain experimental treatment when BRAVE
+		}
+		tooltip_info = brave
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 10
+				is_unimportant_trigger = yes
+				OR = {
+					FROM = { physician_bad_trigger = yes }
+					FROM = {
+						NOT = { learning = 10 }
+					}
+				}
+			}
+			
+			modifier = {
+				factor = 2
+				is_strong_trigger = yes
+			}
+			
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+			
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = shy
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = cynical
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = mystic
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = humble
+			}
+		}
+		
+		trigger = {
+			trait = brave
+			is_adult = yes
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				#Good "normal" experimental treatment
+				40 = {
+					modifier = {
+						factor = 1.2
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 0.6
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_good_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 0 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 25 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 50 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 75 }
+						}
+					}
+
+					random_list = {
+						80 = { set_character_flag = good_treatment_outcome }
+						20 = {
+							modifier = {
+								factor = 4
+								OR = {
+									FROM = { NOT = { learning = 15 } }
+									FROM = { trait = wroth }
+									FROM = { trait = arbitrary }
+									FROM = { trait = brave }
+									FROM = { trait = ambitious }
+									FROM = { learning = 25 }
+									FROM = { physician_good_trigger = yes }
+								}
+							}
+							set_character_flag = amazing_treatment_outcome
+						}
+					}
+				}
+				#Bad "normal" experimental treatment 
+				60 = {
+					modifier = {
+						factor = 0.8
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.4
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = 0 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -25 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -50 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -75 } }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = { physician_good_trigger = yes }
+					}
+
+					random_list = {
+						80 = { set_character_flag = bad_treatment_outcome }
+						20 = {
+							modifier = {
+								factor = 4
+								OR = {
+									FROM = { NOT = { learning = 15 } }
+									FROM = { trait = wroth }
+									FROM = { trait = arbitrary }
+									FROM = { trait = brave }
+									FROM = { trait = ambitious }
+									FROM = { learning = 25 }
+									FROM = { physician_good_trigger = yes }
+								}
+							}
+							set_character_flag = terrible_treatment_outcome
+						}
+					}
+				}
+			}
+
+			character_event = { id = RIP.11040 days = 3 }
+		}
+	}
+
+	# Mystic treatment
+	option = {
+		name = EVTOPTE_RIP_11035
+		custom_tooltip = {
+			text = EVTOPTE_RIP_11035_TOOLTIP #explain mystic treatment
+		}
+		
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 3
+				trait = mystic
+			}
+			
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+			
+			modifier = {
+				factor = 2
+				is_smart_trigger = yes
+			}
+			
+			modifier = {
+				factor = 3.0
+				trait = zealous
+				trait = mystic
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = zealous
+				NOT = { trait = mystic }
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = humble
+				NOT = { trait = mystic }
+			}
+		}
+		
+		trigger = {
+			FROM = { trait = mystic }
+			is_adult = yes
+			NOT = {
+				has_game_rule = {
+					name = supernatural_events
+					value = off
+				}
+			}
+		}
+
+		hidden_tooltip = {
+			random_list = {
+
+				40 = {
+					modifier = {
+						factor = 1.2
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_good_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 0 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 25 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 50 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 75 }
+						}
+					}
+					random_list = {
+						60 = { 
+							set_character_flag = MYSTIC_AMAZING_OUTCOME
+						}
+						40 = { 
+							set_character_flag = MYSTIC_DECENT_OUTCOME
+						}
+					}
+				}
+				60 = {
+					modifier = {
+						factor = 0.8
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = 0 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -25 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -50 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -75 } }
+						}
+					}
+					random_list = {
+						50 = { 
+							set_character_flag = MYSTIC_POOR_OUTCOME
+						}
+						50 = { 
+							set_character_flag = MYSTIC_TERRIBLE_OUTCOME
+						}
+					}
+				}
+			}
+			character_event = { id = RIP.11047 days = 3 }
+		}
+	}
+
+	# Regular treatment
+	option = {
+		name = EVTOPTB_RIP_11035
+		custom_tooltip = {
+			text = EVTOPTB_RIP_11035_TOOLTIP # Explain regular treatment
+		}
+		
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2
+				trait = temperate
+			}
+			
+			modifier = {
+				factor = 2.0
+				trait = cynical
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = zealous
+			}
+		}
+		
+		hidden_tooltip = {
+			random_list = {
+				60 = {
+					modifier = {
+						factor = 1.2
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 10
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_good_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 0 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 25 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 50 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 75 }
+						}
+					}
+					set_character_flag = good_treatment_outcome
+				}
+				40 = {
+					modifier = {
+						factor = 0.8
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 10
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = 0 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -25 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -50 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -75 } }
+						}
+					}
+					set_character_flag = bad_treatment_outcome
+				}
+			}
+			character_event = { id = RIP.11041 days = 3 }
+		}
+	}
+	# Very cautious treatment
+	option = {
+		name = EVTOPTC_RIP_11035
+		custom_tooltip = {
+			text = EVTOPTC_RIP_11035_TOOLTIP # Explain cautious treatment
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			
+			modifier = {
+				factor = 3
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2.0
+				trait = humble
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = trusting
+			}
+		}
+		
+		trigger = {
+			OR = {
+				is_adult = no
+				trait = craven
+				trait = paranoid
+			}
+			NOT = { trait = brave }
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				80 = {
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 10
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_good_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 0 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 25 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 50 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							opinion = { who = ROOT value = 75 }
+						}
+					}
+					set_character_flag = good_treatment_outcome
+				}
+				20 = {
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 10
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = { physician_bad_trigger = yes }
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = 0 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -25 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -50 } }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { opinion = { who = ROOT value = -75 } }
+						}
+					}
+					set_character_flag = bad_treatment_outcome
+				}
+			}
+			character_event = { id = RIP.11042 days = 3 }
+		}
+	}
+
+	# Do nothing
+	option = {
+		name = EVTOPTD_RIP_11035
+		
+		ai_chance = {
+			factor = 0
+		}
+		
+		custom_tooltip = {
+			text = EVTOPTD_RIP_11035_TOOLTIP # Explain you'd rather be left alone
+			if = {
+				limit = {
+					trait = craven
+				}
+				prestige = -20
+				break = yes
+			}
+			if = {
+				limit = {
+					NOR = { 
+						trait = craven
+						trait = brave
+						trait = berserker
+					}
+				}
+				add_trait = craven
+				break = yes
+			}
+			if = {
+				limit = {
+					trait = brave
+				}
+				remove_trait = brave
+			}
+		}
+	}
+}
+
+#Experimental treatment outcome
+character_event = {
+	id = RIP.11040
+	picture = GFX_evt_doctor_crazy_treatment
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_11040_1
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_2
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_3
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_5
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_5_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_6
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_6_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_8
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_8_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_9
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_9_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_10
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_10_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_11
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_11_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_12
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_12_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_13
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_13_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11040_14
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_14_FLAG
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11040_15
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11040_15_FLAG
+		}
+	}
+
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = bad_treatment_outcome
+					has_character_flag = good_treatment_outcome
+				}
+			}
+			random_list = {
+				10 = { set_character_flag = EVTDESC_RIP_11040_1_FLAG }
+				10 = { set_character_flag = EVTDESC_RIP_11040_2_FLAG }
+				10 = { set_character_flag = EVTDESC_RIP_11040_3_FLAG }
+				10 = { 
+					modifier = {
+						factor = 0
+						trait = one_legged
+					}
+					set_character_flag = EVTDESC_RIP_11040_5_FLAG 
+				}
+				10 = { set_character_flag = EVTDESC_RIP_11040_6_FLAG }
+				10 = { set_character_flag = EVTDESC_RIP_11040_8_FLAG }
+				10 = { set_character_flag = EVTDESC_RIP_11040_9_FLAG }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = terrible_treatment_outcome
+					has_character_flag = amazing_treatment_outcome
+				}
+			}
+			random_list = {
+				10 = { 
+					modifier = {
+						factor = 0
+						OR = {
+							trait = blinded
+							trait = one_eyed
+						}
+					}
+					set_character_flag = EVTDESC_RIP_11040_10_FLAG 
+				}
+				10 = { 
+					modifier = {
+						factor = 0
+						OR = {
+							is_female = yes
+							trait = eunuch
+						}
+					}
+					set_character_flag = EVTDESC_RIP_11040_11_FLAG 
+				}
+				10 = { 
+					modifier = {
+						factor = 0
+						trait = lunatic
+					}
+					set_character_flag = EVTDESC_RIP_11040_12_FLAG 
+				}
+				10 = { 
+					modifier = {
+						factor = 0
+						trait = disfigured
+					}
+					set_character_flag = EVTDESC_RIP_11040_13_FLAG 
+				}
+				10 = { 
+					modifier = {
+						factor = 0
+						trait = one_handed
+					}
+					set_character_flag = EVTDESC_RIP_11040_14_FLAG 
+				}
+				10 = { 
+					modifier = {
+						factor = 0
+						trait = one_legged
+					}
+					set_character_flag = EVTDESC_RIP_11040_15_FLAG 
+				}
+			}
+		}
+	}
+
+	option = { #Good outcome
+		name = EVTOPTA_RIP_11040
+		trigger = {
+			has_character_flag = good_treatment_outcome
+		}
+		if = {
+			limit = { 
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_3
+				duration = 730
+			}	
+		}
+		if = {
+			limit = { 
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_3
+				duration = 1825
+			}	
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			host = { 
+				character_event = { id = RIP.11061 }
+				if = {
+					limit = {
+						is_ruler = no
+						FROMFROM = {
+							NOT = {
+								trait = physician
+							}
+						}
+					}
+					random = {
+						chance = 10
+						character_event = { id = RIP.11065 } 
+					}
+				}
+			}
+		}
+
+		clr_character_flag = good_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11040_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_9_FLAG
+	}
+
+	option = { #Bad outcome
+		name = EVTOPTB_RIP_11040
+		trigger = {
+			has_character_flag = bad_treatment_outcome
+		}
+		add_character_modifier = {
+			name = failed_treatment_2
+			duration = 365
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			if = {
+				limit = { 
+					is_ruler = no
+					FROMFROM = {
+						ai = yes
+					}
+				}
+				host = { character_event = { id = RIP.11060 } }
+			}
+		}
+		
+		clr_character_flag = bad_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11040_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_9_FLAG
+	}
+
+	option = { #Amazing outcome
+		name = EVTOPTC_RIP_11040
+		trigger = { has_character_flag = amazing_treatment_outcome }
+
+		custom_tooltip = { text = CURED_RIP_TOOLTIP }
+
+		hidden_tooltip = {
+			if = { limit = { trait = flu } remove_trait = flu }
+			if = { limit = { trait = dysentery } remove_trait = dysentery }
+			if = { limit = { trait = gout }	remove_trait = gout }
+			if = { limit = { trait = food_poisoning } remove_trait = food_poisoning }
+			if = { limit = { trait = rabies } remove_trait = rabies }
+			if = { limit = { trait = cancer } remove_trait = cancer }
+			if = { limit = { trait = pneumonic } remove_trait = pneumonic }
+			if = { limit = { trait = syphilitic } remove_trait = syphilitic set_character_flag = immune_syphilis }       
+			if = { limit = { trait = has_tuberculosis } remove_trait = has_tuberculosis set_character_flag = immune_tuberculosis }
+			if = { limit = { trait = has_typhoid_fever } remove_trait = has_typhoid_fever set_character_flag = immune_typhoid_fever}
+			if = { limit = { trait = has_typhus } remove_trait = has_typhus set_character_flag = immune_typhus}
+			if = { limit = { trait = has_bubonic_plague ai = yes } remove_trait = has_bubonic_plague set_character_flag = immune_bubonic_plague}
+			if = { limit = { trait = has_bubonic_plague ai = no } remove_trait = has_bubonic_plague set_character_flag = immune_bubonic_plague set_character_flag = achievement_i_got_better}
+			if = { limit = { trait = has_measles } remove_trait = has_measles set_character_flag = immune_measles}
+			if = { limit = { trait = has_small_pox } remove_trait = has_small_pox set_character_flag = immune_smallpox }
+			if = { limit = { trait = has_aztec_disease } remove_trait = has_aztec_disease set_character_flag = immune_aztec_disease }
+			remove_treatment_modifiers_effect = yes
+			clear_disease_level_effect = yes
+			remove_disease_flags_effect = yes
+			set_character_flag = seen_the_light_of_modern_medicine
+		}
+		
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_10_FLAG }
+			add_trait = one_eyed
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_11_FLAG }
+			add_trait = eunuch
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_12_FLAG }
+			add_trait = lunatic
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_13_FLAG }
+			add_trait = disfigured
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_14_FLAG }
+			add_trait = one_handed
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_15_FLAG }
+			add_trait = one_legged
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			host = { 
+				character_event = { id = RIP.11061 }
+				if = {
+					limit = {
+						FROMFROM = {
+							NOT = {
+								trait = physician
+							}
+						}
+					}
+					random = {
+						chance = 10
+						character_event = { id = RIP.11065 } 
+					}
+				}
+			}
+		}
+
+		clr_character_flag = amazing_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11040_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_12_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_13_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_14_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_15_FLAG
+	}
+
+	option = { #Terrible outcome
+		name = EVTOPTD_RIP_11040
+		trigger = { has_character_flag = terrible_treatment_outcome }
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_10_FLAG }
+			add_trait = one_eyed
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_11_FLAG }
+			add_trait = eunuch
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_12_FLAG }
+			add_trait = lunatic
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_13_FLAG }
+			add_trait = disfigured
+			add_trait = severely_injured
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_14_FLAG }
+			add_trait = one_handed
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11040_15_FLAG }
+			add_trait = one_legged
+			add_trait = severely_injured
+			hidden_tooltip = {
+				resolve_severely_injured_effect = yes
+			}
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			if = {
+				limit = { 
+					FROMFROM = {
+						ai = yes
+					}
+				}
+				host = { character_event = { id = RIP.11060 } }
+			}
+		}
+
+		clr_character_flag = terrible_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11040_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_12_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_13_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_14_FLAG
+		clr_character_flag = EVTDESC_RIP_11040_15_FLAG
+
+		ROOT = {
+			opinion = {
+				modifier = opinion_traitor
+				who = FROMFROM
+			}
+		}
+	}
+}
+
+#Normal treatment outcome
+character_event = {
+	id = RIP.11041
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_religion
+	
+	desc = {
+		text = EVTDESC_RIP_11041_1
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_2
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_3
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_4
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_4_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_5
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_5_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_6
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_6_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_7
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_7_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_8
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_8_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_10
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_10_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_11
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_11_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11041_13
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11041_13_FLAG
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = { 
+				modifier = {
+					factor = 0
+					is_adult = no
+				}
+				set_character_flag = EVTDESC_RIP_11041_1_FLAG
+			}
+			10 = { 
+				modifier = {
+					factor = 0
+					is_adult = no
+				}
+				set_character_flag = EVTDESC_RIP_11041_2_FLAG 
+			}
+			10 = { set_character_flag = EVTDESC_RIP_11041_3_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_4_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_5_FLAG }
+			10 = { 
+				modifier = {
+					factor = 0
+					is_adult = no
+				}
+				set_character_flag = EVTDESC_RIP_11041_6_FLAG
+			}
+			10 = { set_character_flag = EVTDESC_RIP_11041_7_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_8_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_10_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_11_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11041_13_FLAG }
+		}
+	} 
+
+	option = { #good outcome
+		name = EVTOPTA_RIP_11041
+		trigger = {
+			has_character_flag = good_treatment_outcome
+		}
+		if = {
+			limit = { 
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_2
+				duration = 730
+			}	
+		}
+		if = {
+			limit = { 
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_2
+				duration = 1825
+			}	
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			host = { 
+				character_event = { id = RIP.11061 }
+				if = {
+					limit = {
+						FROMFROM = {
+							NOT = {
+								trait = physician
+							}
+						}
+					}
+					random = {
+						chance = 10
+						character_event = { id = RIP.11065 } 
+					}
+				}
+			}
+		}
+
+		clr_character_flag = good_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11041_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_13_FLAG
+	}
+
+	option = { #bad outcome
+		name = EVTOPTB_RIP_11041
+		trigger = {
+			has_character_flag = bad_treatment_outcome
+		}
+		add_character_modifier = {
+			name = failed_treatment_1
+			duration = 365
+		}
+
+		if = {
+			limit = {
+				host = {
+					NOT = { character = ROOT }
+					OR = {
+						AND = {
+							is_married = yes
+							any_spouse = { character = ROOT }
+						}
+						is_child_of = ROOT
+						is_father = ROOT
+						is_mother = ROOT
+						is_lover = ROOT
+						sibling = ROOT
+					}
+				}
+			}
+			if = {
+				limit = { 
+					FROMFROM = {
+						ai = yes
+					}
+				}
+				host = { character_event = { id = RIP.11060 } }
+			}
+		}
+
+		clr_character_flag = bad_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11041_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11041_13_FLAG
+	}
+}
+
+#Cautious treatment outcome
+character_event = {
+	id = RIP.11042
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_11042_1
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_2
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_3
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_4
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_4_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_5
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_5_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_6
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_6_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_7
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_7_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_8
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_8_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_9
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_9_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11042_10
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11042_10_FLAG
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = { set_character_flag = EVTDESC_RIP_11042_1_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_2_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_3_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_4_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_5_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_6_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_7_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_8_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_9_FLAG }
+			10 = { set_character_flag = EVTDESC_RIP_11042_10_FLAG }
+		}
+	} 
+
+	option = { #ok outcome
+		name = EVTOPTA_RIP_11042
+		trigger = {
+			has_character_flag = good_treatment_outcome
+		}
+		if = {
+			limit = { 
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_1
+				duration = 730
+			}	
+		}
+		if = {
+			limit = { 
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = successful_treatment_1
+				duration = 1825
+			}	
+		}
+		clr_character_flag = good_treatment_outcome
+		clr_character_flag = being_treated
+		set_character_flag = recent_treatment
+		clr_character_flag = EVTDESC_RIP_11042_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_9_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_10_FLAG
+	}
+
+	option = { #nothing happens
+		name = EVTOPTB_RIP_11042
+		trigger = {
+			has_character_flag = bad_treatment_outcome
+		}
+		clr_character_flag = bad_treatment_outcome
+		clr_character_flag = being_treated
+		clr_character_flag = EVTDESC_RIP_11042_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_9_FLAG
+		clr_character_flag = EVTDESC_RIP_11042_10_FLAG
+	}
+}
+
+#Mystic treatment outcome
+character_event = {
+	id = RIP.11047
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_11047_1
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_2
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_3
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_4
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_4_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_5
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_5_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_6
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_6_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_7
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_7_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_8
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_8_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_9
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_9_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_10
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_10_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_11
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_11_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11047_12
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11047_12_FLAG
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+
+		random_list = {
+
+			10 = { # Mirrors and candles
+				modifier ={
+					factor = 0
+					has_character_flag = MYSTIC_TERRIBLE_OUTCOME
+				}
+				set_character_flag = EVTDESC_RIP_11047_1_FLAG 
+			}
+			
+			10 = { # Sacrificed animals, rubbed in ashes
+				modifier ={
+					factor = 0
+					AND = {
+						trait = paranoid
+						trait = possessed
+					}
+				}
+				set_character_flag = EVTDESC_RIP_11047_2_FLAG 
+			} 
+
+			10 = { # Conjuring, burnt fingers
+				modifier = {
+					factor = 0
+					trait = one_handed
+					
+				}
+				set_character_flag = EVTDESC_RIP_11047_3_FLAG 
+			}
+			
+			10 = { # Improv greatest poem
+				modifier = {
+					factor = 0
+					trait = poet
+				}
+				set_character_flag = EVTDESC_RIP_11047_4_FLAG 
+			}
+			
+			10 = { # Bloodbath
+				modifier = {
+					factor = 0
+					trait = cruel
+				}
+				set_character_flag = EVTDESC_RIP_11047_5_FLAG 
+			}
+			
+			5 = { # "special brew"
+				modifier = {
+					factor = 0
+					trait = drunkard
+				} 
+				set_character_flag = EVTDESC_RIP_11047_6_FLAG 
+			}
+
+			10 = { # walk on fire
+				modifier = {
+					factor = 0
+					trait = brave
+				}
+				set_character_flag = EVTDESC_RIP_11047_7_FLAG 
+			}
+
+			10 = {  # physician tries to drown you
+				modifier = {
+					factor = 0
+					FROM = { 
+						NOR = { 
+							trait = zealous
+							trait = cruel
+						}
+					}
+				}
+				set_character_flag = EVTDESC_RIP_11047_8_FLAG 
+			}
+			
+			5 = {  # physician sacrifices your child
+			modifier = {
+					factor = 0
+					NOR = {
+						NOT = {
+							any_courtier = {
+								is_child_of = ROOT
+								is_ill = no
+								NOT = { trait = inbred }
+								is_abroad = no
+							}
+					}
+						FROM = { 
+							NOR = { 
+								trait = zealous
+								trait = cruel
+								trait = arbitrary
+								trait = impaler
+							}
+						}
+					}
+				}
+				set_character_flag = EVTDESC_RIP_11047_9_FLAG 
+			}
+			
+			10 = { # am I the beast?
+				modifier ={
+					factor = 0
+					OR = {
+						trait = possessed
+						trait = lunatic
+					}
+				}
+				set_character_flag = EVTDESC_RIP_11047_10_FLAG 
+			}
+
+			10 = { set_character_flag = EVTDESC_RIP_11047_11_FLAG } # the rat will carry your burdens
+			10 = { set_character_flag = EVTDESC_RIP_11047_12_FLAG } # physician suicide
+		}
+	}
+
+	option = {
+		set_character_flag = recent_treatment
+		name = {
+			text = EVTOPTB_RIP_11047
+			trigger = { has_character_flag = EVTDESC_RIP_11047_8_FLAG }
+		}
+		name = {
+			text = EVTOPTC_RIP_11047
+			trigger = { has_character_flag = EVTDESC_RIP_11047_9_FLAG }
+		}
+		name = {
+			text = EVTOPTD_RIP_11047
+			trigger = { has_character_flag = EVTDESC_RIP_11047_12_FLAG }
+		}
+		name = {
+			text = EVTOPTE_RIP_11047
+			trigger = { has_character_flag = EVTDESC_RIP_11047_3_FLAG }
+		}
+		name = {
+			text = EVTOPTA_RIP_11047
+			trigger = { 
+				NOR = { 
+					has_character_flag = EVTDESC_RIP_11047_8_FLAG
+					has_character_flag = EVTDESC_RIP_11047_9_FLAG
+					has_character_flag = EVTDESC_RIP_11047_12_FLAG
+					has_character_flag = EVTDESC_RIP_11047_3_FLAG
+				} 
+			}
+		}
+		
+		if = {
+			limit = { has_character_flag = MYSTIC_AMAZING_OUTCOME }
+				
+			#Chance to remove the disease!
+			custom_tooltip = { text = CURED_RIP_TOOLTIP }
+
+			hidden_tooltip = {
+				if = { limit = { trait = flu } remove_trait = flu }
+				if = { limit = { trait = dysentery } remove_trait = dysentery }
+				if = { limit = { trait = gout }	remove_trait = gout }
+				if = { limit = { trait = food_poisoning } remove_trait = food_poisoning }
+				if = { limit = { trait = rabies } remove_trait = rabies }
+				if = { limit = { trait = cancer } remove_trait = cancer }
+				if = { limit = { trait = pneumonic } remove_trait = pneumonic }
+				if = { limit = { trait = syphilitic } remove_trait = syphilitic set_character_flag = immune_syphilis }       
+				if = { limit = { trait = has_tuberculosis } remove_trait = has_tuberculosis set_character_flag = immune_tuberculosis }
+				if = { limit = { trait = has_typhoid_fever } remove_trait = has_typhoid_fever set_character_flag = immune_typhoid_fever}
+				if = { limit = { trait = has_typhus } remove_trait = has_typhus set_character_flag = immune_typhus}
+				if = { limit = { trait = has_bubonic_plague } remove_trait = has_bubonic_plague set_character_flag = immune_bubonic_plague}
+				if = { limit = { trait = has_measles } remove_trait = has_measles set_character_flag = immune_measles}
+				if = { limit = { trait = has_small_pox } remove_trait = has_small_pox set_character_flag = immune_smallpox }
+				if = { limit = { trait = has_aztec_disease } remove_trait = has_aztec_disease set_character_flag = immune_aztec_disease }
+				remove_treatment_modifiers_effect = yes
+				clear_disease_level_effect = yes
+				remove_disease_flags_effect = yes
+				set_character_flag = seen_the_light_of_modern_medicine
+			}
+		}
+
+		if = {
+			limit = { 
+				has_character_flag = MYSTIC_DECENT_OUTCOME
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = mystic_treatment_decent
+				duration = 730
+			}	
+		}
+		if = {
+			limit = { 
+				has_character_flag = MYSTIC_DECENT_OUTCOME
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = mystic_treatment_decent
+				duration = 1825
+			}	
+		}
+		if = {
+			limit = { 
+				has_character_flag = MYSTIC_POOR_OUTCOME
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = mystic_treatment_poor
+				duration = 365
+			}
+		}
+		if = {
+			limit = { 
+				has_character_flag = MYSTIC_POOR_OUTCOME
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = mystic_treatment_poor
+				duration = 1825
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = MYSTIC_TERRIBLE_OUTCOME
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			custom_tooltip = { text = RIP_11047_TERRIBLE_TOOLTIP }
+			add_character_modifier = {
+					name = mystic_treatment_terrible
+					duration = 365
+				}
+			hidden_tooltip = {
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = possessed } }
+						character_event = { id = 38315 }
+					}
+				}
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = lunatic } }
+						character_event = { id = 38304 }
+					}
+				}
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = depressed } }
+						character_event = { id = 38288 }
+					}
+				}
+				random = {
+					chance = 25
+					if = {
+						limit = { NOT = { trait = stressed } }
+						character_event = { id = 38282 }
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = MYSTIC_TERRIBLE_OUTCOME
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			custom_tooltip = { text = RIP_11047_TERRIBLE_TOOLTIP }
+			add_character_modifier = {
+					name = mystic_treatment_terrible
+					duration = 1825
+				}
+			hidden_tooltip = {
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = possessed } }
+						character_event = { id = 38315 }
+					}
+				}
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = lunatic } }
+						character_event = { id = 38304 }
+					}
+				}
+				random = {
+					chance = 10
+					if = {
+						limit = { NOT = { trait = depressed } }
+						character_event = { id = 38288 }
+					}
+				}
+				random = {
+					chance = 25
+					if = {
+						limit = { NOT = { trait = stressed } }
+						character_event = { id = 38282 }
+					}
+				}
+			}
+		}
+		
+		#Specific effects from the chosen event desc
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_1_FLAG }
+			
+			trigger_switch = {
+				on_trigger = trait
+				paranoid = { add_trait = trusting }
+				trusting = { add_trait = paranoid }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				ambitious = { add_trait = content }
+				content = { add_trait = ambitious }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				humble = { add_trait = proud }
+				proud = { add_trait = humble }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				shy = { add_trait = gregarious }
+				gregarious = { add_trait = shy }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				temperate = { add_trait = gluttonous }
+				gluttonous = { add_trait = temperate }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				charitable = { add_trait = greedy }
+				greedy = { add_trait = charitable }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				diligent = { add_trait = slothful }
+				slothful = { add_trait = diligent }
+			}
+			trigger_switch = {
+				on_trigger = trait
+				envious = { add_trait = kind }
+				kind = { add_trait = envious }
+			}
+		}
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_2_FLAG }
+			if = {
+				limit = { NOT = { trait = paranoid } }
+					add_trait = paranoid
+			}
+			
+			random = {
+				chance =  25
+				if = {
+					limit = { NOT = { trait = possessed } }
+					add_trait = possessed
+				}
+			}
+		}
+		
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_3_FLAG }
+			if = {
+				limit = { NOT = { trait = one_handed } }
+					add_trait = one_handed
+			}
+			if = {
+				limit = { 
+					NOR = { 
+						trait = wroth
+						trait = patient
+					} 
+				}
+				add_trait = wroth
+			}
+			if = {
+				limit = { trait = patient }
+					remove_trait = patient
+			}
+		}
+		
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_4_FLAG }
+			add_trait = poet
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_5_FLAG }
+			add_trait = cruel
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_6_FLAG }
+			add_trait = drunkard
+		}
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_7_FLAG }
+			add_trait = brave
+			if = {
+				limit = { NOT = { trait = zealous } }
+					add_trait = zealous
+			}
+		}
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_8_FLAG }
+			# DROWNING
+			opinion = {
+				who = FROMFROM
+				modifier = opinion_traitor
+			}
+			if = {
+				limit = { NOT = { trait = paranoid } }
+					add_trait = paranoid
+			}
+
+		}
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_9_FLAG }
+
+			opinion = {
+				who = FROMFROM
+				modifier = opinion_traitor
+			}
+
+			random_courtier = {
+				limit = {		
+					is_child_of = ROOT
+					is_ill = no
+					NOT = { trait = inbred }
+					is_abroad = no
+				}
+
+				death = {
+					death_reason = death_murder_unknown
+					killer = FROMFROM
+				}
+			}
+		}
+
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_10_FLAG }
+			if = {
+				limit = { NOT = { trait = possessed } }
+					add_trait = possessed
+			}
+			
+			random = {
+				chance =  25
+				if = {
+					limit = { NOT = { trait = lunatic } }
+					add_trait = lunatic
+				}
+			}
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_11_FLAG }
+
+			if = {
+				limit = {
+					NOR = { 
+						trait = content
+						trait = ambitious 
+					} 
+				}
+				add_trait = content
+			}
+			if = {
+				limit = { trait = ambitious }
+				remove_trait = ambitious
+			}
+
+			if = {
+				limit = { 
+					NOR = { 
+						trait = kind
+						trait = envious 
+					} 
+				}
+				add_trait = kind
+			}
+			if = {
+				limit = { trait = envious }
+				remove_trait = envious
+			}
+
+			if = {
+				limit = { 
+					NOR = { 
+						trait = honest
+						trait = deceitful
+					} 
+				}
+				add_trait = honest
+			}
+			if = {
+				limit = { trait = deceitful }
+				remove_trait = deceitful
+			}
+			if = {
+				limit = { 
+					NOR = { 
+						trait = patient
+						trait = wroth
+					} 
+				}
+				add_trait = patient
+			}
+			if = {
+				limit = { trait = wroth }
+				remove_trait = wroth
+			}
+			if = {
+				limit = { 
+					NOR = { 
+						trait = humble
+						trait = proud
+					} 
+				}
+				add_trait = humble
+			}
+			if = {
+				limit = { trait = proud }
+				remove_trait = proud
+			}
+			if = {
+				limit = { 
+					NOR = { 
+						trait = charitable
+						trait = greedy
+					} 
+				}
+				add_trait = charitable
+			}
+			if = {
+				limit = { trait = greedy }
+				remove_trait = greedy
+			}
+			if = {
+				limit = { 
+					NOR = { 
+						trait = temperate
+						trait = gluttonous
+					} 
+				}
+				add_trait = temperate
+			}
+			if = {
+				limit = { trait = gluttonous }
+				remove_trait = gluttonous
+			}
+
+		}
+		if = {
+			limit = { has_character_flag = EVTDESC_RIP_11047_12_FLAG }
+			
+			FROMFROM = {
+				death = { death_reason = death_suicide }
+			}
+			
+			if = {
+				limit = { trait = humble }
+				add_trait = humble
+			}
+
+			random = {
+				chance =  25
+				if = {
+					limit = { NOT = { trait = lunatic } }
+					add_trait = lunatic
+				}
+			}
+		}
+
+		clr_character_flag = MYSTIC_AMAZING_OUTCOME
+		clr_character_flag = MYSTIC_DECENT_OUTCOME
+		clr_character_flag = MYSTIC_POOR_OUTCOME
+		clr_character_flag = MYSTIC_TERRIBLE_OUTCOME
+		clr_character_flag = good_treatment_outcome
+		clr_character_flag = bad_treatment_outcome
+		clr_character_flag = being_treated
+		clr_character_flag = EVTDESC_RIP_11047_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_9_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11047_12_FLAG
+	}
+}
+
+
+#Symptom treatment
+character_event = {
+	id = RIP.11045
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_tuberculosis
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_tuberculosis_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_tuberculosis_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_tuberculosis_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_tuberculosis_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhoid_fever
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhoid_fever_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhoid_fever_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhoid_fever_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhoid_fever_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhus
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhus_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhus_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhus_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhus_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhus_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhus_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhus_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_typhus_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_typhus_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_bubonic_plague
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_bubonic_plague_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_bubonic_plague_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_bubonic_plague_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_bubonic_plague_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_measles
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_measles_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_measles_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_measles_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_measles_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_measles_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_measles_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_measles_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_measles_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_measles_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_small_pox
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_small_pox_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_small_pox_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_small_pox_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_small_pox_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_small_pox_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_has_aztec_disease
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_aztec_disease_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_aztec_disease_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_aztec_disease_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_has_aztec_disease_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_flu
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_flu_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_flu_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_flu_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_flu_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_flu_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_flu_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_flu_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_flu_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_flu_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_dysentery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_dysentery_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_dysentery_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_dysentery_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_dysentery_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_dysentery_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_gout
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_gout_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_gout_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_gout_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_gout_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_gout_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_gout_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_gout_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_gout_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_gout_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_food_poisoning
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_food_poisoning_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_food_poisoning_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_food_poisoning_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_food_poisoning_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_rabies
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_rabies_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_rabies_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_rabies_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_rabies_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_rabies_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_rabies_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_rabies_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_rabies_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_rabies_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_cancer
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_cancer_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_cancer_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_cancer_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_cancer_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_cancer_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_cancer_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_cancer_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_cancer_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_cancer_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_pneumonia
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_pneumonia_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_pneumonia_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_pneumonia_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_pneumonia_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_syphilitic
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_syphilis_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_syphilitic_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_syphilitic_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_syphilitic_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_syphilitic_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_uncertain
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_11045_not_serious
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_not_serious_flag
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_not_serious_horse
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_not_serious_flag_horse
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_not_serious_certain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_not_serious_flag_certain
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_not_serious_sure
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_not_serious_flag_sure
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11045_not_serious_uncertain
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11045_not_serious_flag_uncertain
+		}
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			##Symptoms
+			trait = cough
+			trait = fever
+			trait = diarrhea
+			trait = vomiting
+			trait = chest_pain
+			trait = cramps
+			trait = rash
+			trait = headache
+			trait = abdominal_pain
+			trait = fatigue
+			trait = malaise
+		}
+	}
+
+	immediate = {
+		random_list = {
+			40 = {
+				modifier = {
+					factor = 2
+					num_of_symptoms = 2
+				}
+				modifier = {
+					factor = 2
+					num_of_symptoms = 3
+				}
+				modifier = {
+					factor = 1.5
+					FROM = {
+						OR = {
+							trait = scholar
+							trait = mutazilite
+						}
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						is_smart_trigger = yes
+					}
+				}
+				modifier = {
+					factor = 5
+					FROM = {
+						culture = horse
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						physician_good_trigger = yes
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						learning = 25
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						learning = 20
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						learning = 15
+					}
+				}
+				modifier = {
+					factor = 0.8
+					FROM = {
+						NOT = { learning = 15 }
+					}
+				}
+				modifier = {
+					factor = 0.8
+					FROM = {
+						NOT = { learning = 10 }
+					}
+				}
+				set_character_flag = correct_diagnosis
+			}
+			60 = {
+				modifier = {
+					factor = 0
+					FROM = {
+						culture = horse
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						is_dumb_trigger = yes
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						physician_bad_trigger = yes
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { opinion = { who = ROOT value = 0 } }
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { opinion = { who = ROOT value = -25 } }
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { opinion = { who = ROOT value = -50 } }
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { opinion = { who = ROOT value = -75 } }
+					}
+				}
+				modifier = {
+					factor = 0.8
+					FROM = {
+						learning = 25
+					}
+				}
+				modifier = {
+					factor = 0.8
+					FROM = {
+						learning = 20
+					}
+				}
+				modifier = {
+					factor = 0.8
+					FROM = {
+						learning = 15
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { learning = 15 }
+					}
+				}
+				modifier = {
+					factor = 1.2
+					FROM = {
+						NOT = { learning = 10 }
+					}
+				}
+				set_character_flag = faulty_diagnosis
+			}
+		}
+
+		#Now we check to see what disease the character has
+		random_list = {
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_tuberculosis }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_tuberculosis
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag #otherwise, doctors are fairly sure
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_typhoid_fever }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_typhoid_fever
+					}
+				}
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_typhus }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_typhus
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhus_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhus_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhus_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_typhus_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_typhus_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_bubonic_plague }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_bubonic_plague
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_measles }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_measles
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_measles_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_measles_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_measles_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_measles_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_measles_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_smallpox }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_smallpox
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_smallpox_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_small_pox_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_aztec_disease }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_aztec_disease
+					}
+				}
+
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						NOR = {
+							has_global_flag = aztec_arrival
+							year = 1350
+						}
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_flu }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_flu
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_flu_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_flu_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_flu_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_flu_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_flu_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_dysentery }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_dysentery
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_dysentery_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_gout }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_gout
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_gout_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_gout_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_gout_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_gout_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_gout_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_food_poisoning }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_food_poisoning
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_rabies }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_rabies
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_rabies_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_rabies_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_rabies_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_rabies_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_rabies_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_cancer }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_cancer
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_cancer_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_cancer_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_cancer_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_cancer_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_cancer_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_pneumonia }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_pneumonia
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = got_syphilis }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = got_syphilis
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_has_syphilis_flag
+			}
+			10 = {
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = correct_diagnosis
+						NOT = { has_character_flag = disease_not_serious }
+					}
+				}
+				modifier = {
+					factor  = 0
+					AND = {
+						has_character_flag = faulty_diagnosis
+						has_character_flag = disease_not_serious
+					}
+				}
+				
+				if = {
+					limit = {	#horse
+						FROM = {
+							culture = horse
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_not_serious_flag_horse
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = correct_diagnosis #Really good doctors know for sure
+						FROM = {
+							OR = {
+								learning = 25
+								AND = {
+									physician_good_trigger = yes
+									learning = 20
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_not_serious_flag_certain
+					break = yes
+				}
+				if = {	#Good doctors are pretty sure
+					limit = {
+						FROM = {
+							OR = {
+								learning = 20
+								AND = {
+									physician_good_trigger = yes
+									learning = 15
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_not_serious_flag_sure
+					break = yes
+				}
+				if = {
+					limit = { # awful doctors are uncertain 
+						FROM = {
+							OR = {
+								AND = {
+									NOT = { learning = 10 }	
+									physician_bad_trigger = no
+								}
+								AND = {
+									NOT = { learning = 15 }	
+									physician_bad_trigger = yes
+								}
+							}
+						}	
+					}
+					set_character_flag = EVTDESC_RIP_11045_not_serious_flag_uncertain
+					break = yes
+				}
+				
+				set_character_flag = EVTDESC_RIP_11045_not_serious_flag
+			}
+		}
+	}
+
+
+	option = {
+		name = EVTOPTA_RIP_11045
+		custom_tooltip = {
+			text = EVTOPTA_RIP_11045_TOOLTIP #symptom treatment notification
+		}
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 1.2
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							trait = physician
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.5
+						has_character_flag = correct_diagnosis
+					}
+					set_character_flag = good_treatment_outcome
+				}
+				50 = {
+					modifier = {
+						factor = 0.8
+						is_strong_trigger = yes
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 25
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 20
+						}
+					}
+					modifier = {
+						factor = 0.8
+						FROM = {
+							learning = 15
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 15 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						FROM = {
+							NOT = { learning = 10 }
+						}
+					}
+					modifier = {
+						factor = 1.2
+						is_weak_trigger = yes
+					}
+					modifier = {
+						factor = 1.5
+						has_character_flag = faulty_diagnosis
+					}
+					set_character_flag = bad_treatment_outcome
+				}
+			}
+			
+			if = {	#If good treatment, check for quality
+				limit = {
+					has_character_flag = good_treatment_outcome
+				}
+				random_list = {
+					100 = {
+						modifier = {
+							factor = 1.5
+							FROM = {
+								learning = 25
+							}
+						}
+						modifier = {
+							factor = 1.2
+							FROM = {
+								learning = 20
+							}
+						}
+						modifier = {
+							factor = 1.2
+							FROM = {
+								learning = 15
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								NOT = { learning = 15 }
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								NOT = { learning = 10 }
+							}
+						}
+						set_character_flag = best_symptom_treatment
+					}
+					100 = {
+						modifier = {
+							factor = 1.2
+							FROM = {
+								learning = 25
+							}
+						}
+						modifier = {
+							factor = 1.2
+							FROM = {
+								learning = 20
+							}
+						}
+						modifier = {
+							factor = 1.2
+							FROM = {
+								learning = 15
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								NOT = { learning = 15 }
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								NOT = { learning = 10 }
+							}
+						}
+						set_character_flag = good_symptom_treatment
+					}
+					100 = {
+						set_character_flag = ok_symptom_treatment
+					}
+					100 = {
+						modifier = {
+							factor = 0.8
+							FROM = {
+								learning = 25
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								learning = 20
+							}
+						}
+						modifier = {
+							factor = 0.8
+							FROM = {
+								learning = 15
+							}
+						}
+						modifier = {
+							factor = 1.5
+							FROM = {
+								NOT = { learning = 15 }
+							}
+						}
+						modifier = {
+							factor = 1.5
+							FROM = {
+								NOT = { learning = 10 }
+							}
+						}
+						set_character_flag = poor_symptom_treatment
+					}
+				}
+			}
+			
+			character_event = { id = RIP.11046 days = 3 }
+			#Clear all flags
+			clr_character_flag = faulty_diagnosis
+			clr_character_flag = correct_diagnosis
+			clr_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_tuberculosis_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_typhoid_fever_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_typhus_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_typhus_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_typhus_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_typhus_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_typhus_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_bubonic_plague_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_measles_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_measles_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_measles_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_measles_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_measles_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_small_pox_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_small_pox_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_aztec_disease_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_flu_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_flu_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_flu_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_flu_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_flu_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_dysentery_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_dysentery_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_gout_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_gout_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_gout_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_gout_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_gout_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_food_poisoning_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_rabies_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_rabies_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_rabies_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_rabies_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_rabies_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_cancer_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_cancer_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_cancer_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_cancer_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_cancer_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_pneumonia_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_has_syphilis_flag
+			clr_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_has_syphilis_flag_uncertain
+			clr_character_flag = EVTDESC_RIP_11045_not_serious_flag
+			clr_character_flag = EVTDESC_RIP_11045_not_serious_flag_horse
+			clr_character_flag = EVTDESC_RIP_11045_not_serious_flag_certain
+			clr_character_flag = EVTDESC_RIP_11045_not_serious_flag_sure
+			clr_character_flag = EVTDESC_RIP_11045_not_serious_flag_uncertain
+		}
+	}
+}
+
+#Symptom treatment outcome
+character_event = {
+	id = RIP.11046
+	picture = GFX_evt_recovery
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_11046_COUGH_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_COUGH_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_COUGH_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_COUGH_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_COUGH_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_COUGH_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FEVER_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FEVER_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FEVER_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FEVER_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FEVER_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FEVER_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_DIARRHEA_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_DIARRHEA_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_DIARRHEA_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_DIARRHEA_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_DIARRHEA_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_DIARRHEA_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_VOMITING_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_VOMITING_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_VOMITING_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_VOMITING_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_VOMITING_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_VOMITING_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HEADACHE_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HEADACHE_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HEADACHE_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HEADACHE_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HEADACHE_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HEADACHE_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CHESTPAIN_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CHESTPAIN_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CHESTPAIN_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CHESTPAIN_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CHESTPAIN_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CHESTPAIN_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CRAMPS_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CRAMPS_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CRAMPS_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CRAMPS_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_CRAMPS_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_CRAMPS_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_RASH_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_RASH_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_RASH_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_RASH_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_RASH_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_RASH_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_ABDOMINALPAIN_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_ABDOMINALPAIN_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_ABDOMINALPAIN_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_MALAISE_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_MALAISE_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_MALAISE_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_MALAISE_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_MALAISE_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_MALAISE_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FATIGUE_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FATIGUE_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FATIGUE_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FATIGUE_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_FATIGUE_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_FATIGUE_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_4
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_4_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_5
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_5_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_6
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_6_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_7
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_7_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_8
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_8_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_9
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_9_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_10
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_10_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_11
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_11_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_12
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_12_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_13
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_13_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_14
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_14_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_15
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_15_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_GENERAL_16
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_GENERAL_16_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HORSE_1
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HORSE_1_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HORSE_2
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HORSE_2_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HORSE_3
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HORSE_3_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HORSE_4
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HORSE_4_FLAG
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_11046_HORSE_5
+		picture = GFX_evt_recovery
+		trigger = {
+			has_character_flag = EVTDESC_RIP_11046_HORSE_5_FLAG
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cough }
+				}
+				set_character_flag = EVTDESC_RIP_11046_COUGH_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cough }
+				}
+				set_character_flag = EVTDESC_RIP_11046_COUGH_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cough }
+				}
+				set_character_flag = EVTDESC_RIP_11046_COUGH_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fever }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FEVER_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fever }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FEVER_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fever }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FEVER_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = diarrhea }
+				}
+				set_character_flag = EVTDESC_RIP_11046_DIARRHEA_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = diarrhea }
+				}
+				set_character_flag = EVTDESC_RIP_11046_DIARRHEA_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = diarrhea }
+				}
+				set_character_flag = EVTDESC_RIP_11046_DIARRHEA_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = vomiting }
+				}
+				set_character_flag = EVTDESC_RIP_11046_VOMITING_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = vomiting }
+				}
+				set_character_flag = EVTDESC_RIP_11046_VOMITING_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = vomiting }
+				}
+				set_character_flag = EVTDESC_RIP_11046_VOMITING_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = headache }
+				}
+				set_character_flag = EVTDESC_RIP_11046_HEADACHE_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = headache }
+				}
+				set_character_flag = EVTDESC_RIP_11046_HEADACHE_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = headache }
+				}
+				set_character_flag = EVTDESC_RIP_11046_HEADACHE_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = chest_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CHESTPAIN_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = chest_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CHESTPAIN_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = chest_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CHESTPAIN_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cramps }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CRAMPS_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cramps }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CRAMPS_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = cramps }
+				}
+				set_character_flag = EVTDESC_RIP_11046_CRAMPS_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = rash }
+				}
+				set_character_flag = EVTDESC_RIP_11046_RASH_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = rash }
+				}
+				set_character_flag = EVTDESC_RIP_11046_RASH_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = rash }
+				}
+				set_character_flag = EVTDESC_RIP_11046_RASH_3_FLAG
+			}
+		
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = abdominal_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = abdominal_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = abdominal_pain }
+				}
+				set_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = malaise }
+				}
+				set_character_flag = EVTDESC_RIP_11046_MALAISE_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = malaise }
+				}
+				set_character_flag = EVTDESC_RIP_11046_MALAISE_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = malaise }
+				}
+				set_character_flag = EVTDESC_RIP_11046_MALAISE_3_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fatigue }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FATIGUE_1_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fatigue }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FATIGUE_2_FLAG
+			}
+			10 = {
+				modifier = {
+					factor = 0 
+					NOT = { trait = fatigue }
+				}
+				set_character_flag = EVTDESC_RIP_11046_FATIGUE_3_FLAG
+			}
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_1_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_2_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_3_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_4_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_5_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_6_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_7_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_8_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_9_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_10_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_11_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_12_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_13_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_14_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_15_FLAG }
+			5 = { set_character_flag = EVTDESC_RIP_11046_GENERAL_16_FLAG }
+			1 = { 
+				modifier = {
+					factor = 0 
+					NOT = { 
+						FROMFROM = {
+							culture = horse
+						}
+					}
+				}
+				modifier = {
+					factor = 1000 
+						FROMFROM = {
+							culture = horse
+						}
+				}
+				set_character_flag = EVTDESC_RIP_11046_HORSE_1_FLAG
+			}
+			1 = { 
+				modifier = {
+					factor = 0 
+					NOT = { 
+						FROMFROM = {
+							culture = horse
+						}
+					}
+				}
+				modifier = {
+					factor = 1000 
+						FROMFROM = {
+							culture = horse
+						}
+				}
+				set_character_flag = EVTDESC_RIP_11046_HORSE_2_FLAG
+			}
+			1 = { 
+				modifier = {
+					factor = 0 
+					NOT = { 
+						FROMFROM = {
+							culture = horse
+						}
+					}
+				}
+				modifier = {
+					factor = 1000 
+						FROMFROM = {
+							culture = horse
+						}
+				}
+				set_character_flag = EVTDESC_RIP_11046_HORSE_3_FLAG
+			}
+			1 = { 
+				modifier = {
+					factor = 0 
+					NOT = { 
+						FROMFROM = {
+							culture = horse
+						}
+					}
+				}
+				modifier = {
+					factor = 1000 
+						FROMFROM = {
+							culture = horse
+						}
+				}
+				set_character_flag = EVTDESC_RIP_11046_HORSE_4_FLAG
+			}
+			1 = { 
+				modifier = {
+					factor = 0 
+					NOT = { 
+						FROMFROM = {
+							culture = horse
+						}
+					}
+				}
+				modifier = {
+					factor = 1000 
+						FROMFROM = {
+							culture = horse
+						}
+				}
+				set_character_flag = EVTDESC_RIP_11046_HORSE_5_FLAG
+			}
+		}
+	}
+
+	option = { # Ok outcome
+		name = EVTOPTA_RIP_11046
+		trigger = {
+			has_character_flag = good_treatment_outcome
+		}
+		if = {
+			limit = {
+				has_character_flag = best_symptom_treatment
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_4
+				duration = 730
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = best_symptom_treatment
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_4
+				duration = 1825
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = good_symptom_treatment
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_3
+				duration = 730
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = good_symptom_treatment
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_3
+				duration = 1825
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = ok_symptom_treatment
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_2
+				duration = 730
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = ok_symptom_treatment
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_2
+				duration = 1825
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = poor_symptom_treatment
+				NOR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_1
+				duration = 730
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = poor_symptom_treatment
+				OR = {
+					trait = cancer
+					trait = gout
+					trait = syphilitic
+				}
+			}
+			add_character_modifier = {
+				name = symptom_treatment_1
+				duration = 1825
+			}
+		}
+		set_character_flag = recent_treatment
+		clr_character_flag = best_symptom_treatment
+		clr_character_flag = good_symptom_treatment
+		clr_character_flag = ok_symptom_treatment
+		clr_character_flag = poor_symptom_treatment
+		clr_character_flag = good_treatment_outcome
+		clr_character_flag = being_treated
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_9_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_12_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_13_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_14_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_15_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_16_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_5_FLAG
+	}
+
+	option = { #nothing happens
+		name = EVTOPTB_RIP_11046
+		trigger = {
+			has_character_flag = bad_treatment_outcome
+		}
+		set_character_flag = recent_treatment
+		clr_character_flag = bad_treatment_outcome
+		clr_character_flag = being_treated
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_COUGH_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FEVER_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_DIARRHEA_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_VOMITING_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HEADACHE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CHESTPAIN_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_CRAMPS_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_RASH_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_ABDOMINALPAIN_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_MALAISE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_FATIGUE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_5_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_6_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_7_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_8_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_9_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_10_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_11_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_12_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_13_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_14_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_15_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_GENERAL_16_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_1_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_2_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_3_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_4_FLAG
+		clr_character_flag = EVTDESC_RIP_11046_HORSE_5_FLAG
+	}
+}
+
+#Physician hurt your close of kin
+character_event = {
+	id = RIP.11060
+	picture = GFX_evt_bloody_tools
+	desc = EVTDESC_RIP_11060
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	# throw them in prison
+	option = {
+		trigger = {
+			NOT = {
+				trait = wroth
+			}
+		}
+		ai_chance = {
+			factor = 5
+		}
+		name = EVTOPTD_RIP_11060
+		FROMFROMFROM = {
+			imprison = yes
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_grateful
+				years = 10
+			}
+		}
+	}
+
+	# have their head
+	option = {
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		ai_chance = {
+			factor = 5
+		}
+		name = EVTOPTA_RIP_11060
+		FROMFROMFROM = {
+			death = {
+				death_reason = death_execution_beheading
+				killer = ROOT
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_grateful
+				years = 10
+			}
+		}
+	}
+
+	# formal complaint
+	option = {
+		ai_chance = {
+			factor = 60
+		}
+		name = EVTOPTB_RIP_11060
+		FROMFROMFROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_did_not_trust_me
+				years = 5
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_grateful
+				years = 5
+			}
+		}
+	}
+
+	# do nothing
+	option = {
+		ai_chance = {
+			factor = 35
+		}
+		name = EVTOPTC_RIP_11060
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = insulted
+				years = 5
+			}
+			random = {
+				chance = 10
+				add_rival = ROOT
+			}
+		}
+	}
+}
+
+#Physician cured your close of kin
+character_event = {
+	id = RIP.11061
+	picture = GFX_evt_recovery
+	desc = EVTDESC_RIP_11061
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	#Praise them to the court
+	option = {
+		tooltip_info = gregarious
+		trigger = {
+			trait = gregarious
+		}
+		ai_chance = {
+			factor = 100
+		}
+		name = EVTOPTC_RIP_11061
+		
+		reverse_opinion = {
+			who = FROMFROMFROM
+			modifier = opinion_was_praised
+			years = 5
+		}
+		
+		random = {
+			chance = 20
+			add_friend = FROMFROMFROM
+		}
+		
+		any_courtier = {
+			limit = {
+				age = 16
+				prisoner = no
+				NOT = {
+					character = ROOT
+				}
+				NOT = {
+					trait = incapable
+				}
+			}
+			opinion = {
+				who = FROMFROMFROM
+				modifier = opinion_good_work
+				years = 5
+			}
+		}
+	}
+
+	#Commend them
+	option = {
+		ai_chance = {
+			factor = 20
+		}
+		name = EVTOPTA_RIP_11061
+		reverse_opinion = {
+			who = FROMFROMFROM
+			modifier = opinion_was_praised
+			years = 5
+		}
+		opinion = {
+			who = FROMFROMFROM
+			modifier = opinion_good_work
+			years = 5
+		}
+		transfer_scaled_wealth = {
+			to = FROMFROMFROM
+			value = 0.02
+		}
+	}
+
+	#It's their job
+	option = {
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 0
+				trait = gregarious
+			}
+		}
+		prestige = 10
+		name = EVTOPTB_RIP_11061
+	}
+}
+
+#Physician tells you you have leprosy
+character_event = {
+	id = RIP.11062
+	picture = GFX_evt_court_physician 
+	desc = RIP.11062.d
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = ALAS
+		clr_character_flag = new_leper_character
+	}
+}
+
+#Leprosy cleanup
+character_event = {
+	id = RIP.11063
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = new_leper_character
+	}
+
+	option = {
+		name = ALAS
+		clr_character_flag = new_leper_character
+		clr_character_flag = being_treated
+	}
+}
+
+#babies born in seclusion gain seclusion
+character_event = {
+	id = RIP.11064
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		host = {
+			has_character_modifier = in_seclusion
+		}
+	}
+
+	option = {
+		name = OK
+		add_character_modifier = {
+			name = in_seclusion
+			duration = -1
+		}
+	}
+}
+
+# Court Physician becomes renowned
+character_event = {
+	id = RIP.11065
+	picture = GFX_evt_court_physician 
+	desc = RIP.110625.d
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+	
+	immediate = {
+		FROMFROMFROM = { 
+			save_event_target_as = physician_portrait
+			add_trait = physician
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			FROMFROMFROM = {
+				add_trait = physician
+			}
+		}
+	}
+}
+
+#Court physician ping event for sickly child
+character_event = {
+	id = RIP.11066
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	option = { event_target:infant_guardian = { character_event = { id = RIP.11067 } } }
+}
+
+character_event = {
+	id = RIP.11067
+	picture = GFX_evt_birth
+	desc = EVTDSC_RIP_11067
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#Treat them!
+	option = {
+		name = EVTOPTA_RIP_11067
+		custom_tooltip = { text = EVTOPTA_RIP_11067_TOOLTIP }
+
+		hidden_tooltip = { FROM = { character_event = { id = RIP.11068 days = 20 } } }
+
+		ai_chance = {
+			factor = 10
+
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 10
+				current_heir = { character = event_target:sickly_infant }
+			}
+		}
+	}
+
+	#Don't do anything
+	option = {
+		name = EVTOPTB_RIP_11067
+		custom_tooltip = { text = EVTOPTB_RIP_11067_TOOLTIP } 
+		
+		hidden_tooltip = {
+			random = {
+				chance = 20
+				modifier = {
+					factor = 4
+					event_target:sickly_infant = { is_unimportant_trigger = yes }
+				}
+
+				event_target:sickly_infant = { character_event = { id = RIP.11072 days = 30 random = 100 } } #Child dies
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+
+			modifier = {
+				factor = 50
+				event_target:sickly_infant = { is_unimportant_trigger = yes }
+			}
+			modifier = {
+				factor = 20
+				OR = {
+					trait = cruel
+					trait = arbitrary
+				}
+			}
+			modifier = {
+				factor = 20
+				OR = {
+					liege = { is_tribal = yes }
+					liege = { is_nomadic = yes }
+				}
+			}
+		}
+	}
+}
+
+#Court physician ping event for outcome of treatment for sickly child
+character_event = {
+	id = RIP.11068
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = { event_target:sickly_infant = { trait = sickly } }
+
+	option = { 
+		random_list = {
+			#Perfect treatment
+			15 = {
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					physician_good_trigger = yes
+				}
+				modifier = {
+					factor = 1.2
+					learning = 25
+				}
+				modifier = {
+					factor = 1.2
+					learning = 20
+				}
+				modifier = {
+					factor = 1.2
+					learning = 15
+				}
+				modifier = {
+					factor = 0.8
+					NOT = { learning = 15 }
+				}
+				modifier = {
+					factor = 0.8
+					NOT = { learning = 10 }
+				}
+				FROM = { character_event = { id = RIP.11069 } }
+			}
+			#A bit of a treatment
+			35 = {
+				modifier = {
+					factor = 1.2
+					learning = 25
+				}
+				modifier = {
+					factor = 1.2
+					learning = 20
+				}
+				modifier = {
+					factor = 1.2
+					learning = 15
+				}
+				modifier = {
+					factor = 0.8
+					NOT = { learning = 15 }
+				}
+				modifier = {
+					factor = 0.8
+					NOT = { learning = 10 }
+				}
+				FROM = { character_event = { id = RIP.11070 } }
+			}
+			#Bad treatment
+			50 = {
+				modifier = {
+					factor = 1.5
+					is_dumb_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					physician_bad_trigger = yes
+				}
+				modifier = {
+					factor = 0.8
+					learning = 25
+				}
+				modifier = {
+					factor = 0.8
+					learning = 20
+				}
+				modifier = {
+					factor = 0.8
+					learning = 15
+				}
+				modifier = {
+					factor = 1.2
+					NOT = { learning = 15 }
+				}
+				modifier = {
+					factor = 1.2
+					NOT = { learning = 10 }
+				}
+				FROM = { character_event = { id = RIP.11071 } }
+			}
+		}
+	}
+}
+
+#Sickly is removed
+character_event = {
+	id = RIP.11069
+	picture = GFX_evt_birth
+	desc = EVTDSC_RIP_11069
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_11069
+
+		event_target:sickly_infant = { remove_trait = sickly }
+	}
+}
+
+#Nice little treatment
+character_event = {
+	id = RIP.11070
+	picture = GFX_evt_birth
+	desc = EVTDSC_RIP_11070
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_11070
+
+		event_target:sickly_infant = { 
+			add_character_modifier = {
+				name = successful_treatment
+				years = 3
+			}
+		}
+	}
+}
+
+#Nothing happens
+character_event = {
+	id = RIP.11071
+	picture = GFX_evt_birth
+	desc = EVTDSC_RIP_11071
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_11071
+		custom_tooltip = { text = EVTOPTA_RIP_11071_TOOLTIP }
+	}
+}
+
+#Child dies ping event
+character_event = {
+	id = RIP.11072
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	option = { event_target:infant_guardian = { character_event = { id = RIP.11073 } } }
+}
+
+#Child dies
+character_event = {
+	id = RIP.11073
+	picture = GFX_evt_birth
+	desc = EVTDSC_RIP_11073
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	trigger = { FROM = { trait = sickly } }
+
+	option = {
+		name = EVTOPTA_RIP_11073
+		custom_tooltip = { text = EVTOPTA_RIP_11073_TOOLTIP }
+
+		FROM = { death = { death_reason = death_trait } }
+	}
+}

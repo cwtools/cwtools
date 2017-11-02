@@ -1,0 +1,114 @@
+##############################################################################
+# Groogy got bored a weekend again and made bunch of stuff 
+#
+# Range ZE.15000 - ZE.15999
+# New Horse Chancellor Events
+#    ZE.15000 - ZE.15010
+##############################################################################
+
+## Written by Henrik "Groogy" Hansson
+
+namespace = ZE
+
+### Horse Chancellor
+character_event = {
+	id = ZE.15000
+	desc = EVTDESC6317
+	picture = GFX_evt_courier
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	only_playable = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOT = {
+			has_game_rule = {
+				name = supernatural_events
+				value = off
+			}
+		}
+		trait = lunatic
+		any_voter = {
+			has_job_title = job_chancellor
+			NOT = { race = horse }
+			OR = {
+				ai = no
+				liege = { ai = no }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+	}
+	
+	option = {
+		name = EVTOPTA6317
+		tooltip_info = lunatic
+		job_chancellor = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				who = ROOT
+				years = 5
+			}
+			hidden_tooltip = {
+				character_event = { id = 6318 }
+			}
+			remove_title = job_chancellor
+		}
+		any_courtier = {
+			limit = {
+				race = horse
+			}
+			give_job_title = job_chancellor
+			break = yes
+		}
+		random_list = {
+			50 = {
+				create_character = {
+					name = "Glitterhoof"
+					age = 16
+					religion = ROOT
+					culture = horse
+					race = horse
+					dynasty = NONE
+					trait = horse
+					trait = imbecile
+					trait = stubborn
+					trait = fair
+					trait = strong
+				}
+			}
+			50 = {
+				create_character = {
+					name = "Glitterhoof"
+					female = yes
+					age = 16
+					religion = ROOT
+					culture = horse
+					race = horse
+					dynasty = NONE
+					trait = horse
+					trait = imbecile
+					trait = stubborn
+					trait = fair
+					trait = strong
+				}
+			}
+		}
+		new_character = {
+			give_job_title = job_chancellor
+			opinion = {
+				modifier = opinion_my_master
+				who = ROOT
+			}
+			reverse_opinion = {
+				modifier = opinion_my_horse
+				who = ROOT
+			}
+		}
+	}
+}

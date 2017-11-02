@@ -1,0 +1,7779 @@
+###################################
+#
+# Events for Guardian
+#
+# Id 2000-2499 and 38100 - 38299 is reserved
+#
+#
+###################################
+#
+# Written by Sara Wendel-Örtqvist & Henrik Fåhraeus
+# heavily revised by Johan Andersson.
+
+#Event ID 2000-2009 is reserved for Gluttonous events#
+#Fosterling gains trait Gluttonous
+character_event = {
+	id = 2000
+	desc = EVTDESC2000
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2000 # Encourage Gluttony
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = hedonist
+			}
+			modifier = {
+				factor = 0
+				trait = temperate
+			}
+		}
+		
+		if = {
+			limit = {
+				trait = temperate
+			}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = gluttonous
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = gluttonous
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_happy_with_guardian
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2000 # Birch Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = gluttonous
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_sad
+			years = 2
+		}
+		random = {
+			chance = 40
+			FROM = { 
+				remove_trait = gluttonous
+				hidden_tooltip = { 
+					character_event = { 
+						id = 1501 
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC2000 # Talk to Him about moderation.
+		trigger = {
+			NOT = { trait = gluttonous }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = temperate
+			}
+			modifier = {
+				factor = 10
+				trait = diligent
+			}
+			modifier = {
+				factor = 10
+				trait = celibate
+			}
+		}
+		
+		random_list = {
+			50 = { 
+				FROM = { 
+					add_trait = temperate
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38176
+							}
+						} 
+						character_event = { 
+							id = 38276
+						}
+					}
+				}
+			}
+			50 = { 
+				FROM = { 
+					remove_trait = gluttonous
+					hidden_tooltip = {
+						character_event = {	
+							id = 1501
+						}
+					}
+				}
+			}
+		}
+	}	
+	option = {
+		name = EVTOPTD2000 # Pray God will save her..
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+			}
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		
+		piety = 5
+		random = {
+			chance = 20 
+			FROM = { 
+				remove_trait = gluttonous
+				hidden_tooltip = { 
+					character_event = {	
+						id = 1501
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2010-2019 is reserved for Temperate events
+#Fosterling is Temperate
+character_event = {
+	id = 2010
+	desc = EVTDESC2010
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2010 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 4
+				trait = diligent
+			}
+			modifier = {
+				factor = 4
+				trait = celibate
+			}
+		}
+	
+		if = {
+			limit = { trait = gluttonous}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				stewardship = 10
+			}
+			FROM = { change_stewardship = 1}
+		}
+
+		if = {
+			limit = {
+				trait = temperate				
+			}
+			prestige = 5
+		}
+		FROM = { 
+			tooltip = {
+				add_trait = temperate
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2010 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = gluttonous
+			}
+			NOT = { trait =  gluttonous}
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				stewardship = 10
+			}
+			FROM = { change_stewardship = 1}
+		}
+		any_courtier = {
+			limit = {
+				trait = gluttonous
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+
+	option = {
+		name = EVTOPTC2010 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random = {
+			chance = 10
+			FROM = { 
+				add_trait = gluttonous
+				hidden_tooltip = { 
+					ROOT = { 
+						character_event = { 
+							id = 38177
+						}
+					}
+					character_event = { 
+						id = 38277 
+					} 
+				}
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTD2010 # He/She must learn to enjoy life!
+		trigger = {
+			NOT = { trait =  temperate }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = hedonist
+			}
+		}
+		
+		FROM = { 
+			random_list = {
+				50 = {
+					add_trait = gluttonous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+							id = 38177
+							}
+						}
+						character_event = {
+							id = 38277
+						}
+					}
+				}
+				40 = { 
+					remove_trait = temperate
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1511
+						}
+					}
+				}
+				10 = {}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2020-2029 is reserved for Greedy events#
+#Fosterling is Greedy
+character_event = {
+	id = 2020
+	desc = EVTDESC2020
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2020 # Encourage Greed
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+		}
+		
+		if = {
+			limit = { trait = charitable}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = greedy			
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = greedy
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}	
+	}
+	
+	
+	option = {
+		name = EVTOPTB2020 # Birch Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = greedy
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random = {
+			chance = 40
+			FROM = { 
+				remove_trait = greedy
+				hidden_tooltip = { 
+					character_event = {	
+						id = 1521
+					}
+				}
+			}
+		}
+	}	
+	option = {
+		name = EVTOPTC2020 # needs a lecture on charity!
+		trigger = {
+			NOT = { trait =  greedy }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+		}
+		
+		random_list = {
+			50 = {
+				FROM = { 
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173
+							}
+						}
+						character_event = {
+							id = 38273
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = greedy
+					hidden_tooltip = {
+						character_event = {
+							id = 1521
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+
+	option = {
+		name = EVTOPTD2020 # God will save him from Hell
+		trigger = {
+			NOT = { trait = cynical }
+			religion_group = christian
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random = {
+			chance = 20
+			FROM = { 
+				remove_trait = greedy
+				hidden_tooltip = { 
+					character_event = {	
+						id = 1521
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2030-2039 is reserved for Charitable events#
+#Fosterling is Charitable
+character_event = {
+	id = 2030
+	desc = EVTDESC2030
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2030 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+			modifier = {
+				factor = 4
+				trait = diligent
+			}
+			modifier = {
+				factor = 4
+				trait = kind
+			}
+		}
+	
+		if = {
+			limit = { trait = greedy}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = { change_diplomacy = 1}
+		}
+
+		if = {
+			limit = {
+				trait = charitable				
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = charitable
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2030 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = greedy
+			}
+			NOT = { trait =  greedy }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = { change_diplomacy = 1}
+		}
+		any_courtier = {
+			limit = {
+				trait = greedy
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+			
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+
+	option = {
+		name = EVTOPTC2030 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random = {
+			chance = 10
+			FROM = {
+				add_trait = greedy
+				hidden_tooltip = {
+					ROOT = {
+						character_event = {
+							id = 38152
+						}
+					}
+					character_event = { 
+						id = 38252
+					}
+				}
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTD2030 # Charity is for naive weaklings!
+		trigger = {
+			NOT = { trait =  charitable}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = hedonist
+			}
+		}
+		
+		random_list = {
+			50 = {
+				FROM = {
+					add_trait = greedy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38152
+							}
+						}
+						character_event = {
+							id = 38252
+						}
+					}
+				}
+			}
+			40 = {
+				FROM = {
+					remove_trait = charitable
+					hidden_tooltip = {
+						character_event = {
+							id = 1531
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+}
+
+
+##################################################
+
+#Event ID 2040-2049 is reserved for Slothful events#
+#Fosterling is slothful
+character_event = {
+	id = 2040
+	desc = EVTDESC2040
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2040 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = gluttonous
+			}
+		}
+		if = {
+			limit = { trait = diligent}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = slothful
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = slothful
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}		
+	
+	option = {
+		name = EVTOPTB2040 # Birch Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = slothful
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random = {
+			chance = 40
+			FROM = { 
+				remove_trait = slothful
+				hidden_tooltip = {
+					character_event = {
+						id = 1541
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTC2040 # needs a lecture on diligence!
+		trigger = {
+			NOT = { trait =  slothful }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = diligent
+			}
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+		}
+		
+		random_list = {
+			50 = {
+				FROM = {
+					add_trait = diligent
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38156
+							}
+						}
+						character_event = {
+							id = 38256
+						}
+					}
+				}
+			}
+			40 = {
+				FROM = {
+					remove_trait = slothful
+					hidden_tooltip = {
+						character_event = {
+							id = 1541
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2040 # Pray for his soul.
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+
+		piety = 5
+		random = {
+			chance = 20
+			FROM = {
+				remove_trait = slothful
+				hidden_tooltip = { 
+					character_event = {	
+						id = 1541
+					}
+				}
+			}
+		}
+	}
+}
+
+
+##################################################
+
+#Event ID 2050-2059 is reserved for Diligent events#
+#Fosterling is Diligent
+character_event = {
+	id = 2050
+	desc = EVTDESC2050
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2050 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = diligent
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+	
+		if = {
+			limit = { trait = slothful}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				OR = {
+					diplomacy = 12
+					martial = 12
+					stewardship = 12
+					intrigue = 12
+				}
+				learning = 10
+				
+			}
+			random_list = {
+				10 = { FROM = { change_diplomacy = 1 }}
+				10 = { FROM = { change_martial = 1 }}
+				10 = { FROM = { change_stewardship = 1 }}
+				10 = { FROM = { change_intrigue = 1 }}
+			}
+		}
+
+		if = {
+			limit = {
+				trait = diligent			
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = diligent
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2050 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = slothful
+			}
+			NOT = { trait =  slothful }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = diligent
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					diplomacy = 12
+					martial = 12
+					stewardship = 12
+					intrigue = 12
+				}
+				learning = 10
+				
+			}
+			random_list = {
+				10 = { FROM = { change_diplomacy = 1}}
+				10 = { FROM = { change_martial = 1}}
+				10 = { FROM = { change_stewardship = 1}}
+				10 = { FROM = { change_intrigue = 1}}
+			}
+		}
+		any_courtier = {
+			limit = {
+				trait = slothful
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+
+	option = {
+		name = EVTOPTC2050 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random = {
+			chance = 10
+			FROM = { 
+				add_trait = slothful
+				hidden_tooltip = { 
+					ROOT = { 
+						character_event = { 
+							id = 38151
+						}
+					}
+					character_event = { 
+						id = 38251
+					}
+				}
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTD2050 # The child needs to lighten up!
+		trigger = {
+			NOT = { trait = diligent}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = hedonist
+			}
+		}
+		
+		random_list = {
+			50 = {
+				FROM = {
+					add_trait = slothful
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38151
+							}
+						}
+						character_event = {
+							id = 38251
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = {
+					remove_trait = diligent
+					hidden_tooltip = {
+						character_event = {	
+							id = 1551
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2060-2069 is reserved for Envious events#
+#Fosterling is Envious
+character_event = {
+	id = 2060
+	desc = EVTDESC2060
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2060 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+		}
+		
+		if = {
+			limit = { trait = kind}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = envious				
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = envious
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2060 # Beat some respect into Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = slothful
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random = {
+			chance = 40
+			FROM = { 
+				remove_trait = envious
+				hidden_tooltip = { 
+					character_event = {	
+						id = 1561
+					}
+				}
+			}
+		}
+	}	
+	
+	option = {
+		name = EVTOPTC2060 # Discourage
+		trigger = {
+			NOT = { trait =  envious }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+		}
+		FROM = {
+			random_list = {
+				50 = { 
+					add_trait = kind
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = {
+								id = 38168
+							}
+						}
+						character_event = { 
+							id = 38268
+						}
+					}
+				}
+				40 = { 
+					remove_trait = envious
+					hidden_tooltip = { 
+						character_event = { 
+							id = 1561
+						}
+					}
+				}
+				10 = { }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2060 # Envy is the deadliest of sins!
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		
+		piety = 5
+		random_list = {
+			80 = { }
+			20 = { 
+				FROM = { 
+					remove_trait = envious 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1561
+						}
+					}
+				}
+			}
+		}
+	}	
+}
+
+##################################################
+
+#Event ID 2070-2079 is reserved for Kind events#
+#Fosterling is Kind
+character_event = {
+	id = 2070
+	desc = EVTDESC2070
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2070 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+		}
+		
+		if = {
+			limit = { trait = envious}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = { change_diplomacy = 1}
+		}
+
+		if = {
+			limit = {
+				trait = kind
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = kind
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}	
+	}
+	
+	option = {
+		name = EVTOPTB2070 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = envious
+			}
+			NOT = { trait =  envious }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			change_diplomacy = 1
+		}
+		any_courtier = {
+			limit = {
+				trait = envious
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+	
+	option = {
+		name = EVTOPTC2070 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		FROM = {
+			random_list = {
+				90 = { }
+				10 = {
+					add_trait = envious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38171
+							}
+						}
+						character_event = {
+							id = 38271
+						}
+					}
+				}
+			}
+		}		
+	}	
+	option = {
+		name = EVTOPTD2070 # Discourage
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+		}
+		FROM = {
+			random_list = {
+				50 = {
+					add_trait = envious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38171
+							}
+						}
+						character_event = {
+							id = 38271
+						}
+					}
+				}
+				40 = {
+					remove_trait = kind
+					hidden_tooltip = {
+						character_event = {
+							id = 1571
+						}
+					}
+				}
+				10 = { }
+			}
+		}		
+	}
+}
+
+
+##################################################
+
+#Event ID 2080-2089 is reserved for Wroth events#
+#Fosterling is Wroth
+character_event = {
+	id = 2080
+	desc = EVTDESC2080
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2080 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+	
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+		}
+		
+		if = {
+			limit = { trait = patient }
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = wroth				
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = wroth
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2080 # Beat some respect into Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			random_list = {
+				70 = { }
+				30 = {
+					add_trait = patient
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38164
+							}
+						}
+						character_event = { 
+							id = 38264
+						}
+					}
+				}
+			}
+		}
+	}	
+	
+	option = {
+		name = EVTOPTC2080 # Discourage
+		trigger = {
+			NOT = { trait = wroth }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = patient
+			}
+		}
+		FROM = {
+			random_list = {
+				50 = {
+					add_trait = patient
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38164
+							}
+						} 
+						character_event = {
+							id = 38264
+						}
+					}
+				}
+				40 = {
+					remove_trait = wroth 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1581 
+						}
+					}
+				}
+				10 = { }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2080 # Pray for his sins
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		FROM = { 
+			random_list = {
+				80 = { }
+				20 = { 
+					remove_trait = wroth
+					hidden_tooltip = {
+						character_event = {
+							id = 1581
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2090-2099 is reserved for Patient events#
+#Fosterling is Patient
+character_event = {
+	id = 2090
+	desc = EVTDESC2090
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2090 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = just
+			}
+			modifier = {
+				factor = 6
+				trait = patient
+			}
+		}
+		
+		if = {
+			limit = { trait = wroth}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			FROM = { change_intrigue = 1}
+		}
+
+		if = {
+			limit = {
+				trait = patient			
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = patient
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	
+	option = {
+		name = EVTOPTB2090 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = wroth
+			}
+			NOT = { trait = wroth }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = patient
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			change_intrigue = 1
+		}
+		any_courtier = {
+			limit = {
+				trait = wroth
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+			
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+	
+	option = {
+		name = EVTOPTC2090 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		FROM = {
+			random_list = {
+				90 = { }
+				10 = {	 
+					add_trait = wroth
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38154
+							}
+						}
+						character_event = {
+							id = 38254
+						}
+					}
+				}
+			}
+		}		
+	}	
+	option = {
+		name = EVTOPTD2090 # Discourage
+		trigger = {
+			NOT = { trait = patient }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 10
+				trait = wroth
+			}
+		}
+		FROM = {
+			random_list = {
+				50 = { 
+					add_trait = wroth
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38154
+							}
+						} 
+						character_event = {
+							id = 38254
+						}
+					}
+				}
+				40 = { 
+					remove_trait = patient 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1591
+						}
+					}
+				}
+				10 = { }
+			}
+		}		
+	}
+}
+
+##################################################
+
+#Event ID 2100-2109 is reserved for Proud events#
+#Fosterling is Proud
+character_event = {
+	id = 2100
+	desc = EVTDESC2100
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2100 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = proud
+			}
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+		}
+		if = {
+			limit = { trait = humble}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = proud
+			}
+			prestige = 5
+			
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = proud
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}		
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2100 # Beat some respect into him/her!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			60 = { }
+			40 = { 
+				FROM = { 
+					remove_trait = proud
+					hidden_tooltip = {
+						character_event = {
+							id = 1601 
+						}
+					}
+				}
+			}
+		}
+	}	
+	
+	
+	option = {
+		name = EVTOPTC2100 # Discourage
+		trigger = {
+			NOT = { trait = proud }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = humble
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+		}
+		FROM = { 
+			random_list = {
+				50 = {
+					add_trait = humble
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38160
+							}
+						}
+						character_event = {
+							id = 38260
+						}
+					}
+				}
+				40 = { 
+					remove_trait = proud
+					hidden_tooltip = {
+						character_event = {
+							id = 1601
+						}
+					}
+				}
+				10 = { }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2100 # Pray for his sinsS
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random_list = {
+			80 = { }
+			20 = { 
+				FROM = { 
+					remove_trait = proud
+					hidden_tooltip = {
+						character_event = {
+							id = 1601
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2110-2119 is reserved for Humble events#
+#Fosterling is Humble
+character_event = {
+	id = 2110
+	desc = EVTDESC2110
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2110 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = humble
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+		}
+		if = {
+			limit = { trait = proud}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = humble
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = humble
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}	
+	}
+	
+	option = {
+		name = EVTOPTB2110 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random_list = {
+			80 = { }
+			10 = { 
+				FROM = { 
+					add_trait = proud
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38161
+							}
+						}
+						character_event = {
+							id = 38261
+						}
+					}
+				}
+			}
+			10 = { 
+				FROM = { 
+				add_trait = wroth
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38154
+							}
+						}
+						character_event = {
+							id = 38254
+						}
+					}
+				}
+			}
+		}		
+	}	
+	option = {
+		name = EVTOPTC2110 # Discourage
+		trigger = {
+			NOT = { trait = proud }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = proud
+			}
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+
+		}
+		
+		random_list = {
+			50 = {
+				FROM = { 
+					add_trait = proud
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38161
+							}
+						}
+						character_event = {
+							id = 38261
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = humble
+					hidden_tooltip = {
+						character_event = {
+							id = 1611
+						}
+					}
+				}
+			}
+			10 = { }
+		}		
+	}
+}
+
+##################################################
+
+### Event ID 2120-2129 is reserved for Deceitful events ###
+
+#Fosterling is Deceitful
+character_event = {
+	id = 2120
+	desc = EVTDESC2120
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2120 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = deceitful
+			}
+		}
+		if = {
+			limit = { trait = honest}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = deceitful
+				intrigue = 15
+			}
+			FROM = {
+				change_intrigue = 1
+			}
+		}	
+		FROM = {
+			tooltip = {
+				add_trait = deceitful
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2120 # Beat some respect into Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			50 = { }
+			40 = {
+				FROM = {
+					remove_trait = deceitful
+					hidden_tooltip = {
+						character_event = {
+							id = 1621
+						}
+					}
+				}
+			}
+			10 = {
+				FROM = {
+					add_trait = wroth
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38154
+							}
+						}
+						character_event = {
+							id = 38254
+						}
+					}
+				}
+			}
+		}
+	}	
+	
+	
+	option = {
+		name = EVTOPTC2120 # Discourage
+		trigger = {
+			NOT = { trait = deceitful }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = honest
+			}
+		}
+		random_list = {
+			50 = {
+				FROM = { 
+					add_trait = honest
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = {
+								id = 38162
+							}
+						}
+						character_event = {
+							id = 38262
+						}
+					}
+				}
+			}
+			40 = {
+				FROM = { 
+					remove_trait = deceitful
+					hidden_tooltip = {
+						character_event = {	
+							id = 1621
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2120 # Pray for his sins
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random_list = {
+			80 = {}
+			20 = { 
+				FROM = { 
+					remove_trait = deceitful
+					hidden_tooltip = {
+						character_event = {
+							id = 1621
+						}
+					} 
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2130-2139 is reserved for Zealous events
+#Fosterling is Zealous
+character_event = {
+	id = 2130
+	desc = EVTDESC2130
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2130 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+		}
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+		}
+		if = {
+			limit = {
+				learning = 10
+			}
+			FROM = { change_learning = 1}
+		}
+		if = {
+			limit = {
+				trait = zealous
+				learning = 10
+			}
+			FROM = { piety = 5}
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = zealous
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2130 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+		}
+		
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+			piety = -50
+		}
+		FROM = {
+			remove_trait = zealous
+			hidden_tooltip = {
+				character_event = {
+					id = 1631
+				}
+			}
+		}
+	}
+}
+
+#Fosterling is Zealous - Muslim
+character_event = {
+	id = 2132
+	desc = EVTDESC2132
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2130 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+		}
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+		}
+		if = {
+			limit = {
+				learning = 10
+			}
+			FROM = { change_learning = 1}
+		}
+		if = {
+			limit = {
+				trait = zealous
+				learning = 10
+			}
+			FROM = { piety = 5}
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = zealous
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2130 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+		}
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+			piety = -50
+		}
+		FROM = {
+			remove_trait = zealous
+			hidden_tooltip = {
+				character_event = {
+					id = 1631
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2140-2149 is reserved for Honest events#
+#Fosterling is Honest
+character_event = {
+	id = 2140
+	desc = EVTDESC2140
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2140 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = honest
+			}
+		}
+		if = {
+			limit = { trait = deceitful}
+			prestige = -5
+		}
+		random_courtier = {
+			limit = {
+				trait = gluttonous
+				is_female = yes
+				prisoner = no
+			}
+			opinion = {
+				modifier = opinion_insulted
+				who = ROOT
+				years = 2
+			}
+		}
+		
+		if = {
+			limit = {
+				trait = honest				
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = honest
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2140 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = deceitful
+			}
+			NOT = { trait = deceitful }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 0
+				trait = deceitful
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			change_diplomacy = 1 
+		}
+		any_courtier = {
+			limit = {
+				trait = deceitful
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+		}
+		FROM = {
+			prestige = 5
+		}
+	}	
+	
+	option = {
+		name = EVTOPTC2140 # Discourage Mildly
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				trait = honest
+			}			
+		}
+		FROM = {
+			remove_trait = honest
+			hidden_tooltip = {
+				character_event = {
+					id = 1641
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2140 # Discourage strongly
+		trigger = {
+			NOT = { trait = honest }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = deceitful
+			}
+		}
+		
+		random_list = {
+			50 = {	
+				FROM = { 
+					add_trait = deceitful
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38155
+							}
+						}
+						character_event = {
+							id = 38255
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = honest 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1641
+						}
+					}
+				}
+			}
+			10 = {}
+		}		
+	}	
+}
+
+##################################################
+
+#Event ID 2150-2159 is reserved for Craven events#
+#Fosterling is Craven
+character_event = {
+	id = 2150
+	desc = EVTDESC2150
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2150 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 10
+				trait = craven
+			}
+			modifier = {
+				factor = 0
+				trait = brave
+			}
+		}
+		if = {
+			limit = {
+				trait = craven				
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = craven
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2150 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = content
+			}
+		}
+		if = {
+			limit = { trait = brave}
+			prestige = -5
+		}
+		random_list = {
+			50 = {	
+				FROM = {
+					add_trait = content
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38179
+							}
+						}
+						character_event = {
+							id = 38279
+						}
+					}
+				} 
+			}
+			30 = {
+				FROM = { 
+					remove_trait = craven
+					hidden_tooltip = {
+						character_event = {
+							id = 1651
+						}
+					} 
+				} 
+			}
+			20 = { }
+		}
+	}	
+	
+	option = {
+		name = EVTOPTC2150 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = brave
+			}
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+		}
+		FROM = {
+			remove_trait = craven
+			hidden_tooltip = {
+				character_event = {
+					id = 1651
+				}
+			}
+		}
+		random = {
+			chance = 25
+			FROM = { 
+				add_trait = brave 
+				hidden_tooltip = {
+					ROOT = {
+						character_event = {
+							id = 38170
+						}
+					}
+					character_event = {
+						id = 38270
+					} 
+				}
+			} 
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2160-2169 is reserved for Brave events#
+#Fosterling is Brave
+character_event = {
+	id = 2160
+	desc = EVTDESC2160
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2160 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = brave
+			}
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0
+				trait = craven
+			}			
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			FROM = { change_martial = 1}
+		}
+		if = {
+			limit = {
+				trait = brave			
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = brave
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2160 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = craven
+			}
+			NOT = { trait =  craven}
+		}		
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 0
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			FROM = { change_martial = 1}
+		}
+		any_courtier = {
+			limit = {
+				trait = craven
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+			
+		}
+		FROM = {
+			prestige = 5
+		}
+	}		
+	
+	option = {
+		name = EVTOPTC2160 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = craven
+			}
+			modifier = {
+				factor = 0
+				trait = brave
+			}
+		}
+		random_list = {
+			50 = { 
+				FROM = { 
+					add_trait = craven
+					hidden_tooltip = {
+						ROOT = { 
+							character_event = {
+								id = 38157
+							}
+						} 
+						character_event = {
+							id = 38257
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = brave
+					hidden_tooltip = {
+						character_event = {
+							id = 1661
+						}
+					}
+				}
+			}
+			10 = { }
+		}		
+	}
+}
+
+##################################################
+
+#Event ID 2170-2179 is reserved for Shy events#
+#Fosterling is Shy
+character_event = {
+	id = 2170
+	desc = EVTDESC2170
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2170 # Encourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = shy
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}
+			modifier = {
+				factor = 2
+				trait = content
+			}
+			modifier = {
+				factor = 0
+				trait = gregarious
+			}
+			modifier = {
+				factor = 0
+				trait = proud
+			}			
+		}
+		
+		if = {
+			limit = {
+				trait = gregarious
+			}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = shy			
+			}
+			prestige = 5
+		}
+		FROM = {
+			tooltip = {
+				add_trait = shy
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2170 # Birch Him!
+		trigger = {
+			NOT = { trait = kind }
+			NOT = { trait = shy }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0
+				trait = shy
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			60 = { }
+			40 = { 
+				FROM = { 
+					remove_trait = shy
+					hidden_tooltip = {
+						character_event = {
+							id = 1671
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTC2170 # Talk to him 
+		trigger = {
+			NOT = { trait = shy }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = temperate
+			}
+			modifier = {
+				factor = 10
+				trait = diligent
+			}
+			modifier = {
+				factor = 10
+				trait = celibate
+			}
+		}
+		
+		random_list = {
+			50 = {
+				FROM = {
+					add_trait = gregarious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38165
+							}
+						} 
+						character_event = { 
+							id = 38265
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = shy
+					hidden_tooltip = {
+						character_event = {	
+							id = 1671
+						}
+					} 
+				}
+			}
+			10 = { }
+		}
+	}	
+	option = {
+		name = EVTOPTD2170 # Pray God will give her strength.
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random_list = {
+			80 = { }
+			20 = {	
+				FROM = {
+					remove_trait = shy
+					hidden_tooltip = { 
+						character_event = {
+							id = 1671
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2180-2189 is reserved for Gregarious events#
+#Fosterling is Gregarious
+character_event = {
+	id = 2180
+	desc = EVTDESC2180
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2180 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 4
+				trait = proud
+			}
+			modifier = {
+				factor = 4
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0
+				trait = shy
+			}
+		}
+	
+		if = {
+			limit = { trait = shy}
+			prestige = -5
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = { change_diplomacy = 1}
+		}
+
+		if = {
+			limit = {
+				trait = gregarious			
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = gregarious
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2180 # Hold up X as an example for the court!
+		trigger = {
+			any_courtier = {
+				trait = shy
+			}
+			NOT = { trait = shy }
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 0
+				trait = shy
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = { change_diplomacy = 1}
+		}
+		any_courtier = {
+			limit = {
+				trait = shy
+			}		
+			opinion = {
+				modifier = opinion_envy
+				who = FROM
+				years = 5
+			}
+		}
+		FROM = {
+			prestige = 5
+		}
+	}
+
+	option = {
+		name = EVTOPTC2180 # Thank God for X's virtues!
+		trigger = {
+			NOT = { trait = cynical }
+			NOT = { religion = buddhist }
+			NOT = { religion = jain }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		piety = 5
+		random_list = {
+			90 = { }
+			10 = {
+				FROM = { 
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = { 
+							character_event = {
+								id = 38163
+							}
+						} 
+						character_event = {
+							id = 38263
+						}
+					}
+				}
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTD2180 # discourage
+		trigger = {
+			NOT = { trait = temperate }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = humble
+			}
+			modifier = {
+				factor = 5
+				trait = honest
+			}
+		}
+		
+		random_list = {
+			50 = { 
+				FROM = { 
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38163
+							}
+						}
+						character_event = {
+							id = 38263
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = gregarious
+					hidden_tooltip = {
+						character_event = {
+							id = 1681
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2190-2199 is reserved for Ambitious events#
+#Fosterling is Ambitious
+character_event = {
+	id = 2190
+	desc = EVTDESC2190
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2190 # Encourage
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 4
+				trait = ambitious
+			}
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+		}
+		FROM = {
+			add_trait = ambitious
+			hidden_tooltip = {
+				ROOT = {
+					character_event = {
+						id = 38178 #Notify Child is ambitious
+					}
+				}
+				character_event = {
+					id = 38278 #Notify Ambitious
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2190 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = content
+			}
+			modifier = {
+				factor = 10
+				trait = humble
+			}
+		}
+		FROM = {
+			remove_trait = ambitious
+			hidden_tooltip = {
+				character_event = {
+					id = 1691
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2200-2209 is reserved for Content events#
+#Fosterling is Content
+character_event = {
+	id = 2200
+	desc = EVTDESC2200
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2200 # Encourage
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 4
+				trait = content
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}
+		}
+		FROM = {
+			tooltip = {
+				add_trait = content
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2200 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = ambitious
+			}
+			modifier = {
+				factor = 10
+				trait = proud
+			}
+		}
+		FROM = {
+			remove_trait = content
+			hidden_tooltip = {
+				character_event = {
+					id = 1701
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2210-2219 is reserved for Arbitrary events#
+#Fosterling is Arbitrary
+character_event = {
+	id = 2210
+	desc = EVTDESC2210
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2210 # Encourage
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 4
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = deceitful
+			}
+		}
+		FROM = {
+			tooltip = {
+				add_trait = arbitrary
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2210 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = just
+			}
+			modifier = {
+				factor = 10
+				trait = diligent
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		FROM = {
+			remove_trait = arbitrary
+			hidden_tooltip = {
+				character_event = {
+					id = 1711
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2220-2229 is reserved for Just events#
+#Fosterling is Just
+character_event = {
+	id = 2220
+	desc = EVTDESC2220
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2220 # Encourage
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 4
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+		}
+		FROM = {
+			tooltip = {
+				add_trait = just
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2220 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 10
+				trait = slothful
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+		}
+		FROM = {
+			remove_trait = just
+			hidden_tooltip = {
+				character_event = {
+					id = 1721
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Event ID 2230-2239 is reserved for Cynical events#
+#Fosterling is Cynical
+character_event = {
+	id = 2230
+	desc = EVTDESC2230
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2230 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+		}
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+		}	
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			FROM = { change_intrigue = 1}
+		}	
+		FROM = {
+			tooltip = {
+				add_trait = cynical
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2230 # Discourage
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 200
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+		}
+		FROM = {
+			remove_trait = cynical
+			if = {
+				limit = {
+					NOT = {
+						religion_group = muslim
+					}
+				}
+				hidden_tooltip = {
+					character_event = {
+						id = 1731
+					}
+				}
+			}
+			if = {
+				limit = {
+					religion_group = muslim
+				}
+				hidden_tooltip = {
+					character_event = {
+						id = 1733
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+#Fosterling gains trait Cruel
+character_event = {
+	id = 2465
+	desc = EVTDESC2465
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2465 # Encourage
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = impaler
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+		}
+		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		if = {
+			limit = { trait = kind }
+			prestige = -5
+		}
+		if = {
+			limit = {
+				trait = cruel			
+			}
+			prestige = 5
+		}		
+		FROM = {
+			tooltip = {
+				add_trait = cruel
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB2465 # Beat some respect into Him!
+		trigger = {
+			NOT = { trait = kind }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 10
+				trait = wroth
+			}
+			modifier = {
+				factor = 0
+				trait = cruel
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			60 = { }
+			40 = { 
+				FROM = { 
+					remove_trait = cruel
+					hidden_tooltip = {
+						character_event = {
+							id = 1966
+						}
+					}
+				}
+			}
+		}
+	}	
+	
+	option = {
+		name = EVTOPTC2465 # Discourage
+		trigger = {
+			NOT = { trait = cruel }
+		}		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+		}
+		
+		random_list = {
+			50 = {	
+				FROM = { 
+					add_trait = kind 
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38168
+							}
+						} 
+						character_event = {
+							id = 38268
+						}
+					}
+				}
+			}
+			40 = { 
+				FROM = { 
+					remove_trait = cruel 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1966
+						}
+					}
+				}
+			}
+			10 = { }
+		}
+	}
+	
+	option = {
+		name = EVTOPTD2465 # Pray for his soul!
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 150
+				trait = zealous
+			}
+		}
+		
+		piety = 5
+		random_list = {
+			80 = { }
+			20 = { 
+				FROM = { 
+					remove_trait = cruel 
+					hidden_tooltip = { 
+						character_event = {	
+							id = 1966 
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+##################################################
+
+# Vassal wants to be guardian for liege's child
+character_event = {
+	id = 2480
+	desc = EVTDESC2480
+	picture = GFX_evt_council
+	
+	min_age = 20
+	max_age = 70
+	only_rulers = yes
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		independent = no
+		NOT = { trait = stressed }
+		NOT = { trait = depressed }
+		NOT = { trait = leper }
+		health = 4
+		
+		# Not if already having a ward
+		NOT = {
+			any_ward = {
+				age = 6
+			}
+		}
+		liege = {
+			NOT = {
+				character = ROOT
+			}
+			any_child = {
+				age = 6
+				is_ruler = no
+				is_alive = yes
+				NOT = { age = 16 }
+				prisoner = no
+				NOT = {
+					AND = {
+						is_female = yes
+						religion_group = muslim
+					}
+				}
+				has_guardian = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 5.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 5.0
+			trait = shy
+		}
+		modifier = {
+			factor = 0.6
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.6
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			martial =  12
+		}
+		modifier = {
+			factor = 0.5
+			stewardship = 12
+		}
+	}
+	
+	option = {
+		name = EVTOPTA2480
+		ai_chance = { factor = 100}
+		liege = {
+			letter_event = {
+				id = 2481
+				tooltip = EVTTOOLTIP2481
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB2480
+		ai_chance = { factor = 0}
+	}
+}
+
+# The liege is asked by a vassal to let him/her raise the child
+letter_event = {
+	id = 2481
+	desc = EVTDESC2481
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2481
+		random_child = {
+			limit = {
+				age = 6
+				NOT = { age = 16}
+				has_guardian = no
+				is_alive = yes
+				prisoner = no
+			}
+			set_character_flag = guardian_child
+			character_event = { id = 2484 tooltip = EVTTOOLTIP2484 }
+		}
+		FROM = {
+			letter_event = {
+				id = 2482
+				tooltip = EVTTOOLTIP2482
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB2481
+		FROM = {
+			letter_event = {
+				id = 2483
+				tooltip = EVTTOOLTIP2483
+			}
+		}
+	}
+}
+
+# The vassal becomes the guardian of the child
+letter_event = {
+	id = 2482
+	desc = EVTDESC2482
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2482
+		if = {
+			limit = {
+				liege = {
+					any_child = {
+						age = 6
+						NOT = { age = 16}
+						has_guardian = no
+						prisoner = no
+						has_character_flag = guardian_child
+					}
+				}
+			}
+			liege = {
+				random_child = {
+					limit = {
+						age = 6
+						NOT = { age = 16}
+						has_guardian = no
+						has_character_flag = guardian_child
+					}
+					set_guardian = ROOT
+					clr_character_flag = guardian_child
+				}
+			}
+			opinion = {
+				modifier = opinion_granted_guardianship
+				who = FROM
+				months = 24
+			}
+		}
+	}
+}
+
+# The vassal's request is denied
+letter_event = {
+	id = 2483
+	desc = EVTDESC2483
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2483
+		opinion = {
+			modifier = opinion_denied_guardianship
+			who = FROM
+			months = 24
+		}
+	}
+}
+
+# The child is informed of the guardianship
+character_event = {
+	id = 2484
+	desc = EVTDESC2484
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA2484
+	}
+}
+
+###################################
+
+# Child asks guardian about religion
+character_event = {
+	id = 38100
+	desc = EVTDESC38100
+	picture = GFX_evt_guardian
+	
+	min_age = 6
+	max_age = 15
+	only_capable = yes
+	lacks_dlc = "Zeus"
+	
+	trigger = {
+		has_guardian = yes
+		guardian = { 
+			NOT = { religion = ROOT }
+			employer = {
+				religion = PREV
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.5
+			guardian = {
+				trait = zealous
+			}
+		}
+		modifier = {
+			factor = 0.5
+			guardian = {
+				trait = diligent
+			}
+		}
+		modifier = {
+			factor = 0.2
+			guardian = {
+				is_priest = yes
+			}
+		}
+		modifier = {
+			factor = 2.0
+			guardian = {
+				trait = slothful
+			}
+		}
+		modifier = {
+			factor = 2.0
+			guardian = {
+				trait = cynical
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA38100 # Ask the guardian about God
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+		}
+		ai_chance = { factor = 100}
+		guardian = {
+			character_event = {
+				id = 38101
+				days = 2
+				tooltip = EVTTOOLTIP38101
+			}
+		}
+		piety = 5
+	}
+	option = {
+		name = EVTOPTB38100 # Go play with my friends
+		ai_chance = { factor = 0}
+		piety = -5
+	}
+	option = {
+		name = EVTOPTC38100 # Ask the guardian about Allah
+		trigger = {
+			religion_group = muslim
+		}
+		ai_chance = { factor = 100}
+		guardian = {
+			character_event = {
+				id = 38101
+				days = 2
+				tooltip = EVTTOOLTIPA38101
+			}
+		}
+		piety = 5
+	}
+}
+
+# Guardian chooses whether to convert the child
+character_event = {
+	id = 38101
+	desc = EVTDESC38101
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38101 # Teach the child the true faith
+		ai_chance = { factor = 100}
+		FROM = {
+			character_event = {
+				id = 38102
+				tooltip = EVTTOOLTIP38102
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB38101 # He/she will sort it out...
+		tooltip_info = cynical
+		trigger = {
+			trait = cynical
+		}
+		ai_chance = { factor = 0}
+		piety = -5
+	}
+}
+
+# Guardian chooses whether to convert the child
+character_event = {
+	id = 38102
+	desc = EVTDESC38102
+	picture = GFX_evt_guardian
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38102 # Conversion
+		religion = FROM
+	}
+}
+
+###################################
+
+# Child is influenced by the culture of his or her guardian
+character_event = {
+	id = 38110
+	desc = EVTDESC38110
+	picture = GFX_evt_guardian
+	
+	min_age = 6
+	max_age = 15
+	only_capable = yes
+	lacks_dlc = "Zeus"
+	
+	trigger = {
+		has_guardian = yes
+		father = {
+			NOT = { is_nomadic = yes }
+		}
+		guardian = {
+			NOT = { culture = ROOT }
+			employer = {
+				culture = PREV
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.5
+			guardian = {
+				trait = diligent
+			}
+		}
+		modifier = {
+			factor = 0.5
+			guardian = {
+				trait = gregarious
+			}
+		}
+		modifier = {
+			factor = 2.0
+			guardian = {
+				trait = shy
+			}
+		}
+		modifier = {
+			factor = 2.0
+			guardian = {
+				trait = slothful
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA38110
+		ai_chance = { factor = 100}
+		guardian = {
+			reverse_culture = ROOT
+			hidden_tooltip = {
+				character_event = {
+					id = 38111
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38100 # Go play with my friends
+		ai_chance = { factor = 0 }
+	}
+}
+
+character_event = {
+	id = 38111
+	desc = EVTDESC38111
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38111 # What a bright child
+		prestige = 1
+	}
+}
+
+
+
+
+######################################
+#38200 - CK1 ported events by Johan
+######################################
+
+
+# Child is slow to learn to talk.
+character_event = {
+	id = 38200
+	desc = EVTDESC38200
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38200 # Encourage the child by example
+		
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = trusting}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = kind}
+			}
+			modifier = {
+				factor = 0
+				father = { trait = cruel}
+			}			
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+			25 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+			15 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+			10 = {	FROM = { add_trait = stutter	hidden_tooltip = { ROOT = { character_event = { id = 38153}} character_event = { id = 38253} }}}
+		}
+
+	}
+	option = {
+		name = EVTOPTB38200 # Birch the words from the child
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = cruel}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = wroth}
+			}
+			modifier = {
+				factor = 0
+				father = { trait = kind}
+			}			
+		}			
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			80 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254}}}}
+			15 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255}}}}
+			 5 = {	FROM = { add_trait = stutter	hidden_tooltip = { ROOT = { character_event = { id = 38153}} character_event = { id = 38253}}}}
+		}
+	}
+	option = {
+		name = EVTOPTC38200 # Let the child take its time
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = arbitrary}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = stutter	hidden_tooltip = { ROOT = { character_event = { id = 38153}} character_event = { id = 38253}}}}
+			45 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256}}}}
+			5 = {	FROM = { add_trait = trusting   hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+		}
+	}
+	option = {
+		name = EVTOPTD38200 # Send this child to the nannies instead
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = slothful}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = stutter	hidden_tooltip = { ROOT = { character_event = { id = 38153}} character_event = { id = 38253}}}}
+			50 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+		}
+
+	}
+
+
+}
+
+
+
+# Daddy, where do children come from?
+character_event = {
+	id = 38201
+	desc = EVTDESC38201
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38201 # Daddy will tell you when you get older
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = cynical}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = arbitrary}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+			30 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			20 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255} }}}
+		}
+
+	}
+	
+	option = {
+		name = EVTOPTB38201 # You know there are bees and flowers...
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = deceitful}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = kind}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+			30 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255} }}}
+			20 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+		}
+
+	}	
+
+	option = {
+		name = EVTOPTC38201 # Be silent or I'll slap you!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = cruel}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = wroth}
+			}
+		}			
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			40 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+			40 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			20 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+}
+
+
+# Your child is afraid of the dark
+character_event = {
+	id = 38202
+	desc = EVTDESC38202
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38202 # Ridicule the child, that should do it
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = cruel}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = slothful}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+			30 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			20 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB38202 # Try to adress the causes of the fear
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = kind}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = diligent}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+			30 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			20 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38202 # Let the child handle this alone
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = craven}
+			}
+			modifier = {
+				factor = 2
+				father = { trait = cruel}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+			30 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			20 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+		}
+	}
+}
+
+# Your child is often involved in fights with other toddlers
+character_event = {
+	id = 38203
+	desc = EVTDESC38203
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38203 # That's good news
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = proud}
+			}
+		}			
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			40 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+			30 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			20 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			10 = {	FROM = { add_trait = cruel	hidden_tooltip = { ROOT = { character_event = { id = 38159}} character_event = { id = 38259} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38203 # Try to steer the child's energy elsewhere
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = diligent}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+			25 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			25 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTC38203 # Discipline the child
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = wroth}
+			}
+		}			
+		random_list = {
+			50 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			30 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+			20 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+		}
+	}
+	
+	option = {
+		name = EVTOPTD38203 # Let the monks purge sin from the child
+		trigger = {
+			religion_group = christian
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = humble}
+			}
+		}			
+		random_list = {
+			70 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			20 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+			10 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+		}
+	}
+}
+
+# Your child always wants more toys
+character_event = {
+	id = 38204
+	desc = EVTDESC38204
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38204 # Let the child have them
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = slothful}
+			}
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+			20 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			10 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38204 # Encourage the child to play outside instead
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = diligent}
+			}
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			40 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38204 # Teach the child some humility
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = humble}
+			}
+			modifier = {
+				factor = 4
+				father = { trait = charitable}
+			}
+		}		
+		random_list = {
+			80 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			20 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+	option = {
+		name = EVTOPTD38204 # Off to the nannies with you, leech!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				father = { trait = greedy}
+			}
+		}		
+		random_list = {
+			90 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+			10 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+}
+
+# Dad, Where is mom?
+character_event = {
+	id = 38205
+	desc = EVTDESC38205
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38205 # Mom is an angel now
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+				religion_group = jewish_group
+			}
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = honest
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262} }}}
+			30 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			20 = {	FROM = { add_trait = shy	hidden_tooltip = { ROOT = { character_event = { id = 38163}} character_event = { id = 38263 } }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38205 # Mom has gone to a long journey
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = patient
+			}
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+		}		
+		random_list = {
+			40 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			40 = {	FROM = { add_trait = patient	hidden_tooltip = { ROOT = { character_event = { id = 38164}} character_event = { id = 38264} }}}
+			20 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		
+		}
+	}
+	option = {
+		name = EVTOPTC38205 # Don't me ask me things like that!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = deceitful
+			}
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+			30 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255} }}}
+			20 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+		}
+	}
+}
+
+# Your child has trouble making friends
+character_event = {
+	id = 38206
+	desc = EVTDESC38206
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38206 # Friends are overvalued commodity anyway 
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = shy
+			}
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+			30 = {	FROM = { add_trait = shy	hidden_tooltip = { ROOT = { character_event = { id = 38163}} character_event = { id = 38263 } }}}
+			20 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38206 # Help the child along
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = gregarious	hidden_tooltip = { ROOT = { character_event = { id = 38165}} character_event = { id = 38265} }}}
+			40 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262} }}}
+		}
+	}	
+	option = {
+		name = EVTOPTC38206 # Give the child toys to attract friends with
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = deceitful
+			}
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255}}}}
+			40 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+		}
+	}	
+}
+
+# Your child wants to play with friends instead of studying
+character_event = {
+	id = 38207
+	desc = EVTDESC38207
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38207 # He can play only after school 
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = just
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = just	hidden_tooltip = { ROOT = { character_event = { id = 38167}} character_event = { id = 38267 } }}}
+			45 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			5 = {	FROM = { add_trait = shy	hidden_tooltip = { ROOT = { character_event = { id = 38163}} character_event = { id = 38263 } }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38207 # Play all you like then
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = gregarious	hidden_tooltip = { ROOT = { character_event = { id = 38165}} character_event = { id = 38265} }}}
+			30 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+			10 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38207 # You can play with a birch if you like, go to school!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+		}		
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_list = {
+			70 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			30 = {	FROM = { add_trait = deceitful	hidden_tooltip = { ROOT = { character_event = { id = 38155}} character_event = { id = 38255}}}}
+		}
+	}
+}
+
+# Where do heathens come from?
+character_event = {
+	id = 38208
+	desc = EVTDESC38208
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38208 # Heathens are people just like us 
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 4
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+			}			
+		}
+		random_list = {
+			50 = {	FROM = { add_trait = kind	hidden_tooltip = { ROOT = { character_event = { id = 38168}} character_event = { id = 38268 } }}}
+			40 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262} }}}
+			10 = {	FROM = { add_trait = gregarious	hidden_tooltip = { ROOT = { character_event = { id = 38165}} character_event = { id = 38265} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38208 # They are demons from Hell!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = wroth
+			}
+			modifier = {
+				factor = 10
+				trait = zealous
+			}			
+		}
+		
+		random_list = {
+			60 = {	FROM = { add_trait = zealous	hidden_tooltip = { ROOT = { character_event = { id = 38169}} character_event = { id = 38269 } }}}
+			30 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			10 = {	FROM = { add_trait = cruel	hidden_tooltip = { ROOT = { character_event = { id = 38159}} character_event = { id = 38259} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38208 # They are men like us, but unbeliever enemies
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 6
+				trait = just
+			}
+		}
+		
+		random_list = {
+			80 = {	FROM = { add_trait = just	hidden_tooltip = { ROOT = { character_event = { id = 38167}} character_event = { id = 38267 } }}}
+			20 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+		}
+	}
+}
+
+#Your child is often playing very daring games with other children
+character_event = {
+	id = 38209
+	desc = EVTDESC38209
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38209 # Let the child play, what harm could there be? 
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = brave
+			}
+			modifier = {
+				factor = 0
+				trait = craven
+			}			
+		}		
+		random_list = {
+			95 = {	FROM = { add_trait = brave	hidden_tooltip = { ROOT = { character_event = { id = 38170}} character_event = { id = 38270 } }}}
+			5 = {
+				FROM = { 
+					death = {
+						death_reason = death_accident
+					}
+				} 
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38209 # Try to limit the child's games a bit
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}			
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			50 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262 } }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38209 # Curfew the child!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}			
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+			40 = {	FROM = { add_trait = shy	hidden_tooltip = { ROOT = { character_event = { id = 38163}} character_event = { id = 38263 } }}}
+		}
+	}
+}
+
+# Daddy, does God exist?
+character_event = {
+	id = 38210
+	desc = EVTDESC38210
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38210 # Of course my child, go to play now
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}			
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = trusting	hidden_tooltip = { ROOT = { character_event = { id = 38150}} character_event = { id = 38250} }}}
+			30 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38210 # Certainly child, let me tell you all about Him
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 10
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				trait = cynical
+			}			
+		}		
+		random_list = {
+			90 = {	FROM = { add_trait = zealous	hidden_tooltip = { ROOT = { character_event = { id = 38169}} character_event = { id = 38269 } }}}
+			10 = {	FROM = { add_trait = kind	hidden_tooltip = { ROOT = { character_event = { id = 38168}} character_event = { id = 38268 } }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38210 # My child, let me explain how things really are...
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 10
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+			}			
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+			30 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}
+}
+
+# Why do people die?
+character_event = {
+	id = 38211
+	desc = EVTDESC38211
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38211 # Because they are too carefree
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = patient
+			}
+			modifier = {
+				factor = 2
+				trait = craven
+			}			
+		}		
+		random_list = {
+			60 = {	FROM = { add_trait = patient	hidden_tooltip = { ROOT = { character_event = { id = 38164}} character_event = { id = 38264} }}}
+			30 = {	FROM = { add_trait = craven	hidden_tooltip = { ROOT = { character_event = { id = 38157}} character_event = { id = 38257} }}}
+			10 = {	FROM = { add_trait = slothful	hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38211 # Everyone dies, sooner or later
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = brave
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}			
+		}		
+		random_list = {
+			50 = {	FROM = { add_trait = brave	hidden_tooltip = { ROOT = { character_event = { id = 38170}} character_event = { id = 38270 } }}}
+			50 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38211 # It's all part of God's plan
+		trigger = {
+			religion_group = christian
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+			modifier = {
+				factor = 8
+				trait = zealous
+			}			
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262 } }}}		
+			30 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}
+	option = {
+		name = EVTOPTD38211 # It's all part of Allah's plan
+		trigger = {
+			religion_group = muslim
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+			modifier = {
+				factor = 8
+				trait = zealous
+			}			
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = honest	hidden_tooltip = { ROOT = { character_event = { id = 38162}} character_event = { id = 38262 } }}}		
+			30 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}
+}
+
+# Will I rule one day?
+character_event = {
+	id = 38212
+	desc = EVTDESC38212
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38212 # Of course you will...
+		trigger = {
+			FROM = {
+				OR = {
+					father = { is_ruler = yes}
+					is_primary_heir = yes
+				}
+			}
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = proud
+			}
+			modifier = {
+				factor = 0
+				trait = envious
+			}			
+		}		
+		random_list = {
+			80 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+			10 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+			10 = {	FROM = { add_trait = slothful hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38212 # If you deserve it, you shall
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = diligent
+			}			
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}			
+		}		
+		random_list = {
+			40 = {	FROM = { add_trait = ambitious	hidden_tooltip = { ROOT = { character_event = { id = 38178}} character_event = { id = 38278} }}}
+			40 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			20 = {	FROM = { add_trait = gregarious	hidden_tooltip = { ROOT = { character_event = { id = 38165}} character_event = { id = 38265} }}}
+		}
+	}
+	option = {
+		name = EVTOPTC38212 # No you won't, silly child!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 10
+				trait = envious
+			}
+			modifier = {
+				factor = 0
+				FROM = { 
+					is_father = prev
+				}
+			}			
+		}		
+		random_list = {
+			70 = {	FROM = { add_trait = envious hidden_tooltip = { ROOT = { character_event = { id = 38171}} character_event = { id = 38271 } }}}		
+			20 = {	FROM = { add_trait = humble	hidden_tooltip = { ROOT = { character_event = { id = 38160}} character_event = { id = 38260 } }}}
+			10 = {	FROM = { add_trait = slothful hidden_tooltip = { ROOT = { character_event = { id = 38151}} character_event = { id = 38251} }}}
+		}
+	}
+}
+
+# Your child has developed a habit for wild parties.
+character_event = {
+	id = 38213
+	desc = EVTDESC38213
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38213 # There is nothing I can do
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+			modifier = {
+				factor = 5
+				trait = lustful
+			}			
+		}		
+		random_list = {
+			60 = {	
+				FROM = {
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173
+							}
+						}
+						character_event = {
+							id = 38273
+						}
+					}
+				}
+			}
+			40 = {
+				if = {
+					limit = {
+						NOT = {
+							religion_group = muslim
+						}
+					}
+					FROM = {
+						add_trait = lustful
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38172
+								}
+							}
+							character_event = {
+								id = 38272
+							} 
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38213 # Curfews!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 20
+				trait = chaste
+			}			
+		}		
+		
+		random_list = {
+			60 = {
+				FROM = {
+					add_trait = arbitrary
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38166
+							}
+						}
+						character_event = { 
+							id = 38266
+						} 
+					}
+				}
+			}
+			40 = {
+				if = {
+					limit = {
+						NOT = {
+							religion_group = muslim
+						}
+					}
+					FROM = { 
+						add_trait = chaste
+						hidden_tooltip = {
+							ROOT = { 
+								character_event = { 
+									id = 38174
+								}
+							}
+							character_event = {
+								id = 38274
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# If we're Catholic and our enemies are Catholic, why are we fighting?
+character_event = {
+	id = 38214
+	desc = EVTDESC38214
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38214 # Fighting heathens is just silly church thing
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}			
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = cynical	hidden_tooltip = { ROOT = { character_event = { id = 38158}} character_event = { id = 38258} }}}
+			50 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38214 # I fight who I like!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}			
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			30 = {	FROM = { add_trait = cruel	hidden_tooltip = { ROOT = { character_event = { id = 38159}} character_event = { id = 38259} }}}
+			20 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}	
+	option = {
+		name = EVTOPTC38214 # Sometimes, even your brother can be an enemy
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = { trait = paranoid}
+			}
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+			45 = {}
+			5 = {	FROM = { add_trait = paranoid	hidden_tooltip = { ROOT = { character_event = { id = 38175}} character_event = { id = 38275} }}}
+		}
+	}
+}
+
+# Why is the church so rich when the peasants are starving and poor?
+character_event = {
+	id = 38215
+	desc = EVTDESC38215
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38215 # Because for the poor is the kingdom of heaven
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+			}			
+		}		
+		
+		random_list = {
+			70 = {	FROM = { add_trait = zealous	hidden_tooltip = { ROOT = { character_event = { id = 38169}} character_event = { id = 38269 } }}}
+			30 = {	FROM = { add_trait = greedy	hidden_tooltip = { ROOT = { character_event = { id = 38152}} character_event = { id = 38252} }}}
+		}
+	}
+	option = {
+		name = EVTOPTB38215 # How about sharing of your own then?
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+			modifier = {
+				factor = 3
+				trait = just
+			}			
+		}		
+		
+		random_list = {
+			70 = {	FROM = { add_trait = charitable	hidden_tooltip = { ROOT = { character_event = { id = 38173}} character_event = { id = 38273} }}}
+			30 = {	FROM = { add_trait = just	hidden_tooltip = { ROOT = { character_event = { id = 38167}} character_event = { id = 38267 } }}}
+		}
+	}
+}
+
+# Why did you let off that peasant accused from poaching?
+character_event = {
+	id = 38216
+	desc = EVTDESC38216
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38216 # Because he needed the deer more than me
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = kind
+			}			
+		}		
+		
+		random_list = {
+			70 = {	FROM = { add_trait = kind	hidden_tooltip = { ROOT = { character_event = { id = 38168}} character_event = { id = 38268 } }}}
+			30 = {	FROM = { add_trait = just	hidden_tooltip = { ROOT = { character_event = { id = 38167}} character_event = { id = 38267 } }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38216 # A good deed in a day keeps man happy
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 3
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 5
+				trait = kind
+			}			
+		}		
+		
+		random_list = {
+			70 = {	FROM = { add_trait = kind	hidden_tooltip = { ROOT = { character_event = { id = 38168}} character_event = { id = 38268 } }}}
+			30 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+		}
+	}
+}
+
+# These peasants we have are all mine to command like little slaves, right?
+character_event = {
+	id = 38217
+	desc = EVTDESC38217
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38217 # That's right child
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = arbitrary
+			}			
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+			40 = {	FROM = { add_trait = cruel	hidden_tooltip = { ROOT = { character_event = { id = 38159}} character_event = { id = 38259} }}}
+			10 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38217 # That's it, you're under curfew!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 2
+				trait = proud
+			}			
+		}		
+		
+		random_list = {
+			80 = {	FROM = { add_trait = wroth	hidden_tooltip = { ROOT = { character_event = { id = 38154}} character_event = { id = 38254} }}}
+			20 = {	FROM = { add_trait = proud	hidden_tooltip = { ROOT = { character_event = { id = 38161}} character_event = { id = 38261} }}}
+		}
+	}
+}
+
+# If a tree falls in the woods and there's nobody there to hear it, does it make a noise?
+character_event = {
+	id = 38218
+	desc = EVTDESC38218
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38218 # Good question, you should ponder it on your own
+		random_list = {
+			70 = {	change_learning = 1}
+			30 = {	FROM = { add_trait = shy	hidden_tooltip = { ROOT = { character_event = { id = 38163}} character_event = { id = 38263 } }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38218 # You should concentrate on something useful instead
+		random_list = {
+			70 = {	FROM = { add_trait = diligent	hidden_tooltip = { ROOT = { character_event = { id = 38156}} character_event = { id = 38256} }}}
+			20 = {	FROM = { add_trait = arbitrary	hidden_tooltip = { ROOT = { character_event = { id = 38166}} character_event = { id = 38266} }}}
+			10 = {	change_learning = -1}
+		}
+	}
+}
+
+# Since we all die anyway, why to be so hassled about life?
+character_event = {
+	id = 38219
+	desc = EVTDESC38219
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38219 # I suppose you are right
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 3
+				trait = chaste
+			}
+			modifier = {
+				factor = 3
+				trait = temperate
+			}			
+		}		
+		
+		random_list = {
+			50 = {
+				if = {
+					limit = {
+						NOT = {
+							religion_group = muslim
+						}
+					}
+					FROM = { 
+						add_trait = chaste
+						hidden_tooltip = {
+							ROOT = { 
+								character_event = { 
+									id = 38174
+								}
+							}
+							character_event = { 
+								id = 38274
+							}
+						}
+					}
+				}
+			}
+			50 = {	FROM = { add_trait = temperate	hidden_tooltip = { ROOT = { character_event = { id = 38176}} character_event = { id = 38276 } }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38219 # But what about the enjoyment?
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = lustful
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}			
+		}		
+		
+		random_list = {
+			50 = {	FROM = { add_trait = lustful	hidden_tooltip = { ROOT = { character_event = { id = 38172}} character_event = { id = 38272} }}}
+			50 = {	FROM = { add_trait = gluttonous	hidden_tooltip = { ROOT = { character_event = { id = 38177}} character_event = { id = 38277 } }}}
+		}
+	}
+}
+
+#How can I best serve God?
+character_event = {
+	id = 38220
+	desc = EVTDESC38220
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38220 # Be brave against His enemies!
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = brave
+			}
+		}
+		random_list = {
+			80 = {	FROM = { add_trait = brave	hidden_tooltip = { ROOT = { character_event = { id = 38170}} character_event = { id = 38270 } }}}
+			20 = {	FROM = { add_trait = zealous	hidden_tooltip = { ROOT = { character_event = { id = 38169}} character_event = { id = 38269 } }}}
+		}
+	}
+
+	option = {
+		name = EVTOPTB38220 # Be just to all His children
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = just
+			}
+		}		
+		random_list = {
+			80 = {	FROM = { add_trait = just	hidden_tooltip = { ROOT = { character_event = { id = 38167}} character_event = { id = 38267 } }}}
+			20 = {	FROM = { add_trait = zealous	hidden_tooltip = { ROOT = { character_event = { id = 38169}} character_event = { id = 38269 } }}}
+		}
+	}
+}
+
+# Female Ward is playing with swords instead of sewing
+character_event = {
+	id = 38221
+	desc = EVTDESC38221
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38221 #Let her do it
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 100
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 100
+				trait = brave
+			}
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = brave
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38170 #Notify Child is brave
+							}
+						}
+						character_event = {
+							id = 38270 #Notify Brave
+						}
+					}
+				}
+				25 = {
+					add_trait = wounded
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38180 #Notify Child is brave
+							}
+						}
+						character_event = {
+							id = 38280 #Notify Brave
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38221
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 100
+				trait = just
+			}
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = just
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38167 #Notify Child is just
+							}
+						}
+						character_event = {
+							id = 38267 #Notify Just
+						}
+					}
+				}
+				25 = {
+					add_trait = humble
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38160 #Notify Child is humble
+							}
+						}
+						character_event = {
+							id = 38260 #Notify Humble
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward is ridiculed for cowardness
+character_event = {
+	id = 38222
+	desc = EVTDESC38222
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38222 #Show him how to fight yourself
+		tooltip_info = martial
+		trigger = {
+			martial = 10
+		}
+		FROM = {
+			change_martial = 1
+			change_learning = -1
+		}
+	}
+	option = {
+		name = EVTOPTB38222 #Speak up for the child
+		trigger = {
+			any_courtier = {
+				age = 8
+				NOT = { age = 16}
+				NOT = { character = FROM }
+			}
+		}
+		any_courtier = {
+			limit = {
+				age = 8
+				NOT = { age = 16}
+				NOT = { character = FROM }
+			}
+			opinion = {
+				modifier = opinion_coward
+				who = FROM
+				years = 2
+			}
+		}
+		FROM = {
+			random = {
+				chance = 10
+				add_trait = shy
+				hidden_tooltip = {
+					ROOT = {
+						character_event = {
+							id = 38163 #Notify Child is shy
+						}
+					}
+					character_event = {
+						id = 38263 #Notify Shy
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38222 #Tell him/her not to worry
+		FROM = {
+			change_learning = 1
+			random_list = {
+				50 = {
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38163 #Notify Child is shy
+							}
+						}
+						character_event = {
+							id = 38263 #Notify Shy
+						}
+					}
+				}
+				50 = {
+					add_trait = humble
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38160 #Notify Child is humble
+							}
+						}
+						character_event = {
+							id = 38260 #Notify Humble
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward is sneaking through the dungeons, and comes up with a bloody knife it found
+character_event = {
+	id = 38223
+	desc = EVTDESC38223
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38223 #I'll teach him/her some useful skills
+		#tooltip_info = 
+		trigger = {
+			OR = {
+				trait = cruel
+				trait = impaler
+				trait = wroth
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			random_list = {
+				50 = { 
+					add_trait = cruel 
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38159 #Notify Child is cruel
+							}
+						}
+						character_event = {
+							id = 38259 #Notify Cruel
+						}
+					}
+				}
+				25 = { 
+					add_trait = wroth
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38154 #Notify Child is wroth
+							}
+						}
+						character_event = {
+							id = 38254 #Notify Wroth
+						}
+					}
+				}
+				25 = { 
+					add_trait = craven
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38157 #Notify Child is craven
+							}
+						}
+						character_event = {
+							id = 38257 #Notify Craven
+						}
+					}
+				}
+			}
+			opinion = {
+				modifier = opinion_happy_with_guardian
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38223 #
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+		}
+		FROM = {
+			add_trait = deceitful
+			hidden_tooltip = {
+				character_event = {
+					id = 38255 #Notify deceitful
+				}
+			}
+			opinion = {
+				modifier = opinion_mad_at_guardian
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38223
+		trigger = {
+			NOT = {
+				trait = cruel
+			}
+			NOT = {
+				trait = impaler
+			}
+			NOT = {
+				trait = wroth
+			}
+			NOT = {
+				trait = arbitrary
+			}
+		}
+		FROM = {
+			random_list = {
+				50 = { 
+					add_trait = kind 
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38168 #Notify Child is kind
+							}
+						}
+						character_event = {
+							id = 38268 #Notify Kind
+						}
+					}
+				}
+				25 = { 
+					add_trait = patient
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38164 #Notify Child is patient
+							}
+						}
+						character_event = {
+							id = 38264 #Notify Patient
+						}
+					}
+				}
+				25 = { 
+					add_trait = brave 
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38170 #Notify Child is brave
+							}
+						}
+						character_event = {
+							id = 38270 #Notify Brave
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward hides away to read books
+character_event = {
+	id = 38224
+	desc = EVTDESC38224
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38224 #Take pride in your learning
+		FROM = {
+			if = {
+				limit = {
+					ROOT = {
+						learning = 10
+					}
+				}
+				change_learning = 1
+			}
+			random_list = {
+				65 = {
+					add_trait = proud
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38161 #Notify Child is proud
+							}
+						}
+						character_event = {
+							id = 38261 #Notify Proud
+						}
+					}
+				}
+				35 = {
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38163 #Notify Child is shy
+							}
+						}
+						character_event = {
+							id = 38263 #Notify Shy
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38224 #Joke about bookworm
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = cruel
+			}
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38163 #Notify Child is shy
+							}
+						}
+						character_event = {
+							id = 38263 #Notify Shy
+						}
+					}
+				}
+				25 = {
+					add_trait = humble
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38160 #Notify Child is humble
+							}
+						}
+						character_event = {
+							id = 38260 #Notify Humble
+						}
+					}
+					opinion = {
+						modifier = opinion_mad_at_guardian
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name =  EVTOPTC38224 #Encourage more activities with others.
+		FROM = {
+			random_list = {
+				50 = {
+					add_trait = gregarious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38165 #Notify Child is gregarious
+							}
+						}
+						character_event = {
+							id = 38265 #Notify Gregarious
+						}
+					}
+				}
+				50 = {
+					add_trait = humble
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38160 #Notify Child is humble
+							}
+						}
+						character_event = {
+							id = 38260 #Notify Humble
+						}
+					}
+					opinion = {
+						modifier = opinion_mad_at_guardian
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ugly Ward
+character_event = {
+	id = 38225
+	desc = EVTDESC38225
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38225 #You can never be as good looking
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = envious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38171 #Notify Child is envious
+							}
+						}
+						character_event = {
+							id = 38271 #Notify Envious
+						}
+					}
+				}
+				20 = {
+					add_trait = ambitious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38178 #Notify Child is ambitious
+							}
+						}
+						character_event = {
+							id = 38278 #Notify Ambitious
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38225 #You look fine to me
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = arbitrary
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38166 #Notify Child is arbitrary
+							}
+						}
+						character_event = {
+							id = 38266 #Notify Arbitrary
+						}
+					}
+				}
+				25 = {
+					add_trait = content
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38179 #Notify Child is content
+							}
+						}
+						character_event = {
+							id = 38279 #Notify Content
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Fair ward
+character_event = {
+	id = 38226
+	desc = EVTDESC38226
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_guardian = yes
+	}
+	
+	option = {
+		name = EVTOPTA38226 #Encourage flaunting beauty
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = envious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38171 #Notify Child is envious
+							}
+						}
+						character_event = {
+							id = 38271 #Notify Envious
+						}
+					}
+				}
+				30 = {
+					add_trait = ambitious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38178 #Notify Child is ambitious
+							}
+						}
+						character_event = {
+							id = 38278 #Notify Ambitious
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38226
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = arbitrary
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38166 #Notify Child is arbitrary
+							}
+						}
+						character_event = {
+							id = 38266 #Notify Arbitrary
+						}
+					}
+				}
+				25 = {
+					add_trait = content
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38179 #Notify Child is content
+							}
+						}
+						character_event = {
+							id = 38279 #Notify Content
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward shows a tendency to count money whenever possible...
+character_event = {
+	id = 38227
+	desc = EVTDESC38227
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38227 #Teach X about joys of money
+		if = {
+			limit = {
+				stewardship = 10
+			}
+			FROM = {
+				change_stewardship = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_smart_trigger = yes
+				}
+			}
+			FROM = {
+				change_stewardship = 1
+			}
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = greedy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38152 #Notify Child is greedy
+							}
+						}
+						character_event = {
+							id = 38252 #Notify Greedy
+						}
+					}
+				}
+				25 = {
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173 #Notify Child is charitable
+							}
+						}
+						character_event = {
+							id = 38273 #Notify Charitable
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38227 #Tell about the joys of giving money
+		if = {
+			limit = {
+				trait = greedy
+			}
+			prestige = -5
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173 #Notify Child is charitable
+							}
+						}
+						character_event = {
+							id = 38273 #Notify Charitable
+						}
+					}
+				}
+				25 = {
+					change_stewardship = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38227 #Money is for god
+		trigger = {
+			religion_group = christian
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = zealous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38169 #Notify Child is zealous
+							}
+						}
+						character_event = {
+							id = 38269 #Notify Zealous
+						}
+					}
+				}
+				25 = {
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173 #Notify Child is charitable
+							}
+						}
+						character_event = {
+							id = 38273 #Notify Charitable
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD38227 #Money is for god
+		trigger = {
+			religion_group = muslim
+		}
+		FROM = {
+			random_list = {
+				75 = {
+					add_trait = zealous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38169 #Notify Child is zealous
+							}
+						}
+						character_event = {
+							id = 38269 #Notify Zealous
+						}
+					}
+				}
+				25 = {
+					add_trait = charitable
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38173 #Notify Child is charitable
+							}
+						}
+						character_event = {
+							id = 38273 #Notify Charitable
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward shows interest in visitors to the court
+character_event = {
+	id = 38228
+	desc = EVTDESC38228
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38228 #Introduce him to visitors
+		ai_chance = {
+			factor = 99
+			
+			modifier = {
+				factor = 0.01
+				trait = shy
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			FROM = {
+				change_diplomacy = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_smart_trigger = yes
+				}
+			}
+			FROM = {
+				change_diplomacy = 1
+			}
+		}
+		FROM = {
+			add_trait = gregarious
+			hidden_tooltip = {
+				character_event = {
+					id = 38265 #Notify Gregarious
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38228 #Tell him to stop it!
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = shy
+			}
+		}
+		if = {
+			limit = {
+				trait = gregarious
+			}
+			prestige = -5
+		}
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = shy
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38163 #Notify Child is gregarious
+							}
+						}
+						character_event = {
+							id = 38263 #Notify Gregarious
+						}
+					}
+				}
+				20 = {
+					add_trait = gregarious
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38165 #Notify Child is gregarious
+							}
+						}
+						character_event = {
+							id = 38265 #Notify Gregarious
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward constantly plays with swords and practices fighting with older men
+character_event = {
+	id = 38229
+	desc = EVTDESC38229
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38229 #This will turn him into a great knight!
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			FROM = {
+				change_martial = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_smart_trigger = yes
+				}
+			}
+			FROM = {
+				change_martial = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						trait = brave
+					}
+				}
+			}
+			FROM = {
+				random_list = {
+					40 = {
+						add_trait = brave
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38170 #Notify Child is brave
+								}
+							}
+							character_event = {
+								id = 38270 #Notify Brave
+							}
+						}
+					}
+					30 = {
+						add_trait = diligent
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38156 #Notify Child is diligent
+								}
+							}
+							character_event = {
+								id = 38256 #Notify Diligent
+							}
+						}
+					}
+					20 = {
+						add_trait = proud
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38161 #Notify Child is proud
+								}
+							}
+							character_event = {
+								id = 38261 #Notify Proud
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					trait = brave
+				}
+			}
+			FROM = {
+				random_list = {
+					60 = {
+						add_trait = diligent
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38170 #Notify Child is Diligent
+								}
+							}
+							character_event = {
+								id = 38270 #Notify Diligent
+							}
+						}
+					}
+					40 = {
+						add_trait = proud
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38161 #Notify Child is proud
+								}
+							}
+							character_event = {
+								id = 38261 #Notify Proud
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38229 #Make sure he does not hurt himself
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = craven
+			}
+			modifier = {
+				factor = 100
+				NOT = { trait = cruel }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					trait = brave
+					trait = proud
+					trait = diligent
+				}
+			}
+			prestige = -5
+		}
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = craven
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38157 #Notify Child is craven
+							}
+						}
+						character_event = {
+							id = 38257 #Notify Craven
+						}
+					}
+				}
+				20 = {
+					add_trait = proud
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38161 #Notify Child is proud
+							}
+						}
+						character_event = {
+							id = 38261 #Notify Proud
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38229 #This will turn him into a great swordsmaster!
+		trigger = {
+			religion_group = muslim
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			FROM = {
+				change_martial = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_smart_trigger = yes
+				}
+			}
+			FROM = {
+				change_martial = 1
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						trait = brave
+					}
+				}
+			}
+			FROM = {
+				random_list = {
+					40 = {
+						add_trait = brave
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38170 #Notify Child is brave
+								}
+							}
+							character_event = {
+								id = 38270 #Notify Brave
+							}
+						}
+					}
+					30 = {
+						add_trait = diligent
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38156 #Notify Child is diligent
+								}
+							}
+							character_event = {
+								id = 38256 #Notify Diligent
+							}
+						}
+					}
+					20 = {
+						add_trait = proud
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38161 #Notify Child is proud
+								}
+							}
+							character_event = {
+								id = 38261 #Notify Proud
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					trait = brave
+				}
+			}
+			FROM = {
+				random_list = {
+					60 = {
+						add_trait = diligent
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38170 #Notify Child is Diligent
+								}
+							}
+							character_event = {
+								id = 38270 #Notify Diligent
+							}
+						}
+					}
+					40 = {
+						add_trait = proud
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38161 #Notify Child is proud
+								}
+							}
+							character_event = {
+								id = 38261 #Notify Proud
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Ward's first kiss ###
+character_event = {
+	id = 38230
+	desc = EVTDESC38230
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38230 #Teach about courtly love
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = kind
+			}
+			modifier = {
+				factor = 100
+				trait = gregarious
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					NOT = {
+						uses_decadence = yes
+					}
+				}
+				random_list = {
+					75 = {
+						add_trait = chaste
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38174 #Notify Child is chaste
+								}
+							}
+							character_event = {
+								id = 38274 #Notify Chaste
+							}
+						}
+					}
+					25 = {
+						add_trait = lustful
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38172 #Notify Child is chaste
+								}
+							}
+							character_event = {
+								id = 38272 #Notify Chaste
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38230 #Lecture about virtues and sins
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = zealous
+			}
+		}
+		FROM = {
+			random_list = {
+				40 = {
+					if = {
+						limit = {
+							NOT = {
+								uses_decadence = yes
+							}
+						}
+						add_trait = chaste
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38174 #Notify Child is chaste
+								}
+							}
+							character_event = {
+								id = 38274 #Notify Chaste
+							}
+						}
+					}
+				}
+				30 = {
+					add_trait = deceitful
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38155 #Notify Child is deceitful
+							}
+						}
+						character_event = {
+							id = 38255 #Notify Deceitful
+						}
+					}
+				}
+				25 = {
+					add_trait = zealous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38169 #Notify Child is zealous
+							}
+						}
+						character_event = {
+							id = 38269 #Notify Zealous
+						}
+					}
+				}
+				5 = {
+					add_trait = paranoid
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38175 #Notify Child is zealous
+							}
+						}
+						character_event = {
+							id = 38275 #Notify Zealous
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Boy is spending all his time in the kitchen, risk becoming gluttonous and craven
+character_event = {
+	id = 38231
+	desc = EVTDESC38231
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38231 #Force him to learn how to fight
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = brave
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38170 #Notify Child is brave
+							}
+						}
+						character_event = {
+							id = 38270 #Notify Brave
+						}
+					}
+				}
+				10 = {
+					add_trait = gluttonous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38177 #Notify Child is gluttonous
+							}
+						}
+						character_event = {
+							id = 38277 #Notify Gluttonous
+						}
+					}
+				}
+				10 = {
+					add_trait = craven
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38157 #Notify Child is craven
+							}
+						}
+						character_event = {
+							id = 38257 #Notify Craven
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38231 #This is not my concern (Let him eat until he bursts!)
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = gluttonous
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38177 #Notify Child is gluttonous
+							}
+						}
+						character_event = {
+							id = 38277 #Notify Gluttonous
+						}
+					}
+				}
+				20 = {
+					change_martial = -1
+				}
+			}
+		}
+	}
+}
+
+# Too curious a child: Find ward in the highest tower
+character_event = {
+	id = 38232
+	desc = EVTDESC38232
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38232 #Curiousity has never killed anyone!
+		FROM = {
+			random_list = {
+				50 = {
+					add_trait = honest
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38162 #Notify Child is honest
+							}
+						}
+						character_event = {
+							id = 38262 #Notify Honest
+						}
+					}
+				}
+				35 = {
+					add_trait = brave
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38170 #Notify Child is brave
+							}
+						}
+						character_event = {
+							id = 38270 #Notify Brave
+						}
+					}
+				}
+				10 = {
+					add_trait = wounded
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38180 #Notify Child is wounded
+							}
+						}
+						character_event = {
+							id = 38280 #Notify Wounded
+						}
+					}
+				}
+				5 = {
+					add_maimed_trait_effect = yes
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38181 #Notify Child is maimed
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38232 #Teach her/him a lesson!
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { trait = cruel }
+				NOT = { trait = wroth }
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			random_list = {
+				80 = {
+					add_maimed_trait_effect = yes
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38181 #Notify Child is maimed
+							}
+						}
+					}
+					opinion = {
+						modifier = opinion_murder_attempt
+						who = ROOT
+						years = 5
+					}
+				}
+				20 = {
+					set_character_flag = murdered_by_guardian
+					death = {
+						death_reason = death_murder_unknown_fall
+						killer = ROOT
+					}
+				}
+			}
+		}
+		set_character_flag = murdered_fosterling
+	}
+	option = {
+		name = EVTOPTC38232 #Strictly forbid
+		if = {
+			limit = { 
+				FROM = { 
+					OR = { 
+						intrigue = 6 
+						martial = 6
+					} 
+				} 
+			} 
+			FROM = {
+				random_list = {
+					90 = {
+						add_trait = deceitful
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38155 #Notify Child is deceitful
+								}
+							}
+							character_event = {
+								id = 38255 #Notify Deceitful
+							}
+						}
+					}
+					10 = {
+						add_trait = craven
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38157 #Notify Child is craven
+								}
+							}
+							character_event = {
+								id = 38257 #Notify Craven
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { 
+					NOT = { 
+						intrigue = 6
+					}
+					NOT = {
+						martial = 6
+					} 
+				} 
+			} 
+			FROM = {
+				random_list = {
+					50 = {
+						add_trait = deceitful
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38155 #Notify Child is deceitful
+								}
+							}
+							character_event = {
+								id = 38255 #Notify Deceitful
+							}
+						}
+					}
+					50 = {
+						add_trait = craven
+						hidden_tooltip = {
+							ROOT = {
+								character_event = {
+									id = 38157 #Notify Child is craven
+								}
+							}
+							character_event = {
+								id = 38257 #Notify Craven
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward is Ill
+character_event = {
+	id = 38233
+	desc = EVTDESC38233
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38233 #Make the child fast to atone for its sins
+		trigger = {
+			religion_group = christian
+		}
+		ai_chance = {
+			factor = 1
+		
+			modifier = {
+				factor = 100
+				trait = zealous
+			}
+		}
+		FROM = {
+			random_list = {
+				45 = {
+					add_trait = pneumonic
+				}
+				50 = {
+					remove_trait = ill #Not triggered with Reapers
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38183 #Notify Child is no longer ill
+							}
+						}
+						character_event = {
+							id = 38283 #Notify Remove Ill
+						}
+					}
+				}
+				5 = {
+					death = {
+						death_reason = death_murder_unknown
+						killer = ROOT
+					}
+					set_character_flag = murdered_by_guardian
+				}
+			}
+			if = {
+				limit = {
+					trait = gluttonous
+					NOT = {
+						trait = zealous
+					}
+				}
+				opinion = {
+					modifier = opinion_mad_at_guardian
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38233 #Pay a doctor to cure ward
+		ai_chance = {
+			factor = 1
+		
+			modifier = {
+				factor = 100
+				NOT = { trait = cruel }
+			}
+			modifier = {
+				factor = 100
+				trait = kind
+			}
+		}
+		scaled_wealth = -0.5
+		FROM = {
+			random_list = {
+				50 = {
+					remove_trait = ill
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38183 #Notify Child is no longer ill
+							}
+						}
+						character_event = {
+							id = 38283 #Notify Remove Ill
+						}
+					}
+				}
+				5 = {
+					death = {
+						death_reason = death_trait
+					}
+				}
+				45 = {}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38233 #Only God decides over life and death
+		trigger = {
+			religion_group = christian
+		}
+		FROM = {
+			random = {
+				chance = 60
+			
+				death = {
+					death_reason = death_trait
+				}
+				if = {
+					limit = {
+						father = {
+							is_alive = yes
+						}
+					}
+					father = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = ROOT
+							years = 5
+						}
+					}
+				}
+				if = {
+					limit = {
+						father_even_if_dead = {
+							is_alive = no
+						}
+						mother = {
+							is_alive = yes
+						}
+					}
+					mother = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = ROOT
+							years = 5
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD38233 #Only Allah decides over life and death
+		trigger = {
+			religion_group = muslim
+		}
+		FROM = {
+			random = {
+				chance = 60
+			
+				death = {
+					death_reason = death_trait
+				}
+				if = {
+					limit = {
+						father = {
+							is_alive = yes
+						}
+					}
+					father = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = ROOT
+							years = 5
+						}
+					}
+				}
+				if = {
+					limit = {
+						father_even_if_dead = {
+							is_alive = no
+						}
+						mother = {
+							is_alive = yes
+						}
+					}
+					mother = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = ROOT
+							years = 5
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTE38233 #Do nothing
+		trigger = {
+			religion_group = muslim
+		}
+		ai_chance = {
+			factor = 1
+		
+			modifier = {
+				factor = 100
+				trait = zealous
+			}
+		}
+		FROM = {
+			random_list = {
+				45 = {
+					add_trait = pneumonic
+				}
+				50 = {
+					remove_trait = ill
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38183 #Notify Child is no longer ill
+							}
+						}
+						character_event = {
+							id = 38283 #Notify Remove Ill
+						}
+					}
+				}
+				5 = {
+					death = {
+						death_reason = death_murder_unknown
+						killer = ROOT
+					}
+					set_character_flag = murdered_by_guardian
+				}
+			}
+			if = {
+				limit = {
+					trait = gluttonous
+					NOT = {
+						trait = zealous
+					}
+				}
+				opinion = {
+					modifier = opinion_mad_at_guardian
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+}
+
+# Homosexual Ward
+character_event = {
+	id = 38234
+	desc = EVTDESC38234
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38234 #Make the child fast to atone for its sins
+		trigger = {
+			religion_group = christian
+		}
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 9
+				trait = zealous
+			}
+		}
+		FROM = {
+			random = {
+				chance = 20
+				
+				remove_trait = homosexual
+				opinion = {
+					modifier = opinion_mad_at_guardian
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38234 #Try to beat it out of him/her
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 9
+				trait = cruel
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		FROM = {
+			random = {
+				chance = 10
+				
+				remove_trait = homosexual
+				opinion = {
+					modifier = opinion_mad_at_guardian
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC38234 #S/he will grow out of it
+		FROM = {
+			random = {
+				chance = 25
+				
+				add_trait = trusting
+				hidden_tooltip = {
+					ROOT = {
+						character_event = {
+							id = 38150 #Notify Child is trusting
+						}
+					}
+					character_event = {
+						id = 38250 #Notify Trusting
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ward is good at talking to people, and have no problem getting friends
+character_event = {
+	id = 38235
+	desc = EVTDESC38235
+	picture = GFX_evt_child_play
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA38235 #the goal justifies the means. 
+		ai_chance= {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = deceitful
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			FROM = {
+				change_intrigue = 1
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					is_smart_trigger = yes
+				}
+				change_intrigue = 1
+			}
+			add_trait = deceitful
+			hidden_tooltip = {
+				character_event = {
+					id = 38255 #Notify Trusting
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB38235 #your tongue will cause you problems!
+		ai_chance= {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				trait = honest
+			}
+		}
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			prestige = -10
+		}
+		FROM = {
+			random_list = {
+				80 = {
+					add_trait = honest
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38162 #Notify Child is honest
+							}
+						}
+						character_event = {
+							id = 38262 #Notify Honest
+						}
+					}
+				}
+				20 = {
+					add_trait = deceitful
+					hidden_tooltip = {
+						ROOT = {
+							character_event = {
+								id = 38155 #Notify Child is deceitful
+							}
+						}
+						character_event = {
+							id = 38255 #Notify Deceitful
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#A child is missing a guardian
+character_event = {
+	id = 2490
+	desc = EVTDESC2490
+	picture = GFX_evt_child_bully
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA2490 
+		trigger = {
+			age = 16
+		}
+		FROM = {
+			set_guardian = ROOT
+		}
+		prestige = -2
+	}
+	
+	option = {
+		name = EVTOPTB2490 
+		random_list = {
+			10 = {	
+				FROM = { 
+					add_trait = arbitrary
+						hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38166 #Notify ROOT child is arbitrary
+							}
+						} 
+						character_event = { 
+							id = 38266 #Notify arbitrary
+						} 
+					}
+				}
+			}
+			10 = {	
+				FROM = { 
+					add_trait = cruel
+					hidden_tooltip = {
+						ROOT = { 
+							character_event = { 
+								id = 38159 #Notify ROOT child is cruel
+							}
+						}
+						character_event = { 
+							id = 38259 #Notify cruel
+						}
+					}
+				}
+			}
+			10 = {	
+				FROM = { 
+					add_trait = gluttonous
+					hidden_tooltip = { 
+						ROOT = {
+							character_event = { 
+								id = 38177 #Notify ROOT child is gluttonous
+							}
+						} 
+						character_event = { 
+							id = 38277  #Notify gluttonous
+						} 
+					} 
+				}
+			}
+			10 = {	
+				FROM = { 
+					add_trait = slothful
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38151 #Notify ROOT child is slothful
+							}
+						} 
+						character_event = { 
+							id = 38251 #Notify slothful
+						} 
+					} 
+				}
+			}
+			10 = {	
+				FROM = {
+					add_trait = lustful
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38172 #Notify ROOT child is lustful
+							}
+						} 
+						character_event = { 
+							id = 38272 #Notify lustful
+						} 
+					} 
+				}
+			}
+			10 = {	
+				FROM = { 
+					add_trait = wroth
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38154 #Notify ROOT child is wroth
+							}
+						} 
+						character_event = { 
+							id = 38254 #Notify wroth
+						}
+					} 
+				}
+			}
+			10 = {	
+				FROM = {
+					add_trait = envious
+					hidden_tooltip = { 
+						ROOT = { 
+							character_event = { 
+								id = 38171 #Notify ROOT child is envious
+							}
+						} 
+						character_event = { 
+							id = 38271 #Notify envious
+						} 
+					} 
+				}
+			}	
+			10 = {	
+				FROM = { 
+						add_trait = greedy
+						hidden_tooltip = {
+							ROOT = { 
+								character_event = { 
+									id = 38152 #Notify ROOT child is greedy
+								}
+							} 
+							character_event = { 
+							id = 38252 #Notify greedy
+						} 
+					} 
+				}
+			}
+		}
+	}
+}

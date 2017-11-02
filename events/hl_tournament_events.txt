@@ -1,0 +1,308 @@
+###########################################
+#                                         #
+# Horse Lords tournament events           #
+# ID HL.7000-HL.7999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = HL
+
+
+# Invite warriors
+character_event = {
+	id = HL.7000
+	desc = EVTDESC_HL_7000
+	picture = GFX_evt_horsemanship
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_7000
+		any_realm_character = {
+			limit = {
+				prisoner = no
+				war = no
+				NOT = { trait = incapable }
+				age = 16
+				NOT = { has_character_flag = do_not_disturb }
+				OR = {
+					liege = { character = ROOT }
+					is_close_relative = ROOT
+				}
+				OR = {
+					is_female = no
+					has_character_flag = special_marshal
+				}
+			}
+			letter_event = {
+				id = HL.7001
+				tooltip = EVTTOOLTIP1_RoI_1000
+			}
+		}
+		hidden_tooltip = { character_event = { id = HL.7020 days = 20 } }
+	}
+}
+
+# Warrior receives invitation
+letter_event = {
+	id = HL.7001
+	desc = EVTDESC_HL_7001
+	border = GFX_event_letter_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_HL_7001 # Accept invitation
+		ai_chance = {
+			factor = 2
+		}
+		set_character_flag = do_not_disturb
+		set_character_flag = attending_nomad_wargames
+		hidden_tooltip = { character_event = { id = HL.7099 days = 60 } } # Safety clearing of all flags and modifiers
+	}
+	option = {
+		name = EVTOPTB_RoI_1001 # Refuse invitation
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				is_nomadic = yes
+				opinion = { who = FROM value = 25 }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			modifier = {
+				factor = 0
+				is_ruler = no
+			}
+			modifier  = {
+				factor = 3
+				is_nomadic = no
+				NOT = { combat_rating = 1 }
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_coward
+			who = FROM
+			years = 2
+		}
+		hidden_tooltip = {
+			FROM = {
+				letter_event = {
+					id = HL.7002
+					days = 3
+					tooltip = EVTTOOLTIP1_RoI_2001
+				}
+			}
+		}
+	}
+}
+
+# If warrior refuses to come
+letter_event = {
+	id = HL.7002
+	desc = EVTDESC_HL_7002
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_502 
+		opinion = {
+			modifier = opinion_coward
+			who = FROM
+			years = 2
+		}
+	}
+}
+
+# Tournament begins - host
+character_event = {
+	id = HL.7020
+	desc = EVTDESC_HL_7020
+	picture = GFX_evt_horsemanship
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_7020
+		hidden_tooltip = { character_event = { id = HL.7050 days = 5 } } # Decide winner
+		hidden_tooltip = { character_event = { id = HL.7099 days = 30 } } # Clearing all flags and modifiers after feast
+		any_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+			}
+			hidden_tooltip = { character_event = { id = HL.7025 } }
+			hidden_tooltip = { character_event = { id = HL.7099 days = 30 } } # Clearing all flags and modifiers after feast
+		}
+	}
+}
+
+# Wargames begin - guest
+character_event = {
+	id = HL.7025
+	desc = EVTDESC_HL_7025
+	picture = GFX_evt_horsemanship
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_7025
+	}
+}
+
+# Wargames, decide winner
+character_event = {
+	id = HL.7050
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = 13
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = 10
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = 7
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = 4
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = 1
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = -2
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+				combat_rating = -5
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_nomad_wargames
+			}
+			character_event = { id = HL.7055 } # Winner
+			break = yes
+		}
+	}
+}
+
+
+# Wargames winner
+character_event = {
+	id = HL.7055
+	desc = EVTDESC_HL_7055
+	picture = GFX_evt_horsemanship
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_7055
+		prestige = 200
+		wealth = 30
+		clr_character_flag = attending_nomad_wargames
+		clr_character_flag = do_not_disturb
+		hidden_tooltip = {									# Notify host and other participants about winner
+			FROM = {
+				character_event = { id = HL.7060 }
+				any_realm_character = {
+					limit = {
+						has_character_flag = attending_nomad_tournament
+						NOT = { character = ROOT }
+					}
+					character_event = { id = HL.7060 }
+				}
+			}
+		}
+	}
+}
+
+# Notify host and other participants about winner
+character_event = {
+	id = HL.7060
+	desc = EVTDESC_HL_7060
+	picture = GFX_evt_horsemanship
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_7060
+		tooltip = {
+			FROM = { prestige = 200 }
+			FROM = { wealth = 30 }
+		}
+		clr_character_flag = attending_nomad_wargames
+		clr_character_flag = do_not_disturb
+		if = {
+			limit = { has_character_modifier = holding_nomad_wargames }
+			remove_character_modifier = holding_nomad_wargames
+			add_character_modifier = {
+				name = held_nomad_wargames
+				years = 5
+			}
+		}
+	}
+}
+
+
+# Clear all character flags and modifiers - safety catch
+character_event = {
+	id = HL.7099
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = holding_nomad_wargames
+		clr_character_flag = attending_nomad_wargames
+		clr_character_flag = do_not_disturb
+	}
+}
+

@@ -1,0 +1,3542 @@
+
+###########################################
+#                                         #
+# Catholic Pilgrimage Events              #             
+#                                         #
+# ID SoA.5000-                            #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = SoA
+
+# Confirm decision and check religion
+
+character_event = {
+	id = SoA.5000
+	desc = EVTDESC_SoA_5000
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5000
+		piety = 20
+		set_character_flag = preparing_pilgrimage
+		clr_character_flag = activated_pilgrimage
+		hidden_tooltip = {
+			if = {
+				limit = {
+					OR = {
+						religion = orthodox  # Jeru, Const, Antio
+						religion = iconoclast
+						religion = monothelite
+						religion = nestorian
+						religion = bogomilist
+						religion = messalian
+						religion = paulician
+					}
+				}
+				character_event = { id = SoA.5011 }
+			}
+			if = {
+				limit = {
+					OR = {
+						religion = miaphysite # Jeru, Antio, Axum
+						religion = monophysite
+					}
+				}
+				character_event = { id = SoA.5011 }
+			}
+			if = {
+				limit = {
+					OR = {
+						religion = catholic # All Catholic holy places
+						religion = cathar
+						religion = fraticelli
+						religion = waldensian
+						religion = lollard
+					}
+				}
+				character_event = { id = SoA.5008 }
+			}
+		}
+	}
+}
+
+# Check catholic pilgrim's location - then send on to destination choice event
+character_event = {
+	id = SoA.5008
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_tooltip = {
+			if = {
+				limit = {
+					OR = {
+						capital_scope = { province_id = 73 }
+						capital_scope = { province_id = 119 }
+						capital_scope = { province_id = 333 }
+						capital_scope = { province_id = 157 }
+					}
+				}
+				character_event = { id = SoA.5016 days = 4 } # Go to Jerusalem
+			}
+			if = {
+				limit = {
+					capital_scope = { province_id = 774 }
+				}
+				character_event = { id = SoA.5017 days = 4 } # Go to Rome
+			}
+			if = {
+				limit = { 
+					NOT = {
+						OR = {
+							capital_scope = { province_id = 73 }
+							capital_scope = { province_id = 774 }
+							capital_scope = { province_id = 119 }
+							capital_scope = { province_id = 333 }
+							capital_scope = { province_id = 157 }
+						}
+					}
+				}
+				character_event = { id = SoA.5018 days = 4 } # May choose destination
+			}
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Choose destination                      #
+#                                         #
+# ID SoA.5009-5020                        #
+#                                         #
+###########################################
+
+# Choose destination as Eastern Christian
+character_event = {
+	id = SoA.5011
+	desc = EVTDESC_SoA_5011
+	picture = GFX_evt_icon
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5011
+		trigger = {
+			NOT = { capital_scope = { province_id = 774 } }
+		}
+		set_character_flag = pilgrimage_to_jerusalem
+		hidden_tooltip = {
+			character_event = { id = SoA.5022 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_JERUSALEM
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_SoA_5011
+		trigger = {
+			NOT = { capital_scope = { province_id = 496 } }
+			NOT = { religion = miaphysite }
+			NOT = { religion = monophysite }
+		}
+		set_character_flag = pilgrimage_to_constantinople
+		hidden_tooltip = {
+			character_event = { id = SoA.5094 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_CONSTANTINOPLE
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5011
+		trigger = {
+			NOT = { capital_scope = { province_id = 764 } }
+		}
+		set_character_flag = pilgrimage_to_antioch
+		hidden_tooltip = {
+			character_event = { id = SoA.5096 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_ANTIOCH
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_SoA_5011
+		trigger = {
+			OR = {
+				religion = miaphysite
+				religion = monophysite
+			}
+		NOT = { capital_scope = { province_id = 875 } }
+		}
+		set_character_flag = pilgrimage_to_axum
+		hidden_tooltip = {
+			character_event = { id = SoA.5095 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_AXUM
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+}
+
+# Catholic - Always go to Jerusalem if already living at one of the other sites
+character_event = {
+	id = SoA.5016
+	desc = EVTDESC_SoA_5016
+	picture = GFX_evt_jerusalem
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5016
+		set_character_flag = pilgrimage_to_jerusalem
+		hidden_tooltip = {
+			character_event = { id = SoA.5022 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_JERUSALEM
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+}
+
+# Catholic - Always go to Rome if living in Jerusalem province
+character_event = {
+	id = SoA.5017
+	desc = EVTDESC_SoA_5017
+	picture = GFX_evt_victory_arch_byzantine
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5017
+		set_character_flag = pilgrimage_to_rome
+		hidden_tooltip = {
+			character_event = { id = SoA.5024 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_ROME
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+}
+
+# Catholic - May decide where to go - Western Europe (Canterbury, Santiago, Cologne) or the ancient sites (Jerusalem, Rome)
+character_event = {
+	id = SoA.5018
+	desc = EVTDESC_SoA_5018
+	picture = GFX_evt_cathedral
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5018   # Go to Western Europe
+		trigger = {
+			year = 814
+		}
+		hidden_tooltip = { character_event = { id = SoA.5019 } }
+	}
+	option = {
+		name = EVTOPTB_SoA_5018   # Go to the old sites, Rome or Jerusalem
+		hidden_tooltip = { character_event = { id = SoA.5020 } }
+	}
+}
+
+# Catholic - Where to go - West
+character_event = {
+	id = SoA.5019
+	desc = EVTDESC_SoA_5019
+	picture = GFX_evt_cathedral
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5019
+		trigger = {
+			year = 1170
+		}
+		ai_chance = { factor = 25 }
+		set_character_flag = pilgrimage_to_canterbury
+		hidden_tooltip = { character_event = { id = SoA.5021 days = 15 } }
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_CANTERBURY
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5019
+		trigger = {
+			year = 1164
+		}
+		ai_chance = { factor = 25 }
+		set_character_flag = pilgrimage_to_koln
+		hidden_tooltip = { character_event = { id = SoA.5023 days = 15 } }
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_KOLN
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5019
+		ai_chance = { factor = 50 }
+		set_character_flag = pilgrimage_to_santiago
+		hidden_tooltip = { character_event = { id = SoA.5025 days = 15 } }
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_SANTIAGO
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+}
+
+# Catholic - Where to go - Med - the oldest sites
+character_event = {
+	id = SoA.5020
+	desc = EVTDESC_SoA_5020
+	picture = GFX_evt_victory_arch_byzantine
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5020
+		ai_chance = { factor = 50 }
+		set_character_flag = pilgrimage_to_jerusalem
+		hidden_tooltip = {
+			character_event = { id = SoA.5022 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_JERUSALEM
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_SoA_5020
+		ai_chance = { factor = 50 }
+		set_character_flag = pilgrimage_to_rome
+		hidden_tooltip = {
+			character_event = { id = SoA.5024 days = 15 }
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_PILGRIMAGE_TO_ROME
+				picture = GFX_evt_pilgrims_epic_journey
+			}
+		}
+	}
+}
+
+###########################################
+#                                         #
+# The journey                             #
+#                                         #
+# ID SoA.5021-5049                        #
+#    SoA.5081-5087                        #
+#    SoA.5094-5096                        #
+#                                         #
+###########################################
+
+
+# Setting out for Constantinople (also selects events for road)
+character_event = {
+	id = SoA.5094
+	desc = EVTDESC_SoA_5094
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5094
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5097 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 496	# Constantinople
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						is_title_active = d_holy_sepulchre
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Setting out for Axum (also selects events for road)
+character_event = {
+	id = SoA.5095
+	desc = EVTDESC_SoA_5095
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5095
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5098 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 875	# Axum
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						is_title_active = d_saint_anthony
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Setting out for Antioch (also selects events for road)
+character_event = {
+	id = SoA.5096
+	desc = EVTDESC_SoA_5096
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5096
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5099 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 764	# Antioch
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_templar
+							is_title_active = d_teutonic_order
+							is_title_active = d_knights_hospitaler
+							is_title_active = d_holy_sepulchre
+						}
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+
+# Setting out for Canterbury (also selects events for road)
+character_event = {
+	id = SoA.5021
+	desc = EVTDESC_SoA_5021
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5021
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5050 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 73	# Canterbury
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_templar
+							is_title_active = d_knights_hospitaler
+						}
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Setting out for Jerusalem (also selects events for road)
+character_event = {
+	id = SoA.5022
+	desc = EVTDESC_SoA_5022
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5022
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5051 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 774	# Jerusalem
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_templar
+							is_title_active = d_teutonic_order
+							is_title_active = d_knights_hospitaler
+							is_title_active = d_holy_sepulchre
+						}
+				}
+				random_list = {
+					10 = { narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = { character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = { character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Setting out for Cologne (also selects events for road)
+character_event = {
+	id = SoA.5023
+	desc = EVTDESC_SoA_5023
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5023
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5052 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 119	# Cologne
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_templar
+							is_title_active = d_teutonic_order
+							is_title_active = d_knights_hospitaler
+						}
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+
+# Setting out for Rome (also selects events for road)
+character_event = {
+	id = SoA.5024
+	desc = EVTDESC_SoA_5024
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5024
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5053 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 333	# Rome
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_templar
+							is_title_active = d_teutonic_order
+							is_title_active = d_knights_hospitaler
+						}
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Setting out for Santiago (also selects events for road)
+character_event = {
+	id = SoA.5025
+	desc = EVTDESC_SoA_5025
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SoA_5025
+		clr_character_flag = preparing_pilgrimage
+		hidden_tooltip = {
+			add_trait = on_pilgrimage
+			set_character_flag = good_pilgrimage
+			narrative_event = { id = SoA.5054 days = 30 }
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					location = {
+						distance = {
+							where = 157	# Santiago
+							value = 400	# Longer journey
+						}
+					}
+				}
+				random_list = {
+					10 = {  character_event = { id = SoA.5026 days = 5 random = 9 } } # List for longer journeys only
+					10 = {  character_event = { id = SoA.5027 days = 5 random = 9 } }
+					10 = {  narrative_event = { id = SoA.5028 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5029 days = 5 random = 9 } }
+					10 = {  character_event = { id = SoA.5030 days = 5 random = 9 } }
+				}
+			}
+	
+			random_list = {
+				10 = {  character_event = { id = SoA.5031 days = 15 random = 7 } } # List that is always checked
+				10 = {  character_event = { id = SoA.5032 days = 15 random = 7 } }
+				10 = {  narrative_event = { id = SoA.5033 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5034 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5035 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5036 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5037 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5038 days = 15 random = 7 } }
+				10 = {  character_event = { id = SoA.5039 days = 15 random = 7 } }
+			}
+			if = {
+				limit = {
+						OR = {
+							is_title_active = d_knights_santiago
+							is_title_active = d_knights_calatrava
+						}
+				}
+				random_list = {
+					10 = {  narrative_event = { id = SoA.5045 days = 23 random = 4 } } # Holy orders events, close to destination
+					10 = {  character_event = { id = SoA.5046 days = 23 random = 4 } }
+					10 = {  character_event = { id = SoA.5047 days = 23 random = 4 } }
+				}
+			}
+		}
+	}
+}
+
+# Trouble on road - weather
+character_event = {
+	id = SoA.5026
+	desc = EVTDESC_SoA_5026
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5026
+		ai_chance = {
+			factor = 10
+		}
+		piety = 5
+		random_list = {
+			10 = {
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Reapers"
+						}
+					}
+				add_trait = pneumonic
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_trait = infection
+					hidden_tooltip = {
+						character_event = { id = RIP.11001 days = 365 random = 1095 }
+					}
+				}
+			}
+			30 = {
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Reapers"
+						}
+					}
+				add_trait = ill
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_symptom_effect = yes
+				}
+			}
+			60 = {
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5026
+		ai_chance = {
+			factor = 90
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+		random_list = {
+			5 = {
+				add_trait = pneumonic
+			}
+			15 = {
+				add_trait = ill
+			}
+			80 = {
+			}
+		}
+	}
+}
+
+# Trouble on road - lost
+character_event = {
+	id = SoA.5027
+	desc = EVTDESC_SoA_5027
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5027
+		ai_chance = {
+			factor = 50
+		}
+		if = {
+			limit = { NOT = { trait = wroth } }
+			random = {
+				chance = 30
+				add_trait = wroth
+				hidden_tooltip = {
+					character_event = {
+						id = 38254 #Notify Wroth
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5027
+		ai_chance = {
+			factor = 50
+		}
+		if = {
+			limit = { NOT = { trait = patient } }
+			random = {
+				chance = 30
+				add_trait = patient
+				hidden_tooltip = {
+					character_event = {
+						id = 38264 #Notify Patient
+					}
+				}
+			}
+		}
+	}
+}
+
+# Trouble on road - inn on fire
+narrative_event = {
+	id = SoA.5028
+	title = EVTNAME_SoA_5028
+	desc = EVTDESC_SoA_5028
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5028
+		ai_chance = {
+			factor = 80
+		}
+		random = {
+			chance = 10
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = brave } }
+			random = {
+				chance = 30
+				add_trait = brave
+				hidden_tooltip = {
+					character_event = {
+						id = 38270 #Notify brave
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5028
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOR = { trait = craven trait = berserker } }
+			add_trait = craven
+		}
+	}
+}
+
+# Danger on road - robbers
+character_event = {
+	id = SoA.5029
+	desc = EVTDESC_SoA_5029
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5029
+		ai_chance = {
+			factor = 90
+		}
+		wealth = -10
+	}
+	option = {
+		name = EVTOPTB_SoA_5029
+		tooltip_info = martial
+		trigger = {
+			martial = 10
+		}
+		ai_chance = {
+			factor = 10
+		}
+		if = {
+			limit = { NOT = { trait = brave } }
+			add_trait = brave
+		}
+		random = {
+			chance = 10
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+}
+
+# Danger on road  - broken bridge
+character_event = {
+	id = SoA.5030
+	desc = EVTDESC_SoA_5030
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5030
+		ai_chance = {
+			factor = 10
+		}
+		random = {
+			chance = 20
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5030
+		ai_chance = {
+			factor = 45
+		}
+		wealth = -10
+	}
+	option = {
+		name = EVTOPTC_SoA_5030
+		ai_chance = {
+			factor = 45
+		}
+		wealth = -30
+		if = {
+			limit = { NOT = { trait = charitable } }
+			add_trait = charitable
+		}
+	}
+}
+
+# Philosophical ponderings
+character_event = {
+	id = SoA.5031
+	desc = EVTDESC_SoA_5031
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5031
+		if = {
+			limit = {
+				NOR = {
+					lifestyle_traits = 1
+					has_dlc = "Way of Life"
+				}
+			}
+			random_list = {
+				10 = {
+					add_trait = scholar
+				}
+				10 = {
+					add_trait = mystic
+				}
+				10 = {
+					add_trait = poet
+				}
+				10 = {
+					add_trait = zealous
+				}
+				10 = {
+					add_trait = depressed
+				}
+				50 = {
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					lifestyle_traits = 1
+					has_dlc = "Way of Life"
+				}
+			}
+			random_list = {
+				20 = {
+					add_trait = poet
+				}
+				20 = {
+					add_trait = zealous
+				}
+				10 = {
+					add_trait = depressed
+				}
+				50 = {
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5031
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 20
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Meeting people on travels - good Samaritan
+character_event = {
+	id = SoA.5032
+	desc = EVTDESC_SoA_5032
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5032
+		ai_chance = {
+			factor = 90
+		}
+		wealth = -10
+		if = {
+			limit = { NOT = { trait = kind } }
+			add_trait = kind
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5032
+		ai_chance = {
+			factor = 10
+		}
+		if = {
+			limit = { trait = kind }
+			remove_trait = kind
+		}
+	}
+}
+
+# Meeting people on travels - Noah's ark
+narrative_event = {
+	id = SoA.5033
+	title = EVTNAME_SoA_5033
+	desc = EVTDESC_SoA_5033
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5033
+		if = {
+			limit = { NOT = { trait = arbitrary } }
+			add_trait = arbitrary
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5033
+		if = {
+			limit = { NOT = { trait = charitable } }
+			add_trait = charitable
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5033
+		custom_tooltip = { text = noahs_ark_cats_dogs }
+	}
+}
+
+# Meeting people on travels - bread and fish
+character_event = {
+	id = SoA.5034
+	desc = EVTDESC_SoA_5034
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5034
+		wealth = -5
+		if = {
+			limit = { NOT = { trait = charitable } }
+			add_trait = charitable
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5034
+		if = {
+			limit = {
+				trait = charitable
+			}
+		remove_trait = charitable
+		}
+	}
+}
+
+# Learning something about boats
+character_event = {
+	id = SoA.5035
+	desc = EVTDESC_SoA_5035
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5035
+		random_list = {
+			15 = { change_martial = 1 }
+			15 = { change_learning = 1 }
+			70 = {}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5035
+		piety = 30
+	}
+}
+
+# Learning something about bridges
+character_event = {
+	id = SoA.5036
+	desc = EVTDESC_SoA_5036
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5036
+		random = {
+			chance = 30
+			change_learning = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5036
+		if = {
+			limit = { NOT = { trait = proud } }
+			random = {
+				chance = 30
+				add_trait = proud
+				hidden_tooltip = {
+					character_event = {
+						id = 38261 #Notify Proud
+					}
+				}
+			}
+		}
+	}
+}
+
+# Falls ill from trials on journey
+character_event = {
+	id = SoA.5037
+	desc = EVTDESC_SoA_5037
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5037
+		ai_chance = {
+			factor = 10
+		}
+		piety = 10
+		random = {
+			chance = 40
+			if = {
+				limit = {
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = ill
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				add_symptom_effect = yes
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5037
+		ai_chance = {
+			factor = 90
+		}
+		random = {
+			chance = 20
+			if = {
+				limit = {
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = ill
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				add_symptom_effect = yes
+			}
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 50
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Moral choice - steal or give
+character_event = {
+	id = SoA.5038
+	desc = EVTDESC_SoA_5038
+	picture = GFX_evt_pilgrims_epic_journey
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5038
+	}
+	option = {
+		name = EVTOPTB_SoA_5038
+		wealth = -10
+		if = {
+			limit = { NOT = { trait = charitable } }
+			add_trait = charitable
+		}
+	}
+	option = {
+		name = EVTOPTC_SoA_5038
+		wealth = 10
+		if = {
+			limit = { trait = charitable }
+			remove_trait = charitable
+		}
+		if = {
+			limit = { NOT = { trait = deceitful } }
+			add_trait = deceitful
+		}
+	}
+	option = {
+		name = EVTOPTD_SoA_5038
+		if = {
+			limit = { trait = charitable }
+			remove_trait = charitable
+		}
+	}
+}
+
+# Sees a guiding star - religious experience
+character_event = {
+	id = SoA.5039
+	desc = EVTDESC_SoA_5039
+	picture = GFX_evt_pilgrims_epic_journey
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5039
+		if = {
+			limit = { NOT = { trait = zealous } }
+			random = {
+				chance = 20
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5039
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 20
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Holy knights come to meet and escort - feels safe
+narrative_event = {
+	id = SoA.5045
+	title = EVTNAME_SoA_5045
+	desc = EVTDESC_SoA_5045
+	picture = GFX_evt_crusaders
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5045
+		ai_chance = {
+			factor = 90
+		}
+		piety = 20
+	}
+	option = {
+		name = EVTOPTB_SoA_5045
+		ai_chance = {
+			factor = 10
+		}
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			random = {
+				chance = 20
+				add_trait = paranoid
+				hidden_tooltip = {
+					character_event = {
+						id = 38275 #Notify Paranoid
+					}
+				}
+			}
+		}
+	}
+}
+
+# Comes upon holy knights at camp - talks to them and learns something
+character_event = {
+	id = SoA.5046
+	desc = EVTDESC_SoA_5046
+	picture = GFX_evt_crusaders
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5046
+		piety = 10
+		random = {
+			chance = 30
+			change_learning = 1
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5046
+		random = {
+			chance = 30
+			change_martial = 1
+		}
+	}
+}
+
+
+# Meets holy knight as travel companion - makes friend who is member of a holy order
+character_event = {
+	id = SoA.5047
+	desc = EVTDESC_SoA_5047
+	picture = GFX_evt_crusaders
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5047    # yes - select order of knight depending on availability and destination. If several possible, randomize
+		ai_chance = {
+			factor = 90
+		}
+		custom_tooltip = { text = gain_friend }
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_canterbury
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5081 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_canterbury
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_knights_templar }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5083 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_canterbury
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_knights_templar
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5081 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5082 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5083 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = { character_event = { id = SoA.5048 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_jerusalem
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5081 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5082 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = { character_event = { id = SoA.5083 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_koln
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5081 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5082 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = { character_event = { id = SoA.5083 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_rome
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_santiago
+				is_title_active = d_knights_santiago
+				NOT = { is_title_active = d_knights_calatrava }
+			}
+			character_event = { id = SoA.5084 }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_santiago
+				NOT = { is_title_active = d_knights_santiago }
+				is_title_active = d_knights_calatrava
+			}
+			character_event = { id = SoA.5085 }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_santiago
+				is_title_active = d_knights_santiago
+				is_title_active = d_knights_calatrava
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5084 } }
+					10 = { character_event = { id = SoA.5085 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_constantinople
+			}
+			character_event = { id = SoA.5048 }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_axum
+			}
+			character_event = { id = SoA.5049 }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5081 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5082 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = { character_event = { id = SoA.5083 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = { character_event = { id = SoA.5048 } }
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				NOT = { is_title_active = d_holy_sepulchre }
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				NOT = { is_title_active = d_knights_hospitaler }
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				NOT = { is_title_active = d_teutonic_order }
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				NOT = { is_title_active = d_knights_templar }
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = pilgrimage_to_antioch
+				is_title_active = d_knights_templar
+				is_title_active = d_teutonic_order
+				is_title_active = d_knights_hospitaler
+				is_title_active = d_holy_sepulchre
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = SoA.5081 } }
+					10 = { character_event = { id = SoA.5082 } }
+					10 = { character_event = { id = SoA.5083 } }
+					10 = { character_event = { id = SoA.5048 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_SoA_5047    # no
+		ai_chance = {
+			factor = 10
+		}
+		if = {
+			limit = {
+				NOT = { trait = shy	}
+			}
+			random = {
+				chance = 20
+				add_trait = shy
+				hidden_tooltip = {
+					character_event = {
+						id = 38263 #Notify Shy
+					}
+				}
+			}
+		}
+	}
+}
+
+# Follow-up friend events - see SoA.5081-SoA.5085, SoA.5048-SoA.5049
+# Makes friend in Knights Templar
+character_event = {
+	id = SoA.5081
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_knights_templar = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+
+
+# Makes friend in Teutonic Order
+character_event = {
+	id = SoA.5082
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_teutonic_order = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Makes friend in Knights Hospitaller
+character_event = {
+	id = SoA.5083
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_knights_hospitaler = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Makes friend - Knight of Santiago
+character_event = {
+	id = SoA.5084
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_knights_santiago = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Makes friend - Knight of Calatrava
+character_event = {
+	id = SoA.5085
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_knights_calatrava = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Makes friend - Knight of the Holy Sepulchre
+character_event = {
+	id = SoA.5048
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_holy_sepulchre = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Makes friend - Knight of the Holy Sepulchre
+character_event = {
+	id = SoA.5049
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		d_saint_anthony = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						is_female = no
+						prisoner = no
+						in_command = no
+						is_priest = no
+						age = 16
+						NOT = {
+							sibling = ROOT
+						}
+						NOT = {
+							is_friend = ROOT
+						}
+						NOT = {
+							is_rival = ROOT
+						}
+						NOT = { has_job_title = job_spiritual }
+					}
+					add_friend = ROOT
+					character_event = { id = SoA.5086 }
+				}
+			}
+		}
+	}
+}
+
+# Knight friend bounce event
+character_event = {
+	id = SoA.5086
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			character_event = { id = SoA.5087 }
+		}
+	}
+}
+
+# Pilgrim receives notification about new friend
+character_event = {
+	id = SoA.5087
+	desc = EVTDESC_SoA_5087
+	picture = GFX_evt_crusaders
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5087
+	}
+}
+
+###########################################
+#                                         #
+# Pilgrim arrives                         #
+#                                         #
+# ID SoA.5050-SoA.5054                    #
+#    SoA.5094-5096                        #
+#                                         #
+###########################################
+
+# Arrived at Canterbury
+narrative_event = {
+	id = SoA.5050
+	title = EVTNAME_SoA_5050
+	desc = EVTDESC_SoA_5050
+	picture = GFX_evt_cathedral
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5050
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Jerusalem
+narrative_event = {
+	id = SoA.5051
+	title = EVTNAME_SoA_5051
+	desc = EVTDESC_SoA_5051
+	picture = GFX_evt_jerusalem
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5051
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Cologne
+narrative_event = {
+	id = SoA.5052
+	title = EVTNAME_SoA_5052
+	desc = EVTDESC_SoA_5052
+	picture = GFX_evt_cathedral
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5052
+		hidden_tooltip = {  character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Rome
+narrative_event = {
+	id = SoA.5053
+	title = EVTNAME_SoA_5053
+	desc = EVTDESC_SoA_5053
+	picture = GFX_evt_victory_arch_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5053
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Santiago
+narrative_event = {
+	id = SoA.5054
+	title = EVTNAME_SoA_5054
+	desc = EVTDESC_SoA_5054
+	picture = GFX_evt_cathedral
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5054
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Constantinople
+narrative_event = {
+	id = SoA.5097
+	title = EVTNAME_SoA_5097
+	desc = EVTDESC_SoA_5097
+	picture = GFX_evt_hagia_sofia
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5097
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Axum
+narrative_event = {
+	id = SoA.5098
+	title = EVTNAME_SoA_5098
+	desc = EVTDESC_SoA_5098
+	picture = GFX_evt_market_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5098
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+# Arrived at Antioch
+narrative_event = {
+	id = SoA.5099
+	title = EVTNAME_SoA_5099
+	desc = EVTDESC_SoA_5099
+	picture = GFX_evt_market_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5099
+		hidden_tooltip = { character_event = { id = SoA.5055 days = 5 } }
+	}
+}
+
+###########################################
+#                                         #
+# Events occurring at pilgrimage          #
+# destination                             #
+#                                         #
+# ID SoA.5055-SoA.5080                    #
+#                                         #
+###########################################
+
+# Hidden event that selects what interesting things will happen at destination
+character_event = {
+	id = SoA.5055
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				if = {
+					limit = { NOT = { trait = cynical } }
+					character_event = { id = SoA.5056 }   # Stimulated to learning
+				}
+				if = {
+					limit = { trait = cynical }
+					random_list = {
+						20 = { character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = { character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = { character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = { character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						OR = {
+							trait = mastermind_theologian
+							trait = scholarly_theologian
+						}
+					}
+					character_event = { id = SoA.5059 }  # Mastermind theologian impresses everyone
+				}
+				if = {
+					limit = {
+						NOT = { trait = mastermind_theologian }
+						NOT = { trait = scholarly_theologian }
+					}
+					random_list = {
+						20 = { character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = { character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = { character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = { character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {
+				if = {
+					limit = { trait = lustful }
+					character_event = { id = SoA.5062 }    # Lustful tourist having fun
+				}
+				if = {
+					limit = { NOT = { trait = lustful }	}
+					random_list = {
+						20 = { character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = { character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = { character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = { character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {
+				if = {
+					limit = { trait = homosexual }
+					character_event = { id = SoA.5063 }    # Freedom
+				}
+				if = {
+					limit = { NOT = { trait = homosexual } }
+					random_list = {
+						20 = {  character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = {  character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = {  character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = {  character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {                  # Monks cure pilgrim of disease - attributed to God's hand?
+				if = {
+					limit = {
+						OR = {
+							is_ill = yes
+							trait = pneumonic
+							trait = syphilitic
+						}
+					}
+					narrative_event = { id = SoA.5064 }
+				}
+				if = {
+					limit = {
+						NOT = {
+							OR = {
+								is_ill = yes
+								trait = pneumonic
+								trait = syphilitic
+							}
+						}
+					}
+					random_list = {
+						20 = {  character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = {  character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = {  character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = {  character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						OR = {
+							trait = lunatic
+							trait = possessed
+						}
+					}
+					character_event = { id = SoA.5065 }  # Lunatic/possessed decides (s)he is God
+				}
+				if = {
+					limit = {
+						NOT = {
+							OR = {
+								trait = lunatic
+								trait = possessed
+							}
+						}
+					}
+					random_list = {
+						20 = {  character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = {  character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = {  character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = {  character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {
+				if = {
+					limit = {
+						OR = {
+							trait = drunkard
+							trait = hedonist
+						}
+					}
+					character_event = { id = SoA.5066 }  # Drunkard/hedonist event
+				}
+				if = {
+					limit = {
+						NOT = {
+							OR = {
+								trait = drunkard
+								trait = hedonist
+							}
+						}
+					}
+					random_list = {
+						20 = {  character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = {  character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = {  character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = {  character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+			10 = {                                           # Impressed by Islam or Judaism (Jerusalem only)
+				if = {
+					limit = { has_character_flag = pilgrimage_to_jerusalem }
+					character_event = { id = SoA.5067 }
+				}
+				if = {
+					limit = {
+						NOT = { has_character_flag = pilgrimage_to_jerusalem }
+					}
+					random_list = {
+						20 = {  character_event = { id = SoA.5057 } }  # Strong religious experience
+						10 = {  character_event = { id = SoA.5058 } }  # Disappointed in the place
+						20 = {  character_event = { id = SoA.5060 } }  # Learns things of the world - cosmopolitan
+						20 = {  character_event = { id = SoA.5061 } }  # Generally impressed
+					}
+				}
+			}
+		}
+	}
+}
+
+# Stimulated to theological learning
+character_event = {
+	id = SoA.5056
+	desc = EVTDESC_SoA_5056
+	picture = GFX_evt_library
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5056
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			add_trait = scholar
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			random = {
+				chance = 20
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5056
+		piety = 30
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Strong religious experience
+character_event = {
+	id = SoA.5057
+	desc = EVTDESC_SoA_5057
+	picture = GFX_evt_knight_kneeling
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5057
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Disappointed in the place
+character_event = {
+	id = SoA.5058
+	desc = EVTDESC_SoA_5058
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5058
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+		clr_character_flag = good_pilgrimage
+		clr_character_flag = abominable_pilgrimage
+		set_character_flag = bad_pilgrimage
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+}
+
+# Mastermind theologian impresses everyone
+character_event = {
+	id = SoA.5059
+	desc = EVTDESC_SoA_5059
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5059
+		prestige = 30
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+}
+
+# Learns things of the big world - cosmopolitan experience
+character_event = {
+	id = SoA.5060
+	desc = EVTDESC_SoA_5060
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5060
+		random_list = {
+			15 = { change_learning = 1 }
+			15 = { change_intrigue = 1 }
+			70 = {}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+	option = {
+		name = EVTOPTB_SoA_5060
+		if = {
+			limit = { NOT = { trait = gregarious } }
+			random = {
+				chance = 50
+				add_trait = gregarious
+				hidden_tooltip = {
+					character_event = {
+						id = 38265 #Notify Gregarious
+					}
+				}
+			}
+		}
+		if = {
+			limit = { trait = gregarious }
+			random = {
+				chance = 20
+				change_diplomacy = 1
+			}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Generally impressed
+character_event = {
+	id = SoA.5061
+	desc = EVTDESC_SoA_5061
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5061
+		piety = 20
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+}
+
+# Lustful character enjoys freedom far from home
+character_event = {
+	id = SoA.5062
+	desc = EVTDESC_SoA_5062
+	picture = GFX_evt_lovers
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5062   # Let's go!
+		if = {
+			limit = {
+				is_female = yes
+				NOT = { trait = homosexual }
+			}
+			random = {
+				chance = 50
+				custom_tooltip = {
+					text = becomes_pregnant_no_father
+					hidden_tooltip = { impregnate = 0 }
+				}
+				clr_character_flag = good_pilgrimage
+				clr_character_flag = abominable_pilgrimage
+				set_character_flag = bad_pilgrimage
+			}
+		}
+
+
+		if = {
+			limit = { NOT = { trait = syphilitic } }
+			random = {
+				chance = 5
+				add_trait = syphilitic
+				clr_character_flag = good_pilgrimage
+				clr_character_flag = abominable_pilgrimage
+				set_character_flag = bad_pilgrimage
+			}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5062   # Control yourself
+		piety = 10
+		if = {
+			limit = { NOT = { trait = chaste } }
+			random = {
+				chance = 40
+				add_trait = chaste
+				hidden_tooltip = {
+					character_event = {
+						id = 38274 #Notify Chaste
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Homosexual character enjoys freedom far from home
+character_event = {
+	id = SoA.5063
+	desc = EVTDESC_SoA_5063
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5063    # Do it
+		if = {
+			limit = { trait = stressed }
+			remove_trait = stressed
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5063    # Don't do it
+		if = {
+			limit = { NOT = { trait = stressed } }
+			add_trait = stressed
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			random = {
+				chance = 20
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Monks cure pilgrim of disease - pilgrim attributes it to God's hand
+narrative_event = {
+	id = SoA.5064
+	title = EVTNAME_SoA_5064
+	desc = EVTDESC_SoA_5064
+	picture = GFX_evt_monastery_monks
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5064
+		ai_chance = {
+			factor = 70
+		}
+		if = {
+			limit = { trait = ill }
+			remove_trait = ill
+		}
+		if = {
+			limit = { trait = pneumonic	}
+			remove_trait = pneumonic
+		}
+		if = {
+			limit = { trait = syphilitic }
+			remove_trait = syphilitic
+		}
+		if = {
+			limit = { trait = wounded }
+			remove_trait = wounded
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5064
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { trait = ill }
+			remove_trait = ill
+		}
+		if = {
+			limit = { trait = pneumonic	}
+			remove_trait = pneumonic
+		}
+		if = {
+			limit = { trait = syphilitic }
+			remove_trait = syphilitic
+		}
+		if = {
+			limit = { trait = wounded }
+			remove_trait = wounded
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTC_SoA_5064
+		trigger = {
+			NOT = { lifestyle_traits = 1 }
+			NOT = { has_dlc = "Way of Life" }
+		}
+		ai_chance = {
+			factor = 10
+		}
+		if = {
+			limit = { trait = ill }
+			remove_trait = ill
+		}
+		if = {
+			limit = { trait = pneumonic	}
+			remove_trait = pneumonic
+		}
+		if = {
+			limit = { trait = syphilitic }
+			remove_trait = syphilitic
+		}
+		if = {
+			limit = { trait = wounded }
+			remove_trait = wounded
+		}
+		add_trait = mystic
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Lunatic/possessed pilgrim decides (s)he is God
+character_event = {
+	id = SoA.5065
+	desc = EVTDESC_SoA_5065
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5065
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = { character_event = { id = SoA.5080 } } # Results of speaking to the masses
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+	option = {
+		name = EVTOPTB_SoA_5065
+		ai_chance = {
+			factor = 90
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+		}
+}
+
+# Drunkard/hedonist at holy site
+character_event = {
+	id = SoA.5066
+	desc = EVTDESC_SoA_5066
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5066
+		ai_chance = {
+			factor = 80
+		}
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			random = {
+				chance = 30
+				add_trait = hedonist
+			}
+		}
+		if = {
+			limit = { NOT = { trait = drunkard } }
+			random = {
+				chance = 30
+				add_trait = drunkard
+				hidden_tooltip = {
+					character_event = {
+						id = 38286 #Notify Drunkard
+					}
+				}
+			}
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5066
+		ai_chance = {
+			factor = 20
+		}
+		piety = 10
+			if = {
+				limit = { NOT = { trait = stressed } }
+				random = {
+					chance = 30
+					add_trait = stressed
+					hidden_tooltip = {
+						character_event = {
+							id = 38282 #Notify Stressed
+						}
+					}
+				}
+			}
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Impressed by Islam or Judaism (Jerusalem only)
+character_event = {
+	id = SoA.5067
+	desc = EVTDESC_SoA_5067
+	picture = GFX_evt_imam
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5067
+		if = {
+			limit = { trait = zealous }
+			remove_trait = zealous
+		}
+		add_trait = sympathy_islam
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+	option = {
+		name = EVTOPTB_SoA_5067
+		if = {
+			limit = { trait = zealous }
+			remove_trait = zealous
+		}
+		add_trait = sympathy_judaism
+		hidden_tooltip = { character_event = { id = SoA.5090 days = 10 } } # Stay a little longer then go home
+	}
+}
+
+# Self-styled God speaks to the masses - consequences
+character_event = {
+	id = SoA.5080
+	desc = EVTDESC_SoA_5080
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_SoA_5080
+		prestige = -10
+		clr_character_flag = good_pilgrimage
+		clr_character_flag = bad_pilgrimage
+		set_character_flag = abominable_pilgrimage
+		if = {
+			limit = { NOT = { trait = lunatic } }
+			add_trait = lunatic
+		}
+		if = {
+			limit = { NOT = { trait = wroth } }
+			random = {
+				chance = 50
+				add_trait = wroth
+				hidden_tooltip = {
+					character_event = {
+						days = 2
+						id = 38254 #Notify Wroth
+					}
+				}
+			}
+		}
+	}
+}
+
+
+###########################################
+#                                         #
+# Homecoming                              #
+#                                         #
+# ID SoA5090-SoA5093                      #
+#                                         #
+###########################################
+
+# Event checking result of pilgrimage and sending us on to the respective homecoming event
+character_event = {
+	id = SoA.5090
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_character_flag = good_pilgrimage }
+			character_event = { id = SoA.5091 }
+		}
+		if = {
+			limit = { has_character_flag = bad_pilgrimage }
+			character_event = { id = SoA.5092 }
+		}
+		if = {
+			limit = { has_character_flag = abominable_pilgrimage }
+			character_event = { id = SoA.5093 }
+		}
+	}
+}
+
+# Good pilgrimage
+character_event = {
+	id = SoA.5091
+	desc = EVTDESC_SoA_5091
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				ai = no
+				NOT = { has_character_flag = achievement_pilgrim }
+			}
+			set_character_flag = achievement_pilgrim
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5091
+		clr_character_flag = pilgrimage_to_canterbury
+		clr_character_flag = pilgrimage_to_jerusalem
+		clr_character_flag = pilgrimage_to_koln
+		clr_character_flag = pilgrimage_to_rome
+		clr_character_flag = pilgrimage_to_santiago
+		clr_character_flag = good_pilgrimage
+		clr_character_flag = do_not_disturb
+		add_trait = pilgrim
+		hidden_tooltip = { remove_trait = on_pilgrimage }
+		piety = 30
+	}
+}
+
+# Disappointing pilgrimage
+character_event = {
+	id = SoA.5092
+	desc = EVTDESC_SoA_5092
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				ai = no
+				NOT = { has_character_flag = achievement_pilgrim }
+			}
+			set_character_flag = achievement_pilgrim
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5092
+		clr_character_flag = pilgrimage_to_canterbury
+		clr_character_flag = pilgrimage_to_jerusalem
+		clr_character_flag = pilgrimage_to_koln
+		clr_character_flag = pilgrimage_to_rome
+		clr_character_flag = pilgrimage_to_santiago
+		clr_character_flag = bad_pilgrimage
+		clr_character_flag = do_not_disturb
+		add_trait = pilgrim
+		hidden_tooltip = { remove_trait = on_pilgrimage }
+		piety = -10
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 20
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
+	}
+}
+
+# Abominable pilgrimage - very unusual outcome
+character_event = {
+	id = SoA.5093
+	desc = EVTDESC_SoA_5093
+	picture = GFX_evt_lunatic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { 
+				ai = no
+				NOT = { has_character_flag = achievement_pilgrim }
+			}
+			set_character_flag = achievement_pilgrim
+		}
+	}
+
+	option = {
+		name = EVTOPTA_SoA_5093
+		clr_character_flag = pilgrimage_to_canterbury
+		clr_character_flag = pilgrimage_to_jerusalem
+		clr_character_flag = pilgrimage_to_koln
+		clr_character_flag = pilgrimage_to_rome
+		clr_character_flag = pilgrimage_to_santiago
+		clr_character_flag = abominable_pilgrimage
+		clr_character_flag = do_not_disturb
+		add_trait = pilgrim
+		hidden_tooltip = { remove_trait = on_pilgrimage }
+		piety = -100
+	}
+}

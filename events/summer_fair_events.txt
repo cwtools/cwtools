@@ -1,0 +1,1534 @@
+################################################
+#
+# Events for Summer Fair
+#
+# ID 74000 - 74999 is reserved
+#
+# Satirical Puppet Show ID: 4105
+# Dancing bear ID: 4170
+#
+#################################################
+#
+# Designed by Johan Andersson
+# Written by Sara Wendel-Örtqvist
+
+#Dancing Monkey
+character_event = {
+	id = 74000
+	desc = "EVTDESC74000"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		has_character_modifier = holding_summer_fair
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}
+
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74000 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74000
+	}		
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 0.5
+			trait = charitable
+		}
+		modifier = {
+			factor = 2
+			trait = greedy
+		}	
+	}
+
+
+	option = {
+		name = "EVTOPTA74000"
+		trigger = {
+			NOT = {
+				trait = kind
+				trait = charitable
+				trait = honest
+			}
+		}
+		random = {
+			chance = 10
+			add_trait = stressed
+			hidden_tooltip = {
+				character_event = {
+					id = 38282 #Notify Stressed
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB74000"
+		trigger = {
+			OR = {
+				trait = kind
+				trait = charitable
+				trait = honest
+			}
+			any_vassal = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = honest
+				}
+			}
+		}
+		random_vassal = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = honest
+				}
+			}
+			opinion = {
+				modifier = honest_pos
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC74000"
+		trigger = {
+			trait = arbitrary
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTE74000"
+		prestige = 5
+		treasury = -5
+	}
+}
+
+#Archery
+character_event = {
+	id = 74005
+	desc = "EVTDESC74005"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			age = 20
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		NOT = { trait = paranoid }
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74005 }	
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74005
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 0.75
+			trait = arbitrary
+		}
+
+		modifier = {
+			factor = 2.5
+			trait = gregarious
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74005"
+		trigger = {
+			NOT = { trait = trusting }
+			NOT = { trait = paranoid }
+		}
+		add_trait = paranoid
+	}
+
+	option = {
+		name = "EVTOPTC74005"
+		trigger = {
+			NOT = { trait = charitable }
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTD74005"
+		trigger = {
+			NOT = { trait = greedy }
+		}
+		random_vassal = {
+			limit = {
+				age = 20
+			}
+			opinion = {
+				modifier = charitable_pos
+				who = ROOT
+				years = 5
+			}
+		}
+		wealth = -5
+	}
+}
+
+#Jesters
+character_event = {
+	id = 74010
+	desc = "EVTDESC74010"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+	
+
+	trigger = {
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74010 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74010
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 3
+			trait = wroth
+		}
+
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74010"
+		trigger = {
+			NOT = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+		prestige = 5
+	}
+
+	option = {
+		name = "EVTOPTE74010"
+		trigger = {
+			OR = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTG74010"
+		trigger = {
+			trait = charitable
+			NOT = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+		treasury = -10
+		prestige = 10
+	}
+}
+
+#Mummers
+character_event = {
+	id = 74015
+	desc = "EVTDESC74015"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = { reverse_opinion = { who = ROOT value = 10 } }
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74015 }	
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74015
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+		modifier = {
+			factor = 3
+			trait = wroth
+		}
+
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74015"
+		trigger = {
+			NOT = { trait = gregarious }
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTD74015"
+		piety = 10
+		random_vassal = {
+			limit = { reverse_opinion = { who = ROOT value = 10 } }
+			opinion = {
+				modifier = gregarious_neg
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTE74015"
+		trigger = {
+			NOT = { trait = gregarious }
+			NOT = { trait = shy }
+		}
+		random = {
+			chance = 25
+			add_trait = gregarious
+			hidden_tooltip = {
+				character_event = {
+					id = 38265 #Notify Gregarious
+				}
+			}
+		}
+	}
+}
+
+#Summer Fair
+character_event = {
+	id = 74020
+	desc = "EVTDESC74020"
+	picture = "GFX_evt_market"
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			NOT = {
+				is_priest = yes
+			}
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74020 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74020
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 5
+			trait = cynical
+		}
+
+		modifier = {
+			factor = 3
+			trait = wroth
+		}
+
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+
+		modifier = {
+			factor = 2.5
+			trait = charitable
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74020"
+		random_vassal = {
+			limit = {
+				NOT = {
+					is_priest = yes
+				}
+			}
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC74020"
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+}
+
+#Strolling Players
+character_event = {
+	id = 74025
+	desc = "EVTDESC74025"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+	is_married = yes
+
+	trigger = {
+		learning = 10
+		any_vassal = {
+			learning = 10
+			age = 20
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74025 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74025
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}	
+		
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+
+		modifier = {
+			factor = 2.5
+			trait = charitable
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74025"
+		random_vassal = {
+			limit = {
+				learning = 10
+				is_adult = yes
+			}
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB74025"
+		trigger = {
+			NOT = { has_character_flag = learning_boost_fair }
+		}
+		change_learning = 1
+		set_character_flag = learning_boost_fair
+	}
+
+	option = {
+		name = "EVTOPTD74025"
+		spouse = {
+			opinion = {
+				modifier = opinion_delighted
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Jugglers
+character_event = {
+	id = 74030
+	desc = "EVTDESC74030"
+	picture = "GFX_evt_jugglers"
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			is_priest = yes
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74030 }	
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74030
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 0.75
+			trait = cynical
+		}
+
+		modifier = {
+			factor = 5
+			trait = honest
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74030"
+		prestige = 10
+		piety = -5
+	}
+
+	option = {
+		name = "EVTOPTB74030"
+		random_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_disapprove
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTD74030"
+		prestige = -5
+		piety = 10
+		random_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Jumping Jews of Jerusalem
+character_event = {
+	id = 74035
+	desc = "EVTDESC74035"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+	religion = catholic
+
+	trigger = {
+		any_vassal = {
+			trait = gregarious
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74035 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74035
+	}	
+
+	mean_time_to_happen = {
+		days = 360
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+
+		modifier = {
+			factor = 0.5
+			trait = gregarious
+		}
+
+		modifier = {
+			factor = 1.5
+			trait = shy
+		}
+	}
+
+	option = {
+		name = "EVTOPTA74035"
+		trigger = {
+			NOT = { trait = gregarious }
+		}
+		treasury = 5
+		random_vassal = {
+			limit = {
+				trait = gregarious
+			}
+			opinion = {
+				modifier = opinion_disgruntled
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB74035"
+		trigger = {
+			NOT = { trait = gregarious }
+			OR = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC74035"
+		if = {
+			limit = {
+				NOT = { trait = gregarious }
+			}
+			random = {
+				chance = 25
+				add_trait = gregarious
+				hidden_tooltip = {
+					character_event = {
+						id = 38265 #Notify Gregarious
+					}
+				}
+			}
+		}
+		random_vassal = {
+			limit = {
+				trait = gregarious
+			}
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Mages and Divinators visits the fair
+character_event = {
+	id = 74040
+	desc = "EVTDESC74040"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			is_priest = yes
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74040 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74040
+	}	
+
+	mean_time_to_happen = {
+		days = 240
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA74040" #Allow them
+		trigger = {
+			OR = {	
+				ai = no
+				NOT = { trait = zealous }
+			}
+		}		
+		piety = -5
+		random_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_irritated
+				who = ROOT
+				years = 5
+			}
+		}
+		if = {
+			limit = { trait = zealous }
+			remove_trait = zealous
+		}
+	}
+	option = {
+		name = "EVTOPTB74040" #Banish them
+		piety = 10
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+}
+
+#Errant monk disturbing the fair
+character_event = {
+	id = 74042
+	desc = "EVTDESC74042"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			is_priest = yes
+		}
+		capital_scope = {
+			NOT = { has_province_modifier = peasants_upset }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74042 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74042
+	}	
+
+	mean_time_to_happen = {
+		days = 240
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA74042" #Allow him
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		piety = -5
+		random_vassal = {
+			limit = {
+				is_priest = yes
+			}
+			opinion = {
+				modifier = opinion_irritated
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB74042" #Banish him
+		piety = 10
+		capital_scope = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 365
+			}
+		}
+	}
+}
+
+#Peddler are arrested by Marshal for selling stolen goods
+character_event = {
+	id = 74044
+	desc = "EVTDESC74044"
+	picture = GFX_evt_market
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		job_marshal = {
+			martial = 12
+		}
+		any_demesne_province = {
+			is_capital = yes
+			NOT = {
+				has_province_modifier = public_execution
+			}
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74044 }	
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74044
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA74044"
+		random_demesne_province = {
+			limit = {
+				is_capital = yes
+			}
+			add_province_modifier = {
+				name = public_execution
+				duration = 1825
+			}
+		}
+		random = {
+			chance = 25
+
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event = {
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB74044"
+		treasury = 5
+	}
+}
+
+#Too many Peasants enter the city
+character_event = {
+	id = 74045
+	desc = "EVTDESC74045"
+	picture = GFX_evt_jugglers
+
+	min_age = 20
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_vassal = {
+			tier = baron
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}			
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_74045 }	
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_74045
+	}	
+
+	mean_time_to_happen = {
+		days = 180
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA74045" #Tell him to accept the peasants
+		ai_chance = {
+			factor = 100
+		}
+		random_vassal = {
+			limit = {
+				tier = baron
+			}
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB74045" #Restrict peasant access
+		ai_chance = {
+			factor = 5
+		}
+		random_demesne_province = {
+			limit = {
+				is_capital = yes
+			}
+			add_province_modifier = {
+				name = restricted_peasant_access
+				duration = 730
+			}
+		}
+	}
+}
+
+#The summer Fair is over
+character_event = {
+	id = 74047
+	desc = "EVTDESC74047"
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA74047"
+		remove_character_modifier = holding_summer_fair
+		clr_character_flag = do_not_disturb
+		clr_character_flag = fair_event_happened
+		clr_character_flag = summer_fair_begin
+		set_character_flag = recent_summer_fair
+		clr_character_flag = fair_event_74000
+		clr_character_flag = fair_event_74005
+		clr_character_flag = fair_event_74010
+		clr_character_flag = fair_event_74015
+		clr_character_flag = fair_event_74020
+		clr_character_flag = fair_event_74025
+		clr_character_flag = fair_event_74030
+		clr_character_flag = fair_event_74035
+		clr_character_flag = fair_event_74040
+		clr_character_flag = fair_event_74042
+		clr_character_flag = fair_event_74044
+		clr_character_flag = fair_event_74045
+		clr_character_flag = fair_event_4105
+		clr_character_flag = fair_event_4170
+		prestige = 10
+	}
+}
+
+character_event = {
+	id = 74050
+	desc = "EVTDESC74050"
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = summer_fair_begin
+	}
+
+	option = {
+		name = "EVTOPTA74050"
+	}
+}
+
+#Satirical Puppet Show
+character_event = {
+	id = 4105
+	desc = "EVTDESC4105"
+	picture = GFX_evt_jugglers
+
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	has_character_flag = summer_fair_begin
+
+	trigger = {
+		in_command = no
+		any_vassal = {
+			war = no
+			prisoner = no
+			age = 20
+			reverse_opinion = { who = ROOT value = 20 }
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_4105 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_4105
+	}	
+
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA4105"
+		trigger = {
+			NOT = { trait = kind }
+			NOT = { trait = gregarious }
+		}
+		random_vassal = {
+			limit = {
+				war = no
+				prisoner = no
+				is_adult = yes
+				reverse_opinion = {
+					who = ROOT
+					value = 20
+				}
+			}
+			opinion = {
+				modifier = opinion_disgruntled
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC4105"
+		trigger = {
+			trait = kind
+			NOT = { trait = gregarious }
+		}
+		random_vassal = {
+			limit = {
+				war = no
+				prisoner = no
+				is_adult = yes
+				reverse_opinion = {
+					who = ROOT
+					value = 20
+				}
+			}
+			opinion = {
+				modifier = opinion_relieved
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTD4105"
+		trigger = {
+			trait = gregarious
+		}
+		random_vassal = {
+			limit = {
+				reverse_opinion = {
+					who = ROOT
+					value = 20
+				}
+			}
+			opinion = {
+				modifier = gregarious_pos
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Performing Bear
+character_event = {
+	id = 4170
+	desc = "EVTDESC4170"
+	picture = "GFX_evt_jugglers"
+
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	has_character_flag = summer_fair_begin
+
+	trigger = {
+		in_command = no
+		any_courtier = {
+			prisoner = no
+			is_female = no
+		}
+		
+		OR = {
+			NOT = { has_character_flag = fair_event_happened }
+			had_character_flag = {
+				flag = fair_event_happened
+				days = 3
+			}
+		}	
+
+		has_character_modifier = holding_summer_fair
+		had_character_flag = {
+			flag = summer_fair_begin
+			days = 3
+		}
+		NOT = { has_character_flag = fair_event_4170 }
+	}
+	
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = fair_event_4170
+	}	
+
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = fair_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = fair_event_happened
+		}			
+	}
+
+	option = {
+		name = "EVTOPTA4170"
+		trigger = {
+			NOT = { trait = proud }
+			NOT = { trait = craven }
+			NOT = { trait = brave }
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+			}
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC4170"
+		trigger = {
+			trait = craven
+		}
+		prestige = -5
+	}
+
+	option = {
+		name = "EVTOPTD4170"
+		trigger = {
+			trait = proud
+			NOT = { trait = craven }
+			NOT = { trait = brave }
+		}
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_female = no
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTE4170"
+		trigger = {
+			trait = brave
+		}
+		prestige = 10
+	}
+}
+

@@ -1,0 +1,406 @@
+###########################################
+# Charlemagne various events              #
+#                                         #
+# ID CM.2000-CM.3999                      #
+# ID CM.5000-CM.5999                      #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = CM
+
+# Ragnar Lodbrok gains his nickname
+character_event = {
+	id = CM.5000
+	desc = EVTDESC_CM_5000
+	picture = GFX_evt_child_sword
+
+	is_triggered_only = yes
+	
+	only_men = yes
+	has_character_flag = is_ragnar_lodbrok
+	
+	trigger = {
+		has_dlc = "Charlemagne"
+		year = 780
+		NOT = { year = 795 }
+		NOT = { has_nickname = nick_lodbrok }
+	}
+	
+	option = {
+		name = EVTOPTA_CM_5001
+		give_nickname = nick_lodbrok
+		prestige = 10
+		add_trait = robust
+		add_trait = diligent
+		hidden_tooltip = { father = { character_event = { id = CM.5001 } } }
+	}
+}
+
+# Father
+character_event = {
+	id = CM.5001
+	desc = EVTDESC_CM_5001
+	picture = GFX_evt_child_sword
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_CM_5001
+		tooltip = {
+			any_child = {
+				limit = { has_character_flag = is_ragnar_lodbrok }
+				give_nickname = nick_lodbrok
+				prestige = 10
+				add_trait = robust
+				add_trait = diligent
+			}
+		}
+	}
+}
+
+###########################################
+# Hero knight events                      #
+# ID CM.2000-CM.3999                      #
+###########################################
+
+###########################################
+# Hero knight appears                     #
+###########################################
+
+character_event = {
+	id = CM.2000
+	desc = EVTDESC_CM_2000
+	picture = GFX_evt_emissary
+
+	ai = no
+	min_age = 16
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+
+	trigger = {
+		has_dlc = "Charlemagne"
+		OR = {
+			primary_title = { tier = EMPEROR }
+			primary_title = { tier = KING }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+	}
+	
+	option = {
+		name = EVTOPTA_CM_2000
+		create_character = {
+			random_traits = no
+			dynasty = random
+			religion = ROOT
+			culture = ROOT
+			age = 35
+			trait = brave
+			trait = strong
+			trait = skilled_tactician
+			attributes = {
+				martial = 10
+			}
+		}
+		new_character = {
+			set_character_flag = hero_knight
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+				years = 100
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_CM_2000
+		prestige = 10
+	}
+}
+
+#########################################################
+# Knight is guardian to your child - child gains traits #
+#########################################################
+
+character_event = {
+	id = CM.2020
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Charlemagne"
+		ai = no
+		age = 16
+		is_female = no
+		NOT = { trait = incapable }
+		prisoner = no
+		in_command = no
+		NOT = { has_character_flag = do_not_disturb }
+		any_child = {
+			age = 9
+			OR = {
+				is_female = no
+				religion = cathar
+				religion = messalian
+				father = { primary_title = { has_law = status_of_women_4 } }
+				mother = { primary_title = { has_law = status_of_women_4 } }
+				has_game_rule = {
+					name = gender
+					value = all
+				}
+			}
+			guardian = {
+				has_character_flag = hero_knight
+				NOT = { has_character_flag = knight_adventure }
+				prisoner = no
+			}
+		}
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				age = 9
+				OR = {
+					is_female = no
+					religion = cathar
+					religion = messalian
+					father = { primary_title = { has_law = status_of_women_4 } }
+					mother = { primary_title = { has_law = status_of_women_4 } }
+					has_game_rule = {
+						name = gender
+						value = all
+					}
+				}
+				guardian = {
+					has_character_flag = hero_knight
+					prisoner = no
+				}
+			}
+			character_event = { id = CM.2021 }
+		}
+	}
+}
+
+character_event = {
+	id = CM.2021
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = { FROM = { character_event = { id = CM.2022 } } } # Brave
+			10 = { FROM = { character_event = { id = CM.2024 } } } # Strong
+			10 = { FROM = { character_event = { id = CM.2026 } } } # Duelist
+			10 = { FROM = { character_event = { id = CM.2028 } } } # Just
+			1 = { character_event = { id = CM.2029 } } # Wounded or maimed
+		}
+	}
+}
+
+# Child learns bravery
+character_event = {
+	id = CM.2022
+	desc = EVTDESC_CM_2022
+	picture = GFX_evt_child_sword
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { NOT = { trait = brave } }
+		FROM = { guardian = { NOT = { trait = craven } } }
+	}
+	
+	option = {
+		name = EVTOPTA_CM_2022
+		trigger = {
+			NOT = { trait = craven }
+		}
+		FROM = {
+			add_trait = brave
+		}
+	}
+	option = {
+		name = EVTOPTA_CM_2022
+		trigger = {
+			trait = craven
+		}
+		FROM = {
+			add_trait = brave
+		}
+	}
+}
+
+# Child becomes strong
+character_event = {
+	id = CM.2024
+	desc = EVTDESC_CM_2024
+	picture = GFX_evt_child_sword
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { is_strong_trigger = no }
+	}
+
+	option = {
+		name = EVTOPTA_CM_2022
+		FROM = {
+			add_trait = robust
+		}
+	}
+}
+
+# Child becomes a duelist
+character_event = {
+	id = CM.2026
+	desc = EVTDESC_CM_2026
+	picture = GFX_evt_child_sword
+	
+	lacks_dlc = "Way of Life"
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { NOT = { lifestyle_traits = 1 } }
+	}
+
+	option = {
+		name = EVTOPTA_CM_2026
+		trigger = {
+			NOT = { trait = duelist }
+		}
+		FROM = {
+			add_trait = duelist
+		}
+	}
+	option = {
+		name = EVTOPTB_CM_2026
+		trigger = {
+			trait = duelist
+			FROM = { is_female = no }
+		}
+		FROM = {
+			add_trait = duelist
+		}
+	}
+	option = {
+		name = EVTOPTC_CM_2026
+		trigger = {
+			trait = duelist
+			FROM = { is_female = yes }
+		}
+		FROM = {
+			add_trait = duelist
+		}
+	}
+}
+
+# Child learns justice
+character_event = {
+	id = CM.2028
+	desc = EVTDESC_CM_2028
+	picture = GFX_evt_guardian
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { NOT = { trait = just } }
+		FROM = { guardian = { NOT = { trait = arbitrary } } }
+	}
+
+	option = {
+		name = EVTOPTA_CM_2028
+		trigger = {
+			NOT = { trait = arbitrary }
+		}
+		FROM = {
+			add_trait = just
+		}
+	}
+	option = {
+		name = EVTOPTB_CM_2028
+		trigger = {
+			trait = arbitrary
+		}
+		FROM = {
+			add_trait = just
+		}
+	}
+}
+
+# Child is wounded or maimed while practising with knight
+character_event = {
+	id = CM.2029
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { trait = wounded }
+		can_be_maimed_trigger = yes
+	}
+
+	immediate = {
+		random_list = {
+				80 = { add_trait = wounded }
+				20 = { add_maimed_trait_effect = yes }
+		}
+		FROMFROM = { character_event = { id = CM.2030 } }
+	}
+}
+
+character_event = {
+	id = CM.2030
+	desc = EVTDESC_CM_2030
+	picture = GFX_evt_child_sword
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_CM_2030
+		trigger = {
+			FROM = { trait = wounded }
+		}
+		tooltip = { FROM = { add_trait = wounded } }
+	}
+	option = {
+		name = EVTOPTA_CM_2030
+		trigger = {
+			FROM = { is_maimed_trigger = yes }
+		}
+		if = {
+			limit = { FROM = { trait = maimed } }
+			tooltip = { FROM = { add_trait = maimed } }
+		}
+		if = {
+			limit = { FROM = { trait = one_eyed } }
+			tooltip = { FROM = { add_trait = one_eyed } }
+		}
+		if = {
+			limit = { FROM = { trait = one_handed } }
+			tooltip = { FROM = { add_trait = one_handed } }
+		}
+		if = {
+			limit = { FROM = { trait = one_legged } }
+			tooltip = { FROM = { add_trait = one_legged } }
+		}
+		if = {
+			limit = { FROM = { trait = disfigured } }
+			tooltip = { FROM = { add_trait = disfigured } }
+		}
+		if = {
+			limit = { FROM = { trait = mangled } }
+			tooltip = { FROM = { add_trait = mangled } }
+		}
+	}
+}
+

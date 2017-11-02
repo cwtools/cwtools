@@ -1,0 +1,1128 @@
+############################################
+#						   			 
+# Hashshashin Order Events 			 
+#									 
+# Event ID 88000 - 88249 is reserved 
+#
+# By Henrik Eklund
+# 									 
+############################################
+
+#####################################
+# The Order is created/destroyed... #
+#####################################
+
+# Birth of the Assassins
+narrative_event = {
+	id = 88000
+	title = "EVTNAME88000"
+	desc = "EVTDESC88000"
+	major = yes
+	
+	picture = GFX_evt_shadow
+	
+	hide_from = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	religion_group = muslim
+	
+	trigger = {
+		year = 1089
+		OR = {
+			religion = shiite
+			religion = druze
+			religion = hurufi
+		}
+		is_heretic = no
+		NOT = { 
+			has_global_flag = assassins_founded 
+			has_global_flag = assassins_destroyed
+		}
+		b_alamut = {
+			has_holder = no
+		}
+		665 = { # Dailam
+			NOR = {
+				num_of_settlements = 6
+				AND = {
+					num_of_settlements = 5
+					has_settlement_construction = yes
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = assassins_founded
+		activate_title = { title = d_hashshashin status = yes }
+		create_character = {
+			random_traits = no
+			name = "Hassan"
+			dynasty = random
+			religion = ROOT
+			culture = persian
+			female = no
+			age = 40
+			attributes = {
+				martial = 6
+				diplomacy = 8
+				stewardship = 9
+				intrigue = 12
+				learning = 12
+			}
+			health = 6
+			fertility = 0.8
+			trait = elusive_shadow
+			trait = patient
+			trait = zealous
+			trait = scholar
+			trait = chaste
+			trait = temperate
+		}
+		new_character = {
+			set_character_flag = hassan_the_assassin
+			wealth = 500
+			d_hashshashin = {
+				grant_title = PREV
+			}
+			set_government_type = feudal_government
+			665 = { # Dailam
+				build_holding = {
+					title = b_alamut
+					type = temple
+					holder = PREV
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = ROOT
+				culture = persian
+				female = yes
+				age = 20
+			}
+		}
+	}
+	
+
+	option = {
+		name = "EVTOPTA88000"
+	}
+}
+
+# The Assassins spread to Syria
+narrative_event = {
+	id = 88001
+	title = "EVTNAME88001"
+	desc = "EVTDESC88001"
+	major = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	only_playable = yes
+	religion_group = muslim
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		year = 1099
+		has_landed_title = d_hashshashin
+		NOT = {
+			has_global_flag = assassins_syria
+			has_global_flag = assassins_destroyed
+		}
+		b_masyaf = {
+			has_holder = no
+		}
+		765 = { # Archa
+			NOR = {
+				num_of_settlements = 6
+				AND = {
+					num_of_settlements = 5
+					has_settlement_construction = yes
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = "OK"
+		trigger = { has_landed_title = d_hashshashin }
+		set_global_flag = assassins_syria
+		765 = { # Archa
+			build_holding = {
+				title = b_masyaf
+				type = castle
+				holder = ROOT
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTA88001"
+		trigger = { 
+			NOT = { has_landed_title = d_hashshashin }
+		}
+	}
+}
+
+# The Assassins scatter!
+narrative_event = {
+	id = 88002
+	title = "EVTNAME88002"
+	desc = "EVTDESC88002"
+	major = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	only_rulers = yes
+	religion_group = muslim
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		has_landed_title = d_hashshashin
+		NOT = { year = 1200 }
+		NOT = { demesne_size = 1 }
+		NOT = { has_global_flag = assassins_destroyed }
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "OK"
+		trigger = { has_landed_title = d_hashshashin }
+		set_global_flag = assassins_scatter
+		activate_title = { title = d_hashshashin status = no }
+		death = { death_reason = death_battle }
+	}
+	option = {
+		name = "EVTOPTA88002"
+		trigger = {
+			NOT = { has_landed_title = d_hashshashin }
+		}
+	}
+}
+
+# The Assassins resurface!
+narrative_event = {
+	id = 88003
+	title = "EVTNAME88003"
+	desc = "EVTDESC88003"
+	major = yes
+	hide_from = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	only_playable = yes
+	religion = catholic
+	has_global_flag = assassins_scatter
+	
+	trigger = {
+		year = 1220
+		controls_religion = yes # Let it happen for the Pope - he's always around
+		NOT = { 
+			has_global_flag = assassins_resurface
+			has_global_flag = assassins_destroyed
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 860
+	}
+	
+	immediate = {
+		activate_title = { title = d_hashshashin status = yes }
+		clr_global_flag = assassins_scatter
+		set_global_flag = assassins_resurface
+		hidden_tooltip = {
+			create_character = {
+				random_traits = no
+				name = "Ala ad-Din"
+				dynasty = random
+				religion = shiite
+				culture = persian
+				female = no
+				age = 19
+				attributes = {
+					martial = 6
+					diplomacy = 9
+					stewardship = 8
+					intrigue = 9
+					learning = 12
+				}
+				health = 6
+				fertility = 0.8
+				trait = elusive_shadow
+				trait = patient
+				trait = zealous
+				trait = scholar
+				trait = chaste
+				trait = temperate
+			}
+		}
+		new_character = {
+			wealth = 500
+			d_hashshashin = {
+				grant_title = PREV
+			}
+			set_government_type = feudal_government
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				religion = THIS
+				culture = persian
+				female = yes
+				age = 20
+			}
+			random_list = {
+				50 = {
+					b_alamut = { grant_title = PREV }
+				}
+				50 = {
+					b_masyaf = { grant_title = PREV }
+				}
+			}
+		}
+		
+	}
+	option = {
+		name = "EVTOPTA88003"
+	}
+}
+
+# The Assassins are destroyed!
+narrative_event = {
+	id = 88004
+	title = "EVTNAME88004"
+	desc = "EVTDESC88004"
+	major = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	only_rulers = yes
+	religion_group = muslim
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		year = 1201
+		has_landed_title = d_hashshashin
+		NOT = { demesne_size = 1 }
+		NOT = {
+			has_global_flag = assassins_destroyed
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = "OK"
+		trigger = { has_landed_title = d_hashshashin }
+		set_global_flag = assassins_destroyed
+		activate_title = { title = d_hashshashin status = no }
+		death = { death_reason = death_battle }
+	}
+	option = {
+		name = "EVTOPTA88004"
+		trigger = { 
+			NOT = { has_landed_title = d_hashshashin }
+		}
+	}
+}
+
+###################################
+# Assassins strike at the Mongols #
+###################################
+
+# Assassins attempt to kill Mongol leader
+character_event = {
+	id = 88005
+	hide_window = yes # not optimal but better than an empty event.
+	
+	has_global_flag = assassins_founded
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+		NOT = { has_global_flag = mongols_provoke_assassins }
+		OR = {
+			has_landed_title = e_il-khanate
+			has_landed_title = e_golden_horde
+			any_liege = { has_landed_title = e_il-khanate }
+			any_liege = { has_landed_title = e_golden_horde }
+		}
+		FROM = {
+			OR = {
+				title = b_rayy
+				title = b_kalar
+				title = b_lambsar
+				title = b_kirkuk
+				title = b_baqubah
+				title = b_gilan
+			}
+		}
+	}
+	
+	immediate = {
+		set_global_flag = mongols_provoke_assassins
+		if = {
+			limit = { 
+				OR = {
+					has_landed_title = e_il-khanate
+					has_landed_title = e_golden_horde
+				}
+			}
+			random_list = {
+				40 = {
+					character_event = { id = 88006 days = 5 }
+				}
+				60 = {
+					character_event = { id = 88008 days = 5 }
+				}
+			}
+		}
+		if = {
+			limit = { 
+				OR = {
+					any_liege = { has_landed_title = e_il-khanate }
+					any_liege = { has_landed_title = e_golden_horde }
+				}
+			}
+			random_list = {
+				40 = {
+					any_liege = { 
+						limit = {
+							OR = {
+								has_landed_title = e_il-khanate
+								has_landed_title = e_golden_horde
+							}
+						}
+						character_event = { id = 88006 days = 5 }
+					}
+				}
+				60 = {
+					any_liege = { 
+						limit = {
+							OR = {
+								has_landed_title = e_il-khanate
+								has_landed_title = e_golden_horde
+							}
+						}
+						character_event = { id = 88008 days = 5 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# They succeed!
+character_event = {
+	id = 88006
+
+	hide_window = yes # not optimal but better than an empty event.
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ai = yes
+	}
+	
+	immediate = {
+		death = { death_reason = death_hashshashin }
+		narrative_event = { id = 88007 days = 2 }
+	}
+}
+
+# The Mongol leader is dead!
+narrative_event = {
+	id = 88007
+	title = "EVTNAME88007"
+	desc = "EVTDESC88007"
+	border = GFX_event_narrative_frame_intrigue
+	major = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA88007"
+	}
+}
+
+# They fail!
+character_event = {
+	id = 88008
+	hide_window = yes # not optimal but better than an empty event.
+	
+	is_triggered_only = yes
+	
+	option = {
+		narrative_event = { id = 88009 days = 2 }
+	}
+}
+
+# The Mongol leader has survived!
+narrative_event = {
+	id = 88009
+	title = "EVTNAME88009"
+	desc = "EVTDESC88009"
+	border = GFX_event_narrative_frame_intrigue
+	major = yes
+	
+	picture = "GFX_evt_shadow"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA88009"
+		trigger = { religion_group = muslim }
+	}
+	option = {
+		name = "EVTOPTA88016"
+		trigger = { 
+			NOT = { religion_group = muslim }
+		}
+	}
+}
+
+######################################
+# Assassins strike at decadent ruler #
+######################################
+
+# Decadent ruler is warned
+character_event = {
+	id = 88010
+	desc = "EVTDESC88010"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	ai = no
+	only_playable = yes
+	only_independent = yes
+	religion_group = muslim
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		uses_decadence = yes
+		decadence = 60
+		NOT = { has_character_flag = decadence_warned }
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+	}
+	
+	mean_time_to_happen = {
+		months = 160
+	}
+	
+	option = {
+		name = "EVTOPTA88010"
+		set_character_flag = decadence_warned
+	}
+}
+
+# Assassins kill random courtier
+character_event = {
+	id = 88011
+	desc = "EVTDESC88011"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	only_playable = yes
+	only_independent = yes
+	prisoner = no
+	min_age = 16
+	only_capable = yes
+	ai = no
+	religion_group = muslim
+	has_character_flag = decadence_warned
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		uses_decadence = yes
+		decadence = 70
+		
+		any_courtier = {
+			is_ruler = no
+			NOT = { spouse = { character = ROOT } }
+			is_primary_heir = no
+			in_command = no
+		}
+		
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+	}
+	
+	immediate = {
+		any_courtier = {
+			limit = {
+				is_ruler = no
+				NOT = { spouse = { character = ROOT } }
+				is_primary_heir = no
+				in_command = no
+			}
+			save_event_target_as = assassin_target
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 22
+	}
+	
+	option = {
+		name = "EVTOPTA88011"
+		event_target:assassin_target = {
+			death = { death_reason = death_hashshashin }
+		}
+		set_character_flag = decadence_courtier_killed
+	}
+}
+
+# Assassins kill ruler
+character_event = {
+	id = 88013
+	desc = "EVTDESC88012"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	religion_group = muslim
+	has_character_flag = decadence_courtier_killed
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		uses_decadence = yes
+		decadence = 90
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = "EVTOPTA88012"
+		death = { death_reason = death_hashshashin }
+	}
+}
+
+##########################
+# War with the Assassins #
+##########################
+
+# Courtier is killed
+character_event = {
+	id = 88015
+	hide_window = yes
+	
+	prisoner = no
+	only_capable = yes
+	min_age = 16
+	ai = yes
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		is_ruler = no
+		employer = {
+			war = yes
+			is_playable = yes
+			independent = yes
+			prisoner = no
+			religion_group = muslim
+			NOT = { spouse = { character = ROOT } }
+			d_hashshashin = {
+				holder_scope = {
+					war_with = PREVPREV
+				}
+			}
+		}
+		
+		is_primary_heir = no
+		is_pretender = no
+		in_command = no
+		
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+	}
+	
+	mean_time_to_happen = {
+		months = 880
+	}
+	
+	immediate = {
+		if = {
+			limit = { liege = { NOT = { is_inaccessible_trigger = yes } } }
+			random_list = {
+				33 = {
+					liege = {
+						character_event = { id = 88016 }
+					}
+				}
+				33 = {
+					liege = {
+						character_event = { id = 88017 }
+					}
+				}
+				33 = {
+					liege = {
+						character_event = { id = 88018 }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { liege = { is_inaccessible_trigger = yes } }
+			random_list = {
+				50 = {
+					liege = {
+						character_event = { id = 88016 }
+					}
+				}
+				50 = {
+					liege = {
+						character_event = { id = 88017 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Assassins kill random courtier 1
+character_event = {
+	id = 88016
+	desc = "EVTDESC88016"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA88016"
+		FROM = {
+			death = { death_reason = death_hashshashin }
+		}
+	}
+}
+
+# Assassins kill random courtier 2
+character_event = {
+	id = 88017
+	desc = "EVTDESC88017"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA88017"
+		FROM = {
+			death = { death_reason = death_hashshashin }
+		}
+	}
+}
+
+# Assassins kill random courtier 3
+character_event = {
+	id = 88018
+	desc = "EVTDESC88018"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA88018"
+		FROM = {
+			death = { death_reason = death_hashshashin }
+		}
+	}
+}
+
+# Assassins warn ruler
+character_event = {
+	id = 88019
+	desc = "EVTDESC88019"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	ai = no
+	only_playable = yes
+	only_independent = yes
+	religion_group = muslim
+	war = yes
+	
+	trigger = {
+		NOT = { has_character_flag = warned_by_assassins }
+		d_hashshashin = {
+			holder_scope = {
+				war_with = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 160
+	}
+	
+	option = {
+		name = "EVTOPTA88019"
+		set_character_flag = warned_by_assassins
+	}
+}
+
+# Assassins kill ruler
+character_event = {
+	id = 88020
+	desc = "EVTDESC88012"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	only_rulers = yes
+	prisoner = no
+	min_age = 16
+	religion_group = muslim
+	has_character_flag = warned_by_assassins
+
+	trigger = {
+		d_hashshashin = {
+			holder_scope = {
+				war_with = ROOT
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 1400
+	}
+	
+	option = {
+		name = "EVTOPTA88012"
+		death = { death_reason = death_hashshashin } 
+	}
+}
+
+##########
+# Random #
+##########
+
+# Courtier is killed
+character_event = {
+	id = 88025
+	desc = "EVTDESC88016"
+	picture = "GFX_evt_shadow"
+	border = GFX_event_normal_frame_intrigue
+	
+	ai = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_global_flag = assassins_founded
+	
+	trigger = {
+		host = { 
+			character = liege
+			prisoner = no
+		}
+		OR = {
+			NOT = { has_global_flag = assassins_scatter }
+			has_global_flag = assassins_resurface
+		}
+		NOT = { has_global_flag = assassins_destroyed }
+		OR = {
+			religion_group = muslim
+			liege = { has_landed_title = e_byzantium }
+			liege = { has_landed_title = k_jerusalem }
+		}
+		is_primary_heir = no
+		is_pretender = no
+		in_command = no
+		NOT = { spouse = { character = host } }
+	}
+	
+	mean_time_to_happen = {
+		months = 5500
+		modifier = {
+			factor = 0.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.75
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.75
+			trait = impaler
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			trait = just
+		}
+		modifier = {
+			factor = 2.0
+			trait = charitable
+		}
+		modifier = {
+			factor = 2.0
+			is_female = yes
+		}
+	}
+	
+	option = {
+		name = "OK"
+		if = {
+			limit = { liege = { NOT = { is_inaccessible_trigger = yes } } }
+			random_list = {
+				33 = {
+					liege = {
+						character_event = { id = 88016 }
+					}
+				}
+				33 = {
+					liege = {
+						character_event = { id = 88017 }
+					}
+				}
+				33 = {
+					liege = {
+						character_event = { id = 88018 }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { liege = { is_inaccessible_trigger = yes } }
+			random_list = {
+				50 = {
+					liege = {
+						character_event = { id = 88016 }
+					}
+				}
+				50 = {
+					liege = {
+						character_event = { id = 88017 }
+					}
+				}
+			}
+		}
+	}	
+}

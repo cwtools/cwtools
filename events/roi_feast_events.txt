@@ -1,0 +1,1871 @@
+###########################################
+#                                         #
+# Rajas of India feast events             #
+#                                         #
+# ID RoI.1000-RoI.1999                    #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = RoI
+
+###########################################
+#                                         #
+# Invitations, preparations, gifts        #
+# ID RoI.1000-RoI.1007                    #
+#                                         #
+###########################################
+
+# Invite vassals to feast
+character_event = {
+	id = RoI.1000
+	desc = EVTDESC_RoI_1000
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_1000
+		if = {
+			limit = {
+				has_character_modifier = holding_diwali_feast
+			}
+			any_vassal = {
+				limit = {
+					NOT = { is_inaccessible_trigger = yes }
+					prisoner = no
+					war = no
+					in_command = no
+					NOT = { trait = incapable }
+					age = 16
+					NOT = { has_character_flag = do_not_disturb }
+				}
+				letter_event = {
+					id = RoI.1001
+					tooltip = EVTTOOLTIP1_RoI_1000
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_modifier = holding_kali_puja_feast
+			}
+			any_vassal = {
+				limit = {
+					NOT = { is_inaccessible_trigger = yes }
+					prisoner = no
+					war = no
+					in_command = no
+					NOT = { trait = incapable }
+					age = 16
+					NOT = { has_character_flag = do_not_disturb }
+				}
+				letter_event = {
+					id = RoI.1940
+					tooltip = EVTTOOLTIP1_RoI_1000
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_married = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1005 } }
+		}
+		if = {
+			limit = {
+				is_married = no
+				has_lover = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1006 } }
+		}
+		hidden_tooltip = { character_event = { id = RoI.1020 days = 12 } }
+	}
+}
+
+# Vassal receives invitation - Diwali
+letter_event = {
+	id = RoI.1001
+	desc = EVTDESC_RoI_1001
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_RoI_1001 #Travel to the feast
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 5
+				has_focus = focus_carousing
+			}
+			modifier  = {
+				factor = 0.1
+				is_inaccessible_trigger = yes
+			}
+			modifier  = {
+				factor = 2
+				opinion = { who = from value = -30 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = -15 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = 0 }
+			}
+		}
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = RoI.1989 days = 12 } } # Hidden - arrives at feast
+		hidden_tooltip = { character_event = { id = RoI.1990 days = 42 } } # Safety event for clearing all flags
+		if = {
+			limit = {
+				is_married = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1005 } }
+		}
+		if = {
+			limit = {
+				is_married = no
+				has_lover = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1006 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_1001 #Refuse invitation
+		ai_chance = {
+			factor = 1
+			modifier  = {
+				factor = 0
+				opinion = { who = from value = 25 } 
+				NOT = { is_inaccessible_trigger = yes }
+			}
+		}
+		FROM = {
+			letter_event = {
+				id = RoI.1002
+				days = 3
+				tooltip = EVTTOOLTIP1_RoI_2001
+			}
+		}
+	}
+}
+
+# Vassal receives invitation - Kali Puja
+letter_event = {
+	id = RoI.1940
+	desc = EVTDESC_RoI_1940
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_RoI_1001 #Travel to the feast
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 5
+				has_focus = focus_carousing
+			}
+			modifier  = {
+				factor = 0.1
+				is_inaccessible_trigger = yes
+			}
+			modifier  = {
+				factor = 2
+				opinion = { who = from value = -30 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = -15 }
+			}
+			modifier  = {
+				factor = 5
+				opinion = { who = from value = 0 }
+			}
+		}
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = RoI.1989 days = 12 } } # Hidden - arrives at feast
+		hidden_tooltip = { character_event = { id = RoI.1990 days = 42 } } # Safety event for clearing all flags
+		if = {
+			limit = {
+				is_married = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1005 } }
+		}
+		if = {
+			limit = {
+				is_married = no
+				has_lover = yes
+			}
+			hidden_tooltip = { character_event = { id = RoI.1006 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_1001 #Refuse invitation
+		ai_chance = {
+			factor = 1
+			modifier  = {
+				factor = 0
+				opinion = { who = from value = 25 }
+			}
+		}
+		FROM = {
+			letter_event = {
+				id = RoI.1002
+				days = 3
+				tooltip = EVTTOOLTIP1_RoI_2001
+			}
+		}
+	}
+}
+
+# If vassal refuses to come to the feast
+letter_event = {
+	id = RoI.1002
+	desc = EVTDESC_RoI_1002
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1002 
+		opinion = {
+			modifier = opinion_dislike
+			who = FROM
+			years = 2
+		}
+	}
+}
+
+# Choose gift for spouse
+character_event = {
+	id = RoI.1005
+	desc = EVTDESC_RoI_1005
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_1005
+		trigger = {
+			spouse = { is_female = yes }
+		}
+		scaled_wealth = -0.2
+		set_character_flag = diwali_fine_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTB_RoI_1005
+		trigger = {
+			spouse = { is_female = yes }
+		}
+		scaled_wealth = -0.05
+		set_character_flag = diwali_small_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTC_RoI_1005
+		trigger = {
+			NOT = { trait = kind }
+			spouse = { is_female = yes }
+		}
+		set_character_flag = diwali_no_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTD_RoI_1005
+		trigger = {
+			has_lover = yes
+			spouse = {
+				NOT = { is_lover = ROOT }
+				is_female = yes
+			}
+		}
+		hidden_tooltip = { character_event = { id = RoI.1006 } }
+	}
+	option = {
+		name = EVTOPTE_RoI_1005
+		trigger = {
+			spouse = { is_female = no }
+		}
+		scaled_wealth = -0.2
+		set_character_flag = diwali_fine_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTF_RoI_1005
+		trigger = {
+			spouse = { is_female = no }
+		}
+		scaled_wealth = -0.05
+		set_character_flag = diwali_small_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTG_RoI_1005
+		trigger = {
+			NOT = { trait = kind }
+			spouse = { is_female = no }
+		}
+		set_character_flag = diwali_no_gift_to_spouse
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTH_RoI_1005
+		trigger = {
+			has_lover = yes
+			spouse = {
+				NOT = { is_lover = ROOT }
+				is_female = no
+			}
+		}
+		hidden_tooltip = { character_event = { id = RoI.1006 } }
+	}
+}
+
+# Choose gift for lover
+character_event = {
+	id = RoI.1006
+	desc = EVTDESC_RoI_1006
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_1006
+		trigger = {
+			any_lover = { is_female = yes }
+		}
+		scaled_wealth = -0.2
+		set_character_flag = diwali_fine_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTB_RoI_1006
+		trigger = {
+			any_lover = { is_female = yes }
+		}
+		scaled_wealth = -0.05
+		set_character_flag = diwali_small_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTC_RoI_1006
+		trigger = {
+			is_married = no
+			NOT = { trait = kind }
+			any_lover = { is_female = yes }
+		}
+		set_character_flag = diwali_no_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTD_RoI_1006
+		trigger = {
+			any_lover = { is_female = no }
+		}
+		scaled_wealth = -0.2
+		set_character_flag = diwali_fine_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTE_RoI_1006
+		trigger = {
+			any_lover = { is_female = no }
+		}
+		scaled_wealth = -0.05
+		set_character_flag = diwali_small_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+	option = {
+		name = EVTOPTF_RoI_1006
+		trigger = {
+			is_married = no
+			NOT = { trait = kind }
+			any_lover = { is_female = no }
+		}
+		set_character_flag = diwali_no_gift_to_lover
+		hidden_tooltip = { character_event = { id = RoI.1007 days = 30 } }
+	}
+}
+
+# Wife or lover reacts to gift (or lack thereof)
+character_event = {
+	id = RoI.1007
+	desc = EVTDESC_RoI_1007
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1007
+		trigger = {
+			spouse = { is_female = yes }
+			has_character_flag = diwali_fine_gift_to_spouse
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+			random = {
+				chance = 30
+				add_lover = ROOT
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_1007
+		trigger = {
+			spouse = { is_female = yes }
+			has_character_flag = diwali_small_gift_to_spouse
+		}
+	}
+	option = {
+		name = EVTOPTC_RoI_1007
+		trigger = {
+			spouse = { is_female = yes }
+			has_character_flag = diwali_no_gift_to_spouse
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_insulted
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #d
+		name = EVTOPTD_RoI_1007
+		trigger = {
+			any_lover = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+			has_character_flag = diwali_fine_gift_to_lover
+			is_married = yes
+		}
+		random_lover = {
+			limit = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_furious
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #e
+		name = EVTOPTE_RoI_1007
+		trigger = {
+			any_lover = { is_female = yes }
+			has_character_flag = diwali_fine_gift_to_lover
+			is_married = no
+		}
+		random_lover = {
+			limit = { is_female = yes }
+			opinion = {
+				modifier = opinion_very_grateful
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #f
+		name = EVTOPTF_RoI_1007
+		trigger = {
+			any_lover = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+			has_character_flag = diwali_small_gift_to_lover
+			is_married = yes
+		}
+		random_lover = {
+			limit = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_insulted
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #g
+		name = EVTOPTG_RoI_1007
+		trigger = {
+			any_lover = { is_female = yes }
+			has_character_flag = diwali_small_gift_to_lover
+			is_married = no
+		}
+		random_lover = {
+			limit = { is_female = yes }
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = {#h 
+		name = EVTOPTH_RoI_1007
+		trigger = {
+			any_lover = { is_female = yes }
+			has_character_flag = diwali_no_gift_to_lover
+		}
+		random_lover = {
+			limit = { is_female = yes }
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #i
+		name = EVTOPTI_RoI_1007
+		trigger = {
+			spouse = { is_female = no }
+			has_character_flag = diwali_fine_gift_to_spouse
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #j
+		name = EVTOPTJ_RoI_1007
+		trigger = {
+			spouse = { is_female = no }
+			has_character_flag = diwali_small_gift_to_spouse
+		}
+	}
+	option = {#k
+		name = EVTOPTK_RoI_1007
+		trigger = {
+			spouse = { is_female = no }
+			has_character_flag = diwali_no_gift_to_spouse
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_insulted
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #l
+		name = EVTOPTL_RoI_1007
+		trigger = {
+			any_lover = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+			has_character_flag = diwali_fine_gift_to_lover
+			is_married = yes
+		}
+		random_lover = {
+			limit = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_furious
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #m
+		name = EVTOPTM_RoI_1007
+		trigger = {
+			any_lover = { is_female = no }
+			has_character_flag = diwali_fine_gift_to_lover
+			is_married = no
+		}
+		random_lover = {
+			limit = { is_female = no }
+			opinion = {
+				modifier = opinion_very_grateful
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #n
+		name = EVTOPTN_RoI_1007
+		trigger = {
+			any_lover = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+			has_character_flag = diwali_small_gift_to_lover
+			is_married = yes
+		}
+		random_lover = {
+			limit = {
+				is_female = yes
+				NOT = {
+					spouse = {
+						character = ROOT
+					}
+				}
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_insulted
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #o
+		name = EVTOPTO_RoI_1007
+		trigger = {
+			any_lover = { is_female = no }
+			has_character_flag = diwali_small_gift_to_lover
+			is_married = no
+		}
+		random_lover = {
+			limit = { is_female = no }
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = { #p
+		name = EVTOPTP_RoI_1007
+		trigger = {
+			any_lover = { is_female = no }
+			has_character_flag = diwali_no_gift_to_lover
+		}
+		random_lover = {
+			limit = { is_female = no }
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Feast beginning and ending              #
+# ID RoI.1020, RoI.1095-Roi.1099          #
+#                                         #
+###########################################
+	
+# Feast begins
+character_event = {
+	id = RoI.1020
+	desc = EVTDESC_RoI_1020
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1020
+		hidden_tooltip = { character_event = { id = RoI.1170 days = 25 } } # Religious ceremony
+		hidden_tooltip = { character_event = { id = RoI.1995 days = 30 } } # End feast
+		hidden_tooltip = { character_event = { id = RoI.1990 days = 31 } } # Clearing all flags and modifiers after feast
+		set_character_flag = diwali_feast_begun
+		hidden_tooltip = {
+			random_list = { # Choose random event
+				10 = { character_event = { id = RoI.1050 days = 10 random = 5 } } # Snake charmer
+#				2 = { character_event = { id = RoI.1140 days = 10 random = 5 } } # Apsara
+#				2 = { character_event = { id = RoI.1143 days = 10 random = 5 } } # Ghandarva
+				10 = { character_event = { id = RoI.1150 days = 10 random = 5 } } # Magician
+				10 = { character_event = { id = RoI.1160 days = 10 random = 5 } } # Monkeys
+				100 = {} # No random event
+			}
+		}
+		any_courtier = {
+			limit = {
+				is_adult = yes
+				is_ruler = no
+				NOT = { trait = incapable }
+			}
+			set_character_flag = attending_diwali_feast
+			hidden_tooltip = { character_event = { id = RoI.1990 days = 31 } } # Clearing all flags and modifiers after feast
+		}
+	}
+}
+
+# Vassal arrives at feast
+character_event = {
+	id = RoI.1989
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = attending_diwali_feast
+		random_list = { # Choose random event
+#			1 = { character_event = { id = RoI.1140 days = 10 random = 5 } } # Apsara
+#			1 = { character_event = { id = RoI.1143 days = 10 random = 5 } } # Ghandarva
+			10 = { character_event = { id = RoI.1150 days = 10 random = 5 } } # Magician
+			10 = { character_event = { id = RoI.1160 days = 10 random = 5 } } # Monkeys
+			120 = {} # No random event
+		}
+	}
+}
+
+# Feast ends
+character_event = {
+	id = RoI.1995
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_flag = bad_diwali
+			}
+			character_event = { id = RoI.1997 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = bad_diwali }
+			}
+			character_event = { id = RoI.1996 }
+		}
+		any_vassal = {
+			limit = {
+				has_character_flag = attending_diwali_feast
+				ROOT = { is_liege_of = THIS }
+				has_character_flag = bad_diwali
+			}
+			character_event = { id = RoI.1999 }
+		}
+		any_vassal = {
+			limit = {
+				has_character_flag = attending_diwali_feast
+				ROOT = { is_liege_of = THIS }
+				NOT = { has_character_flag = bad_diwali }
+			}
+			character_event = { id = RoI.1998 }
+		}
+	}
+}
+
+# A feast to remember - host 
+character_event = {
+	id = RoI.1996
+	desc = EVTDESC_RoI_1996
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1996
+		add_character_modifier = {
+			name = large_feast_timer
+			duration = 365
+			hidden = yes
+		}
+	}
+}
+
+# A feast to forget - host
+character_event = {
+	id = RoI.1997
+	desc = EVTDESC_RoI_1997
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1997
+		add_character_modifier = {
+			name = large_feast_timer
+			duration = 365
+			hidden = yes
+		}
+	}
+}
+
+# A feast to remember - guest
+character_event = {
+	id = RoI.1998
+	desc = EVTDESC_RoI_1998
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1998
+		add_character_modifier = {
+			name = large_feast_timer
+			duration = 365
+			hidden = yes
+		}
+	}
+}
+
+# A feast to forget - guest
+character_event = {
+	id = RoI.1999
+	desc = EVTDESC_RoI_1999
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1999
+		add_character_modifier = {
+			name = large_feast_timer
+			duration = 365
+			hidden = yes
+		}
+	}
+}
+
+###########################################
+#                                         #
+# Random events at feast                  #
+# ID RoI.1050-RoI.                        #
+#                                         #
+###########################################
+
+
+###########################################
+# Snake charmer                           #
+###########################################
+
+# Snake charmer
+character_event = {
+	id = RoI.1050
+	desc = EVTDESC_RoI_1050
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	trigger = {
+		capital_scope = {
+			region = world_india
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_RoI_1050
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = RoI.1051 }
+			}
+		}
+		set_character_flag = diwali_snake_charmer
+	}
+}
+
+# Snake charmer - snake escapes!
+character_event = {
+	id = RoI.1051
+	desc = EVTDESC_RoI_1051
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1051
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = RoI.1052 } }
+				10 = { character_event = { id = RoI.1054 } }
+				10 = { character_event = { id = RoI.1055 } }
+			}
+		}
+	}
+}
+
+# Snake slither up in someone's lap and scares them
+character_event = {
+	id = RoI.1052
+	desc = EVTDESC_RoI_1052
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1052
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_diwali_feast
+				ROOT = { is_liege_of = THIS }
+			}
+			hidden_tooltip = { character_event = { id = RoI.1053 } }
+		}
+	}
+}
+
+# Notify target of friendly snake
+character_event = {
+	id = RoI.1053
+	desc = EVTDESC_RoI_1053
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1053
+		if = {
+			limit = {
+				NOT = { trait = stressed }
+				NOT = { trait = craven }
+			}
+			add_trait = stressed
+			set_character_flag = bad_diwali
+		}
+		if = {
+			limit = {
+				OR = {
+					trait = stressed
+					trait = craven
+				}
+			}
+			hidden_tooltip = {
+				random_list = {
+					10 = {
+						if = {
+							limit = {
+								NOT = {
+									has_dlc = "Reapers"
+								}
+							}
+							add_trait = ill
+						}
+						if = {
+							limit = {
+								has_dlc = "Reapers"
+							}
+							add_symptom_effect = yes
+						}
+						set_character_flag = bad_diwali
+						character_event = { id = 38290 } # Notify
+					}
+					10 = {
+						add_trait = stutter
+						set_character_flag = bad_diwali
+						character_event = { id = 38253 } # Notify
+					}
+					10 = {
+						add_trait = depressed
+						set_character_flag = bad_diwali
+						character_event = { id = 38288 } # Notify
+					}
+					10 = {
+						add_trait = lunatic
+						set_character_flag = bad_diwali
+						character_event = { id = 38304 } # Notify
+					}
+				}
+			}
+		}
+	}
+}
+
+# Snake kills guest
+character_event = {
+	id = RoI.1054
+	desc = EVTDESC_RoI_1054
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1054
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_diwali_feast
+				ROOT = { is_liege_of = THIS }
+				ai = yes
+			}
+			death = {
+				death_reason = death_accident_snakes
+			}
+		}
+	}
+}
+
+# Guest kills snake
+character_event = {
+	id = RoI.1055
+	desc = EVTDESC_RoI_1055
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1054
+		random_realm_character = {
+			limit = {
+				has_character_flag = attending_diwali_feast
+				ROOT = { is_liege_of = THIS }
+				is_female = no
+			}
+			tooltip = { prestige = 30 }
+			ROOT = {
+				opinion = {
+					modifier = opinion_impressed
+					who = PREV
+					years = 5
+				}
+				any_realm_character = {
+					limit = {
+						has_character_flag = attending_diwali_feast
+						ROOT = { is_liege_of = THIS }
+						NOT = { character = PREVPREV }
+					}
+					hidden_tooltip = {
+						opinion = {
+							modifier = opinion_impressed
+							who = PREVPREV
+							years = 5
+						}
+					}
+				}
+			}
+			hidden_tooltip = { character_event = { id = RoI.1056 } }
+		}
+	}
+}
+
+# Notify hero killer of snake
+character_event = {
+	id = RoI.1056
+	desc = EVTDESC_RoI_1056
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1056
+		prestige = 30
+	}
+}
+
+###########################################
+# Magician                                #
+###########################################
+
+# Magician performs at feast
+character_event = {
+	id = RoI.1150
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ai = no
+	}
+
+	immediate = {
+		set_character_flag = diwali_magician
+		random_list = {
+			10 = { narrative_event = { id = RoI.1151 } }
+			10 = { narrative_event = { id = RoI.1152 } }
+			10 = { narrative_event = { id = RoI.1154 } }
+		}
+	}
+}
+
+# Disappears boy in basket
+narrative_event = {
+	id = RoI.1151
+	title = EVTTITLE_RoI_1051
+	desc = EVTDESC_RoI_1151
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1151 # How interesting
+		add_character_modifier = {
+			name = entertaining_entertainment
+			days = 730
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_1151 # Guards, arrest him!
+		prestige = 20
+	}
+}
+
+# Cups and balls
+narrative_event = {
+	id = RoI.1152
+	title = EVTTITLE_RoI_1051
+	desc = EVTDESC_RoI_1152
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1152 # Left cup
+		hidden_tooltip = { character_event = { id = RoI.1153 } }
+	}
+	option = {
+		name = EVTOPTB_RoI_1152 # Middle cup
+		hidden_tooltip = { character_event = { id = RoI.1153 } }
+	}
+	option = {
+		name = EVTOPTC_RoI_1152 # Right cup
+		hidden_tooltip = { character_event = { id = RoI.1153 } }
+	}
+}
+
+# Cups and balls - guess is always wrong
+character_event = {
+	id = RoI.1153
+	desc = EVTDESC_RoI_1153
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1153 # Oh snap
+		prestige = -5
+	}
+	option = {
+		name = EVTOPTB_RoI_1153 # Angry - I think you are cheating!
+		tooltip_info = wroth
+		trigger = {
+			is_smart_trigger = no 
+			trait = wroth
+		}
+		prestige = 15
+		if = {
+			limit = {
+				NOT = { trait = cynical }
+			}
+			add_trait = cynical
+		}
+	}
+	option = {
+		name = EVTOPTC_RoI_1153 # I saw you cheating!
+		tooltip_info = genius
+		trigger = {
+			trait = genius
+			NOT = { 
+				OR = {
+				trait = quick
+				trait = shrewd
+				} 
+			}
+		}
+		prestige = 30
+	}
+	option = {
+		name = EVTOPTC_RoI_1153 # I saw you cheating!
+		tooltip_info = quick
+		trigger = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			NOT = { trait = genius }
+		}
+		prestige = 30
+	}
+}
+
+# Rope trick
+narrative_event = {
+	id = RoI.1154
+	title = EVTTITLE_RoI_1051
+	desc = EVTDESC_RoI_1154
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1151 # Amazing!
+		add_character_modifier = {
+			name = entertaining_entertainment
+			days = 730
+		}
+	}
+	option = {
+		name = EVTOPTB_RoI_1154 # They cheat, I can see the hidden wire
+		tooltip_info = quick
+		trigger = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			NOT = { trait = genius }
+		}
+		prestige = 30
+	}
+	option = {
+		name = EVTOPTB_RoI_1154 # They cheat, I can see the hidden wire
+		tooltip_info = genius
+		trigger = {
+			trait = genius
+			NOT = { 
+				OR = {
+				trait = quick
+				trait = shrewd
+				} 
+			}
+		}
+		prestige = 30
+	}
+}
+
+###########################################
+# Monkeys                                 #
+###########################################
+
+# Monkeys 
+character_event = {
+	id = RoI.1160
+	desc = EVTDESC_RoI_1160
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	
+	trigger = {
+		capital_scope = {
+			region = world_india
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RoI_1160 # Oh my!
+		trigger = {
+			NOT = { trait = stressed }
+			NOT = { trait = depressed }
+			NOT = { trait = shy }
+			NOT = { trait = wroth }
+			NOT = { trait = craven }
+			NOT = { trait = paranoid }
+		}
+		set_character_flag = bad_diwali
+		prestige = -10
+	}
+	option = {
+		name = EVTOPTB_RoI_1160 # Hunter shoots monkey with bow
+		trigger = {
+			trait = hunter
+		}
+		tooltip_info = hunter
+		prestige = 30
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTC_RoI_1160 # Cruel or impaler catches monkey and tortures it
+		tooltip_info = impaler
+		trigger = {
+			trait = impaler
+			NOT = { trait = cruel }
+		}
+		add_character_modifier = {
+			name = entertaining_entertainment
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTC_RoI_1160 # Cruel or impaler catches monkey and tortures it
+		tooltip_info = cruel
+		trigger = {
+			trait = cruel
+			NOT = { trait = impaler }
+		}
+		add_character_modifier = {
+			name = entertaining_entertainment
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTD_RoI_1160 # Inbred is friend of monkeys
+		tooltip_info = inbred
+		trigger = {
+			trait = inbred
+			NOT = { trait = imbecile }
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTD_RoI_1160 # Imbecile is friend of monkeys
+		tooltip_info = imbecile
+		trigger = {
+			trait = imbecile
+			NOT = { trait = inbred }
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTE_RoI_1160 # Lunatic "marries" monkey
+		trigger = {
+			trait = lunatic
+		}
+		tooltip_info = lunatic
+		add_character_modifier = {
+			name = married_monkey
+			days = -1
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTF_RoI_1160 # Good laugh cures stressed or depressed person
+		trigger = {
+			OR = {
+				trait = stressed
+				trait = depressed
+			}
+		}
+		if = {
+			limit = { trait = stressed }
+			remove_trait = stressed
+		}
+		if = {
+			limit = { trait = depressed }
+			remove_trait = depressed
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		clr_character_flag = bad_diwali
+	}
+	option = {
+		name = EVTOPTG_RoI_1160 # Some people are upset by this sort of thing...
+		trigger = {
+			OR = {
+				trait = shy
+				trait = wroth
+				trait = craven
+				trait = paranoid
+			}
+		}
+		add_trait = stressed
+		set_character_flag = bad_diwali
+	}
+}
+
+###########################################
+# Religious ceremony                      #
+###########################################
+
+# Religious ceremony - liege
+character_event = {
+	id = RoI.1170
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_character_modifier = holding_diwali_feast
+				religion = hindu
+			}
+			character_event = { id = RoI.1171 } # Hindu
+		}
+		if = {
+			limit = {
+				has_character_modifier = holding_diwali_feast
+				religion = buddhist
+			}
+			character_event = { id = RoI.1173 } # Buddhist
+		}
+		if = {
+			limit = {
+				has_character_modifier = holding_diwali_feast
+				religion = jain
+			}
+			character_event = { id = RoI.1175 } # Jain
+		}
+		if = {
+			limit = {
+				has_character_modifier = holding_kali_puja_feast
+			}
+			character_event = { id = RoI.1177 } # Kali Puja
+		}
+	}
+}
+
+# Hindu celebration - host
+character_event = {
+	id = RoI.1171
+	desc = EVTDESC_RoI_1171
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1171 #
+		piety = 30
+		any_vassal = {
+			limit = {
+				ai = no
+				has_character_flag = attending_diwali_feast
+			}
+			hidden_tooltip = { character_event = { id = RoI.1172 } }
+		}
+	}
+}
+
+# Hindu celebration - guests
+character_event = {
+	id = RoI.1172
+	desc = EVTDESC_RoI_1171
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1171 # 
+		piety = 10
+	}
+}
+
+# Buddhist celebration - host
+character_event = {
+	id = RoI.1173
+	desc = EVTDESC_RoI_1173
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1173 #
+		piety = 30
+		any_vassal = {
+			limit = {
+				ai = no
+				has_character_flag = attending_diwali_feast
+			}
+			hidden_tooltip = { character_event = { id = RoI.1174 } }
+		}
+	}
+}
+
+# Buddhist celebration - guests
+character_event = {
+	id = RoI.1174
+	desc = EVTDESC_RoI_1173
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1173 # 
+		piety = 10
+	}
+}
+
+# Jain celebration - host
+character_event = {
+	id = RoI.1175
+	desc = EVTDESC_RoI_1175
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1175 #
+		piety = 30
+		any_vassal = {
+			limit = {
+				ai = no
+				has_character_flag = attending_diwali_feast
+			}
+			hidden_tooltip = { character_event = { id = RoI.1176 } }
+		}
+	}
+}
+
+# Jain celebration - guests
+character_event = {
+	id = RoI.1176
+	desc = EVTDESC_RoI_1175
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1175 # 
+		piety = 10
+	}
+}
+
+# Kali Puja Celebration
+character_event = {
+	id = RoI.1177
+	desc = EVTDESC_RoI_1177
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1177 # Stay with the basics
+		any_vassal = {
+			limit = {
+				ai = no
+				has_character_flag = attending_diwali_feast
+			}
+			hidden_tooltip = { character_event = { id = RoI.1189 } }
+		}
+		hidden_tooltip = { character_event = { id = RoI.1188 } }
+	}
+	option = {
+		name = EVTOPTB_RoI_1177 # Really go for it - bloody madness
+		trigger = {
+			NOT = { trait = kind }
+		}
+		if = {
+			limit = { NOT = { trait = cruel } }
+			add_trait = cruel
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			random = {
+				chance = 20
+				add_trait = zealous
+				hidden_tooltip = {
+					character_event = {
+						id = 38269 #Notify Zealous
+					}
+				}
+			}
+		}
+		character_event = { id = RoI.1178 }
+	}
+}
+
+# Celebrate Kali - bloody madness - host
+character_event = {
+	id = RoI.1178
+	desc = EVTDESC_RoI_1178
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1178 # 1 - Ritual sacrifice of prisoner
+		trigger = {
+			any_courtier = {
+				prisoner = yes
+				host = { character = ROOT }
+			}
+		}
+		random_courtier = {
+			limit = {
+				prisoner = yes
+				host = { character = ROOT }
+			}
+			character_event = { id = RoI.1190 }
+		}
+		prestige = 20
+	}
+	option = {
+		name = EVTOPTB_RoI_1178 # 2 - Ritual sacrifice of servant
+		any_vassal = {
+			limit = { has_character_flag = attending_diwali_feast }
+			hidden_tooltip = { character_event = { id = RoI.1182 } }
+		}
+		hidden_tooltip = { character_event = { id = RoI.1181 } }
+		prestige = 10
+	}
+	option = {
+		name = EVTOPTC_RoI_1178 # 3 - Massive ritual blood sacrifice of animals (elephants, massive)
+		trigger = {
+			capital_scope = {
+				region = world_india
+			}
+		}
+		any_vassal = {
+			limit = { has_character_flag = attending_diwali_feast }
+			hidden_tooltip = { narrative_event = { id = RoI.1184 } }
+		}
+		hidden_tooltip = { narrative_event = { id = RoI.1183 } }
+		wealth = -10
+		prestige = 30
+	}
+}
+
+# Prisoner to be sacrificed gets this bridging event
+character_event = {
+	id = RoI.1190
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			any_vassal = {
+				limit = { has_character_flag = attending_diwali_feast }
+				hidden_tooltip = { character_event = { id = RoI.1179 } }
+			}
+			hidden_tooltip = { character_event = { id = RoI.1180 } }
+		}
+	}
+}
+
+# Celebrate Kali - bloody madness 1 - guests
+character_event = {
+	id = RoI.1179
+	desc = EVTDESC_RoI_1179
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1179 # 
+		piety = 10
+	}
+}
+
+# Celebrate Kali - bloody madness 1 - host
+character_event = {
+	id = RoI.1180
+	desc = EVTDESC_RoI_1179
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1179 # 
+		piety = 30
+		if = {
+			limit = {
+				NOT = { has_character_flag = achievement_kali_maaa }
+				ai = no
+				FROM = {
+					primary_title = {
+						OR = {
+							tier = EMPEROR
+							tier = KING
+						}
+					}
+				}
+			}
+			set_character_flag = achievement_kali_maaa
+		}
+		FROM = {
+			death = {
+				death_reason = death_sacrificed
+				killer = ROOT
+			}
+		}
+	}
+}
+
+# Celebrate Kali - bloody madness 2 - host
+character_event = {
+	id = RoI.1181
+	desc = EVTDESC_RoI_1181
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1179 # 
+		piety = 30
+	}
+}
+
+# Celebrate Kali - bloody madness 2 - guests
+character_event = {
+	id = RoI.1182
+	desc = EVTDESC_RoI_1181
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1179 # 
+		piety = 10
+	}
+}
+
+# Celebrate Kali - bloody madness 3 - host
+narrative_event = {
+	id = RoI.1183
+	title = EVTTITLE_RoI_1183
+	desc = EVTDESC_RoI_1183
+	picture = GFX_evt_feast
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1183 # 
+		piety = 30
+	}
+}
+
+# Celebrate Kali - bloody madness 3 - guests
+narrative_event = {
+	id = RoI.1184
+	title = EVTTITLE_RoI_1183
+	desc = EVTDESC_RoI_1183
+	picture = GFX_evt_feast
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1183 # 
+		piety = 10
+	}
+}
+
+# Basic Kali Puja celebration - host
+character_event = {
+	id = RoI.1188
+	desc = EVTDESC_RoI_1188
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1188 # 
+		piety = 30
+	}
+}
+
+# Basic Kali Puja celebration - guests
+character_event = {
+	id = RoI.1189
+	desc = EVTDESC_RoI_1188
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_RoI_1188 # 
+		piety = 10
+	}
+}
+
+###########################################
+# Flag management                         #
+###########################################
+
+# Clear all character flags and modifiers
+character_event = {
+	id = RoI.1990
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = holding_diwali_feast
+		remove_character_modifier = holding_kali_puja_feast
+		clr_character_flag = attending_diwali_feast
+		clr_character_flag = diwali_feast_begun
+		clr_character_flag = diwali_monkeys
+		clr_character_flag = diwali_snake_charmer
+		clr_character_flag = diwali_fine_gift_to_spouse
+		clr_character_flag = diwali_small_gift_to_spouse
+		clr_character_flag = diwali_no_gift_to_spouse
+		clr_character_flag = diwali_fine_gift_to_lover
+		clr_character_flag = diwali_small_gift_to_lover
+		clr_character_flag = diwali_apsara
+		clr_character_flag = diwali_gandharva
+		clr_character_flag = diwali_magician
+		clr_character_flag = diwali_religious_ceremony
+		clr_character_flag = bad_diwali
+		clr_character_flag = do_not_disturb
+	}
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,3877 @@
+#################################
+#
+# THE REPUBLIC
+# - Trade Events
+#
+#################################
+
+# Written by Henrik Eklund
+
+namespace = REP
+
+### Shipping Events
+
+# Thieving Captain (AI)
+character_event = {
+	id = REP.1
+	hide_window = yes
+	
+	ai = yes
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+		liege = { is_merchant_republic = yes }
+		OR = {
+			liege = { ai = no }
+			liege = {
+				any_vassal = {
+					is_patrician = yes
+					ai = no
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1820
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				liege = { ai = no }
+			}
+			liege = { 
+				character_event = { id = REP.2 } 
+			}
+		}
+		if = {
+			limit = {
+				liege = { 
+					any_vassal = {
+						is_patrician = yes
+						ai = no 
+					}
+				}
+			}
+			liege = {
+				random_vassal = {
+					limit = {
+						is_patrician = yes
+						ai = no
+					}
+					character_event = { id = REP.2 } 
+				}
+			}
+		}
+	}
+}
+
+# Thieving Captain (Player)
+character_event = {
+	id = REP.2
+	desc = EVTDESC_REP_002
+	picture = GFX_evt_trade_post_republic
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_002
+		wealth = -50
+	}
+}
+
+# Spoiled Cargo
+character_event = {
+	id = REP.3
+	desc = EVTDESC_REP_003
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1420
+	}
+	
+	option = {
+		name = EVTOPTA_REP_003
+		wealth = -50
+	}
+}
+
+# Ship Lost in Storm (AI)
+character_event = {
+	id = REP.4
+	hide_window = yes
+	
+	ai = yes
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+		liege = { is_merchant_republic = yes }
+		OR = {
+			liege = { ai = no }
+			liege = {
+				any_vassal = {
+					is_patrician = yes
+					ai = no
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1820
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				liege = { ai = no }
+			}
+			liege = { 
+				character_event = { id = REP.5 } 
+			}
+		}
+		if = {
+			limit = {
+				liege = { 
+					any_vassal = {
+						is_patrician = yes
+						ai = no 
+					}
+				}
+			}
+			liege = {
+				random_vassal = {
+					limit = {
+						is_patrician = yes
+						ai = no
+					}
+					character_event = { id = REP.5 } 
+				}
+			}
+		}
+	}
+}
+
+# Ship Lost in Storm (Player)
+character_event = {
+	id = REP.5
+	desc = EVTDESC_REP_005
+	picture = GFX_evt_bad_news
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_005
+		wealth = -50
+	}
+}
+
+# Pirates Attack Ships
+character_event = {
+	id = REP.6
+	desc = EVTDESC_REP_006
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1420
+	}
+	
+	option = {
+		name = EVTOPTA_REP_006
+		wealth = -50
+	}
+}
+
+# Pirates Captured
+character_event = {
+	id = REP.7
+	desc = EVTDESC_REP_007
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_007
+		wealth = 100
+	}
+}
+
+# Valuable Spice Obtained
+character_event = {
+	id = REP.8
+	desc = EVTDESC_REP_008
+	picture = GFX_evt_busy_trading_dock_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+		in_revolt = no
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_008
+		wealth = 100
+	}
+}
+
+# New Markets Discovered
+character_event = {
+	id = REP.9
+	desc = EVTDESC_REP_009
+	picture = GFX_evt_trade_post_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_009
+		wealth = 100
+	}
+}
+
+# Lost Ship Appears
+character_event = {
+	id = REP.10
+	desc = EVTDESC_REP_010
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_010
+		wealth = 100
+	}
+}
+
+# Dockworkers Strike
+character_event = {
+	id = REP.11
+	desc = EVTDESC_REP_011
+	picture = GFX_evt_busy_trading_dock_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1420
+	}
+	
+	option = {
+		name = EVTOPTA_REP_011
+		wealth = -50
+	}
+}
+
+# Warehouse Fire
+character_event = {
+	id = REP.12
+	desc = EVTDESC_REP_012
+	picture = GFX_evt_burning_house
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1420
+	}
+	
+	option = {
+		name = EVTOPTA_REP_012
+		wealth = -50
+	}
+}
+
+# Noble Books Passage (AI)
+character_event = {
+	id = REP.13
+	hide_window = yes
+	
+	ai = yes
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+		liege = { is_merchant_republic = yes }
+		OR = {
+			liege = { ai = no }
+			liege = {
+				any_vassal = {
+					is_patrician = yes
+					ai = no
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1820
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				liege = { ai = no }
+			}
+			liege = { 
+				character_event = { id = REP.14 } 
+			}
+		}
+		if = {
+			limit = {
+				liege = { 
+					any_vassal = {
+						is_patrician = yes
+						ai = no 
+					}
+				}
+			}
+			liege = {
+				random_vassal = {
+					limit = {
+						is_patrician = yes
+						ai = no
+					}
+					character_event = { id = REP.14 } 
+				}
+			}
+		}
+	}
+}
+
+# Noble Books Passage (Player)
+character_event = {
+	id = REP.14
+	desc = EVTDESC_REP_014
+	picture = GFX_evt_trade_post_republic
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_014
+		wealth = 100
+	}
+}
+
+# Efficient Dockworkers
+character_event = {
+	id = REP.15
+	desc = EVTDESC_REP_015
+	picture = GFX_evt_busy_trading_dock_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_015
+		wealth = 100
+	}
+}
+
+# Treasure Found!
+character_event = {
+	id = REP.16
+	desc = EVTDESC_REP_016
+	picture = GFX_evt_trade_post_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_016
+		wealth = 100
+	}
+}
+
+# Improved Charts
+character_event = {
+	id = REP.17
+	desc = EVTDESC_REP_017
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1220
+	}
+	
+	option = {
+		name = EVTOPTA_REP_017
+		wealth = 100
+	}
+}
+
+# Captain Rams Pier
+character_event = {
+	id = REP.18
+	desc = EVTDESC_REP_018
+	picture = GFX_evt_busy_trading_dock_republic
+	
+	ai = no
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+	}
+	
+	mean_time_to_happen = {
+		months = 1420
+	}
+	
+	option = {
+		name = EVTOPTA_REP_018
+		trigger = {
+			NOT = { trait = drunkard }
+		}
+		wealth = -50
+	}
+	option = {
+		name = EVTOPTB_REP_018
+		tooltip_info = drunkard
+		trigger = {
+			trait = drunkard
+		}
+		wealth = -50
+	}
+}
+
+# Mutiny! (AI)
+character_event = {
+	id = REP.19
+	hide_window = yes
+	
+	ai = yes
+	is_patrician = yes
+	
+	trigger = {
+		has_dlc = "The Republic"
+		liege = { is_merchant_republic = yes }
+		OR = {
+			liege = { ai = no }
+			liege = {
+				any_vassal = {
+					is_patrician = yes
+					ai = no
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1820
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				liege = { ai = no }
+			}
+			liege = { 
+				character_event = { id = REP.20 } 
+			}
+		}
+		if = {
+			limit = {
+				liege = { 
+					any_vassal = {
+						is_patrician = yes
+						ai = no 
+					}
+				}
+			}
+			liege = {
+				random_vassal = {
+					limit = {
+						is_patrician = yes
+						ai = no
+					}
+					character_event = { id = REP.20 } 
+				}
+			}
+		}
+	}
+}
+
+# Mutiny! (Player)
+character_event = {
+	id = REP.20
+	desc = EVTDESC_REP_020
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_020
+		wealth = -50
+	}
+}
+
+### The Rise of the Hansa
+
+# Hansa formed in Hamburg (AI)
+character_event = {
+	id = REP.40
+	hide_window = yes
+	
+	ai = yes
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = c_hamburg
+		year = 1170
+		top_liege = { 
+			has_landed_title = e_hre
+			religion_group = christian 
+		}
+		261 = {
+			culture = german
+			religion_group = christian
+		}
+		OR = {
+			NOT = { is_merchant_republic = yes }
+			NOT = { liege = { is_merchant_republic = yes } }
+			NOT = { is_patrician = yes }
+		}
+		NOT = { has_global_flag = hansa_formed }
+	}
+	
+	immediate = {
+		top_liege = { character_event = { id = REP.45 } }
+	}
+	
+	mean_time_to_happen = {
+		months = 1020
+	}
+}
+
+# Hansa formed in Bremen (AI)
+character_event = {
+	id = REP.41
+	hide_window = yes
+	
+	ai = yes
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = c_bremen
+		year = 1170
+		top_liege = { 
+			has_landed_title = e_hre
+			religion_group = christian 
+		}
+		848 = {
+			culture = german
+			religion_group = christian
+		}
+		OR = {
+			NOT = { is_merchant_republic = yes }
+			NOT = { liege = { is_merchant_republic = yes } }
+			NOT = { is_patrician = yes }
+		}
+		NOT = { has_global_flag = hansa_formed }
+	}
+	
+	immediate = {
+		top_liege = { character_event = { id = REP.46 } }
+	}
+	
+	mean_time_to_happen = {
+		months = 1020
+	}
+}
+
+# Hansa formed in Lübeck (AI)
+character_event = {
+	id = REP.42
+	hide_window = yes
+	
+	ai = yes
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = c_lubeck
+		year = 1170
+		top_liege = { 
+			has_landed_title = e_hre
+			religion_group = christian 
+		}
+		262 = {
+			culture = german
+			religion_group = christian
+		}
+		OR = {
+			NOT = { is_merchant_republic = yes }
+			NOT = { liege = { is_merchant_republic = yes } }
+			NOT = { is_patrician = yes }
+		}
+		NOT = { has_global_flag = hansa_formed }
+	}
+	
+	immediate = {
+		top_liege = { character_event = { id = REP.47 } }
+	}
+	
+	mean_time_to_happen = {
+		months = 1020
+	}
+}
+
+# Hansa formed in Mecklenburg (AI)
+character_event = {
+	id = REP.43
+	hide_window = yes
+	
+	ai = yes
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = c_mecklemburg
+		year = 1170
+		top_liege = { 
+			has_landed_title = e_hre
+			religion_group = christian 
+		}
+		260 = {
+			culture = german
+			religion_group = christian
+		}
+		OR = {
+			NOT = { is_merchant_republic = yes }
+			NOT = { liege = { is_merchant_republic = yes } }
+			NOT = { is_patrician = yes }
+		}
+		NOT = { has_global_flag = hansa_formed }
+	}
+	
+	immediate = {
+		top_liege = { character_event = { id = REP.48 } }
+	}
+	
+	mean_time_to_happen = {
+		months = 1020
+	}
+}
+
+# Hansa formed in Rostock (AI)
+character_event = {
+	id = REP.44
+	hide_window = yes
+	
+	ai = yes
+	only_playable = yes
+	
+	trigger = {
+		has_landed_title = c_rostock
+		year = 1170
+		top_liege = { 
+			has_landed_title = e_hre
+			religion_group = christian 
+		}
+		306 = {
+			culture = german
+			religion_group = christian
+		}
+		OR = {
+			NOT = { is_merchant_republic = yes }
+			NOT = { liege = { is_merchant_republic = yes } }
+			NOT = { is_patrician = yes }
+		}
+		NOT = { has_global_flag = hansa_formed }
+	}
+	
+	immediate = {
+		top_liege = { character_event = { id = REP.49 } }
+	}
+	
+	mean_time_to_happen = {
+		months = 1020
+	}
+}
+
+# Permit Hansa in Hamburg?
+character_event = {
+	id = REP.45
+	desc = EVTDESC_REP_45
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_45
+		ai_chance = { factor = 100 }
+		hidden_tooltip = {
+			FROM = { character_event = { id = REP.50 } }
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_unhappy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = permit_hansa_tooltip }
+	}
+	option = {
+		name = EVTOPTB_REP_45
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_happy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = deny_hansa_tooltip }
+		set_global_flag = hansa_formed
+	}
+}
+
+# Permit Hansa in Bremen?
+character_event = {
+	id = REP.46
+	desc = EVTDESC_REP_46
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_45
+		ai_chance = { factor = 100 }
+		hidden_tooltip = {
+			FROM = { character_event = { id = REP.51 } }
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_unhappy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = permit_hansa_tooltip }
+	}
+	option = {
+		name = EVTOPTB_REP_45
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_happy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = deny_hansa_tooltip }
+		set_global_flag = hansa_formed
+	}
+}
+
+# Permit Hansa in Lübeck?
+character_event = {
+	id = REP.47
+	desc = EVTDESC_REP_47
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_45
+		ai_chance = { factor = 100 }
+		hidden_tooltip = {
+			FROM = { character_event = { id = REP.52 } }
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_unhappy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = permit_hansa_tooltip }
+	}
+	option = {
+		name = EVTOPTB_REP_45
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_happy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = deny_hansa_tooltip }
+		set_global_flag = hansa_formed
+	}
+}
+
+# Permit Hansa in Mecklenburg?
+character_event = {
+	id = REP.48
+	desc = EVTDESC_REP_48
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_45
+		ai_chance = { factor = 100 }
+		hidden_tooltip = {
+			FROM = { character_event = { id = REP.53 } }
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_unhappy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = permit_hansa_tooltip }
+	}
+	option = {
+		name = EVTOPTB_REP_45
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_happy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = deny_hansa_tooltip }
+		set_global_flag = hansa_formed
+	}
+}
+
+# Permit Hansa in Rostock?
+character_event = {
+	id = REP.49
+	desc = EVTDESC_REP_49
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_intrigue
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_45
+		ai_chance = { factor = 100 }
+		hidden_tooltip = {
+			FROM = { character_event = { id = REP.54 } }
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_unhappy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = permit_hansa_tooltip }
+	}
+	option = {
+		name = EVTOPTB_REP_45
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						modifier = opinion_happy
+						who = ROOT
+						years = 4
+					}
+				}
+			}
+		}
+		custom_tooltip = { text = deny_hansa_tooltip }
+		set_global_flag = hansa_formed
+	}
+}
+
+### The Rise of the Hansa
+
+# Hansa formed in Hamburg (AI)
+character_event = {
+	id = REP.50
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = german
+			female = no
+			age = 30
+		}
+		new_character = {
+			b_altona = {
+				grant_title = PREV
+			}
+			c_hamburg = {
+				grant_title = PREV
+			}
+			k_hansa = {
+				grant_title = PREV
+			}
+			character_event = { id = REP.60 }
+			e_hre = {
+				holder_scope = {
+					set_defacto_vassal = PREVPREV
+				}
+			}
+			create_character = { # Extra courtiers
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 20
+			}
+		}
+		set_global_flag = hansa_formed
+	}
+}
+
+# Hansa formed in Bremen (AI)
+character_event = {
+	id = REP.51
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = german
+			female = no
+			age = 30
+		}
+		new_character = {
+			b_beverstedt = {
+				grant_title = PREV
+			}
+			c_bremen = {
+				grant_title = PREV
+			}
+			k_hansa = {
+				grant_title = PREV
+			}
+			character_event = { id = REP.60 }
+			e_hre = {
+				holder_scope = {
+					set_defacto_vassal = PREVPREV
+				}
+			}
+			create_character = { # Extra courtiers
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 20
+			}
+		}
+		set_global_flag = hansa_formed
+	}
+}
+
+# Hansa formed in Lübeck (AI)
+character_event = {
+	id = REP.52
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = german
+			female = no
+			age = 30
+		}
+		new_character = {
+			b_beverstedt = {
+				grant_title = PREV
+			}
+			c_lubeck = {
+				grant_title = PREV
+			}
+			k_hansa = {
+				grant_title = PREV
+			}
+			character_event = { id = REP.60 }
+			e_hre = {
+				holder_scope = {
+					set_defacto_vassal = PREVPREV
+				}
+			}
+			create_character = { # Extra courtiers
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 20
+			}
+		}
+		set_global_flag = hansa_formed
+	}
+}
+
+# Hansa formed in Mecklenburg (AI)
+character_event = {
+	id = REP.53
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = german
+			female = no
+			age = 30
+		}
+		new_character = {
+			b_wismar = {
+				grant_title = PREV
+			}
+			c_mecklemburg = {
+				grant_title = PREV
+			}
+			k_hansa = {
+				grant_title = PREV
+			}
+			character_event = { id = REP.60 }
+			e_hre = {
+				holder_scope = {
+					set_defacto_vassal = PREVPREV
+				}
+			}
+			create_character = { # Extra courtiers
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 20
+			}
+		}
+		set_global_flag = hansa_formed
+	}
+}
+
+# Hansa formed in Rostock (AI)
+character_event = {
+	id = REP.54
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = german
+			female = no
+			age = 30
+		}
+		new_character = {
+			b_gustrow = {
+				grant_title = PREV
+			}
+			c_rostock = {
+				grant_title = PREV
+			}
+			k_hansa = {
+				grant_title = PREV
+			}
+			character_event = { id = REP.60 }
+			e_hre = {
+				holder_scope = {
+					set_defacto_vassal = PREVPREV
+				}
+			}
+			create_character = { # Extra courtiers
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 17
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = catholic
+				culture = german
+				female = yes
+				age = 20
+			}
+		}
+		set_global_flag = hansa_formed
+	}
+}
+
+# The Rise of the Hansa (AI)
+character_event = {
+	id = REP.60
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		narrative_event = { id = REP.61 }
+		character_event = { id = REP.65 days = 6 }
+		wealth = 1000
+		location = {
+			if = {
+				limit = { has_trade_post = yes }
+				seize_trade_post = ROOT
+				any_neighbor_province = {
+					seize_trade_post = ROOT
+				}
+			}
+		}
+	}
+}
+
+# The Rise of the Hansa
+narrative_event = {
+	id = REP.61
+	title = EVTNAME_REP_61
+	desc = EVTDESC_REP_61
+	major = yes
+	picture = GFX_evt_busy_trading_dock_republic
+	
+	is_triggered_only = yes
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	option = {
+		name = EVTOPTA_REP_61
+		trigger = {
+			OR = {
+				NOT = { is_merchant_republic = yes }
+				NOT = { liege = { is_merchant_republic = yes } }
+				NOT = { is_patrician = yes }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_61
+		trigger = {
+			OR = {
+				is_merchant_republic = yes
+				is_patrician = yes
+			}
+		}
+	}
+}
+
+# Set up Patricians
+character_event = {
+	id = REP.65
+	hide_window = yes
+	
+	ai = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_vassal = {
+			limit = { 
+				is_patrician = yes
+				NOT = {
+					has_character_flag = patrician_1
+					has_character_flag = patrician_2
+					has_character_flag = patrician_3
+					has_character_flag = patrician_4
+				}
+			}
+			set_character_flag = patrician_1
+		}
+		random_vassal = {
+			limit = { 
+				is_patrician = yes
+				NOT = {
+					has_character_flag = patrician_1
+					has_character_flag = patrician_2
+					has_character_flag = patrician_3
+					has_character_flag = patrician_4
+				}
+			}
+			set_character_flag = patrician_2
+		}
+		random_vassal = {
+			limit = { 
+				is_patrician = yes
+				NOT = {
+					has_character_flag = patrician_1
+					has_character_flag = patrician_2
+					has_character_flag = patrician_3
+					has_character_flag = patrician_4
+				}
+			}
+			set_character_flag = patrician_3
+		}
+		random_vassal = {
+			limit = { 
+				is_patrician = yes
+				NOT = {
+					has_character_flag = patrician_1
+					has_character_flag = patrician_2
+					has_character_flag = patrician_3
+					has_character_flag = patrician_4
+				}
+			}
+			set_character_flag = patrician_4
+		}
+		random_vassal = {
+			limit = { has_character_flag = patrician_1 }
+			character_event = { id = REP.66 }
+		}
+		random_vassal = {
+			limit = { has_character_flag = patrician_2 }
+			character_event = { id = REP.67 }
+		}
+		random_vassal = {
+			limit = { has_character_flag = patrician_3 }
+			character_event = { id = REP.68 }
+		}
+		random_vassal = {
+			limit = { has_character_flag = patrician_4 }
+			character_event = { id = REP.69 }
+		}
+	}
+}
+
+# Set up Patrician 1
+character_event = {
+	id = REP.66
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				267 = { has_trade_post = yes }
+			}
+			267 = { 
+				trade_post_owner = { character_event = { id = REP.70 } }
+				seize_trade_post = ROOT 
+			}
+		}
+		if = {
+			limit = { 
+				296 = { has_trade_post = yes }
+			}
+			296 = { 
+				trade_post_owner = { character_event = { id = REP.71 } }
+				seize_trade_post = ROOT
+			}
+		}
+		wealth = 1000
+	}
+}
+
+# Set up Patrician 2
+character_event = {
+	id = REP.67
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				84 = { has_trade_post = yes }
+			}
+			84 = { 
+				trade_post_owner = { character_event = { id = REP.72 } }
+				seize_trade_post = ROOT
+			}
+		}
+		if = {
+			limit = { 
+				83 = { has_trade_post = yes }
+			}
+			83 = { 
+				trade_post_owner = { character_event = { id = REP.73 } }
+				seize_trade_post = ROOT				
+			}
+		}
+		wealth = 1000
+	}
+}
+
+# Set up Patrician 3
+character_event = {
+	id = REP.68
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				32 = { has_trade_post = yes }
+			}
+			32 = { 
+				trade_post_owner = { character_event = { id = REP.74 } }
+				seize_trade_post = ROOT				
+			}
+		}
+		if = {
+			limit = { 
+				74 = { has_trade_post = yes }
+			}
+			74 = { 
+				trade_post_owner = { character_event = { id = REP.75 } }
+				seize_trade_post = ROOT 
+			}
+		}
+		wealth = 1000
+	}
+}
+
+# Set up Patrician 4
+character_event = {
+	id = REP.69
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				368 = { has_trade_post = yes }
+			}
+			368 = { 
+				trade_post_owner = { character_event = { id = REP.76 } }
+				seize_trade_post = ROOT 
+			}
+		}
+		if = {
+			limit = { 
+				370 = { has_trade_post = yes }
+			}
+			370 = { 
+				trade_post_owner = { character_event = { id = REP.77 } }
+				seize_trade_post = ROOT 
+			}
+		}
+		wealth = 1000
+	}
+}
+
+# Former Trade Post Owner Informed 267
+character_event = {
+	id = REP.70
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			267 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 296
+character_event = {
+	id = REP.71
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			296 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 84
+character_event = {
+	id = REP.72
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			84 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 83
+character_event = {
+	id = REP.73
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			83 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 32
+character_event = {
+	id = REP.74
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			32 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 74
+character_event = {
+	id = REP.75
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			74 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 368
+character_event = {
+	id = REP.76
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			368 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+# Former Trade Post Owner Informed 370
+character_event = {
+	id = REP.77
+	desc = EVTDESC_REP_070
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_070
+		tooltip = {
+			370 = { 
+				seize_trade_post = FROM
+			}
+		}
+	}
+}
+
+### Seize Trade Post Plot
+
+# Decision Fired
+character_event = {
+	id = REP.300
+	desc = EVTDESC_REP_300
+	picture = GFX_evt_trade_post_republic
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_300
+		trigger = {
+			plot_power = 1.0
+			NOT = { plot_power = 1.5 }
+		}
+		
+		wealth = -100
+		custom_tooltip = {
+			text = EVTOPTA_REP_300_tooltip
+			hidden_tooltip = {
+				plot_target_char = {
+					character_event = { id = REP.302 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_300
+		trigger = {
+			plot_power = 1.5
+		}
+		
+		wealth = -50
+		custom_tooltip = {
+			text = EVTOPTB_REP_300_tooltip
+			hidden_tooltip = {
+				plot_target_char = {
+					character_event = { id = REP.308 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_REP_300
+		trigger = {
+			NOT = { plot_power = 1.0 }
+		}
+		
+		wealth = -200
+		custom_tooltip = {
+			text = EVTOPTC_REP_300_tooltip
+			hidden_tooltip = {
+				plot_target_char = {
+					character_event = { id = REP.301 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTE_REP_300
+		trigger = {
+			is_merchant_republic = no
+			plot_target_char = { 
+				is_merchant_republic = no
+				num_of_trade_post_diff = {
+					character = ROOT
+					value = 10
+				}
+			}
+		}
+		custom_tooltip = {
+			text = EVTOPTE_REP_300_tooltip
+			hidden_tooltip = {
+				liege = {
+					letter_event = { id = REP.310 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_REP_300
+		custom_tooltip = { text = EVTOPTD_REP_300_tooltip }
+		cancel_plot = plot_seize_trade_post
+		clr_character_flag = plot_seize_trade_post_decision_taken
+	}
+}
+
+# Trade Post Owner Informed Of Bribe
+character_event = {
+	id = REP.301
+	desc = EVTDESC_REP_301
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_301
+		
+		wealth = -250
+		custom_tooltip = {
+			text = EVTOPTA_REP_301_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.303 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_301
+		
+		custom_tooltip = {
+			text = EVTOPTB_REP_301_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.306 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Trade Post Owner Informed Of Plot Support
+character_event = {
+	id = REP.302
+	desc = EVTDESC_REP_302
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_302
+		
+		wealth = -250
+		custom_tooltip = {
+			text = EVTOPTA_REP_302_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.303 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_302
+		
+		custom_tooltip = {
+			text = EVTOPTB_REP_302_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.306 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Plotter Informed Of Bribe
+character_event = {
+	id = REP.303
+	desc = EVTDESC_REP_303
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_303
+		
+		wealth = -300
+		custom_tooltip = {
+			text = EVTOPTA_REP_303_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.304 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_303
+		cancel_plot = plot_seize_trade_post
+		clr_character_flag = plot_seize_trade_post_decision_taken
+		
+		custom_tooltip = { 
+			text = EVTOPTB_REP_303_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.307 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Owner Informed Of Counter-Bribe
+character_event = {
+	id = REP.304
+	desc = EVTDESC_REP_304
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_304
+		
+		wealth = -350
+		custom_tooltip = { 
+			text = EVTOPTA_REP_304_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.305 days = 5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_304
+		
+		custom_tooltip = { 
+			text = EVTOPTB_REP_302_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.306 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Plotter Informed He Has Been Outbid
+character_event = {
+	id = REP.305
+	desc = EVTDESC_REP_305
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_305
+		cancel_plot = plot_seize_trade_post
+		clr_character_flag = plot_seize_trade_post_decision_taken
+		
+		prestige = -50
+		custom_tooltip = {
+			text = EVTOPTB_REP_303_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.307 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Victorious Plotter Informed About Success
+character_event = {
+	id = REP.306
+	desc = EVTDESC_REP_306
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_306
+		plot_target_province =  {
+			seize_trade_post = ROOT
+		}
+		clr_character_flag = plot_seize_trade_post_decision_taken
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_seized_tp
+				months = 60
+			}
+		}
+	}
+}
+
+# Victorious Owner Informed About Success
+character_event = {
+	id = REP.307
+	desc = EVTDESC_REP_306
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_306
+		prestige = 50
+	}
+}
+
+# Trade Post Owner Informed Of Overwhelming Plot Support
+character_event = {
+	id = REP.308
+	desc = EVTDESC_REP_308
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_308
+		
+		custom_tooltip = { 
+			text = EVTOPTB_REP_306_tooltip
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = REP.306 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Plotter goes to Doge
+letter_event = {
+	id = REP.310
+	desc = EVTDESC_REP_310
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_310
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value =  25 }
+			}
+			modifier = {
+				factor = 2
+				opinion = { who = FROM value =  50 }
+			}
+			modifier = {
+				factor = 3
+				opinion = { who = FROM value =  75 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { opinion = { who = FROM value =  0 } }
+			}
+		}
+		FROM = {
+			plot_target_char = {
+				letter_event = { id = REP.311 days = 5 tooltip =  EVTTOOLTIPREP.311 }
+				opinion = {
+					who = ROOT
+					modifier = opinion_disgruntled
+					months = 60
+				}
+			}
+		}
+		FROM = {
+			letter_event = { id = REP.313 days = 5 tooltip = EVTTOOLTIPREP.311 }
+			opinion = {
+				who = ROOT
+				modifier = opinion_glad
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_310
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				NOT = { opinion = { who = FROM value =  10 } }
+			}
+			modifier = {
+				factor = 0
+				opinion = { who = FROM value =  90 }
+			}
+		}
+		FROM = {
+			letter_event = { id = REP.312 days = 5 tooltip = EVTTOOLTIPREP.313 }
+			opinion = {
+				who = ROOT
+				modifier = opinion_disgruntled
+				months = 60
+			}
+		}
+	}
+}
+
+# Owner Told of Doge's Support
+letter_event = {
+	id = REP.311
+	desc = EVTDESC_REP_311
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_311
+		prestige = -30
+	}
+}
+
+# Plotter Told Doge Refuses Support
+letter_event = {
+	id = REP.312
+	desc = EVTDESC_REP_312
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_312
+		cancel_plot = plot_seize_trade_post
+		prestige = -50
+		clr_character_flag = plot_seize_trade_post_decision_taken
+	}
+}
+
+# Plotter Informed of Doge's Support
+letter_event = {
+	id = REP.313
+	desc = EVTDESC_REP_313
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_313
+		clr_character_flag = plot_seize_trade_post_decision_taken
+		plot_target_char = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_seized_tp
+				months = 60
+			}
+		}
+		plot_target_province =  {
+			seize_trade_post = ROOT
+		}
+	}
+}
+
+### Dynastic Marriage Events
+
+# Family member marries burgher daughter (AI)
+character_event = {
+	id = REP.400
+	hide_window = yes
+	
+	ai = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	only_men = yes
+	is_married = no
+	
+	trigger = {
+		NOT = { has_character_flag = getting_married }
+		is_betrothed = no
+		is_primary_heir = no
+		is_pretender = no
+		is_theocracy = no
+		is_priest = no
+		NOR = { 
+			trait = chaste
+			trait = monk
+		}
+		liege = {
+			NOT = { any_child = { character = ROOT } }
+			is_patrician = yes
+			dynasty = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 210
+	}
+	
+	immediate = {
+		set_character_flag = getting_married
+		if = {
+			limit = {
+				age = 18
+				NOT = { age = 30 }
+			}
+			liege = {
+				character_event = { id = REP.401 }
+			}
+		}
+		if = {
+			limit = {
+				age = 30
+				NOT = { age = 45 }
+			}
+			liege = {
+				character_event = { id = REP.402 }
+			}
+		}
+		if = {
+			limit = {
+				age = 45
+			}
+			liege = {
+				character_event = { id = REP.403 }
+			}
+		}
+	}
+}
+
+# Family member marries burgher daughter (18 - 29)
+character_event = {
+	id = REP.401
+	desc = EVTDESC_REP_401
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_401
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 24
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Family member marries burgher daughter (30 - 44)
+character_event = {
+	id = REP.402
+	desc = EVTDESC_REP_401
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_401
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 35
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Family member marries burgher daughter (44+)
+character_event = {
+	id = REP.403
+	desc = EVTDESC_REP_401
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_401
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 48
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Family member marries bar wench/peasant girl/rich girl (AI)
+character_event = {
+	id = REP.404
+	hide_window = yes
+	
+	ai = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	max_age = 40
+	only_men = yes
+	is_married = no
+	
+	trigger = {
+		NOT = { has_character_flag = getting_married }
+		is_betrothed = no
+		is_primary_heir = no
+		is_pretender = no
+		is_theocracy = no
+		is_priest = no
+		NOT = { trait = chaste }
+		liege = {
+			NOT = { any_child = { character = ROOT } }
+			is_patrician = yes
+			dynasty = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	immediate = {
+		set_character_flag = getting_married
+		random_list = {
+			33 = {
+				liege = {
+					character_event = { id = REP.405 }
+				}
+			}
+			33 = {
+				liege = {
+					character_event = { id = REP.406 }
+				}
+			}
+			33 = {
+				liege = {
+					character_event = { id = REP.407 }
+				}
+			}
+		}
+	}
+}
+
+# Family member marries bar wench
+character_event = {
+	id = REP.405
+	desc = EVTDESC_REP_405
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_405
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 25
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Family member marries peasant girl
+character_event = {
+	id = REP.406
+	desc = EVTDESC_REP_406
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_406
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 24
+				religion = FROM
+				culture = FROM
+				trait = fair
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Family member marries rich girl
+character_event = {
+	id = REP.407
+	desc = EVTDESC_REP_407
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_407
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 28
+				religion = FROM
+				culture = FROM
+				trait = ugly
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+			wealth = 100
+			clr_character_flag = getting_married
+		}
+	}
+}
+
+# Old family member marries young woman (AI)
+character_event = {
+	id = REP.408
+	hide_window = yes
+	
+	ai = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 42
+	only_men = yes
+	is_married = no
+	
+	trigger = {
+		is_betrothed = no
+		is_primary_heir = no
+		is_pretender = no
+		is_theocracy = no
+		is_priest = no
+		NOT = { trait = chaste }
+		liege = {
+			NOT = { any_child = { character = ROOT } }
+			is_patrician = yes
+			dynasty = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 450
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = REP.409 }
+		}
+	}
+}
+
+# Old family member marries young woman
+character_event = {
+	id = REP.409
+	desc = EVTDESC_REP_409
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_409
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 20
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+		}
+	}
+}
+
+# Young family member marries older woman (AI)
+character_event = {
+	id = REP.410
+	hide_window = yes
+	
+	ai = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	max_age = 26
+	only_men = yes
+	is_married = no
+	
+	trigger = {
+		is_betrothed = no
+		is_primary_heir = no
+		is_pretender = no
+		is_theocracy = no
+		is_priest = no
+		NOT = { trait = chaste }
+		liege = {
+			NOT = { any_child = { character = ROOT } }
+			is_patrician = yes
+			dynasty = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 450
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = REP.411 }
+		}
+	}
+}
+
+# Young family member marries older woman
+character_event = {
+	id = REP.411
+	desc = EVTDESC_REP_411
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_411
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 41
+				religion = FROM
+				culture = FROM
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+		}
+	}
+}
+
+# Family member marries foreign woman (AI)
+character_event = {
+	id = REP.412
+	hide_window = yes
+	
+	ai = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	only_men = yes
+	is_married = no
+	
+	trigger = {
+		is_betrothed = no
+		is_primary_heir = no
+		is_pretender = no
+		is_theocracy = no
+		is_priest = no
+		NOT = { trait = chaste }
+		can_marry = yes
+		NOT = { culture = manden }
+		liege = {
+			NOT = { any_child = { character = ROOT } }
+			NOT = { culture = manden }
+			is_patrician = yes
+			dynasty = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 450
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = REP.413 }
+		}
+	}
+}
+
+# Family member marries foreign woman
+character_event = {
+	id = REP.413
+	desc = EVTDESC_REP_413
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_413
+		FROM = {
+			create_character = {
+				random_traits = yes
+				dynasty = NONE
+				female = yes
+				age = 26
+				religion = FROM
+				culture = manden
+			}
+			new_character = {
+				add_spouse = PREV
+			}
+		}
+	}
+}
+
+### Trade Post Decisions
+
+# Doge approached by Patrician
+letter_event = {
+	id = REP.500
+	desc = EVTDESC_REP_500
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = { num_of_trade_posts = 1 }
+				any_vassal = {
+					is_patrician = yes
+					NOT = { character = FROM }
+					num_of_trade_post_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_vassal = {
+				limit = {
+					is_patrician = yes
+					NOT = { character = FROM }
+					num_of_trade_post_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+				set_character_flag = target_patrician
+			}
+		}
+		if = {
+			limit = {
+				FROM = { NOT = { num_of_trade_posts = 1 } }
+				any_vassal = {
+					is_patrician = yes
+					num_of_trade_posts = 10
+				}
+			}
+			random_vassal = {
+				limit = {
+					is_patrician = yes
+					num_of_trade_posts = 10
+				}
+				set_character_flag = target_patrician
+			}
+		}
+		FROM = { set_character_flag = poor_patrician }
+	}
+	
+	option = {
+		name = EVTOPTA_REP_500
+		FROM = {
+			letter_event = { id = REP.501 }
+			clr_character_flag = poor_patrician
+		}
+		hidden_tooltip = {
+			any_vassal = {
+				limit = { has_character_flag = target_patrician }
+				clr_character_flag = target_patrician
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_500
+		ai_chance = { factor = 100 }
+		any_vassal = {
+			limit = { has_character_flag = target_patrician }
+			letter_event = { id = REP.502 tooltip = EVTTOOLTIP_REP_502 }
+		}
+	}
+}
+
+# Doge refuses request
+letter_event = {
+	id = REP.501
+	desc = EVTDESC_REP_501
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_501
+		prestige = -100
+	}
+}
+
+# Doge makes request to wealthy patrician
+letter_event = {
+	id = REP.502
+	desc = EVTDESC_REP_502
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_502
+		FROM = {
+			letter_event = { id = REP.503 tooltip = EVTTOOLTIP_REP_503 }
+		}
+		tooltip = {
+			random_trade_post = {
+				seize_trade_post = FROMFROM
+				any_neighbor_province = {
+					limit = {
+						trade_post_owner = { character = ROOT } 
+					}
+					seize_trade_post = FROMFROM
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_510
+		tooltip_info = stewardship
+		trigger = {
+			stewardship = 10
+		}
+		FROM = {
+			letter_event = { id = REP.505 tooltip = EVTTOOLTIP_REP_512 }
+		}
+	}
+	option = {
+		name = EVTOPTC_REP_510
+		tooltip_info = diplomacy
+		trigger = {
+			diplomacy = 10
+		}
+		FROM = {
+			letter_event = { id = REP.506 tooltip = EVTTOOLTIP_REP_513 }
+		}
+	}
+	option = {
+		name = EVTOPTD_REP_510
+		tooltip_info = intrigue
+		trigger = {
+			intrigue = 10
+		}
+		FROM = {
+			letter_event = { id = REP.507 tooltip = EVTTOOLTIP_REP_514 }
+		}
+	}
+}
+
+# Patrician grants Doge's request
+letter_event = {
+	id = REP.503
+	desc = EVTDESC_REP_503
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_503
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_disgruntled
+				months = 60
+			}
+		}
+		any_vassal = {
+			limit = { has_character_flag = poor_patrician }
+			letter_event = { id = REP.504 tooltip = EVTTOOLTIP_REP_504 }
+		}	
+	}
+}
+
+# Doge informs original Patrician that request has been granted
+letter_event = {
+	id = REP.504
+	desc = EVTDESC_REP_504
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_504
+		clr_character_flag = poor_patrician
+		FROMFROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_angry
+				months = 60
+			}
+			clr_character_flag = target_patrician
+			random_trade_post = {
+				seize_trade_post = ROOT
+				any_neighbor_province = {
+					limit = { 
+						trade_post_owner = { character = PREVPREVPREV } 
+					}
+					seize_trade_post = ROOT
+				}
+			}
+		}
+	}
+}
+
+# Patrician refuses demand due to stewardship
+letter_event = {
+	id = REP.505
+	desc = EVTDESC_REP_512
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_505
+		any_vassal = {
+			limit = { has_character_flag = poor_patrician }
+			letter_event = { id = REP.508 tooltip = EVTTOOLTIP_REP_508 }
+		}	
+	}
+}
+
+# Patrician refuses demand due to diplomacy
+letter_event = {
+	id = REP.506
+	desc = EVTDESC_REP_513
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_505
+		any_vassal = {
+			limit = { has_character_flag = poor_patrician }
+			letter_event = { id = REP.508 tooltip = EVTTOOLTIP_REP_508 }
+		}	
+	}
+}
+
+# Patrician refuses demand due to intrigue
+letter_event = {
+	id = REP.507
+	desc = EVTDESC_REP_514
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_505
+		any_vassal = {
+			limit = { has_character_flag = poor_patrician }
+			letter_event = { id = REP.508 tooltip = EVTTOOLTIP_REP_508 }
+		}	
+	}
+}
+
+# Doge informs Patrician of failure
+letter_event = {
+	id = REP.508
+	desc = EVTDESC_REP_508
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_508
+		hidden_tooltip = {
+			FROMFROM = {
+				clr_character_flag = target_patrician
+			}
+		}
+		clr_character_flag = poor_patrician
+		prestige = -50
+	}
+}
+
+# Patrician approached by Doge
+letter_event = {
+	id = REP.510
+	desc = EVTDESC_REP_510
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_510
+		hidden_tooltip = {
+			FROM = {
+				letter_event = { id = REP.511 }
+			}
+		}
+		tooltip = {
+			random_trade_post = {
+				seize_trade_post = FROM
+				any_neighbor_province = {
+					limit = { 
+						trade_post_owner = { character = ROOT } 
+					}
+					seize_trade_post = FROM
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_510
+		tooltip_info = stewardship
+		trigger = {
+			stewardship = 10
+			FROM = {
+				NOT = { stewardship = 8 }
+			}
+		}
+		FROM = {
+			letter_event = { id = REP.512 tooltip = EVTTOOLTIP_REP_512 }
+		}
+	}
+	option = {
+		name = EVTOPTC_REP_510
+		tooltip_info = diplomacy
+		trigger = {
+			diplomacy = 10
+			FROM = {
+				NOT = { diplomacy = 8 }
+			}
+		}
+		FROM = {
+			letter_event = { id = REP.513 tooltip = EVTTOOLTIP_REP_513 }
+		}
+	}
+	option = {
+		name = EVTOPTD_REP_510
+		tooltip_info = intrigue
+		trigger = {
+			intrigue = 10
+			FROM = {
+				NOT = { intrigue = 8 }
+			}
+		}
+		FROM = {
+			letter_event = { id = REP.514 tooltip = EVTTOOLTIP_REP_514 }
+		}
+	}
+}
+
+# Patrician agrees to demand
+letter_event = {
+	id = REP.511
+	desc = EVTDESC_REP_511
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_511
+		FROM = {
+			clr_character_flag = target_patrician_doge
+			opinion = {
+				who = ROOT
+				modifier = opinion_angry
+				months = 60
+			}
+			random_trade_post = {
+				seize_trade_post = ROOT
+				any_neighbor_province = {
+					limit = {
+						trade_post_owner = { character = PREVPREVPREV } 
+					}
+					seize_trade_post = ROOT
+				}
+			}
+		}
+	}
+}
+
+# Patrician refuses demand due to stewardship
+letter_event = {
+	id = REP.512
+	desc = EVTDESC_REP_512
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_512
+		prestige = -50
+	}
+}
+
+# Patrician refuses demand due to diplomacy
+letter_event = {
+	id = REP.513
+	desc = EVTDESC_REP_513
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_512
+		prestige = -50
+	}
+}
+
+# Patrician refuses demand due to intrigue
+letter_event = {
+	id = REP.514
+	desc = EVTDESC_REP_514
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_512
+		prestige = -50
+	}
+}
+
+### Trade Post Razing
+
+# Province has TP
+province_event = {
+	id = REP.600
+	hide_window = yes
+	
+	trigger = {
+		has_trade_post = yes
+		owner = {
+			is_patrician = no
+			top_liege = {
+				is_patrician = no
+			}
+		}
+
+		trade_post_owner = {
+			is_patrician = yes
+			ROOT = {
+				owner = {
+					NOT = {
+						any_realm_character = { character = PREVPREVPREV }
+					}
+					top_liege = {
+						NOR = {
+							is_vassal_or_below = PREVPREVPREV #this is backwards
+							opinion = { who = PREVPREVPREV value =  0 }
+							has_opinion_modifier = { who = PREVPREVPREV modifier = opinion_bribed_tp }
+							has_opinion_modifier = { who = PREVPREVPREV modifier = opinion_thwarted_tp_destruction }
+							has_opinion_modifier = { who = PREVPREVPREV modifier = opinion_burned_tp }
+							has_opinion_modifier = { who = PREVPREVPREV modifier = opinion_burned_tp_despite_bribe }
+							war_with = PREVPREVPREV
+						}
+					}
+					
+					# Only if there is no non-aggression-pact with the trade post owner
+					NOT = {
+						has_non_aggression_pact_with = PREVPREV
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1620
+		
+		modifier = {
+			factor = 0.7
+			trade_post_owner = {
+				ROOT = {
+					owner = {
+						top_liege = {
+							NOT = { opinion = { who = PREVPREVPREV value =  -20 } }
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.6
+			trade_post_owner = {
+				ROOT = {
+					owner = {
+						top_liege = {
+							NOT = { opinion = { who = PREVPREVPREV value =  -40 } }
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			trade_post_owner = {
+				ROOT = {
+					owner = {
+						top_liege = {
+							NOT = { opinion = { who = PREVPREVPREV value =  -60 } }
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.4
+			trade_post_owner = {
+				ROOT = {
+					owner = {
+						top_liege = {
+							NOT = { opinion = { who = PREVPREVPREV value =  -80 } }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			top_liege = {
+				character_event = { id = REP.601 }
+			}
+		}
+	}
+}
+
+# Liege informed
+character_event = {
+	id = REP.601
+	desc = EVTDESC_REP_601
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_601
+		ai_chance = { factor = 100 }
+		FROM = {
+			trade_post_owner = {
+				character_event = { id = REP.602 days = 6 tooltip = EVTTOOLTIP_REP_602 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_601
+		custom_tooltip = { text = tp_spare }
+	}
+}
+
+# Trade Post Owner Confronted
+character_event = {
+	id = REP.602
+	desc = EVTDESC_REP_602
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = { # Accept
+		name = EVTOPTA_REP_602
+		destroy_tradepost = FROMFROM
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = REP.603 }
+			}
+		}
+	}
+	option = { # Bribe
+		name = EVTOPTB_REP_602
+		trigger = {
+			wealth = 100
+		}
+		wealth = -100
+		FROMFROM = {
+			province_event = { id = REP.608 days = 6 tooltip = EVTTOOLTIP_REP_604 }
+		}
+		tooltip = {
+			FROM = { wealth = 100 }
+		}
+	}
+	option = { # Stewardship
+		name = EVTOPTC_REP_602
+		tooltip_info = stewardship
+		trigger = {
+			stewardship = 12
+		}
+		FROM = {
+			character_event = { id = REP.605 days = 6 tooltip = EVTTOOLTIP_REP_605 }
+		}
+	}
+	option = { # Diplomacy
+		name = EVTOPTD_REP_602
+		tooltip_info = diplomacy
+		trigger = {
+			diplomacy = 12
+		}
+		FROM = {
+			character_event = { id = REP.606 days = 6 tooltip = EVTTOOLTIP_REP_605 }
+		}
+	}
+}
+
+# Trade Post Destroyed
+character_event = {
+	id = REP.603
+	desc = EVTDESC_REP_603
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_603
+		prestige = 30
+		FROM = {
+			opinion = {
+				modifier = opinion_burned_tp
+				who = ROOT
+			}
+		}
+	}
+}
+
+# Bribe Offered
+character_event = {
+	id = REP.604
+	desc = EVTDESC_REP_604
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_604
+		ai_chance = { factor = 70 }
+		wealth = 100
+		opinion = {
+			modifier = opinion_bribed_tp
+			who = FROMFROM
+		}
+		tooltip = {
+			FROMFROM = {
+				wealth = -100
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_REP_604
+		ai_chance = { factor = 30 }
+		wealth = 100
+		tooltip = {
+			FROMFROM = {
+				wealth = -100
+			}
+		}
+		piety = -50
+		FROMFROM = {
+			opinion = {
+				modifier = opinion_burned_tp_despite_bribe
+				who = ROOT
+			}
+			if = {
+				limit = {
+					liege = {
+						is_merchant_republic = yes 
+						NOT = { character = FROMFROM }
+					}
+				}
+				liege = {
+					opinion = {
+						modifier = opinion_burned_tp_despite_bribe
+						who = ROOT
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = REP.607 days = 6 }
+			}
+		}
+		tooltip = {
+			destroy_tradepost = FROM
+		}	
+	}
+}
+
+# Stewardship used to save TP
+character_event = {
+	id = REP.605
+	desc = EVTDESC_REP_605
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_605
+		opinion = {
+			modifier = opinion_thwarted_tp_destruction
+			who = FROM
+		}
+		prestige = -30
+	}
+}
+
+# Diplomacy used to save TP
+character_event = {
+	id = REP.606
+	desc = EVTDESC_REP_606
+	picture = GFX_evt_trade_post_republic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_605
+		opinion = {
+			modifier = opinion_thwarted_tp_destruction
+			who = FROM
+		}
+		prestige = -30
+	}
+}
+
+# TP owner informed of treachery
+character_event = {
+	id = REP.607
+	desc = EVTDESC_REP_607
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_REP_607
+		destroy_tradepost = FROMFROM
+	}
+}
+
+# Hidden province owner event
+province_event = {
+	id = REP.608
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			character_event = { id = REP.604 }
+		}
+	}		
+}

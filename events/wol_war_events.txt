@@ -1,0 +1,5216 @@
+###########################################
+#                                         #
+# Way of Life war events                  #
+#                                         #
+# ID WoL.11000-WoL.11999                  #
+#                                         #
+###########################################
+
+# Written by Joel Hansson
+
+namespace = WoL
+
+### Duels
+
+# Get challenged
+character_event = {
+	id = WoL.11000
+	desc = EVTDESC_WOL_11000
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_character_modifier = declined_prestige_duel_timer }
+					NOT = { 
+						AND = {
+							is_female = no
+							event_target:challenger = { is_female = yes }
+							top_liege = { is_nomadic = no }
+						}
+					}
+				}
+			}
+			add_character_modifier = {
+				modifier = declined_prestige_duel_timer
+				duration = 1095
+				hidden = yes
+			}
+			set_character_flag = punish_declining
+		}
+		if = {
+			limit = { NOT = { has_character_modifier = recent_duel_timer } }
+			add_character_modifier = {
+				modifier = recent_duel_timer
+				hidden = yes
+				duration = 365
+			}
+		}
+		FROMFROM = {
+			if = {
+				limit = { NOT = { has_character_modifier = recent_duel_timer } }
+				add_character_modifier = {
+					modifier = recent_duel_timer
+					hidden = yes
+					duration = 365
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11000
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+			modifier = {
+				factor = 0.05
+				trait = craven
+			}
+			modifier = {
+				factor = 0.3
+				religion = jain
+			}
+			modifier = {
+				religion_group = christian
+				is_priest = yes
+				factor = 0
+			}
+			modifier = {
+				is_female = no
+				FROM = { is_female = yes }
+				top_liege = {
+					is_nomadic = no
+				}
+				factor = 0.025
+			}
+		}
+		if = {
+			limit = { trait = craven }
+			random = {
+				chance = 20
+				remove_trait = craven
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		if = {
+			limit = { 
+				FROMFROM = { 
+					has_opinion_modifier = { who = ROOT modifier = grievously_offended }
+				}
+			}
+			FROMFROM = {
+				remove_opinion = { who = ROOT modifier = grievously_offended }
+			}
+		}
+		save_event_target_as = opponent
+		FROMFROM = {
+			save_event_target_as = challenger
+			hidden_tooltip = {
+				character_event = { id = WoL.11001 days = 3 }
+			}
+		}
+		clr_character_flag = punish_declining
+	}
+	option = {
+		name = EVTOPTB_WOL_11000
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = { has_character_flag = punish_declining }
+			if = {
+				limit = { 
+					NOR = {
+						trait = craven
+						trait = brave
+						trait = berserker 
+					}
+				}
+				random = {
+					chance = 30
+					add_trait = craven
+					hidden_tooltip = {
+						character_event = {
+							id = 38257 #Notify Craven
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					trait = brave
+				}
+				remove_trait = brave
+			}
+			prestige = -50
+			add_character_modifier = {
+				modifier = declined_prestige_duel_timer
+				hidden = yes
+				duration = 1095
+			}
+		}
+		hidden_tooltip = {
+			remove_character_modifier = recent_duel_timer
+		}
+		FROMFROM = {
+			hidden_tooltip = {
+				remove_character_modifier = recent_duel_timer
+				opinion = {
+					modifier = opinion_fled_duel
+					who = ROOT
+					years = 100
+				}
+				character_event = { id = WoL.11002 days = 3 }
+			}
+		}
+		clr_character_flag = punish_declining
+	}
+}
+
+# Start the duel
+character_event = {
+	id = WoL.11001
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11001
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11001
+		character_event = { id = WoL.11003 }
+	}
+}
+
+# Duel rejected
+character_event = {
+	id = WoL.11002
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11002
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11002
+	}
+}
+
+# Pop-in without dialogue to accept (event_target:opponent and event_target:challenger must be set)
+character_event = {
+	id = WoL.11003
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = { NOT = { has_character_modifier = recent_duel_timer } }
+			add_character_modifier = {
+				modifier = recent_duel_timer
+				hidden = yes
+				duration = 365
+			}
+		}
+		event_target:opponent = {
+			if = {
+				limit = { NOT = { has_character_modifier = recent_duel_timer } }
+				add_character_modifier = {
+					modifier = recent_duel_timer
+					hidden = yes
+					duration = 365
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_fought_duel
+			who = event_target:opponent
+			years = 150
+		}
+		if = {
+			limit = {
+				has_character_modifier = recent_duel_victory
+			}
+			remove_character_modifier = recent_duel_victory
+		}
+		event_target:opponent = {			
+			opinion = {
+				modifier = opinion_fought_duel
+				who = ROOT
+				years = 150
+			}
+			hidden_tooltip = {
+				character_event = { id = WoL.11004 }
+			}
+		}
+	}
+}
+
+# Opponent bounce for scopes (hidden)
+character_event = {
+	id = WoL.11004
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_modifier = recent_duel_victory
+			}
+			remove_character_modifier = recent_duel_victory
+		}
+		FROM = {
+			character_event = { id = WoL.11005 }
+		}
+	}
+}
+
+
+# Duel (hidden)
+character_event = {
+	id = WoL.11005
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+#		log = "WoL.11005: [Root.GetBestName] challenged [From.GetBestName] on a duel"
+		random_list = {
+			1 = { # double death
+				modifier = {
+					OR = {
+						combat_rating_diff = { who = FROM value = 4 }
+						FROM = { combat_rating_diff = { who = ROOT value = 4 } }
+					}
+					factor = 0.2
+				}
+				modifier = {
+					trait = wroth
+					FROM = {
+						trait = wroth
+					}
+					factor = 2
+				}
+				long_character_event = { id = WoL.11009 }
+				FROM = { long_character_event = { id = WoL.11009 } }
+			}
+			1 = { # decapitate opponent
+				modifier = {
+					NOT = { combat_rating_diff = { who = FROM value = 1 } }
+					factor = 0
+				}
+				add_character_modifier = {
+					modifier = recent_duel_victory
+					months = 12
+				}
+				long_character_event = { id = WoL.11011 }
+			}
+			1 = { # decapitate challenger
+				modifier = {
+					NOT = { FROM = { combat_rating_diff = { who = ROOT value = 1 } } }
+					factor = 0
+				}
+				FROM = {
+					add_character_modifier = {
+						modifier = recent_duel_victory
+						months = 12
+					}
+					long_character_event = { id = WoL.11011 } 
+				}
+			}
+			200 = { # challenger win
+				### modifiers
+				#modifier = {
+				#	factor = 0
+				#	always = yes ######### DEBUGGING
+				#}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 1 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 2 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 3 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 4 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 5 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 6 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 7 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 8 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 9 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 10 }
+					}
+					factor = 0.7
+				}
+				### effects
+				random_list = {
+					70 = {						
+						add_character_modifier = {
+							modifier = recent_duel_victory
+							months = 12
+						}
+						long_character_event = { id = WoL.11006 }
+					}
+					30 = {
+						modifier = {
+							FROM = { is_maimed_trigger = yes }
+							factor = 0
+						}
+						add_character_modifier = {
+							modifier = recent_duel_victory
+							months = 12
+						}
+						set_character_flag = duel_maim
+						long_character_event = { id = WoL.11006 }
+					}
+				}
+			}
+			200 = { # opponent win
+				### modifiers
+				#modifier = {
+				#	factor = 0
+				#	always = yes ######### DEBUGGING
+				#}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 1 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 2 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 3 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 4 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 5 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 6 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 7 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 8 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 9 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 10 }
+					factor = 0.7
+				}
+				### effects
+				random_list = {
+					70 = {
+						FROM = {
+							add_character_modifier = {
+								modifier = recent_duel_victory
+								months = 12
+							}
+							long_character_event = { id = WoL.11006  } 
+						}
+					}
+					30 = {
+						modifier = {
+							is_maimed_trigger = yes
+							factor = 0
+						}
+						FROM = {
+							add_character_modifier = {
+								modifier = recent_duel_victory
+								months = 12
+							}
+							set_character_flag = duel_maim
+							long_character_event = { id = WoL.11006  } 
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Winner event
+long_character_event = {
+	id = WoL.11006
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	
+	desc = {
+		text = EVTDESCA_WOL_11006 # Maiming opponent
+		trigger = {
+			event_target:challenger = { character = ROOT }
+			has_character_flag = duel_maim
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_11006 # Winning over opponent
+		trigger = {
+			event_target:challenger = { character = ROOT }
+			NOT = {
+				has_character_flag = duel_maim
+			}
+		}
+	}
+	desc = {
+		text = EVTDESCC_WOL_11006 # Maiming challenger
+		trigger = {
+			NOT = { event_target:challenger = { character = ROOT } }
+			has_character_flag = duel_maim
+		}
+	}
+	desc = {
+		text = EVTDESCD_WOL_11006 # Winning over challenger
+		trigger = {
+			NOT = { event_target:challenger = { character = ROOT } }
+			NOT = {
+				has_character_flag = duel_maim
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11006
+		trigger = {
+			has_character_flag = duel_maim
+		}
+		ai_chance = {
+			factor = 60
+		}
+		prestige = 50
+		if = {
+			limit = { event_target:challenger = { character = ROOT } }
+			tooltip = {
+				event_target:opponent = {
+					maim_hand_effect = yes
+				}
+			}
+			hidden_tooltip = {
+				event_target:opponent = {
+					long_character_event = { id = WoL.11007 }
+				}
+				if = {
+					limit = { has_focus = focus_war }
+					random = {
+						chance = 50
+						character_event = { id = WoL.11200 }
+					}
+				}
+			}
+		}		
+		if = {
+			limit = { NOT = { event_target:challenger = { character = ROOT } } }
+			tooltip = {
+				event_target:challenger = {
+					maim_hand_effect = yes
+				}
+			}
+			hidden_tooltip = {
+				event_target:challenger = {
+					long_character_event = { id = WoL.11007 }
+				}
+				if = {
+					limit = { has_focus = focus_war }
+					random = {
+						chance = 50
+						character_event = { id = WoL.11200 }
+					}
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = 720 } } # Bring it On achievement check event
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11006
+		trigger = {
+			NOT = {
+				has_character_flag = duel_maim
+			}
+		}
+		ai_chance = {
+			factor = 60
+		}
+		prestige = 50
+		if = {
+			limit = { event_target:challenger = { character = ROOT } }
+			if = {
+				limit = { event_target:opponent = { NOT = { is_maimed_trigger = yes } } }
+				tooltip = {
+					event_target:opponent = {
+						add_trait = wounded
+					}
+				}
+			}
+			hidden_tooltip = {
+				event_target:opponent = {
+					long_character_event = { id = WoL.11007 }
+				}
+				random = {
+					chance = 25
+					character_event = { id = WoL.11200 }
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { event_target:challenger = { character = ROOT } } }
+			if = {
+				limit = { event_target:challenger = { NOT = { is_maimed_trigger = yes } } }
+				tooltip = {
+					event_target:challenger = {
+						add_trait = wounded
+					}
+				}
+			}
+			hidden_tooltip = {
+				event_target:challenger = {
+					long_character_event = { id = WoL.11007 }
+				}
+				random = {
+					chance = 25
+					character_event = { id = WoL.11200 }
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = 720 } } # Bring it On achievement check event
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11006
+		ai_chance = {
+			factor = 1
+			modifier = {
+				trait = kind
+				factor = 0.1
+			}
+			modifier = {
+				trait = impaler
+				factor = 15
+			}
+			modifier = {
+				trait = cruel
+				factor = 5
+			}
+			modifier = {
+				OR = {
+					AND = {
+						event_target:opponent = { character = ROOT }
+						is_rival = event_target:challenger
+					}
+					AND = {
+						event_target:challenger = { character = ROOT }
+						is_rival = event_target:opponent
+					}
+				}
+				factor = 10
+			}
+		}
+		prestige = 50
+		custom_tooltip = {
+			text = EVTTOOLTIPWOL11006
+			hidden_tooltip = {
+				any_realm_character = {
+					opinion = {
+						modifier = opinion_ruthless
+						who = ROOT
+						months = 60
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_modifier = merciless
+			}
+			if = {
+				limit = {
+					has_nickname = no
+				}
+				give_nickname = nick_the_ruthless
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = merciless }
+			}
+			add_character_modifier = {
+				modifier = merciless
+				duration = -1
+			}
+		}
+		if = {
+			limit = { event_target:challenger = { character = ROOT } }
+			if = {
+				limit = {
+					event_target:opponent = { dynasty = ROOT }
+					NOT = { trait = kinslayer }
+				}
+				add_trait = kinslayer
+			}
+			tooltip = {
+				event_target:opponent = {
+					death = {
+						death_reason = death_duel
+						killer = event_target:challenger
+					}
+				}
+			}
+			hidden_tooltip = {
+				event_target:opponent = {
+					long_character_event = { id = WoL.11008 }
+				}
+				random = {
+					chance = 25
+					character_event = { id = WoL.11200 }
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { event_target:challenger = { character = ROOT } } }
+			if = {
+				limit = {
+					event_target:challenger = { dynasty = ROOT }
+					NOT = { trait = kinslayer }
+				}
+				add_trait = kinslayer
+			}
+			tooltip = {
+				event_target:challenger = {
+					death = {
+						death_reason = death_duel
+						killer = event_target:opponent
+					}
+				}
+			}
+			hidden_tooltip = {
+				event_target:challenger = {
+					long_character_event = { id = WoL.11008 }
+				}
+				random = {
+					chance = 25
+					character_event = { id = WoL.11200 }
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = 720 } } # Bring it On achievement check event
+	}
+}
+
+# Loser event
+long_character_event = {
+	id = WoL.11007
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	
+	desc = {
+		text = EVTDESCA_WOL_11007
+		trigger = {
+			FROM = {
+				has_character_flag = duel_maim
+			}
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_11007
+		trigger = {
+			FROM = {
+				NOT = { 
+					has_character_flag = duel_maim
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11007
+
+		prestige = -50
+		if = {
+			limit = {
+				FROM = { has_character_flag  = duel_maim }
+			}
+			maim_hand_effect = yes
+		}
+		if = {
+			limit = {
+				NOT = { FROM = { has_character_flag = duel_maim } }
+				NOT = { is_maimed_trigger = yes }
+			}
+			add_trait = wounded
+		}
+		FROM = { clr_character_flag = duel_maim }
+		hidden_tooltip = {
+			random = {
+				chance = 35
+				character_event = { id = WoL.11013 days = 3 }
+			}
+		}
+	}
+}
+
+# Loser event executed
+long_character_event = {
+	id = WoL.11008
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11008
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	
+	immediate = {
+		if = {
+			limit = { multiplayer = yes }
+			death = {
+				death_reason = death_duel
+				killer = FROM
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_CM_6303
+		hidden_tooltip = {
+			FROM = { clr_character_flag = duel_maim }
+		}
+		if = {
+			limit = {
+				FROM = {
+					dynasty = ROOT
+					NOT = { trait = kinslayer }
+				}
+			}
+			tooltip = {
+				FROM = { add_trait = kinslayer }
+			}
+		}
+		if = {
+			limit = { multiplayer = no }
+			death = {
+				death_reason = death_duel
+				killer = FROM
+			}
+		}
+	}
+}
+
+# Double death (challenger)
+long_character_event = {
+	id = WoL.11009
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	desc = {
+		text = EVTDESCA_WOL_11009 # Challenger desc
+		trigger = {
+			event_target:challenger = { character = ROOT } 
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_11009 # Opponent desc
+		trigger = {
+			NOT = { event_target:challenger = { character = ROOT } }
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { multiplayer = yes }
+			if = {
+				limit = { event_target:challenger = { character = ROOT } }
+				if = {
+					limit = {
+						event_target:opponent = { dynasty = ROOT }
+						NOT = { trait = kinslayer }
+					}
+					add_trait = kinslayer
+				}
+				death = {
+					death_reason = death_duel
+					killer = event_target:opponent
+				}
+			}
+			if = {
+				limit = { NOT = { event_target:challenger = { character = ROOT } } }
+				if = {
+					limit = {
+						event_target:challenger = { dynasty = ROOT }
+						NOT = { trait = kinslayer }
+					}
+					add_trait = kinslayer
+				}
+				death = {
+					death_reason = death_duel
+					killer = event_target:challenger
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_CM_6303
+		if = {
+			limit = { event_target:challenger = { character = ROOT } }
+			if = {
+				limit = {
+					event_target:opponent = { dynasty = ROOT }
+				}
+				if = {
+					limit = { NOT = { trait = kinslayer } }
+					add_trait = kinslayer
+				}
+				if = {
+					limit = { event_target:opponent = { NOT = { trait = kinslayer } } }
+					tooltip = { event_target:opponent = { add_trait = kinslayer } }
+				}
+			}
+			if = {
+				limit = { multiplayer = no }
+				death = {
+					death_reason = death_duel
+					killer = event_target:opponent
+				}
+			}
+			tooltip = {
+				event_target:opponent = {
+					death = {
+						death_reason = death_duel
+						killer = event_target:challenger
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { event_target:challenger = { character = ROOT } } }
+			if = {
+				limit = {
+					event_target:challenger = { dynasty = ROOT }
+				}
+				if = {
+					limit = { NOT = { trait = kinslayer } }
+					add_trait = kinslayer
+				}
+				if = {
+					limit = { event_target:challenger = { NOT = { trait = kinslayer } } }
+					tooltip = { event_target:challenger = { add_trait = kinslayer } }
+				}
+			}
+			if = {
+				limit = { multiplayer = no }
+				death = {
+					death_reason = death_duel
+					killer = event_target:challenger
+				}
+			}
+			tooltip = {
+				event_target:challenger = {
+					death = {
+						death_reason = death_duel
+						killer = event_target:opponent
+					}
+				}
+			}
+		}
+	}
+}
+
+# Winner decap
+long_character_event = {
+	id = WoL.11011
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	desc = {
+		text = EVTDESCA_WOL_11011
+		trigger = {
+			event_target:challenger = { character = ROOT }
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_11011
+		trigger = {
+			NOT = { event_target:challenger = { character = ROOT } }
+		}
+	}
+	
+	option = {
+		trigger = { event_target:challenger = { character = ROOT } }
+		name = EVTOPTA_WOL_11011
+		prestige = 100
+		if = {
+			limit = {
+				event_target:opponent = {
+					has_nickname = no
+				}
+			}
+			event_target:opponent = {
+				give_nickname = nick_the_headless
+			}
+		}
+		if = {
+			limit = {
+				has_nickname = no
+			}
+			give_nickname = nick_the_beheader
+		}
+		if = {
+			limit = {
+				event_target:opponent = { dynasty = ROOT }
+				NOT = { trait = kinslayer }
+			}
+			add_trait = kinslayer
+		}
+		tooltip = {
+			event_target:opponent = {
+				death = {
+					death_reason = death_duel
+					killer = ROOT
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:opponent = { long_character_event = { id = WoL.11012 } }
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.11200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = 720 } } # Bring it On achievement check event
+	}
+	
+	option = {
+		trigger = { NOT = { event_target:challenger = { character = ROOT } } }
+		name = EVTOPTA_WOL_11011
+		prestige = 100
+		if = {
+			limit = {
+				event_target:challenger = {
+					has_nickname = no
+				}
+			}
+			event_target:challenger = {
+				give_nickname = nick_the_headless
+			}
+		}
+		if = {
+			limit = {
+				has_nickname = no
+			}
+			give_nickname = nick_the_beheader
+		}
+		if = {
+			limit = {
+				event_target:challenger = { dynasty = ROOT }
+				NOT = { trait = kinslayer }
+			}
+			add_trait = kinslayer
+		}
+		tooltip = {
+			event_target:challenger = {
+				death = {
+					death_reason = death_duel
+					killer = ROOT
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:challenger = { long_character_event = { id = WoL.11012 } }
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = WoL.11200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = 720 } } # Bring it On achievement check event
+	}
+}
+
+# Loser decap
+long_character_event = {
+	id = WoL.11012
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11012
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	
+	immediate = {
+		if = {
+			limit = { has_nickname = no }
+			give_nickname = nick_the_headless
+		}
+		if = {
+			limit = { multiplayer = yes }
+			death = {
+				death_reason = death_duel
+				killer = FROM
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11012
+		if = {
+			limit = { has_nickname = no }
+			tooltip = {
+				give_nickname = nick_the_headless
+			}
+		}
+		if = {
+			limit = { multiplayer = no }
+			death = {
+				death_reason = death_duel
+				killer = FROM
+			}
+		}
+	}
+}
+
+# Gain rival
+character_event = {
+	id = WoL.11013
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11013
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	trigger = {
+		NOT = {
+			is_rival = FROMFROM
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11013
+		add_rival = FROMFROM
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = WoL.11014 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11013
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# Gain rival notification
+character_event = {
+	id = WoL.11014
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11014
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11014
+		trigger = {
+			NOT = { num_of_rivals = 3 }
+		}
+		add_rival = FROM
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11014
+		trigger = {
+			num_of_rivals = 3
+		}
+		add_rival = FROM
+	}
+}
+
+############### Minor events
+
+### Random event list
+character_event = {
+	id = WoL.11100
+	hide_window = yes
+	
+	min_age = 16
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_focus = focus_war
+		NOT = { trait = infirm }
+		NOT = { has_character_flag = do_not_disturb }
+		in_command = no
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		random_list = {
+			30 = {
+				modifier = {
+					has_character_modifier = run_training_timer
+					factor = 0
+				}
+				character_event = { id = WoL.11101 } # running
+			}
+			30 = {
+				modifier = {
+					OR = {
+						trait = slothful
+						NOT = {
+							any_courtier = {
+								trait = slothful
+							}
+						}
+					}
+					factor = 0
+				}
+				character_event = { id = WoL.11102 } # slothful court
+			}
+			30 = {
+				modifier = {
+					has_character_modifier = spear_throwing_timer
+					factor = 0
+				}
+				character_event = { id = WoL.11103 } # spear-throwing
+			}
+			30 = {
+				modifier = {
+					any_friend = {
+						has_character_flag = sparring_partner
+					}
+					factor = 0
+				}
+				character_event = { id = WoL.11110 } # sparring-partner
+			}
+			30 = {
+				modifier = {
+				NOT = {
+					any_friend = {
+							has_character_flag = sparring_partner
+						}
+						has_character_flag = sparring_partner
+					}
+					factor = 0	
+				}
+				random_friend = {
+					limit = { has_character_flag = sparring_partner }
+					character_event = { id = WoL.11113 } # sparring success
+				}
+			}
+			30 = {
+				modifier = {
+					NOT = {
+						any_friend = {
+							has_character_flag = sparring_partner
+						}
+						has_character_flag = sparring_partner
+					}
+					factor = 0
+				}
+				random_friend = {
+					limit = { has_character_flag = sparring_partner }
+					character_event = { id = WoL.11114 } # sparring accident
+				}
+			}
+			30 = {
+				modifier = {
+					has_character_modifier = wargame_timer
+					factor = 0
+				}
+				character_event = { id = WoL.11115 }
+			}
+		}
+	}
+}
+
+# Start running
+character_event = {
+	id = WoL.11101
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11101
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11101
+		custom_tooltip = {
+			text = EVTTOOLTIPWOLWARPROGRESS
+			hidden_tooltip = {
+				add_character_modifier = {
+					modifier = run_training_timer
+					duration = 1825
+					hidden = yes
+				}
+				character_event = { id = WoL.11200 days = 7 }
+			}
+		}
+	}
+}
+
+# ROOT upset about slothful courtier # not possible if ROOT is slothful
+character_event = {
+	id = WoL.11102
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11102
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11102
+		random_courtier = {
+			limit = {
+				NOT = {
+					OR = {
+						character = ROOT 
+						trait = incapable
+						trait = infirm
+					}
+				}
+				ai = yes
+				is_adult = yes
+				trait = slothful
+			}
+			random_list = {
+				50 = {
+					remove_trait = slothful
+				}
+				30 = {
+					opinion = {
+						modifier = opinion_lost_respect
+						who = ROOT
+						months = 36
+					}
+				}
+				10 = {
+					add_trait = stressed
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11102
+		random = {
+			chance = 20
+			add_trait = stressed
+			hidden_tooltip = {
+				character_event = {
+					id = 38282 #Notify Stressed
+				}
+			}
+		}
+	}
+}
+
+# Arrange a small spear-throwing contest
+character_event = {
+	id = WoL.11103
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11103
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11103
+		hidden_tooltip = {
+			add_character_modifier = {
+				modifier = spear_throwing_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+		any_courtier = {
+			limit = {
+				is_female = no
+				prisoner = no
+				is_adult = yes
+				NOR = {
+					trait = incapable
+					trait = infirm
+					character = ROOT
+					is_rival = ROOT
+				}
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_held_contest
+				months = 6
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = WoL.11104 days = 5} }
+				50 = { character_event = { id = WoL.11105 days = 5} }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11103
+	}
+}
+
+# Courtier maimed while measuring spear throws
+character_event = {
+	id = WoL.11104
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11104
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_war
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				ai = yes
+				is_adult = yes
+				is_female = no
+				prisoner = no
+				NOR = {
+					is_rival = ROOT
+					trait = incapable
+					trait = infirm
+					character = ROOT
+				}
+			}
+			save_event_target_as = portrait_target
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11104
+		event_target:portrait_target = {
+			mangle_effect = yes
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.11105 days = 5}
+		}
+	}
+}
+
+# Spear-throwing conclusion
+character_event = {
+	id = WoL.11105
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		random_list = {
+			30 = { # win
+				modifier = {
+					trait = dwarf
+					factor = 0.5
+				}
+				character_event = { id = WoL.11107 }
+			}
+			60 = { # lose
+				random_courtier = {
+					limit = {
+						ai = yes
+						is_adult = yes
+						is_female = no
+						prisoner = no
+						NOT = {
+							OR = {
+								is_rival = ROOT
+								trait = incapable
+								trait = infirm
+								character = ROOT
+							}
+						}
+					}
+					character_event = { id = WoL.11108 }
+				}
+			}
+		}
+	}
+}
+
+# Win spear-throwing
+character_event = {
+	id = WoL.11107
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11107
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11107
+		prestige = 50
+		hidden_tooltip = {
+			character_event = { id = WoL.11200 days = 7 }
+		}
+	}
+}
+
+# Lose spear courtier bounce
+character_event = {
+	id = WoL.11108
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.11109 }
+		}
+	}
+}
+
+# Lose spear-throwing
+character_event = {
+	id = WoL.11109
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11109
+	picture = GFX_evt_son_asking_father
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11109
+		FROM = { prestige = 50 }
+		prestige = -5
+		hidden_tooltip = {
+			character_event = { id = WoL.11200 days = 7 }
+		}
+	}
+}
+
+# Sparring partner
+character_event = {
+	id = WoL.11110
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11110
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11110
+		random_realm_character = {
+			limit = { 
+				ai = yes
+				is_female = no
+				is_adult = yes
+				NOT = {
+					OR = {
+						is_rival = ROOT
+						is_friend = ROOT
+						age = 50
+						trait = incapable
+						trait = infirm
+					}
+				}
+			}
+			hidden_tooltip = {
+				add_friend = ROOT
+				set_character_flag = sparring_partner
+			}
+			ROOT = {
+				add_friend = PREV
+			}
+		}
+		hidden_tooltip = {
+			set_character_flag = sparring_partner
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11110
+	}
+}
+
+# Sparring success
+character_event = {
+	id = WoL.11111
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11111
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11111
+		add_character_modifier = {
+			modifier = wol_duel_training
+			duration = 365
+		}
+		hidden_tooltip = {
+			character_event = { id = WoL.11200 days = 7 }
+		}
+	}
+}
+
+# Sparring accident
+character_event = {
+	id = WoL.11112
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11112
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	immediate = {
+		random = {
+			chance = 50
+			set_character_flag = sparring_injured
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11112
+		trigger = { has_character_flag = sparring_injured }
+		if = {
+			limit = { NOT = { is_maimed_trigger = yes } }
+			add_trait = wounded
+		}
+		clr_character_flag = sparring_injured
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11112
+		trigger = { NOT = { has_character_flag = sparring_injured } }
+		random_friend = {
+			limit = { has_character_flag = sparring_partner }
+			if = {
+				limit = { NOT = { is_maimed_trigger = yes } }
+				add_trait = wounded
+			}
+		}
+		clr_character_flag = sparring_injured
+	}
+}
+
+# Sparring success bounce
+character_event = {
+	id = WoL.11113
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.11111 }
+		}
+	}
+}
+
+# Sparring accident bounce
+character_event = {
+	id = WoL.11114
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = WoL.11112 }
+		}
+	}
+}
+
+
+# Wargame start
+character_event = {
+	id = WoL.11115
+	desc = EVTDESC_WOL_11115
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_11115
+		hidden_tooltip = {
+			random_vassal = {
+				limit = {
+					ai = yes
+					prisoner = no
+					has_job_title = yes
+					NOR = {
+						trait = incapable
+						trait = infirm
+						has_character_flag = do_not_disturb
+					}
+				}
+				save_event_target_as = attacker
+				set_character_flag = selected
+				ROOT = {
+					set_character_flag = att_found
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_character_flag = att_found }
+				}
+				random_courtier = {
+					limit = {
+						ai = yes
+						prisoner = no
+						has_job_title = yes
+						NOR = {
+							trait = incapable
+							trait = infirm
+							has_character_flag = do_not_disturb
+							has_character_flag = selected
+						}
+					}
+					save_event_target_as = attacker
+					set_character_flag = selected
+					ROOT = {
+						set_character_flag = att_found
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_character_flag = att_found }
+				}
+				random_courtier = {
+					limit = {
+						ai = yes
+						NOT = {
+							has_character_flag = selected
+						}
+					}
+					save_event_target_as = attacker
+					set_character_flag = selected
+				}
+			}
+			random_vassal = {
+				limit = {
+					ai = yes
+					prisoner = no
+					has_job_title = yes
+					NOR = {
+						trait = incapable
+						trait = infirm
+						has_character_flag = do_not_disturb
+						has_character_flag = selected
+					}
+				}
+				save_event_target_as = defender
+				set_character_flag = selected
+				ROOT = {
+					set_character_flag = def_found
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_character_flag = def_found }
+				}
+				random_courtier = {
+					limit = {
+						ai = yes
+						prisoner = no
+						has_job_title = yes
+						NOR = {
+							trait = incapable
+							trait = infirm
+							has_character_flag = do_not_disturb
+							has_character_flag = selected
+						}
+					}
+					save_event_target_as = defender
+					set_character_flag = selected
+					ROOT = {
+						set_character_flag = def_found
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_character_flag = def_found }
+				}
+				random_courtier = {
+					limit = {
+						ai = yes
+						NOT = {
+							has_character_flag = selected
+						}
+					}
+					save_event_target_as = defender
+					set_character_flag = selected
+				}
+			}
+			add_character_modifier = { modifier = wargame_timer days = 1095 hidden = yes }
+			character_event = { id = WoL.11116 }
+			clr_character_flag = att_found
+			clr_character_flag = def_found
+			event_target:defender = { clr_character_flag = selected }
+			event_target:attacker = { clr_character_flag = selected }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11115
+	}
+}
+
+# Check if people available to play
+character_event = {
+	id = WoL.11116
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NOT = { event_target:attacker = { always = yes } }
+					NOT = { event_target:defender = { always = yes } }
+				}
+			}
+			character_event = { id = WoL.11117 days = 3 }
+			break = yes
+		}
+		character_event = { id = WoL.11118 days = 3 }
+	}
+}
+
+# Nobody wants to play
+character_event = {
+	id = WoL.11117
+	desc = EVTDESC_WOL_11117
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_11117
+		remove_character_modifier = wargame_timer
+	}
+}
+
+# Declare players
+character_event = {
+	id = WoL.11118
+	desc = EVTDESC_WOL_11118
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_11118
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = WoL.11120 days = 3 }
+				}
+				50 = {
+					character_event = { id = WoL.11130 days = 3 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11120
+	desc = EVTDESC_WOL_11120
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_11120
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = WoL.11121 days = 3 }
+				}
+				50 = {
+					character_event = { id = WoL.11122 days = 3 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11120
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = WoL.11123 days = 3 }
+				}
+				50 = {
+					character_event = { id = WoL.11124 days = 4 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11121
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11121_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11121_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11121
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss8
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11121
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win4
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11121
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss8
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}	
+}
+
+character_event = {
+	id = WoL.11122
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11122_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11122_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11122
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win6
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11122
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss7
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11122
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss7
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11123
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11123_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11123_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11123
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss6
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11123
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss6
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11123
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win5
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11124
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11124_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11124_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11124
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win4
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11124
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss1
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11124
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss1
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11130
+	desc = EVTDESC_WOL_11130
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WOL_11130
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = WoL.11131 days = 3 }
+				}
+				50 = {
+					character_event = { id = WoL.11132 days = 3 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11130
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = WoL.11133 days = 3 }
+				}
+				50 = {
+					character_event = { id = WoL.11134 days = 4 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11131
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11131_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11131_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11131
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss5
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11131
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss5
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11131
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win3
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11132
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11132_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11132_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11132
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win2
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11132
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss4
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11132
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss4
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11133
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11133_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11133_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11133
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss3
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11133
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss3
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11133
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win1
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11134
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_good_advice
+		}
+		text = EVTDESC_WOL_11134_GOOD
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = wargame_good_advice }
+		}
+		text = EVTDESC_WOL_11134_BAD
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 9
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 12
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:defender = {
+						martial = 15
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:defender = {
+						trait = strategist
+					}
+				}
+				set_character_flag = wargame_good_advice
+			}
+			50 = {
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11134
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss2
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11134
+		if = {
+			limit = {
+				NOT = { has_character_flag = wargame_good_advice }
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_win1
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_WOL_11134
+		if = {
+			limit = {
+				has_character_flag = wargame_good_advice
+			}
+			event_target:defender = {
+				opinion = {
+					modifier = opinion_upset
+					who = ROOT
+					months = 12
+				}
+			}
+		}
+		set_character_flag = wargame_loss2
+		hidden_tooltip = {
+			character_event = { id = WoL.11140 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = WoL.11140
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_win1
+		}
+		text = EVTDESC_WOL_11140_WIN1
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_win2
+		}
+		text = EVTDESC_WOL_11140_WIN2
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_win3
+		}
+		text = EVTDESC_WOL_11140_WIN3
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_win4
+		}
+		text = EVTDESC_WOL_11140_WIN4
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_win5
+		}
+		text = EVTDESC_WOL_11140_WIN5
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss1
+		}
+		text = EVTDESC_WOL_11140_LOSS1
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss2
+		}
+		text = EVTDESC_WOL_11140_LOSS2
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss3
+		}
+		text = EVTDESC_WOL_11140_LOSS3
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss4
+		}
+		text = EVTDESC_WOL_11140_LOSS4
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss5
+		}
+		text = EVTDESC_WOL_11140_LOSS5
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss6
+		}
+		text = EVTDESC_WOL_11140_LOSS6
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss7
+		}
+		text = EVTDESC_WOL_11140_LOSS7
+	}
+	
+	desc = {
+		trigger = {
+			has_character_flag = wargame_loss8
+		}
+		text = EVTDESC_WOL_11140_LOSS8
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11140
+		trigger = {
+			has_character_modifier = adept_of_strategy
+			NOT = { lifestyle_traits = 1 }
+			OR = {
+				has_character_flag = wargame_win1
+				has_character_flag = wargame_win2
+				has_character_flag = wargame_win3
+				has_character_flag = wargame_win4
+				has_character_flag = wargame_win5
+			}
+		}
+		add_trait = strategist
+		prestige = 75
+		hidden_tooltip = {
+			remove_character_modifier = adept_of_strategy
+			character_event = { id = WoL.11149 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11140
+		trigger = {
+			OR = {
+				has_character_flag = wargame_win1
+				has_character_flag = wargame_win2
+				has_character_flag = wargame_win3
+				has_character_flag = wargame_win4
+				has_character_flag = wargame_win5
+			}
+		}
+		if = {
+			limit = {
+				has_character_modifier = student_of_strategy
+				NOT = { has_character_modifier = adept_of_strategy }
+			}
+			hidden_tooltip = {
+				remove_character_modifier = student_of_strategy
+			}
+			add_character_modifier = { modifier = adept_of_strategy duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = adept_of_strategy }
+				NOT = { has_character_modifier = student_of_strategy }
+			}
+			add_character_modifier = { modifier = student_of_strategy duration = -1 }
+		}
+		prestige = 75
+		hidden_tooltip = {
+			character_event = { id = WoL.11149 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11140
+		trigger = {
+			NOT = { trait = wroth }
+			NOR = {
+				has_character_flag = wargame_win1
+				has_character_flag = wargame_win2
+				has_character_flag = wargame_win3
+				has_character_flag = wargame_win4
+				has_character_flag = wargame_win5
+			}
+		}
+		prestige = -10
+		event_target:attacker = { prestige = 100 }
+		hidden_tooltip = {
+			character_event = { id = WoL.11149 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTD_WOL_11140
+		trigger = {
+			trait = wroth
+			NOR = {
+				has_character_flag = wargame_win1
+				has_character_flag = wargame_win2
+				has_character_flag = wargame_win3
+				has_character_flag = wargame_win4
+				has_character_flag = wargame_win5
+			}
+		}
+		prestige = -10
+		event_target:attacker = { prestige = 100 }
+		hidden_tooltip = {
+			character_event = { id = WoL.11149 }
+		}
+	}
+}
+
+# flag clean-up
+character_event = {
+	id = WoL.11149
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = wargame_win1
+		clr_character_flag = wargame_win2
+		clr_character_flag = wargame_win3
+		clr_character_flag = wargame_win4
+		clr_character_flag = wargame_win5
+		clr_character_flag = wargame_win6
+		clr_character_flag = wargame_loss1
+		clr_character_flag = wargame_loss2
+		clr_character_flag = wargame_loss3
+		clr_character_flag = wargame_loss4
+		clr_character_flag = wargame_loss5
+		clr_character_flag = wargame_loss6
+		clr_character_flag = wargame_loss7
+		clr_character_flag = wargame_loss8
+		clr_character_flag = wargame_good_advice
+	}
+}
+
+### Success in war-focus (hidden)
+character_event = {
+	id = WoL.11200
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = {
+					OR = {
+						has_character_modifier = wol_great_warrior
+						trait = duelist
+						trait = strategist
+					}
+					factor = 0
+				}
+				modifier = {
+					has_character_modifier = wol_warrior
+					factor = 0.75
+				}
+				character_event = { id = WoL.11201 } # level up
+			}
+			10 = {
+				modifier = {
+					OR = {
+						NOT = {
+							has_character_modifier = wol_great_warrior
+						}
+						has_character_flag = denied_duelist_trait
+						lifestyle_traits = 1
+					}
+					factor = 0
+				}
+				character_event = { id = WoL.11202 } # duelist
+			}
+			30 = {
+				character_event = { id = WoL.11203 } # prestige
+			}
+			30 = {
+				modifier = {
+					trait = wroth
+					factor = 0
+				}
+				character_event = { id = WoL.11204 } # wroth
+			}
+			30 = {
+				modifier = {
+					trait = brave
+					factor = 0
+				}
+				character_event = { id = WoL.11205 } # brave
+			}
+			5 = {
+				modifier = {
+					is_strong_trigger = yes
+					factor = 0
+				}
+				character_event = { id = WoL.11206 } # strong
+			}
+		}
+	}
+}
+
+# Level up modifier
+character_event = {
+	id = WoL.11201
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11201
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	trigger = {
+		NOT = {
+			OR = {
+				has_character_modifier = wol_great_warrior
+				trait = duelist
+				trait = strategist
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11201
+		if = {
+			limit = {
+				has_character_modifier = wol_warrior
+			}
+			hidden_tooltip = {
+				remove_character_modifier = wol_warrior
+			}
+			add_character_modifier = {
+				modifier = wol_great_warrior
+				duration = -1
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = wol_warrior }
+			}
+			add_character_modifier = {
+				modifier = wol_warrior
+				duration = -1
+			}
+		}
+	}
+}
+
+# Gain duelist
+character_event = {
+	id = WoL.11202
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11202
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	trigger = {
+		has_character_modifier = wol_great_warrior
+		NOT = { lifestyle_traits = 1 }
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11202
+		hidden_tooltip = {
+			remove_character_modifier = wol_great_warrior
+		}
+		add_trait = duelist
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11202
+		prestige = 10
+		set_character_flag = denied_duelist_trait
+	}
+}
+
+# Gain prestige
+character_event = {
+	id = WoL.11203
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11203
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11203
+		prestige = 100
+	}
+}
+
+# Gain Wroth / lose patient
+character_event = {
+	id = WoL.11204
+	is_triggered_only = yes
+	desc = EVTDESC_WOL_11204
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11204
+		if = {
+			limit = {
+				NOT = { trait = patient }
+			}
+			add_trait = wroth
+		}
+		if = {
+			limit = {
+				trait = patient
+			}
+			remove_trait = patient
+		}
+	}
+}
+
+# Gain Brave / lose coward
+character_event = {
+	id = WoL.11205
+	is_triggered_only =  yes
+	desc = EVTDESC_WOL_11205
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	option = {
+		name = EVTOPTA_WOL_11205
+		if = {
+			limit = {
+				NOT = { trait = craven }
+			}
+			add_trait = brave
+		}
+		if = {
+			limit = {
+				trait = craven
+			}
+			remove_trait = craven
+		}
+	}
+}
+
+# Gain strong
+character_event = {
+	id = WoL.11206
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	desc = {
+		text = EVTDESCA_WOL_11206
+		trigger = {
+			is_weak_trigger = no
+		}
+	}
+	desc = {
+		text = EVTDESCB_WOL_11206
+		trigger = {
+			is_weak_trigger = yes
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11206
+		trigger = {	is_weak_trigger = no }
+		add_trait = robust
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11206
+		trigger = { is_weak_trigger = yes }
+		remove_trait = weak
+		remove_trait = feeble
+	}
+}
+
+#######################################
+# WAR FOCUS PULSE EVENTS
+# by Henrik Fåhraeus
+#######################################
+
+# Martial Education improved
+character_event = {
+	id = WoL.11300
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11300
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		OR = {
+			trait = misguided_warrior
+			trait = tough_soldier
+			trait = skilled_tactician
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 0.25
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 0.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11300
+	
+		if = {
+			limit = {
+				trait = skilled_tactician
+			}
+			remove_trait = skilled_tactician
+			add_trait = brilliant_strategist
+		}
+		if = {
+			limit = {
+				trait = tough_soldier
+			}
+			remove_trait = tough_soldier
+			add_trait = skilled_tactician
+		}
+		if = {
+			limit = {
+				trait = misguided_warrior
+			}
+			remove_trait = misguided_warrior
+			add_trait = tough_soldier
+		}
+	}
+}
+
+# Leader Trait Choice: Troop Types
+character_event = {
+	id = WoL.11301
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11301
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		can_have_more_leadership_traits = yes
+		OR = {
+			NOT = { trait = light_foot_leader }
+			NOT = { trait = heavy_infantry_leader }
+			NOT = { trait = cavalry_leader }
+			AND = {
+				NOT = { trait = war_elephant_leader }
+				OR = {
+					culture_group = indo_aryan_group
+					culture_group = dravidian_group
+					any_demesne_province = {
+						terrain = jungle
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.25
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 1.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 3.0
+			trait = brilliant_strategist
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+		modifier = {
+			factor = 0.25
+			leader_traits = 1
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11301 # Light Infantry
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 2
+				is_tribal = yes
+			}
+		}
+		trigger = {
+			NOT = { trait = light_foot_leader }
+		}
+		add_trait = light_foot_leader
+	}
+	option = {
+		name = EVTOPTB_WOL_11301 # Heavy Infantry
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = heavy_infantry_leader }
+		}
+		add_trait = heavy_infantry_leader
+	}
+	option = {
+		name = EVTOPTC_WOL_11301 # Cavalry
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 50
+				is_nomadic = yes
+			}
+		}
+		trigger = {
+			NOT = { trait = cavalry_leader }
+		}
+		add_trait = cavalry_leader
+	}
+	option = {
+		name = EVTOPTD_WOL_11301 # Elephants
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			NOT = { trait = war_elephant_leader }
+			OR = {
+				culture_group = indo_aryan_group
+				culture_group = dravidian_group
+				any_demesne_province = {
+					terrain = jungle
+				}
+			}
+		}
+		
+		add_trait = war_elephant_leader
+	}
+	option = {
+		name = EVTOPTE_WOL_11301 # Bad choices all...
+	}
+}
+
+# Leader Trait Choice: Terrain
+character_event = {
+	id = WoL.11302
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11302
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		can_have_more_leadership_traits = yes
+		OR = {
+			NOT = { trait = flat_terrain_leader }
+			NOT = { trait = rough_terrain_leader }
+			NOT = { trait = mountain_terrain_leader }
+			AND = {
+				NOT = { trait = desert_terrain_leader }
+				any_demesne_province = {
+					terrain = desert
+				}
+			}
+			AND = {
+				NOT = { trait = winter_soldier }
+				OR = {
+					culture_group = north_germanic
+					culture_group = baltic
+					culture_group = east_slavic
+					culture_group = west_slavic
+					culture_group = finno_ugric
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.25
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 1.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 3.0
+			trait = brilliant_strategist
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+		modifier = {
+			factor = 0.25
+			leader_traits = 1
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11302 # Flat Terrain
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 50
+				is_nomadic = yes
+			}
+		}
+		trigger = {
+			NOT = { trait = flat_terrain_leader }
+		}
+		add_trait = flat_terrain_leader
+	}
+	option = {
+		name = EVTOPTB_WOL_11302 # Rough Terrain
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 2
+				OR = {
+					culture_group = north_germanic
+					culture_group = baltic
+					culture_group = east_slavic
+					culture_group = west_slavic
+					culture_group = finno_ugric
+					is_tribal = yes
+				}
+			}
+		}
+		trigger = {
+			NOT = { trait = rough_terrain_leader }
+		}
+		add_trait = rough_terrain_leader
+	}
+	option = {
+		name = EVTOPTC_WOL_11302 # Mountain Terrain
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = mountain_terrain_leader }
+		}
+		add_trait = mountain_terrain_leader
+	}
+	option = {
+		name = EVTOPTD_WOL_11302 # Desert Terrain
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = desert_terrain_leader }
+			any_demesne_province = {
+				terrain = desert
+			}
+		}
+		add_trait = desert_terrain_leader
+	}
+	option = {
+		name = EVTOPTE_WOL_11302 # Winter Soldier
+		ai_chance = {
+			factor = 150
+		}
+		trigger = {
+			NOT = { trait = winter_soldier }
+			OR = {
+				culture_group = north_germanic
+				culture_group = baltic
+				culture_group = east_slavic
+				culture_group = west_slavic
+				culture_group = finno_ugric
+			}
+		}
+		add_trait = winter_soldier
+	}
+	
+	option = {
+		name = EVTOPTE_WOL_11301 # Bad choices all...
+	}
+}
+
+# Leader Trait Choice: Centre, Flank or Siege
+character_event = {
+	id = WoL.11303
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11303
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		can_have_more_leadership_traits = yes
+		OR = {
+			NOT = { trait = experimenter }
+			NOT = { trait = flanker }
+			NOT = { trait = narrow_flank_leader }
+			NOT = { trait = trickster }
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.25
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 1.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 3.0
+			trait = brilliant_strategist
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+		modifier = {
+			factor = 0.25
+			leader_traits = 1
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11303 # Centre
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = experimenter }
+		}
+		add_trait = experimenter
+	}
+	option = {
+		name = EVTOPTB_WOL_11303 # Flanks
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = flanker }
+		}
+		add_trait = flanker
+	}
+	option = {
+		name = EVTOPTC_WOL_11303 # Narrow Flanks
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = narrow_flank_leader }
+		}
+		add_trait = narrow_flank_leader
+	}
+	option = {
+		name = EVTOPTD_WOL_11303 # Trickster
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = trickster }
+		}
+		add_trait = trickster
+	}
+	
+	option = {
+		name = EVTOPTE_WOL_11301 # Bad choices all...
+	}
+}
+
+# Leader Trait Choice: Centre, Flank or Siege
+character_event = {
+	id = WoL.11304
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11304
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		can_have_more_leadership_traits = yes
+		OR = {
+			NOT = { trait = inspiring_leader }
+			NOT = { trait = siege_leader }
+			NOT = { trait = organizer }
+			AND = {
+				NOT = { trait = holy_warrior }
+				trait = zealous
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.25
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 1.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 3.0
+			trait = brilliant_strategist
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+		modifier = {
+			factor = 0.25
+			leader_traits = 1
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11304 # Inpiring Leader
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = inspiring_leader }
+		}
+		add_trait = inspiring_leader
+	}
+	option = {
+		name = EVTOPTB_WOL_11304 # Sieges
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = siege_leader }
+		}
+		add_trait = siege_leader
+	}
+	option = {
+		name = EVTOPTC_WOL_11304 # Organizer
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = organizer }
+		}
+		add_trait = organizer
+	}
+	option = { # Holy Warrior
+		name = { 
+			text = EVTOPTD_WOL_11304
+			trigger = {
+				NOT = { religion_group = muslim }
+			}
+		}
+		name = {
+			text = EVTOPTD_WOL_11304_MUSLIM
+			trigger = {
+				religion_group = muslim
+			}
+		}
+		ai_chance = {
+			factor = 1000
+		}
+		trigger = {
+			trait = zealous
+		}
+		trigger = {
+			NOT = { trait = holy_warrior }
+		}
+		add_trait = holy_warrior
+	}
+	
+	option = {
+		name = EVTOPTE_WOL_11301 # Bad choices all...
+	}
+}
+
+# Leader Trait Choice: Offense vs Defense
+character_event = {
+	id = WoL.11305
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11305
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		can_have_more_leadership_traits = yes
+		OR = {
+			NOT = { trait = aggressive_leader }
+			NOT = { trait = defensive_leader }
+			NOT = { trait = unyielding_leader }
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = 1.25
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 1.5
+			trait = tough_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = skilled_tactician
+		}
+		modifier = {
+			factor = 3.0
+			trait = brilliant_strategist
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { martial = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			has_character_modifier = adept_of_strategy
+		}
+		modifier = {
+			factor = 3.0
+			trait = strategist
+		}
+		modifier = {
+			factor = 0.25
+			leader_traits = 1
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_WOL_11305 # Offense
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = aggressive_leader }
+		}
+		add_trait = aggressive_leader
+	}
+	option = {
+		name = EVTOPTB_WOL_11305 # Defense
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = defensive_leader }
+		}
+		add_trait = defensive_leader
+	}
+	option = {
+		name = EVTOPTC_WOL_11305 # Unyielding
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			NOT = { trait = unyielding_leader }
+		}
+		add_trait = unyielding_leader
+	}
+	
+	option = {
+		name = EVTOPTE_WOL_11301 # Bad choices all...
+	}
+}
+
+# Teach a leader trait to one of my Commanders
+character_event = {
+	id = WoL.11310
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11310
+	
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		has_focus = focus_war
+		OR = {
+			trait = light_foot_leader
+			trait = heavy_infantry_leader
+			trait = cavalry_leader
+			trait = inspiring_leader
+			trait = trickster
+			trait = organizer
+			trait = defensive_leader
+			trait = experimenter
+			trait = flanker
+			trait = aggressive_leader
+			trait = siege_leader
+			trait = unyielding_leader
+			trait = narrow_flank_leader
+			trait = flat_terrain_leader
+			trait = rough_terrain_leader
+			trait = mountain_terrain_leader
+			trait = desert_terrain_leader
+			trait = holy_warrior
+			trait = winter_soldier
+			trait = war_elephant_leader
+			trait = jungle_terrain_leader
+		}
+		any_courtier = {
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			OR = {
+				has_job_title = job_marshal
+				has_minor_title = title_commander
+			}
+			can_have_more_leadership_traits = yes
+			NOT = { leader_traits = 1 }
+		}
+	}
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				prisoner = no
+				is_adult = yes
+				NOT = { trait = incapable }
+				OR = {
+					has_job_title = job_marshal
+					has_minor_title = title_commander
+				}
+				can_have_more_leadership_traits = yes
+				NOT = { leader_traits = 1 }
+			}
+			save_event_target_as = my_student
+		}
+	}
+	
+	option = {
+		name = EVTOPT_WOL_11310_LF
+		trigger = {
+			trait = light_foot_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = light_foot_leader
+			}
+			character_event = { id = WoL.11311 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_HF
+		trigger = {
+			trait = heavy_infantry_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = heavy_infantry_leader
+			}
+			character_event = { id = WoL.11312 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_CAV
+		trigger = {
+			trait = cavalry_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = cavalry_leader
+			}
+			character_event = { id = WoL.11313 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_INSP
+		trigger = {
+			trait = inspiring_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = inspiring_leader
+			}
+			character_event = { id = WoL.11314 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_TRICK
+		trigger = {
+			trait = trickster
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = trickster
+			}
+			character_event = { id = WoL.11315 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_ORG
+		trigger = {
+			trait = organizer
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = organizer
+			}
+			character_event = { id = WoL.11316 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_DEF
+		trigger = {
+			trait = defensive_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = defensive_leader
+			}
+			character_event = { id = WoL.11317 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_CENTRE
+		trigger = {
+			trait = experimenter
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = experimenter
+			}
+			character_event = { id = WoL.11318 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_FLANK
+		trigger = {
+			trait = flanker
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = flanker
+			}
+			character_event = { id = WoL.11319 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_AGG
+		trigger = {
+			trait = aggressive_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = aggressive_leader
+			}
+			character_event = { id = WoL.11320 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_SIEGE
+		trigger = {
+			trait = siege_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = siege_leader
+			}
+			character_event = { id = WoL.11321 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_UN
+		trigger = {
+			trait = unyielding_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = unyielding_leader
+			}
+			character_event = { id = WoL.11322 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_NF
+		trigger = {
+			trait = narrow_flank_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = narrow_flank_leader
+			}
+			character_event = { id = WoL.11323 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_FTL
+		trigger = {
+			trait = flat_terrain_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = flat_terrain_leader
+			}
+			character_event = { id = WoL.11324 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_RTL
+		trigger = {
+			trait = rough_terrain_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = rough_terrain_leader
+			}
+			character_event = { id = WoL.11325 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_MTL
+		trigger = {
+			trait = mountain_terrain_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = mountain_terrain_leader
+			}
+			character_event = { id = WoL.11326 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_DTL
+		trigger = {
+			trait = desert_terrain_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = desert_terrain_leader
+			}
+			character_event = { id = WoL.11327 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_HW
+		trigger = {
+			trait = holy_warrior
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = holy_warrior
+			}
+			character_event = { id = WoL.11328 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_WINTER
+		trigger = {
+			trait = winter_soldier
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = winter_soldier
+			}
+			character_event = { id = WoL.11329 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_ELEPHANT
+		trigger = {
+			trait = war_elephant_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = war_elephant_leader
+			}
+			character_event = { id = WoL.11330 days = 7 }
+		}
+	}
+	option = {
+		name = EVTOPT_WOL_11310_JUNGLE
+		trigger = {
+			trait = jungle_terrain_leader
+		}
+		event_target:my_student = {
+			tooltip = {
+				add_trait = jungle_terrain_leader
+			}
+			character_event = { id = WoL.11331 days = 7 }
+		}
+	}
+	
+	option = {
+		ai_chance = {
+			factor = 0
+		}
+		name = EVTOPT_WOL_11310_NOPE
+	}
+}
+
+# Light Foot
+character_event = {
+	id = WoL.11311
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11311
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = light_foot_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Heavy Foot
+character_event = {
+	id = WoL.11312
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11312
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = heavy_infantry_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Cavalry
+character_event = {
+	id = WoL.11313
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11313
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = cavalry_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Inspiring Leader
+character_event = {
+	id = WoL.11314
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11314
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = inspiring_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Trickster
+character_event = {
+	id = WoL.11315
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11315
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = trickster
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Organizer
+character_event = {
+	id = WoL.11316
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11316
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = organizer
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Defensive Leader
+character_event = {
+	id = WoL.11317
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11317
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = defensive_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Direct Leader
+character_event = {
+	id = WoL.11318
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11318
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = experimenter
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Flanker
+character_event = {
+	id = WoL.11319
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11319
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = flanker
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Aggressive Leader
+character_event = {
+	id = WoL.11320
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11320
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = aggressive_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Siege Leader
+character_event = {
+	id = WoL.11321
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11321
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = siege_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Unyielding
+character_event = {
+	id = WoL.11322
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11322
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = unyielding_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Narrow Flank Leader
+character_event = {
+	id = WoL.11323
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11323
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = narrow_flank_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Flat
+character_event = {
+	id = WoL.11324
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11324
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = flat_terrain_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Rough
+character_event = {
+	id = WoL.11325
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11325
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = rough_terrain_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Mountain
+character_event = {
+	id = WoL.11326
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11326
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = mountain_terrain_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Desert
+character_event = {
+	id = WoL.11327
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11327
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = desert_terrain_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Holy Warrior
+character_event = {
+	id = WoL.11328
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11328
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+		}
+		add_trait = holy_warrior
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 1
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Winter Soldier
+character_event = {
+	id = WoL.11329
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11329
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = winter_soldier
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# War Elephants
+character_event = {
+	id = WoL.11330
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11330
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = war_elephant_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Jungle
+character_event = {
+	id = WoL.11331
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11331
+	
+	option = {
+		name = EVTOPTA_WOL_11311 # Accept
+		ai_chance = {
+			factor = 100
+		}
+		add_trait = jungle_terrain_leader
+		FROM = {
+			character_event = { id = WoL.11340 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_WOL_11311 # Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROM = {
+			character_event = { id = WoL.11341 }
+		}
+	}
+}
+
+# Commander accepts the lessons
+character_event = {
+	id = WoL.11340
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11340
+	
+	option = {
+		name = EXCELLENT
+	}
+	
+}
+
+# Commander declines the lessons
+character_event = {
+	id = WoL.11341
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+	
+	desc = EVTDESC_WOL_11341
+	
+	option = {
+		name = EVTOPTA_WOL_11341
+	}
+}

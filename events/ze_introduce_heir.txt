@@ -1,0 +1,985 @@
+###########################################
+#                                         #
+# Introduce Heir events				      #
+# by Alexander Oltner                     #
+# ID      	              				  #
+#                                         #
+###########################################
+
+namespace = ZE
+
+# Introduce Heir Start Event
+character_event = {
+	id = ZE.22900
+	desc = EVTDESC_ZE_22900
+	picture = GFX_evt_son_asking_father
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_child = {
+			limit = {
+				age = 12
+				is_alive = yes
+				is_landed = no
+				host = { character = ROOT }
+				is_adult = no
+				prisoner = no
+				NOR = {
+					trait = bastard
+					trait = eunuch
+					trait = celibate
+					trait = incapable
+					is_inaccessible_trigger = yes
+					trait = monk
+					trait = nun
+				}
+				OR = {
+					AND = {
+						is_female = no
+						ROOT = { NOT = { has_law = true_cognatic_succession } }
+						NOT = {
+							any_sibling = {
+								AND = {
+									is_older_than = PREV
+									same_sex = PREV
+									is_child_of = ROOT
+									NOR = {
+										trait = bastard
+										trait = eunuch
+										trait = celibate
+										trait = incapable
+										is_inaccessible_trigger = yes
+										trait = monk
+										trait = nun
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						ROOT = { has_law = true_cognatic_succession }
+						NOT = {
+							any_sibling = {
+								is_older_than = PREV
+								is_child_of = ROOT
+								NOR = {
+									trait = bastard
+									trait = eunuch
+									trait = celibate
+									trait = incapable
+									is_inaccessible_trigger = yes
+									trait = monk
+									trait = nun
+								}
+							}
+						}
+					}
+				}
+			}
+			set_character_flag = introduced_heir
+			save_event_target_as = introduced_heir
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22900
+		
+		event_target:introduced_heir = { prestige = 5 }
+		
+		hidden_tooltip = {
+			#Heir is groomed!
+			character_event = { id = ZE.22901 days = 104 }
+		
+			#Vassal offers to teach heir the scripture for a favor
+			if = {
+				limit = {
+					any_vassal = {
+						ai = yes
+						religion = ROOT
+						prisoner = no
+						piety = 0
+						NOT = { holds_favor_on = ROOT }
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+						}
+						OR = {
+							trait = theologian
+							trait = scholar
+							learning = 12
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22902 days = 10 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir impresses visiting vassal
+			if = {
+				limit = {
+					any_vassal = {
+						ai = yes
+						prisoner = no
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+							has_opinion_modifier = {
+								modifier = insulted
+								who = event_target:introduced_heir
+							}
+							has_opinion_modifier = {
+								modifier = opinion_impressed
+								who = event_target:introduced_heir
+							}
+						}
+					}
+					event_target:introduced_heir = {
+						OR = {
+							trait = affectionate
+							has_character_flag = was_affectionate
+							trait = playful
+							has_character_flag = was_playful
+							trait = curious
+							has_character_flag = was_curious
+							trait = conscientious
+							has_character_flag = was_conscientious
+							trait = idolizer
+							has_character_flag = was_idolizer
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22903 days = 21 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22903 days = 98 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir accidently insults visiting vassal
+			if = {
+				limit = {
+					any_vassal = {
+						ai = yes
+						prisoner = no
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+							has_opinion_modifier = {
+								modifier = insulted
+								who = event_target:introduced_heir
+							}
+							has_opinion_modifier = {
+								modifier = opinion_impressed
+								who = event_target:introduced_heir
+							}
+						}
+					}
+					event_target:introduced_heir = {
+						OR = {
+							trait = haughty
+							has_character_flag = was_haughty
+							trait = rowdy
+							has_character_flag = was_rowdy
+							trait = willful
+							has_character_flag = was_willful
+							trait = indolent
+							has_character_flag = was_indolent
+							trait = fussy
+							has_character_flag = was_fussy
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22904 days = 32 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22904 days = 87 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir befriends vassal child
+			if = {
+				limit = {
+					event_target:introduced_heir = {
+						NOR = {
+							trait = timid
+							has_character_flag = was_timid
+						}
+					}
+					any_vassal = {
+						ai = yes
+						prisoner = no
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+						}
+						any_child = {
+							ai = yes
+							age = 8
+							is_adult = no
+							prisoner = no
+							is_landed = no
+							NOR = { 
+								is_friend = event_target:introduced_heir 
+								is_rival = event_target:introduced_heir 
+								sibling = event_target:introduced_heir 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22905 days = 32 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir rivals vassal child
+			if = {
+				limit = {
+					event_target:introduced_heir = {
+						NOR = {
+							trait = affectionate
+							has_character_flag = was_affectionate
+						}
+					}
+					any_vassal = {
+						ai = yes
+						prisoner = no
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+						}
+						any_child = {
+							ai = yes
+							age = 8
+							is_adult = no
+							prisoner = no
+							is_landed = no
+							NOR = { 
+								is_friend = event_target:introduced_heir 
+								is_rival = event_target:introduced_heir 
+								sibling = event_target:introduced_heir 
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22906 days = 43 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir underperforms and becomes depressed
+			if = {
+				limit = {
+					event_target:introduced_heir = {
+						NOR = {
+							trait = depressed 
+							trait = indolent
+							has_character_flag = was_indolent
+						}
+						OR = {
+							trait = brooding
+							has_character_flag = was_brooding
+							trait = conscientious
+							has_character_flag = was_conscientious
+							trait = fussy
+							has_character_flag = was_fussy
+							trait = stressed
+						}
+					}
+				}
+				random_list = {
+					10 = {
+						character_event = { id = ZE.22907 days = 54 random = 5 }
+					}
+					90 = {
+						
+					}
+				}
+			}
+			
+			#Vassal offers to teach heir to fight for a favor
+			if = {
+				limit = {
+					any_vassal = {
+						ai = yes
+						prisoner = no
+						NOR = {
+							holds_favor_on = ROOT
+							trait = incapable
+							is_inaccessible_trigger = yes
+						}
+						OR = {
+							trait = strategist
+							trait = duelist
+							martial = 12
+						}
+					}
+				}
+				random_list = {
+					75 = {
+						character_event = { id = ZE.22908 days = 65 random = 5 }
+					}
+					25 = {
+						
+					}
+				}
+			}
+			
+			#Heir is infatuated with Vassal's spouse
+			if = {
+				limit = {
+					event_target:introduced_heir = {
+						is_female = no
+					}
+					any_vassal = {
+						is_female = no
+						ai = yes
+						is_married = yes
+						prisoner = no
+						NOR = {
+							trait = incapable
+							is_inaccessible_trigger = yes
+						}
+						any_spouse = {
+							is_female = yes
+							ai = yes
+							prisoner = no
+							age = 20
+							is_landed = no
+							NOT = { age = 45 }
+							NOR = {
+								trait = incapable
+								is_inaccessible_trigger = yes
+							}
+						}
+					}
+				}
+				random_list = {
+					50 = {
+						character_event = { id = ZE.22909 days = 76 random = 5 }
+					}
+					50 = {
+						
+					}
+				}
+			}
+			
+		}
+		
+	}
+}
+
+# Introduce Heir End Event
+character_event = {
+	id = ZE.22901
+	desc = EVTDESC_ZE_22901
+	picture = GFX_evt_son_asking_father
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22901
+		
+		event_target:introduced_heir = { 
+			add_character_modifier = {
+				modifier = groomed_to_perfection
+				years = 20
+			}
+		}
+		
+	}
+}
+
+# Vassal offers to teach heir the Scripture
+character_event = {
+	id = ZE.22902
+	desc = EVTDESC_ZE_22902
+	picture = GFX_evt_church_council
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+		any_vassal = {
+			ai = yes
+			religion = ROOT
+			prisoner = no
+			piety = 0
+			NOR = {
+				holds_favor_on = ROOT
+				trait = incapable
+				is_inaccessible_trigger = yes
+			}
+			OR = {
+				trait = theologian
+				trait = scholar
+				learning = 12
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				religion = ROOT
+				prisoner = no
+				piety = 0
+				NOR = {
+					holds_favor_on = ROOT
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+				OR = {
+					trait = theologian
+					trait = scholar
+					learning = 12
+				}
+			}
+			save_event_target_as = vassal_teacher
+		}
+	}
+	
+	#Accept offer
+	option = {
+		name = EVTOPTA_ZE_22902
+		
+		event_target:introduced_heir = { 
+			change_learning = 1
+			piety = 50
+		}
+		event_target:vassal_teacher = { 
+			add_favor = ROOT 
+		}
+	}
+	
+	#Decline offer
+	option = {
+		name = EVTOPTB_ZE_22902
+		
+		piety = -50
+		
+		event_target:vassal_teacher = { 
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+
+	}
+}
+
+# Heir impresses vassal
+character_event = {
+	id = ZE.22903
+	desc = EVTDESC_ZE_22903
+	picture = GFX_evt_dancing
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = {
+			is_alive = yes
+		}
+		any_vassal = {
+			ai = yes
+			prisoner = no
+			NOR = {
+				trait = incapable
+				is_inaccessible_trigger = yes
+				has_opinion_modifier = {
+					modifier = insulted
+					who = event_target:introduced_heir
+				}
+				has_opinion_modifier = {
+					modifier = opinion_impressed
+					who = event_target:introduced_heir
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_opinion_modifier = {
+						modifier = insulted
+						who = event_target:introduced_heir
+					}
+					has_opinion_modifier = {
+						modifier = opinion_impressed
+						who = event_target:introduced_heir
+					}
+				}
+			}
+			save_event_target_as = compliment_vassal
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22903
+		
+		event_target:compliment_vassal = {
+			opinion = {
+				modifier = opinion_impressed
+				who = event_target:introduced_heir
+				years = 20
+			}
+		}
+		
+	}
+}
+
+# Heir insults vassal
+character_event = {
+	id = ZE.22904
+	desc = EVTDESC_ZE_22904
+	picture = GFX_evt_accused
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = {
+			is_alive = yes
+		}
+		any_vassal = {
+			ai = yes
+			prisoner = no
+			NOR = {
+				trait = incapable
+				is_inaccessible_trigger = yes
+				has_opinion_modifier = {
+					modifier = insulted
+					who = event_target:introduced_heir
+				}
+				has_opinion_modifier = {
+					modifier = opinion_impressed
+					who = event_target:introduced_heir
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+					has_opinion_modifier = {
+						modifier = insulted
+						who = event_target:introduced_heir
+					}
+					has_opinion_modifier = {
+						modifier = opinion_impressed
+						who = event_target:introduced_heir
+					}
+				}
+			}
+			save_event_target_as = insult_vassal
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22904
+		
+		event_target:insult_vassal = {
+			opinion = {
+				modifier = insulted
+				who = event_target:introduced_heir
+				years = 20
+			}
+		}
+		
+	}
+}
+
+# Heir befriends vassal child
+character_event = {
+	id = ZE.22905
+	desc = EVTDESC_ZE_22905
+	picture = GFX_evt_child_sword
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+		any_vassal = {
+			ai = yes
+			prisoner = no
+			NOR = {
+				trait = incapable
+				is_inaccessible_trigger = yes
+			}
+			any_child = {
+				ai = yes
+				age = 8
+				is_adult = no
+				prisoner = no
+				is_landed = no
+				NOR = { 
+					is_friend = event_target:introduced_heir 
+					is_rival = event_target:introduced_heir 
+					sibling = event_target:introduced_heir 
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+			any_child = {
+				limit = {
+					ai = yes
+					age = 8
+					is_adult = no
+					prisoner = no
+					is_landed = no
+					NOR = { 
+						is_friend = event_target:introduced_heir 
+						is_rival = event_target:introduced_heir 
+						sibling = event_target:introduced_heir 
+						trait = incapable
+						is_inaccessible_trigger = yes
+					}
+				}
+				save_event_target_as = befriended_child
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22905
+		
+		event_target:introduced_heir = { 
+			add_friend = event_target:befriended_child
+		}
+		
+	}
+}
+
+# Heir rivals vassal child
+character_event = {
+	id = ZE.22906
+	desc = EVTDESC_ZE_22906
+	picture = GFX_evt_child_bully
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+		any_vassal = {
+			ai = yes
+			prisoner = no
+			NOR = {
+				trait = incapable
+				is_inaccessible_trigger = yes
+			}
+			any_child = {
+				ai = yes
+				age = 8
+				is_adult = no
+				prisoner = no
+				is_landed = no
+				NOR = { 
+					is_friend = event_target:introduced_heir 
+					is_rival = event_target:introduced_heir 
+					sibling = event_target:introduced_heir 
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+			any_child = {
+				limit = {
+					ai = yes
+					age = 8
+					is_adult = no
+					prisoner = no
+					is_landed = no
+					NOR = { 
+						is_friend = event_target:introduced_heir 
+						is_rival = event_target:introduced_heir 
+						sibling = event_target:introduced_heir 
+						trait = incapable
+						is_inaccessible_trigger = yes
+					}
+				}
+				save_event_target_as = rival_child
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22906
+		
+		event_target:introduced_heir = { 
+			add_rival = event_target:rival_child
+		}
+		
+	}
+}
+
+# Heir becomes depressed
+character_event = {
+	id = ZE.22907
+	desc = EVTDESC_ZE_22907
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22907
+		
+		event_target:introduced_heir = {
+			add_trait = depressed
+			hidden_tooltip = {
+				character_event = {	id = 38314 days = 1000 random = 800 }
+			}
+		}
+		
+	}
+}
+
+# Vassal offers to teach heir to fight
+character_event = {
+	id = ZE.22908
+	desc = EVTDESC_ZE_22908
+	picture = GFX_evt_family_feud_republic
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+		any_vassal = {
+			ai = yes
+			prisoner = no
+			NOR = {
+				holds_favor_on = ROOT
+				trait = incapable
+				is_inaccessible_trigger = yes
+			}
+			OR = {
+				trait = strategist
+				trait = duelist
+				martial = 12
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOR = {
+					holds_favor_on = ROOT
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+				OR = {
+					trait = strategist
+					trait = duelist
+					martial = 12
+				}
+			}
+			save_event_target_as = vassal_teacher_martial
+		}
+	}
+	
+	#Accept offer
+	option = {
+		name = EVTOPTA_ZE_22908
+		
+		event_target:introduced_heir = { 
+			change_martial = 1
+			prestige = 50
+		}
+		event_target:vassal_teacher_martial = { 
+			add_favor = ROOT 
+		}
+	}
+	
+	#Decline offer
+	option = {
+		name = EVTOPTB_ZE_22908
+		
+		prestige = -50
+		
+		event_target:vassal_teacher_martial = { 
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+
+	}
+}
+
+# Heir is infatuated with vassal's spouse
+character_event = {
+	id = ZE.22909
+	desc = EVTDESC_ZE_22909
+	picture = GFX_evt_princess_byzantine
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		event_target:introduced_heir = { is_alive = yes }
+		any_vassal = {
+			is_female = no
+			ai = yes
+			is_married = yes
+			prisoner = no
+			NOR = {
+				trait = incapable
+				is_inaccessible_trigger = yes
+			}
+			any_spouse = {
+				is_female = yes
+				ai = yes
+				prisoner = no
+				age = 20
+				is_landed = no
+				NOT = { age = 45 }
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				is_female = no
+				ai = yes
+				is_married = yes
+				prisoner = no
+				NOR = {
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+			}
+			save_event_target_as = husband_target
+			any_spouse = {
+				limit = {
+					is_female = yes
+					ai = yes
+					prisoner = no
+					age = 20
+					is_landed = no
+					NOT = { age = 45 }
+					NOR = {
+						trait = incapable
+						is_inaccessible_trigger = yes
+					}
+				}
+				save_event_target_as = wife_target
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_22909
+		
+		event_target:introduced_heir = {
+			opinion = {
+				modifier = teenage_infatuation
+				who = event_target:wife_target
+				years = 10
+			}
+		}
+		
+		event_target:husband_target = {
+			opinion = {
+				modifier = opinion_disapprove
+				who = event_target:introduced_heir
+				years = 10
+			}
+		}
+		
+	}
+}
