@@ -32,7 +32,7 @@ module CKParser =
 
     //let spaceAsStr = anyOf whitespaceTextChars |>> fun chr -> string chr
     let ws = (many spaces1 |>> ignore) <?> "whitespace"
-    let comment = skipChar '#' >>. manyCharsTill anyChar newline .>> ws |>> string |>> Comment
+    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment
     let wsc = (many (comment |>> ignore <|> spaces1) |>> ignore) <?> "whitespace_comment"
     let str s = pstring s .>> ws
     let ch c = skipChar c >>. ws
@@ -55,7 +55,7 @@ module CKParser =
     //let valueBlock = ch '{' >>. inner .>> ch '}'
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let troops, troopsimpl = createParserForwardedToRef()
-    let keyvaluelist = many (comment <|> troops <|> keyvalue)
+    let keyvaluelist = many (comment <|> (attempt troops) <|> keyvalue)
     let valueBlock = 
         let list = keyvaluelist |>> Block
         between (ch '{') (ch '}') list <?> "valueBlock"
