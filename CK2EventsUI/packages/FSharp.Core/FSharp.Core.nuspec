@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>FSharp.Core</id>
+    <version>4.2.3</version>
+    <title>FSharp.Core for F# 4.1</title>
+    <authors>Microsoft and F# Software Foundation</authors>
+    <owners>Microsoft and F# Software Foundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/Microsoft/visualfsharp/blob/master/License.txt</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/visualfsharp</projectUrl>
+    <description>FSharp.Core redistributables from Visual F# 4.1.0
+                Supported Platforms:
+                    .NET 4.5+           (net45)
+                    netstandard1.6      (netstandard1.6)</description>
+    <summary>FSharp.Core for F# 4.1</summary>
+    <language>en-US</language>
+    <tags>Visual F# Compiler FSharp functional programming</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="System.Collections" version="4.0.11" />
+        <dependency id="System.Console" version="4.0.0" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
+        <dependency id="System.Globalization" version="4.0.11" />
+        <dependency id="System.IO" version="4.1.0" />
+        <dependency id="System.Linq" version="4.1.0" />
+        <dependency id="System.Linq.Expressions" version="4.1.0" />
+        <dependency id="System.Linq.Queryable" version="4.0.1" />
+        <dependency id="System.Net.Requests" version="4.0.11" />
+        <dependency id="System.Reflection" version="4.1.0" />
+        <dependency id="System.Reflection.Extensions" version="4.0.1" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
+        <dependency id="System.Runtime" version="4.1.0" />
+        <dependency id="System.Runtime.Extensions" version="4.1.0" />
+        <dependency id="System.Runtime.Numerics" version="4.0.1" />
+        <dependency id="System.Text.RegularExpressions" version="4.1.0" />
+        <dependency id="System.Threading" version="4.0.11" />
+        <dependency id="System.Threading.Tasks" version="4.0.11" />
+        <dependency id="System.Threading.Tasks.Parallel" version="4.0.1" />
+        <dependency id="System.Threading.Thread" version="4.0.0" />
+        <dependency id="System.Threading.ThreadPool" version="4.0.10" />
+        <dependency id="System.Threading.Timer" version="4.0.1" />
+      </group>
+      <group targetFramework=".NETFramework4.5" />
+    </dependencies>
+  </metadata>
+</package>

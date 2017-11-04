@@ -1,0 +1,89 @@
+##############################################
+#
+# News Flavor Events
+#
+# Event ID 89500 - 89999 is reserved
+#
+# Written by Henrik Eklund
+#
+##############################################
+
+# Marco Polo
+narrative_event = {
+	id = 89500
+	title = "EVTNAME89500"
+	desc = "EVTDESC89500"
+	major = yes
+	
+	hide_from = yes
+	
+	picture = "GFX_evt_monk"
+	
+	only_playable = yes
+	
+	trigger = {
+		year = 1300
+		has_landed_title = c_jerusalem
+		NOT = {	has_global_flag = marco_polo }
+		NOT = {
+			capital_scope = {
+				OR = {
+					region = world_steppe
+					region = world_persia
+					region = world_india
+				}
+			}
+		}
+	}
+	
+	major_trigger = {
+		ai = no
+		NOT = { religion_group = muslim }
+		NOT = { religion_group = indian_group }
+		NOT = { religion = tengri_pagan }
+		NOT = { religion = tengri_pagan_reformed }
+	}	
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = {
+		name = "EVTOPTA89500"
+		set_global_flag = marco_polo
+	}
+}
+
+# Zheng He
+narrative_event = {
+	id = 89501
+	title = "EVTNAME89501"
+	desc = "EVTDESC89501"
+	major = yes
+	
+	hide_from = yes
+	
+	picture = "GFX_evt_merchant_ship_at_sea_republic"
+	
+	only_playable = yes
+	
+	trigger = {
+		year = 1414
+		has_landed_title = c_jerusalem
+		NOT = { has_global_flag = zheng_he } 
+	}
+	
+	major_trigger = {
+		ai = no
+		religion_group = muslim
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = "EVTOPTA89501"
+		set_global_flag = zheng_he
+	}
+}

@@ -1,0 +1,2984 @@
+###########################################
+#                                         #
+# RIP Epidemic Events           		  #
+# ID RIP.13000-RIP.13999                  #
+#                                         #
+###########################################
+
+# Written by:
+# Markus Olsén
+# David Ballantyne
+# Milla Isaksson
+# Mathilda Bjarnehed
+
+namespace = RIP
+
+#Chain starter events
+character_event = {
+	id = RIP.13000
+
+	hide_window = yes
+
+	only_playable = yes
+	only_independent = yes
+
+	mean_time_to_happen = {
+		months = 6
+	}
+
+	trigger = {
+		host = { character = ROOT }
+		capital_scope = {
+			OR = {
+				has_province_modifier = depopulated_1
+				has_province_modifier = depopulated_2
+				has_province_modifier = depopulated_3
+			}
+		}
+		NOT = { has_character_flag = epidemic_blame_game }
+	}
+
+	immediate = {
+		# List of event chains triggered 
+		random_list = {
+			10 = { # Cat complaints
+				set_character_flag = epidemic_blame_game
+				character_event = { id = RIP.13001 }
+			}
+			10 = { # Blame Jews
+				modifier = {
+					factor = 0
+					OR = {
+						has_character_modifier = expelled_jewish
+						religion_group = jewish_group
+						any_realm_province = { religion_group = jewish_group }
+					}
+				}
+				set_character_flag = epidemic_blame_game
+				character_event = { id = RIP.13400 }
+			}
+			10 = { # Witch hunt
+				modifier = {
+					factor = 0
+					NOT = { job_spiritual = { always = yes } }
+				}
+				modifier = {
+					factor = 0
+					NOT = { any_courtier = { count = 5 } }
+				}
+				set_character_flag = epidemic_blame_game
+				character_event = { id = RIP.13198 }
+			}
+			10 = { # Bad Hindu
+				modifier = {
+					factor = 0
+					NAND = {
+						religion_group = indian_group
+						job_spymaster = { always = yes }
+					}
+				}
+				set_character_flag = epidemic_blame_game
+				character_event = { id = RIP.13500 }
+			}
+		}
+	}
+}
+
+#Cat complaints
+character_event = {
+	id = RIP.13001
+	picture = GFX_evt_depopulated_town
+	desc = EVTDESC_RIP_13001
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		capital_scope = {
+			save_event_target_as = capital
+		}
+	}
+
+	#Gather and examine some cats
+	option = {
+		name = EVTOPTA_RIP_13001
+		custom_tooltip = {
+			text = EVTOPTA_RIP_13001_TOOLTIP
+		}
+		if = {
+			limit = {
+				has_character_modifier = in_seclusion
+			}
+			scaled_wealth = -0.4
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = in_seclusion }
+			}
+			scaled_wealth = -0.1
+		}
+		hidden_tooltip = {
+			character_event = { id = RIP.13002 days = 20 random = 5 }
+			character_event = { id = RIP.13003 days = 90 random = 30 }
+		}
+	}
+
+	#Ignore complaints
+	option = {
+		name = EVTOPTB_RIP_13001
+		hidden_tooltip = {
+			character_event = { id = RIP.13003 days = 90 random = 30 }
+		}
+	}
+}
+
+#Cats seem to be ok
+character_event = {
+	id = RIP.13002
+	picture = GFX_evt_cat
+	desc = EVTDESC_RIP_13002
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = cats_examined
+		any_courtier_or_vassal = {
+			limit = {
+				has_minor_title = title_court_physician
+			}
+			save_event_target_as = cat_examiner
+			break = yes
+		}
+		job_marshal = {
+			save_event_target_as = cat_examiner
+			break = yes
+		}
+		random_courtier = {
+			save_event_target_as = cat_examiner
+			break = yes
+		}
+	}
+
+	#let cats go
+	option = {
+		name = EVTOPTA_RIP_13002
+	}
+
+	#keep them for observation
+	option = {
+		name = EVTOPTB_RIP_13002
+		scaled_wealth = -0.2
+		set_character_flag = cats_observed
+		hidden_tooltip = {
+			random_list = {
+				70 = {
+					character_event = { id = RIP.13006 days = 30 random = 10 }
+				}
+				30 = { }
+			}
+		}
+	}
+}
+
+#Crowd gathered to complain
+character_event = {
+	id = RIP.13003
+	picture = GFX_evt_peasants
+	desc = EVTDESC_RIP_13003
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = cats_examined
+	}
+
+	#make example of leader cat
+	option = {
+		name = EVTOPTA_RIP_13003
+		tooltip_info = intrigue
+		trigger = {
+			has_character_flag = cats_observed
+			intrigue = 15
+		}
+		custom_tooltip = {
+			text = EVTOPTA_RIP_13003_TOOLTIP
+		}
+		hidden_tooltip = {
+			random_list = {
+				20 = {
+					character_event = { id = RIP.13011 days = 50 random = 20 }
+				}
+				80 = {
+					character_event = { id = RIP.13010 days = 50 random = 20 }
+				}
+			}
+		}
+	}
+
+	#cats are not the cause
+	option = {
+		name = EVTOPTB_RIP_13003
+		tooltip_info = diplomacy
+		trigger = {
+			diplomacy = 15
+			has_character_flag = cats_examined
+		}
+		custom_tooltip = {
+			text = EVTOPTB_RIP_13003_TOOLTIP
+		}
+		hidden_tooltip = {
+			random_list = {
+				20 = {
+					character_event = { id = RIP.13011 days = 50 random = 20 }
+				}
+				80 = {
+					character_event = { id = RIP.13010 days = 50 random = 20 }
+				}
+			}
+		}
+	}
+
+	#fallback for investment
+	option = {
+		name = EVTOPTC_RIP_13003
+		trigger = {
+			has_character_flag = cats_examined
+			NOR = {
+				diplomacy = 15
+				AND = {
+					intrigue = 15
+					has_character_flag = cats_observed
+				}
+			}
+		}
+		custom_tooltip = {
+			text = EVTOPTC_RIP_13003_TOOLTIP
+		}
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					character_event = { id = RIP.13011 days = 50 random = 20 }
+				}
+				50 = {
+					character_event = { id = RIP.13010 days = 50 random = 20 }
+				}
+			}
+		}
+	}
+
+	#get rid of all cats
+	option = {
+		name = EVTOPTD_RIP_13003
+		if = {
+			limit = {
+				has_character_modifier = pet_cat
+			}
+			remove_character_modifier = pet_cat
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = no_more_cats
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				30 = {}
+				70 = {
+					random_courtier = {
+						limit = { 
+							is_adult = yes
+							NOR = { 
+								is_rival = ROOT
+								is_friend = ROOT
+								owes_favor_to = ROOT
+							}
+						}
+						character_event = { id = RIP.13007 days = 4 } 
+					}
+				}
+			}
+		}
+	}
+
+	#ignore complaints
+	option = {
+		name = EVTOPTE_RIP_13003
+		capital_scope = {
+			add_province_modifier = {
+				name = epidemic_blame_1
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				20 = {
+					character_event = { id = RIP.13010 days = 50 random = 20 }
+				}
+				80 = {
+					character_event = { id = RIP.13011 days = 50 random = 20 }
+				}
+			}
+		}
+	}
+}
+
+#courtier wants special treatment
+character_event = {
+	id = RIP.13004
+	picture = GFX_evt_suspicious_noble
+	desc = EVTDESC_RIP_13004
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#even your cats
+	option = {
+		name = EVTOPTA_RIP_13004
+		event_target:worried_courtier = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_hate
+				years = 5
+			}
+			hidden_tooltip = {
+				character_event = { id = RIP.13008 }
+			}
+		}
+	}
+
+	#keep secret
+	option = {
+		name = EVTOPTB_RIP_13004
+		add_favor = event_target:worried_courtier
+		hidden_tooltip = {
+			event_target:worried_courtier = { character_event = { id = RIP.13009 } }
+			random_list = {
+				50 = {
+					character_event = { id = RIP.13010 days = 20 random = 20 } #commoners calm down
+				}
+				50 = {
+					character_event = { id = RIP.13005 days = 20 random = 20 } #commoners discover special treatment
+				}
+			}
+		}
+	}
+}
+
+#commoners discover special treatment
+character_event = {
+	id = RIP.13005
+	picture = GFX_evt_peasants
+	desc = EVTDESC_RIP_13005
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#Not good
+	option = {
+		name = EVTOPTA_RIP_13005
+		capital_scope = {
+			add_province_modifier = {
+				name = epidemic_blame_2
+				years = 10
+			}
+		}
+	}
+}
+
+#adopt new pet cat
+character_event = {
+	id = RIP.13006
+	picture = GFX_evt_cat
+	desc = EVTDESC_RIP_13006
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = {
+				set_character_flag = cat_name_1
+			}
+			10 = {
+				set_character_flag = cat_name_2
+			}
+			10 = {
+				set_character_flag = cat_name_3
+			}
+		}
+	}
+
+	#keep pet
+
+	#Name 1
+	option = {
+		name = {
+			text = EVTOPTA_RIP_13006
+			trigger = {
+				has_character_flag = cat_name_1
+			}
+		}
+		name = {
+			text = EVTOPTB_RIP_13006
+			trigger = {
+				has_character_flag = cat_name_2
+			}
+		}
+		name = {
+			text = EVTOPTC_RIP_13006
+			trigger = {
+				has_character_flag = cat_name_3
+			}
+		}
+		add_character_modifier = {
+			name = pet_cat
+			duration = -1
+		}
+		hidden_tooltip = { character_event = { id = 77802 days = 3000 random = 2000 } } # Cat dies
+	}
+
+	#don't keep cat
+	option = {
+		name = EVTOPTD_RIP_13006
+	}
+}
+
+#argue with liege about decision
+character_event = {
+	id = RIP.13007
+	picture = GFX_evt_quarrel
+	desc = EVTDESC_RIP_13007
+	border = GFX_event_normal_frame_religion
+
+	immediate = {
+		save_event_target_as = worried_courtier
+	}
+
+	is_triggered_only = yes
+
+	#refuse to get rid of cats
+	option = {
+		name = EVTOPTA_RIP_13007
+		trigger = {
+			NOT = { owes_favor_to = FROM }
+		}
+		ai_chance = {
+			factor = 100
+		}
+		custom_tooltip = {
+			text = EVTOPTA_RIP_13007_TOOLTIP
+			hidden_tooltip = {
+				FROM = { character_event = { id = RIP.13004 } }
+			}
+		}
+	}
+
+	#get rid of your beloved cats
+	option = {
+		name = EVTOPTB_RIP_13007
+		ai_chance = {
+			factor = 0
+		}
+		prestige = -200
+	}
+}
+
+#liege does not agree with keeping cats
+character_event = {
+	id = RIP.13008
+	picture = GFX_evt_suspicious_noble
+	desc = EVTDESC_RIP_13008
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#had to get rid of cats
+	option = {
+		name = EVTOPTA_RIP_13008
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_hate
+				years = 5
+			}
+		}
+	}
+}
+
+#liege made an exception
+character_event = {
+	id = RIP.13009
+	picture = GFX_evt_courtiers_talking
+	desc = EVTDESC_RIP_13009
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#hurrah!
+	option = {
+		name = EVTOPTA_RIP_13009
+		tooltip = {
+			reverse_add_favor = FROM
+		}
+	}
+}
+
+#talk about cats has calmed down
+character_event = {
+	id = RIP.13010
+	picture = GFX_evt_market
+	desc = EVTDESC_RIP_13010
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#Finally
+	option = {
+		name = EVTOPTA_RIP_13009
+	}
+}
+
+#angry mob escalated
+character_event = {
+	id = RIP.13011
+	picture = GFX_evt_peasants
+	desc = EVTDESC_RIP_13011
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#meet demands
+	option = {
+		name = EVTOPTA_RIP_13011
+		scaled_wealth = -1
+		if = {
+			limit = {
+				has_character_modifier = pet_cat
+			}
+			remove_character_modifier = pet_cat
+		}
+		capital_scope = {
+			if = {
+				limit = {
+					NOT = {
+						has_province_modifier = no_more_cats
+					}
+				}
+			}
+			add_province_modifier = {
+				name = no_more_cats
+				years = 10
+			}
+			if = {
+				limit = {
+					has_province_modifier = epidemic_blame_1
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+			if = {
+				limit = {
+					has_province_modifier = epidemic_blame_2
+				}
+				remove_province_modifier = epidemic_blame_2
+			}
+		}
+	}
+
+	#ignore demands
+	option = {
+		name = EVTOPTB_RIP_13011
+		capital_scope = {
+			add_province_modifier = {
+				name = epidemic_blame_2
+				years = 10
+			}
+			if = {
+				limit = {
+					has_province_modifier = epidemic_blame_1
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+		}
+	}
+}
+
+
+# also weather/earthquakes if time
+# Europeans targeted "various groups such as Jews, friars, foreigners, beggars, pilgrims",lepers, and Romani
+# religious head can chip in to support or condemn the persecutions 
+# blaming jews nets you some cash, but of course all jews leave.
+# protecting jews makes the population madder and perhaps some riots break out meaning you must punish people
+
+
+character_event = { #blame game starts
+	id = RIP.13400
+	picture = GFX_evt_impalement
+	border = GFX_event_normal_frame_religion
+	desc = RIP.13400.d
+	
+	is_triggered_only = yes #Should not fired for Jewish rulers or rulers with Jewish provinces in their realm, or for those who have expelled Jews already
+	
+	immediate = {
+		
+	}	
+
+	option = {
+		name = RIP.13400.a
+		any_realm_province = {
+			limit = {
+				owner = { character = ROOT }
+			}
+			add_province_modifier = {
+				name = epidemic_blame_1
+				duration = 3650
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					rightful_religious_head_scope = { 
+						always = yes
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				rightful_religious_head_scope = {
+					character_event = {	id = RIP.13401 days = 30 }
+				}
+			}
+		}
+		character_event = {	id = RIP.13402 days = 60 }
+	}
+
+	option = {
+		name = RIP.13400.b
+		#who cares?
+		any_realm_province = {
+			limit = {
+				owner = { character = ROOT }
+			}
+			add_province_modifier = {
+				name = epidemic_blame_2
+				duration = 3650
+			}
+		}
+	}
+}
+
+#character_event = { #Bonus if time: if you are jewish, blame infidels? 
+#	id = RIP.13450
+#	picture = GFX_evt_garden
+#	border = GFX_event_normal_frame_religion
+#	desc = RIP.13450.d 
+#	
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#		
+#	}	
+#
+#	option = {
+#		name = RIP.13402.a
+#		#yeah, infidels are to blame
+#	}
+#
+#	option = {
+#		name = RIP.13402.b
+#		#leave off the infidels
+#	}
+#}
+
+character_event = { #head of religion chimes in. could be player.
+	id = RIP.13401
+	picture = GFX_evt_end_of_days
+	border = GFX_event_normal_frame_religion
+	desc = RIP.13401.d
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		
+	}	
+
+	option = {
+		name = RIP.13401.a
+		#leave off the jews
+		FROM = {
+			letter_event = { id = RIP.13404 }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				OR = {
+					trait = zealous
+					trait = cynical
+				}
+			}
+			modifier = {
+				factor = 10
+				OR = {
+					religion = jewish
+					trait = sympathy_judaism
+				}
+			}
+			modifier = {
+				factor = 2
+				is_virtous = yes
+			}
+		}			
+	}
+
+	option = {
+		name = RIP.13401.b
+		#yeah, jews are to blame
+		trigger = {
+			NOR = {
+				religion = jewish
+				trait = sympathy_judaism
+			}
+		}
+		FROM = {
+			letter_event = { id = RIP.13405 }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				is_wicked = yes
+			}
+		}
+	}
+}
+
+letter_event = { #don't blame jews
+	id = RIP.13404
+	border = GFX_event_letter_frame_religion
+	desc = RIP.13404.d # 
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		
+	}	
+
+	option = {
+		name = OK
+		set_character_flag = religion_head_says_stop
+	}
+
+}
+
+letter_event = { #blame jews
+	id = RIP.13405
+	border = GFX_event_letter_frame_religion
+	desc = RIP.13405.d # 
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		
+	}	
+
+	option = {
+		name = OK
+		#yeah, jews are to blame
+		set_character_flag = religion_head_says_go
+	}
+
+}
+
+character_event = { #you decide what to do
+	id = RIP.13402
+	picture = GFX_evt_suspicious_noble
+	border = GFX_event_normal_frame_religion
+	#desc = RIP.13402.d # change desc based on religion head stance
+	
+	desc = {
+		picture = GFX_evt_suspicious_noble
+		text = RIP.13402.d1
+		trigger = { has_character_flag = religion_head_says_stop }
+	}
+	desc = {
+		picture = GFX_evt_suspicious_noble
+		text = RIP.13402.d2
+		trigger = { has_character_flag = religion_head_says_go }
+	}
+	desc = {
+		picture = GFX_evt_suspicious_noble
+		text = RIP.13402.d3
+		trigger = {
+			NOR = { 
+				has_character_flag = religion_head_says_stop 
+				has_character_flag = religion_head_says_go
+			} 
+		}
+	}
+	
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		
+	}	
+
+	option = {
+		name = RIP.13402.a
+		#leave off the jews
+		character_event = { id = RIP.13403 days = 30 }
+		clr_character_flag = religion_head_says_stop
+		clr_character_flag = religion_head_says_go
+		
+	}
+
+	option = {
+		name = RIP.13402.b
+		#yeah, jews are to blame
+		clr_character_flag = religion_head_says_stop
+		clr_character_flag = religion_head_says_go
+		any_realm_province = {
+				limit = {
+					owner = { character = ROOT }
+				}
+				remove_province_modifier = epidemic_blame_1
+		}
+		prestige = -100
+			scaled_wealth = 2
+			banish_religion = jewish
+			if = {
+				limit = { trait = sympathy_judaism }
+				remove_trait = sympathy_judaism
+			}
+			if = {
+				limit = {
+					NOT = { trait = arbitrary }
+					has_character_modifier = borrowed_from_jews
+				}
+				add_trait = arbitrary
+			}
+			if = {
+				limit = { has_character_modifier = borrowed_from_jews }
+				remove_character_modifier = borrowed_from_jews
+			}
+			add_character_modifier = {
+				name = expelled_jewish
+				duration = -1
+				inherit = yes
+			}
+			custom_tooltip = {
+				text = jews_are_expelled
+			}
+			hidden_tooltip = {
+				character_event = { id = SoA.105 }
+				add_character_modifier = {
+					name = expelled_jews_timer
+					duration = 7300
+					hidden = yes
+				}
+			}
+			any_friend = {
+				limit = { religion_group = jewish_group }
+				remove_friend = ROOT
+			}
+	}
+}
+
+character_event = { #if you keep jews, stuff happens
+	id = RIP.13403
+	picture = GFX_evt_impalement
+	border = GFX_event_normal_frame_religion
+	#desc = RIP.13403.d #trigger this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				any_demesne_province = {
+					owner = { character = ROOT }
+					NOT = { has_province_flag = pogrom_target }
+					any_province_holding = {
+						holding_type = city
+						
+					}
+				}
+			}			
+			random_demesne_province = {
+				limit = {
+					owner = { character = ROOT }
+					NOT = { has_province_flag = pogrom_target }
+					any_province_holding = {
+						holding_type = city
+					}
+				}
+				random_province_holding = {
+					limit = {
+						holding_type = city
+					}
+				save_event_target_as = pogrom_city_target
+				}
+				set_province_flag = pogrom_target
+				save_event_target_as = pogrom_province_target
+			}
+			set_character_flag = pogrom_target_selected
+		}		
+	}
+
+	desc = {
+		picture = GFX_end_of_days
+		text = RIP.13403.d1
+		trigger = { has_character_flag = pogrom_target_selected }
+	}
+	desc = {
+		picture = GFX_evt_end_of_days
+		text = RIP.13403.d2
+		trigger = { NOT = { has_character_flag = pogrom_target_selected } }
+	}
+
+	option = {
+		name = RIP.13403.a
+		event_target:pogrom_province_target = {
+			remove_province_modifier = epidemic_blame_1
+			add_province_modifier = {
+				name = epidemic_blame_2
+				duration = 3650
+			}
+		}
+		clr_character_flag = pogrom_target_selected
+		clear_event_target = pogrom_city_target
+	}
+
+	option = {
+		name = RIP.13403.b
+		prestige = -100
+		clr_character_flag = pogrom_target_selected
+		clear_event_target = pogrom_city_target
+	}
+}
+
+###BLAME GAME: Witch hunt###
+character_event = {
+	id = RIP.13198
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		job_spiritual = { character_event = { id = RIP.13199 } }
+	}
+}
+character_event = {
+	id = RIP.13199
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		FROM = { character_event = { id = RIP.13200 } }
+	}
+}
+
+character_event = {
+	id = RIP.13200
+	desc = EVTDSC_RIP_13200
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_witch_burning
+
+	is_triggered_only = yes
+
+	immediate = {
+		save_event_target_as = bg_witch_hunter
+	}
+
+	#Witch hunt
+	option = {
+		name = EVTOPTA_RIP_13200
+
+		custom_tooltip = { text = EVTOPTA_RIP_13200_TOOLTIP }
+
+
+		hidden_tooltip = { 
+			character_event = { id = RIP.13201 days = 30 } 
+			character_event = { id = RIP.13229 days = 300 } #The judgment
+			set_character_flag = bg_witch_hunt
+			set_variable = { which = bg_imprisoned_witches value = 0 }
+		}
+		reverse_opinion = {
+			modifier = opinion_took_my_advice
+			who = FROM
+		}
+		
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_unrest
+					duration = 3650
+				}
+			}
+		}
+	}
+	#Hah! There is not such thing as witches
+	option = {
+		name = EVTOPTC_RIP_13200
+		custom_tooltip = { text = EVTOPTC_RIP_13200_TOOLTIP }
+		reverse_opinion = {
+			modifier = opinion_did_not_take_my_advice
+			who = FROM
+		}
+		
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_crisis
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+#Witch hunt
+character_event = {
+	id = RIP.13201
+	desc = EVTDSC_RIP_13201
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_tooltip = { character_event = { id = RIP.13220 } }
+	}
+
+	#Find the most likely witch
+	option = {
+		trigger = { job_spiritual = { always = yes } }
+		name = EVTOPTA_RIP_13201
+		custom_tooltip = { text = EVTOPTA_RIP_13201_TOOLTIP }
+		hidden_tooltip = { job_spiritual = { character_event = { id = RIP.13202 days = 100 random = 40 } } }
+	}
+
+	#Let them make suggestions
+	option = {
+		name = EVTOPTB_RIP_13201
+		custom_tooltip = { text = EVTOPTB_RIP_13201_TOOLTIP }
+		hidden_tooltip = { character_event = { id = RIP.13206 days = 80 random = 40 } } 
+		
+	}
+
+	#You know just the guy...
+	option = {
+		trigger = {
+			any_courtier = {
+				OR = {
+					is_rival = ROOT
+					NOT = { reverse_opinion = { who = FROM value = 0 } }
+				}
+			}
+			NOT = { trait = honest }
+		}
+		name = EVTOPTC_RIP_13201
+		custom_tooltip = { text = EVTOPTC_RIP_13201_TOOLTIP }
+		hidden_tooltip = { character_event = { id = RIP.13208 days = 50 random = 30 } }
+	}
+
+	#Nah
+	option = {
+		name = EVTOPTD_RIP_13201
+		custom_tooltip = { text = EVTOPTD_RIP_13201_TOOLTIP }
+	}
+}
+
+#Let them make suggestions
+character_event = {
+	id = RIP.13206
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		random_list = {
+			#2 rivals accuse each other
+			50 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						any_courtier = {
+							is_adult = yes
+							prisoner = no
+							NOT = { has_character_flag = bg_accused_witch }
+						}
+					}
+				}
+				random_courtier = {
+					limit = {
+						is_adult = yes
+						prisoner = no
+						ai = yes
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_rival_1
+					set_character_flag = bg_accused_witch
+				}
+				random_courtier = {
+					limit = {
+						is_adult = yes
+						prisoner = no
+						ai = yes
+						NOT = { character = event_target:bg_rival_1 }
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_rival_2
+					set_character_flag = bg_accused_witch
+					add_rival = event_target:bg_rival_1
+				}
+				
+				character_event = { id = RIP.13204 }
+			}
+			50 = {
+				modifier = {
+					factor = 0
+					any_courtier = {
+						NOT = {
+							has_lover = no
+							is_married = yes
+							is_adult = yes
+							NOT = { trait = homosexual }
+							any_spouse = { 
+								NOT = { character = ROOT }
+								ai = yes
+								NOT = { has_character_flag = bg_accused_witch }
+							}
+
+						}
+					}
+				}
+				random_courtier = {
+					limit = {
+						has_lover = no
+						is_married = yes
+						is_adult = yes
+						any_spouse = { 
+							NOT = { character = ROOT }
+							ai = yes
+							NOT = { has_character_flag = bg_accused_witch }
+						}
+					}
+					save_event_target_as = bg_lover
+					random_spouse = { 
+						save_event_target_as = bg_spouse
+						set_character_flag = bg_accused_witch 
+					}
+				}
+
+				if = {
+					limit = { event_target:bg_lover = { prefers_men_trigger = yes } }
+					create_character = {
+						female = no
+						random_traits = yes
+						dynasty = random
+					}
+				}
+				if = {
+					limit = { event_target:bg_lover = { prefers_men_trigger = no } }
+					create_character = {
+						female = yes
+						random_traits = yes
+						dynasty = random
+					}
+				}
+				new_character = {
+					remove_trait = chaste
+					remove_trait = kind
+					add_trait = lustful
+					add_trait = envious
+
+					save_event_target_as = bg_jealous_lover
+					add_lover = event_target:bg_lover
+					character_event = { id = RIP.13205 }
+				}
+			}
+		}
+	}
+}
+
+#Ping for find the most likely
+character_event = {
+	id = RIP.13202
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		prisoner = no
+	}
+
+	#Find the most likely witch
+	option = {
+		#Gives someone else the ability to blame
+		if = {
+			limit = {
+				NOT = { has_job_title = job_spiritual }
+				event_target:bg_witch_hunter = { has_character_flag = bg_witch_hunt }
+			}
+			event_target:bg_witch_hunter = { character_event = { id = RIP.13220 } }
+		}
+
+		event_target:bg_witch_hunter = {
+			#Blames rival
+			if = {
+				limit = {
+					any_courtier = {
+						NOT = { is_liege_or_above = ROOT }
+						is_rival = ROOT
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+				}
+				random_courtier = {
+					limit = { 
+						NOT = { is_liege_or_above = ROOT }
+						is_rival = ROOT
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_likely_witch
+					set_character_flag = bg_accused_witch
+
+					random_list = {
+						10 = { set_character_flag = bg_crazy }
+						10 = { set_character_flag = bg_sinful }
+						10 = { set_character_flag = bg_infidel }
+					}
+				}
+				event_target:bg_witch_hunter = { character_event = { id = RIP.13203 } }
+				break = yes
+			}
+			#Witch is possessed/lunatic
+			if = {
+				limit = {
+					any_courtier = {
+						NOT = { is_liege_or_above = ROOT }
+						OR = {
+							trait = possessed
+							trait = lunatic
+						}
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+				}
+				random_courtier = {
+					limit = {
+						NOT = { is_liege_or_above = ROOT }
+						OR = {
+							trait = possessed
+							trait = lunatic
+						}
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_likely_witch
+					set_character_flag = bg_accused_witch
+					set_character_flag = bg_crazy
+				}
+
+				event_target:bg_witch_hunter = { character_event = { id = RIP.13203 } }
+				break = yes
+			}
+			#Witch is of different religion/is mystic
+			if = {
+				limit = { 
+					any_courtier = {
+						NOT = { is_liege_or_above = ROOT }
+						OR = {
+							NOT = { religion = FROM }
+							trait = mystic
+						}
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+				}
+				random_courtier = {
+					limit = {
+						NOT = { is_liege_or_above = ROOT }
+						OR = {
+							NOT = { religion = FROM }
+							trait = mystic
+						}
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_likely_witch
+					set_character_flag = bg_accused_witch
+					set_character_flag = bg_infidel
+				}
+				event_target:bg_witch_hunter = { character_event = { id = RIP.13203 } }
+				break = yes
+			}
+			#Witch is sinful 
+			if = {
+				limit = {
+					any_courtier = {
+						NOT = { is_liege_or_above = ROOT }
+						is_wicked = yes
+						prisoner = no
+						is_adult = yes
+						NOT = { has_character_flag = bg_accused_witch }
+					} 
+				} 
+				random_courtier = {
+					limit = { 
+						NOT = { is_liege_or_above = ROOT }
+						is_wicked = yes 
+						prisoner = no
+						is_adult = yes
+						NOT = { has_character_flag = bg_accused_witch }
+					} 
+					save_event_target_as = bg_likely_witch
+					set_character_flag = bg_accused_witch
+					set_character_flag = bg_sinful
+				}
+				event_target:bg_witch_hunter = { character_event = { id = RIP.13203 } }
+				break = yes
+			}
+			#Backup case
+			if = {
+				limit = {
+					any_courtier = {
+						NOT = { is_liege_or_above = ROOT }
+						is_adult = yes 
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+				}
+
+				random_courtier = { 
+					limit = { 
+						NOT = { is_liege_or_above = ROOT }
+						is_adult = yes 
+						prisoner = no
+						NOT = { has_character_flag = bg_accused_witch }
+					}
+					save_event_target_as = bg_likely_witch
+					set_character_flag = bg_accused_witch
+					random_list = {
+						10 = { set_character_flag = bg_crazy } 
+						10 = { set_character_flag = bg_sinful } 
+						10 = { set_character_flag = bg_infidel } 
+					}
+				}
+
+				event_target:bg_witch_hunter = { character_event = { id = RIP.13203 } }
+			}
+		}
+	}
+}
+
+#Presenting most likely witch 
+character_event = {
+	id = RIP.13203
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_suspicious_noble
+
+	desc = {
+		text = EVTDSC_RIP_13203_crazy_spiritual
+		trigger = {
+			FROM = { has_job_title = job_spiritual }
+			event_target:bg_likely_witch = { has_character_flag = bg_crazy }
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_13203_sinful_spiritual
+		trigger = {
+			FROM = { has_job_title = job_spiritual }
+			event_target:bg_likely_witch = { has_character_flag = bg_sinful }
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_13203_infidel_spiritual
+		trigger = {
+			FROM = { has_job_title = job_spiritual }
+			event_target:bg_likely_witch = { has_character_flag = bg_infidel }
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_13203_crazy_courtier
+		trigger = {
+			FROM = { NOT = { has_job_title = job_spiritual } }
+			event_target:bg_likely_witch = { has_character_flag = bg_crazy }
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_13203_sinful_courtier
+		trigger = {
+			FROM = { NOT = { has_job_title = job_spiritual } }
+			event_target:bg_likely_witch = { has_character_flag = bg_sinful }
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_13203_infidel_courtier
+		trigger = {
+			FROM = { NOT = { has_job_title = job_spiritual } }
+			event_target:bg_likely_witch = { has_character_flag = bg_infidel }
+		}
+	}
+	
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:bg_witch_hunter = { has_character_flag = bg_witch_hunt }
+		FROM = { prisoner = no }
+	}
+
+	#Imprison the likely witch
+	option = {
+		name = EVTOPTA_RIP_13203
+		custom_tooltip = { text = EVTOPTA_RIP_13203_TOOLTIP }
+
+		reverse_opinion = {
+			modifier = opinion_took_my_advice
+			who = FROM
+		}
+
+		event_target:bg_likely_witch = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+
+	#No 
+	option = {
+		name = EVTOPTB_RIP_13203
+		custom_tooltip = { text = EVTOPTB_RIP_13203_TOOLTIP }
+
+		reverse_opinion = {
+			modifier = opinion_did_not_take_my_advice
+			who = FROM
+		}
+	}
+}
+
+#2 rivals accuse each other
+character_event = {
+	id = RIP.13204
+	desc = EVTDSC_RIP_13204
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_suspicious_noble
+
+	is_triggered_only = yes
+
+	#Imprison rival 1
+	option = {
+		name = EVTOPTA_RIP_13204
+		custom_tooltip = { text = EVTOPTA_RIP_13204_TOOLTIP }
+		event_target:bg_rival_1 = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		event_target:bg_rival_2 = {
+			reverse_opinion = {
+				modifier = opinion_took_my_advice
+				who = FROM
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	#Imprison rival 2
+	option = {
+		name = EVTOPTB_RIP_13204
+		custom_tooltip = { text = EVTOPTB_RIP_13204_TOOLTIP }
+		event_target:bg_rival_2 = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 30
+				}
+			}
+		}
+
+		event_target:bg_rival_1 = {
+			reverse_opinion = {
+				modifier = opinion_took_my_advice
+				who = FROM
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	#Imprison both
+	option = {
+		name = EVTOPTC_RIP_13204
+		custom_tooltip = { text = EVTOPTC_RIP_13204_TOOLTIP }
+
+		event_target:bg_rival_1 = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+		}
+		event_target:bg_rival_2 = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 2 } }
+	}
+	#No 
+	option = {
+		name = EVTOPTD_RIP_13204
+		custom_tooltip = { text = EVTOPTD_RIP_13204_TOOLTIP }
+
+		event_target:bg_rival_1 = {
+			opinion = {
+				modifier = opinion_did_not_take_my_advice
+				who = ROOT
+			}
+		}
+		event_target:bg_rival_2 = {
+			opinion = {
+				modifier = opinion_did_not_take_my_advice
+				who = ROOT
+			}
+		}
+	}
+}
+
+#ping event jealous lover
+character_event = {
+	id = RIP.13205
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { character_event = { id = RIP.13207 } }	
+	}
+}
+
+#Jealous lover accuses other's spouse
+character_event = {
+	id = RIP.13207
+	desc = EVTDSC_RIP_13207
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_13207
+		custom_tooltip = { text = EVTOPTA_RIP_13207_TOOLTIP }
+		event_target:bg_spouse = { 
+			imprison = ROOT 
+			set_character_flag = bg_imprisoned_as_witch
+		}
+
+		reverse_opinion = {
+			modifier = opinion_took_my_advice
+			who = FROM
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	#No 
+	option = {
+		name = EVTOPTB_RIP_13207
+		custom_tooltip = { text = EVTOPTB_RIP_13207_TOOLTIP }
+
+		reverse_opinion = {
+			modifier = opinion_did_not_take_my_advice
+			who = FROM
+		}
+	}
+}
+
+#Decide who you want to blame
+character_event = {
+	id = RIP.13208
+	desc = EVTDSC_RIP_13208
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_suspicious_noble
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_courtier = {
+			limit = {
+				OR = {
+					is_rival = ROOT
+					NOT = { reverse_opinion = { who = FROM value = 0 } }
+				}
+				prisoner = no
+			}
+			save_event_target_as = bg_dislike_1
+		}
+		random_courtier = {
+			limit = {
+				OR = {
+					is_rival = ROOT
+					NOT = { reverse_opinion = { who = FROM value = 0 } }
+				}
+				prisoner = no
+				NOT = { character = event_target:bg_dislike_1 }
+			}
+			save_event_target_as = bg_dislike_2
+		}
+		random_courtier = {
+			limit = {
+				OR = {
+					is_rival = ROOT
+					NOT = { reverse_opinion = { who = FROM value = 0 } }
+				}
+				prisoner = no
+				NOT = { character = event_target:bg_dislike_1 }
+				NOT = { character = event_target:bg_dislike_2 }
+			}
+			save_event_target_as = bg_dislike_3
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_13208
+		custom_tooltip = { text = EVTOPTA_RIP_13208_TOOLTIP }
+		event_target:bg_dislike_1 = { 
+			imprison = yes 
+			set_character_flag = bg_imprisoned_as_witch
+			set_character_flag = bg_accused_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	option = {
+		trigger = { event_target:bg_dislike_2  = { always = yes } }
+		name = EVTOPTB_RIP_13208
+		custom_tooltip = { text = EVTOPTB_RIP_13208_TOOLTIP }
+		event_target:bg_dislike_2 = { 
+			imprison = yes 
+			set_character_flag = bg_imprisoned_as_witch
+			set_character_flag = bg_accused_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	option = {
+		trigger = { event_target:bg_dislike_3  = { always = yes } }
+		name = EVTOPTC_RIP_13208
+		custom_tooltip = { text = EVTOPTC_RIP_13208_TOOLTIP }
+		event_target:bg_dislike_3 = { 
+			imprison = yes
+			set_character_flag = bg_imprisoned_as_witch
+			set_character_flag = bg_accused_witch
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				add_province_modifier = {
+					name = peasant_pleased_witch_hunt
+					duration = 60
+				}
+			}
+		}
+
+		hidden_tooltip = { change_variable = { which = bg_imprisoned_witches value = 1 } } 
+	}
+	#Nah 
+	option = {
+		name = EVTOPTD_RIP_13208
+	}
+}
+
+
+#Random character might get to point out someone
+character_event = {
+	id = RIP.13220
+	desc = EVTDSC_RIP_13220
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		random_courtier = {
+			limit = {
+				prisoner = no
+				NOT = { has_job_title = job_spiritual }
+				age = 12
+			}
+			character_event = { id = RIP.13202 days = 50 random = 60 }
+		}
+	}
+}
+
+#Evaluate, did you suceed in your witch hunt
+character_event = {
+	id = RIP.13229
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		clr_character_flag = bg_witch_hunt
+		if = {
+			limit = { check_variable = { which = bg_imprisoned_witches value = 1 } }
+			character_event = { id = RIP.13230 }
+		}
+		if = {
+			limit = { NOT = { check_variable = { which = bg_imprisoned_witches value = 1 } } }
+			character_event = { id = RIP.13233 }
+		}
+
+		any_courtier = {
+			clr_character_flag = bg_accused_witch
+		}
+	}
+}
+
+#What to do with the imprisoned witches?
+character_event = {
+	id = RIP.13230
+	desc = EVTDSC_RIP_13230
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_witch_burning
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = { 
+			#Close family member is killed
+			10 = {
+				modifier = {
+					factor = 2
+					check_variable = { which = bg_imprisoned_witches value = 2 }
+				}
+				modifier = {
+					factor = 2
+					check_variable = { which = bg_imprisoned_witches value = 4 }
+				}
+				modifier = {
+					factor = 2
+					check_variable = { which = bg_imprisoned_witches value = 6 }
+				}
+				modifier = {
+					factor = 0
+					NOR = {
+						is_married = yes
+						any_child = { 
+							at_location = ROOT
+							age = 4
+						}
+						any_sibling = { at_location = ROOT }
+						mother = { at_location = ROOT }
+					}
+				}
+				character_event = { id = RIP.13231 days = 20 random = 30 }
+			}
+			60 = {
+				character_event = { id = RIP.13232 days = 20 random = 30 }
+			}
+		}
+	}
+
+	#Burn them!
+	option = {
+		name = EVTOPTA_RIP_13230
+		
+		custom_tooltip = { text = EVTOPTA_RIP_13230_TOOLTIP }
+
+		any_courtier = {
+			limit = { has_character_flag = bg_imprisoned_as_witch }
+			death = { death_reason = death_execution_burning killer = ROOT }
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = { OWNER = { character = ROOT } }
+				remove_province_modifier = peasant_unrest 
+			}
+		}
+	}
+	#Let them rot 
+	option = {
+		name = EVTOPTB_RIP_13230
+		custom_tooltip = { text = EVTOPTB_RIP_13230_TOOLTIP }
+		
+	}
+	#Let the priest deal with them
+	option = {
+		name = EVTOPTC_RIP_13230
+		any_courtier = {
+			limit = { has_character_flag = bg_imprisoned_as_witch }
+			prisoner = no
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 10
+			}
+			add_character_modifier = {
+				name = renewed_faith
+				duration = 120
+			}
+		}
+	}
+}
+
+#Family member to be killed is chosen
+character_event = {
+	id = RIP.13231
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = { is_married = yes }
+			random_spouse = { save_event_target_as = bg_relative_witch } 
+			break = yes
+		}
+		if = {
+			limit = { any_child = { at_location = ROOT } }
+			random_child = {
+				limit = { 
+					at_location = ROOT 
+					age = 4
+				} 
+				save_event_target_as = bg_relative_witch 
+			} 
+			break = yes
+		}
+		if = {
+			limit = { mother = { at_location = ROOT } }
+			random_child = {
+				limit = { at_location = ROOT } 
+				save_event_target_as = bg_relative_witch 
+			} 
+			break = yes
+		}
+		if = {
+			limit = { any_sibling = { at_location = ROOT } }
+			random_sibling = {
+				limit = { at_location = ROOT } 
+				save_event_target_as = bg_relative_witch 
+			} 
+			break = yes
+		}
+	}
+
+	option = {
+		event_target:bg_relative_witch = { character_event = { id = RIP.13234 } }
+	}	
+}
+
+#Family member getting killed is pinged
+character_event = {
+	id = RIP.13234
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { character_event = { id = RIP.13235 } }
+	}
+}
+
+#Family member found dead
+character_event = {
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_death
+	id = RIP.13235
+
+	desc = {
+		text = EVTDSC_RIP_13235_A
+		trigger = { check_variable = { which = bg_imprisoned_witches value = 1 } }
+	}
+	desc = {
+		text = EVTDSC_RIP_13235_B
+		trigger = { NOT = { check_variable = { which = bg_imprisoned_witches value = 1 } } }
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_13235
+		custom_tooltip = { text = EVTOPTA_RIP_13235_TOOLTIP }
+		event_target:bg_relative_witch = { death = { death_reason = death_murder } }
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed
+		}
+	}
+}
+
+#All is fine and dandy
+character_event = {
+	id = RIP.13232
+	desc = EVTDSC_RIP_13232
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_bishop
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_13232
+
+	}
+}
+
+#You found no witch
+character_event = {
+	id = RIP.13233
+	desc = EVTDSC_RIP_13233
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_13233
+
+		hidden_tooltip = { 
+			random = {
+				chance = 30
+				modifier = {
+					factor = 0
+					NOR = {
+						is_married = yes
+						any_child = { 
+							at_location = ROOT
+							age = 4
+						}
+						any_sibling = { at_location = ROOT }
+						mother = { at_location = ROOT }
+					}
+				}
+				character_event = { id = RIP.13231 days = 20 random = 30 }
+			}
+		}
+	}
+}
+
+
+
+
+##BLAME GAME: Bad Hindu - there is unrest and you're to blame
+character_event = {
+	id = RIP.13500
+	picture = GFX_evt_plague_spreading
+	desc = EVTDESC_RIP_13500
+	border = GFX_event_normal_frame_religion
+	
+	religion_group = indian_group
+
+	is_triggered_only = yes
+
+	trigger = {
+		job_spymaster = {
+			always = yes
+			ai = yes
+		}
+		NOT = {
+			capital_holding = {
+				holding_type = temple
+			}
+		}
+	}
+
+	hide_from = yes
+
+	immediate = {
+		job_spymaster = {
+			save_event_target_as = hindu_spymaster
+		}
+
+		any_realm_province = {
+			limit = {
+				owner = {
+					character = ROOT
+				}
+			}
+			add_province_modifier = {
+				name = "epidemic_blame_1"
+				duration = 3650
+			}
+		}
+	}
+
+	#I will go to temple
+	option = {
+		name = EVTOPTA_RIP_13500
+		custom_tooltip = { text = EVTOPTA_RIP_13500_TOOLTIP }
+
+		if = {
+			limit = { trait = proud }
+			remove_trait = proud
+		}
+		
+		if = {
+			limit = { 
+				NOT = { trait = humble }
+				NOT = { trait = proud }
+			}
+			add_trait = humble
+		}
+
+		piety = 20
+
+		if = {
+			limit = { has_character_modifier = in_seclusion }
+			remove_character_modifier = in_seclusion
+		}
+
+		hidden_tooltip = {
+			character_event = { id = RIP.13501 days = 15 }
+		}
+	}
+	
+	#I will pretend to go to temple - INTRIGUE
+	option = {
+		name = EVTOPTB_RIP_13500
+		tooltip_info = intrigue
+		custom_tooltip = { text = EVTOPTB_RIP_13500_TOOLTIP }
+
+		scaled_wealth = -0.3
+
+		hidden_tooltip = {
+			character_event = { id = RIP.13502 days = 15 }
+		}
+
+		trigger = {
+			intrigue = 12
+			NOT = { trait = deceitful }
+		}
+	}
+
+	#I will pretend to go to temple - DECEITFUL
+	option = {
+		name = EVTOPTB_RIP_13500
+		tooltip_info = deceitful
+		custom_tooltip = { text = EVTOPTB_RIP_13500_TOOLTIP }
+
+		scaled_wealth = -0.3
+
+		hidden_tooltip = {
+			character_event = { id = RIP.13502 days = 15 }
+		}
+
+		trigger = {
+			trait = deceitful
+		}
+	}
+
+	#I'll build a temple!
+	option = {
+		name = EVTOPTC_RIP_13500
+		custom_tooltip = { text = EVTOPTC_RIP_13500_TOOLTIP }
+
+		scaled_wealth = -0.8
+
+		trigger = {
+			capital_scope = {
+				num_of_empty_holdings = 2			
+			}
+			NOT = { has_character_flag = in_seclusion }
+		}
+
+		hidden_tooltip = {
+			character_event = { id = RIP.13506 days = 15 }
+		}
+	}
+
+	#I do as I please!
+	option = {
+		name = EVTOPTD_RIP_13500
+		custom_tooltip = { text = EVTOPTD_RIP_13500_TOOLTIP }
+	}
+}
+
+#I start going to temple, all is well
+character_event = {
+	id = RIP.13501
+	picture = GFX_evt_hindu_temple_interior
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_13501_A
+		trigger = {	has_character_modifier = patron_shiva }
+	}
+	desc = {
+		text = EVTDESC_RIP_13501_B
+		trigger = {	has_character_modifier = patron_vishnu }
+	}
+	desc = {
+		text = EVTDESC_RIP_13501_C
+		trigger = {	has_character_modifier = patron_brahma }
+	}
+	desc = {
+		text = EVTDESC_RIP_13501_D
+		trigger = {	has_character_modifier = patron_kali }
+	}
+	desc = {
+		text = EVTDESC_RIP_13501_E
+		trigger = {	has_character_modifier = patron_ganesha }
+	}
+	desc = {
+		text = EVTDESC_RIP_13501_F
+		trigger = {	has_character_modifier = patron_ganga }
+	}
+
+	desc = {
+		text = EVTDESC_RIP_13501_G
+		trigger = {
+			NOR = {
+				has_character_modifier = patron_shiva
+				has_character_modifier = patron_vishnu
+				has_character_modifier = patron_brahma
+				has_character_modifier = patron_kali
+				has_character_modifier = patron_ganesha
+				has_character_modifier = patron_ganga
+			}
+		}
+	}
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_13501
+		
+		if = {
+			limit = { NOT = { has_character_modifier = devoted_worshiper } }
+			add_character_modifier = {
+				name = devoted_worshiper
+				duration = 365
+			}
+		}
+
+		hidden_tooltip = {
+			character_event = { id = RIP.13503 days = 65 random = 10 }
+		}
+	}
+}
+
+#pretend to go to temple
+character_event = {
+	id = RIP.13502
+	picture = GFX_evt_hindu_temple_interior
+	desc = EVTDESC_RIP_13502
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	#Keep up the ruse!
+	option = {
+		name = EVTOPTA_RIP_13502
+		custom_tooltip = { text = EVTOPTA_RIP_13502_TOOLTIP }
+		if = {
+			limit = { NOT = { has_character_modifier = fake_worshiper } }
+			add_character_modifier = {
+				name = fake_worshiper
+				duration = 356
+			}
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				#Peasants are fooled
+				50 = {
+					modifier = {
+						factor = 1.1
+						intrigue = 10
+					}
+					modifier = {
+						factor = 1.1
+						intrigue = 12
+					}
+					modifier = {
+						factor = 1.1
+						intrigue = 15
+					}
+					modifier = {
+						factor = 1.1
+						intrigue = 17
+					}
+					modifier = {
+						factor = 1.1
+						intrigue = 20
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							intrigue = 10
+						}
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							intrigue = 12
+						}
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							intrigue = 15
+						}
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							intrigue = 17
+						}
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							intrigue = 20
+						}
+					}
+
+					character_event = { id = RIP.13505 days = 50 }
+				}
+
+				#Peasants see through the ruse
+				50 = {
+					modifier = {
+						factor = 1.5
+						NOT = { intrigue = 10 }
+					}
+					modifier = {
+						factor = 1.1
+						event_target:hindu_spymaster = {
+							trait = deceitful
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:hindu_spymaster = {
+							trait = deceitful
+							NOT = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:hindu_spymaster = {
+							is_dumb_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:hindu_spymaster = {
+							NOT = { intrigue = 6 }
+						}
+					}
+					character_event = { id = RIP.13504 days = 70 }
+				}
+			}
+		}
+
+	}
+	#I should stop this
+	option = {
+		name = EVTOPTB_RIP_13502
+		custom_tooltip = { text = EVTOPTB_RIP_13502_TOOLTIP }
+		if = {
+			limit = { NOT = { has_character_modifier = fake_worshiper_felt_guilty } }
+			add_character_modifier = {
+				name = fake_worshiper_felt_guilty
+				duration = 356
+			}
+		}
+	}
+}
+
+#positive extra effects from going to temple
+character_event = {
+	id = RIP.13503
+	picture = GFX_evt_india_temple
+	desc = EVTDESC_RIP_13503
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+	hide_new = yes
+
+	trigger = {
+		is_wicked = no
+	}
+
+	immediate = {
+		random_list = {
+			50 = {
+				create_character = {
+					female = yes
+					age = 12
+					random_traits = yes
+					dynasty = NONE
+				}
+			}
+			50 = {
+				create_character = {
+					age = 12
+					random_traits = yes
+					dynasty = NONE
+				}
+			}
+		}
+		new_character = {
+			remove_trait = slothful
+			remove_trait = idolizer
+			remove_trait = dwarf
+			remove_trait = harelip
+			remove_trait = hunchback
+			remove_trait = imbecile
+			remove_trait = slow
+			remove_trait = stutter
+			remove_trait = cruel
+			add_trait = quick
+			add_trait = zealous
+			save_event_target_as = zealous_child
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+				years = 100
+			}
+		}
+	}
+
+
+	#I want the servant!
+	option = {
+		name = EVTOPTA_RIP_13503
+		custom_tooltip = { text = EVTOPTA_RIP_13503_TOOLTIP }
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+		}
+	}
+
+	#They should stay with their family
+	option = {
+		name = EVTOPTB_RIP_13503
+		custom_tooltip = { text = EVTOPTB_RIP_13503_TOOLTIP }
+		
+		treasury = -20
+
+		if = { 
+			limit = { NOT = { has_nickname = nick_the_wise } } 
+			give_nickname = nick_the_wise
+		}
+
+		if = { 
+			limit = { 
+				NOT = { 
+					trait = kind 
+					trait = cruel
+				}
+			}
+			add_trait = kind
+		}
+
+		if = { 
+			limit = { 
+				trait = cruel
+			}
+			remove_trait = cruel
+		}
+
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+			event_target:zealous_child = {
+				leave_court_effect = yes
+			}
+		}
+	}
+}
+
+#Peasants see through the ruse
+character_event = {
+	id = RIP.13504
+	picture = GFX_evt_end_of_days
+	desc = EVTDESC_RIP_13504
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#Filthy peasants!
+	option = {
+		name = EVTOPTA_RIP_13504
+		custom_tooltip = { text = EVTOPTA_RIP_13504_TOOLTIP }
+
+		add_character_modifier = {
+			name = failed_temple_ruse
+			duration = 3650
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+				add_province_modifier = {
+					name = "epidemic_blame_2"
+					duration = 3650
+				}
+			}
+		}
+	}
+
+	#Fire spymaster
+	option = {
+		name = EVTOPTB_RIP_13504
+		custom_tooltip = { text = EVTOPTB_RIP_13504_TOOLTIP }
+
+		event_target:hindu_spymaster = {
+			remove_title = job_spymaster
+			opinion = {
+				modifier = opinion_fired_from_council
+				who = ROOT
+				years = 5
+			}
+		}
+
+		trigger = {
+			event_target:hindu_spymaster = {
+				has_job_title = job_spymaster
+				is_alive = yes
+			}
+		}
+	}
+}
+
+#Peasants remain fooled
+character_event = {
+	id = RIP.13505
+	picture = GFX_evt_india_temple
+	desc = EVTDESC_RIP_13505
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	#My skills of deception are awesome
+	option = {
+		name = EVTOPTA_RIP_13505
+		custom_tooltip = { text = EVTOPTA_RIP_13505_TOOLTIP }
+
+		change_intrigue = 1
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+		}
+	}
+
+	#Commend SPYMASTER
+	option = {
+		name = EVTOPTB_RIP_13505
+
+		custom_tooltip = { text = EVTOPTA_RIP_13505_TOOLTIP }
+
+		change_diplomacy = 1
+
+		event_target:hindu_spymaster = {
+			opinion = {
+				modifier = opinion_was_praised
+				who = ROOT
+				years = 5
+			}
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+		}
+
+		trigger = {
+			event_target:hindu_spymaster = {
+				has_job_title = job_spymaster
+				is_alive = yes
+			}
+		}
+	}
+}
+
+#Construct a temple - VANDALS APPEAR
+character_event = {
+	id = RIP.13506
+	picture = GFX_evt_child_bully
+	desc = EVTDESC_RIP_13506
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	immediate = {
+		create_character = {
+			female = yes
+			age = 9
+			random_traits = yes
+			dynasty = NONE
+		}
+		new_character = {
+			remove_trait = slothful
+			remove_trait = idolizer
+			remove_trait = dwarf
+			remove_trait = harelip
+			remove_trait = hunchback
+			remove_trait = imbecile
+			remove_trait = slow
+			remove_trait = ugly
+			remove_trait = weak
+			add_trait = twin
+			add_trait = genius
+			save_event_target_as = vagrant_child_1
+		}
+
+		create_character = {
+			age = 9
+			random_traits = yes
+			dynasty = NONE
+		}
+		new_character = {
+			remove_trait = slothful
+			remove_trait = idolizer
+			remove_trait = dwarf
+			remove_trait = harelip
+			remove_trait = hunchback
+			remove_trait = imbecile
+			remove_trait = slow
+			remove_trait = ugly
+			remove_trait = weak
+			add_trait = twin
+			add_trait = strong
+			save_event_target_as = vagrant_child_2
+		}
+	}
+
+	hide_new = yes
+	hide_from = yes
+
+	#Kill the vandals!
+	option = {
+		name = EVTOPTA_RIP_13506
+		custom_tooltip = { text = EVTOPTA_RIP_13506_TOOLTIP }
+
+		event_target:vagrant_child_1 = {
+			death = { death_reason = death_execution_beheading KILLER = FROM }
+		}
+		event_target:vagrant_child_2 = {
+			death = { death_reason = death_execution_beheading KILLER = FROM }
+		}
+
+		if = {
+			limit = {
+				NOT = { trait = cruel }
+			}
+			add_trait = cruel
+		}
+		if = {
+			limit = {
+				NOT = { trait = zealous }
+			}
+			add_trait = zealous
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+			}
+
+			random_list = {
+				#construction succeeds
+				60 = {
+					character_event = { id = RIP.13507 days = 75 }
+				}
+				#construction fails
+				40 = {
+					character_event = { id = RIP.13508 days = 30 }
+				}
+			}
+		}
+
+		trigger = {
+			NOT = { 
+				religion = jain
+			}
+		}
+	}
+
+	#Imprison them!
+	option = {
+		name = EVTOPTB_RIP_13506
+		custom_tooltip = { text = EVTOPTB_RIP_13506_TOOLTIP }
+
+		event_target:vagrant_child_1 = {
+			imprison = ROOT
+		}
+		event_target:vagrant_child_2 = {
+			imprison = ROOT
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				#construction succeeds
+				50 = {
+					character_event = { id = RIP.13507 days = 90 }
+				}
+				#construction fails
+				50 = {
+					character_event = { id = RIP.13508 days = 30 }
+				}
+			}
+		}
+	}
+	#Are you mad? These are starving children!
+	option = {
+		name = EVTOPTC_RIP_13506
+		custom_tooltip = { text = EVTOPTC_RIP_13506_TOOLTIP }
+
+		event_target:vagrant_child_1 = {
+			opinion = {
+				modifier = opinion_relieved
+				who = ROOT
+				years = 5
+			}
+		}
+		event_target:vagrant_child_2 = {
+			opinion = {
+				modifier = opinion_relieved
+				who = ROOT
+				years = 5
+			}
+		}
+
+		hidden_tooltip = {
+			set_character_flag = spared_urchins
+
+			if = {
+				limit = { has_character_modifier = in_seclusion }
+				set_character_flag = exposed_to_outside
+				event_target:vagrant_child_1 = {
+					add_character_modifier =  { name = in_seclusion duration = -1 }	
+				}
+				event_target:vagrant_child_2 = {
+					add_character_modifier =  { name = in_seclusion duration = -1 }
+				}
+			}
+			
+			random_list = {
+				#construction succeeds
+				40 = {
+					character_event = { id = RIP.13507 days = 100 }
+				}
+				#construction fails
+				60 = {
+					character_event = { id = RIP.13508 days = 30 }
+				}
+			}
+
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+				add_province_modifier = {
+					name = "epidemic_blame_2"
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+
+#Construction finished
+character_event = {
+	id = RIP.13507
+	picture = GFX_evt_india_temple
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	desc = {
+		text = EVTDESC_RIP_13507_A
+		trigger = {
+			capital_scope = {
+				num_of_empty_holdings = 2
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_13507_B
+		trigger = {
+			NOT = {
+				capital_scope = {
+					num_of_empty_holdings = 2
+				}
+			}
+		}
+	}
+
+	#Lo and behold, a temple was built!
+	option = {
+		name = EVTOPTA_RIP_13507
+		custom_tooltip = { text = EVTOPTA_RIP_13507_TOOLTIP }
+		
+		prestige = 100
+
+		if = {
+			limit = { NOT = { has_character_modifier = devoted_worshiper } }
+			add_character_modifier = {
+				name = devoted_worshiper
+				duration = 365
+			}
+		}
+		if = {
+			limit = { 
+				NOT = { lifestyle_traits = 1 }
+				has_dlc = "Way of Life"
+			}
+			add_trait = architect
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_2
+			}
+			remove_character_modifier = fake_worshiper
+			clr_character_flag = spared_urchins
+		}
+
+		capital_scope = {
+			build_holding  ={
+				type = temple
+			}
+		}
+
+		trigger = {
+			capital_scope = {
+				num_of_empty_holdings = 2
+			}
+		}
+	}
+
+	#The temple could not be built
+	option = {
+		name = EVTOPTB_RIP_13507
+		custom_tooltip = { text = EVTOPTB_RIP_13507_TOOLTIP }
+
+		treasury = 200
+
+		clr_character_flag = spared_urchins
+
+		trigger = {
+			NOT = {
+				capital_scope = {
+					num_of_empty_holdings = 2
+				}
+			}
+		}
+	}
+}
+
+#Temple construction - something goes wrong
+character_event = {
+	id = RIP.13508
+	picture = GFX_evt_trampled_by_elephant
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	desc = {
+		text = EVTDESC_RIP_13508_A
+		trigger = {
+			has_character_flag = spared_urchins
+		}
+	}
+
+	desc = {
+		text = EVTDESC_RIP_13508_B
+		trigger = {
+			NOT = { has_character_flag = spared_urchins }
+		}
+	}
+
+	#The project fails - kids are in your court
+	option = {
+		name = EVTOPTA_RIP_13508
+		custom_tooltip = { text = EVTOPTA_RIP_13508_TOOLTIP }
+
+		event_target:vagrant_child_1 = {
+			add_maimed_trait_effect = yes 
+		}
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+				add_province_modifier = {
+					name = "epidemic_blame_2"
+					duration = 3650
+				}
+			}
+			clr_character_flag = spared_urchins
+		}
+
+		trigger = {
+			has_character_flag = spared_urchins
+		}
+	}
+
+	#The project fails
+	option = {
+		name = EVTOPTB_RIP_13508
+		custom_tooltip = { text = EVTOPTA_RIP_13508_TOOLTIP }
+
+		hidden_tooltip = {
+			any_realm_province = {
+				limit = {
+					owner = {
+						character = ROOT
+					}
+				}
+				remove_province_modifier = epidemic_blame_1
+				add_province_modifier = {
+					name = "epidemic_blame_2"
+					duration = 3650
+				}
+			}
+			clr_character_flag = spared_urchins
+		}
+
+		trigger = {
+			NOT = { has_character_flag = spared_urchins }
+		}
+	}
+}

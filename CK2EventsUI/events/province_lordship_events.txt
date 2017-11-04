@@ -1,0 +1,568 @@
+###################################
+#
+# Province Lordship Events
+#
+# Id 77000 - 77999 is reserved
+#
+###################################
+#
+# Designed by Johan Andersson
+# Written by Sara Wendel-Örtqvist
+
+# The Clergy demands a stop to commerce in all church squares
+province_event = {
+	id = 77000
+	desc = EVTDESC77000
+	picture = GFX_evt_market
+	
+	trigger = {
+		religion_group = christian
+		owner = {
+			religion_group = christian
+		}
+		NOT = {
+			has_province_modifier = stop_commerce
+		}
+		any_province_lord = {
+			is_theocracy = yes
+		}
+		any_province_lord = {
+			is_republic = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+	}
+	
+	option = {
+		name = EVTOPTA77000
+		owner = {
+			piety = 5
+		}
+		add_province_modifier = {
+			name = stop_commerce
+			duration = 3650
+		}
+		random_province_lord = {
+			limit = {
+				is_theocracy = yes
+			}
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77000
+		random_province_lord = {
+			limit = {
+				is_theocracy = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# Burghers demands that city laws is set higher than canonical law
+province_event = {
+	id = 77001
+	desc = EVTDESC77001
+	picture = GFX_evt_cathedral
+	
+	trigger = {
+		religion_group = christian
+		owner = {
+			religion_group = christian
+		}
+		any_province_lord = {
+			is_theocracy = yes
+		}
+		any_province_lord = {
+			is_republic = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+	}
+	
+	option = {
+		name = EVTOPTA77001
+		random_province_lord = {
+			limit = {
+				is_theocracy = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77001
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# The Nobility demands Prima Noctae rights
+province_event = {
+	id = 77002
+	desc = EVTDESC77002
+	picture = GFX_evt_peasants
+	
+	trigger = {
+		religion_group = christian
+		NOT = {
+			has_province_modifier = prima_noctae
+		}
+		any_province_lord = {
+			is_adult = yes
+			is_female = no
+			is_feudal = yes
+			ROOT = {
+				owner = {
+					NOT = {
+						character = PREVPREV
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_province_lord = {
+			limit = {
+				is_adult = yes
+				is_female = no
+				is_feudal = yes
+				ROOT = {
+					owner = {
+						NOT = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			save_event_target_as = target_province_lord
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+	}
+	
+	option = {
+		name = EVTOPTA77002
+		event_target:target_province_lord = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		add_province_modifier = {
+			name = prima_noctae
+			duration = 3650
+		}
+	}
+	option = {
+		name = EVTOPTB77002
+		event_target:target_province_lord = {
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# The Burgers demands that peasants be forbidden to sell goods within the city walls
+province_event = {
+	id = 77003
+	desc = EVTDESC77003
+	picture = GFX_evt_market
+	
+	trigger = {
+		owner = {
+			NOT = { religion_group = muslim }
+			NOT = { religion_group = jewish_group }
+		}
+		any_province_lord = {
+			is_republic = yes
+		}
+		NOT = {
+			has_province_modifier = peasants_forbidden_sale
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+		
+	}
+	
+	option = {
+		name = EVTOPTA77003
+		add_province_modifier = {
+			name = peasants_forbidden_sale
+			duration = 3650
+		}
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77003
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# The Nobles demands hunting rights on church lands
+province_event = {
+	id = 77004
+	desc = EVTDESC77004
+	picture = GFX_evt_hunt
+	
+	trigger = {
+		religion_group = christian
+		owner = {
+			religion_group = christian
+		}
+		any_province_lord = {
+			is_adult = yes
+			is_feudal = yes
+			is_female = no
+			NOT = { trait = incapable }
+		}
+		any_province_lord = {
+			NOT = { trait = incapable }
+			is_theocracy = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+		
+	}
+
+	immediate = {
+		random_province_lord = {
+			limit = {
+				is_adult = yes
+				is_feudal = yes
+				is_female = no
+				NOT = { trait = incapable }
+			}
+			save_event_target_as = target_feudal
+		}
+		random_province_lord = {
+			limit = {
+				NOT = { trait = incapable }
+				is_theocracy = yes
+			}
+			save_event_target_as = target_bishop
+		}
+	}
+	
+	option = {
+		name = EVTOPTA77004
+		event_target:target_feudal = {
+			opinion = {	
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:target_bishop = {
+			opinion = {	
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77004
+		event_target:target_bishop = {
+			opinion = {	
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		event_target:target_feudal = {
+			opinion = {	
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# The Clergy demands right to collect extra tithe on free peasants
+province_event = {
+	id = 77005
+	desc = EVTDESC77005
+	picture = GFX_evt_stone_church
+	
+	trigger = {
+		religion_group = christian
+		owner = {
+			religion_group = christian
+		}
+		NOT = {
+			has_province_modifier = clergy_extra_tithe
+		}
+		any_province_lord = {
+			is_theocracy = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+		
+	}
+	
+	option = {
+		name = EVTOPTA77005
+		add_province_modifier = {
+			name = clergy_extra_tithe
+			duration = 3650
+		}
+	}
+	option = {
+		name = EVTOPTB77005
+		random_province_lord = {
+			limit = {
+				is_theocracy = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# Sell titles to rich merchants
+province_event = {
+	id = 77006
+	desc = EVTDESC77006
+	picture = GFX_evt_market
+	
+	trigger = {
+		any_province_lord = {
+			is_feudal = yes
+			ROOT = {
+				owner = {
+					NOT = {
+						character = PREVPREV
+					}
+				}
+			}
+		}
+		any_province_lord = {
+			is_republic = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+		
+	}
+	
+	option = {
+		name = EVTOPTA77006
+		owner = {
+			scaled_wealth = 0.25
+		}
+		random_province_lord = {
+			limit = {
+				is_feudal = yes
+				ROOT = {
+					owner = {
+						NOT = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77006
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion = {
+				modifier = opinion_dislike
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# Rights to spoils from shipwrecks
+province_event = {
+	id = 77007
+	desc = EVTDESC77007
+	picture = GFX_evt_merchant_ship_at_sea_republic
+	
+	trigger = {
+		port = yes
+		religion_group = christian
+		owner = {
+			religion_group = christian
+		}
+		any_province_lord = {
+			is_feudal = yes
+		}
+		any_province_lord = {
+			is_republic = yes
+		}
+		any_province_lord = {
+			is_theocracy = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36000
+		
+	}
+	
+	option = {
+		name = EVTOPTA77007
+		trigger = {
+			owner = {
+				NOT = {
+					is_theocracy = yes
+				}
+			}
+		}
+		random_province_lord = {
+			limit = {
+				is_theocracy = yes
+			}
+			opinion ={
+				modifier = opinion_happy
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB77007
+		trigger = {
+			owner = {
+				NOT = {
+					is_republic = yes
+				}
+			}
+		}
+		random_province_lord = {
+			limit = {
+				is_republic = yes
+			}
+			opinion ={
+				modifier = opinion_happy
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC77007
+		trigger = {
+			owner = {
+				NOT = {
+					is_feudal = yes
+				}
+			}
+		}
+		random_province_lord = {
+			limit = {
+				is_feudal = yes
+				ROOT = {
+					owner = {
+						NOT = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			opinion ={
+				modifier = opinion_happy
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD77007
+		owner = {
+			scaled_wealth = { value = 0.05 min = 10 }
+		}
+	}
+}

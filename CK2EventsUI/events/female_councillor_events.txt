@@ -1,0 +1,1962 @@
+##Female councillor events, reserved numbers 77760-77795
+
+
+###RANDOM NEW FEMALE COUNCILLOR CANDIDATE###
+
+#Creates the councillor
+character_event = {
+	id = 77777
+
+	is_triggered_only = yes
+	
+	only_playable = yes
+	capable_only = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		NOR = {
+			is_inaccessible_trigger = yes 
+			has_game_rule = {
+				name = gender
+				value = all
+			}
+		}
+	}
+	
+	hide_window = yes
+
+	immediate = {
+		random_list = {
+			#Chancellor
+			25 = {
+				modifier = {
+					factor = 5
+					has_dlc = "Conclave"
+					NOR = {
+						has_law = status_of_women_2
+						has_law = status_of_women_3
+						has_law = status_of_women_4
+					}
+				}
+				modifier = {
+					factor = 0
+					job_chancellor = { diplomacy = 12 }
+				}
+				
+				create_character = {
+					female = yes
+					age = 35
+					attributes = { 
+						martial = 2
+						diplomacy = 10
+						stewardship = 2
+						intrigue = 2
+						learning = 2 
+					}
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					trait = charismatic_negotiator
+					random_traits = yes
+				}
+				new_character = {
+					set_character_flag = female_councillor_chancellor
+					character_event = { id = 77778 }
+
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_trait = shy
+					remove_trait = deceitful
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seductress
+					remove_trait = scholar
+					remove_trait = theologian
+					remove_trait = mystic
+
+					if = {
+						limit = { religion_group = indian_group }
+						remove_trait = brahmin
+						remove_trait = vaishya
+						add_trait = kshatriya
+					}
+
+					#Adds some more traits
+					random_list = {
+						#Attractive
+						20 = {
+							add_trait = fair
+						}
+						#Poet
+						20 = {
+							add_trait = poet
+						}
+						#Socializer
+						20 = {
+							add_trait = socializer
+						}
+						#Gamer
+						20 = {
+							add_trait = gamer
+						}
+						#Party
+						20 = {
+							add_trait = hedonist
+						}
+					}
+				}
+			}
+			#Marshal
+			25 = {
+				modifier = {
+					factor = 5
+					has_dlc = "Conclave"
+					NOR = {
+						has_law = status_of_women_3
+						has_law = status_of_women_4
+					}
+				}
+
+				modifier = {
+					factor = 0
+					job_marshal = { martial = 12 }
+				}
+
+				create_character = {
+					age = 37
+					female = yes
+					attributes = { 
+						martial = 10
+						diplomacy = 2
+						stewardship = 2
+						intrigue = 2
+						learning = 2 
+					}
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					trait = skilled_tactician
+					trait = brave
+					random_traits = yes
+				}
+				new_character = {
+					set_character_flag = female_councillor_marshal
+					character_event = { id = 77778 }
+
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_trait = craven
+					remove_trait = feeble
+					remove_trait = weak
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seductress
+					remove_trait = scholar
+					remove_trait = theologian
+					remove_trait = mystic
+
+					if = {
+						limit = { religion_group = indian_group }
+						remove_trait = brahmin
+						remove_trait = vaishya
+						add_trait = kshatriya
+					}
+
+					#Adds some more traits
+					random_list = {
+						#Brawny but Ugly
+						25 = {
+							add_trait = robust
+							add_trait = ugly
+							add_trait = aggressive_leader
+						}
+						#Duelist
+						25 = {
+							add_trait = duelist
+							add_trait = inspiring_leader
+						}
+						#Hunter
+						25 = {
+							add_trait = hunter
+							add_trait = flanker
+						}
+						#Strategist
+						25 = {
+							add_trait = strategist
+							add_trait = unyielding_leader
+						}
+					}	
+				}
+			}
+			#Steward
+			25 = {
+				modifier = {
+					factor = 5
+					has_dlc = "Conclave"
+					NOR = {
+						has_law = status_of_women_2
+						has_law = status_of_women_3
+						has_law = status_of_women_4
+					}
+				}
+				modifier = {
+					factor = 0
+					job_treasurer = { stewardship = 12 }
+				}
+
+				create_character = {
+					age = 38
+					female = yes
+					attributes = { 
+						martial = 2
+						diplomacy = 2
+						stewardship = 10
+						intrigue = 2
+						learning = 2 
+					}
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					trait = fortune_builder
+					random_traits = yes
+				}
+				new_character = {
+					set_character_flag = female_councillor_treasurer
+					character_event = { id = 77778 }
+
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_trait = arbitrary
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seductress
+					remove_trait = scholar
+					remove_trait = theologian
+					remove_trait = mystic
+
+					if = {
+						limit = { religion_group = indian_group }
+						remove_trait = brahmin
+						remove_trait = kshatriya
+						add_trait = vaishya
+					}
+
+					#Adds some more traits
+					random_list = {
+						#Administrator
+						25 = {
+							add_trait = administrator
+						}
+						#Architect
+						25 = {
+							add_trait = architect
+						}
+						#Gardener
+						25 = {
+							add_trait = gardener
+						}
+						#Shrewd
+						25 = {
+							add_trait = gardener
+						}
+					}
+				}
+			}
+			#Spymaster
+			25 = {
+				modifier = {
+					factor = 5
+					has_dlc = "Conclave"
+					NOR = {
+						has_law = status_of_women_1
+						has_law = status_of_women_2
+						has_law = status_of_women_3
+						has_law = status_of_women_4
+					}
+				}
+				modifier = {
+					factor = 0
+					job_spymaster = { intrigue = 12 }
+				}
+
+				create_character = {
+					age = 42
+					female = yes
+					attributes = { 
+						martial = 2
+						diplomacy = 2
+						stewardship = 2
+						intrigue = 10
+						learning = 2 
+					}
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					trait = intricate_webweaver
+					random_traits = yes
+				}
+				new_character = {	
+					set_character_flag = female_councillor_spymaster
+					character_event = { id = 77778 }
+
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_trait = trusting
+					remove_trait = honest
+					remove_trait = socializer
+					remove_trait = gamer
+					remove_trait = hedonist
+					remove_trait = duelist
+					remove_trait = hunter
+					remove_trait = strategist
+					remove_trait = administrator
+					remove_trait = architect
+					remove_trait = gardener
+					remove_trait = schemer
+					remove_trait = impaler
+					remove_trait = seductress
+					remove_trait = scholar
+					remove_trait = theologian
+					remove_trait = mystic
+
+					if = {
+						limit = { religion_group = indian_group }
+						remove_trait = brahmin
+						remove_trait = kshatriya
+						add_trait = vaishya
+					}
+
+					#Adds some more traits
+					random_list = {
+						#Schemer
+						33 = {
+							add_trait = schemer
+						}
+						#Impaler
+						33 = {
+							add_trait = impaler
+						}
+						#Seductress
+						33 = {
+							add_trait = seductress
+							add_trait = lustful
+							add_trait = fair
+							remove_trait = chaste
+						}
+						#Deceitful, paranoid & ugly
+						33 = {
+							add_trait = ugly
+							add_trait = shrewd
+						}
+					}
+				} 
+			}
+		}
+	}
+}
+
+#Ping event for new councillor character
+character_event = {
+	id = 77778
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+
+		remove_trait = content
+
+		if = {
+			limit = { has_character_flag = female_councillor_chancellor }
+			FROM = { character_event = { id = 77779 } }
+		}
+		if = {
+			limit = { has_character_flag = female_councillor_marshal }
+			FROM = { character_event = { id = 77780 } }
+		}
+		if = {
+			limit = { has_character_flag = female_councillor_treasurer }
+			FROM = { character_event = { id = 77781 } }
+		}
+		if = {
+			limit = { has_character_flag = female_councillor_spymaster }
+			FROM = { character_event = { id = 77782 } }
+		}
+
+		clr_character_flag = female_councillor_chancellor
+		clr_character_flag = female_councillor_marshal
+		clr_character_flag = female_councillor_treasurer
+		clr_character_flag = female_councillor_spymaster
+	}
+}
+
+
+#Female chancellor appears
+character_event = {
+	id = 77779
+	desc = EVTDESC_77779
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77779
+		
+		ai_chance = {
+			factor = 2
+			
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+		}
+
+		job_chancellor = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { 
+			give_job_title = job_chancellor 
+		}
+		
+		if = {
+			limit = {
+				has_dlc = "Conclave"
+			}
+			add_favor = FROM
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } } 
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+
+		#Gets her married
+		hidden_tooltip = {
+			if = {
+				limit = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } }
+				random_courtier = {
+					limit = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes }
+					add_spouse_matrilineal = FROM
+				}
+				break = yes
+			}
+
+			if = {
+				limit = { NOT = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } } }
+
+				create_random_diplomat = { 
+					random_traits = yes
+					dynasty = NONE
+					female = no
+					age = 37
+				}
+				new_character = { add_spouse_matrilineal = FROM }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_77779
+		hidden_tooltip = {
+			FROM = {
+				leave_court_effect = yes
+				death = { death_reason = death_missing }
+			}
+		}
+		ai_chance = {
+			factor = 98
+		}
+	}
+}
+
+#Female marshal appears
+character_event = {
+	id = 77780
+	desc = EVTDESC_77780
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77780
+		
+		ai_chance = {
+			factor = 2
+			
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+		}
+
+		job_marshal = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { 
+			give_job_title = job_marshal 
+		}
+		
+		if = {
+			limit = {
+				has_dlc = "Conclave"
+			}
+			add_favor = FROM
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_2 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_3
+					months = 60
+				}
+			}
+		}
+
+		#Gets her married
+		hidden_tooltip = {
+			if = {
+				limit = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } }
+				random_courtier = {
+					limit = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes }
+					add_spouse_matrilineal = FROM
+				}
+				break = yes
+			}
+
+			if = {
+				limit = { NOT = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } } }
+
+				create_random_soldier = { 
+					random_traits = yes
+					dynasty = NONE
+					female = no
+					age = 37
+				}
+				new_character = { add_spouse_matrilineal = FROM }
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77780
+		hidden_tooltip = {
+			FROM = {
+				leave_court_effect = yes
+				death = { death_reason = death_missing }
+			}
+		}
+		ai_chance = {
+			factor = 98
+		}
+	}
+}
+
+#Female steward appears
+character_event = {
+	id = 77781
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_carriage
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = { NOT = { has_dlc = "Way of Life" } } 
+		text = EVTDESC_77781
+		picture = GFX_evt_carriage
+	}
+	desc = {
+		trigger = { has_dlc = "Way of Life" }
+		text = EVTDESC_77781
+		picture = GFX_evt_merchant_caravan
+	}
+
+	option = {
+		name = EVTOPTA_77781
+		
+		ai_chance = {
+			factor = 2
+			
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+		}
+
+		job_treasurer = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { 
+			give_job_title = job_treasurer 
+		}
+		
+		if = {
+			limit = {
+				has_dlc = "Conclave"
+			}
+			add_favor = FROM
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+
+		#Gets her married
+		hidden_tooltip = {
+			if = {
+				limit = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } }
+				random_courtier = {
+					limit = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes }
+					add_spouse_matrilineal = FROM
+				}
+				break = yes
+			}
+
+			if = {
+				limit = { NOT = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } } }
+
+				create_random_steward = { 
+					random_traits = yes
+					dynasty = NONE
+					female = no
+					age = 42
+				}
+				new_character = { add_spouse_matrilineal = FROM }
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77781
+		hidden_tooltip = {
+			FROM = {
+				leave_court_effect = yes
+				death = { death_reason = death_missing }
+			}
+		}
+		ai_chance = {
+			factor = 98
+		}
+	}
+}
+
+#Female spymaster appears
+character_event = {
+	id = 77782
+	border = GFX_event_normal_frame_intrigue
+	picture = GFX_evt_whispers
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = { NOT = { has_dlc = "Way of Life" } }
+		text = EVTDESC_77782
+		picture = GFX_evt_whispers
+	}
+	desc = {
+		trigger = { has_dlc = "Way of Life" } 
+		text = EVTDESC_77782
+		picture = GFX_evt_eavesdropping
+	}
+	
+	option = {
+		name = EVTOPTA_77782
+		
+		ai_chance = {
+			factor = 2
+			
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+		}
+
+		job_spymaster = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { 
+			give_job_title = job_spymaster 
+		}
+		
+		if = {
+			limit = {
+				has_dlc = "Conclave"
+			}
+			add_favor = FROM
+		}
+
+		#Gets her married
+		hidden_tooltip = {
+			if = {
+				limit = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } }
+				random_courtier = {
+					limit = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes }
+					add_spouse_matrilineal = FROM
+				}
+				break = yes
+			}
+
+			if = {
+				limit = { NOT = { any_courtier = { NOT = { character = ROOT } is_adult = yes is_married = no is_female = no prisoner = no is_unimportant_trigger = yes } } }
+
+				create_random_intriguer = { 
+					random_traits = yes
+					dynasty = NONE
+					female = no
+					age = 29
+				}
+				new_character = { add_spouse_matrilineal = FROM }
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77782
+		hidden_tooltip = {
+			FROM = {
+				leave_court_effect = yes
+				death = { death_reason = death_missing }
+			}
+		}
+		ai_chance = {
+			factor = 98
+		}
+	}
+}
+
+###FEMALE RELATIVE COUNCILLOR CANDIDATE###
+
+#Finds a talented female relative
+character_event = {
+	id = 77790
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	capable_only = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		NOR = { 
+			primary_title = { has_law = status_of_women_3 }
+			primary_title = { has_law = status_of_women_4 }
+			religion = cathar
+			religion = messalian
+			has_game_rule = {
+				name = gender
+				value = all
+			}
+		} 
+
+		any_realm_character = {	
+			is_close_relative = ROOT
+			is_female = yes
+			is_adult = yes
+			liege = { character = ROOT }
+			NOT = { trait = content }
+
+			NOR = {
+				has_job_title = job_chancellor
+				has_job_title = job_marshal
+				has_job_title = job_treasurer
+				has_job_title = job_spymaster
+				has_job_title = job_spiritual
+				has_opinion_modifier = { who = ROOT modifier = opinion_refused_council }
+			}
+
+			OR = { 
+				diplomacy = 15
+				martial = 15
+				stewardship = 15
+				intrigue = 15
+			}
+		}
+	}
+
+	immediate = {
+		random_realm_character = {
+			limit = {
+				is_close_relative = ROOT
+				is_female = yes
+				is_adult = yes
+				NOT = { trait = content }
+				liege = { character = ROOT }
+				NOT = { character = ROOT }
+				ai = yes
+
+				NOR = {
+					has_job_title = job_chancellor
+					has_job_title = job_marshal
+					has_job_title = job_treasurer
+					has_job_title = job_spymaster
+					has_job_title = job_spiritual
+					has_opinion_modifier = { who = ROOT modifier = opinion_refused_council }
+				}
+				
+				OR = {
+					#Diplomacy woman who can't be councillor
+					AND = {
+						diplomacy = 15
+						NOT = { ROOT = { primary_title = { has_law = status_of_women_2 } } }
+					}
+
+					#Martial woman who can't be councillor
+					martial = 15
+
+					#Stewardship woman who can't be councillor
+					AND = {
+						stewardship = 15
+						NOT = { ROOT = { primary_title = { has_law = status_of_women_2 } } }
+					}
+
+					#Spymaster woman who can't be councillor
+					AND = {
+						intrigue = 15
+						NOR = {
+							ROOT = { primary_title = { has_law = status_of_women_2 } }
+							ROOT = { primary_title = { has_law = status_of_women_1 } }
+							AND = {
+								ROOT = { religion_group = pagan_group }
+								religion_group = pagan_group
+							}
+							any_spouse = { character = ROOT }
+							any_child = { character = ROOT }
+						}
+					}
+				}
+			}
+			character_event = { id = 77791 }
+		}
+	}
+}
+
+#Ping event for female relative who wants to be on the council
+character_event = {
+	id = 77791
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		#Which position will they ask for?
+		random_list = {
+			#chancellor
+			25 = {
+				modifier = {
+					factor = 0
+					OR = {
+						NOT = { diplomacy = 15 }
+						FROM = { primary_title = { has_law = status_of_women_2 } }
+					}
+				}
+				FROM = { character_event = { id = 77792 } } 
+			}
+			#marshal
+			25 = {
+				modifier = {
+					factor = 0
+					NOT = { martial = 15 }
+				}
+				FROM = { character_event = { id = 77793 } } 
+			}
+			#steward
+			25 = {
+				modifier = {
+					factor = 0
+					OR = {
+						NOT = { stewardship = 15 }
+						FROM = { primary_title = { has_law = status_of_women_2 } }
+					}
+				}
+				FROM = { character_event = { id = 77794 } } 
+			}
+			#spymaster
+			25 = {
+				modifier = {
+					factor = 0
+					OR = {
+						NOT = { intrigue = 15 }
+						FROM = { primary_title = { has_law = status_of_women_2 } } 
+						FROM = { primary_title = { has_law = status_of_women_1 } } 
+						AND = {
+							FROM = { religion_group = pagan_group }
+							religion_group = pagan_group
+						}
+					}
+				}
+				FROM = { character_event = { id = 77795 } } 
+			}
+		}
+	}
+}
+
+#Female relative asks to be chancellor
+character_event = {
+	id = 77792
+	desc = EVTDESC_77792
+	picture = GFX_evt_wise_woman
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_chancellor = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+		FROM = { give_job_title = job_chancellor }
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } } 
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_chancellor = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council
+			years = 5
+			who = FROM
+		}
+	}
+}
+
+#Female relative asks to be marshal
+character_event = {
+	id = 77793
+	desc = EVTDESC_77793
+	picture = GFX_evt_wise_woman
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_marshal = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_marshal }
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_2 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_3
+					months = 60
+				}
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_marshal = {
+					is_landed = yes
+				}
+			}
+		}
+		
+
+		reverse_opinion = {
+			modifier = opinion_refused_council
+			years = 5
+			who = FROM
+		}
+	}
+}
+
+#Female relative asks to be treasurer
+character_event = {
+	id = 77794
+	border = GFX_event_normal_frame_economy
+	desc = EVTDESC_77794
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_treasurer = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_treasurer }
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_treasurer = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council
+			years = 5
+			who = FROM
+		}
+	}
+}
+
+#Female relative asks to be spymaster
+character_event = {
+	id = 77795
+	border = GFX_event_normal_frame_intrigue
+	desc = EVTDESC_77795
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_spymaster = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_spymaster }
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_spymaster = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council
+			years = 5
+			who = FROM
+		}
+	}
+}
+
+###FEMALE LANDED VASSAL WANTS TO BECOME COUNCILLOR###
+character_event = {
+	id = 77760
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	capable_only = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+
+	trigger = {
+		NOR = { 
+			primary_title = { has_law = status_of_women_3 }
+			primary_title = { has_law = status_of_women_4 }
+			religion = cathar
+			religion = messalian
+			has_game_rule = {
+				name = gender
+				value = all
+			}
+		} 
+
+		any_vassal = {	
+			is_landed = yes
+			is_female = yes
+			is_adult = yes
+			NOT = { trait = content }
+
+			NOR = {
+				has_job_title = job_chancellor
+				has_job_title = job_marshal
+				has_job_title = job_treasurer
+				has_job_title = job_spymaster
+				has_job_title = job_spiritual
+				has_opinion_modifier = { who = ROOT modifier = opinion_refused_council }
+			}
+
+			OR = { 
+				diplomacy = 13
+				martial = 13
+				stewardship = 13
+				intrigue = 13
+				trait = ambitious
+				trait = proud
+			}
+		}
+	}
+
+	immediate = {
+		random_vassal = {
+			limit = {
+				is_landed = yes
+				is_female = yes
+				is_adult = yes
+				NOT = { trait = content }
+
+				NOR = {
+					has_job_title = job_chancellor
+					has_job_title = job_marshal
+					has_job_title = job_treasurer
+					has_job_title = job_spymaster
+					has_job_title = job_spiritual
+					has_opinion_modifier = { who = ROOT modifier = opinion_refused_council }
+				}
+
+				OR = {
+					#Diplomacy woman who can't be councillor
+					AND = {
+						OR = {
+							diplomacy = 13
+							AND = {
+								has_education_diplomacy_trigger = yes
+								OR = {
+									trait = ambitious
+									trait = proud
+								}
+							}
+						}
+
+						NOT = { ROOT = { primary_title = { has_law = status_of_women_2 } } }
+					}
+
+					#Martial woman who can't be councillor
+					OR = {
+							martial = 13
+							AND = {
+								has_education_martial_trigger = yes
+								OR = {
+									trait = ambitious
+									trait = proud
+								}
+							}
+						}
+
+					#Stewardship woman who can't be councillor
+					AND = {
+						OR = {
+							stewardship = 13
+							AND = {
+								has_education_stewardship_trigger = yes
+								OR = {
+									trait = ambitious
+									trait = proud
+								}
+							}
+						}
+						NOT = { ROOT = { primary_title = { has_law = status_of_women_2 } } }
+					}
+
+					#Spymaster woman who can't be councillor
+					AND = {
+						OR = {
+							intrigue = 13
+							AND = {
+								has_education_intrigue_trigger = yes
+								OR = {
+									trait = ambitious
+									trait = proud
+								}
+							}
+						}
+						NOR = {
+							ROOT = { primary_title = { has_law = status_of_women_2 } }
+							ROOT = { primary_title = { has_law = status_of_women_1 } }
+							AND = {
+								ROOT = { religion_group = pagan_group }
+								religion_group = pagan_group
+							}
+							any_spouse = { character = ROOT }
+							any_child = { character = ROOT }
+						}
+					}
+				}
+			}
+
+			set_character_flag = advisor_woman #todo
+
+			character_event = { id = 77761 }
+		}
+	}
+}
+
+#Female vassal decides to ask for council position
+character_event = {
+	id = 77761
+	desc = EVTDESC_77761
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+
+	#Chancellor
+	option = {
+		trigger = {
+			OR = {
+				diplomacy = 13
+				has_education_diplomacy_trigger = yes
+			}
+			NOT = { FROM = { primary_title = { has_law = status_of_women_2 } } }
+		}
+
+		name = EVTOPTA_77761
+		custom_tooltip = { text = EVTOPTA_77761_TOOLTIP }
+
+		FROM = { character_event = { id = 77762 } }
+	}
+
+	#Marshal
+	option = {
+		trigger = {
+			OR = {
+				martial = 13
+				has_education_martial_trigger = yes
+			}
+		}
+
+		name = EVTOPTB_77761
+		custom_tooltip = { text = EVTOPTB_77761_TOOLTIP }
+
+		FROM = { character_event = { id = 77763 } }
+	}
+
+	#Steward
+	option = {
+		trigger = {
+			OR = {
+				stewardship = 13
+				has_education_stewardship_trigger = yes
+			}
+			NOT = { FROM = { primary_title = { has_law = status_of_women_2 } } }
+		}
+
+		name = EVTOPTC_77761
+		custom_tooltip = { text = EVTOPTC_77761_TOOLTIP }
+
+		FROM = { character_event = { id = 77764 } }
+	}
+
+	#Spymaster
+	option = {
+		trigger = {
+			OR = {
+				intrigue = 13
+				has_education_intrigue_trigger = yes
+			}
+			NOR = { 
+				FROM = { primary_title = { has_law = status_of_women_2 } }
+				FROM = { primary_title = { has_law = status_of_women_1 } } 
+				AND = {
+					FROM = { religion_group = pagan_group }
+					religion_group = pagan_group
+				}
+			}			
+		}
+
+		name = EVTOPTD_77761
+		custom_tooltip = { text = EVTOPTD_77761_TOOLTIP }
+
+		FROM = { character_event = { id = 77765 } }
+	}
+
+	#Actually no
+	option = {
+		name = EVTOPTE_77761
+		custom_tooltip = { text = EVTOPTE_77761_TOOLTIP }
+
+		if = {
+			limit = { trait = ambitious }
+			remove_trait = ambitious
+		}
+
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Female vassal asks to be chancellor
+character_event = {
+	id = 77762
+	desc = EVTDESC_77762
+	picture = GFX_evt_wise_woman
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_chancellor = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+		FROM = { give_job_title = job_chancellor }
+
+		reverse_opinion = {
+			modifier = opinion_appreciated_abilities
+			who = FROM
+			years = 10
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } } 
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77766 days = 15 } } }
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_chancellor = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council_position
+			years = 15
+			who = FROM
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77767 days = 15 } } }
+	}
+}
+
+#Female vassal asks to be marshal
+character_event = {
+	id = 77763
+	desc = EVTDESC_77763
+	picture = GFX_evt_wise_woman
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_marshal = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_marshal }
+
+		reverse_opinion = {
+			modifier = opinion_appreciated_abilities
+			who = FROM
+			years = 10
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_2 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_3
+					months = 60
+				}
+			}	
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77766 days = 15 } } }
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_marshal = {
+					is_landed = yes
+				}
+			}
+		}
+		
+
+		reverse_opinion = {
+			modifier = opinion_refused_council_position
+			years = 15
+			who = FROM
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77767 days = 15 } } }
+	}
+}
+
+#Female vassal asks to be treasurer
+character_event = {
+	id = 77764
+	border = GFX_event_normal_frame_economy
+	desc = EVTDESC_77764
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_treasurer = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_treasurer }
+
+		reverse_opinion = {
+			modifier = opinion_appreciated_abilities
+			who = FROM
+			years = 10
+		}
+
+		if = {
+			limit = { NOT = { has_dlc = "Conclave" } }
+			add_character_modifier = {
+				name = scandalous_councillor_3
+				months = 60
+			}
+		}
+		if = {
+			limit = { has_dlc = "Conclave" } 
+			if = {
+				limit = { primary_title = { has_law = status_of_women_1 } }
+				add_character_modifier = {
+					name = scandalous_councillor_1
+					months = 60
+				}
+			}
+			if = {
+				limit = { primary_title = { has_law = status_of_women_0 } }
+				add_character_modifier = {
+					name = scandalous_councillor_2
+					months = 60
+				}
+			}	
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77766 days = 15 } } }
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_treasurer = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council_position
+			years = 15
+			who = FROM
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77767 days = 15 } } }
+	}
+}
+
+#Female vassal asks to be spymaster
+character_event = {
+	id = 77765
+	border = GFX_event_normal_frame_intrigue
+	desc = EVTDESC_77765
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_77795
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+		}
+
+		job_spymaster = {
+			opinion = {
+				modifier = opinion_fired_from_council
+				years = 5
+				who = ROOT
+			}
+		}
+
+		FROM = { give_job_title = job_spymaster }
+
+		reverse_opinion = {
+			modifier = opinion_appreciated_abilities
+			who = FROM
+			years = 10
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77766 days = 15 } } }
+	}
+	option = {
+		name = EVTOPTB_77795
+		
+		ai_chance = {
+			factor = 75
+			
+			modifier = {
+				factor = 2
+				job_spymaster = {
+					is_landed = yes
+				}
+			}
+		}
+
+		reverse_opinion = {
+			modifier = opinion_refused_council_position
+			years = 15
+			who = FROM
+		}
+
+		hidden_tooltip = { FROM = { character_event = { id = 77767 days = 15 } } }
+	}
+}
+
+#Yes council
+character_event = {
+	id = 77766
+	border = GFX_event_normal_frame_diplomacy
+	desc = EVTDESC_77766
+	picture = GFX_evt_council
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_77766
+	}
+}
+
+#No council
+character_event = {
+	id = 77767
+	border = GFX_event_normal_frame_diplomacy
+	desc = EVTDESC_77767
+	picture = GFX_evt_council
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_77767
+
+		tooltip = {
+			opinion = {
+				modifier = opinion_refused_council_position
+				who = FROM
+				years = 15
+			}
+		}
+	}
+}

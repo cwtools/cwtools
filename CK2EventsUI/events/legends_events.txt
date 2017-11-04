@@ -1,0 +1,2025 @@
+#########################################
+#
+# Medieval Legends Events
+#
+# Id 10000-19999 is reserved
+#
+#########################################
+#
+# Written by Sara Wendel-Örtqvist
+
+### Robin Hood ###
+narrative_event = {
+	id = 10000
+	title = "EVTNAME10000"
+	desc = "EVTDESC10000"
+	picture = GFX_evt_throne_room
+	
+	ai = no
+	min_age = 20
+	prisoner = no
+	capable_only = yes
+	war = no
+	
+	trigger = {
+		NOT = { has_global_flag = robin_hood_existed }
+		in_command = no
+		is_ill = no
+		OR = {
+			religion_group = christian
+			religion_group = pagan_group
+		}
+		NOT = {
+			has_character_flag = killed_robin_hood
+		}
+		NOT = {
+			has_character_flag = robin_marion_married
+		}
+		NOT = {
+			has_character_flag = robin_hood
+		}
+		any_demesne_province = {
+			OR = {
+				has_province_modifier = highway_robber_band
+				revolt_risk = 0.05
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 2000
+		
+		modifier = {
+			factor = 1.2
+			trait = just
+		}
+		
+		modifier = {
+			factor = 0.2
+			trait = arbitrary
+		}
+		
+		modifier = {
+			factor = 1.3
+			trait = charismatic_negotiator
+		}
+		
+		modifier = {
+			factor = 0.3
+			trait = midas_touched
+		}
+	}
+	
+	immediate = {
+		set_character_flag = lure_robin
+		set_character_flag = robin_hood
+		set_global_flag = robin_hood_existed
+	}
+	
+	option = {
+		name = "EVTOPTA10000"
+		prestige = 10
+		random = {
+			chance = 60
+			
+			narrative_event = { 
+				id = 10001 #Noble woman
+				days = 5
+				random = 10
+				tooltip = "EVTTOOLTIP10001"
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB10000"
+		if = {
+			limit = {
+				NOT = {
+					trait = diligent
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = diligent
+				set_character_flag = got_trait
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trait = diligent
+				NOR = {
+					trait = deceitful
+					has_character_flag = got_trait
+				}
+			}
+			random = {
+				chance = 25
+				set_character_flag = got_trait
+				add_trait = deceitful
+				hidden_tooltip = {
+					character_event = {
+						id = 38255 #Notify Deceitful
+					}
+				}
+			}
+		}
+		random = {
+			chance = 40
+			
+			narrative_event = {
+				id = 10002 #Noble man
+				days = 5
+				random = 10
+				tooltip = "EVTTOOLTIP10001"
+			}
+			break = yes
+		}
+		clr_character_flag = got_trait
+	}
+	
+	option = {
+		name = "EVTOPTC10000"
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 25
+			
+				add_trait = content
+				hidden_tooltip = {
+					character_event = {
+						id = 38279 #Notify Content
+					}
+				}
+			}
+		}
+	}
+}
+
+#Noble woman "complains" about merry men
+narrative_event = {
+	id = 10001
+	title = "EVTNAME10001"
+	desc = "EVTDESC10001"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10001" #Give her gold and send her away
+		scaled_wealth = -0.02
+		set_character_flag = ignore_robin
+	}
+	
+	option = {
+		name = "EVTOPTB10001" #Something must be done! Set a trap
+		set_character_flag = do_something
+		if = {
+			limit = {
+				NOT = {
+					trait = diligent
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ambitious
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = ambitious
+				hidden_tooltip = {
+					character_event = {
+						id = 38278 #Notify Ambitious
+					}
+				}
+			}
+		}
+	}
+}
+
+#Noble man complains about merry men
+narrative_event = {
+	id = 10002
+	title = "EVTNAME10002"
+	desc = "EVTDESC10002"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10002" #Give him gold and send him awy
+		scaled_wealth = -0.02
+		set_character_flag = ignore_robin
+	}
+	
+	option = {
+		name = "EVTOPTB10002" #Something must be done! Set a trap
+		set_character_flag = do_something
+		if = {
+			limit = {
+				NOR = {
+					trait = diligent
+					has_character_flag = got_trait
+				}
+			}
+			random = {
+				chance = 25
+
+				add_trait = diligent
+				hidden_tooltip = {
+					character_event = {
+						id = 38256 #Notify Diligent
+					}
+				}
+			}
+			clr_character_flag = got_trait
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ambitious
+					has_character_flag = got_trait
+				}
+			}
+			random = {
+				chance = 25
+
+				add_trait = ambitious
+				hidden_tooltip = {
+					character_event = {
+						id = 38278 #Notify Ambitious
+					}
+				}
+			}
+			clr_character_flag = got_trait
+		}
+	}
+}
+
+#It's a trap!
+narrative_event = {
+	id = 10003
+	title = "EVTNAME10003"
+	desc = "EVTDESC10003"
+	picture = GFX_evt_council
+	
+	min_age = 20
+	prisoner = no
+	capable_only = yes
+	only_playable = yes
+	war = no
+	has_character_flag = lure_robin
+	
+	trigger = {
+		in_command = no
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 1.7
+			has_character_flag = ignore_robin
+		}
+		
+		modifier = {
+			factor = 0.7
+			has_character_flag = do_something
+		}
+	}
+	
+	immediate = {
+		clr_character_flag = lure_robin
+	}
+	
+	option = {
+		name = "EVTOPTA10003" #Too risky
+		prestige = -10
+		if = {
+			limit = {	
+				NOR = {
+					trait = craven
+					trait = berserker
+				}
+			}
+			add_trait = craven
+			break = yes
+		}
+		if = {
+			limit = {	
+				OR = {
+					trait = craven
+					trait = berserker
+				}
+				NOT = {
+					trait = slothful
+				}
+			}
+			add_trait = slothful
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10003" #Archery Contest
+		random_courtier = {
+			opinion = {
+				modifier = clever_deceive
+				who = ROOT
+				years = 5
+			}
+		}
+		narrative_event = { 
+			id = 10010
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10010"
+		}
+	}
+	
+	option = {	
+		name = "EVTOPTC10003" 
+		prestige = 10
+		if = {
+			limit = {
+				NOT = {
+					trait = deceitful
+				}
+			}
+			add_trait = deceitful
+			narrative_event = {
+				id = 10020
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIP10020"
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = deceitful
+				NOT = {
+					trait = patient
+				}
+			}
+			add_trait = patient
+			narrative_event = {
+				id = 10020
+				days = 1
+				random = 3
+				tooltip = "EVTTOOLTIP10020"
+			}
+		}
+		
+	}
+}
+
+#Archery Contest
+narrative_event = {
+	id = 10010
+	title = "EVTNAME10010"
+	desc = "EVTDESC10010"
+	picture = GFX_evt_longbowman
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10010" #Let the game begin!
+		prestige = 15
+		random_list = {
+			50 = {
+				narrative_event = {
+					id = 10011 #The leader of the Merry Men is captured
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10011"
+				}
+			}
+			50 = {
+				narrative_event = {
+					id = 10012 #An old man wins
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10012"
+				}
+			}
+		}
+	}
+}
+
+#The leader of the Merry Men is captured
+narrative_event = {
+	id = 10011
+	title = "EVTNAME10011"
+	desc = "EVTDESC10011"
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10011" #Hang him!
+		set_character_flag = killed_robin_hood
+		prestige = 10
+		any_courtier = {
+			limit = {
+				NOT = {
+					trait = charitable
+				}
+				NOT = {
+					trait = kind
+				}
+			}
+			opinion = {
+				modifier = opinion_killed_merrymen
+				who = ROOT
+				years = 5
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = wroth
+				}
+			}
+			add_trait = wroth
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = wroth
+				NOT = {
+					trait = cruel
+				}
+			}
+			add_trait = cruel
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10011" #Hire him and his merry men as gamekeepers
+		add_character_modifier = {
+			name = the_merciful
+			duration = 365
+		}
+		create_character = {
+			name = Robin
+			random_traits = no
+			dynasty = random
+			female = no
+			age = 30
+			trait = misguided_warrior
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 13
+				intrigue = 13
+			}
+		}
+		new_character = {
+			set_character_flag = marion_robin
+		}
+		create_character = {
+			name = Marion
+			random_traits = no
+			dynasty = random
+			female = yes
+			age = 25
+			trait = naive_appeaser
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 10
+				intrigue = 12
+			}
+		}
+		new_character = {
+			set_character_flag = robin_marion
+		}
+		narrative_event = {
+			id = 10042
+			days = 7
+			random = 14
+			tooltip = "EVTTOOLTIP10042"
+		}
+	}
+}
+
+#An old man wins
+narrative_event = {
+	id = 10012
+	title = "EVTNAME10012"
+	desc = "EVTDESC10012"
+	picture = GFX_evt_longbowman
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = "EVTOPTA10012" #What happened?
+		narrative_event = { 
+			id = 10013 #That didn't work
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10013"
+		}
+	}
+}
+
+#That didn't work
+narrative_event = {
+	id = 10013
+	title = "EVTNAME10013"
+	desc = "EVTDESC10013"
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = "EVTOPTA10013" #Leave them alone
+		prestige = -10
+		any_courtier = {
+			limit = {
+				OR = {
+					trait = brave
+					trait = honest
+					trait = proud
+				}
+			}
+			opinion = {
+				modifier = opinion_disapprove
+				who = ROOT
+				years = 5
+			}
+		}
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		
+	}
+	
+	option = { 
+		name = "EVTOPTB10013" #Let's try something else
+		narrative_event = {
+			id = 10020
+			days = 1
+			random = 3
+			tooltip = "EVTTOOLTIP10020"
+		}
+	}
+}
+
+#Devil in Disguise
+narrative_event = {
+	id = 10020
+	title = "EVTNAME10020"
+	desc = "EVTDESC10020"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10020" #Let's see how this works...
+		random_list = {
+			30 = {
+				narrative_event = { #Disguise revealed!
+					id = 10021
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10021"
+				}
+			}
+			30 = {
+				narrative_event = { #Stumbles upon the Merry Men
+					id = 10022
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10022"
+				}
+			}
+			30 = {
+				narrative_event = { #Meets Little John
+					id = 10023
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10023"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10020"
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			remove_trait = deceitful
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = slothful
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = slothful
+				hidden_tooltip = {
+					character_event = {
+						id = 38251 #Notify Slothful
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 10
+			
+				narrative_event = {
+					id = 10021
+					days = 10
+					random = 30
+				}
+			}
+		}
+	}
+}
+
+#Disguise revealed!
+narrative_event = {
+	id = 10021
+	title = "EVTNAME10021"
+	desc = "EVTDESC10021"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10021"
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = modifier_outfoxed
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				NOT = { has_province_modifier = highway_robber_band }
+			}
+			province_event = {
+				id = 68030
+				days = 2
+				random = 10
+				tooltip = "EVTTOOLTIP68030"
+			}
+		}
+	}
+}
+
+#Stumbles upon the Merry Men
+narrative_event = {
+	id = 10022
+	title = "EVTNAME10022"
+	desc = "EVTDESC10022"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10022"
+		prestige = 10
+		narrative_event = {
+			id = 10030
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10030"
+		}
+	}
+	option = {
+		name = "EVTOPTB10022"
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = modifier_outfoxed
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				NOT = { has_province_modifier = highway_robber_band }
+			}
+			province_event = {
+				id = 68030
+				days = 2
+				random = 10
+				tooltip = "EVTTOOLTIP68030"
+			}
+		}
+	}
+}
+
+#Meets/Fights Little John
+narrative_event = {
+	id = 10023
+	title = "EVTNAME10023"
+	desc = "EVTDESC10023"
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10023"
+		random_list = {
+			30 = {
+				narrative_event = { #Wins
+					id = 10024
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10024"
+				}
+			}
+			30 = {
+				narrative_event = { #Loses
+					id = 10025
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10025"
+				}
+			}
+			30 = {
+				narrative_event = { #Is Exposed
+					id = 10026
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10026"
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10023"
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		if = {
+			limit = {
+				NOR = {
+					trait = craven
+					trait = berserker
+				}
+			}
+			add_trait = craven
+		}
+		if = {
+			limit = {
+				OR = {
+					trait = craven
+					trait = berserker
+				}
+				NOT = {
+					trait = deceitful
+				}
+			}
+			add_trait = deceitful
+		}
+		add_character_modifier = {
+			name = modifier_outfoxed
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				NOT = { has_province_modifier = highway_robber_band }
+			}
+			province_event = {
+				id = 68030
+				days = 2
+				random = 10
+				tooltip = "EVTTOOLTIP68030"
+			}
+		}
+	}
+}
+
+#Wins
+narrative_event = {
+	id = 10024
+	title = "EVTNAME10024"
+	desc = "EVTDESC10024"
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10024"
+		prestige = 10
+		narrative_event = {
+			id = 10030
+			days = 1
+			tooltip = "EVTTOOLTIP10030"
+		}
+	}
+}
+
+#Loses
+narrative_event = {
+	id = 10025
+	title = "EVTNAME10025"
+	desc = "EVTDESC10025"
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10025"
+		prestige = -10
+		narrative_event = {
+			id = 10030
+			days = 1
+			tooltip = "EVTTOOLTIP10030"
+		}
+	}
+}
+
+#Is Exposed
+narrative_event = {
+	id = 10026
+	title = "EVTNAME10026"
+	desc = "EVTDESC10026"
+	picture = GFX_evt_bloody_man
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10026"
+		scaled_wealth = -0.02
+		random = {
+			chance = 10
+			
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = modifier_outfoxed
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				NOT = { has_province_modifier = highway_robber_band }
+			}
+			province_event = {
+				id = 68030
+				days = 2
+				random = 10
+				tooltip = "EVTTOOLTIP68030"
+			}
+		}
+	}
+}
+
+#Meet the Merry Men
+narrative_event = {
+	id = 10030
+	title = "EVTNAME10030"
+	desc = "EVTDESC10030"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10030"
+		narrative_event = { #S.F.T.R.G.T.T.P
+			id = 10031
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10031"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10030"
+		narrative_event = { #Adventure!
+			id = 10032
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10032"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC10030"
+		any_courtier = {
+			limit = {
+				NOT = {
+					trait = honest
+				}
+			}
+			opinion = {
+				modifier = clever_deceive
+				who = ROOT
+				years = 2
+			}
+		}
+		narrative_event = { #Arrest leader
+			id = 10040
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10040"
+		}
+	}
+	
+	
+	option = {
+		name = "EVTOPTD10026"
+		scaled_wealth = -0.02
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = modifier_outfoxed
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				NOT = { has_province_modifier = highway_robber_band }
+			}
+			province_event = {
+				id = 68030
+				days = 2
+				random = 10
+				tooltip = "EVTTOOLTIP68030"
+			}
+		}
+	}
+}
+
+#S.F.T.R.G.T.T.P
+narrative_event = {
+	id = 10031
+	title = "EVTNAME10031"
+	desc = "EVTDESC10031"
+	picture = GFX_evt_carriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10031" #This has gone too far!
+		narrative_event = { #Arrest leader
+			id = 10040
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10040"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10031" #Time to leave and leave them alone
+		scaled_wealth = -0.02
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = met_merry_men
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				has_province_modifier = highway_robber_band
+			}
+			random_demesne_province = {
+				remove_province_modifier = highway_robber_band
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC10031" #Now I know where to find them
+		narrative_event = {
+			id = 10041
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10041"
+		}
+	}
+}
+
+#Adventure!
+narrative_event = {
+	id = 10032
+	title = "EVTNAME10032"
+	desc = "EVTDESC10032"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10032" #Arrest him!
+		narrative_event = {
+			id = 10040
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10040"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10032" #This is wrong!
+		narrative_event = {
+			id = 10041
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10041"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC10032" #This was fun!
+		narrative_event = {
+			id = 10033
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10033"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTD10032" #Time to leave and leave them alone
+		scaled_wealth = -0.02
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = met_merry_men
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				has_province_modifier = highway_robber_band
+			}
+			random_demesne_province = {
+				remove_province_modifier = highway_robber_band
+			}
+		}
+	}
+}
+
+#This was fun!
+narrative_event = {
+	id = 10033
+	title = "EVTNAME10033"
+	desc = "EVTDESC10033"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10033" #Leave
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = met_merry_men
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				has_province_modifier = highway_robber_band
+			}
+			random_demesne_province = {
+				remove_province_modifier = highway_robber_band
+			}
+		}
+	}
+}
+
+#What to do?
+narrative_event = {
+	id = 10040
+	title = "EVTNAME10040"
+	desc = "EVTDESC10040"
+	picture = GFX_evt_bandits
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10040" #Hang him!
+		set_character_flag = killed_robin_hood
+		prestige = 10
+		any_courtier = {
+			limit = {
+				NOT = {
+					trait = charitable
+				}
+				NOT = {
+					trait = kind
+				}
+			}
+			opinion = {
+				modifier = opinion_killed_merrymen
+				who = ROOT
+				years = 5
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = wroth
+				}
+			}
+			add_trait = wroth
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = wroth
+				NOT = {
+					trait = cruel
+				}
+			}
+			add_trait = cruel
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10040" #Hire him and his merry men as gamekeepers
+		add_character_modifier = {
+			name = the_merciful
+			duration = 365
+		}
+		create_character = {
+			name = Robin
+			random_traits = no
+			dynasty = random
+			female = no
+			age = 30
+			trait = misguided_warrior
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 13
+				intrigue = 13
+			}
+		}
+		new_character = {
+			set_character_flag = marion_robin
+		}
+		create_character = {
+			name = Marion
+			random_traits = no
+			dynasty = random
+			female = yes
+			age = 25
+			trait = naive_appeaser
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 10
+				intrigue = 12
+			}
+		}
+		new_character = {
+			set_character_flag = robin_marion
+		}
+		narrative_event = {
+			id = 10042
+			days = 7
+			random = 14
+			tooltip = "EVTTOOLTIP10042"
+		}
+	}
+}
+
+#Ambush!
+narrative_event = {
+	id = 10041
+	title = "EVTNAME10041"
+	desc = "EVTDESC10041"
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10041" #Kill them all!
+		set_character_flag = killed_robin_hood
+		random = {
+			chance = 30
+			
+			add_trait = wounded
+			hidden_tooltip = {
+				character_event = {
+					id = 38280 #Notify Wounded
+				}
+			}
+		}
+		clr_character_flag = lure_robin
+		clr_character_flag = ignore_robin
+		clr_character_flag = do_something
+		clr_character_flag = robin_hood
+		add_character_modifier = {
+			name = met_merry_men
+			duration = 1825
+		}
+		random_demesne_province = {
+			limit = {
+				has_province_modifier = highway_robber_band
+			}
+			random_demesne_province = {
+				remove_province_modifier = highway_robber_band
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = wroth
+				}
+			}
+			add_trait = wroth
+		}
+		if = {
+			limit = {
+				trait = wroth
+				NOT = {
+					trait = cruel
+				}
+			}
+			add_trait = cruel
+		}
+		any_courtier = {
+			limit = {
+				NOT = {
+					trait = charitable
+				}
+				NOT = {
+					trait = kind
+				}
+			}
+			opinion = {
+				modifier = opinion_killed_merrymen
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10041" #Hire him and his merry men as gamekeepers
+		add_character_modifier = {
+			name = the_merciful
+			duration = 365
+		}
+		create_character = {
+			name = Robin
+			random_traits = no
+			dynasty = random
+			female = no
+			age = 30
+			trait = misguided_warrior
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 13
+				intrigue = 13
+			}
+		}
+		new_character = {
+			set_character_flag = marion_robin
+		}
+		create_character = {
+			name = Marion
+			random_traits = no
+			dynasty = random
+			female = yes
+			age = 25
+			trait = naive_appeaser
+			trait = brave
+			trait = ambitious
+			trait = proud
+			trait = zealous
+			health = 10
+			attributes = {
+				martial = 10
+				intrigue = 12
+			}
+		}
+		new_character = {
+			set_character_flag = robin_marion
+		}
+		narrative_event = {
+			id = 10042
+			days = 7
+			random = 14
+			tooltip = "EVTTOOLTIP10042"
+		}
+	}
+}
+
+#Marion gets her Robin
+narrative_event = {
+	id = 10042
+	title = "EVTNAME10042"
+	desc = "EVTDESC10042"
+	picture = GFX_evt_marriage
+	
+	is_triggered_only = yes
+
+	option = {
+		name =  "EVTOPTA10042"
+		set_character_flag = robin_marion_married
+		random_courtier = {
+			limit = {
+				has_character_flag = robin_marion
+			}
+			random_courtier = {
+				limit = {
+					has_character_flag = marion_robin
+				}
+				add_spouse = PREV
+				hidden_tooltip = {
+					add_lover = PREV
+				}
+			}
+		}
+	}
+}
+
+### GATES OF HELL ###
+
+#Gates of Hell - A strange gap has opened
+narrative_event = {
+	id = 10100
+	title = "EVTNAME10100"
+	desc = "EVTDESC10100"
+	picture = GFX_evt_pagan
+	
+	only_playable = yes
+	min_age = 20
+	max_age = 100
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		in_command = no
+		is_landed = yes
+		mercenary = no
+		primary_title = { temporary = no }
+
+		NOT = { is_inaccessible_trigger = yes }
+
+		NOT = {
+			has_character_modifier = flaming_gap
+		}
+		NOT = {
+			has_character_modifier = gates_hell
+		}
+		NOT = {
+			has_character_modifier = wailing_gap
+		}
+		NOR = {
+			has_character_modifier = exorcism_gateshell
+			has_character_modifier = cattle_gateshell
+			has_character_modifier = sacrifice_gateshell
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 10000
+		
+		modifier = {
+			factor = 0.5
+			trait = wroth
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = chaste
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA10100" #Ignore it
+		add_character_modifier = {
+			name = flaming_gap
+			duration = 730
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = slothful
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = slothful
+				hidden_tooltip = {
+					character_event = {
+						id = 38251 #Notify Slothful
+					}
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = slothful
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 25
+				
+				add_trait = content
+				hidden_tooltip = {
+					character_event = {
+						id = 38279 #Notify Content
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10100"
+		add_character_modifier = {
+			name = flaming_gap
+			duration = 730
+		}
+		narrative_event = {
+			id = 10101
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10101"
+		}
+	}
+}
+
+#Flames and fiery stones!
+narrative_event = {
+	id = 10101
+	title = "EVTNAME10101"
+	desc = "EVTDESC10101"
+	picture = GFX_evt_pagan
+	
+	only_playable = yes
+	min_age = 20
+	max_age = 100
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		has_character_modifier = flaming_gap
+		in_command = no
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.5
+			trait = lustful
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA10101" #Keep ignoring it
+		remove_character_modifier = flaming_gap
+		add_character_modifier = {
+			name = wailing_gap
+			duration = 730
+		}
+		location = {
+			add_province_modifier = {
+				name = peasants_upset
+				duration = 730
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10101"
+		remove_character_modifier = flaming_gap
+		add_character_modifier = {
+			name = wailing_gap
+			duration = 730
+		}
+		narrative_event = {
+			id = 10102
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10102"
+		}
+	}
+}
+
+#Wailings, screams and cries for help seems to emit from the burning gap
+narrative_event = {
+	id = 10102
+	title = "EVTNAME10102"
+	desc = "EVTDESC10102"
+	picture = GFX_evt_pagan
+
+	only_playable = yes
+	min_age = 20
+	max_age = 100
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	trigger = {
+		has_character_modifier = wailing_gap
+		in_command = no
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.5
+			trait = lustful
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA10102" #Keep ignoring it
+		remove_character_modifier = wailing_gap
+		add_character_modifier = {
+			name = gates_hell
+			duration = 730
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10102"
+		remove_character_modifier = wailing_gap
+		add_character_modifier = {
+			name = gates_hell
+			duration = 730
+		}
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}
+
+#Close the gap
+narrative_event = {
+	id = 10103
+	title = "EVTNAME10103"
+	desc = "EVTDESC10103"
+	picture = GFX_evt_pagan
+
+	only_playable = yes
+	min_age = 20
+	max_age = 100
+	capable_only = yes
+	prisoner = no
+	war = no
+
+	trigger = {
+		has_character_modifier = gates_hell
+		in_command = no
+		NOT = {
+			has_character_flag = choose_solution_gh
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = "EVTOPTA10103" #By using exorcism
+		trigger = {
+			religion_group = christian
+		}
+		set_character_flag = choose_solution_gh
+		narrative_event = {
+			id = 10104
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10104"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB10103" #By feeding it cattle
+		trigger = {
+			treasury = 50
+			NOT = {
+				trait = greedy
+			}
+		}
+		set_character_flag = choose_solution_gh
+		narrative_event = {
+			id = 10105
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10105"
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC10103" #By rolling down stones into it
+		set_character_flag = choose_solution_gh
+		narrative_event = {
+			id = 10106
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10106"
+		}
+	}
+	
+	option = { #By sacrificing what the city held to be most dear
+		name = "EVTOPTD10103"
+		trigger = {
+			any_child = {
+				is_abroad = no
+				prisoner = no
+				is_alive = yes
+				age = 10
+				NOT = {
+					age = 20
+				}
+				is_female = no
+				NOT = {
+					any_sibling = {
+						is_older_than = PREV
+						OR = {
+							father = { character = ROOT }
+							mother = { character = ROOT }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { religion = jain }
+			piety = -20
+			custom_tooltip = { text = jain_ahimsa_tooltip }
+		}
+		random_child = {
+			limit = {
+				is_abroad = no
+				prisoner = no
+				is_alive = yes
+				age = 10
+				NOT = {
+					age = 20
+				}
+				is_female = no
+				NOT = {
+					any_sibling = {
+						is_older_than = PREV
+						OR = {
+							father = { character = ROOT }
+							mother = { character = ROOT }
+						}
+					}
+				}
+			}
+			set_character_flag = human_sacrifice
+		}
+		set_character_flag = choose_solution_gh
+		narrative_event = {
+			id = 10107
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10107"
+		}
+	}
+}
+
+#By using exorcism
+narrative_event = {
+	id = 10104
+	title = "EVTNAME10104"
+	desc = "EVTDESC10104"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10104"
+		random_list = {
+			90 = {
+				set_character_flag = gate_exorcism
+				narrative_event = {
+					id = 10108
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10108" #It worked!
+				}
+			}
+			10 = {
+				narrative_event = {
+					id = 10109
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10109" #It didn't work!
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10104"
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}
+
+#By feeding it cattle
+narrative_event = {
+	id = 10105
+	title = "EVTNAME10105"
+	desc = "EVTDESC10105"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10105"
+		treasury = -50
+		random_list = {
+			90 = {
+				set_character_flag = gate_cattle
+				narrative_event = {
+					id = 10108
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10108" #It worked!
+				}
+			}
+			10 = {
+				narrative_event = {
+					id = 10109
+					days = 30
+					tooltip = "EVTTOOLTIP10109" #It didn't work!
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10105"
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}
+
+#By rolling down stones into it
+narrative_event = {
+	id = 10106
+	title = "EVTNAME10106"
+	desc = "EVTDESC10106"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10106"
+		random_list = {
+			90 = {
+				set_character_flag = gate_stones
+				narrative_event = {
+					id = 10108
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10108" #It worked!
+				}
+			}
+			10 = {
+				narrative_event = {
+					id = 10109
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10109" #It didn't work!
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10106"
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}
+
+	
+#By sacrificing what the city held to be most dear - child dies
+narrative_event = {
+	id = 10107
+	title = "EVTNAME10107"
+	desc = "EVTDESC10107"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10107"
+		random_child = {
+			limit = {
+				has_character_flag = human_sacrifice
+			}
+			clr_character_flag = human_sacrifice
+			death = {
+				death_reason = death_murder_fall
+				killer = ROOT
+			}
+		}
+		random_list = {
+			90 = {
+				set_character_flag = gate_human_sacrifice
+				narrative_event = {
+					id = 10108
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10108" #It worked!
+				}
+			}
+			10 = {
+				narrative_event = {
+					id = 10109
+					days = 5
+					random = 10
+					tooltip = "EVTTOOLTIP10109" #It didn't work!
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB10107" #I changed my mind!
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}
+
+#It worked!
+narrative_event = {
+	id = 10108
+	title = "EVTNAME10108"
+	desc = "EVTDESC10108"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10108"
+		trigger = {
+			has_character_flag = gate_exorcism
+		}
+		remove_character_modifier = gates_hell
+		clr_character_flag = choose_solution_gh
+		add_character_modifier = {
+			name = exorcism_gateshell
+			duration = 1825
+		}
+	}
+	option = {
+		name = "EVTOPTB10108"
+		trigger = {
+			has_character_flag = gate_cattle
+		}
+		remove_character_modifier = gates_hell
+		clr_character_flag = choose_solution_gh
+		add_character_modifier = {
+			name = cattle_gateshell
+			duration = 1825
+		}
+	}
+	option = {
+		name = "EVTOPTC10108"
+		trigger = {
+			has_character_flag = gate_stones
+		}
+		remove_character_modifier = gates_hell
+		clr_character_flag = choose_solution_gh
+		add_character_modifier = {
+			name = stones_gateshell
+			duration = 1825
+		}
+	}
+	option = {
+		name = "EVTOPTD10108"
+		trigger = {
+			has_character_flag = gate_human_sacrifice
+		}
+		remove_character_modifier = gates_hell
+		clr_character_flag = choose_solution_gh
+		add_character_modifier = {
+			name = sacrifice_gateshell
+			duration = 1825
+		}
+	}
+}
+
+#It did not work!
+narrative_event = {
+	id = 10109
+	title = "EVTNAME10109"
+	desc = "EVTDESC10109"
+	picture = GFX_evt_pagan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA10109" #Crap! Try something else
+		prestige = -15
+		clr_character_flag = choose_solution_gh
+		narrative_event = {
+			id = 10103
+			days = 5
+			random = 10
+			tooltip = "EVTTOOLTIP10103"
+		}
+	}
+}

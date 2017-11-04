@@ -1,0 +1,770 @@
+###########################################
+#                                         #
+# ZE Marshal Events                       #
+# ID ZE.4000-ZE.4999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = ZE
+
+
+### Marshal suggests candidate for commander position (if corrupt, may suggest moderately competent friends instead of the best)
+character_event = {
+	id = ZE.4000
+	desc = EVTDESC_ZE_4000
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	ai = no
+	only_capable = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		is_nomadic = no
+		job_marshal = {
+			ai = yes
+			NOT = { is_inaccessible_trigger = yes }
+		}
+		OR = {
+			AND = {
+				tier = COUNT
+				NOT = {
+					any_realm_character = {
+						count = 2
+						liege = { character = ROOT }
+						has_minor_title = title_commander
+					}
+				}
+				any_realm_character = {
+					ai = yes
+					martial = 9
+					liege = { character = ROOT }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+				}
+			}
+			AND = {
+				tier = DUKE
+				NOT = {
+					any_realm_character = {
+						count = 4
+						liege = { character = ROOT }
+						has_minor_title = title_commander
+					}
+				}
+				any_realm_character = {
+					ai = yes
+					martial = 9
+					liege = { character = ROOT }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+				}
+			}
+			AND = {
+				tier = KING
+				NOT = {
+					any_realm_character = {
+						count = 6
+						liege = { character = ROOT }
+						has_minor_title = title_commander
+					}
+				}
+				any_realm_character = {
+					ai = yes
+					martial = 9
+					liege = { character = ROOT }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+				}
+			}
+			AND = {
+				tier = EMPEROR
+				NOT = {
+					any_realm_character = {
+						count = 8
+						liege = { character = ROOT }
+						has_minor_title = title_commander
+					}
+				}
+				any_realm_character = {
+					ai = yes
+					martial = 9
+					liege = { character = ROOT }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			job_marshal = {
+				OR = {
+					trait = arbitrary
+					trait = deceitful
+				}
+				any_friend = { ai = yes }
+			}
+		}
+	}
+		
+	immediate = {
+		if = {
+			limit = {
+				job_marshal = {
+					OR = {
+						trait = arbitrary
+						trait = deceitful
+					}
+					any_friend = { ai = yes }
+				}
+				any_realm_character = {
+					ai = yes
+					liege = { character = ROOT }
+					ROOT = { job_marshal = { is_friend = PREVPREV } }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+					martial = 9
+				}
+			}
+			job_marshal = { set_character_flag = marshal_interested_commander_suggestion }
+			random_realm_character = {
+				limit = {
+					ai = yes
+					liege = { character = ROOT }
+					ROOT = { job_marshal = { is_friend = PREVPREV } }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+					martial = 9
+				}
+				save_event_target_as = recommended_for_marshal_ze_4000
+				break = yes
+			}
+		}
+		if = {
+			limit = {
+				job_marshal = {
+					OR = {
+						trait = arbitrary
+						trait = deceitful
+					}
+				}
+				any_realm_character = {
+					ai = yes
+					liege = { character = ROOT }
+					ROOT = { job_marshal = { dynasty = PREVPREV } }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+					martial = 9
+				}
+			}
+			job_marshal = { set_character_flag = marshal_interested_commander_suggestion }
+			random_realm_character = {
+				limit = {
+					ai = yes
+					liege = { character = ROOT }
+					ROOT = { job_marshal = { dynasty = PREVPREV } }
+					NOT = { has_minor_title = title_commander }
+					NOT = { has_job_title = job_marshal }
+					can_hold_title = title_commander
+					martial = 9
+				}
+				save_event_target_as = recommended_for_marshal_ze_4000
+				break = yes
+			}
+		}
+		random_realm_character = {
+			limit = {
+				ai = yes
+				liege = { character = ROOT }
+				NOT = { has_minor_title = title_commander }
+				NOT = { has_job_title = job_marshal }
+				can_hold_title = title_commander
+				martial = 19
+			}
+			save_event_target_as = recommended_for_marshal_ze_4000
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				ai = yes
+				liege = { character = ROOT }
+				NOT = { has_minor_title = title_commander }
+				NOT = { has_job_title = job_marshal }
+				can_hold_title = title_commander
+				martial = 15
+			}
+			save_event_target_as = recommended_for_marshal_ze_4000
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				ai = yes
+				liege = { character = ROOT }
+				NOT = { has_minor_title = title_commander }
+				NOT = { has_job_title = job_marshal }
+				can_hold_title = title_commander
+				martial = 12
+			}
+			save_event_target_as = recommended_for_marshal_ze_4000
+			break = yes
+		}
+		random_realm_character = {
+			limit = {
+				ai = yes
+				liege = { character = ROOT }
+				NOT = { has_minor_title = title_commander }
+				NOT = { has_job_title = job_marshal }
+				can_hold_title = title_commander
+				martial = 9
+			}
+			save_event_target_as = recommended_for_marshal_ze_4000
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_4000 # Yes
+		event_target:recommended_for_marshal_ze_4000 = {
+			give_minor_title = title_commander
+		}
+		job_marshal = { clr_character_flag = marshal_interested_commander_suggestion }
+	}
+	option = {
+		name = EVTOPTB_ZE_4000 # No
+		job_marshal = {
+			prestige = -20
+			if = {
+				limit = { has_character_flag = marshal_interested_commander_suggestion }
+				opinion = {
+					who = ROOT
+					modifier = opinion_very_disappointed
+					years = 3
+				}
+				clr_character_flag = marshal_interested_commander_suggestion
+			}
+		}
+	}
+}
+
+# Marshal has met engineer and wants to start using experimental military inventions - asks for investment
+character_event = {
+	id = ZE.4010
+	desc = EVTDESC_ZE_4010
+	picture = GFX_evt_machines_of_war
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	ai = no
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_marshal = {
+			ai = yes
+			OR = {
+				trait = diligent
+				trait = lunatic
+			}
+			NOT = { has_character_flag = marshal_military_experiments_ze }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	immediate = {
+		job_marshal = {
+			set_character_flag = marshal_military_experiments_ze
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_4010 # Go ahead
+		wealth = -30
+		job_marshal = {
+			set_character_flag = marshal_experimenter
+			hidden_tooltip = { character_event = { id = ZE.4011 days = 100 } }
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_4010 # No
+		job_marshal = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_disappointed
+				years = 3
+			}
+		}
+	}
+}
+
+# Marshal chooses direction...
+character_event = {
+	id = ZE.4011
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	ai = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_title = job_marshal
+		liege = { character = FROM }
+		ai = yes
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			10 = {
+				FROM = { narrative_event = { id = ZE.4020 } }	# Armored chariot with balista slits
+			}
+			10 = {
+				FROM = { narrative_event = { id = ZE.4030 } }	# Rockets
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = { trait = lunatic }
+				}
+				FROM = { narrative_event = { id = ZE.4040 } }	# Play trumpets really loudly to stun enemy (lunatic only)
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = { trait = lunatic }
+				}
+				FROM = { narrative_event = { id = ZE.4050 } }	# Set fire to sheep and send them towards enemy (lunatic only)
+			}
+		}
+	}
+}
+
+
+# Results - armored chariot
+narrative_event = {
+	id = ZE.4020
+	title = EVTTITLE_ZE_4020
+	picture = GFX_evt_machines_of_war
+	border = GFX_event_narrative_frame_war
+
+	desc = {
+		text = EVTDESCA_ZE_4020
+		trigger = {
+			has_character_flag = exp_armored_chariot_success
+		} 
+	}
+	desc = {
+		text = EVTDESCB_ZE_4020
+		trigger = {
+			has_character_flag = exp_armored_chariot_failure
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			30 = {
+				set_character_flag = exp_armored_chariot_success
+			}
+			10 = {
+				modifier = {
+					factor = 3
+					FROM = { trait = lunatic }
+				}
+				set_character_flag = exp_armored_chariot_failure
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_4020 # Excellent
+		trigger = {
+			has_character_flag = exp_armored_chariot_success
+		}
+		clr_character_flag = exp_armored_chariot_success
+		military_techpoints = 50
+	}
+	option = {
+		name = EVTOPTB_ZE_4020 # Oh no
+		trigger = {
+			has_character_flag = exp_armored_chariot_failure
+		}
+		clr_character_flag = exp_armored_chariot_failure
+		military_techpoints = -10
+		job_marshal = {
+			random_list = {
+				25 = {
+					modifier = {
+						factor = 0
+						OR = {
+							FROM = { trait = wounded }
+							FROM = { is_maimed_trigger = yes }
+						}
+					}
+					FROM = { add_trait = wounded }
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						FROM = { NOT = { can_be_maimed_trigger = yes } }
+					}
+					FROM = { add_maimed_trait_effect = yes }
+				}
+				50 = {
+				}
+			}
+		}
+	}
+}
+
+# Results - rockets
+narrative_event = {
+	id = ZE.4030
+	title = EVTTITLE_ZE_4030
+	picture = GFX_evt_machines_of_war
+	border = GFX_event_narrative_frame_war
+
+	desc = {
+		text = EVTDESCA_ZE_4030
+		trigger = {
+			has_character_flag = exp_rockets_success
+		} 
+	}
+	desc = {
+		text = EVTDESCB_ZE_4030
+		trigger = {
+			has_character_flag = exp_rockets_failure
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			30 = {
+				set_character_flag = exp_rockets_success
+			}
+			10 = {
+				modifier = {
+					factor = 3
+					FROM = { trait = lunatic }
+				}
+				set_character_flag = exp_rockets_failure
+			}
+		}
+	}
+	
+	option = {
+		name = EXCELLENT # Excellent
+		trigger = {
+			has_character_flag = exp_rockets_success
+		}
+		clr_character_flag = exp_rockets_success
+		military_techpoints = 50
+	}
+	option = {
+		name = WOE # Oh no
+		trigger = {
+			has_character_flag = exp_rockets_failure
+		}
+		clr_character_flag = exp_rockets_failure
+		military_techpoints = -10
+		job_marshal = {
+			random_list = {
+				25 = {
+					modifier = {
+						factor = 0
+						OR = {
+							FROM = { trait = wounded }
+							FROM = { is_maimed_trigger = yes }
+						}
+					}
+					FROM = { add_trait = wounded }
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						FROM = { NOT = { can_be_maimed_trigger = yes } }
+					}
+					FROM = { add_maimed_trait_effect = yes }
+				}
+				50 = {
+				}
+			}
+		}
+	}
+}
+
+# Results - trumpets
+narrative_event = {
+	id = ZE.4040
+	title = EVTTITLE_ZE_4040
+	desc = EVTDESC_ZE_4040
+	picture = GFX_evt_scandal
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_4040 # Oh no
+		prestige = -30
+		military_techpoints = -10
+		job_marshal = {
+			add_character_modifier = {
+				name = hard_of_hearing
+				duration = -1
+			}
+		}
+	}
+}
+
+# Results - burning sheep
+narrative_event = {
+	id = ZE.4050
+	title = EVTTITLE_ZE_4050
+	desc = EVTDESC_ZE_4050
+	picture = GFX_evt_scandal
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_4050 # Oh no
+		military_techpoints = -10
+		job_marshal = {
+			random_list = {
+				25 = {
+					modifier = {
+						factor = 0
+						OR = {
+							FROM = { trait = wounded }
+							FROM = { is_maimed_trigger = yes }
+						}
+					}
+					FROM = { add_trait = wounded }
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						FROM = { NOT = { can_be_maimed_trigger = yes } }
+					}
+					FROM = { add_maimed_trait_effect = yes }
+				}
+				50 = {
+				}
+			}
+		}
+	}
+}
+
+### Marshal on mission turns populace against liege
+character_event = {
+	id = ZE.4100
+	desc = EVTDESC_ZE_4100
+	picture = GFX_evt_noble_haughty_talking_to_peasants
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	only_rulers = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_marshal = {
+			ai = yes
+			NOT = { opinion = { who = ROOT value = -75 } }
+			NOT = { trait = honest }
+			has_job_action = yes
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			job_marshal = { trait = deceitful }
+		}
+		modifier = {
+			factor = 2
+			job_marshal = { trait = arbitrary }
+		}
+		modifier = {
+			factor = 0.5
+			job_marshal = { trait = craven }
+		}
+		modifier = {
+			factor = 0.5
+			job_marshal = { trait = slothful }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_4100 # Depose + get imprison reason
+		add_character_modifier = {
+			name = disloyal_peasantry
+			years = 5
+			inherit = yes
+		}
+		job_marshal = {
+			reverse_opinion = {
+				who = ROOT
+				years = 5
+				modifier = opinion_traitor
+			}
+		}
+		job_marshal = {
+			remove_title = job_marshal
+			prestige = -50
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_4100 # Turn a blind eye for now but get imprison reason
+		add_character_modifier = {
+			name = disloyal_peasantry
+			years = 5
+			inherit = yes
+		}
+		job_marshal = {
+			reverse_opinion = {
+				who = ROOT
+				years = 5
+				modifier = opinion_traitor
+			}
+		}
+	}
+}
+
+### Marshal - abuse of office, runs protection racket in province
+character_event = {
+	id = ZE.4120
+	desc = EVTDESC_ZE_4120
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	only_rulers = yes
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_marshal = {
+			ai = yes
+			has_job_action = yes
+			NOT = { trait = honest }
+			NOT = { trait = just }
+			NOT = { trait = kind }
+			NOT = { is_inaccessible_trigger = yes }
+			NOT = { has_character_flag = marshal_abuse_of_office }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 1.5
+			job_marshal = {
+				trait = deceitful
+			}
+		}
+		modifier = {
+			factor = 2
+			job_marshal = {
+				trait = arbitrary
+			}
+		}
+		modifier = {
+			factor = 2
+			job_marshal = {
+				trait = greedy
+			}
+		}
+		modifier = {
+			factor = 0.5
+			job_marshal = {
+				trait = craven
+			}
+		}
+		modifier = {
+			factor = 0.5
+			job_marshal = {
+				trait = slothful
+			}
+		}
+	}
+	
+	immediate = {
+		job_marshal = {
+			wealth = 100
+			set_character_flag = marshal_abuse_of_office
+			save_event_target_as = custom_marshal_4120
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_4120 # Depose + get imprison reason
+		event_target:custom_marshal_4120 = {
+			location = {
+				add_province_modifier = {
+					name = peasant_unrest
+					years = 3
+				}
+			}
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+			remove_title = job_marshal
+			prestige = -50
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_4120 # Turn a blind eye for now but get imprison reason
+		event_target:custom_marshal_4120 = {
+			location = {
+				add_province_modifier = {
+					name = peasant_unrest
+					years = 3
+				}
+			}
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+		}
+	}
+}
+
+
+
+
+
+
+

@@ -1,0 +1,590 @@
+#############################################
+#
+# Hedge Knights Event Series
+#
+# Event ID 71000-71999 is reserved
+#
+#############################################
+#Written by Johan Andersson
+
+#Group of Hedge Knights visiting
+character_event = {
+	id = 71000
+	desc = EVTDESC71000	
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+	war = no
+	
+	picture = GFX_evt_emissary
+
+	trigger = {
+		in_command = no
+		NOT = { has_character_flag = hedge_knights_visiting }
+		NOT = { has_character_flag = hates_hedge_knights }
+		any_courtier = {
+			has_job_title = job_chancellor
+		}
+		NOT = { has_character_flag = in_seclusion }
+	}
+
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 2.0
+			prestige = 100
+		}
+		modifier = {
+			factor = 2.0
+			tier = count
+		}
+		modifier = {
+			factor = 0.5
+			tier = king
+		}
+		modifier = {
+			factor = 0.2
+			tier = emperor
+		}
+		modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_bubonic_plague
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+				
+	}	
+	
+	option = {
+		name = EVTOPTA71000 #Welcome them with a lavish feast
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+			modifier = {
+				factor = 0
+				trait = greedy
+			}
+			modifier = {
+				factor = 0
+				trait = shy
+			}
+		}
+		set_character_flag = hedge_knights_visiting
+		prestige = 10
+		if = {
+			limit = {
+				not = { trait = gregarious }
+			}
+			add_trait = gregarious
+		}
+		if = {
+			limit = {
+				NOT = { trait = greedy }
+			}
+			scaled_wealth = -0.2
+		}
+		if = {
+			limit = {
+				trait = greedy
+			}
+			scaled_wealth = -0.4
+			remove_trait = greedy
+		}
+		
+	}
+	option = {
+		name = EVTOPTB71000 #Welcome them reluctantly
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				OR = {
+					trait = gregarious
+					trait = proud
+					trait = ambitious
+					trait = charitable
+				}
+			}
+			
+		}
+		prestige = 1
+		scaled_wealth = -0.05
+		set_character_flag = hedge_knights_visiting
+	}
+	option = {
+		name = EVTOPTC71000 #Refuse them Access
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { trait = greedy }
+			}
+		}
+		prestige = -5
+		any_courtier = {
+			opinion = {
+				modifier = tight_ruler
+				who = ROOT
+			}
+		}
+	}
+}
+	
+#Minor Tournament Hedge Knight Injured
+character_event = {
+	id = 71001
+	desc = EVTDESC71001	
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+
+	has_character_flag = hedge_knights_visiting
+	
+	picture = GFX_evt_joust
+	trigger = {
+		NOT = {	has_character_flag = hedge_knight_recruited }
+		NOT = {	has_character_flag = hedge_knight_woman_seduced	}
+	}
+
+	mean_time_to_happen = {
+		days = 20
+	}	
+	
+	immediate = {
+		clr_character_flag = hedge_knights_visiting
+		clr_character_flag = hedge_knight_recruited	
+		clr_character_flag = hedge_knight_woman_seduced
+	}
+	
+	option = {
+		name = EVTOPTA71001 	# pay for their expenses, and send them on their way
+		scaled_wealth = -0.05
+		piety = 5
+		
+	}
+	option = {
+		name = EVTOPTB71001 #let them stay at the castle while recovering.
+		prestige = -5
+		piety = 5
+		if = {
+			limit = { NOT = { personality_traits = 5 } }
+			add_trait = just
+		}
+	}
+}	
+
+#One hedge knight distinguishes himself
+character_event = {
+	id = 71002
+	desc = EVTDESC71002	
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+	ai = no
+
+	has_character_flag = hedge_knights_visiting
+	
+	picture = GFX_evt_joust
+	
+	trigger =  {
+		NOT = {	has_character_flag = hedge_knight_recruited }
+		NOT = {	has_character_flag = hedge_knight_woman_seduced	}
+	}
+	immediate = {
+		set_character_flag = hedge_knight_recruited	
+	}
+
+	mean_time_to_happen = {
+		days = 100
+		modifier = {
+			factor = 0.5
+			trait = gregarious
+		}
+	}	
+	
+	option = {
+		name = EVTOPTA71002  #take him in your service.
+		create_character = {
+			random_traits = no
+			dynasty = random
+			female = no
+			age = 16
+			trait = brave
+			trait = ambitious
+			trait = humble
+			health = 10
+			attributes = {
+				martial = 10
+			}
+		}	
+		scaled_wealth = -0.1
+	}
+	option = {
+		name = EVTOPTB71002 #give him lavish praise.
+		prestige = 5
+	}
+}	
+
+#Male courtier insulted by hedge knights
+character_event = {
+	id = 71003
+	desc = EVTDESC71003	
+	
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+
+	has_character_flag = hedge_knights_visiting
+	
+	picture = GFX_evt_joust
+	trigger = {
+	 	any_courtier = {
+	 		age = 16
+	 		is_female = no
+	 		OR = {
+	 			trait = cruel
+	 			trait = proud
+	 			trait = wroth
+	 			trait = zealous
+	 			trait = envious
+	 			prestige = 100
+	 		}
+	 	}
+	}	
+
+	mean_time_to_happen = {
+		days = 30
+		modifier = {
+			factor = 0.9
+			trait = arbitrary
+		}
+		
+		modifier = {
+			factor = 5
+			has_character_flag = hedge_knight_recruited	
+		}
+		
+		modifier = {
+			factor = 5
+			has_character_flag = hedge_knight_woman_seduced	
+		}		
+		
+	}	
+	option = {
+		name = EVTOPTA71003  #Throw them out.
+		clr_character_flag = hedge_knights_visiting
+		clr_character_flag = hedge_knight_recruited	
+		clr_character_flag = hedge_knight_woman_seduced
+		piety = -10 
+	}
+	option = {
+		name = EVTOPTB71003 #Ignore the complaints
+	 	random_courtier = {
+	 		limit = {
+	 			age = 16
+	 			is_female = no
+	 			OR = {
+		 			trait = cruel
+		 			trait = proud
+		 			trait = wroth
+		 			trait = zealous
+		 			trait = envious
+		 			prestige = 100
+		 		}
+		 	}
+			opinion = {
+				modifier = ruler_not_respect_rank
+				who = ROOT
+				months = 60
+			}
+	 	}		
+	}
+	
+}	
+
+#A young woman has been seduced by a hedge knight
+character_event = {
+	id = 71004
+	desc = EVTDESC71004	
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+	ai = no
+
+	has_character_flag = hedge_knights_visiting
+	
+	picture = GFX_evt_lovers
+	
+	trigger = {
+		NOT = {	has_character_flag = hedge_knight_recruited }
+		NOT = {	has_character_flag = hedge_knight_woman_seduced	}
+		any_courtier = {
+	 		age = 16
+	 		not = { age = 20 }
+	 		is_female = yes	
+	 		is_married = no
+			has_lover = no
+	 		is_pregnant = no
+			fertility = 0.3
+	 	}	 	
+	}	
+	
+	immediate = {
+		set_character_flag = hedge_knight_woman_seduced
+	}
+
+	mean_time_to_happen = {
+		days = 20
+		
+		modifier = {
+			factor = 5
+			has_character_flag = hedge_knight_recruited	
+		}		
+	}	
+	option = {
+		name = EVTOPTA71004 #stay
+ 		
+ 		
+		random_courtier = {
+	 		limit = {
+	 			age = 16
+	 			not = { age = 20 }
+	 			is_female = yes	
+	 			is_married = no
+	 			is_pregnant = no
+				has_lover = no
+	 		}
+	 		add_trait = lustful
+	 		create_character = {
+				random_traits = yes
+				dynasty = random
+				fertility = 0.6
+				female = no
+				age = 24
+	 		}
+			new_character = {
+	 			impregnate = PREV
+	 			add_lover = PREV
+				add_trait = lustful
+	 		}
+	 	}
+	 	piety = -10
+	}
+	option = {
+		name = EVTOPTB71004 #dungeon
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 100
+				OR = {
+					trait = cruel
+					trait = zealous
+				 }
+			}
+		}
+		random_courtier = {
+	 		limit = {
+	 			age = 16
+	 			not = { age = 20 }
+	 			is_female = yes	
+	 			is_married = no
+	 			is_pregnant = no
+	 		}
+	 		add_trait = lustful
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				fertility = 0.6
+				female = no
+				age = 24
+	 		}
+			new_character = {
+	 			impregnate = PREV
+	 			add_lover = PREV
+				add_trait = lustful
+				imprison = root
+	 		}
+	 	}		
+	}
+}
+
+#Hedge knights leaving
+character_event = {
+	id = 71005
+	desc = EVTDESC71005	
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	religion = catholic
+	
+	has_character_flag = hedge_knights_visiting
+	
+	trigger = {
+	 	always = yes
+	}	
+	immediate = {
+		clr_character_flag = hedge_knights_visiting
+		clr_character_flag = hedge_knight_woman_seduced
+		clr_character_flag = hedge_knight_recruited	
+	}
+	
+	picture = GFX_evt_feast
+
+	mean_time_to_happen = {
+		days = 40
+		modifier = {
+			factor = 0.1
+			has_character_flag = hedge_knight_recruited	
+		}		
+	}	
+	option = {
+		name = EVTOPTA71005 #give them a farewell feast
+		prestige = 10
+		scaled_wealth = -0.05
+
+	}
+	option = {
+		name = EVTOPTB71005 #let them leave quitely
+		prestige = -5
+	}
+}
+
+#Marshal has arrested a hedge knight
+character_event = {
+	id = 71006
+	desc = EVTDESC71006	
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	prisoner = no
+	religion = catholic
+	war = no
+	
+	picture = GFX_evt_melee
+	
+	trigger = {
+		in_command = no
+		NOT = { has_character_flag = hedge_knights_visiting }
+		any_courtier = {
+			has_job_title = job_marshal
+		}
+	}
+	
+	option = {
+		name = EVTOPTA71006  #order him released
+		job_marshal = {
+			prestige = -25
+			opinion = {
+				modifier = marshal_overruled
+				who = ROOT
+			}
+		}
+		piety = 10
+		clr_character_flag = hates_hedge_knights
+	}
+	option = {
+		name = EVTOPTB71006 #it is not my concern
+		job_marshal = {
+			prestige = 25
+		}
+		prestige = 25
+		piety = -10
+		set_character_flag = hates_hedge_knights
+	}
+}	
+	

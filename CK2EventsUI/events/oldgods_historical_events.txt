@@ -1,0 +1,979 @@
+###################################
+#
+# THE OLD GODS 
+# - Various Historical Events
+#
+###################################
+
+# Written by Henrik Eklund
+
+namespace = TOG
+
+# Discovery of Greenland
+narrative_event = {
+	id = TOG.400
+	title = EVTNAME_TOG_400
+	desc = EVTDESC_TOG_400
+	picture = GFX_evt_longships_at_sea_oldgods
+	border = GFX_event_narrative_frame_diplomacy
+	
+	ai = no
+	culture_group = north_germanic
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		1 = { culture_group = north_germanic }
+		year = 925
+		NOT = { has_global_flag = greenland_discovered }
+	}	
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = greenland_discovered
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_400
+	}
+}
+
+# Greenland is settled
+narrative_event = {
+	id = TOG.401
+	title = EVTNAME_TOG_401
+	desc = EVTDESC_TOG_401
+	picture = GFX_evt_longships_at_sea_oldgods
+	border = GFX_event_narrative_frame_diplomacy
+	
+	ai = no
+	culture_group = north_germanic
+	has_global_flag = greenland_discovered
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		1 = { culture_group = north_germanic }
+		year = 985
+		NOT = { has_global_flag = greenland_settled }
+	}	
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = greenland_settled
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_401
+	}
+}
+
+# Leif Ericson discovers Vinland
+narrative_event = {
+	id = TOG.402
+	title = EVTNAME_TOG_402
+	desc = EVTDESC_TOG_402
+	picture = GFX_evt_longships_at_sea_oldgods
+	border = GFX_event_narrative_frame_diplomacy
+	
+	ai = no
+	culture_group = north_germanic
+	has_global_flag = greenland_settled
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		1 = { culture_group = north_germanic }
+		year = 1001
+		NOT = { has_global_flag = vinland_discovered }
+	}	
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = vinland_discovered
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_402
+	}
+}
+
+# Aztecs Encountered (Sunset Invasion only)
+narrative_event = {
+	id = TOG.403
+	title = EVTNAME_TOG_403
+	desc = EVTDESC_TOG_403
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_narrative_frame_diplomacy
+	
+	ai = no
+	culture_group = north_germanic
+	has_global_flag = vinland_discovered
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		has_dlc = "Sunset Invasion"
+		year = 1010
+		NOT = { has_global_flag = aztecs_encountered }
+	}	
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = aztecs_encountered
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_403
+	}
+}
+
+### Jomsvikings ###
+
+### Jomsvikings in Stettin
+
+# Palnatoke created
+character_event = {
+	id = TOG.4004
+	hide_window = yes
+
+	min_age = 16
+	only_men = yes
+	only_playable = yes
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		year = 920
+		controls_religion = yes # Let it happen for the Pope - he's always around
+		NOT = { has_global_flag = no_land_to_jomsvikings }
+		NOT = { has_global_flag = jomsvikings_founded }
+		# The settlement has not been built yet
+		b_kolbatz = {
+			has_holder = no
+		}
+		# Stettin
+		366 = {
+			owner = {
+				OR = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+				}
+			}
+			NOT = { num_of_settlements = 4 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 620
+	}
+	
+	immediate = {
+		366 = {
+			owner = {
+				create_character = {
+					random_traits = no
+					name = "Palnatoke"
+					religion = norse_pagan
+					culture = norse
+					dynasty = none
+					female = no
+					age = 28
+					trait = tough_soldier
+					trait = brave
+					trait = strong
+					trait = zealous
+					trait = hunter
+					trait = wroth
+					trait = berserker
+				}
+				new_character = {
+					character_event = { id = TOG.4000 }
+				}
+			}
+		}
+	}
+}
+
+# Chief Writes a Letter (Stettin)
+character_event = {
+	id = TOG.4000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		366 = {
+			owner = { letter_event = { id = TOG.4001 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = TOG.4001
+	desc = EVTDESC_TOG_4001
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4001
+		ai_chance = {
+			factor = 99
+		}
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		
+		custom_tooltip = {
+			text = jomsvikings_founded
+			hidden_tooltip = { 366 = { province_event = { id = TOG.4002 days = 1 } } }
+			hidden_tooltip = {
+				activate_title = { title = d_jomsvikings status = yes }
+				d_jomsvikings = { grant_title = FROM }
+				set_global_flag = jomsvikings_founded
+				FROM = {
+					wealth = 300
+					religion = ROOT
+					set_government_type = feudal_government
+				}
+				if = {
+					limit = { has_global_flag = norse_reformation }
+					d_jomsvikings = {
+						religion = norse_pagan_reformed # This Holy Order now changes religion
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_4001
+		piety = -25
+		set_global_flag = no_land_to_jomsvikings
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+			banish = yes
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = TOG.4002
+	desc = EVTDESC_TOG_4002
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4002
+		build_holding = {
+		   title = b_kolbatz
+		   type = castle
+		   holder = FROMFROM
+		}
+		b_kolbatz = { set_name = Jomsborg }
+		hidden_tooltip = {
+			owner = {
+				narrative_event = { id = TOG.4003 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = TOG.4003
+	title = EVTNAME_TOG_4003
+	desc = EVTDESC_TOG_4003
+	picture = "GFX_evt_longships_at_sea_oldgods"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4003
+		trigger = {
+			OR = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_4003
+		trigger = {
+			NOT = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+	}
+}
+
+### Jomsvikings in Wolgast
+
+# Palnatoke created
+character_event = {
+	id = TOG.4009
+	hide_window = yes
+
+	min_age = 16
+	only_men = yes
+	only_playable = yes
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		year = 920
+		controls_religion = yes # Let it happen for the Pope - he's always around
+		NOT = { has_global_flag = no_land_to_jomsvikings }
+		NOT = { has_global_flag = jomsvikings_founded }
+		# The settlement has not been built yet
+		b_zussow = {
+			has_holder = no
+		}
+		# Wolgast
+		308 = {
+			owner = {
+				OR = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+				}
+			}
+			NOT = { num_of_settlements = 4 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 620
+	}
+	
+	immediate = {
+		308 = {
+			owner = {
+				create_character = {
+					random_traits = no
+					name = "Palnatoke"
+					religion = norse_pagan
+					culture = norse
+					dynasty = none
+					female = no
+					age = 28
+					trait = tough_soldier
+					trait = brave
+					trait = strong
+					trait = zealous
+					trait = hunter
+					trait = wroth
+					trait = berserker
+				}
+				new_character = {
+					character_event = { id = TOG.4005 }
+				}
+			}
+		}
+	}
+}
+
+# Chief Writes a Letter (Wolgast)
+character_event = {
+	id = TOG.4005
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		308 = {
+			owner = { letter_event = { id = TOG.4006 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = TOG.4006
+	desc = EVTDESC_TOG_4006
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4001
+		ai_chance = {
+			factor = 99
+		}
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		
+		custom_tooltip = {
+			text = jomsvikings_founded
+			hidden_tooltip = { 308 = { province_event = { id = TOG.4007 days = 1 } } }
+			hidden_tooltip = {
+				activate_title = { title = d_jomsvikings status = yes }
+				d_jomsvikings = { grant_title = FROM }
+				set_global_flag = jomsvikings_founded
+				FROM = {
+					wealth = 300
+					religion = ROOT
+					set_government_type = feudal_government
+				}
+				if = {
+					limit = { has_global_flag = norse_reformation }
+					d_jomsvikings = {
+						religion = norse_pagan_reformed # This Holy Order now changes religion
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_4001
+		piety = -25
+		set_global_flag = no_land_to_jomsvikings
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+			banish = yes
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = TOG.4007
+	desc = EVTDESC_TOG_4002
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4002
+		build_holding = {
+		   title = b_zussow
+		   type = castle
+		   holder = FROMFROM
+		}
+		b_zussow = { set_name = Jomsborg }
+		hidden_tooltip = {
+			FROMFROM = {
+				narrative_event = { id = TOG.4008 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = TOG.4008
+	title = EVTNAME_TOG_4003
+	desc = EVTDESC_TOG_4003
+	picture = "GFX_evt_longships_at_sea_oldgods"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4003
+		trigger = {
+			OR = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_4003
+		trigger = {
+			NOT = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+			}
+		}
+	}
+}
+
+### Jomsvikings in Rügen
+
+# Palnatoke created
+character_event = {
+	id = TOG.4010
+	hide_window = yes
+
+	min_age = 16
+	only_men = yes
+	only_playable = yes
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		year = 920
+		controls_religion = yes # Let it happen for the Pope - he's always around
+		NOT = { has_global_flag = no_land_to_jomsvikings }
+		NOT = { has_global_flag = jomsvikings_founded }
+		# The settlement has not been built yet
+		b_putbus = {
+			has_holder = no
+		}
+		# Rügen
+		304 = {
+			owner = {
+				OR = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+				}
+			}
+			NOT = { num_of_settlements = 3 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 620
+	}
+	
+	immediate = {
+		304 = {
+			owner = {
+				create_character = {
+					random_traits = no
+					name = "Palnatoke"
+					religion = norse_pagan
+					culture = norse
+					dynasty = none
+					female = no
+					age = 28
+					trait = tough_soldier
+					trait = brave
+					trait = strong
+					trait = zealous
+					trait = hunter
+					trait = wroth
+					trait = berserker
+				}
+				new_character = {
+					character_event = { id = TOG.4015 }
+				}
+			}
+		}
+	}
+}
+
+# Chief Writes a Letter (Rügen)
+character_event = {
+	id = TOG.4015
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		304 = {
+			owner = { letter_event = { id = TOG.4016 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = TOG.4016
+	desc = EVTDESC_TOG_4016
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4001
+		ai_chance = {
+			factor = 99
+		}
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		
+		custom_tooltip = { 
+			text = jomsvikings_founded
+			hidden_tooltip = { 304 = { province_event = { id = TOG.4017 days = 1 } } }
+			hidden_tooltip = {
+				activate_title = { title = d_jomsvikings status = yes }
+				d_jomsvikings = { grant_title = FROM }
+				set_global_flag = jomsvikings_founded
+				FROM = {
+					wealth = 300
+					religion = ROOT
+					set_government_type = feudal_government
+				}
+				if = {
+					limit = { has_global_flag = norse_reformation }
+					d_jomsvikings = {
+						religion = norse_pagan_reformed # This Holy Order now changes religion
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_4001
+		piety = -25
+		set_global_flag = no_land_to_jomsvikings
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+			banish = yes
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = TOG.4017
+	desc = EVTDESC_TOG_4002
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4002
+		build_holding = {
+		   title = b_putbus
+		   type = castle
+		   holder = FROMFROM
+		}
+		b_putbus = { set_name = Jomsborg }
+		hidden_tooltip = {
+			FROMFROM = {
+				narrative_event = { id = TOG.4018 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = TOG.4018
+	title = EVTNAME_TOG_4003
+	desc = EVTDESC_TOG_4003
+	picture = "GFX_evt_longships_at_sea_oldgods"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4003
+		trigger = {
+			OR = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_4003
+		trigger = {
+			NOT = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+			}
+		}
+	}
+}
+
+### Jomsvikings in Werle
+
+# Palnatoke created
+character_event = {
+	id = TOG.4020
+	hide_window = yes
+
+	min_age = 16
+	only_men = yes
+	only_playable = yes
+	religion = catholic
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		year = 920
+		controls_religion = yes # Let it happen for the Pope - he's always around
+		NOT = { has_global_flag = no_land_to_jomsvikings }
+		NOT = { has_global_flag = jomsvikings_founded }
+		# The settlement has not been built yet
+		b_tribsees = {
+			has_holder = no
+		}
+		# Werle
+		307 = {
+			owner = {
+				OR = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+				}
+			}
+			NOT = { num_of_settlements = 4 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 620
+	}
+	
+	immediate = {
+		307 = {
+			owner = {
+				create_character = {
+					random_traits = no
+					name = "Palnatoke"
+					religion = norse_pagan
+					culture = norse
+					dynasty = none
+					female = no
+					age = 28
+					trait = tough_soldier
+					trait = brave
+					trait = strong
+					trait = zealous
+					trait = hunter
+					trait = wroth
+					trait = berserker
+				}
+				new_character = {
+					character_event = { id = TOG.4025 }
+				}
+			}
+		}
+	}
+}
+
+# Chief Writes a Letter (Werle)
+character_event = {
+	id = TOG.4025
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		307 = {
+			owner = { letter_event = { id = TOG.4026 days = 7 } }
+		}
+	}
+}
+
+# Ask permission from the Count
+letter_event = {
+	id = TOG.4026
+	desc = EVTDESC_TOG_4026
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4001
+		ai_chance = {
+			factor = 99
+		}
+		piety = 100
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_barony_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+
+		custom_tooltip = { 
+			text = jomsvikings_founded
+			hidden_tooltip = { 307 = { province_event = { id = TOG.4027 days = 1 } } }
+			hidden_tooltip = {
+				activate_title = { title = d_jomsvikings status = yes }
+				d_jomsvikings = { grant_title = FROM }
+				set_global_flag = jomsvikings_founded
+				FROM = {
+					wealth = 300
+					religion = ROOT
+					set_government_type = feudal_government
+				}
+				if = {
+					limit = { has_global_flag = norse_reformation }
+					d_jomsvikings = {
+						religion = norse_pagan_reformed # This Holy Order now changes religion
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_4001
+		piety = -25
+		set_global_flag = no_land_to_jomsvikings
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+			banish = yes
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = TOG.4027
+	desc = EVTDESC_TOG_4002
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4002
+		build_holding = {
+		   title = b_tribsees
+		   type = castle
+		   holder = FROMFROM
+		}
+		b_tribsees = { set_name = Jomsborg }
+		hidden_tooltip = {
+			FROMFROM = {
+				narrative_event = { id = TOG.4028 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new castle
+narrative_event = {
+	id = TOG.4028
+	title = EVTNAME_TOG_4003
+	desc = EVTDESC_TOG_4003
+	picture = "GFX_evt_longships_at_sea_oldgods"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_4003
+		trigger = {
+			OR = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_4003
+		trigger = {
+			NOT = {
+					religion = norse_pagan
+					religion = norse_pagan_reformed
+			}
+		}
+	}
+}
+
+# Jomsvikings Reform
+character_event = {
+	id = TOG.4030
+	hide_window = yes
+	
+	min_age = 16
+	only_men = yes
+	only_playable = yes
+	religion = catholic
+	has_global_flag = norse_reformation
+	
+	trigger = {
+		controls_religion = yes
+		NOT = { has_global_flag = jomsvikings_reformed }
+		is_title_active = d_jomsvikings
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		d_jomsvikings = {
+			religion = norse_pagan_reformed # This Holy Order now changes religion
+			holder_scope = {
+				religion = norse_pagan_reformed
+			}
+		}
+		set_global_flag = jomsvikings_reformed
+	}
+}

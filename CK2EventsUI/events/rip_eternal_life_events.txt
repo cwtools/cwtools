@@ -1,0 +1,5089 @@
+###################################
+#
+# ETERNAL LIFE
+# - The quest for immortality events
+#
+###################################
+
+# Written by Mathilda Bjarnehed & Milla Isaksson
+
+###SEARCH STEP###
+
+#Contemplating mortality
+narrative_event = {
+	title = EVTNAME_RIP_21000
+	id = RIP.21000
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_danse_macabre
+
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+
+	hide_from = yes
+	hide_new = yes
+
+	ai = no
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		NOR = {
+			has_game_rule = {
+				name = supernatural_events
+				value = off
+			}
+			has_character_flag = eternal_life_events
+		}
+		is_inaccessible_trigger = no
+		immortal = no
+	}
+
+	mean_time_to_happen = {
+		months = 3000
+		
+		modifier = {
+			factor = 0.8
+			NOT = { health = 2 }
+			character_disease_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			character_disease_trigger = yes
+		}
+		modifier = {
+			factor = 0.9
+			age = 50
+		}
+		modifier = {
+			factor = 0.9
+			age = 60
+		}
+		modifier = {
+			factor = 0.9
+			age = 70
+		}
+		modifier = {
+			factor = 0.9
+			age = 80
+		}
+		modifier = {
+			factor = 0.9
+			age = 90
+		}
+	}
+
+	immediate = {
+		set_character_flag = eternal_life_events
+
+		if = {
+			limit = {
+				is_married = no
+				NOT = { trait = ambitious }
+			}
+
+			set_character_flag = RIP_21000_lonely
+
+			if = {
+				limit = { 
+					any_courtier = { 
+						sad_example_trigger = yes 
+						ai = yes
+					} 
+				}
+
+				random_courtier = {
+					limit = { 
+						sad_example_trigger = yes 
+						ai = yes
+					}
+					
+					add_trait = depressed
+					save_event_target_as = eternal_life_sad_example	
+				}
+			}
+
+			if = {
+				limit = { NOT = { any_courtier = { sad_example_trigger = yes } } }
+
+				create_character = {
+					age = 62
+					random_traits = yes
+					trait = depressed
+					religion = ROOT
+					dynasty = yes
+					race = ROOT
+					culture = ROOT
+				}
+				new_character = { save_event_target_as = eternal_life_sad_example }
+			}
+		}
+	}
+
+	desc = {
+		text = EVTDSC_RIP_21000_MARRIED
+		trigger = { 
+			AND = {
+				is_married = yes
+				any_spouse = {
+					is_lover = ROOT
+				}
+			}
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_21000_UNMARRIED
+		trigger = {
+			has_character_flag = RIP_21000_lonely
+		}
+	}
+
+	desc = {
+		text = EVTDSC_RIP_21000_UNMARRIED_AMBITIOUS
+		trigger = {
+			OR = {
+				AND = {
+					is_married = no
+					trait = ambitious
+				}
+				AND = {
+					is_married = yes
+					NOT = { trait = kind }
+					NOT = {
+						any_spouse = {
+							is_lover = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_21000_MARRIED_NO_LOVE
+		trigger = { 
+			AND = {
+				is_married = yes
+				trait = kind
+				NOT = {
+					any_spouse = {
+						is_lover = ROOT
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		text = EVTDSC_RIP_21000_FALLBACK
+		trigger = {
+			is_married = no
+			NOT = { trait = ambitious }
+			NOT = { has_character_flag = RIP_21000_lonely }
+		}
+	}	
+
+	#Summon the council!
+	option = {
+		name = EVTOPTA_RIP_21000
+		narrative_event = {
+			id = RIP.21001
+			days = 10
+			tooltip = EVTOPTA_RIP_21000_TOOLTIP
+		}
+
+		trigger = {	NOT = { has_character_flag = RIP_21000_lonely } }
+	}
+
+	#Summon the council! Who cares about lonely people?
+	option = {
+		name = EVTOPTB_RIP_21000
+		narrative_event = {
+			id = RIP.21001
+			days = 15
+			tooltip = EVTOPTB_RIP_21000_TOOLTIP
+		}
+
+		trigger = { has_character_flag = RIP_21000_lonely }
+
+		clr_character_flag = RIP_21000_lonely
+	}
+
+	#Nah
+	option = {
+		name = EVTOPTC_RIP_21000
+		custom_tooltip = { text = EVTOPTC_RIP_21000_TOOLTIP }
+		if = {
+			limit = { NOT = { trait = content } }
+			add_trait = content
+		}
+
+		trigger = {	NOT = { has_character_flag = RIP_21000_lonely }	}
+	}
+
+	#Nah, I wanna spend more time with the sad person
+	option = {
+		name = EVTOPTD_RIP_21000
+		custom_tooltip = { text = EVTOPTD_RIP_21000_TOOLTIP }
+
+		if = {
+			limit = { NOT = { trait = content } }
+			add_trait = content
+		}
+
+		event_target:eternal_life_sad_example = {
+			opinion = {
+				who = FROM
+				modifier = opinion_budding_friendship
+			}
+			hidden_tooltip = { add_friend = FROM }
+		}
+
+		trigger = {	has_character_flag = RIP_21000_lonely }
+		
+		hidden_tooltip = {
+			clear_event_target = eternal_life_sad_example
+			clr_character_flag = RIP_21000_lonely
+		}
+	}
+}
+
+#Council is summoned
+narrative_event = {
+	title = EVTNAME_RIP_21001
+	id = RIP.21001
+	desc = {
+		text = EVTDSC_RIP_21001
+		picture = GFX_evt_council_arabic
+		trigger = { culture_group = arabic }	
+	}
+	desc = {
+		text = EVTDSC_RIP_21001
+		picture = GFX_evt_council
+		trigger = { NOT = { culture_group = arabic } }
+	}
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21001
+		trigger = {
+			diplomacy = 12
+			job_chancellor = { always = yes }
+		}
+
+		tooltip_info = diplomacy
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21002 }
+
+		job_chancellor = {
+
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+
+			hidden_tooltip = {
+				save_event_target_as = eternal_life_advisor
+				character_event = { id = RIP.21002 days = 200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = RIP.21021 days = 600 } }
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21001
+		trigger = { 
+			martial = 12 
+			job_marshal = { always = yes } 
+		}
+
+		tooltip_info = martial
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21003 }
+
+		job_marshal = {
+
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+
+			hidden_tooltip = {
+				save_event_target_as = eternal_life_advisor
+				character_event = { id = RIP.21002 days = 200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = RIP.21021 days = 600 } }
+	}
+
+	option = {
+		name = EVTOPTC_RIP_21001
+		trigger = { 
+			intrigue = 12 
+			job_spymaster = { always = yes } 
+		}
+
+		tooltip_info = intrigue
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21004 }
+
+		job_spymaster = {
+
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+
+			hidden_tooltip = {
+				save_event_target_as = eternal_life_advisor
+				character_event = { id = RIP.21002 days = 200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = RIP.21021 days = 600 } }
+	}
+
+	option = {
+		name = EVTOPTD_RIP_21001
+		trigger = {
+			learning = 12
+			job_spiritual = { always = yes }
+		}
+
+		tooltip_info = learning
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21005 }
+
+		job_spiritual = {
+
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+
+			hidden_tooltip = {
+				save_event_target_as = eternal_life_advisor
+				character_event = { id = RIP.21002 days = 200 }
+			}
+		}
+		hidden_tooltip = { character_event = { id = RIP.21021 days = 600 } }
+	}
+
+	#Dumb option
+	option = {
+	name = EVTOPTE_RIP_21001
+		trigger = {
+			OR = {
+			    NOR = {
+		           	diplomacy = 12
+		          	martial = 12
+		           	intrigue = 12
+		           	learning = 12
+			    }
+			    AND = {
+			        is_dumb_trigger = yes
+			        NOT = {
+			           diplomacy = 12
+			           martial = 12
+			           intrigue = 12
+			           learning = 12
+			        }
+			    }
+			}
+		}
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21006 }
+
+		hidden_tooltip = {
+			random_list = {
+				85 = {
+					narrative_event = { id = RIP.21006 days = 150 } #Fail
+				}
+				15 = {
+					narrative_event = { id = RIP.21014 days = 365 random = 60 } #Stranger appears on her own
+				}
+			}
+		}
+	}
+
+	#Neutral fallback
+	option = {
+		name = EVTOPTF_RIP_21001
+		trigger = {
+			OR = {
+				NOT = { diplomacy = 12 }
+				NOT = { martial = 12 }
+				NOT = { intrigue = 12 }
+				NOT = { learning = 12 }
+			}
+			OR = {
+				diplomacy = 12
+				martial = 12
+				intrigue = 12
+				learning = 12
+			}
+			is_dumb_trigger = NO
+		}
+
+		custom_tooltip = { text = EVTTOOLTIP_RIP_21007 }
+
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					narrative_event = { id = RIP.21007 days = 150 } #Fail
+				}
+				35 = {
+					narrative_event = { id = RIP.21014 days = 365 random = 60 } #Stranger appears on her own
+				}
+			}
+		}
+	}
+}
+
+#Advisor starts their search
+character_event = {
+	id = RIP.21002
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	option = {
+		if = {
+			limit = { has_job_title = job_chancellor }
+			FROM = { narrative_event = { id = RIP.21008 }
+			}
+		}
+		if = {
+			limit = { has_job_title = job_marshal }
+			FROM = { narrative_event = { id = RIP.21009 }
+			}
+		}
+		if = {
+			limit = { has_job_title = job_spymaster }
+			FROM = { narrative_event = { id = RIP.21010 }
+			}
+		}
+		if = {
+			limit = { has_job_title = job_spiritual }
+			FROM = { narrative_event = { id = RIP.21011 }
+			}
+		}
+	}
+}
+
+#Dumb fail
+narrative_event = {
+	title = EVTNAME_RIP_21006
+	id = RIP.21006
+	desc = EVTDSC_RIP_21006
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_bishop
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21006
+		custom_tooltip = { text = EVTOPTA_RIP_21006_TOOLTIP }
+	}
+}
+
+#Fallback "neutral" option fail
+narrative_event = {
+	title = EVTNAME_RIP_21007
+	id = RIP.21007
+	desc = EVTDSC_RIP_21007
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_bishop
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21007
+		custom_tooltip = { text = EVTOPTA_RIP_21007_TOOLTIP }
+	}
+}
+
+#Chancellor sends back event
+narrative_event = {
+	title = EVTNAME_RIP_21008
+	id = RIP.21008
+	desc = EVTDSC_RIP_21008
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_princess_byzantine
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			is_alive = yes
+			liege = { character = ROOT }
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21008
+		custom_tooltip = { text = EVTOPTA_RIP_21008_TOOLTIP }
+
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				set_character_flag = eternal_life_expensive_option
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21008
+		custom_tooltip = { text = EVTOPTB_RIP_21008_TOOLTIP }
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+}
+
+#Marshal sends back event
+narrative_event = {
+	title = EVTNAME_RIP_21009
+	id = RIP.21009
+	desc = EVTDSC_RIP_21009
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_knight_kneeling
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			is_alive = yes
+			liege = { character = ROOT }
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21009
+		custom_tooltip = { text = EVTOPTA_RIP_21009_TOOLTIP }	
+
+		scaled_wealth = -1.5
+
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				set_character_flag = eternal_life_expensive_option
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_RIP_21009
+		custom_tooltip = { text = EVTOPTB_RIP_21009_TOOLTIP }
+
+		scaled_wealth = -0.5
+
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				set_character_flag = eternal_life_affordable_option
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTC_RIP_21009
+		custom_tooltip = { text = EVTOPTC_RIP_21009_TOOLTIP }
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+}
+
+#Spymaster sends back event
+narrative_event = {
+	title = EVTNAME_RIP_21010
+	id = RIP.21010
+	desc = EVTDSC_RIP_21010
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_shadow
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			is_alive = yes
+			liege = { character = ROOT }
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21010
+		custom_tooltip = { text = EVTOPTA_RIP_21010_TOOLTIP }
+		
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				set_character_flag = eternal_life_expensive_option
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21010
+		custom_tooltip = { text = EVTOPTB_RIP_21010_TOOLTIP }
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+}
+
+#Chaplain sends back event
+narrative_event = {
+	title = EVTNAME_RIP_21011
+	id = RIP.21011
+	desc = EVTDSC_RIP_21011
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_monk
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			is_alive = yes
+			liege = { character = ROOT }
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21011
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+		
+			event_target:eternal_life_advisor = {
+				set_character_flag = eternal_life_expensive_option
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21011
+		hidden_tooltip = {
+			event_target:eternal_life_advisor = {
+				character_event = { id = RIP.21012 }
+			}
+		}
+	}
+}
+
+#Advisor searches for mystic after recieving answer
+character_event = {
+	id = RIP.21012
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	option = {
+		random_list = {
+			50 = {
+				#finds nothing
+				FROM = {
+					narrative_event = {
+						id = RIP.21017
+						days = 150
+					}
+				}
+			}
+			50 = {
+				#finds a mystic
+				modifier = {
+					factor = 4
+					has_character_flag = eternal_life_expensive_option
+				}
+
+				modifier = {
+					factor = 2
+					has_character_flag = eternal_life_affordable_option
+				}
+
+				FROM = {
+					narrative_event = {
+						id = RIP.21013
+						days = 300
+					}
+				}
+				clr_character_flag = eternal_life_expensive_option
+				clr_character_flag = eternal_life_affordable_option
+			}
+		}
+	}
+}
+
+#Advisor finds a mystic
+narrative_event = {
+	title = EVTNAME_RIP_21013
+	id = RIP.21013
+	border = GFX_event_narrative_frame_religion
+
+	trigger = {
+		FROM = {
+			is_alive = yes
+			liege = { character = ROOT }
+		}
+	}
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDSC_RIP_21013_CHANCELLOR
+		picture = GFX_evt_emissary
+		trigger = { FROM = { has_job_title = job_chancellor } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21013_MARSHAL
+		picture = GFX_evt_emissary
+		trigger = { FROM = { has_job_title = job_marshal } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21013_SPYMASTER
+		picture = GFX_evt_whispers
+		trigger = { FROM = { has_job_title = job_spymaster } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21013_SPIRITUAL
+		picture = GFX_evt_emissary
+		trigger = { FROM = { has_job_title = job_spiritual } }
+	}
+
+	immediate = {
+		if = {
+			limit = { FROM = { has_job_title = job_chancellor } }
+			set_character_flag = diplomacy_mystic
+		}
+		if = {
+			limit = { FROM = { has_job_title = job_marshal } }
+			set_character_flag = martial_mystic
+		}
+		if = {
+			limit = { FROM = { has_job_title = job_spymaster } }
+			set_character_flag = intrigue_mystic
+		}
+		if = {
+			limit = { FROM = { has_job_title = job_spiritual } }
+			set_character_flag = learning_mystic
+		}
+
+		random_playable_ruler = {
+			limit = {
+				is_within_diplo_range = ROOT
+				has_job_title = job_chancellor
+				any_child = {
+					is_female = no
+				}
+			}
+			save_event_target_as = eternal_life_random_diplomat
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21013
+		if = {
+			limit = { has_character_flag = diplomacy_mystic }
+			create_character = {
+				random_traits = no
+				name = "Iðunn"
+				dna = chaehghfacw
+				dynasty = none
+				religion = norse_pagan
+				culture = norse
+				female = yes
+				age = 17
+				health = 15
+				trait = grey_eminence
+				trait = gregarious
+				trait = mystic
+				#trait = lustful
+				trait = charitable
+				trait = fair
+				trait = trusting
+				trait = poet
+				trait = celibate
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic 
+
+				give_nickname = nick_the_youthful
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							FROM = { diplomacy = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { diplomacy = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { diplomacy = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { diplomacy = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { diplomacy = 22 }
+						}
+						
+						change_diplomacy = 6
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		if = {
+			limit = { has_character_flag = martial_mystic }			
+			create_character = {
+				random_traits = no
+				dynasty = none
+				religion = west_african_pagan
+				culture = manden
+				female = yes
+				age = 36
+				health = 15
+				trait = brilliant_strategist
+				trait = mystic
+				trait = robust
+				trait = wroth
+				trait = diligent
+				trait = proud
+				trait = brave
+				trait = aggressive_leader
+				trait = celibate
+				
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic 
+
+				give_nickname = nick_the_fearless 
+
+				random_list = {
+					50 = { add_trait = scarred }
+					50 = { add_trait = disfigured }
+				}
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							FROM = { martial = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { martial = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { martial = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { martial = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { martial = 22 }
+						}
+						
+						change_martial = 6
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		if = {
+			limit = { has_character_flag = intrigue_mystic }
+			create_character = {
+				name = "Cleopatra"
+				random_traits = no
+				dynasty = none
+				religion = hurufi
+				culture = egyptian_arabic
+				female = yes
+				age = 72
+				health = 15
+				trait = elusive_shadow
+				trait = mystic
+				trait = hunchback
+				trait = slothful
+				trait = proud
+				trait = paranoid
+				trait = ambitious
+				trait = deceitful
+				trait = erudite
+
+		
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic 
+
+				give_nickname = nick_the_alchemist
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							FROM = { intrigue = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { intrigue = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { intrigue = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { intrigue = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							FROM = { intrigue = 22 }
+						}
+						
+						change_intrigue = 6
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		if = {
+			limit = { has_character_flag = learning_mystic }
+			create_character = {
+				random_traits = no
+				dynasty = none
+				religion = buddhist
+				culture = sinhala
+				female = yes
+				age = 9
+				health = 15
+				trait = mystic
+				trait = brahmin
+				trait = theravada_buddhist
+				trait = quick
+				trait = fussy
+				trait = conscientious
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic 
+
+				remove_trait = kshatriya
+				remove_trait = vaishya
+
+				give_nickname = nick_the_gentle
+				change_diplomacy = 2
+				change_stewardship = 2
+				change_intrigue = -1
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+						change_learning = 6
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 22 }
+						}
+						
+						change_learning = 15
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		clr_character_flag = diplomacy_mystic
+		clr_character_flag = martial_mystic
+		clr_character_flag = intrigue_mystic
+		clr_character_flag = learning_mystic
+		clr_character_flag = learning_mystic
+
+		event_target:eternal_life_mystic = { narrative_event = { id = RIP.21018 days = 30 random = 20 } }
+		save_event_target_as = eternal_life_seeker
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21013
+		clr_character_flag = diplomacy_mystic
+		clr_character_flag = martial_mystic
+		clr_character_flag = intrigue_mystic
+		clr_character_flag = learning_mystic
+		clr_character_flag = learning_mystic
+	}
+}
+
+#If the advisor is dead, there is a chance of mystic appearing randomly
+character_event = {
+	id = RIP.21021
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			event_target:eternal_life_advisor = { is_alive = no }
+			event_target:eternal_life_advisor = { NOT = { liege = { character = ROOT } } }
+		}
+	}
+
+	option = {
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					narrative_event = { id = RIP.21007 } #Fail
+				}
+				35 = {
+					narrative_event = { id = RIP.21014 } #Stranger appears on her own
+				}
+			}
+		}
+	}
+}
+
+#A stranger appears
+narrative_event = {
+	title = EVTNAME_RIP_21014
+	id = RIP.21014
+	border = GFX_event_narrative_frame_religion
+	desc = EVTDSC_RIP_21014
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes
+
+	hide_from = yes
+
+	immediate = {
+		random_list = {
+			25 = {
+				set_character_flag = diplomacy_mystic
+			}
+			25 = {
+				set_character_flag = martial_mystic
+			}
+			25 = {
+				set_character_flag = intrigue_mystic
+			}
+			25 = {
+				set_character_flag = learning_mystic
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21014
+		if = {
+			limit = { has_character_flag = diplomacy_mystic }
+			create_character = {
+				random_traits = no
+				name = "Iðunn"
+				dna = chaehghfacw
+				dynasty = none
+				religion = norse_pagan
+				culture = norse
+				female = yes
+				age = 17
+				health = 15
+				trait = grey_eminence
+				trait = gregarious
+				trait = mystic
+				#trait = lustful
+				trait = charitable
+				trait = fair
+				trait = trusting
+				trait = poet
+				trait = celibate
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic
+
+				give_nickname = nick_the_youthful
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							ROOT = { diplomacy = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { diplomacy = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { diplomacy = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { diplomacy = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { diplomacy = 22 }
+						}
+						
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+				change_diplomacy = 6
+			}
+		}
+		if = {
+			limit = { has_character_flag = martial_mystic }			
+			create_character = {
+				random_traits = no
+				dynasty = none
+				religion = west_african_pagan
+				culture = manden
+				female = yes
+				age = 36
+				health = 15
+				trait = brilliant_strategist
+				trait = mystic
+				trait = robust
+				trait = wroth
+				trait = diligent
+				trait = proud
+				trait = brave
+				trait = desert_terrain_leader
+				trait = aggressive_leader
+				trait = scarred
+				trait = celibate
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic
+
+				give_nickname = nick_the_fearless 
+
+				random_list = {
+					50 = { add_trait = scarred }
+					50 = { add_trait = disfigured }
+				}
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							ROOT = { martial = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { martial = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { martial = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { martial = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { martial = 22 }
+						}
+						
+						change_martial = 6
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		if = {
+			limit = { has_character_flag = intrigue_mystic }
+			create_character = {
+				name = "Cleopatra"
+				random_traits = no
+				dynasty = none
+				religion = hurufi
+				culture = egyptian_arabic
+				female = yes
+				age = 72
+				health = 15
+				trait = elusive_shadow
+				trait = mystic
+				trait = hunchback
+				trait = slothful
+				trait = proud
+				trait = paranoid
+				trait = ambitious
+				trait = deceitful
+				trait = erudite
+		
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic
+
+				give_nickname = nick_the_alchemist
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							ROOT = { intrigue = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { intrigue = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { intrigue = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { intrigue = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { intrigue = 22 }
+						}
+						
+						change_intrigue = 6
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		if = {
+			limit = { has_character_flag = learning_mystic }
+			create_character = {
+				random_traits = no
+				dynasty = none
+				religion = buddhist
+				culture = sinhala
+				female = yes
+				age = 9
+				attributes = {
+					learning = 10
+				}
+				health = 15
+				trait = mystic
+				trait = brahmin
+				trait = theravada
+				trait = quick
+				trait = fussy
+				trait = conscientious
+			}
+			new_character = {
+				set_character_flag = eternal_life_mystic
+
+				remove_trait = kshatriya
+				remove_trait = vaishya
+
+				give_nickname = nick_the_gentle
+				change_diplomacy = 2
+				change_stewardship = 2
+				change_intrigue = -1
+
+				random_list = {
+					80 = {
+						set_character_flag = mystic_is_fraud
+						change_learning = 6
+					}
+					20 = {
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 10 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 13 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 16 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 19 }
+						}
+						modifier = {
+							factor = 1.5
+							ROOT = { learning = 22 }
+						}
+						
+						change_learning = 15
+					}
+				}
+				save_event_target_as = eternal_life_mystic
+			}
+		}
+		clr_character_flag = diplomacy_mystic
+		clr_character_flag = martial_mystic
+		clr_character_flag = intrigue_mystic
+		clr_character_flag = learning_mystic
+		clr_character_flag = learning_mystic
+
+		event_target:eternal_life_mystic = { narrative_event = { id = RIP.21018 } }
+		save_event_target_as = eternal_life_seeker
+		log = "mystic recieves 18"
+	}
+
+	option = {
+		name = EVTOPTB_RIP_21014
+		clr_character_flag = diplomacy_mystic
+		clr_character_flag = martial_mystic
+		clr_character_flag = intrigue_mystic
+		clr_character_flag = learning_mystic
+		clr_character_flag = learning_mystic
+	}
+}
+
+#Advisor finds nothing
+narrative_event = {
+	title = EVTNAME_RIP_21017
+	id = RIP.21017
+	desc = EVTDSC_RIP_21017
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_scandal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21017
+		custom_tooltip = { text = EVTOPTA_RIP_21017_TOOLTIP }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					#nothing happens
+				}
+				50 = { 
+					narrative_event = {
+						id = RIP.21014
+						days = 300
+						random = 100
+					}
+				}
+			}
+		}
+	}
+}
+
+#Mystic is prompted to introduce themselves
+narrative_event = {
+	title = EVTNAME_RIP_21018
+	id = RIP.21018
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21019 days = 1 } }				
+	}
+}
+
+#Mystic introduces themselves
+narrative_event = {
+	title = EVTNAME_RIP_21019
+	id = RIP.21019
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_emissary
+
+	#Diplomacy mystic, same religion
+	desc = {
+		text = EVTDSC_RIP_21019_DIPLOMACY_A
+		trigger = { 
+			FROM = { 
+				trait = grey_eminence 
+				religion = ROOT
+			} 
+		}
+	}
+	#Martial mystic, same religion
+	desc = {
+		text = EVTDSC_RIP_21019_MARTIAL_A
+		trigger = { 
+			FROM = { 
+				trait = brilliant_strategist 
+				religion = ROOT
+			} 
+		}
+	}
+	#Intrigue mystic, same religion
+	desc = {
+		text = EVTDSC_RIP_21019_INTRIGUE_A
+		picture = GFX_evt_wise_woman
+
+		trigger = { 
+			FROM = { 
+				trait = elusive_shadow 
+				religion = ROOT
+			} 
+		}
+	}
+	#Learning mystic, same religion
+	desc = {
+		text = EVTDSC_RIP_21019_LEARNING_A
+		trigger = { 
+			FROM = { 
+				is_adult = no 
+				religion = ROOT
+			} 
+		}
+	}
+	#Diplomacy mystic, different religion
+	desc = {
+		text = EVTDSC_RIP_21019_DIPLOMACY_B
+		trigger = { 
+			FROM = { 
+				trait = grey_eminence 
+				NOT = { religion = ROOT }
+			} 
+		}
+	}
+	#Martial mystic, different religion
+	desc = {
+		text = EVTDSC_RIP_21019_MARTIAL_B
+		trigger = { 
+			FROM = { 
+				trait = brilliant_strategist 
+				NOT = { religion = ROOT }
+			} 
+		}
+	}
+	#Intrigue mystic, different religion
+	desc = {
+		text = EVTDSC_RIP_21019_INTRIGUE_B
+		picture = GFX_evt_wise_woman
+
+		trigger = { 
+			FROM = { 
+				trait = elusive_shadow 
+				NOT = { religion = ROOT }
+			} 
+		}
+	}
+	#Learning mystic, different religion
+	desc = {
+		text = EVTDSC_RIP_21019_LEARNING_B
+		trigger = { 
+			FROM = { 
+				is_adult = no 
+				NOT = { religion = ROOT }
+			} 
+		}
+	}
+
+
+	is_triggered_only = yes
+
+	#Stay for same religion
+	option = {
+		trigger = { religion = FROM } 
+		name = EVTOPTA_RIP_21019
+
+		add_character_modifier = {
+			name = consorts_with_mystics
+			years = 10
+
+		}
+
+		hidden_tooltip = {
+
+			#The quest is started
+			FROM = { narrative_event = { id = RIP.21020 } } 
+
+			#Someone becomes concerned
+			character_event = { id = RIP.21499 days = 60 }
+		}
+
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_sought_mystic_knowledge
+			}	
+		}
+	}
+
+	#Leave for same religion
+	option = {
+		trigger = { religion = FROM } 
+		name = EVTOPTB_RIP_21019
+		piety = 50
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+
+	#Stay for different religion
+	option = {
+		trigger = { NOT = { religion = FROM } }
+		name = EVTOPTC_RIP_21019
+
+		piety = -100
+
+		add_character_modifier = {
+			name = consorts_with_infidels
+			years = 10
+		}
+
+		hidden_tooltip = {
+			#The quest is started
+			FROM = { narrative_event = { id = RIP.21020 } } 
+
+			#Someone becomes concerned
+			character_event = { id = RIP.21499 days = 60 }
+		}
+
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_sought_mystic_knowledge
+			}	
+		}
+
+		if = {
+			limit = { trait = zealous }
+			remove_trait = zealous
+		}
+		if = {
+			limit = {
+				FROM = { religion_group = pagan }
+				NOT = { 
+					trait = sympathy_pagans 
+					FROM = { religion_group = ROOT }
+				} 
+			}
+			add_trait = sympathy_pagans
+		}
+
+		if = {
+			limit = {
+				FROM = { religion_group = muslim } 
+				NOT = { 
+					trait = sympathy_islam 
+					FROM = { religion_group = ROOT }
+				} 
+			}
+			add_trait = sympathy_islam
+		}
+
+		if = {
+			limit = {
+				FROM = { religion_group = indian_group } 
+				NOT = { 
+					trait = sympathy_indian 
+					FROM = { religion_group = ROOT }
+				} 
+			}
+			add_trait = sympathy_indian
+		}
+	}
+	#Leave for different religion
+	option = {
+		trigger = { NOT = { religion = FROM } }
+		name = EVTOPTD_RIP_21019
+		piety = 100
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+	#Imprison for different religion
+	option = {
+		trigger = { NOT = { religion = FROM } }
+		name = EVTOPTE_RIP_21019
+		piety = 100
+
+		FROM = { imprison = yes }
+
+		hidden_tooltip = {
+			FROM = {
+				if = {
+					limit = { NOT = { has_character_flag = mystic_is_fraud } }
+					narrative_event = { id = RIP.21508 days = 60 } 
+				}
+			}
+		}
+	}
+}
+
+#Mystic is prompted to start quest
+narrative_event = {
+	title = EVTNAME_RIP_21020
+	id = RIP.21020
+	desc = EVTDSC_RIP_21020
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	option = {
+
+		if = {
+			if = {
+				limit = { trait = grey_eminence }
+				FROM = {
+					narrative_event = { id = RIP.21100 days = 150 } 
+				}
+			}
+			if = {
+				limit = { trait = brilliant_strategist }
+				FROM = {
+					narrative_event = { id = RIP.21200 days = 150 }
+				}
+			}
+			if = {
+				limit = { trait = elusive_shadow }
+				FROM = {
+					narrative_event = { id = RIP.21300 days = 150 } 
+				}
+			}
+			if = {
+				limit = { is_adult = no }
+				FROM = {
+					narrative_event = { id = RIP.21400 days = 150 } 
+				}
+			}
+		}
+	}
+}
+
+###DIPLOMATIC QUEST###
+
+#Diplomatic quest step 1 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21100
+	id = RIP.21100
+	desc = EVTDSC_RIP_21100
+	border = GFX_event_narrative_frame_diplomacy
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21100
+		custom_tooltip = { text = EVTOPTA_RIP_21100_TOOLTIP } 
+
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+			random_list = {
+				40 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21101 days = 60 } } 
+				}
+				60 = {
+					modifier = {
+						factor = 1.2
+						diplomacy = 13 
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16 
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19 
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					#success
+					FROM = { narrative_event = { id = RIP.21103 days = 60 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21100
+		custom_tooltip = { text = EVTOPTB_RIP_21100_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21101 days = 10 } } 
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						diplomacy = 13
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					FROM = { narrative_event = { id = RIP.21103 days = 10 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21100
+		custom_tooltip = { text = EVTOPTC_RIP_21100_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Diplomatic quest step 1 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_211001
+	desc = EVTDSC_RIP_21100
+	id = RIP.21101
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21102 } }
+	}
+}
+
+#Diplomatic quest step 1 fail
+narrative_event = {
+	title = EVTNAME_RIP_21102
+	id = RIP.21102
+	desc = EVTDSC_RIP_21102
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21102
+		custom_tooltip = { text = EVTOPTA_RIP_21102_TOOLTIP }
+		if = {
+			limit = { trait = gregarious }
+			remove_trait = gregarious
+		}
+		if = {
+			limit = { NOT = { trait = shy } }
+			add_trait = shy
+		}
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed
+		}
+
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Diplomatic quest step 1 success ping
+narrative_event = {
+	title = EVTNAME_RIP_211003
+	desc = EVTDSC_RIP_21100
+	id = RIP.21103
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21104 } }
+	}
+}
+
+#Diplomatic quest step 1 success 
+narrative_event = {
+	title = EVTNAME_RIP_21104
+	id = RIP.21104
+	desc = EVTDSC_RIP_21104
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21104
+		custom_tooltip = { text = EVTOPTA_RIP_21104_TOOLTIP }
+		if = {
+			limit = { trait = shy }
+			remove_trait = shy
+		}
+		if = {
+			limit = { NOT = { trait = gregarious } }
+			add_trait = gregarious
+		}
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21105 } } 
+		}
+
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_1
+			}
+		}
+	}
+}
+
+#Diplomatic quest step 1 -> 2 ping
+narrative_event = {
+	title = EVTNAME_RIP_211005
+	desc = EVTDSC_RIP_21105
+	id = RIP.21105
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21110 days = 300 random = 150 } } }
+}
+
+#Diplomatic quest step 2 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21110
+	id = RIP.21110
+	desc = EVTDSC_RIP_21110
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21110
+		custom_tooltip = { text = EVTOPTA_RIP_21110_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					#fail
+					FROM = { narrative_event = { id = RIP.21111 days = 3 } } 
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+				}
+				35 = {
+					#success
+					modifier = {
+						factor = 1.2
+						diplomacy = 13
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					FROM = { narrative_event = { id = RIP.21113 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21110
+		custom_tooltip = { text = EVTOPTB_RIP_21110_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				35 = {
+					#fail
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21111 days = 3 } } 
+				}
+				15 = {
+					#horrible failure
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21116 days = 3 }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						diplomacy = 13
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					FROM = { narrative_event = { id = RIP.21113 days = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21110
+		custom_tooltip = { text = EVTOPTC_RIP_21110_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Diplomatic quest step 2 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_211001
+	desc = EVTDSC_RIP_21100
+	id = RIP.21111
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21112 } }
+	}
+}
+
+#Diplomatic quest step 2 fail
+narrative_event = {
+	title = EVTNAME_RIP_21112
+	id = RIP.21112
+	desc = EVTDSC_RIP_21112
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_carriage
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21112
+		custom_tooltip = { text = EVTOPTA_RIP_21112_TOOLTIP }
+
+		
+		if = {
+			limit = { trait = strong }
+			remove_trait = strong
+		}
+		if = {
+			limit = { trait = robust }
+			remove_trait = robust
+		}
+		if = {
+			limit = { is_weak_trigger = no }
+			add_trait = feeble
+		}
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed
+		}
+
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Diplomatic quest step 2 horrible fail
+narrative_event = {
+	title = EVTNAME_RIP_21116
+	id = RIP.21116
+	desc = EVTDSC_RIP_21116
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_carriage
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21116
+		custom_tooltip = { text = EVTOPTA_RIP_21116_TOOLTIP }
+		
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+			death = { death_reason = death_rabble }
+		}
+	}
+}
+
+#Diplomatic quest step 2 success ping
+narrative_event = {
+	title = EVTNAME_RIP_211003
+	desc = EVTDSC_RIP_21100
+	id = RIP.21113
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21114 } }
+	}
+}
+
+#Diplomatic quest step 2 success 
+narrative_event = {
+	title = EVTNAME_RIP_21114
+	id = RIP.21114
+	desc = EVTDSC_RIP_21114
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_carriage
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21114
+
+		if = {
+			limit = { trait = feeble }
+			remove_trait = feeble
+		}
+		if = {
+			limit = { trait = weak }
+			remove_trait = weak
+		}
+		if = {
+			limit = { is_strong_trigger = no }
+			add_trait = robust		
+		}
+		
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21115 }  
+					remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_1
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_2
+			}
+		}
+	}
+}
+
+#Diplomatic quest step 2 -> 3 ping
+narrative_event = {
+	title = EVTNAME_RIP_211005
+	desc = EVTDSC_RIP_21105
+	id = RIP.21115
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21120 days = 300 random = 150 } } }
+}
+
+#Diplomatic quest step 3 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21120
+	id = RIP.21120
+	desc = EVTDSC_RIP_21120
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21120
+		custom_tooltip = { text = EVTOPTA_RIP_21120_TOOLTIP } 
+
+		scaled_wealth = -3
+
+		hidden_tooltip = {
+			random_list = {
+				60 = {
+					#failure and death
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21125 days = 3 }
+				}
+				40 = {
+					#success bribe
+					modifier = {
+						factor = 1.2
+						diplomacy = 13
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16 
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					FROM = { narrative_event = { id = RIP.21121 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21120
+		custom_tooltip = { text = EVTOPTB_RIP_21120_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				80 = {
+					#speech failure and depressed
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21126 days = 3 }  
+				}
+				20 = {
+					#success speech
+					modifier = {
+						factor = 1.2
+						diplomacy = 13
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 16
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 19
+					}
+					modifier = {
+						factor = 1.2
+						diplomacy = 22
+					}
+					FROM = { narrative_event = { id = RIP.21123 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21120
+		custom_tooltip = { text = EVTOPTC_RIP_21120_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Diplomatic quest step 3 bribe success ping
+narrative_event = {
+	title = EVTNAME_RIP_211001
+	desc = EVTDSC_RIP_21100
+	id = RIP.21121
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21122 } }
+	}
+}
+
+#Diplomatic quest step 3 bribe success
+narrative_event = {
+	title = EVTNAME_RIP_21122
+	id = RIP.21122
+	desc = EVTDSC_RIP_21122
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21122
+		custom_tooltip = { text = EVTOPTA_RIP_21122_TOOLTIP } 
+		hidden_tooltip = {
+			add_trait = immortal
+			event_target:eternal_life_mystic = { add_trait = immortal }
+			
+			FROM = {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Diplomatic quest step 3 speech success ping
+narrative_event = {
+	title = EVTNAME_RIP_211003
+	desc = EVTDSC_RIP_21100
+	id = RIP.21123
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21124 } }
+	}
+}
+
+#Diplomatic quest step 3 speech success 
+narrative_event = {
+	title = EVTNAME_RIP_21124
+	id = RIP.21124
+	desc = EVTDSC_RIP_21124
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21124
+		custom_tooltip = { text = EVTOPTA_RIP_21124_TOOLTIP } 
+		hidden_tooltip = {
+			add_trait = immortal
+			
+			FROM = {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Diplomatic quest step 3 bribe failure
+narrative_event = {
+	title = EVTNAME_RIP_21125
+	id = RIP.21125
+	desc = EVTDSC_RIP_21125
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_bandits
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21125
+		custom_tooltip = { text = EVTOPTA_RIP_21125_TOOLTIP } 
+		hidden_tooltip = {
+			death = { death_reason = death_murder_unknown } 
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+		}
+	}
+}
+
+#Diplomatic quest step 3 speech failure
+narrative_event = {
+	title = EVTNAME_RIP_21126
+	id = RIP.21126
+	desc = EVTDSC_RIP_21126
+	border = GFX_event_narrative_frame_diplomacy
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21126
+		custom_tooltip = { text = EVTOPTA_RIP_21126_TOOLTIP }
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed
+		}
+		if = {
+			limit = { trait = gregarious }
+			remove_trait = gregarious
+		}
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+		}
+	}
+}
+
+
+
+###MARTIAL QUEST###
+
+#Martial quest step 1 challenge - IN HONOR OF THE ANCESTORS
+narrative_event = {
+	title = EVTNAME_RIP_21200
+	id = RIP.21200
+	desc = EVTDSC_RIP_21200
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_quarrel
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	#Choose to sacrifice a antelope
+	option = {
+		name = EVTOPTA_RIP_21200
+		custom_tooltip = { text = EVTOPTA_RIP_21200_TOOLTIP }
+
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+			random_list = {
+				40 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21201 days = 40 random = 5 } }
+				}
+				60 = {
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					#success
+					FROM = { narrative_event = { id = RIP.21203 days = 40 random = 5 } }
+				}
+			}
+		}
+	}
+
+	#Choose to sacrifice a barrel of grain
+	option = {
+		name = EVTOPTB_RIP_21200
+		custom_tooltip = { text = EVTOPTB_RIP_21200_TOOLTIP }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21201 days = 30 random = 2 } }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					FROM = { narrative_event = { id = RIP.21203 days = 30 random = 2 } }
+				}
+			}
+			set_character_flag = eternal_life_chose_grain
+		}
+	}
+	#Freak out over death omen
+	option = {
+		name = EVTOPTC_RIP_21200
+		custom_tooltip = { text = EVTOPTC_RIP_21200_TOOLTIP }
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Martial quest step 1 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_212001
+	desc = EVTDSC_RIP_21200
+	id = RIP.21201
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21202 } }
+	}
+}
+
+#Martial quest step 1 fail
+narrative_event = {
+	title = EVTNAME_RIP_21202
+	id = RIP.21202
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_scandal
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	desc = {
+		text = EVTDSC_RIP_21202_A
+		trigger = {	NOT = { has_character_flag = eternal_life_chose_grain } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21202_B
+		trigger = {	has_character_flag = eternal_life_chose_grain }
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21202
+		custom_tooltip = { text = EVTOPTA_RIP_21202_TOOLTIP }
+
+		if = {
+			limit = { trait = one_handed }
+			add_trait = mangled
+		}
+		if = {
+			limit = { NOT = { trait = one_handed } }
+			add_trait = one_handed
+		}
+
+		add_trait = severely_injured
+
+		resolve_severely_injured_effect = yes
+
+		hidden_tooltip = {
+			clr_character_flag = eternal_life_chose_grain
+			FROM = { leave_court_effect = yes }
+		}
+	}
+}
+
+#Martial quest step 1 success ping
+narrative_event = {
+	title = EVTNAME_RIP_212003
+	desc = EVTDSC_RIP_21200
+	id = RIP.21203
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21204 } }
+	}
+}
+
+#Martial quest step 1 success 
+narrative_event = {
+	title = EVTNAME_RIP_21204
+	id = RIP.21204
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+	
+	desc = {
+		text = EVTDSC_RIP_21204_A
+		trigger = {	NOT = { has_character_flag = eternal_life_chose_grain } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21204_B
+		trigger = {	has_character_flag = eternal_life_chose_grain }
+	}
+
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21204
+		change_martial = 1
+
+		if = {
+			limit = { trait = craven}
+			remove_trait = craven
+		}
+		if = {
+			limit = { NOT = { trait = brave } }
+			add_trait = brave
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_1
+			}
+		}
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21205 days = 300 random = 250 } }
+			clr_character_flag = eternal_life_chose_grain
+		}
+	}
+}
+
+#Martial quest step 1 -> 2 ping
+narrative_event = {
+	title = EVTNAME_RIP_21205
+	id = RIP.21205
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21210 } } }
+}
+
+#Martial quest step 2 challenge SNAKE FIGHT
+narrative_event = {
+	title = EVTNAME_RIP_21210
+	id = RIP.21210
+	desc = EVTDSC_RIP_21210
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_quarrel
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	#wring its neck
+	option = {
+		name = EVTOPTA_RIP_21210
+		custom_tooltip = { text = EVTOPTA_RIP_21210_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					#horrible failure
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21216 days = 3 }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					FROM = { narrative_event = { id = RIP.21213 days = 3 } }
+				}
+			}
+		}
+	}
+	#smash it with a book
+	option = {
+		name = EVTOPTB_RIP_21210
+		custom_tooltip = { text = EVTOPTB_RIP_21210_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					#fail
+					FROM = { narrative_event = { id = RIP.21211 days = 3 } }
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+				}
+				35 = {
+					#success
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					FROM = { narrative_event = { id = RIP.21213 days = 3 } }
+				}
+			}
+			set_character_flag = eternal_life_chose_defense
+		}
+	}
+	#run away
+	option = {
+		name = EVTOPTC_RIP_21210
+		custom_tooltip = { text = EVTOPTC_RIP_21210_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Martial quest step 2 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_212001
+	desc = EVTDSC_RIP_21200
+	id = RIP.21211
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21212 } }
+	}
+}
+
+#Martial quest step 2 fail /defensive style
+narrative_event = {
+	title = EVTNAME_RIP_21212
+	id = RIP.21212
+	desc = EVTDSC_RIP_21212
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21212
+		custom_tooltip = { text = EVTOPTA_RIP_21212_TOOLTIP }
+
+		add_trait = feeble
+		hidden_tooltip = {
+			clr_character_flag = eternal_life_chose_defense
+			FROM = { leave_court_effect = yes }
+		}
+	}
+}
+
+#Martial quest step 2 horrible fail / tried to wring the snake's neck
+narrative_event = {
+	title = EVTNAME_RIP_21216
+	id = RIP.21216
+	desc = EVTDSC_RIP_21216
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21216
+		custom_tooltip = { text = EVTOPTA_RIP_21216_TOOLTIP }
+		random = {
+			chance = 25
+			death = { death_reason = death_accident_snakes }
+		}
+		
+		hidden_tooltip = { event_target:eternal_life_mystic = { leave_court_effect = yes } }
+	}
+}
+
+#Martial quest step 2 success ping
+narrative_event = {
+	title = EVTNAME_RIP_212003
+	desc = EVTDSC_RIP_21200
+	id = RIP.21213
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21214 } }
+	}
+}
+
+#Martial quest step 2 success 
+narrative_event = {
+	title = EVTNAME_RIP_21214
+	id = RIP.21214
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+
+	desc = {
+		text = EVTDSC_RIP_21214_A
+		trigger = {	NOT = { has_character_flag = eternal_life_chose_defense } }
+	}
+	desc = {
+		text = EVTDSC_RIP_21214_B
+		trigger = {	has_character_flag = eternal_life_chose_defense }
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21214
+		change_martial = 2
+
+		if = {
+			limit = { trait = feeble }
+			remove_trait = feeble
+		}
+		if = {
+			limit = { trait = weak }
+			remove_trait = weak
+		}
+		if = {
+			limit = { is_strong_trigger = no }
+			add_trait = robust
+		}
+		if = {
+			limit = { 
+				NOT = { trait = trickster } 
+				can_have_more_leadership_traits = yes
+			}
+			add_trait = trickster
+		}
+
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21215 days = 300 random = 300 } }
+			clr_character_flag = eternal_life_chose_defense
+			
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_1
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_2
+			}
+		}
+	}
+}
+
+#Martial quest step 2 -> 3 ping
+narrative_event = {
+	title = EVTNAME_RIP_21215
+	id = RIP.21215
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21220 } } }
+}
+
+#Martial quest step 3 challenge - THE FINAL RITUAL
+narrative_event = {
+	title = EVTNAME_RIP_21220
+	id = RIP.21220
+	desc = EVTDSC_RIP_21220
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_ritual_scroll
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21220
+		custom_tooltip = { text = EVTOPTA_RIP_21220_TOOLTIP }
+		hidden_tooltip = {
+			random_list = {
+				60 = {
+					#failure and reincarnation death
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					
+					if = {
+						limit = { ROOT = { is_female = yes } }
+						create_character = {
+							female = yes
+							age = 0
+							random_traits = no
+							dynasty = ROOT
+							religion = ROOT
+							culture = ROOT
+							race = ROOT
+						}
+					}
+					if = {
+						limit = { ROOT = { is_female = no } }
+						create_character = {
+							female = no
+							age = 0
+							random_traits = no
+							dynasty = ROOT
+							religion = ROOT
+							culture = ROOT
+							race = ROOT
+						}
+					}
+		
+					new_character = {
+						narrative_event = { id = RIP.21991 days = 3 } #Copies traits
+						narrative_event = { id = RIP.21225 days = 3 } #Pings new character
+					}
+				}
+				40 = {
+					#success ghost
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16 
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					FROM = { narrative_event = { id = RIP.21221 days = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21220
+		custom_tooltip = { text = EVTOPTB_RIP_21220_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				75 = {
+					#failure and madness
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21227 days = 3 }
+				}
+				25 = {
+					#success search
+					modifier = {
+						factor = 1.2
+						martial = 13
+					}
+					modifier = {
+						factor = 1.2
+						martial = 16
+					}
+					modifier = {
+						factor = 1.2
+						martial = 19
+					}
+					modifier = {
+						factor = 1.2
+						martial = 22
+					}
+					FROM = { narrative_event = { id = RIP.21223 days = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21220
+		custom_tooltip = { text = EVTOPTC_RIP_21220_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Martial quest step 3 ghost success ping
+narrative_event = {
+	title = EVTNAME_RIP_212001
+	desc = EVTDSC_RIP_21200
+	id = RIP.21221
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21222 } }
+	}
+}
+
+#Martial quest step 3 ghost success
+narrative_event = {
+	title = EVTNAME_RIP_21222
+	id = RIP.21222
+	desc = EVTDSC_RIP_21222
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21222
+		custom_tooltip = { text = EVTOPTA_RIP_21222_TOOLTIP }
+		hidden_tooltip = {
+			add_trait = immortal
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Martial quest step 3 search success ping
+narrative_event = {
+	title = EVTNAME_RIP_212003
+	desc = EVTDSC_RIP_21200
+	id = RIP.21223
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21224 } }
+	}
+}
+
+#Martial quest step 3 search success
+narrative_event = {
+	title = EVTNAME_RIP_21224
+	id = RIP.21224
+	desc = EVTDSC_RIP_21224
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21224
+		custom_tooltip = { text = EVTOPTA_RIP_21224_TOOLTIP }
+		hidden_tooltip = {
+			add_trait = immortal
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Martial quest step 3 pinging the reincarnation character 
+narrative_event = {
+	title = EVTNAME_RIP_21225
+	id = RIP.21225
+	desc = EVTDSC_RIP_21225
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21226 } }
+	}
+}
+
+#Martial quest step 3 reincarnation death
+narrative_event = {
+	title = EVTNAME_RIP_21226
+	id = RIP.21226
+	desc = EVTDSC_RIP_21226
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21226
+		custom_tooltip = { text = EVTOPTA_RIP_21226_TOOLTIP }
+		
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+			death = { death_reason = death_murder_unknown killer = event_target:eternal_life_mystic } 
+		}
+	}
+}
+
+#Martial quest step 3 search failure
+narrative_event = {
+	title = EVTNAME_RIP_21227
+	id = RIP.21227
+	desc = EVTDSC_RIP_21227
+	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21227
+		custom_tooltip = { text = EVTOPTA_RIP_21227_TOOLTIP }
+		if = {
+			limit = { NOT = { trait = possessed } }
+			add_trait = possessed
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			add_trait = stressed
+		}
+		hidden_tooltip = { event_target:eternal_life_mystic = { leave_court_effect = yes } }
+	}
+}
+
+
+###INTRIGUE QUEST###
+
+#Intrigue quest step 1 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21300
+	id = RIP.21300
+	desc = EVTDSC_RIP_21300
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_wise_woman
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21300
+		custom_tooltip = { text = EVTOPTA_RIP_21300_TOOLTIP }
+
+		scaled_wealth = -1
+
+		hidden_tooltip = {
+			random_list = {
+				40 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21301 days = 65 } }
+				}
+				60 = { 
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					#success
+					FROM = { narrative_event = { id = RIP.21303 days = 65 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21300
+		custom_tooltip = { text = EVTOPTB_RIP_21300_TOOLTIP }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					#fail
+					modifier = {
+						factor = 1.2
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21301 days = 65 } }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					FROM = { narrative_event = { id = RIP.21303 days = 65 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21300
+		custom_tooltip = { text = EVTOPTC_RIP_21300_TOOLTIP }
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Intrigue quest step 1 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_213001
+	desc = EVTDSC_RIP_21300
+	id = RIP.21301
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21302 } }
+	}
+}
+
+#Intrigue quest step 1 fail
+narrative_event = {
+	title = EVTNAME_RIP_21302
+	id = RIP.21302
+	desc = EVTDSC_RIP_21302
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21302
+		custom_tooltip = { text = EVTOPTA_RIP_21302_TOOLTIP }
+		
+		if = {
+			limit = { NOT = { trait = one_handed } }
+			add_trait = one_handed
+		}
+
+		if = {
+			limit = { trait = one_handed }
+			add_trait = mangled
+		}
+
+		add_trait = severely_injured
+
+		resolve_severely_injured_effect = yes
+
+		add_trait = honest
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Intrigue quest step 1 success ping
+narrative_event = {
+	title = EVTNAME_RIP_213003
+	desc = EVTDSC_RIP_21300
+	id = RIP.21303
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21304 } }
+	}
+}
+
+#Intrigue quest step 1 success 
+narrative_event = {
+	title = EVTNAME_RIP_21304
+	id = RIP.21304
+	desc = EVTDSC_RIP_21304
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21304
+		if = {
+			limit = { trait = trusting}
+			remove_trait = trusting
+		}
+		if = {
+			limit = { NOT = { trait = deceitful } }
+			add_trait = deceitful
+		}
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21305 } } 
+		}
+
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_1
+			}
+		}
+	}
+}
+
+#Intrigue quest step 1 -> 2 ping
+narrative_event = {
+	title = EVTNAME_RIP_213005
+	desc = EVTDSC_RIP_21305
+	id = RIP.21305
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21310 days = 300 random = 300 } } }
+}
+
+#Intrigue quest step 2 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21310
+	id = RIP.21310
+	desc = EVTDSC_RIP_21310
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_library
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21310
+		custom_tooltip = { text = EVTOPTA_RIP_21310_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					#fail
+					FROM = { narrative_event = { id = RIP.21311 days = 3 } } 
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+				}
+				35 = {
+					#success
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					FROM = { narrative_event = { id = RIP.21313 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21310
+		custom_tooltip = { text = EVTOPTB_RIP_21310_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				35 = {
+					#fail
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21311 days = 3 } } 
+				}
+				15 = {
+					#horrible failure
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21316 days = 3 }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					FROM = { narrative_event = { id = RIP.21313 days = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21310
+		custom_tooltip = { text = EVTOPTC_RIP_21310_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Intrigue quest step 2 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_213001
+	desc = EVTDSC_RIP_21300
+	id = RIP.21311
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21312 } }
+	}
+}
+
+#Intrigue quest step 2 fail
+narrative_event = {
+	title = EVTNAME_RIP_21312
+	id = RIP.21312
+	desc = EVTDSC_RIP_21312
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_experiments_failed
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21312
+		custom_tooltip = { text = EVTOPTA_RIP_21312_TOOLTIP }
+
+		if = {
+			limit = { is_dumb_trigger = no }
+			add_trait = dull
+		}
+
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed	
+		}
+		
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Intrigue quest step 2 horrible fail
+narrative_event = {
+	title = EVTNAME_RIP_21316
+	id = RIP.21316
+	desc = EVTDSC_RIP_21316
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_performing_experiments
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21316
+		custom_tooltip = { text = EVTOPTA_RIP_21316_TOOLTIP }
+		
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+			death = { death_reason = death_accident }
+		}
+	}
+}
+
+#Intrigue quest step 2 success ping
+narrative_event = {
+	title = EVTNAME_RIP_213003
+	desc = EVTDSC_RIP_21300
+	id = RIP.21313
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21314 } }
+	}
+}
+
+#Intrigue quest step 2 success 
+narrative_event = {
+	title = EVTNAME_RIP_21314
+	id = RIP.21314
+	desc = EVTDSC_RIP_21314
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_performing_experiments
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21314
+
+		if = {
+			limit = { trait = dull }
+			remove_trait = dull
+		}
+		if = {
+			limit = { trait = imbecile }
+			remove_trait = imbecile
+		}
+		if = {
+			limit = { trait = slow }
+			remove_trait = slow
+		}
+		if = {
+			limit = { is_smart_trigger = no }
+			add_trait = shrewd		
+		}
+		
+		hidden_tooltip = {
+			FROM = { 
+					narrative_event = { id = RIP.21315 } 
+					remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_1
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_2
+			}
+		}
+	}
+}
+
+#Intrigue quest step 2 -> 3 ping
+narrative_event = {
+	title = EVTNAME_RIP_213005
+	id = RIP.21315
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21320 days = 400 random = 300 } } }
+}
+
+#Intrigue quest step 3 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21320
+	id = RIP.21320
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_pagan
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = { has_dlc = "Way of Life" }
+		text = EVTDSC_RIP_21320
+		picture = GFX_evt_rider_adventure
+
+	}
+	desc = { 
+		trigger = { NOT = { has_dlc = "Way of Life" } }
+		text = EVTDSC_RIP_21320
+	}
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21320
+		custom_tooltip = { text = EVTOPTA_RIP_21320_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				60 = {
+					#failure and death
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21325 days = 5 } 
+				}
+				40 = {
+					#success ghost
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16 
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					FROM = { narrative_event = { id = RIP.21321 days = 5 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21320
+		custom_tooltip = { text = EVTOPTB_RIP_21320_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				75 = {
+					#failure and madness
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21326 days = 5 }  
+				}
+				25 = {
+					#success search
+					modifier = {
+						factor = 1.2
+						intrigue = 13
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 16
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.2
+						intrigue = 22
+					}
+					FROM = { narrative_event = { id = RIP.21323 days = 5 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21320
+		custom_tooltip = { text = EVTOPTC_RIP_21320_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Intrigue quest step 3 ghost success ping
+narrative_event = {
+	title = EVTNAME_RIP_213001
+	desc = EVTDSC_RIP_21300
+	id = RIP.21321
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21322 } }
+	}
+}
+
+#Intrigue quest step 3 ghost success
+narrative_event = {
+	title = EVTNAME_RIP_21322
+	id = RIP.21322
+	desc = EVTDSC_RIP_21322
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21322
+		custom_tooltip = { text = EVTOPTA_RIP_21322_TOOLTIP } 
+		add_trait = immortal
+
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { add_trait = immortal }
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Intrigue quest step 3 search success ping
+narrative_event = {
+	title = EVTNAME_RIP_213003
+	desc = EVTDSC_RIP_21300
+	id = RIP.21323
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21324 } }
+	}
+}
+
+#Intrigue quest step 3 search success 
+narrative_event = {
+	title = EVTNAME_RIP_21324
+	id = RIP.21324
+	desc = EVTDSC_RIP_21324
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21324
+		custom_tooltip = { text = EVTOPTA_RIP_21324_TOOLTIP } 
+		add_trait = immortal
+
+		hidden_tooltip = {
+			
+			event_target:eternal_life_mystic = { add_trait = immortal }
+			
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Intrigue quest step 3 ghost failure
+narrative_event = {
+	title = EVTNAME_RIP_21325
+	id = RIP.21325
+	desc = EVTDSC_RIP_21325
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21325
+		custom_tooltip = { text = EVTOPTA_RIP_21325_TOOLTIP } 
+		hidden_tooltip = {
+			death = { death_reason = death_murder_unknown killer = event_target:eternal_life_mystic }
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+		}
+	}
+}
+
+#Intrigue quest step 3 search failure
+narrative_event = {
+	title = EVTNAME_RIP_21326
+	id = RIP.21326
+	desc = EVTDSC_RIP_21326
+	border = GFX_event_narrative_frame_intrigue
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21326
+		custom_tooltip = { text = EVTOPTA_RIP_21326_TOOLTIP } 
+		if = {
+			limit = { NOT = { trait = lunatic } }
+			add_trait = lunatic
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			add_trait = stressed
+		}
+		hidden_tooltip = { event_target:eternal_life_mystic = { leave_court_effect = yes } }
+	}
+}
+
+
+
+###LEARNING QUEST STEP###
+
+#Learning quest step 1 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21400
+	id = RIP.21400
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_drunk
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = drunkard
+					trait = charitable
+					trait = just
+				}
+			}
+			set_character_flag = eternal_life_sorry_for_drunkard
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = kind
+					trait = drunkard
+					trait = charitable
+					trait = just
+					trait = temperate
+					trait = cruel
+					trait = arbitrary
+					trait = cynical
+				}
+			}
+			random = {
+				chance = 20
+				set_character_flag = eternal_life_sorry_for_drunkard
+			}	
+		}
+	}
+
+	desc = {
+		text = EVTDSC_RIP_21400_A
+		trigger = { has_character_flag = eternal_life_sorry_for_drunkard }
+	}
+	desc = {
+		text = EVTDSC_RIP_21400_B
+		trigger = { NOT = { has_character_flag = eternal_life_sorry_for_drunkard } }
+	}
+
+
+	#Give money
+	option = {
+		name = EVTOPTA_RIP_21400
+
+		scaled_wealth = -1
+
+		if = {
+			limit = { has_character_flag = eternal_life_sorry_for_drunkard }
+			hidden_tooltip = { FROM = { narrative_event = { id = RIP.21403 days = 3 } } }
+			set_character_flag = eternal_life_charity
+		}
+		if = {
+			limit = { NOT = { has_character_flag = eternal_life_sorry_for_drunkard } }
+			hidden_tooltip = { FROM = { narrative_event = { id = RIP.21401 days = 3 } } }
+			set_character_flag = eternal_life_liar
+		}
+	}
+
+	#Admit
+	option = {
+		name = EVTOPTB_RIP_21400
+		hidden_tooltip = { FROM = { narrative_event = { id = RIP.21403 days = 3 } } }
+	}
+
+	#Curse
+	option = {
+		name = EVTOPTC_RIP_21400
+		
+		hidden_tooltip = { FROM = { narrative_event = { id = RIP.21401 days = 3 } } } 
+	}
+
+	#Give up
+	option = {
+		name = EVTOPTD_RIP_21400
+		custom_tooltip = { text = EVTOPTD_RIP_21400_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Learning quest step 1 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_214001
+	desc = EVTDSC_RIP_21400
+	id = RIP.21401
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21402 } }
+	}
+}
+
+#Learning quest step 1 fail
+narrative_event = {
+	title = EVTNAME_RIP_21402
+	id = RIP.21402
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDSC_RIP_21402_A
+		trigger = { has_character_flag = eternal_life_liar }
+	}
+	desc = {
+		text = EVTDSC_RIP_21402_B
+		trigger = { NOT = { has_character_flag = eternal_life_liar } }
+	} 
+
+	option = {
+		name = EVTOPTA_RIP_21402
+		custom_tooltip = { text = EVTOPTA_RIP_21402_TOOLTIP }
+
+		if = {
+			limit = { trait = just }
+			remove_trait = just
+		}
+		if = {
+			limit = { NOT = { trait = arbitrary } }
+			add_trait = arbitrary
+		}
+		
+		hidden_tooltip = {
+			clr_character_flag = eternal_life_liar
+			FROM = { leave_court_effect = yes }
+		}
+	}
+}
+
+#Learning quest step 1 success ping
+narrative_event = {
+	title = EVTNAME_RIP_214003
+	desc = EVTDSC_RIP_21400
+	id = RIP.21403
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21404 } }
+	}
+}
+
+#Learning quest step 1 success 
+narrative_event = {
+	title = EVTNAME_RIP_21404
+	id = RIP.21404
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDSC_RIP_21404_A
+		trigger = { has_character_flag = eternal_life_charity }
+	}
+	desc = {
+		text = EVTDSC_RIP_21404_B
+		trigger = { NOT = { has_character_flag = eternal_life_charity } }
+	} 
+
+	option = {
+		name = EVTOPTA_RIP_21404
+		if = {
+			limit = { trait = arbitrary }
+			remove_trait = arbitrary
+		}
+		if = {
+			limit = { NOT = { trait = just } }
+			add_trait = just
+		}
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = RIP.21405 } } 
+			clr_character_flag = eternal_life_charity
+			clr_character_flag = eternal_life_sorry_for_drunkard
+
+		}
+
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_1
+			}
+		}
+	}
+}
+
+#Learning quest step 1 -> 2 ping
+narrative_event = {
+	title = EVTNAME_RIP_214005
+	desc = EVTDSC_RIP_21405
+	id = RIP.21405
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21410 days = 450 random = 250 } } }
+}
+
+#Learning quest step 2 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21410
+	id = RIP.21410
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_pagan
+
+	desc = {
+		trigger = { has_dlc = "Way of Life" }
+		text = EVTDSC_RIP_21410
+		picture = GFX_evt_mysterious_forest
+	}
+	desc = {
+		trigger = { NOT = { has_dlc = "Way of Life" } }
+		text = EVTDSC_RIP_21410
+	}
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21410
+		custom_tooltip = { text = EVTOPTA_RIP_21410_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				65 = {
+					#fail
+					FROM = { narrative_event = { id = RIP.21411 days = 3 } } 
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+				}
+				35 = {
+					#success
+					modifier = {
+						factor = 1.2
+						learning = 13
+					}
+					modifier = {
+						factor = 1.2
+						learning = 16
+					}
+					modifier = {
+						factor = 1.2
+						learning = 19
+					}
+					modifier = {
+						factor = 1.2
+						learning = 22
+					}
+					FROM = { narrative_event = { id = RIP.21413 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21410
+		custom_tooltip = { text = EVTOPTB_RIP_21410_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				35 = {
+					#fail
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					FROM = { narrative_event = { id = RIP.21411 days = 3 } } 
+				}
+				15 = {
+					#horrible failure
+					modifier = {
+						factor = 1.5
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21416 days = 3 }
+				}
+				50 = {
+					#success
+					modifier = {
+						factor = 1.2
+						learning = 13
+					}
+					modifier = {
+						factor = 1.2
+						learning = 16
+					}
+					modifier = {
+						factor = 1.2
+						learning = 19
+					}
+					modifier = {
+						factor = 1.2
+						learning = 22
+					}
+					FROM = { narrative_event = { id = RIP.21413 days = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21410
+		custom_tooltip = { text = EVTOPTC_RIP_21410_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Learning quest step 2 fail ping
+narrative_event = {
+	title = EVTNAME_RIP_214001
+	desc = EVTDSC_RIP_21400
+	id = RIP.21411
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21412 } }
+	}
+}
+
+#Learning quest step 2 fail
+narrative_event = {
+	title = EVTNAME_RIP_21412
+	id = RIP.21412
+	desc = EVTDSC_RIP_21412
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_bloody_man
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21412
+		custom_tooltip = { text = EVTOPTA_RIP_21412_TOOLTIP }
+
+		if = {
+			limit = { NOT = { trait = depressed } }
+			add_trait = depressed
+		}
+		if = {
+			limit = { is_dumb_trigger = no }
+			add_trait = dull
+		}
+		if = {
+			limit = { NOT = { trait = fatigue } }
+
+			hidden_tooltip = { 
+				if = {
+					limit = {
+						NOR = {
+							has_character_flag = developing_illness
+							has_character_flag = disease_not_serious
+						}
+					}
+
+					set_character_flag = disease_not_serious 
+					character_event = { id = RIP.11011 days = 100 random = 300 }
+				}
+				
+				add_trait = fatigue
+
+			}
+		}
+	
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Learning quest step 2 horrible fail
+narrative_event = {
+	title = EVTNAME_RIP_21416
+	id = RIP.21416
+	desc = EVTDSC_RIP_21416
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21416
+		custom_tooltip = { text = EVTOPTA_RIP_21416_TOOLTIP }
+		
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+			death = { death_reason = death_accident_fall }
+		}
+	}
+}
+
+#Learning quest step 2 success ping
+narrative_event = {
+	title = EVTNAME_RIP_214003
+	desc = EVTDSC_RIP_21400
+	id = RIP.21413
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21414 } }
+	}
+}
+
+#Learning quest step 2 success 
+narrative_event = {
+	title = EVTNAME_RIP_21414
+	id = RIP.21414
+	desc = EVTDSC_RIP_21414
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_pagan
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21414
+		custom_tooltip = { text = EVTOPTA_RIP_21414_TOOLTIP }
+
+		if = {
+			limit = { trait = dull }
+			remove_trait = dull
+		}
+		if = {
+			limit = { trait = imbecile }
+			remove_trait = imbecile
+		}
+		if = {
+			limit = { trait = slow }
+			remove_trait = slow
+		}
+		if = {
+			limit = { is_smart_trigger = no }
+			add_trait = shrewd		
+		}
+		
+		hidden_tooltip = {
+			FROM = { 
+				narrative_event = { id = RIP.21415 }  
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_1
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_2
+			}
+		}
+	}
+}
+
+#Learning quest step 2 -> 3 ping
+narrative_event = {
+	title = EVTNAME_RIP_214005
+	desc = EVTDSC_RIP_21405
+	id = RIP.21415
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = { FROM = { narrative_event = { id = RIP.21420 days = 500 random = 300 } } }
+}
+
+#Learning quest step 3 challenge
+narrative_event = {
+	title = EVTNAME_RIP_21420
+	id = RIP.21420
+	desc = EVTDSC_RIP_21420
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_death
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = { prisoner = no }
+		is_liege_of = FROM
+	}
+
+	option = {
+		name = EVTOPTA_RIP_21420
+		custom_tooltip = { text = EVTOPTA_RIP_21420_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				60 = {
+					#failure and reincarnation death
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+
+					if = {
+						limit = { ROOT = { is_female = yes } }
+						create_character = {
+							female = yes
+							age = 0
+							random_traits = no
+							dynasty = ROOT
+							religion = ROOT
+							culture = ROOT
+							race = ROOT
+						}
+					}
+					if = {
+						limit = { ROOT = { is_female = no } }
+						create_character = {
+							female = no
+							age = 0
+							random_traits = no
+							dynasty = ROOT
+							religion = ROOT
+							culture = ROOT
+							race = ROOT
+						}
+					}
+		
+					new_character = {
+						narrative_event = { id = RIP.21991 } #Copies traits
+						narrative_event = { id = RIP.21425 days = 3 } #Pings new character
+					}	
+				}
+
+				40 = {
+					#success 
+					modifier = {
+						factor = 1.2
+						learning = 13
+					}
+					modifier = {
+						factor = 1.2
+						learning = 16 
+					}
+					modifier = {
+						factor = 1.2
+						learning = 19
+					}
+					modifier = {
+						factor = 1.2
+						learning = 22
+					}
+					FROM = { narrative_event = { id = RIP.21421 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21420
+		custom_tooltip = { text = EVTOPTB_RIP_21420_TOOLTIP } 
+		hidden_tooltip = {
+			random_list = {
+				75 = {
+					#failure and possession
+					modifier = {
+						factor = 1000
+						FROM = { has_character_flag = mystic_is_fraud }
+					}
+					narrative_event = { id = RIP.21427 days = 3 }  
+				}
+				25 = {
+					#success
+					modifier = {
+						factor = 1.2
+						learning = 13
+					}
+					modifier = {
+						factor = 1.2
+						learning = 16
+					}
+					modifier = {
+						factor = 1.2
+						learning = 19
+					}
+					modifier = {
+						factor = 1.2
+						learning = 22
+					}
+					FROM = { narrative_event = { id = RIP.21421 days = 3 } } 
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21420
+		custom_tooltip = { text = EVTOPTC_RIP_21420_TOOLTIP } 
+		hidden_tooltip = { FROM = { leave_court_effect = yes } }
+	}
+}
+
+#Learning quest step 3 success ping
+narrative_event = {
+	title = EVTNAME_RIP_214001
+	desc = EVTDSC_RIP_21400
+	id = RIP.21421
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21422 } }
+	}
+}
+
+#Learning quest step 3 success
+narrative_event = {
+	title = EVTNAME_RIP_21422
+	id = RIP.21422
+	desc = EVTDSC_RIP_21422
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_death
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21422
+		custom_tooltip = { text = EVTOPTA_RIP_21422_TOOLTIP } 
+		add_trait = immortal
+
+		hidden_tooltip = {
+			
+			FROM =  {
+				remove_opinion = {
+					who = ROOT
+					modifier = opinion_finished_mystic_task_2
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_finished_mystic_task_3
+			}
+		}
+	}
+}
+
+#Learning quest step 3 pinging the reincarnated character 
+narrative_event = {
+	title = EVTNAME_RIP_21425
+	id = RIP.21425
+	desc = EVTDSC_RIP_21425
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM = { narrative_event = { id = RIP.21426 } }
+	}
+}
+
+#reincarnation death
+narrative_event = {
+	title = EVTNAME_RIP_21426
+	id = RIP.21426
+	desc = EVTDSC_RIP_21426
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_birth
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21426
+		custom_tooltip = { text = EVTOPTA_RIP_21426_TOOLTIP }
+		
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = { leave_court_effect = yes }
+			death = { death_reason = death_murder } 
+		}
+	}
+}
+
+#Learning quest step 3 failure and possessed
+narrative_event = {
+	title = EVTNAME_RIP_21427
+	id = RIP.21427
+	desc = EVTDSC_RIP_21427
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_doctor_tending_to_sick
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21427
+		custom_tooltip = { text = EVTOPTA_RIP_21427_TOOLTIP } 
+		if = {
+			limit = { NOT = { trait = possessed } }
+			add_trait = possessed
+		}
+		if = {
+			limit = { NOT = { trait = stressed } }
+			add_trait = stressed
+		}
+		hidden_tooltip = { event_target:eternal_life_mystic = { leave_court_effect = yes } }
+	}
+}
+
+
+###INVESTIGATION###
+
+character_event = {
+	id = RIP.21499
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		if = {
+			limit = {
+				current_heir = { 
+					is_adult = yes
+					prisoner = no
+					NOT = { trait = in_hiding }
+					NOT = { trait = incapable }
+					
+					OR = {
+						NOR = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+						}
+						AND = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+							at_location = ROOT
+						}
+					}
+				}
+			}
+
+			current_heir = { narrative_event = { id = RIP.21500 } }
+
+			break = yes
+		}
+		random_dynasty_member = {
+			if = {
+				limit = { 
+					is_adult = yes
+					prisoner = no
+					NOT = { trait = in_hiding }
+					NOT = { trait = incapable }
+					
+					OR = {
+						NOR = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+						}
+						AND = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+							at_location = ROOT
+						}
+					}
+				}		
+				narrative_event = { id = RIP.21500 } 
+			}
+		}
+
+		if = {
+			limit = {
+				OR = {
+					is_adult = no
+					prisoner = yes
+					trait = in_hiding
+					trait = incapable
+					
+					AND = {
+						OR = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+						}
+						NOT = {
+							at_location = ROOT
+						}
+					}
+				}
+				FROM = { NOT = { trait = elusive_shadow  } }
+			}
+			ROOT = { job_spymaster = { narrative_event = { id = RIP.21500 } } }
+		}
+		if = {
+			limit = {
+				OR = {
+					is_adult = no
+					prisoner = yes
+					trait = in_hiding
+					trait = incapable
+					
+					AND = {
+						OR = {
+							has_character_modifier = in_seclusion
+							ROOT = { has_character_modifier = in_seclusion }
+						}
+						NOT = {
+							at_location = ROOT
+						}
+					}
+				}
+				FROM = { trait = elusive_shadow  }
+			}
+			ROOT = { job_chancellor = { narrative_event = { id = RIP.21500 } } }
+		}
+	}
+}
+
+
+#Investigation starts
+narrative_event = {
+	title = EVTNAME_RIP_21500
+	id = RIP.21500
+	desc = EVTDSC_RIP_21500
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		name = EVTOPTA_RIP_21500
+		FROM =  { narrative_event = { id = RIP.21501 } } 
+	}
+}
+
+#Heir/relative/advisor voices concerns
+narrative_event = {
+	title = EVTNAME_RIP_21501
+	id = RIP.21501
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_suspicious_noble
+
+	#Relative warns about mystic from same religion
+	desc = {
+		text = EVTDSC_RIP_21501_A
+		trigger = { 
+			FROM = { is_close_relative = ROOT } 
+			event_target:eternal_life_mystic = { religion = ROOT }
+		}
+	}
+
+	#Another person warns about mystic from same religion
+	desc = {
+		text = EVTDSC_RIP_21501_B
+		trigger = { 
+			FROM = { NOT = { is_close_relative = ROOT } } 
+			event_target:eternal_life_mystic = { religion = ROOT }
+		} 
+	}
+
+	#Relative warns about mystic from other religion
+	desc = {
+		text = EVTDSC_RIP_21501_C
+		trigger = { 
+			FROM = { is_close_relative = ROOT } 
+			event_target:eternal_life_mystic = { NOT = { religion = ROOT } }
+		} 
+	}
+
+	#Another person warns about mystic from other religion
+	desc = {
+		text = EVTDSC_RIP_21501_D
+		trigger = { 
+			FROM = { NOT = { is_close_relative = ROOT } } 
+			event_target:eternal_life_mystic = { NOT = { religion = ROOT } }
+		} 
+	}
+
+	is_triggered_only = yes
+
+	#Nah it's fine
+	option = {
+		trigger = { NOT = { trait = paranoid } }
+		name = EVTOPTA_RIP_21501
+		custom_tooltip = { text = EVTOPTA_RIP_21501_TOOLTIP } 
+		FROM = {
+			opinion = {
+				modifier = opinion_did_not_take_my_advice
+				who = ROOT
+			}
+		}
+	}
+	#investigate
+	option = {
+		name = EVTOPTB_RIP_21501
+		custom_tooltip = { text = EVTOPTB_RIP_21501_TOOLTIP } 
+		FROM = {
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+		}
+
+		if = {
+			limit = { trait = trusting }
+			remove_trait = trusting
+		}
+
+		hidden_tooltip = {
+			random_list = {
+				#Discovers that mystic is fraud
+				50 = {
+					modifier = {
+						factor = 0
+						event_target:eternal_life_mystic = { NOT = { has_character_flag = mystic_is_fraud } }
+					}
+
+					#Nice characters tell the truth
+					if = {
+						limit = {
+							FROM = {
+								NOR = {
+									trait = deceitful
+									trait = ambitious
+									trait = envious
+								}
+							}
+						}
+						FROM = { narrative_event = { id = RIP.21502 } } 
+					}
+
+					#Bad characters lie
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									trait = deceitful
+									trait = ambitious
+									trait = envious
+								}
+							}
+						}
+						FROM = { narrative_event = { id = RIP.21504 } } 
+					}
+					
+				}
+				#No proof
+				30 = {
+					if = {
+						limit = {
+							FROM = {
+								NOR = {
+									trait = deceitful
+									trait = ambitious
+									trait = envious
+								}
+							}
+						}
+						FROM = { narrative_event = { id = RIP.21504 } } 
+					}
+
+					#Bad characters lie
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									trait = deceitful
+									trait = ambitious
+									trait = envious
+								}
+							}
+						}
+						FROM = { narrative_event = { id = RIP.21502 } } 
+					}
+				}
+				#Mystic discovers you
+				20 = {
+					event_target:eternal_life_mystic = { narrative_event = { id = RIP.21506 } } 
+				
+				}
+			}
+		}
+	}
+	#Imprison
+	option = {
+		trigger = { NOT = { trait = trusting } }
+		name = EVTOPTC_RIP_21501
+
+		FROM = {
+			opinion = {
+				modifier = opinion_took_my_advice
+				who = ROOT
+			}
+		}
+
+		event_target:eternal_life_mystic = { imprison = ROOT }
+
+		hidden_tooltip = {
+			event_target:eternal_life_mystic = {
+				if = {
+					limit = { NOT = { has_character_flag = mystic_is_fraud } }
+					narrative_event = { id = RIP.21508 days = 60 } 
+				}
+			}
+		}
+	}
+}
+
+#Heir/relative/advisor  finds out that mystic is fraud
+narrative_event = {
+	title = EVTNAME_RIP_21502
+	id = RIP.21502
+	desc = EVTDSC_RIP_21502
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM =  { narrative_event = { id = RIP.21503 days = 45 } } 
+	}
+}
+
+#You get notified that the mystic is a fraud
+narrative_event = {
+	title = EVTNAME_RIP_21503
+	id = RIP.21503
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_house_arrest_escape
+
+	desc = {
+		text = EVTDSC_RIP_21503_A
+		trigger = { FROM = { is_close_relative = ROOT } }
+	}
+
+	desc = {
+		text = EVTDSC_RIP_21503_B
+		trigger = { FROM = { NOT = { is_close_relative = ROOT } } } 
+	}
+
+	is_triggered_only = yes
+
+	#I don't believe you
+	option = {
+		trigger = { NOT = { trait = paranoid } }
+		name = EVTOPTA_RIP_21503
+		custom_tooltip = { text = EVTOPTA_RIP_21503_TOOLTIP }
+
+		FROM = {
+			opinion = {
+				modifier = opinion_did_not_take_my_advice
+				who = ROOT
+			}
+			hidden_tooltip = {
+				remove_opinion = {
+					modifier = opinion_took_my_advice
+					who = ROOT
+				}
+			}
+		}
+	}
+	#Imprison
+	option = {
+		name = EVTOPTB_RIP_21503
+		event_target:eternal_life_mystic = { imprison = ROOT }
+		hidden_tooltip = { 
+
+			event_target:eternal_life_mystic = {
+				if = {
+					limit = { NOT = { has_character_flag = mystic_is_fraud } }
+					narrative_event = { id = RIP.21508 days = 60 } 
+				}
+			}
+		}
+	}
+
+	#Demand to know truth
+	option = {
+		name = EVTOPTC_RIP_21503
+		custom_tooltip = { text = EVTOPTC_RIP_21503_TOOLTIP }
+
+		hidden_tooltip = { 
+			event_target:eternal_life_mystic = { narrative_event = { id = RIP.21506 days = 10 } } 
+		}
+	}
+}
+
+#Investigator finds no proof
+narrative_event = {
+	title = EVTNAME_RIP_21504
+	id = RIP.21504
+	desc = EVTDSC_RIP_21504
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM =  { narrative_event = { id = RIP.21505 days = 45 } } 
+	}
+}
+
+#You get notified that Investigator finds no proof
+narrative_event = {
+	title = EVTNAME_RIP_21505
+	id = RIP.21505
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_whispers
+
+	desc = {
+		text = EVTDSC_RIP_21505_A
+		trigger = { FROM = { is_close_relative = ROOT } }
+	}
+
+	desc = {
+		text = EVTDSC_RIP_21505_B
+		trigger = { FROM = { NOT = { is_close_relative = ROOT } } } 
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21505
+	}
+}
+
+#Mystic discovers you
+narrative_event = {
+	title = EVTNAME_RIP_21506
+	id = RIP.21506
+	desc = EVTDSC_RIP_21506
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM =  { narrative_event = { id = RIP.21507 days = 40 } }
+	}
+}
+
+#Mystic gives you ultimatum 
+narrative_event = {
+	title = EVTNAME_RIP_21507
+	id = RIP.21507
+	desc = EVTDSC_RIP_21507
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_quarrel
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RIP_21507
+
+		if = {
+			limit = { trait = paranoid }
+			remove_trait = paranoid
+		}
+
+		if = {
+			limit = { NOT = { trait = trusting } }
+			add_trait = trusting
+		}
+	}
+	option = {
+		name = EVTOPTB_RIP_21507
+		
+		custom_tooltip = { text = EVTOPTB_RIP_21507_TOOLTIP }
+
+		FROM = {
+			opinion = {
+				modifier = opinion_did_not_trust_me
+				who = ROOT
+			}
+			hidden_tooltip = { leave_court_effect = yes }
+		}
+	}
+	option = {
+		name = EVTOPTC_RIP_21507
+		event_target:eternal_life_mystic = { imprison = ROOT }
+		hidden_tooltip = {
+
+			event_target:eternal_life_mystic = {
+				if = {
+					limit = { NOT = { has_character_flag = mystic_is_fraud } }
+					narrative_event = { id = RIP.21508 days = 60 } 
+				}
+			}
+		}
+	}
+}
+
+#Mystic escapes
+narrative_event = {
+	title = EVTNAME_RIP_21508
+	id = RIP.21508
+	desc = EVTDSC_RIP_21508
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		FROM =  { narrative_event = { id = RIP.21509 } }
+		prisoner = no
+		leave_court_effect = yes
+	}
+}
+
+#You get notified of mystic escape
+narrative_event = {
+	title = EVTNAME_RIP_21509
+	id = RIP.21509
+	desc = EVTDSC_RIP_21509
+	border = GFX_event_narrative_frame_religion
+	picture = GFX_evt_into_the_dungeon
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_RIP_21509
+	}
+}
+
+###REINCARNATION
+
+#reincarnation event
+narrative_event = {
+	title = EVTNAME_RIP_21509
+	id = RIP.21991
+	desc = EVTDSC_RIP_21509
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+	hide_from = yes
+	hide_window = yes
+
+	option = {
+
+		FROM = {
+			save_event_target_as = eternal_life_reincarnation_source
+		}
+
+		ROOT = {
+
+			#Add traits of reincarnation source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+			copy_random_personality_trait = event_target:eternal_life_reincarnation_source
+		}
+	}
+}

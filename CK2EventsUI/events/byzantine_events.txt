@@ -1,0 +1,1817 @@
+#######################################
+#
+# Byzantine Events
+#
+# Event ID LoR.800 - LoR.999 reserved
+#
+#######################################
+
+# Written by Henrik Eklund
+
+namespace = LoR
+
+### Eunuchs
+
+# Introduce Eunuch?
+character_event = {
+	id = LoR.800
+	desc = EVTDESCLoR.800
+	picture = GFX_evt_emissary_byzantine
+	
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+	min_age = 16
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		OR = {
+			has_landed_title = e_byzantium
+			has_landed_title = e_roman_empire
+		}
+		NOT = {
+			any_courtier = { has_minor_title = title_imperial_eunuch }
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+	}
+	
+	option = {
+		name = EVTOPTALoR.800
+		custom_tooltip = {
+			text = introduce_eunuch
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = LoR.801 } }
+					20 = { character_event = { id = LoR.802 } }
+					20 = { character_event = { id = LoR.803 } }
+					20 = { character_event = { id = LoR.804 } }
+					20 = { character_event = { id = LoR.805 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.800
+		custom_tooltip = { text = no_to_eunuchs }
+	}
+}
+
+# Martial Eunuch
+character_event = {
+	id = LoR.801
+	desc = EVTDESCLoR.801
+	picture = GFX_evt_emissary_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.801
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = eunuch
+			trait = diligent
+			trait = quick
+			trait = brave
+			trait = brilliant_strategist
+			attributes = {
+				martial = 10
+			}
+		}
+		new_character = {
+			give_minor_title = title_imperial_eunuch
+		}
+	}
+}
+
+# Diplomacy Eunuch 
+character_event = {
+	id = LoR.802
+	desc = EVTDESCLoR.802
+	picture = GFX_evt_emissary_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.801
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = eunuch
+			trait = diligent
+			trait = quick
+			trait = gregarious
+			trait = grey_eminence
+			attributes = {
+				diplomacy = 10
+			}
+		}
+		new_character = {
+			give_minor_title = title_imperial_eunuch
+		}
+	}
+}
+
+# Steward Eunuch
+character_event = {
+	id = LoR.803
+	desc = EVTDESCLoR.803
+	picture = GFX_evt_emissary_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.801
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = eunuch
+			trait = diligent
+			trait = quick
+			trait = temperate
+			trait = midas_touched
+			attributes = {
+				stewardship = 10
+			}
+		}
+		new_character = {
+			give_minor_title = title_imperial_eunuch
+		}
+	}
+}
+
+# Spymaster Eunuch
+character_event = {
+	id = LoR.804
+	desc = EVTDESCLoR.804
+	picture = GFX_evt_emissary_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.801
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = eunuch
+			trait = diligent
+			trait = quick
+			trait = deceitful
+			trait = elusive_shadow
+			attributes = {
+				intrigue = 10
+			}
+		}
+		new_character = {
+			give_minor_title = title_imperial_eunuch
+		}
+	}
+}
+
+# Learning Eunuch
+character_event = {
+	id = LoR.805
+	desc = EVTDESCLoR.805
+	picture = GFX_evt_emissary_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.801
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = eunuch
+			trait = diligent
+			trait = quick
+			trait = scholar
+			trait = mastermind_theologian
+			attributes = {
+				learning = 10
+			}
+		}
+		new_character = {
+			give_minor_title = title_imperial_eunuch
+		}
+	}
+}
+
+### Prisoner Events
+
+# Jailer Blind
+character_event = {
+	id = LoR.830
+	desc = EVTDESCLoR.830
+	picture = GFX_evt_torture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.830
+	}
+}
+
+# Prisoner Blind
+character_event = {
+	id = LoR.831
+	desc = EVTDESCLoR.831
+	picture = GFX_evt_torture
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.831
+	}
+}
+
+# Jailer Castrate
+character_event = {
+	id = LoR.832
+	desc = EVTDESCLoR.832
+	picture = GFX_evt_torture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.832
+	}
+}
+
+# Prisoner Castrate
+character_event = {
+	id = LoR.833
+	desc = EVTDESCLoR.833
+	picture = GFX_evt_torture
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.833
+	}
+}
+
+# Jailer Castrate Boy
+character_event = {
+	id = LoR.834
+	desc = EVTDESCLoR.834
+	picture = GFX_evt_torture
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.834
+	}
+}
+
+### Varangian Hippodrome Riots
+
+# Hippodrome Riots
+character_event = {
+	id = LoR.840
+	desc = EVTDESCLoR.840
+	picture = GFX_evt_riots_byzantine
+	
+	ai = no
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+	min_age = 16
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		in_command = no
+		OR = {
+			has_landed_title = e_byzantium
+			has_landed_title = e_roman_empire
+		}
+		capital_scope = { province_id = 496 }
+		any_vassal = {
+			has_landed_title = d_varangian_guard
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+	}
+	
+	option = {
+		name = EVTOPTALoR.840
+		character_event = { id = LoR.841 days = 3 tooltip = EVTTOOLTIPLoR.841 }
+	}
+	option = {
+		name = EVTOPTBLoR.840
+		character_event = { id = LoR.842 days = 3 tooltip = EVTTOOLTIPLoR.842 }
+	}
+}
+
+# Varangian Guard unleashed
+character_event = {
+	id = LoR.841
+	desc = EVTDESCLoR.841
+	picture = GFX_evt_battle_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.841
+		scaled_wealth = -0.25
+		prestige = -100
+	}
+}
+
+# City Guard handles it
+character_event = {
+	id = LoR.842
+	desc = EVTDESCLoR.842
+	picture = GFX_evt_riots_byzantine
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.842
+		scaled_wealth = -0.1
+	}
+}
+
+### The Varangian and the Princess
+
+character_event = {
+	id = LoR.844
+	hide_window = yes
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	ai = no
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		OR = {
+			has_landed_title = e_byzantium
+			has_landed_title = e_roman_empire
+		}
+		any_vassal = {
+			has_landed_title = d_varangian_guard
+		}
+		any_child = {
+			ai = yes
+			is_female = yes
+			is_marriage_adult = yes
+			is_married = no
+			NOT = { trait = celibate }
+			NOT = { trait = chaste }
+			NOT = { trait = homosexual }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 400
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				ai = yes
+				is_female = yes
+				is_marriage_adult = yes
+				is_married = no
+				NOT = { trait = celibate }
+				NOT = { trait = nun }
+				NOT = { trait = chaste }
+				NOT = { trait = homosexual }
+			}
+			character_event = { id = LoR.845 }
+		}
+	}
+}
+
+# AI Event for Daughter
+character_event = {
+	id = LoR.845
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_tooltip = {
+			father = { 
+				character_event = { id = LoR.846 days = 3 }
+			}
+		}
+	}
+}
+
+# Your Daughter Approaches
+character_event = {
+	id = LoR.846
+	desc = EVTDESCLoR.846
+	picture = GFX_evt_princess_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.846
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 22
+			trait = varangian
+			religion = ROOT
+			culture = norse
+		}
+		hidden_tooltip = {
+			d_varangian_guard = {
+				holder_scope = {
+					new_character = { culture = PREV }
+				}
+			}
+		}
+		new_character = {
+			add_spouse_matrilineal = FROM
+			hidden_tooltip = {
+				add_lover = FROM
+			}
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+			}
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.846
+		FROM = {
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTCLoR.846
+		FROM = {
+			opinion = {
+				modifier = evil_murderer
+				who = ROOT
+				years = 6
+			}
+		}
+	}
+}
+
+### Drunken Varangians
+
+# AI Mayor Event
+character_event = {
+	id = LoR.850
+	hide_window = yes
+	
+	capable_only = yes
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	ai = yes
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		OR = {
+			has_landed_title = b_galata
+			has_landed_title = b_hieron
+			has_landed_title = b_deuteron
+			has_landed_title = b_pempton
+		}
+		liege = {
+			ai = no
+			OR = {
+				has_landed_title = e_byzantium
+				has_landed_title = e_roman_empire
+			}
+			any_vassal = {
+				has_landed_title = d_varangian_guard
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1480
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = LoR.851 }
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# Drunken Varangians
+character_event = {
+	id = LoR.851
+	desc = EVTDESCLoR.851
+	picture = GFX_evt_riots_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.851
+		FROM = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		any_vassal = {
+			limit = { has_landed_title = d_varangian_guard }
+			opinion = {
+				modifier = opinion_bitter
+				who = ROOT
+				years = 4
+			}
+		}
+		custom_tooltip = { text = punish_varangians }
+	}
+	option = {
+		name = EVTOPTBLoR.851
+		any_vassal = {
+			limit = { has_landed_title = d_varangian_guard }
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 4
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_bitter
+				who = ROOT
+				years = 4
+			}
+		}
+		piety = -50
+		custom_tooltip = { text = free_varangians }
+	}
+}
+
+### Greek Fire Event Series
+
+# Explosion
+narrative_event = {
+	id = LoR.860
+	title = EVTNAMELoR.860
+	desc = EVTDESCLoR.860
+	picture = GFX_evt_throne_room_byzantine
+	
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+	ai = no
+	min_age = 16
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		OR = {
+			has_landed_title = e_byzantium
+			has_landed_title = e_roman_empire
+		}
+		NOT = { has_global_flag = greek_fire }
+		in_command = no
+		capital_scope = { province_id = 496 }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 780
+	}
+	
+	option = {
+		name = EVTOPTALoR.860
+		narrative_event = { id = LoR.861 days = 3 tooltip = EVTTOOLTIPLoR.861 }
+		set_global_flag = greek_fire
+	}
+	option = {
+		name = EVTOPTBLoR.860
+		custom_tooltip = { text = not_interested_in_explosion }
+		set_global_flag = greek_fire
+	}
+}
+
+# Aftermath
+narrative_event = {
+	id = LoR.861
+	title = EVTNAMELoR.861
+	desc = EVTDESCLoR.861
+	picture = GFX_evt_market_byzantine
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.861
+		narrative_event = { id = LoR.862 days = 120 random = 20 tooltip = EVTTOOLTIPLoR.862 }
+	}
+}
+
+# Pirate Fleet
+narrative_event = {
+	id = LoR.862
+	title = EVTNAMELoR.862
+	desc = EVTDESCLoR.862
+	picture = GFX_evt_emissary_byzantine
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = { # Naval fleet
+		name = EVTOPTALoR.862
+		
+		custom_tooltip = {
+			text = deploy_fleet
+			hidden_tooltip = {
+				random_list = {
+					33 = { narrative_event = { id = LoR.863 days = 38 random = 8 } }
+					33 = { narrative_event = { id = LoR.864 days = 38 random = 8 } }
+					33 = { narrative_event = { id = LoR.865 days = 38 random = 8 } }
+				}
+			}
+		}
+	}
+	option = { # Spies
+		name = EVTOPTBLoR.862
+		custom_tooltip = { 
+			text = send_in_spies
+			hidden_tooltip = {
+				random_list = {
+					33 = { narrative_event = { id = LoR.866 days = 38 random = 8 } }
+					33 = { narrative_event = { id = LoR.867 days = 38 random = 8 } }
+					33 = { narrative_event = { id = LoR.868 days = 38 random = 8 } }
+				}
+			}
+		}
+	}
+}
+
+# Naval Battle Won (Daughter)
+narrative_event = {
+	id = LoR.863
+	title = EVTNAMELoR.863
+	desc = EVTDESCLoR.863
+	picture = GFX_evt_kraken
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.863
+		change_martial = 1
+		narrative_event = { id = LoR.869 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# Naval Battle Won (Wife)
+narrative_event = {
+	id = LoR.864
+	title = EVTNAMELoR.863
+	desc = EVTDESCLoR.864
+	picture = GFX_evt_kraken
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.863
+		change_martial = 1
+		narrative_event = { id = LoR.870 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# Naval Battle Lost
+narrative_event = {
+	id = LoR.865
+	title = EVTNAMELoR.863
+	desc = EVTDESCLoR.865
+	picture = GFX_evt_kraken
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.865
+		prestige = -25
+		narrative_event = { id = LoR.871 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# Spies Succeed (Daughter)
+narrative_event = {
+	id = LoR.866
+	title = EVTNAMELoR.866
+	desc = EVTDESCLoR.866
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.863
+		change_intrigue = 1
+		narrative_event = { id = LoR.869 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# Spies Succeed (Wife)
+narrative_event = {
+	id = LoR.867
+	title = EVTNAMELoR.866
+	desc = EVTDESCLoR.867
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.863
+		change_intrigue = 1
+		narrative_event = { id = LoR.870 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# Spies Lose
+narrative_event = {
+	id = LoR.868
+	title = EVTNAMELoR.866
+	desc = EVTDESCLoR.868
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.865
+		prestige = -25
+		narrative_event = { id = LoR.871 days = 65 random = 10 tooltip = EVTTOOLTIPLoR.869 }
+	}
+}
+
+# The Letter (has daughter)
+narrative_event = {
+	id = LoR.869
+	title = EVTNAMELoR.869
+	desc = EVTDESCLoR.869
+	picture = GFX_evt_recieve_letter
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.869
+		narrative_event = { id = LoR.872 days = 7 tooltip = EVTTOOLTIPLoR.872 }
+	}
+	option = {
+		name = EVTOPTBLoR.869
+		narrative_event = { id = LoR.873 days = 7 tooltip = EVTTOOLTIPLoR.873 }
+	}
+}
+
+# The Letter (has wife)
+narrative_event = {
+	id = LoR.870
+	title = EVTNAMELoR.869
+	desc = EVTDESCLoR.870
+	picture = GFX_evt_recieve_letter
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.869
+		narrative_event = { id = LoR.874 days = 7 tooltip = EVTTOOLTIPLoR.872 }
+	}
+	option = {
+		name = EVTOPTBLoR.869
+		narrative_event = { id = LoR.875 days = 7 tooltip = EVTTOOLTIPLoR.873 }
+	}
+}
+
+# The Letter (no daughter or wife)
+narrative_event = {
+	id = LoR.871
+	title = EVTNAMELoR.869
+	desc = EVTDESCLoR.870
+	picture = GFX_evt_recieve_letter
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.869
+		narrative_event = { id = LoR.876 days = 7 tooltip = EVTTOOLTIPLoR.872 }
+	}
+	option = {
+		name = EVTOPTBLoR.869
+		narrative_event = { id = LoR.877 days = 7 tooltip = EVTTOOLTIPLoR.873 }
+	}
+}
+
+# The Deal (Backstabbing with Daughter)
+narrative_event = {
+	id = LoR.872
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.872
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		custom_tooltip = { 
+			text = ship_hoists_sails
+			hidden_tooltip = {
+				random_list = {
+					30 = { narrative_event = { id = LoR.880 days = 2 } }
+					70 = { narrative_event = { id = LoR.878 days = 2 } }
+				}
+			}
+		}
+	}
+}
+
+# The Deal (with Daughter)
+narrative_event = {
+	id = LoR.873
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.873
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		narrative_event = { id = LoR.881 days = 2 tooltip = EVTTOOLTIPLoR.878 }
+	}
+}
+
+# The Deal (Backstabbing with Wife)
+narrative_event = {
+	id = LoR.874
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.874
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		scaled_wealth = -0.25
+		custom_tooltip = { 
+			text = ship_hoists_sails 
+			hidden_tooltip = {
+				random_list = {
+					30 = { narrative_event = { id = LoR.880 days = 2 } }
+					70 = { narrative_event = { id = LoR.879 days = 2 } }
+				}
+			}
+		}
+	}
+}
+
+# The Deal (with Wife)
+narrative_event = {
+	id = LoR.875
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.875
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		scaled_wealth = -0.25
+		narrative_event = { id = LoR.881 days = 2 tooltip = EVTTOOLTIPLoR.878 }
+	}
+}
+
+# The Deal (Backstabbing with Money)
+narrative_event = {
+	id = LoR.876
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.876
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		scaled_wealth = -0.35
+		custom_tooltip = { 
+			text = ship_hoists_sails 
+			hidden_tooltip = {
+				random_list = {
+					30 = { narrative_event = { id = LoR.880 days = 2 } }
+					70 = { narrative_event = { id = LoR.879 days = 2 } }
+				}
+			}
+		}
+	}
+}
+
+# The Deal (with Money)
+narrative_event = {
+	id = LoR.877
+	title = EVTNAMELoR.872
+	desc = EVTDESCLoR.877
+	picture = GFX_evt_shadowy_cabal
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.872
+		scaled_wealth = -0.35
+		narrative_event = { id = LoR.881 days = 2 tooltip = EVTTOOLTIPLoR.878 }
+	}
+}
+
+# Conclusion (Ambush success with daughter)
+narrative_event = {
+	id = LoR.878
+	title = EVTNAMELoR.878
+	desc = EVTDESCLoR.878
+	picture = GFX_evt_victory_arch_byzantine
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.878
+		create_character = {
+			name = Kyrillos
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 47
+			religion = orthodox
+			culture = greek
+			trait = intricate_webweaver
+			trait = brave
+			trait = drunkard
+			trait = hedonist
+			trait = wroth
+			trait = greedy
+			trait = proud
+			trait = ambitious
+			attributes = {
+				learning = 2
+				martial = 5
+				diplomacy = 2
+				intrigue = 1
+				stewardship = 1
+			}
+		}
+		new_character = {
+			prisoner = yes
+			create_character = {
+				name = Despina
+				random_traits = no
+				dynasty = NONE
+				female = yes
+				age = 21
+				religion = orthodox
+				culture = greek
+				trait = intricate_webweaver
+				trait = brave
+				trait = hedonist
+				trait = wroth
+				trait = fair
+				trait = proud
+				trait = ambitious
+				attributes = {
+					learning = 1
+					martial = 3
+					diplomacy = 3
+					intrigue = 2
+					stewardship = 2
+				}
+			}
+			new_character = {
+				prisoner = yes
+				set_father = prev
+			}
+		}
+		change_intrigue = 1
+		wealth = 25
+		custom_tooltip = { text = liquid_fire_settled }
+	}
+}
+
+# Conclusion (Ambush success without daughter)
+narrative_event = {
+	id = LoR.879
+	title = EVTNAMELoR.878
+	desc = EVTDESCLoR.879
+	picture = GFX_evt_victory_arch_byzantine
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.878
+		create_character = {
+			name = Kyrillos
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 47
+			religion = orthodox
+			culture = greek
+			trait = intricate_webweaver
+			trait = brave
+			trait = drunkard
+			trait = hedonist
+			trait = wroth
+			trait = greedy
+			trait = proud
+			trait = ambitious
+			attributes = {
+				learning = 2
+				martial = 5
+				diplomacy = 2
+				intrigue = 1
+				stewardship = 1
+			}
+		}
+		new_character = {
+			prisoner = yes
+		}
+		change_intrigue = 1
+		scaled_wealth = 0.35
+		custom_tooltip = { text = liquid_fire_settled }
+	}
+}
+
+# Conclusion (Ambush fails)
+narrative_event = {
+	id = LoR.880
+	title = EVTNAMELoR.878
+	desc = EVTDESCLoR.880
+	picture = GFX_evt_hagia_sofia
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.878
+		prestige = -50
+		custom_tooltip = { text = liquid_fire_settled }
+	}
+}
+
+# Conclusion (no Ambush)
+narrative_event = {
+	id = LoR.881
+	title = EVTNAMELoR.878
+	desc = EVTDESCLoR.881
+	picture = GFX_evt_hagia_sofia
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTALoR.878
+		prestige = -50
+		custom_tooltip = { text = liquid_fire_settled }
+	}
+}
+
+### The Eunuch Merchant
+
+# Merchant Arrives
+character_event = {
+	id = LoR.885
+	desc = EVTDESCLoR.885
+	picture = GFX_evt_carriage
+	
+	ai = no
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		has_dlc = "Legacy of Rome"
+		in_command = no
+		NOT = { religion_group = indian_group }
+		capital_scope = {
+			NOT = { region = world_india }
+		}
+		location = {
+			county = {
+				NOT = { region = world_india }
+			}
+		}
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	mean_time_to_happen = {
+		months = 780
+	}
+	
+	option = {
+		name = EVTOPTALoR.885
+		character_event = { id = LoR.886 days = 3 tooltip = EVTTOOLTIPLoR.886 }
+	}
+	option = {
+		name = EVTOPTBLoR.885
+		custom_tooltip = { text = send_merchants_away }
+	}
+}
+
+# Spends the Night
+character_event = {
+	id = LoR.886
+	desc = EVTDESCLoR.886
+	picture = GFX_evt_feast
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.886
+		custom_tooltip = { 
+			text = eunuch_offer
+			hidden_tooltip = {
+				random_list = {
+					25 = { character_event = { id = LoR.887 days = 3 } }
+					25 = { character_event = { id = LoR.888 days = 3 } }
+					25 = { character_event = { id = LoR.889 days = 3 } }
+					25 = { character_event = { id = LoR.890 days = 3 } }
+				}
+			}
+		}
+	}
+}
+
+# Gift 1
+character_event = {
+	id = LoR.887
+	desc = EVTDESCLoR.887
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_steward = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 22
+			religion = ROOT
+			culture = manden
+			attributes = {
+				stewardship = 6
+			}
+			trait = eunuch
+			trait = diligent
+			trait = temperate
+			trait = humble
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = just
+				}
+				25 = {
+					add_trait = shrewd
+				}
+				25 = {
+					add_trait = stubborn
+				}
+				25 = {
+					add_trait = patient
+				}
+			}
+			random_list = {
+				33 = {
+					add_trait = administrator
+				}
+				33 = {
+					add_trait = architect
+				}
+				33 = {
+					add_trait = gardener
+				}
+			}
+			save_event_target_as = eunuch_gift
+		}
+	}
+	
+	option = {
+		name = EVTOPTALoR.887
+		custom_tooltip = {
+			text = eunuch_gift_tooltip
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.887
+		custom_tooltip = { text = eunuch_declined }
+		hidden_tooltip = {
+			event_target:eunuch_gift = {
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+# Gift 2
+character_event = {
+	id = LoR.888
+	desc = EVTDESCLoR.887
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_diplomat = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 22
+			religion = ROOT
+			culture = ethiopian
+			attributes = {
+				diplomacy = 6
+			}
+			trait = eunuch
+			trait = diligent
+			trait = temperate
+			trait = humble
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = honest
+				}
+				25 = {
+					add_trait = kind
+				}
+				25 = {
+					add_trait = gregarious
+				}
+				25 = {
+					add_trait = trusting
+				}
+			}
+			random_list = {
+				25 = {
+					add_trait = socializer
+				}
+				25 = {
+					add_trait = gamer
+				}
+				25 = {
+					add_trait = poet
+				}
+				25 = {
+					add_trait = falconer
+				}
+			}
+			save_event_target_as = eunuch_gift
+		}
+	}
+	option = {
+		name = EVTOPTALoR.887
+		custom_tooltip = {
+			text = eunuch_gift_tooltip
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.887
+		custom_tooltip = { text = eunuch_declined }
+		hidden_tooltip = {
+			event_target:eunuch_gift = {
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+# Gift 3
+character_event = {
+	id = LoR.889
+	desc = EVTDESCLoR.887
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_intriguer = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 22
+			religion = ROOT
+			culture = greek
+			attributes = {
+				intrigue = 6
+			}
+			trait = eunuch
+			trait = diligent
+			trait = temperate
+			trait = humble
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = deceitful
+				}
+				25 = {
+					add_trait = paranoid
+				}
+				25 = {
+					add_trait = shrewd
+				}
+				25 = {
+					add_trait = cynical
+				}
+			}
+			random_list = {
+				50 = {
+					add_trait = schemer
+				}
+				50 = {
+					add_trait = impaler
+				}
+			}
+			save_event_target_as = eunuch_gift
+		}
+	}
+	option = {
+		name = EVTOPTALoR.887
+		custom_tooltip = {
+			text = eunuch_gift_tooltip
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.887
+		custom_tooltip = { text = eunuch_declined }
+		hidden_tooltip = {
+			event_target:eunuch_gift = {
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+# Gift 4
+character_event = {
+	id = LoR.890
+	desc = EVTDESCLoR.887
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_soldier = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 22
+			religion = ROOT
+			culture = bedouin_arabic
+			attributes = {
+				martial = 6
+			}
+			trait = eunuch
+			trait = diligent
+			trait = temperate
+			trait = humble
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = brave
+				}
+				25 = {
+					add_trait = wroth
+				}
+				25 = {
+					add_trait = cruel
+				}
+				25 = {
+					add_trait = brawny
+				}
+			}
+			random_list = {
+				25 = {
+					add_trait = organizer
+				}
+				25 = {
+					add_trait = inspiring_leader
+				}
+				25 = {
+					add_trait = defensive_leader
+				}
+				25 = {
+					add_trait = desert_terrain_leader
+				}
+			}
+			random_list = {
+				33 = {
+					add_trait = duelist
+				}
+				33 = {
+					add_trait = strategist
+				}
+				33 = {
+					add_trait = hunter
+				}
+			}
+			save_event_target_as = eunuch_gift
+		}
+	}
+	
+	option = {
+		name = EVTOPTALoR.887
+		custom_tooltip = {
+			text = eunuch_gift_tooltip
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.887
+		custom_tooltip = { text = eunuch_declined }
+		hidden_tooltip = {
+			event_target:eunuch_gift = {
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+### Tzykanion
+
+# AI Challenges
+character_event = {
+	id = LoR.900
+	hide_window = yes
+	
+	ai = yes
+	min_age = 16
+	max_age = 50
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	culture = greek
+	only_men = yes
+	
+	trigger = {
+		primary_title = { higher_tier_than = COUNT }
+		is_feudal = yes
+		OR = {
+			liege = {
+				has_dlc = "Legacy of Rome"
+				has_landed_title = e_byzantium
+				NOT = { has_character_flag = no_more_tzykanion }
+				ai = no
+				culture = greek
+				is_female = no
+				prisoner = no
+				age = 16
+				NOT = { age = 50 }
+				NOT = { trait = infirm }
+				NOT = { trait = incapable }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			liege = {
+				has_landed_title = e_byzantium
+				any_realm_lord = {
+					ai = no
+					has_dlc = "Legacy of Rome"
+					NOT = { has_character_flag = no_more_tzykanion }
+					same_liege = ROOT
+					culture = greek
+					is_female = no
+					prisoner = no
+					age = 16
+					NOT = { age = 50 }
+					NOT = { trait = infirm }
+					NOT = { trait = incapable }
+					NOT = { is_inaccessible_trigger = yes }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1800
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				liege = {
+					has_landed_title = e_byzantium
+					ai = no
+					NOT = { is_inaccessible_trigger = yes }
+				}
+			}
+			liege = {
+				character_event = { id = LoR.901 }
+			}
+		}
+		if = {
+			limit = {
+				liege = {
+					has_landed_title = e_byzantium
+					any_realm_lord = { 
+						ai = no
+						NOT = { is_inaccessible_trigger = yes }
+					}
+				}
+			}
+			liege = {
+				random_realm_lord = {
+					limit = { 
+						ai = no
+						NOT = { is_inaccessible_trigger = yes }
+					}
+					character_event = { id = LoR.901 }
+				}
+			}
+		}		
+	}
+}
+
+# Player is Challenged
+character_event = {
+	id = LoR.901
+	desc = EVTDESCLoR.901
+	picture = GFX_evt_hippodrome_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.901
+		custom_tooltip = {
+			text = tzykanion_accepted
+			hidden_tooltip = {
+				FROM = { set_character_flag = tzykanion }
+				if = {
+					limit = {
+						NOT = { trait = wroth }
+					}
+					random_list = {
+						50 = {
+							character_event = { id = LoR.902 }
+						}
+						50 = {
+							character_event = { id = LoR.903 }
+						}
+					}
+				}
+				if = {
+					limit = { trait = wroth }
+					character_event = { id = LoR.904 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTBLoR.901
+		custom_tooltip = { text = tzykanion_declined }
+	}
+}
+
+# Player Wins
+character_event = {
+	id = LoR.902
+	desc = EVTDESCLoR.902
+	picture = GFX_evt_hippodrome_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.902
+		prestige = 25
+		if = {
+			limit = { 
+				NOT = { has_landed_title = e_byzantium }
+			}
+			liege = {
+				any_realm_lord = {
+					limit = { has_character_flag = tzykanion }
+					opinion = {
+						modifier = opinion_tzykanion_pos
+						who = ROOT
+					}
+					clr_character_flag = tzykanion
+				}
+			}
+		}
+		if = {
+			limit = { has_landed_title = e_byzantium }
+			any_realm_lord = {
+				limit = { has_character_flag = tzykanion }
+				opinion = {
+					modifier = opinion_tzykanion_pos
+					who = ROOT
+				}
+				clr_character_flag = tzykanion
+			}
+		}
+	}
+}
+
+# Player Loses
+character_event = {
+	id = LoR.903
+	desc = EVTDESCLoR.903
+	picture = GFX_evt_hippodrome_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.903
+		if = {
+			limit = { 
+				NOT = { has_landed_title = e_byzantium }
+			}
+			liege = {
+				any_realm_lord = {
+					limit = { has_character_flag = tzykanion }
+					opinion = {
+						modifier = opinion_tzykanion_pos
+						who = ROOT
+					}
+					clr_character_flag = tzykanion
+				}
+			}
+		}
+		if = {
+			limit = { has_landed_title = e_byzantium }
+			any_realm_lord = {
+				limit = { has_character_flag = tzykanion }
+				opinion = {
+					modifier = opinion_tzykanion_pos
+					who = ROOT
+				}
+				clr_character_flag = tzykanion
+			}
+		}
+	}
+}
+
+# Player Goes Bananas
+character_event = {
+	id = LoR.904
+	desc = EVTDESCLoR.904
+	picture = GFX_evt_hippodrome_byzantine
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.904
+		prestige = -25
+		set_character_flag = no_more_tzykanion
+		if = {
+			limit = { 
+				NOT = { has_landed_title = e_byzantium }
+			}
+			liege = {
+				any_realm_lord = {
+					limit = { has_character_flag = tzykanion }
+					opinion = {
+						modifier = opinion_tzykanion_neg
+						who = ROOT
+					}
+					clr_character_flag = tzykanion
+				}
+			}
+		}
+		if = {
+			limit = { has_landed_title = e_byzantium }
+			any_realm_lord = {
+				limit = { has_character_flag = tzykanion }
+				opinion = {
+					modifier = opinion_tzykanion_neg
+					who = ROOT
+				}
+				clr_character_flag = tzykanion
+			}
+		}
+	}
+}

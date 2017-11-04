@@ -1,0 +1,809 @@
+#######################################
+#
+# Ramadan Events
+#
+# Event ID 88500 - 88749 reserved
+#
+#######################################
+
+# The Fast Begins
+character_event = {
+	id = 88500
+	title = RAMADANTITLE
+	desc = EVTDESC88500
+	picture = GFX_evt_bishop
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA88500
+		hidden_tooltip = {
+			character_event = { id = 88510 days = 26 }
+			character_event = { id = 88515 days = 31 }
+			character_event = { id = 88516 days = 31 }
+			character_event = { id = 88522 days = 35 }
+			random_list = {
+				10 = { character_event = { id = 88501 days = 3 } }
+				10 = { character_event = { id = 88502 days = 3 } }
+				10 = { character_event = { id = 88503 days = 3 } }
+				10 = { character_event = { id = 88504 days = 3 } }
+				20 = { character_event = { id = 88505 days = 3 } }
+				4 = { character_event = { id = 88506 days = 3 } }
+				4 = { character_event = { id = 88507 days = 3 } }
+			}
+			random_list = {
+				10 = { character_event = { id = 88501 days = 10 } }
+				10 = { character_event = { id = 88502 days = 10 } }
+				10 = { character_event = { id = 88503 days = 10 } }
+				10 = { character_event = { id = 88504 days = 10 } }
+				20 = { character_event = { id = 88505 days = 10 } }
+				4 = { character_event = { id = 88506 days = 10 } }
+				4 = { character_event = { id = 88507 days = 10 } }
+			}
+			random_list = {
+				10 = { character_event = { id = 88501 days = 17	} }
+				10 = { character_event = { id = 88502 days = 17 } }
+				10 = { character_event = { id = 88503 days = 17 } }
+				10 = { character_event = { id = 88504 days = 17 } }
+				20 = { character_event = { id = 88505 days = 17 } }
+				4 = { character_event = { id = 88506 days = 17 } }
+				4 = { character_event = { id = 88507 days = 17 } }
+			}
+		}
+	}
+}
+
+
+
+
+# Release prisoners
+character_event = {
+	id = 88501
+	title = RAMADANTITLE
+	desc = EVTDESC88501
+	picture = GFX_evt_into_the_dungeon
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		num_of_prisoners = 1
+		has_character_flag = ramadan
+		NOT = { has_character_flag = ramadan_prisoners }
+	}
+	
+#	mean_time_to_happen = {
+#		days = 45
+#	}
+	
+	option = {
+		name = EVTOPTA88501
+		set_character_flag = ramadan_prisoners
+		any_courtier = {
+			limit = { prisoner = yes }
+			imprison = no
+		}
+		decadence = -1
+		piety = 15
+	}
+	option = {
+		name = EVTOPTB88501
+		set_character_flag = ramadan_prisoners
+		decadence = 1
+		piety = -15
+	}
+}
+
+# Charity for the People
+character_event = {
+	id = 88502
+	title = RAMADANTITLE
+	desc = EVTDESC88502
+	picture = GFX_evt_market
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		scaled_wealth = 0.20
+		NOT = { has_character_flag = ramadan_charity }
+	}
+	
+#	mean_time_to_happen = {
+#		days = 45
+#	}
+	
+	option = {
+		name = EVTOPTA88502
+		scaled_wealth = -0.25
+		decadence = -1
+		set_character_flag = ramadan_charity
+		piety = 15
+	}
+	option = {
+		name = EVTOPTB88502
+		decadence = 1
+		set_character_flag = ramadan_charity
+		piety = -15
+	}
+}
+
+# Prayers
+character_event = {
+	id = 88503
+	title = RAMADANTITLE
+	desc = EVTDESC88503
+	picture = GFX_evt_monk
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		NOT = { has_character_flag = ramadan_prayers }
+	}
+	
+#	mean_time_to_happen = {
+#		days = 45
+#	}
+	
+	option = {
+		name = EVTOPTA88503
+		set_character_flag = ramadan_prayers
+		decadence = -1
+		piety = 15
+	}
+	option = {
+		name = EVTOPTB88503
+		set_character_flag = ramadan_prayers
+		decadence = 1
+		piety = -15
+	}
+}
+
+# Ill due to Fast
+character_event = {
+	id = 88504
+	title = RAMADANTITLE
+	desc = EVTDESC88504
+	picture = GFX_evt_illness
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		OR = {
+			age = 50
+			is_weak_trigger = yes
+		}
+		NOT = { has_character_flag = ramadan_ill }
+	}
+	
+#	mean_time_to_happen = {
+#		days = 45
+#	}
+	
+	option = {
+		name = EVTOPTA88504
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			add_symptom_effect = yes
+		}
+		character_event = { id = 88522 days = 1 tooltip = EVTTOOLTIP88522 }
+	}
+	option = {
+		name = EVTOPTB88504
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			add_symptom_effect = yes
+		}
+		decadence = -1
+		piety = 15
+		set_character_flag = ramadan_ill
+	}
+}
+
+# Infirm due to Fast
+character_event = {
+	id = 88505
+	title = RAMADANTITLE
+	desc = EVTDESC88505
+	picture = GFX_evt_illness
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		has_character_flag = ramadan_ill
+		is_ill = yes
+	}
+	
+#	mean_time_to_happen = {
+#		days = 8
+#	}
+	
+	option = {
+		name = EVTOPTA88505
+		add_trait = infirm
+		character_event = { id = 88522 days = 1 tooltip = EVTTOOLTIP88522 }
+	}
+}
+
+# Gain Temperate
+character_event = {
+	id = 88506
+	title = RAMADANTITLE
+	desc = EVTDESC88506
+	picture = GFX_evt_monk
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		NOT = { 
+			trait = gluttonous
+			trait = temperate
+		}
+	}
+	
+#	mean_time_to_happen = {
+#		days = 125
+#	}
+	
+	option = {
+		name = EVTOPTA88506
+		add_trait = temperate
+		decadence = -1
+		piety = 15
+	}
+}
+
+# Gain Charitable
+character_event = {
+	id = 88507
+	title = RAMADANTITLE
+	desc = EVTDESC88507
+	picture = GFX_evt_monk
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ramadan
+		NOT = { 
+			trait = greedy
+			trait = charitable
+		}
+	}
+	
+#	mean_time_to_happen = {
+#		days = 125
+#	}
+	
+	option = {
+		name = EVTOPTA88507
+		add_trait = charitable
+		decadence = -1
+		piety = 15
+	}
+}
+
+# War interrupts Fast
+character_event = {
+	id = 88508
+	title = RAMADANTITLE
+	desc = EVTDESC88508
+	picture = GFX_evt_moors
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	war = yes
+	
+	trigger = {
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA88508
+		character_event = { id = 88522 days = 1 }
+	}
+}
+
+# Illness interrupts Fast
+character_event = {
+	id = 88509
+	title = RAMADANTITLE
+	desc = EVTDESC88509
+	picture = GFX_evt_illness
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	is_sick = yes
+	
+	trigger = {
+		NOT = { has_character_flag = ramadan_ill }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA88509
+		character_event = { id = 88522 days = 1 }
+	}
+}
+
+# Hold Feast
+character_event = {
+	id = 88510
+	title = RAMADANTITLE
+	desc = EVTDESC88510
+	picture = GFX_evt_feast
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		num_of_vassals = 1
+		has_character_flag = ramadan
+	}
+	
+	option = {
+		name = EVTOPTA88510
+		scaled_wealth = -0.3
+		any_vassal = {
+			limit = {
+				prisoner = no
+				war = no
+			}
+			letter_event = {
+				id = 88511
+				tooltip = EVTTOOLTIP72011
+			}
+		}
+		character_event = { id = 88513 days = 3 tooltip = EVTTOOLTIP88513 }
+	}
+	option = {
+		name = EVTOPTB88510
+	}
+}
+
+# Vassal Invited
+letter_event = {
+	id = 88511
+	desc = EVTDESC88511
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA88511
+		ai_chance = {
+			factor = 1
+			modifier  = {
+				factor = 0.1
+				ai = yes
+				is_inaccessible_trigger = yes
+			}
+			modifier = {
+				factor = 2
+				opinion = { who = from value = -40 }
+			}
+			modifier  = {
+				factor = 2
+				opinion = { who = from value = -20 }
+			}
+		}
+		character_event = { id = 88514 days = 4 tooltip = EVTTOOLTIP88514 }
+		set_character_flag = attending_ramadan_feast
+	}
+	option = {
+		name = EVTOPTB88511
+		ai_chance = {
+			factor = 1
+			modifier  = {
+				factor = 0
+				opinion = { who = from value = 0 }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			modifier  = {
+				factor = 2
+				NOT = { opinion = { who = from value = -60 } }
+			}
+			modifier  = {
+				factor = 2
+				NOT = { opinion = { who = from value = -80 } }
+			}
+		}
+		FROM = {
+			letter_event = { id = 88512 days = 1 tooltip = EVTTOOLTIP88512 }
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# Vassal Refuses Invitation
+letter_event = {
+	id = 88512
+	desc = EVTDESC88512
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA88512
+	}
+}
+
+# Host is told about Feast
+character_event = {
+	id = 88513
+	title = RAMADANTITLE
+	desc = EVTDESC88513
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA88513
+		any_vassal = {
+			limit = { has_character_flag = attending_ramadan_feast }
+			opinion = {
+				modifier = opinion_impressed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# Vassal is told about Feast
+character_event = {
+	id = 88514
+	title = RAMADANTITLE
+	desc = EVTDESC88514
+	picture = GFX_evt_feast
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA88514
+		clr_character_flag = attending_ramadan_feast
+	}
+}
+
+# Gift for Wife
+character_event = {
+	id = 88515
+	title = RAMADANTITLE
+	desc = EVTDESC88515
+	picture = GFX_evt_marriage
+	border =  GFX_event_normal_frame_religion
+	
+	is_married = yes
+	only_men = yes
+	has_character_flag = ramadan
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			any_spouse = { is_main_spouse = no }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA88515
+		scaled_wealth = -0.25
+		spouse = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB88515
+		spouse = {
+			opinion = {
+				modifier = spouse_ignores_me
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# Gift for Wives
+character_event = {
+	id = 88516
+	title = RAMADANTITLE
+	desc = EVTDESC88516
+	picture = GFX_evt_marriage
+	border =  GFX_event_normal_frame_religion
+	
+	only_men = yes
+	is_married = yes
+	has_character_flag = ramadan
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_spouse = { is_main_spouse = no }
+	}
+	
+	option = {
+		name = EVTOPTA88516
+		scaled_wealth = -0.25
+		any_spouse = {
+			limit = { is_main_spouse = yes }
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 1
+			}
+		}
+		any_spouse = {
+			limit = { is_main_spouse = no }
+			opinion = {
+				modifier = opinion_unhappy
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB88516
+		scaled_wealth = -0.5
+		any_spouse = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC88516
+		any_spouse = {
+			opinion = {
+				modifier = spouse_ignores_me
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# Gluttonous Sin
+character_event = {
+	id = 88517
+	title = RAMADANTITLE
+	desc = EVTDESC88517
+	picture = GFX_evt_lunatic
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	
+	trigger = {
+		trait = gluttonous
+		NOT = { has_character_flag = ramadan_gluttonous }
+	}
+	
+	mean_time_to_happen = {
+		days = 45
+	}
+	
+	option = {
+		name = EVTOPTA88517
+		set_character_flag = ramadan_gluttonous
+		decadence = 1
+		piety = -15
+	}
+}
+
+# Lustful/Hedonist Sin
+character_event = {
+	id = 88518
+	title = RAMADANTITLE
+	desc = EVTDESC88518
+	picture = GFX_evt_jugglers
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	
+	trigger = {
+		OR = {
+			trait = lustful
+			trait = hedonist
+		}
+		NOT = { has_character_flag = ramadan_lustful_hedonist }
+	}
+	
+	mean_time_to_happen = {
+		days = 45
+	}
+	
+	option = {
+		name = EVTOPTA88518
+		set_character_flag = ramadan_lustful_hedonist
+		decadence = 1
+		piety = -15
+	}
+}
+
+# Drunkard Sin
+character_event = {
+	id = 88519
+	title = RAMADANTITLE
+	desc = EVTDESC88519
+	picture = GFX_evt_drunk
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	
+	trigger = {
+		trait = drunkard
+		NOT = { has_character_flag = ramadan_drunkard }
+	}
+	
+	mean_time_to_happen = {
+		days = 45
+	}
+	
+	option = {
+		name = EVTOPTA88519
+		decadence = 1
+		piety = -15
+		set_character_flag = ramadan_drunkard
+	}
+}
+
+# Greedy Sin
+character_event = {
+	id = 88520
+	title = RAMADANTITLE
+	desc = EVTDESC88520
+	picture = GFX_evt_lunatic
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	
+	trigger = {
+		trait = greedy
+		NOT = { 
+			has_character_flag = ramadan_greedy 
+			trait = just
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 45
+	}
+	
+	option = {
+		name = EVTOPTA88520
+		decadence = 1
+		piety = -15
+		set_character_flag = ramadan_greedy
+	}
+}
+
+# Cynical Sin
+character_event = {
+	id = 88521
+	title = RAMADANTITLE
+	desc = EVTDESC88521
+	picture = GFX_evt_lunatic
+	border =  GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion_group = muslim
+	has_character_flag = ramadan
+	
+	trigger = {
+		trait = cynical
+		NOT = { has_character_flag = ramadan_cynical }
+	}
+	
+	mean_time_to_happen = {
+		days = 45
+	}
+	
+	option = {
+		name = EVTOPTA88521
+		decadence = 1
+		piety = -15
+		set_character_flag = ramadan_cynical
+	}
+}
+
+# Ramadan Ends
+character_event = {
+	id = 88522
+	title = RAMADANTITLE
+	desc = EVTDESC88522
+	picture = GFX_evt_bishop
+	border =  GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = { has_character_flag = ramadan }
+	
+	option = {
+		name = EVTOPTA88522
+		clr_character_flag = ramadan
+		clr_character_flag = ramadan_ill
+		clr_character_flag = ramadan_cynical
+		clr_character_flag = ramadan_greedy
+		clr_character_flag = ramadan_gluttonous
+		clr_character_flag = ramadan_drunkard
+		clr_character_flag = ramadan_lustful_hedonist
+		clr_character_flag = ramadan_prayers
+		clr_character_flag = ramadan_charity
+		clr_character_flag = ramadan_prisoners
+	}
+}
+	
+	

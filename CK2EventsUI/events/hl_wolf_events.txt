@@ -1,0 +1,2124 @@
+###########################################
+#                                         #
+# Horse Lords wolf's blood events         #
+# ID HL.1000-HL.1999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = HL
+
+###########################################
+# The Wolf Child                          #
+# ID HL.1000-HL.1099                      #
+###########################################
+
+# Child is born with Wolf's blood
+character_event = {
+	id = HL.1000
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Horse Lords"
+		NOT = {
+			has_game_rule = {
+				name = supernatural_events
+				value = off
+			}
+		}
+		culture_group = altaic
+		NOT = { culture = khitan }
+		OR = {
+			father = {
+				ai = no
+				NOT = { num_of_children = 2 }
+			}
+			mother = {
+				ai = no
+				NOT = { num_of_children = 2 }
+			}
+		}
+		NOT = {
+			any_close_relative = {
+				OR = {
+					has_character_modifier = wolf_child
+					has_character_modifier = wolf_blood
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random = {
+			chance = 5
+			father = { narrative_event = { id = HL.1001 days = 300 } }
+			mother = { narrative_event = { id = HL.1001 days = 300 } }
+		}
+	}
+}
+
+# Baby shows wolf-like behavior
+narrative_event = {
+	id = HL.1001
+	title = EVTTITLE_HL_1001
+	desc = EVTDESC_HL_1001
+	picture = GFX_evt_birth
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	ai = no
+	capable_only = yes	
+	
+	trigger = {
+		FROM = { is_alive = yes }
+		NOT = { trait = sickly }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1001 # Positive response
+		FROM = {
+			add_character_modifier = {
+				name = wolf_child
+				duration = -1
+			}
+			set_character_flag = wolf_blood_first_generation
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_favorite
+			years = 100
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1001 # Negative response
+		FROM = {
+			add_character_modifier = {
+				name = wolf_child
+				duration = -1
+			}
+			set_character_flag = wolf_blood_first_generation
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_worried
+			years = 15
+		}
+	}
+}
+
+# Childless ruler finds child nursed by wolves, may adopt...
+narrative_event = {
+	id = HL.1010
+	title = EVTTITLE_HL_1001
+	desc = EVTDESC_HL_1010
+	picture = GFX_evt_birth
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	ai = no
+	capable_only = yes
+	only_playable = yes
+	
+	trigger = {
+		has_dlc = "Horse Lords"
+		is_adult = yes
+		NOT = { num_of_children = 1 }
+		culture_group = altaic
+		NOT = { culture = khitan }
+		NOT = { religion = jain }
+		NOT = {
+			any_close_relative = {
+				OR = {
+					has_character_modifier = wolf_child
+					has_character_modifier = wolf_blood
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1010 # Take the child in and adopt it
+		create_character = {
+			age = 1
+			dynasty = ROOT
+		}
+		new_character = {
+			if = {
+				limit = { ROOT = { is_female = no } }
+				set_father = ROOT
+			}
+			if = {
+				limit = { ROOT = { is_female = yes } }
+				set_mother = ROOT
+			}
+			set_character_flag = wolf_blood_first_generation
+			add_character_modifier = {
+				name = wolf_child
+				duration = -1
+			}
+		}
+		custom_tooltip = { text = adopt_wolf_child }
+	}
+	option = {
+		name = EVTOPTB_HL_1010 # Leave it
+		piety = -10
+	}
+}
+
+# Child (ruler or child to ruler) gets lost in woods. Is taken in and rescued by wolves..
+narrative_event = {
+	id = HL.1020
+	title = EVTTITLE_HL_1001
+	desc = EVTDESC_HL_1020
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	capable_only = yes	
+	
+	trigger = {
+		has_dlc = "Horse Lords"
+		culture_group = altaic
+		NOT = { culture = khitan }
+		age = 5
+		NOT = { age = 10 }
+		NOT = {	any_sibling = { is_older_than = ROOT } }
+		OR = {
+			ai = no
+			father = { ai = no }
+			mother = { ai = no }
+		}
+		NOT = {
+			any_close_relative = {
+				OR = {
+					has_character_modifier = wolf_child
+					has_character_modifier = wolf_blood
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1020
+		set_character_flag = wolf_blood_first_generation
+		add_character_modifier = {
+			name = wolf_child
+			duration = -1
+		}
+		hidden_tooltip = {
+			father = { narrative_event = { id = HL.1021 } }
+			mother = { narrative_event = { id = HL.1021 } }
+		}
+	}
+}
+
+# Child tells parent of experience with wolves...
+narrative_event = {
+	id = HL.1021
+	title = EVTTITLE_HL_1001
+	desc = EVTDESC_HL_1021
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_1021 # Positive response
+		tooltip = {
+			FROM = {
+				add_character_modifier = {
+					name = wolf_child
+					duration = -1
+				}
+			}
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_impressed
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1021 # Negative response
+		tooltip = {
+			FROM = {
+				add_character_modifier = {
+					name = wolf_child
+					duration = -1
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_opinion_modifier = {
+						who = FROM
+						modifier = opinion_worried
+					}
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_worried
+				years = 3
+			}
+		}
+	}
+}
+
+# Child getting older, court rumors of real mother being a wolf
+narrative_event = {
+	id = HL.1030
+	title = EVTTITLE_HL_1030
+	desc = EVTDESC_HL_1030
+	picture = GFX_evt_whispers
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	has_character_flag = wolf_blood_first_generation
+	capable_only = yes	
+	
+	trigger = {
+		age = 13
+		OR = {
+			ai = no
+			father = { ai = no }
+			mother = { ai = no }
+		}
+		NOT = { has_character_flag = wolf_spawn_rumors }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1030
+		set_character_flag = wolf_spawn_rumors
+		hidden_tooltip = {
+			father = { narrative_event = { id = HL.1031 } }
+			mother = { narrative_event = { id = HL.1031 } }
+		}
+		prestige = 20
+		if = {
+			limit = { NOT = { trait = proud } }
+			random = {
+				chance = 30
+				add_trait = proud
+				hidden_tooltip = {
+					character_event = {
+						id = 38261 #Notify Proud
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1030
+		trigger = {
+			mother_even_if_dead = { always = yes }
+		}
+		set_character_flag = wolf_spawn_rumors
+		hidden_tooltip = {
+			father = { narrative_event = { id = HL.1031 } }
+			mother = { narrative_event = { id = HL.1031 } }
+		}
+		if = {
+			limit = { trait = wroth }
+			random = {
+				chance = 30
+				add_trait = deceitful
+				hidden_tooltip = {
+					character_event = {
+						id = 38255 #Notify Deceitful
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = wroth } }
+			random = {
+				chance = 30
+				add_trait = wroth
+				hidden_tooltip = {
+					character_event = {
+						id = 38254 #Notify Wroth
+					}
+				}
+			}
+		}
+		mother = {
+			reverse_opinion = {
+				who = ROOT
+				modifier = strengthened_loyalty
+				years = 3
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_HL_1030
+		set_character_flag = wolf_spawn_rumors
+		hidden_tooltip = {
+			father = { narrative_event = { id = HL.1031 } }
+			mother = { narrative_event = { id = HL.1031 } }
+		}
+		if = {
+			limit = { trait = paranoid }
+			random = {
+				chance = 30
+				add_trait = envious
+				hidden_tooltip = {
+					character_event = {
+						id = 38271 #Notify Envious
+					}
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { trait = paranoid } }
+			random = {
+				chance = 30
+				add_trait = paranoid
+				hidden_tooltip = {
+					character_event = {
+						id = 38275 #Notify Paranoid
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_HL_1030
+		set_character_flag = wolf_spawn_rumors
+		hidden_tooltip = {
+			father = { narrative_event = { id = HL.1031 } }
+			mother = { narrative_event = { id = HL.1031 } }
+		}
+		prestige = 10
+	}
+}
+
+# Parents hear wolf rumors
+narrative_event = {
+	id = HL.1031
+	title = EVTTITLE_HL_1031
+	desc = EVTDESC_HL_1031
+	picture = GFX_evt_whispers
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	capable_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1031			# Accept gossip
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_approves
+			years = 3
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1031			# Disapprove of gossip
+		prestige = 30
+	}
+}
+
+# Reaches maturity - change Wolf-Child modifier to Wolf's Blood
+character_event = {
+	id = HL.1040
+	title = EVTTITLE_HL_1040
+	desc = EVTDESC_HL_1040
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	has_character_flag = wolf_blood_first_generation
+	
+	option = {
+		name = EVTOPTA_HL_1040
+		remove_character_modifier = wolf_child
+		add_character_modifier = {
+			name = wolf_blood
+			duration = -1
+		}
+		hidden_tooltip = {
+			father = { character_event = { id = HL.1041 } }
+			mother = { character_event = { id = HL.1041 } }
+		}
+		if = {
+			limit = { has_nickname = no }
+			give_nickname = nick_the_wolf
+		}
+	}
+}
+
+# Reach maturity - notify parents
+character_event = {
+	id = HL.1041
+	title = EVTTITLE_HL_1040
+	desc = EVTDESC_HL_1041
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	capable_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_1041
+		tooltip = {
+			FROM = {
+				remove_character_modifier = wolf_child
+				add_character_modifier = {
+					name = wolf_blood
+					duration = -1
+				}
+			}
+			if = {
+				limit = { has_nickname = nick_the_wolf }
+				give_nickname = nick_the_wolf
+			}
+		}
+	}
+}
+
+###########################################
+# Great Hunt random event - wolves appear #
+# and run beside you                      #
+# ID HL.1100                              #
+###########################################
+
+## Great Hunt random event - wolves appear and run beside you
+character_event = {
+	id = HL.1100
+	title = EVTTITLE_HL_1100
+	desc =  EVTDESC_HL_1100
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+	
+	min_age =  16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+	
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}
+
+	mean_time_to_happen = {
+		days = 100
+	}
+
+	option = {
+		name = EVTOPTA_HL_1100
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+	}
+}
+
+###########################################
+# The Call of the Wolves                  #
+# ID HL.1200-HL.1299                      #
+###########################################
+
+# Wolves howl outside several nights in a row
+narrative_event = {
+	id = HL.1200
+	title = EVTTITLE_HL_1200
+	desc = EVTDESC_HL_1200
+	picture = GFX_evt_bad_news
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	ai = no
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	has_character_flag = wolf_blood_first_generation
+	
+	trigger = {
+		in_command = no
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { has_character_flag = call_of_the_wolves }
+	}
+	
+	immediate = {
+		set_character_flag = call_of_the_wolves
+		set_character_flag = do_not_disturb
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1200
+		add_character_modifier = {
+			name = sleep_deprivation
+			days = 30
+		}
+		hidden_tooltip = {
+			character_event = { id = HL.1201 days = 30 }
+		}
+	}
+}
+
+# Wolves keep howling, night after night
+character_event = {
+	id = HL.1201
+	title = EVTTITLE_HL_1201
+	desc = EVTDESC_HL_1201
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1201
+		custom_tooltip = { text = wolves_go_out_alone_tooltip }
+		hidden_tooltip = {
+			narrative_event = { id = HL.1210 } # Go out alone
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1201
+		custom_tooltip = { text = wolves_go_out_with_guards_tooltip }
+		hidden_tooltip = {
+			character_event = { id = HL.1202 } # Go out with guards
+		}
+	}
+	option = {
+		name = EVTOPTC_HL_1201
+		custom_tooltip = { text = wolves_ignore_tooltip }
+		hidden_tooltip = {
+			narrative_event = { id = HL.1203 days = 15 } # Ignore (hint at negative effects of denying your instincts)
+		}
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Wolves howl - go out with guards, wolves retreat
+character_event = {
+	id = HL.1202
+	title = EVTTITLE_HL_1202
+	desc = EVTDESC_HL_1202
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1202
+		custom_tooltip = { text = wolves_continue_alone_tooltip }
+		hidden_tooltip = {
+			narrative_event = { id = HL.1210 } # Send guards home and follow wolves alone
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1202 # Go back inside
+		custom_tooltip = { text = wolves_ignore_tooltip }
+		hidden_tooltip = {
+			narrative_event = { id = HL.1203 days = 15 } # Ignore (hint at negative effects of denying your instincts)
+		}
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Didn't follow wolves, they disappear, you become unhappy as you miss their nightly howls...
+narrative_event = {
+	id = HL.1203
+	title = EVTTITLE_HL_1203
+	desc = EVTDESC_HL_1203
+	picture = GFX_evt_bad_news
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1203
+		if = {
+			limit = {
+				trait = stressed
+			}
+			add_trait = depressed
+		}
+		if = {
+			limit = {
+				NOT = { trait = stressed }
+			}
+			add_trait = stressed
+		}
+	}
+}
+	
+# Follow wolves alone, they run deep into the wild
+narrative_event = {
+	id = HL.1210
+	title = EVTTITLE_HL_1210
+	desc = EVTDESC_HL_1210
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1210
+		custom_tooltip = { text = wolves_run_with_wolves_tooltip }
+		hidden_tooltip = {
+			narrative_event = { id = HL.1230 days = 5 }
+		}
+	}
+}
+
+# Run and hunt with wolves, kill prey, eat raw meat
+narrative_event = {
+	id = HL.1230
+	title = EVTTITLE_HL_1230
+	desc = EVTDESC_HL_1230
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1230
+		add_character_modifier = {
+			name = good_hunt
+			days = 365
+		}
+		if = {
+			limit = {
+				trait = temperate
+			}
+			random = {
+				chance = 30
+				remove_trait = temperate
+			}
+		}
+		hidden_tooltip = {
+			narrative_event = { id = HL.1240 days = 5 }
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1230
+		if = {
+			limit = {
+				NOT = { trait = temperate }
+			}
+			random = {
+				chance = 30
+				add_trait = temperate
+				hidden_tooltip = {
+					character_event = {
+						id = 38276 #Notify Temperate
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			narrative_event = { id = HL.1240 days = 5 }
+		}
+	}
+}
+
+# Had a good time with wolves
+narrative_event = {
+	id = HL.1240
+	title = EVTTITLE_HL_1240
+	desc = EVTDESC_HL_1240
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1240
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+		hidden_tooltip = {
+			narrative_event = { id = HL.1250 days = 5 }
+		}
+	}
+}
+
+# Return home, wife/lover/everyone is worried. Say something about it…
+narrative_event = {
+	id = HL.1250
+	title = EVTTITLE_HL_1250
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESCA_HL_1250
+		trigger = {
+			NOT = { has_character_flag = wolf_homecoming_worried_character } # No one special was worried about you...
+		}
+	}
+	desc = {
+		text = EVTDESCB_HL_1250
+		trigger = {
+			has_character_flag = wolf_homecoming_worried_character # Someone special was worried about you...
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				is_married = yes
+				spouse = {
+					at_location = ROOT
+					NOT = { trait = incapable }
+				}
+			}
+			spouse = { save_event_target_as = wolf_worried_homecoming }
+			set_character_flag = wolf_homecoming_worried_character
+		}
+		if = {
+			limit = {
+				is_married = no
+				has_lover = yes
+				any_lover = {
+					at_location = ROOT
+					NOT = { trait = incapable }
+				}
+			}
+			random_lover = {
+				limit = {
+					at_location = ROOT
+					NOT = { trait = incapable }
+				}
+				save_event_target_as = wolf_worried_homecoming
+			}
+			set_character_flag = wolf_homecoming_worried_character
+		}
+		if = {
+			limit = {
+				is_married = no
+				has_lover = no
+				num_of_consorts = 1
+				any_consort = {
+					at_location = ROOT
+					NOT = { trait = incapable }
+				}
+			}
+			random_consort = {
+				limit = {
+					at_location = ROOT
+					NOT = { trait = incapable }
+				}
+				save_event_target_as = wolf_worried_homecoming
+			}
+			set_character_flag = wolf_homecoming_worried_character
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1250
+		prestige = 20
+		if = {
+			limit = { has_character_flag = wolf_homecoming_character }
+			event_target:wolf_worried_homecoming = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_cautious
+					years = 3
+				}
+			}
+		}
+		clr_character_flag = wolf_homecoming_character
+		clr_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTB_HL_1250
+		prestige = 50
+		if = {
+			limit = { has_character_flag = wolf_homecoming_character }
+			event_target:wolf_worried_homecoming = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_afraid
+					years = 3
+				}
+			}
+		}
+		clr_character_flag = wolf_homecoming_character
+		clr_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTC_HL_1250
+		trigger = {
+			has_character_flag = wolf_homecoming_character
+		}
+		event_target:wolf_worried_homecoming = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_reassured_of_love
+				years = 3
+			}
+		}
+		clr_character_flag = wolf_homecoming_character
+		clr_character_flag = do_not_disturb
+	}
+}
+
+###########################################
+# Possessed: Lycanthropy                  #
+# ID HL.1400-HL.1499                      #
+###########################################
+
+## If Possessed: lycanthropy
+
+# First occurrence...
+narrative_event = {
+	id = HL.1400
+	title = EVTTITLE_HL_1400
+	desc = EVTDESC_HL_1400
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	ai = no
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	
+	trigger = {
+		has_dlc = "Horse Lords"
+		NOT = {
+			has_game_rule = {
+				name = supernatural_events
+				value = off
+			}
+		}
+		trait = possessed
+		NOT = { has_character_modifier = lycanthropy }
+		NOT = { has_character_flag = do_not_disturb }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 10
+			OR = {
+				has_character_flag = wolf_blood_inherited
+				has_character_flag = wolf_blood_first_generation
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = lycanthropy
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1510
+		add_character_modifier = {
+			name = lycanthropy
+			duration = -1
+		}
+		clr_character_flag = lycanthropy
+		hidden_tooltip = {		# Select random werewolf event...
+			random_list = {
+				10 = { character_event = { id = HL.1410 } }
+				10 = { character_event = { id = HL.1420 } }
+				10 = { character_event = { id = HL.1430 } }
+				10 = { character_event = { id = HL.1440 } }
+				10 = { character_event = { id = HL.1450 } }
+				10 = { character_event = { id = HL.1460 } }
+				10 = { character_event = { id = HL.1470 } }
+				10 = { character_event = { id = HL.1480 } }
+			}
+		}
+	}
+}
+
+# It's full moon!
+character_event = {
+	id = HL.1401
+	title = EVTTITLE_HL_1401
+	desc = EVTDESC_HL_1401
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	ai = no
+	capable_only = yes
+	prisoner = no
+	min_age = 18
+	
+	trigger = {
+		trait = possessed
+		has_character_modifier = lycanthropy
+		NOT = { has_character_flag = do_not_disturb }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1401
+		hidden_tooltip = {		# Oh no, it's happening again... select random werewolf event...
+			random_list = {
+				10 = { character_event = { id = HL.1410 } }
+				10 = { character_event = { id = HL.1420 } }
+				10 = { character_event = { id = HL.1430 } }
+				10 = { character_event = { id = HL.1440 } }
+				10 = { character_event = { id = HL.1450 } }
+				10 = { character_event = { id = HL.1460 } }
+				10 = { character_event = { id = HL.1470 } }
+				10 = { character_event = { id = HL.1480 } }
+			}
+		}
+	}
+}
+
+# Howling for hours on mountaintop
+character_event = {
+	id = HL.1410
+	desc = EVTDESC_HL_1410
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1510
+		custom_tooltip = { text = werewolf_howling_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_howling_on_mountaintop
+	}
+}
+
+# Swims river, sleeps outside, becomes ill or catches pneumonia
+character_event = {
+	id = HL.1420
+	desc = EVTDESC_HL_1420
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1420
+		custom_tooltip = { text = werewolf_swimming_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_swims_river_sleeps_outside
+	}
+}
+
+# Kills cow
+character_event = {
+	id = HL.1430
+	desc = EVTDESC_HL_1430
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		custom_tooltip = { text = werewolf_killed_cow_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+	}
+}
+
+# Kills pig
+character_event = {
+	id = HL.1440
+	desc = EVTDESC_HL_1440
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		custom_tooltip = { text = werewolf_killed_pig_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+	}
+}
+
+# Kills dog
+character_event = {
+	id = HL.1450
+	desc = EVTDESC_HL_1450
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		custom_tooltip = { text = werewolf_killed_dog_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+	}
+}
+
+# Kills peasant
+character_event = {
+	id = HL.1460
+	desc = EVTDESC_HL_1460
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		custom_tooltip = { text = werewolf_killed_someone_tooltip }
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+	}
+}
+
+# Kills courtier
+character_event = {
+	id = HL.1470
+	desc = EVTDESC_HL_1460
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+		random_courtier = {
+			limit = {
+				ai = yes
+				at_location = ROOT
+			}
+			death = {
+				death_reason = death_murder_unknown
+				killer = ROOT
+			}
+		}
+	}
+}
+
+# Kills courtier in neighboring province
+character_event = {
+	id = HL.1480
+	desc = EVTDESC_HL_1460
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_HL_1430
+		hidden_tooltip = { character_event = { id = HL.1490 days = 4 } }
+		set_character_flag = werewolf_killed_something
+		location = {
+			random_neighbor_province = {
+				owner = {
+					random_courtier = {
+						limit = {
+							ai = yes
+							at_location = PREV
+						}
+						death = {
+							death_reason = death_murder_unknown
+							killer = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Returns after full moon rage, strange memories of wolves, probably just a dream...
+character_event = {
+	id = HL.1490
+	title = EVTTITLE_HL_1490
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESCA_HL_1490
+		trigger = { has_character_flag = werewolf_howling_on_mountaintop }
+	}
+	desc = {
+		text = EVTDESCB_HL_1490
+		trigger = { has_character_flag = werewolf_swims_river_sleeps_outside }
+	}
+	desc = {
+		text = EVTDESCC_HL_1490
+		trigger = { has_character_flag = werewolf_killed_something }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HL_1490
+		if = {
+			limit = { has_character_flag = werewolf_howling_on_mountaintop }
+			add_character_modifier = {
+				name = hoarse
+				years = 2
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = werewolf_swims_river_sleeps_outside
+				trait = pneumonic
+			}
+			random = {
+				chance = 20
+				add_trait = infirm
+				hidden_tooltip = {
+					character_event = {
+						id = 38284 #Notify Infirm
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = werewolf_swims_river_sleeps_outside
+				trait = ill
+			}
+			add_trait = pneumonic
+		}
+		if = {
+			limit = {
+				has_character_flag = werewolf_swims_river_sleeps_outside
+				is_ill = no
+				NOT = { trait = pneumonic }
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = ill
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				add_symptom_effect = yes
+			}
+		}
+		if = {
+			limit = { has_character_flag = werewolf_killed_something }
+			add_character_modifier = {
+				name = werewolf_killed
+				years = 2
+			}
+		}
+		clr_character_flag = werewolf_howling_on_mountaintop
+		clr_character_flag = werewolf_swims_river_sleeps_outside
+		clr_character_flag = werewolf_killed_something
+	}
+}
+	
+###########################################
+# Random events, all (most of them are    #
+# much less likely to occur after first   #
+# generation)                             #
+# ID HL.1500-HL.1599                      #
+###########################################
+
+# If Impaler/lunatic: cannibalism...
+character_event = {
+	id = HL.1500
+	desc = EVTDESC_HL_1500
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		OR = {
+			trait = impaler
+			trait = lunatic
+		}
+		NOT = { has_character_modifier = cannibal }
+		NOT = { has_character_flag = wolf_resisted_cannibalism }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 4
+			has_character_modifier = cannibal
+		}
+		modifier = {
+			factor = 1.5
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.5
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 1.5
+			trait = hunter
+		}
+		modifier = {
+			factor = 0.5
+			trait = temperate
+		}
+		modifier = {
+			factor = 0.5
+			trait = kind
+		}
+		modifier = {
+			factor = 0.5
+			trait = charitable
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1500		# The Wolf is hungry!
+		random_courtier = {
+			limit = {
+				ai = yes
+				at_location = ROOT
+				NOT = { father = { character= ROOT } }
+				NOT = { mother = { character= ROOT } }
+			}
+			death = {
+				death_reason = death_murder_unknown
+				killer = ROOT
+			}
+		}
+		add_character_modifier = {
+			name = cannibal
+			duration = -1
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1500		# I... must... resist it...
+		if = {
+			limit = {
+				trait = stressed
+			}
+			add_trait = depressed
+		}
+		if = {
+			limit = {
+				NOT = { trait = stressed }
+			}
+			add_trait = stressed
+		}
+		set_character_flag = wolf_resisted_cannibalism
+	}
+}
+
+# Howling at the moon (not if possessed or lunatic)
+character_event = {
+	id = HL.1510
+	desc = EVTDESC_HL_1510
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = possessed }
+		NOT = { trait = lunatic }
+		NOT = { has_character_flag = wolf_howled_at_moon }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1510
+		set_character_flag = wolf_howled_at_moon  #Bark at the moon
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+	}
+}
+
+# Hunter instinct strikes unexpectedly (and awkwardly) at court
+character_event = {
+	id = HL.1520
+	desc = EVTDESC_HL_1520
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = patient }
+		NOT = { religion = jain }
+		NOT = { has_character_flag = wolf_hunting_instinct_at_court }
+	}
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				at_location = ROOT
+				is_adult = yes
+				NOT = { trait = incapable }
+			}
+			save_event_target_as = wolf_hunting_instinct_at_court_courtier
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 2
+			trait = hunter
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1520
+		set_character_flag = wolf_hunting_instinct_at_court
+		event_target:wolf_hunting_instinct_at_court_courtier = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_horrified
+				years = 3
+			}
+		}
+	}
+}
+
+# Hunter instincts in martial training (upgrade martial education)
+character_event = {
+	id = HL.1530
+	desc = EVTDESC_HL_1530
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { has_character_flag = wolf_hunting_instinct_martial_training }
+		OR = {
+			trait = misguided_warrior
+			trait = tough_soldier
+			trait = skilled_tactician	
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 2
+			trait = hunter
+		}
+		modifier = {
+			factor = 2
+			trait = misguided_warrior
+		}
+		modifier = {
+			factor = 0.5
+			trait = skilled_tactician
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1530
+		set_character_flag = wolf_hunting_instinct_martial_training
+		if = {
+			limit = {
+				trait = misguided_warrior
+			}
+			remove_trait = misguided_warrior
+			add_trait = tough_soldier
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = tough_soldier
+			}
+			remove_trait = tough_soldier
+			add_trait = skilled_tactician
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = skilled_tactician
+			}
+			remove_trait = skilled_tactician
+			add_trait = brilliant_strategist
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = trickster } }
+			add_trait = trickster
+		}
+	}
+}
+
+# Become strong
+character_event = {
+	id = HL.1540
+	desc = EVTDESC_HL_1540
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		is_strong_trigger = no
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1540
+		add_trait = robust
+	}
+}
+
+# Cunning as a wolf (quick)
+character_event = {
+	id = HL.1550
+	desc = EVTDESC_HL_1550
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_intrigue
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		is_smart_trigger = no
+		is_dumb_trigger = no
+		NOT = { trait = inbred }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1550
+		add_trait = shrewd
+	}
+}
+
+# Animal instincts take over... (lustful)
+character_event = {
+	id = HL.1560
+	desc = EVTDESC_HL_1560
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_intrigue
+
+	is_triggered_only = yes
+
+	capable_only = yes
+	
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = lustful }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 0.1
+			trait = celibate
+		}
+		modifier = {
+			factor = 0.3
+			trait = chaste
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1560		# Growl!
+		trigger = {
+			NOT = { trait = celibate }
+			NOT = { trait = chaste }
+		}
+		add_trait = lustful
+	}
+	option = {
+		name = EVTOPTB_HL_1560		# It's like an animal inside me!
+		trigger = {
+			trait = celibate
+		}
+		add_trait = lustful
+	}
+	option = {
+		name = EVTOPTC_HL_1560		# I smell new smells...
+		trigger = {
+			NOT = { trait = celibate }
+			trait = chaste
+		}
+		add_trait = lustful
+	}
+}
+
+# Pack instinct (gregarious)
+character_event = {
+	id = HL.1570
+	desc = EVTDESC_HL_1570
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = gregarious }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 0.5
+			trait = shy
+		}
+	}
+
+	option = {
+		name = EVTOPTA_HL_1570		# Hmm, I almost licked one of them...
+		trigger = {
+			NOT = { trait = shy }
+		}
+		add_trait = gregarious
+	}
+	option = {
+		name = EVTOPTB_HL_1570		# I sense a new... belonging.
+		trigger = {
+			trait = shy
+		}
+		add_trait = gregarious
+	}
+}
+
+# Wolf is brave (brave)
+character_event = {
+	id = HL.1580
+	desc = EVTDESC_HL_1580
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = brave }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 0.2
+			trait = craven
+		}
+	}
+
+	option = {
+		name = EVTOPTA_HL_1580
+		trigger = {
+			NOT = { trait = craven }
+		}
+		add_trait = brave
+	}
+	option = {
+		name = EVTOPTB_HL_1580
+		trigger = {
+			trait = craven
+		}
+		add_trait = brave
+	}
+}
+
+# Animal cruelty (cruel)
+character_event = {
+	id = HL.1590
+	desc = EVTDESC_HL_1590
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		NOT = { trait = cruel }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.2
+			has_character_flag = wolf_blood_inherited
+		}
+		modifier = {
+			factor = 0.5
+			trait = kind
+		}
+	}
+
+	option = {
+		name = EVTOPTA_HL_1590
+		trigger = {
+			NOT = { trait = kind }
+		}
+		add_trait = cruel
+	}
+	option = {
+		name = EVTOPTB_HL_1590
+		trigger = {
+			trait = kind
+		}
+		add_trait = cruel
+	}
+}
+
+###########################################
+# Random events, negative. Second and     #
+# later generations                       #
+# ID HL.1600-HL.1599                      #
+###########################################
+
+# Rabid wolf (wroth)
+character_event = {
+	id = HL.1610
+	desc = EVTDESC_HL_1610
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		has_character_flag = wolf_blood_inherited
+		NOT = { trait = wroth }
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.5
+			trait = patient
+		}
+	}
+
+	option = {
+		name = EVTOPTA_HL_1610
+		trigger = {
+			NOT = { trait = patient }
+		}
+		add_trait = wroth
+	}
+	option = {
+		name = EVTOPTB_HL_1610
+		trigger = {
+			trait = patient
+		}
+		add_trait = wroth
+	}
+}
+
+# Wolf-face (ugly)
+character_event = {
+	id = HL.1620
+	desc = EVTDESC_HL_1620
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		has_character_flag = wolf_blood_inherited
+		NOT = { trait = ugly }
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1620
+		trigger = {
+			NOT = { trait = fair }
+		}
+		add_trait = ugly
+	}
+	option = {
+		name = EVTOPTB_HL_1620 # No longer fair I am!
+		trigger = {
+			trait = fair
+		}
+		add_trait = ugly
+	}
+}
+
+# Animal mind (lower learning trait level)
+character_event = {
+	id = HL.1630
+	desc = EVTDESC_HL_1630
+	picture = GFX_evt_wolf
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		has_character_flag = wolf_blood_inherited
+		NOT = { has_character_flag = wolf_animal_mind_learning }
+		OR = {
+			trait = martial_cleric
+			trait = scholarly_theologian
+			trait = mastermind_theologian	
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			trait = hunter
+		}
+		modifier = {
+			factor = 3
+			trait = mastermind_theologian
+		}
+		modifier = {
+			factor = 0.5
+			trait = martial_cleric
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1630
+		set_character_flag = wolf_animal_mind_learning
+		if = {
+			limit = {
+				trait = mastermind_theologian
+			}
+			remove_trait = mastermind_theologian
+			add_trait = scholarly_theologian
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = scholarly_theologian
+			}
+			remove_trait = scholarly_theologian
+			add_trait = martial_cleric
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = martial_cleric
+			}
+			remove_trait = martial_cleric
+			add_trait = detached_priest
+			break = yes
+		}
+	}
+}
+
+# Really howl at the moon! (lunatic)
+narrative_event = {
+	id = HL.1640
+	title = EVTTITLE_HL_1401
+	desc = EVTDESC_HL_1640
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = wolf_blood
+		has_character_flag = wolf_blood_inherited
+		NOT = { has_character_flag = wolf_howled_at_moon }
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 3
+			trait = lunatic
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1510
+		set_character_flag = wolf_howled_at_moon
+		if = {
+			limit = { NOT = { trait = lunatic } }
+			add_trait = lunatic
+		}
+		add_character_modifier = {
+			name = good_times
+			days = 730
+		}
+	}
+}
+
+###########################################
+# Inheriting the Wolf's Blood             #
+# ID HL.1700-HL.1799                      #
+###########################################
+
+character_event = {
+	id = HL.1700
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Horse Lords"
+		OR = {
+			father_even_if_dead = {
+				has_character_modifier = wolf_blood
+				is_father_real_father = yes
+			}
+			mother_even_if_dead = { has_character_modifier = wolf_blood }
+		}
+		NOT = {
+			has_game_rule = {
+				name = supernatural_events
+				value = off
+			}
+		}
+	}
+	
+	immediate = {
+		character_event = { id = HL.1701 days = 150 } # This is when you would start noticing it...
+	}
+}
+
+# Check for Wolf's Blood inheritance
+character_event = {
+	id = HL.1701
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {				# Inherits Wolf's Blood
+				modifier = {
+					factor = 1.5
+					culture_group = altaic
+					NOT = { culture = khitan }
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = { ai = no }
+						mother_even_if_dead = { ai = no }
+						father_even_if_dead = { father_even_if_dead = { ai = no } }
+						father_even_if_dead = { mother_even_if_dead = { ai = no } }
+						mother_even_if_dead = { father_even_if_dead = { ai = no } }
+						mother_even_if_dead = { mother_even_if_dead = { ai = no } }
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = { has_character_flag = wolf_blood_first_generation }
+						mother_even_if_dead = { has_character_flag = wolf_blood_first_generation }
+					}
+				}
+				modifier = {
+					factor = 2
+					father_even_if_dead = { has_character_modifier = wolf_blood }		# If both parents have Wolf's Blood
+					mother_even_if_dead = { has_character_modifier = wolf_blood }
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = { father_even_if_dead = { has_character_flag = wolf_blood_first_generation } }
+						father_even_if_dead = { mother_even_if_dead = { has_character_flag = wolf_blood_first_generation } }
+						mother_even_if_dead = { father_even_if_dead = { has_character_flag = wolf_blood_first_generation } }
+						mother_even_if_dead = { mother_even_if_dead = { has_character_flag = wolf_blood_first_generation } }
+					}
+				}
+				add_character_modifier = {
+					name = wolf_blood
+					duration = -1
+				}
+				set_character_flag = wolf_blood_inherited
+				father = { narrative_event = { id = HL.1702 } }
+				mother = { narrative_event = { id = HL.1702 } }
+			}
+			100 = {} # No inheritance
+		}
+	}
+}
+
+# Notify of inheritance
+narrative_event = {
+	id = HL.1702
+	title = EVTTITLE_HL_1702
+	picture = GFX_evt_wolf
+	border = GFX_event_narrative_frame_war
+
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESCA_HL_1702
+		trigger = {
+			has_character_modifier = wolf_blood  # Has my blood!
+		}
+	}
+	desc = {
+		text = EVTDESCB_HL_1702
+		trigger = {
+			NOT = { has_character_modifier = wolf_blood } # Has my spouse's blood!
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_HL_1702 # Positive response
+		tooltip = {
+			FROM = {
+				add_character_modifier = {
+					name = wolf_blood
+					duration = -1
+				}
+			}
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_happy
+			years = 15
+		}
+	}
+	option = {
+		name = EVTOPTB_HL_1702 # Negative response
+		tooltip = {
+			FROM = {
+				add_character_modifier = {
+					name = wolf_blood
+					duration = -1
+				}
+			}
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_worried
+			years = 15
+		}
+	}
+}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+

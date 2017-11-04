@@ -1,0 +1,2397 @@
+###################################
+#
+# SUNSET INVASION
+# - The Fantasy Menace
+#
+###################################
+
+# Written by Henrik Fåhraeus and Henrik Eklund
+
+namespace = SSI
+
+# First Contact - Beads and Feathers
+province_event = {
+	id = SSI.1
+	desc = EVTDESC_SSI_001
+	
+	picture = GFX_evt_aztec_explorers
+	border = GFX_event_normal_frame_war
+
+	has_dlc = "Sunset Invasion"
+	
+	trigger = {
+		OR = {
+			year = 1250
+			AND = {
+				has_game_rule = {
+					name = aztec_invasion
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOR = {
+			year = 1350
+			has_global_flag = aztec_explorers 
+			has_game_rule = {
+				name = aztec_invasion
+				value = off
+			}
+		}
+		OR = {
+			province_id = 1 # Vestisland
+			province_id = 9 # Connacht
+			province_id = 35 # Inse Gall
+			province_id = 31 # Cornwall
+			province_id = 104 # Cornouaille
+			province_id = 149 # Bordeaux
+			province_id = 156 # Coruna
+			province_id = 162 # Silves
+			province_id = 841 # Tangier
+			province_id = 845 # Anti-Atlas
+		}
+	}
+	
+	immediate = {
+		log = "AZTEC INVASION IMMEDIATE 5532432005"
+		set_global_flag = aztec_explorers
+		set_province_flag = aztec_explorers
+		activate_title = { title = e_mexikha status = yes }
+		
+		k_papal_state = {
+			holder_scope = {
+				create_random_soldier = {
+					dynasty = 1035000 # Acatl
+					random_traits = yes
+					culture = nahuatl
+					religion = aztec
+				}
+				new_character = {
+					e_mexikha = {
+						grant_title = PREV
+					}
+					set_government_type = feudal_government
+					e_mexikha = {
+						add_law = succ_primogeniture
+						add_law = agnatic_succession
+						if = {
+							limit = {
+								has_dlc = "Zeus"
+							}
+							add_law = revoke_title_law_2
+						}
+						if = {
+							limit = {
+								NOT = { has_dlc = "Zeus" }
+							}
+							add_law = crown_authority_1
+						}
+					}
+					set_defacto_liege = THIS
+					narrative_event = { id = SSI.2 days = 7 }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 720
+		modifier = {
+			factor = 0.5
+			year = 1320
+		}
+		modifier = {
+			factor = 4
+			has_game_rule = {
+				name = aztec_invasion
+				value = random
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_001
+	}
+}
+
+# Rumors of people from across the Atlantic
+narrative_event = {
+	id = SSI.2
+	title = EVTNAME_SSI_002
+	desc = EVTDESC_SSI_002
+	major = yes
+	
+	picture = GFX_evt_aztec_explorers
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major_trigger = {
+		FROM = { owner = { NOT = { character = PREVPREV } } }
+	}
+	
+	immediate = {
+		e_mexikha = {
+			holder_scope = {
+				character_event = { id = CM.10018 }  # Chronicle
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_002
+	}
+}
+
+# First Landing of the Aztecs
+province_event = {
+	id = SSI.3
+	desc = EVTDESC_SSI_003
+	
+	picture = GFX_evt_battle_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	trigger = {
+		OR = {
+			year = 1250
+			AND = {
+				has_game_rule = {
+					name = aztec_invasion
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOT = { has_global_flag = aztec_arrival }
+		had_province_flag = { flag = aztec_explorers days = 730 }
+	}
+	
+	immediate = {
+		set_global_flag = aztec_arrival
+#		culture = nahuatl
+#		religion = aztec
+		e_mexikha = {
+			holder_scope = {
+				narrative_event = { id = SSI.4 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_003
+	}
+}
+
+# First Landing of the Aztecs
+narrative_event = {
+	id = SSI.4
+	title = EVTNAME_SSI_004
+	desc = EVTDESC_SSI_004
+	major = yes
+	hide_new = yes
+	
+	picture = GFX_evt_battle_mesoamerican
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major_trigger = {
+		FROM = { owner = { NOT = { character = PREVPREV } } }
+	}
+	
+	immediate = {
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				capital_scope = {
+					NOT = { region = world_india }
+				}
+			}
+			character_event = { id = CM.10020 }  # Chronicle
+		}
+	
+		wealth = 10000
+		FROM = {
+			kingdom = {
+				ROOT = {
+					war = {
+						casus_belli = tribal_invasion
+						target = PREVPREV # The top liege of the province owner
+						thirdparty_title = PREV # The de jure kingdom
+					}
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops = 
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 31
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 23
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 18
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 28
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 29
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		# Ships
+		if = {
+			limit = {
+				FROM = { 
+					OR = {
+						province_id = 1 # Vestisland
+						province_id = 9 # Connacht
+						province_id = 35 # Inse Gall
+						province_id = 31 # Cornwall
+					}
+				}
+			}
+			FROM = {
+				sea_zone = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							home = FROM
+							owner = ROOT
+							earmark = aztec_invasion_fleet
+							troops =
+							{
+								galleys = { 1000 1000 }
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Some extra courtiers
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = yes
+			age = 16
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_004
+	}
+}
+
+# Second Landing of the Aztecs
+province_event = {
+	id = SSI.5
+	desc = EVTDESC_SSI_005
+	
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_normal_frame_war
+
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		OR = {
+			year = 1250
+			AND = {
+				has_game_rule = {
+					name = aztec_invasion
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOT = { has_global_flag = aztec_arrival_2 }
+		OR = {
+			province_id = 1 # Vestisland
+			province_id = 9 # Connacht
+			province_id = 35 # Inse Gall
+			province_id = 31 # Cornwall
+			province_id = 104 # Cornouaille
+			province_id = 149 # Bordeaux
+			province_id = 156 # Coruna
+			province_id = 162 # Silves
+			province_id = 841 # Tangier
+			province_id = 845 # Anti-Atlas
+		}
+		owner = {
+			NOT = { religion = aztec }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = aztec_arrival_2
+		set_province_flag = aztec_second_wave
+#		culture = nahuatl
+#		religion = aztec
+		e_mexikha = {
+			holder_scope = {
+				narrative_event = { id = SSI.6 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_005
+	}
+}
+
+# Second Landing of the Aztecs
+narrative_event = {
+	id = SSI.6
+	title = EVTNAME_SSI_006
+	desc = EVTDESC_SSI_006
+	major = yes
+	hide_new = yes
+	
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	major_trigger = {
+		FROM = { owner = { NOT = { character = PREVPREV } } }
+	}
+	
+	immediate = {
+		FROM = {
+			kingdom = {
+				ROOT = {
+					war = {
+						casus_belli = tribal_invasion
+						target = PREVPREV # The top liege of the province owner
+						thirdparty_title = PREV # The de jure kingdom
+					}
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 30
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 25
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = aztec
+			culture = nahuatl
+			female = no
+			age = 22
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		new_character = {
+			spawn_unit = {
+				province = FROM
+				home = FROM
+				troops =
+				{
+					heavy_infantry = { 2800 2800 }
+					light_infantry = { 1400 1300 }
+					archers = { 1400 1300 }
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		random = {
+			chance = 50
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 30
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 25
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = aztec
+				culture = nahuatl
+				female = no
+				age = 22
+				attributes = {
+					martial = 12
+				}
+				trait = brilliant_strategist
+			}
+			new_character = {
+				spawn_unit = {
+					province = FROM
+					home = FROM
+					troops =
+					{
+						heavy_infantry = { 2800 2800 }
+						light_infantry = { 1400 1300 }
+						archers = { 1400 1300 }
+					}
+				}
+			}
+		}
+		
+		# Ships
+		if = {
+			limit = {
+				FROM = { 
+					OR = {
+						province_id = 1 # Vestisland
+						province_id = 9 # Connacht
+						province_id = 35 # Inse Gall
+						province_id = 31 # Cornwall
+					}
+				}
+			}
+			FROM = {
+				sea_zone = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							home = FROM
+							owner = ROOT
+							earmark = aztec_invasion_fleet
+							troops =
+							{
+								galleys = { 1000 1000 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_006
+	}
+}
+
+# Aztec Invasion Fleets disband
+character_event = {
+	id = SSI.100
+	hide_window = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_invasion_fleet_disbanded }
+		had_global_flag = { flag = aztec_arrival days = 18250 }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		disband_event_forces = aztec_invasion_fleet
+		set_global_flag = aztec_invasion_fleet_disbanded
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# Aztecs Thrown Back Into the Sea
+narrative_event = {
+	id = SSI.105
+	title = EVTNAME_SSI_105
+	desc = EVTDESC_SSI_105
+	
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_war
+	
+	major = yes
+	
+	has_global_flag = aztec_arrival_2
+	only_playable = yes
+	
+	trigger = {
+		NOT = { has_global_flag = aztecs_defeated }
+		has_landed_title = e_mexikha
+		has_regiments = no
+		is_landed = no
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		activate_title = { title = e_mexikha status = no }
+		set_global_flag = aztecs_defeated
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_105
+	}
+}
+
+# Aztecs Fight Incas
+narrative_event = {
+	id = SSI.30
+	title = EVTNAME_SSI_030
+	desc = EVTDESC_SSI_030
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_narrative_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_incas }
+		NOT = { has_global_flag = aztecs_defeated }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		set_global_flag = aztec_incas
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_030
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_030
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Pacify Northern Plains
+narrative_event = {
+	id = SSI.31
+	title = EVTNAME_SSI_031
+	desc = EVTDESC_SSI_031
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_narrative_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_plains }
+		NOT = { has_global_flag = aztecs_defeated }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		set_global_flag = aztec_plains
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_031
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_031
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Food From the Americas
+narrative_event = {
+	id = SSI.35
+	title = EVTNAME_SSI_035
+	desc = EVTDESC_SSI_035
+	
+	picture = GFX_evt_aztec_explorers
+	border = GFX_event_narrative_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_food }
+		NOT = { has_global_flag = aztecs_defeated }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		months = 220
+	}
+	
+	immediate = {
+		set_global_flag = aztec_food
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_035
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_035
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Iceland
+character_event = {
+	id = SSI.40
+	desc = EVTDESC_SSI_040
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_iceland }
+		completely_controls = d_iceland
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_iceland
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_040
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Ireland
+character_event = {
+	id = SSI.41
+	desc = EVTDESC_SSI_041
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_ireland }
+		
+		completely_controls = d_ulster
+		completely_controls = d_connacht
+		completely_controls = d_meath
+		completely_controls = d_leinster
+		completely_controls = d_munster
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_ireland
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_041
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Britain
+character_event = {
+	id = SSI.42
+	desc = EVTDESC_SSI_042
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_britain }
+		completely_controls = d_northumberland
+		completely_controls = d_lancaster
+		completely_controls = d_york
+		completely_controls = d_norfolk
+		completely_controls = d_bedford
+		completely_controls = d_hereford
+		completely_controls = d_gloucester
+		completely_controls = d_canterbury
+		completely_controls = d_somerset
+		completely_controls = d_gwynedd
+		completely_controls = d_cornwall
+		completely_controls = d_galloway
+		completely_controls = d_western_isles
+		completely_controls = d_lothian
+		completely_controls = d_albany
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_britain
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_042
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold London
+character_event = {
+	id = SSI.43
+	desc = EVTDESC_SSI_043
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_middlesex
+		NOT = { has_global_flag = aztec_london }
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_london
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Paris
+character_event = {
+	id = SSI.44
+	desc = EVTDESC_SSI_044
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_ile_de_france
+		NOT = { has_global_flag = aztec_paris }
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_paris
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Rome
+character_event = {
+	id = SSI.45
+	desc = EVTDESC_SSI_045
+	
+	picture = GFX_evt_rome_falls
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_roma
+		NOT = { has_global_flag = aztec_rome }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_rome
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Constantinople
+character_event = {
+	id = SSI.46
+	desc = EVTDESC_SSI_046
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_byzantion
+		NOT = { has_global_flag = aztec_constantinople }
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_constantinople
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Cordoba
+character_event = {
+	id = SSI.47
+	desc = EVTDESC_SSI_047
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_cordoba
+		NOT = { has_global_flag = aztec_cordoba }
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_cordoba
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Hold Cairo
+character_event = {
+	id = SSI.48
+	desc = EVTDESC_SSI_048
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		completely_controls = c_cairo
+		NOT = { has_global_flag = aztec_cairo }
+	}
+	
+	major_trigger = {
+		ai = no
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+		
+	immediate = {
+		set_global_flag = aztec_cairo
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_043
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_040
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Sacrifice Prisoner
+character_event = {
+	id = SSI.60
+	desc = EVTDESC_SSI_060
+	
+	picture = GFX_evt_bishop_aztec
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SSI_060
+	}
+}
+
+# Aztecs Sacrifice Occupied Province Character
+character_event = {
+	id = SSI.61
+	hide_window = yes
+	
+	ai = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		in_command = no
+		NOT = { religion = aztec }
+		NOT = {
+			any_liege = {
+				has_landed_title = e_mexikha
+			}
+		}
+		new_character = {
+			OR = {
+				religion = aztec
+				religion = aztec_reformed
+			}
+		}
+	}
+	
+	immediate = {
+		liege = {
+			character_event = { id = SSI.62 }
+		}
+		new_character = {
+			if = {
+				limit = {
+					ai = no
+					ROOT = {
+						controls_religion = yes
+						NOR = {
+							religion = aztec
+							religion = aztec_reformed
+						}
+					}
+				}
+				set_character_flag = achievement_holy_smoke
+			}
+		}
+		death = { death_reason = death_sacrificed }
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# Liege Informed of Sacrifice
+character_event = {
+	id = SSI.62
+	desc = EVTDESC_SSI_060
+	
+	picture = GFX_evt_bishop_aztec
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SSI_060
+	}
+}
+
+# Aztecs Bring Syphilis
+narrative_event = {
+	id = SSI.70
+	title = EVTNAME_SSI_070
+	desc = EVTDESC_SSI_070
+	
+	picture = GFX_evt_aztec_explorers
+	border = GFX_event_narrative_frame_war
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztec_syphilis }
+		NOT = { has_global_flag = aztecs_defeated }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		months = 150
+	}
+	
+	immediate = {
+		set_global_flag = aztec_syphilis
+		activate_disease = syphilis
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_070
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_070
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Struck by Smallpox
+narrative_event = {
+	id = SSI.71
+	title = EVTNAME_SSI_071
+	desc = EVTDESC_SSI_071
+	
+	picture = GFX_evt_throne_room_mesoamerican
+	border = GFX_event_narrative_frame_war
+	
+	major = yes
+	
+	only_playable = yes
+	has_global_flag = aztec_arrival
+	
+	trigger = {
+		has_global_flag = aztec_syphilis
+		has_landed_title = e_mexikha
+		NOT = { has_global_flag = aztecs_defeated }
+		NOT = { has_global_flag = aztec_smallpox }
+	}
+	
+	major_trigger = {
+		ai = no
+	}	
+	
+	mean_time_to_happen = {
+		months = 150
+	}
+	
+	immediate = {
+		set_global_flag = aztec_smallpox
+	}
+	
+	option = {
+		name = EVTOPTA_SSI_071
+		trigger = {
+			NOT = { has_landed_title = e_mexikha }
+		}
+	}
+	option = {
+		name = EVTOPTB_SSI_071
+		trigger = {
+			has_landed_title = e_mexikha
+		}
+	}
+}
+
+# Aztecs Sacrifice Prisoner (Aztec perspective)
+character_event = {
+	id = SSI.72
+	desc = EVTDESC_SSI_072
+	
+	picture = GFX_evt_bishop_aztec
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SSI_072
+	}
+}
+

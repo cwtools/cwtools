@@ -1,0 +1,2093 @@
+###################################
+#
+# THE OLD GODS 
+# - Defensive pagan events
+#
+###################################
+
+# Written by Mathilda Bjarnehed & Milla Isaksson
+
+namespace = TOG
+
+###ANCESTOR WORSHIP DECISION EVENTS###
+
+#Make a request
+character_event = {
+	id = TOG.7000
+	desc = EVTDESC_TOG_7000
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			religion = finnish_pagan
+			religion = finnish_pagan_reformed
+			religion = west_african_pagan
+			religion = west_african_pagan_reformed
+			religion = baltic_pagan
+			religion = baltic_pagan_reformed
+			religion = slavic_pagan
+			religion = slavic_pagan_reformed
+			religion = tengri_pagan
+			religion = tengri_pagan_reformed
+		}
+	}
+
+	#Health
+	option = {
+		name = EVTOPTA_TOG_7000
+		
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 2
+				NOT = { health = 3 }
+			}
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+		}
+		
+		trigger = { 
+			OR = {
+				character_disease_trigger = yes
+				trait = ill
+				NOT = { health = 4 }
+				has_character_flag = developing_illness
+			}
+		}
+		set_character_flag = ancestors_health
+		hidden_tooltip = { character_event = { id = TOG.7001 days = 3 } }
+	}
+
+	#Relationships - family, friends & love
+	option = {
+		name = EVTOPTB_TOG_7000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 2
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2
+				trait = lustful
+			}
+			modifier = {
+				factor = 2
+				trait = socializer
+			}
+		}
+		
+		trigger = {	NOT = { trait = cruel } }
+		set_character_flag = ancestors_relationships
+		hidden_tooltip = { character_event = { id = TOG.7001 days = 3 } }
+	}
+
+	#War
+	option = {
+		name = EVTOPTC_TOG_7000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 2
+				trait = brave
+			}
+			modifier = {
+				factor = 2
+				is_strong_trigger = yes
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 2
+				trait = strategist
+			}
+		}
+		
+		trigger = {	NOT = { trait = craven } }
+		set_character_flag = ancestors_war
+		hidden_tooltip = { character_event = { id = TOG.7001 days = 3 } }
+	}
+
+	#Prosperity
+	option = {
+		name = EVTOPTD_TOG_7000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+			modifier = {
+				factor = 2
+				trait = patient
+			}
+			modifier = {
+				factor = 2
+				trait = content
+			}
+			modifier = {
+				factor = 2
+				trait = gardener
+			}
+		}
+		
+		trigger = {	is_nomadic = no }
+		set_character_flag = ancestors_prosperity
+		hidden_tooltip = { character_event = { id = TOG.7001 days = 3 } }
+	}
+
+	#Wisdom
+	option = {
+		name = EVTOPTE_TOG_7000
+		
+		ai_chance = {
+			factor = 33
+			
+			modifier = {
+				factor = 2
+				trait = erudite
+			}
+			modifier = {
+				factor = 2
+				is_smart_trigger = yes
+			}
+			modifier = {
+				factor = 2
+				trait = humble
+			}
+			modifier = {
+				factor = 2
+				trait = scholar
+			}
+		}
+		
+		trigger = {	is_dumb_trigger = no }
+		set_character_flag = ancestors_wisdom
+		hidden_tooltip = { character_event = { id = TOG.7001 days = 3 } }
+	}
+}
+
+#Make a Sacrifice
+character_event = {
+	id = TOG.7001
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_shadowy_cabal
+
+	desc = {
+		trigger = { has_character_flag = ancestors_health }
+		text = EVTDESC_TOG_7001_health
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_relationships }
+		text = EVTDESC_TOG_7001_relationships
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_war }
+		text = EVTDESC_TOG_7001_war
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_prosperity }
+		text = EVTDESC_TOG_7001_prosperity
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_wisdom }
+		text = EVTDESC_TOG_7001_wisdom
+	}
+
+	is_triggered_only = yes
+
+	#Sacrifice limb
+	option = {
+		name = EVTOPTA_TOG_7001
+		custom_tooltip = { text = EVTOPTA_TOG_7001_TOOLTIP }
+
+		piety = 100
+		
+		ai_chance = {
+			factor = 300
+			
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = zealous
+					trait = lunatic
+					trait = possessed
+				}
+			}
+
+			modifier = {
+				factor = 0.5
+				OR = {
+					trait = one_eyed
+					trait = blinded
+				}
+			}
+			modifier = {
+				factor = 0.5
+				trait = one_handed
+			}
+			modifier = {
+				factor = 0.5
+				trait = one_legged
+			}
+			modifier = {
+				factor = 0.01
+				trait = severely_injured
+			}
+			modifier = {
+				factor = 0.01
+				trait = maimed
+			}
+		}
+
+		trigger = {
+			NAND = {
+				trait = one_handed
+				trait = one_legged
+				OR = {
+					trait = one_eyed
+					trait = blinded
+				}
+			}
+			NOT = { trait = maimed }
+		}
+
+		set_character_flag = ancestors_limb
+
+		hidden_tooltip = { character_event = { id = TOG.7002 days = 3 } }
+
+		#Shows the right body part in tooltip
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+				NOT = { trait = one_legged }
+				OR = {
+					trait = one_eyed
+					trait = blinded
+				}
+				trait = one_handed
+			}
+
+			tooltip = { 
+				add_trait = one_legged 
+				add_trait = severely_injured
+				resolve_severely_injured_effect = yes
+			}
+
+			set_character_flag = ancestors_leg	
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+				NOT = { trait = one_handed }
+				OR = {
+					trait = one_eyed
+					trait = blinded
+				}	
+			}
+
+			tooltip = { 
+				add_trait = one_handed
+				add_trait = severely_injured
+				resolve_severely_injured_effect = yes
+			}
+
+			set_character_flag = ancestors_hand
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+				NOR = { 
+					trait = one_eyed 
+					trait = blinded 
+				} 
+			}
+			tooltip = { 
+				add_trait = one_eyed
+				add_trait = severely_injured
+				resolve_severely_injured_effect = yes
+			}
+			set_character_flag = ancestors_eye
+		}
+		
+		if = {
+			limit = {
+				NOT = { has_dlc = "Reapers" }
+				NOT = { trait = maimed }
+			}
+			tooltip = { add_trait = maimed }
+			set_character_flag = ancestors_maimed
+		}
+		
+	}
+
+	#Sacrifice prisoner
+	option = {
+		name = EVTOPTB_TOG_7001
+		custom_tooltip = { text = EVTOPTB_TOG_7001_TOOLTIP }
+
+		piety = 60
+		
+		ai_chance = {
+			factor = 80
+			
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+
+		trigger = { 
+			num_of_prisoners = 1 
+			any_courtier = {
+				prisoner = yes
+				is_adult = yes
+			}
+		}
+
+		set_character_flag = ancestors_human
+
+		hidden_tooltip = { character_event = { id = TOG.7002 days = 3 } }
+
+		random_courtier = {
+			limit = { 
+				prisoner = yes 
+				age = 12
+			}
+			if = {
+				limit = {
+					dynasty = ROOT
+					is_close_relative = ROOT
+					ROOT = { NOT = { trait = kinslayer } }
+				}
+				ROOT = { 
+					add_trait = kinslayer 
+					character_event = { id = 38287 }
+				}
+			}
+			death = { death_reason = death_sacrificed_ancestors killer = ROOT }
+		}
+	}
+
+	#Sacrifice courtier
+	option = {
+		name = EVTOPTE_TOG_7001
+		custom_tooltip = { text = EVTOPTE_TOG_7001_TOOLTIP }
+
+		piety = 60
+		
+		ai_chance = {
+			factor = 80
+			
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+
+		trigger = {
+			NOT = { 
+				num_of_prisoners = 1
+				any_courtier = {
+					prisoner = yes
+					is_adult = yes
+				} 
+			}
+			any_courtier = { 
+				is_unimportant_trigger = yes 
+				age = 12
+			}
+		}
+
+		set_character_flag = ancestors_human
+
+		hidden_tooltip = { character_event = { id = TOG.7002 days = 3 } }
+
+		random_courtier = {
+			limit = { 
+				is_unimportant_trigger = yes 
+				age = 12
+			}
+			death = { death_reason = death_sacrificed_ancestors killer = ROOT }
+		}
+	}
+
+	#Great feast Sacrifice
+	option = {
+		name = EVTOPTC_TOG_7001
+		custom_tooltip = { text = EVTOPTC_TOG_7001_TOOLTIP }
+
+		piety = 40
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0.5
+				NOT = { trait = greedy }
+			}
+		}
+		
+		scaled_wealth = { value = -1 min = -25 }
+
+		hidden_tooltip = { character_event = { id = TOG.7002 days = 3 } }
+
+		set_character_flag = ancestors_feast
+	}
+
+	#Minor Sacrifice
+	option = {
+		name = EVTOPTD_TOG_7001
+		custom_tooltip = { text = EVTOPTD_TOG_7001_TOOLTIP }
+
+		piety = 10
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+		}
+		
+		treasury = -5
+
+		hidden_tooltip = { character_event = { id = TOG.7002 days = 3 } }
+
+		set_character_flag = ancestors_carving
+	}
+}
+
+#End of Sacrifice
+character_event = {
+	id = TOG.7002
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	desc = {
+		trigger = { has_character_flag = ancestors_limb }
+		text = EVTDESC_TOG_7002_limb
+		picture = GFX_evt_torture
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_human }
+		text = EVTDESC_TOG_7002_human
+		picture = GFX_evt_torture
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_feast }
+		text = EVTDESC_TOG_7002_feast
+	}
+	desc = {
+		trigger = { has_character_flag = ancestors_carving }
+		text = EVTDESC_TOG_7002_carving
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7002
+
+		clr_character_flag = do_not_disturb
+
+		#REMOVES LIMBS
+		if = {
+			limit = { has_character_flag = ancestors_eye }
+			add_trait = one_eyed
+		}
+		if = {
+			limit = { has_character_flag = ancestors_leg }
+			add_trait = one_legged
+		}
+		if = {
+			limit = { has_character_flag = ancestors_hand }
+			add_trait = one_handed
+		}
+		if = {
+			limit = { has_character_flag = ancestors_maimed }
+			add_trait = maimed
+		}
+
+		if = { 
+			limit = {
+				OR = {
+					has_character_flag = ancestors_leg
+					has_character_flag = ancestors_hand
+					has_character_flag = ancestors_eye
+				}
+			}
+			add_trait = severely_injured
+			resolve_severely_injured_effect = yes
+		}
+
+		clr_character_flag = ancestors_leg
+		clr_character_flag = ancestors_hand
+		clr_character_flag = ancestors_eye
+		clr_character_flag = ancestors_maimed
+
+
+		#OUTCOMES
+
+		#Health
+		if = { 
+			limit = { has_character_flag = ancestors_health }
+			
+
+			#Limb
+			if = { 
+				limit = { has_character_flag = ancestors_limb }
+
+				hidden_tooltip = {
+					random_list = { 
+						10 = { character_event = { id = TOG.7010 days = 30 } } #Remove disease/blessing of health
+						15 = {
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+						 	character_event = { id = TOG.7011 days = 300 } 
+						}
+						30 = { character_event = { id = TOG.7012 days = 200 } } #Health bonus
+						5 = { character_event = { id = TOG.7013 days = 150 } } #Illness
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Human Sacrifice
+			if = { 
+				limit = { has_character_flag = ancestors_human }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { character_event = { id = TOG.7010 days = 30 } } #Remove disease/blessing of health
+						10 = {
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+						 	character_event = { id = TOG.7011 days = 300 } 
+						}
+						30 = { character_event = { id = TOG.7012 days = 200 } } #Health bonus
+						5 = { character_event = { id = TOG.7013 days = 150 } } #Illness
+						30 = { } #Nothing
+					}
+				}
+			}
+			#Big gift
+			if = { 
+				limit = { has_character_flag = ancestors_feast }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { character_event = { id = TOG.7010 days = 30 } } #Remove disease/blessing of health
+						1 = {
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+						 	character_event = { id = TOG.7011 days = 300 } 
+						}
+						50 = { character_event = { id = TOG.7012 days = 200 } } #Health bonus
+						10 = { character_event = { id = TOG.7013 days = 150 } } #Illness
+						50 = { } #Nothing
+					}
+				}
+			}
+			#Small gift
+			if = { 
+				limit = { has_character_flag = ancestors_carving }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { character_event = { id = TOG.7010 days = 30 } } #Remove disease/blessing of health
+						1 = {
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+						 	character_event = { id = TOG.7011 days = 300 } 
+						}
+						15 = { character_event = { id = TOG.7012 days = 200 } } #Health bonus
+						15 = { character_event = { id = TOG.7013 days = 150 } } #Illness
+						20 = { } #Nothing
+					}
+				}
+			}	
+		}
+
+		#Relationships
+		if = { 
+			limit = { has_character_flag = ancestors_relationships }
+			clr_character_flag = ancestors_relationships
+
+			#Limb
+			if = { 
+				limit = { has_character_flag = ancestors_limb }
+
+				hidden_tooltip = {
+					random_list = { 
+						10 = { character_event = { id = TOG.7024 days = 350 } } #Good with people
+						15 = { character_event = { id = TOG.7020 days = 100 } } #Lover
+						15 = { character_event = { id = TOG.7021 days = 150 } } #Friend
+						10 = { character_event = { id = TOG.7022 days = 300 } } #Diplomacy bonus
+						10 = { character_event = { id = TOG.7025 days = 100 } } #Cat
+						5 = { character_event = { id = TOG.7023 days = 150 } } #Rival
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Human Sacrifice
+			if = { 
+				limit = { has_character_flag = ancestors_human }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { character_event = { id = TOG.7024 days = 350 } } #Good with people
+						15 = { character_event = { id = TOG.7020 days = 100 } } #Lover
+						15 = { character_event = { id = TOG.7021 days = 150 } } #Friend
+						10 = { character_event = { id = TOG.7022 days = 300 } } #Diplomacy bonus
+						10 = { character_event = { id = TOG.7025 days = 100 } } #Cat
+						5 = { character_event = { id = TOG.7023 days = 150 } } #Rival
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Big gift
+			if = { 
+				limit = { has_character_flag = ancestors_feast }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { character_event = { id = TOG.7024 days = 350 } } #Good with people
+						15 = { character_event = { id = TOG.7020 days = 100 } } #Lover
+						15 = { character_event = { id = TOG.7021 days = 150 } } #Friend
+						20 = { character_event = { id = TOG.7022 days = 300 } } #Diplomacy bonus
+						15 = { character_event = { id = TOG.7025 days = 100 } } #Cat
+						10 = { character_event = { id = TOG.7023 days = 150 } } #Rival
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Small gift
+			if = { 
+				limit = { has_character_flag = ancestors_carving }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { character_event = { id = TOG.7024 days = 300 } } #Good with people
+						5 = { character_event = { id = TOG.7020 days = 100 } } #Lover
+						5 = { character_event = { id = TOG.7021 days = 150 } } #Friend
+						10 = { character_event = { id = TOG.7022 days = 300 } } #Diplomacy bonus
+						20 = { character_event = { id = TOG.7025 days = 100 } } #Cat
+						20 = { character_event = { id = TOG.7023 days = 150 } } #Rival
+						35 = { } #Nothing
+					}
+				}
+			}	
+		}
+
+		#War
+		if = { 
+			limit = { has_character_flag = ancestors_war }
+			clr_character_flag = ancestors_war
+			
+			#Limb
+			if = { 
+				limit = { has_character_flag = ancestors_limb }
+
+				hidden_tooltip = {
+					random_list = { 
+						15 = { character_event = { id = TOG.7035 days = 150 } } #Increased levy
+						25 = { character_event = { id = TOG.7034 days = 100 } } #War tech
+						25 = { character_event = { id = TOG.7030 days = 100 } } #Commander
+						15 = { 				
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+							character_event = { id = TOG.7011 days = 360 } 
+						}
+						10 = { 
+							modifier = { factor = 0 can_have_more_leadership_traits = no } #Leadership trait
+							character_event = { id = TOG.7032 days = 360 }
+						}
+						5 = { character_event = { id = TOG.7033 days = 100 } } #Maimed
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Human Sacrifice
+			if = { 
+				limit = { has_character_flag = ancestors_human }
+
+				hidden_tooltip = {
+					random_list = { 
+						10 = { character_event = { id = TOG.7035 days = 150 } } #Increased levy
+						20 = { character_event = { id = TOG.7034 days = 100 } } #War tech
+						20 = { character_event = { id = TOG.7030 days = 100 } } #Commander
+						10 = { 				
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+							character_event = { id = TOG.7011 days = 360 } 
+						}
+						10 = { 
+							modifier = { factor = 0 can_have_more_leadership_traits = no } #Leadership trait
+							character_event = { id = TOG.7032 days = 360 }
+						}
+						5 = { character_event = { id = TOG.7033 days = 100 } } #Maimed
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Big gift
+			if = { 
+				limit = { has_character_flag = ancestors_feast }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { character_event = { id = TOG.7035 days = 150 } } #Increased levy
+						10 = { character_event = { id = TOG.7034 days = 100 } } #War tech
+						10 = { character_event = { id = TOG.7030 days = 100 } } #Commander
+						5 = { 				
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+							character_event = { id = TOG.7011 days = 360 } 
+						}
+						20 = { 
+							modifier = { factor = 0 can_have_more_leadership_traits = no } #Leadership trait
+							character_event = { id = TOG.7032 days = 360 }
+						}
+						10 = { character_event = { id = TOG.7033 days = 100 } } #Maimed
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Small gift
+			if = { 
+				limit = { has_character_flag = ancestors_carving }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { character_event = { id = TOG.7035 days = 150 } } #Increased levy
+						5 = { character_event = { id = TOG.7034 days = 100 } } #War tech
+						5 = { character_event = { id = TOG.7030 days = 100 } } #Commander
+						5 = { 				
+							modifier = { factor = 0 is_strong_trigger = yes } #Robust
+							character_event = { id = TOG.7011 days = 360 } 
+						}
+						15 = { 
+							modifier = { factor = 0 can_have_more_leadership_traits = no } #Leadership trait
+							character_event = { id = TOG.7032 days = 360 }
+						}
+						15 = { character_event = { id = TOG.7033 days = 100 } } #Maimed
+						35 = { } #Nothing
+					}
+				}
+			}	
+		}
+
+		#Prosperity
+		if = { 
+			limit = { has_character_flag = ancestors_prosperity }
+			
+			#Limb
+			if = { 
+				limit = { has_character_flag = ancestors_limb }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { 
+							if = {
+								limit = {
+									capital_scope = {
+										NOR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7040 days = 500 } #Increase prosperity level
+							}
+							if = {
+								limit = {
+									capital_scope = {
+										OR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7044 days = 500 } #Decrease depopulation level
+							}	 
+						} 
+						15 = { character_event = { id = TOG.7041 days = 100 } } #Economy tech points
+						10 = { character_event = { id = TOG.7042 days = 200 } } #Stewardship bonus
+						5 = { character_event = { id = TOG.7043 days = 300 } } #Less tax
+						20 = { } #Nothing
+					}
+				}
+			}
+			#Human Sacrifice
+			if = { 
+				limit = { has_character_flag = ancestors_human }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { 
+							if = {
+								limit = {
+									capital_scope = {
+										NOR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7040 days = 500 } #Increase prosperity level
+							}
+							if = {
+								limit = {
+									capital_scope = {
+										OR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7044 days = 500 } #Decrease depopulation level
+							}	 
+						}
+						15 = { character_event = { id = TOG.7041 days = 100 } } #Economy tech points
+						15 = { character_event = { id = TOG.7042 days = 200 } } #Stewardship bonus
+						5 = { character_event = { id = TOG.7043 days = 300 } } #Less tax
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Big gift
+			if = { 
+				limit = { has_character_flag = ancestors_feast }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { 
+							if = {
+								limit = {
+									capital_scope = {
+										NOR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7040 days = 500 } #Increase prosperity level
+							}
+							if = {
+								limit = {
+									capital_scope = {
+										OR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7044 days = 500 } #Decrease depopulation level
+							}	 
+						}
+						15 = { character_event = { id = TOG.7041 days = 100 } } #Economy tech points
+						15 = { character_event = { id = TOG.7042 days = 200 } } #Stewardship bonus
+						10 = { character_event = { id = TOG.7043 days = 300 } } #Less tax
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Small gift
+			if = { 
+				limit = { has_character_flag = ancestors_carving }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { 
+							if = {
+								limit = {
+									capital_scope = {
+										NOR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7040 days = 500 } #Increase prosperity level
+							}
+							if = {
+								limit = {
+									capital_scope = {
+										OR = { 
+											has_province_modifier = depopulated_1
+											has_province_modifier = depopulated_2
+											has_province_modifier = depopulated_3
+										}
+									}
+								}
+								character_event = { id = TOG.7044 days = 500 } #Decrease depopulation level
+							}	 
+						}
+						5 = { character_event = { id = TOG.7041 days = 100 } } #Economy tech points
+						10 = { character_event = { id = TOG.7042 days = 200 } } #Stewardship bonus
+						10 = { character_event = { id = TOG.7043 days = 300 } } #Less tax
+						20 = { } #Nothing
+					}
+				}
+			}	
+		}
+
+		#Wisdom
+		if = { 
+			limit = { has_character_flag = ancestors_wisdom }
+			
+			#Limb
+			if = { 
+				limit = { has_character_flag = ancestors_limb }
+
+				hidden_tooltip = {
+					random_list = { 
+						10 = { 
+							modifier = { factor = 0 is_smart_trigger = yes } #Shrewd
+							character_event = { id = TOG.7050 days = 400 }
+						}
+						15 = { character_event = { id = TOG.7051 days = 200 } } #Wise woman
+						15 = { character_event = { id = TOG.7054 days = 300 } } #Owl
+						5 = { character_event = { id = TOG.7052 days = 300 } } #Learning bonus
+						3 = { 
+							modifier = { factor = 0 is_dumb_trigger = yes } #Dull
+							character_event = { id = TOG.7053 days = 200 } 
+						}
+						20 = { } #Nothing
+					}
+				}
+			}
+			#Human Sacrifice
+			if = { 
+				limit = { has_character_flag = ancestors_human }
+
+				hidden_tooltip = {
+					random_list = { 
+						5 = { 
+							modifier = { factor = 0 is_smart_trigger = yes } #Shrewd
+							character_event = { id = TOG.7050 days = 400 }
+						}
+						15 = { character_event = { id = TOG.7051 days = 200 } } #Wise woman
+						15 = { character_event = { id = TOG.7054 days = 300 } } #Owl
+						10 = { character_event = { id = TOG.7052 days = 300 } } #Learning bonus
+						5 = { 
+							modifier = { factor = 0 is_dumb_trigger = yes } #Dull
+							character_event = { id = TOG.7053 days = 200 } 
+						}
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Big gift
+			if = { 
+				limit = { has_character_flag = ancestors_feast }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { 
+							modifier = { factor = 0 is_smart_trigger = yes } #Shrewd
+							character_event = { id = TOG.7050 days = 400 }
+						}
+						15 = { character_event = { id = TOG.7051 days = 200 } } #Wise woman
+						15 = { character_event = { id = TOG.7054 days = 300 } } #Owl
+						20 = { character_event = { id = TOG.7052 days = 300 } } #Learning bonus
+						10 = { 
+							modifier = { factor = 0 is_dumb_trigger = yes } #Dull
+							character_event = { id = TOG.7053 days = 200 } 
+						}
+						35 = { } #Nothing
+					}
+				}
+			}
+			#Small gift
+			if = { 
+				limit = { has_character_flag = ancestors_carving }
+
+				hidden_tooltip = {
+					random_list = { 
+						1 = { 
+							modifier = { factor = 0 is_smart_trigger = yes } #Shrewd
+							character_event = { id = TOG.7050 days = 400 }
+						}
+						5 = { character_event = { id = TOG.7051 days = 200 } } #Wise woman
+						5 = { character_event = { id = TOG.7054 days = 300 } } #Owl
+						10 = { character_event = { id = TOG.7052 days = 300 } } #Learning bonus
+						10 = { 
+							modifier = { factor = 0 is_dumb_trigger = yes } #Dull
+							character_event = { id = TOG.7053 days = 200 } 
+						}
+						20 = { } #Nothing
+					}
+				}
+			}
+		}
+		clr_character_flag = ancestors_health
+		clr_character_flag = ancestors_relationships
+		clr_character_flag = ancestors_war
+		clr_character_flag = ancestors_prosperity
+		clr_character_flag = ancestors_wisdom
+		clr_character_flag = ancestors_limb
+		clr_character_flag = ancestors_human
+		clr_character_flag = ancestors_feast
+		clr_character_flag = ancestors_carving
+	}
+}
+
+#HEALTH OUTCOMES
+
+#Get healed or blessing of health?
+character_event = {
+	id = TOG.7010
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	option = {
+		if = {
+			limit = { 
+				NOR = {
+					character_disease_trigger = yes
+					trait = ill
+				}
+			}
+			character_event = { id = TOG.7014 }
+		}
+		if = {
+			limit = { 
+				OR = {
+					character_disease_trigger = yes
+					trait = ill
+				}
+			}
+			character_event = { id = TOG.7016 }
+		}
+	}
+}
+
+#Blessing of health
+character_event = {
+	id = TOG.7014
+	desc = EVTDESC_TOG_7014
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7014
+		add_character_modifier = {
+			name = blessing_of_health
+			duration = -1
+		}
+	}
+}
+
+#Blessing of health healing illness
+character_event = {
+	id = TOG.7015
+	desc = EVTDESC_TOG_7015
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			character_disease_trigger = yes 
+			trait = ill
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7015
+		remove_disease_trait_effect = yes	
+		remove_character_modifier = blessing_of_health
+
+		if = {
+			limit = { trait = cynical }
+			remove_trait = cynical
+		}
+		if = {
+			limit = { NOT = { trait = zealous } }
+			add_trait = zealous
+		}
+	}
+}
+
+#Healing illness
+character_event = {
+	id = TOG.7016
+	desc = EVTDESC_TOG_7016
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7016
+		remove_disease_trait_effect = yes	
+	}
+}
+
+
+#Robust
+character_event = {
+	id = TOG.7011
+	desc = EVTDESC_TOG_7011
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7011
+
+		add_trait = robust
+
+		if = {
+			limit = { trait = weak }
+			remove_trait = weak
+		}
+		if = {
+			limit = { trait = feeble }
+			remove_trait = feeble
+		}
+	}
+}
+
+#Small health bonus
+character_event = {
+	id = TOG.7012
+	desc = EVTDESC_TOG_7012
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7012
+		add_character_modifier = {
+			name = invigorated
+			years = 10
+		}
+	}
+}
+
+#Illness
+character_event = {
+	id = TOG.7013
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_illness
+
+	desc = {
+		trigger = { has_dlc = "Reapers" }
+		text = EVTDESC_TOG_7013
+		picture = GFX_evt_doctor_tending_to_sick
+	}
+	desc = {
+		trigger = { NOT = { has_dlc = "Reapers" } }
+		text = EVTDESC_TOG_7013
+		picture = GFX_evt_illness
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7013
+		hidden_tooltip = { character_event = { id = 6063 days = 20 } }
+	}
+}
+
+
+#RELATIONSHIPS
+
+#Lover
+character_event = {
+	id = TOG.7020
+	desc = EVTDESC_TOG_7020
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes
+
+	immediate = {
+		#Targets male lover
+		if = {
+			limit = { prefers_men_trigger = yes }
+
+			#Grabs random courtier
+			if = {
+				limit = {
+					any_courtier = {
+						is_adult = yes
+						is_female = no
+						NOT = { is_lover = ROOT }
+						NOT = { is_close_relative = ROOT }
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+					}
+				}
+
+				random_courtier = {
+					limit = { 
+						is_adult = yes
+						is_female = no
+						NOT = { is_lover = ROOT }
+						NOT = { is_close_relative = ROOT }
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+					}
+					save_event_target_as = ancestors_lover
+				}
+			}
+
+			#Or creates a new one
+			if = {
+				limit = {
+					NOT = {
+						any_courtier = {
+							is_adult = yes
+							is_female = no
+							ai = yes
+						}
+					}
+				}
+
+				create_character = {
+					female = no
+					random_traits = yes
+					dynasty = none
+				}
+				new_character = {
+					save_event_target_as = ancestors_lover
+				}
+			}
+		}
+
+		#Targets female lover
+		if = {
+			limit = { prefers_men_trigger = no }
+
+			#Grabs random courtier
+			if = {
+				limit = {
+					any_courtier = {
+						is_adult = yes
+						is_female = yes
+						NOT = { is_lover = ROOT }
+						NOT = { is_close_relative = ROOT }
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+					}
+				}
+
+				random_courtier = {
+					limit = { 
+						is_adult = yes
+						is_female = yes
+						NOT = { is_lover = ROOT }
+						NOT = { is_close_relative = ROOT }
+						ai = yes
+						prisoner = no
+						NOT = { trait = incapable }
+					}
+					save_event_target_as = ancestors_lover
+				}
+			}
+
+			#Or creates a new one
+			if = {
+				limit = {
+					NOT = {
+						any_courtier = {
+							is_adult = yes
+							is_female = yes
+							NOT = { is_lover = ROOT }
+							NOT = { is_close_relative = ROOT }
+							ai = yes
+						}
+					}
+				}
+
+				create_character = {
+					female = yes
+					random_traits = yes
+					dynasty = none
+				}
+				new_character = {
+					save_event_target_as = ancestors_lover
+				}
+			}
+		}
+	}
+
+	#Confess
+	option = {
+		name = EVTOPTA_TOG_7020
+
+		add_lover = event_target:ancestors_lover
+
+		#Makes lover homosexual if both are same sex
+		hidden_tooltip = {
+			if = {
+				limit = { event_target:ancestors_lover = { same_sex = ROOT } }
+				event_target:ancestors_lover = { add_trait = homosexual }
+			}
+
+			if = {
+				limit = {
+					ROOT = { is_female = no }
+					event_target:ancestors_lover = { is_female = yes } 
+				}
+				random = {
+					chance = 50 
+					impregnate = event_target:ancestors_lover
+				}
+			}
+			if = {
+				limit = {
+					ROOT = { is_female = yes }
+					event_target:ancestors_lover = { is_female = no } 
+				}
+				random = {
+					chance = 50 
+					event_target:ancestors_lover = { impregnate = ROOT }
+				}
+			}
+		}
+	}
+
+	#Or don't
+	option = {
+		name = EVTOPTB_TOG_7020
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Friend
+character_event = {
+	id = TOG.7021
+	desc = EVTDESC_TOG_7021
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes
+
+	immediate = {
+		#Target a friend
+		if = {
+			limit = { any_courtier = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } }
+
+			random_courtier = {
+				limit = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } 
+				save_event_target_as = ancestors_friend
+			}
+		}
+
+		#Or create new one
+		if = {
+			limit = { NOT = { any_courtier = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } } }
+
+			create_character = {
+				random_traits = yes
+				dynasty = random
+			}
+			new_character = {
+				save_event_target_as = ancestors_friend
+			}
+		}
+	}
+
+	#Make friend
+	option = {
+		name = EVTOPTA_TOG_7021
+		add_friend = event_target:ancestors_friend
+	}
+	option = {
+		name = EVTOPTB_TOG_7021
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Small diplomacy bonus
+character_event = {
+	id = TOG.7022
+	desc = EVTDESC_TOG_7022
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_courtiers_talking
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7022
+
+		add_character_modifier = {
+			name = good_listener
+			years = 10
+		}
+	}
+}
+
+#Rival
+character_event = {
+	id = TOG.7023
+	desc = EVTDESC_TOG_7023
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	immediate = {
+		#Target a rival
+		if = {
+			limit = { any_courtier = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } }
+
+			random_courtier = {
+				limit = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } 
+				save_event_target_as = ancestors_rival
+			}
+		}
+
+		#Or create new one
+		if = {
+			limit = { NOT = { any_courtier = { NOR = { is_friend = ROOT is_rival = ROOT is_lover = ROOT } } } }
+
+			create_character = {
+				random_traits = yes
+				dynasty = random
+			}
+			new_character = {
+				save_event_target_as = ancestors_rival
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7023
+		add_rival = event_target:ancestors_rival
+	}
+}
+
+#Good with people
+character_event = {
+	id = TOG.7024
+	desc = EVTDESC_TOG_7024
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_courtiers_talking
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7024
+		add_character_modifier = {
+			name = respected_by_the_people
+			duration = -1
+		}
+	}
+}
+
+#Get a cat
+character_event = {
+	id = TOG.7025
+	border = GFX_event_normal_frame_diplomacy
+	picture = GFX_evt_recovery
+
+	desc = {
+		trigger = { has_dlc = "Reapers" }
+		text = EVTDESC_TOG_7025
+		picture = GFX_evt_cat
+	}
+	desc = {
+		trigger = { NOT = { has_dlc = "Reapers" } } 
+		text = EVTDESC_TOG_7025
+		picture = GFX_evt_recovery
+	}
+
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7025
+		add_character_modifier = {
+			name = pet_cat
+			duration = -1
+		}
+		hidden_tooltip = { character_event = { id = 77802 days = 5000 random = 1000 } } # Cat dies
+	}
+
+	option = {
+		name = EVTOPTB_TOG_7025
+		
+		ai_chance = {
+			factor = 0
+		}
+		
+		add_character_modifier = {
+			name = bad_person
+			years = 1
+		}
+	}
+}
+
+
+#WAR
+
+#Brilliant commander appears
+character_event = {
+	id = TOG.7030
+	desc = EVTDESC_TOG_7030
+	border = GFX_event_normal_frame_war
+	picture = GFX_evt_melee
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = { 
+			limit = {
+				OR = { 
+					has_law = status_of_women_3
+					has_law = status_of_women_4
+					has_game_rule = {
+						name = gender
+						value = all
+					}
+				}
+			}
+
+			create_character = {
+				female = yes
+				age = 35
+				random_traits = yes
+				trait = strong
+				trait = brave
+				trait = brilliant_strategist
+				trait = holy_warrior
+			}
+			new_character = {
+				remove_trait = feeble
+				remove_trait = weak
+				remove_trait = craven
+				remove_trait = imbecile
+				remove_trait = slow
+				remove_trait = dull
+				save_event_target_as = ancestors_commander
+			}
+		}
+		if = { 
+			limit = {
+				NOR = { 
+					religion = cathar
+					religion = messalian
+					has_law = status_of_women_3
+					has_law = status_of_women_4
+					has_game_rule = {
+						name = gender
+						value = all
+					}
+				}
+			}
+
+			create_character = {
+				female = no
+				age = 35
+				random_traits = yes
+				trait = strong
+				trait = brave
+				trait = brilliant_strategist
+				trait = holy_warrior
+			}
+			new_character = {
+				remove_trait = feeble
+				remove_trait = weak
+				remove_trait = craven
+				remove_trait = imbecile
+				remove_trait = slow
+				remove_trait = dull
+				save_event_target_as = ancestors_commander
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7030
+
+		event_target:ancestors_commander = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+				months = 1200
+			}
+		}
+	}
+}
+
+#Robust is TOG.7011
+
+#Random leadership trait
+character_event = {
+	id = TOG.7032
+	desc = EVTDESC_TOG_7032
+	border = GFX_event_normal_frame_war
+	picture = GFX_evt_battle
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7032
+
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					trait = light_foot_leader
+				}
+				add_trait = light_foot_leader
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = heavy_infantry_leader
+				}
+				add_trait = heavy_infantry_leader
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = cavalry_leader
+				}
+				add_trait = cavalry_leader
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = inspiring_leader
+				}
+				add_trait = inspiring_leader
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = defensive_leader
+				}
+				add_trait = defensive_leader
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = flanker
+				}
+				add_trait = flanker
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = siege_leader
+				}
+				add_trait = siege_leader
+			}
+		}
+	}
+}
+
+#Maimed while practising swordfighting
+character_event = {
+	id = TOG.7033
+	desc = EVTDESC_TOG_7033
+	border = GFX_event_normal_frame_war
+	picture = GFX_evt_bloody_man
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7033
+
+		add_maimed_trait_effect = yes
+	}
+}
+
+#War tech
+character_event = {
+	id = TOG.7034
+	border = GFX_event_normal_frame_war
+	picture = GFX_evt_large_army
+
+	desc = {
+		trigger = { job_marshal = { always = yes } }
+		text = EVTDESC_TOG_7034_A
+	}
+	desc = {
+		trigger = { NOT = { job_marshal = { always = yes } } }
+		text = EVTDESC_TOG_7034_B
+	}
+
+	immediate = { job_marshal = { save_event_target_as = ancestors_marshal } }
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7034
+
+		military_techpoints = 100	
+	}
+}
+
+#Levy reinforcement
+character_event = {
+	id = TOG.7035
+	desc = EVTDESC_TOG_7035
+	border = GFX_event_normal_frame_war
+	picture = GFX_evt_large_army
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7035
+
+		capital_scope = {
+			add_province_modifier = {
+				name = inspired_warriors
+				years = 10
+			}
+		}
+	}
+}
+
+
+
+#PROSPERITY
+
+#Increase prosperity level of capital
+character_event = {
+	id = TOG.7040
+	desc = EVTDESC_TOG_7040
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_tribal_lands
+
+	is_triggered_only = yes
+
+	trigger = {
+		capital_scope = {
+			NOR = {
+				has_province_modifier = depopulated_1
+				has_province_modifier = depopulated_2
+				has_province_modifier = depopulated_3
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7040
+
+		if = {
+			limit = { 
+				has_dlc = "Reapers" 
+				NOT = { capital_scope = { has_province_modifier = prosperity_modifier_3 } }
+			}
+			capital_scope = { increase_prosperity_effect = yes }
+		}
+
+		if = {
+			limit = { 
+				OR = {
+					NOT = { has_dlc = "Reapers" } 
+					capital_scope = { has_province_modifier = prosperity_modifier_3 }
+				}
+			}
+			scaled_wealth = { value = 1 min = 50 }
+		}
+	}
+}
+
+#Give economy tech
+character_event = {
+	id = TOG.7041
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_council
+
+	desc = {
+		trigger = { job_treasurer = { always = yes } }
+		text = EVTDESC_TOG_7041_A
+	}
+	desc = {
+		trigger = { NOT = { job_treasurer = { always = yes } } }
+		text = EVTDESC_TOG_7041_B
+	}
+
+	immediate = { job_treasurer = { save_event_target_as = ancestors_treasurer } }
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7041
+		economy_techpoints = 100	
+	}
+}
+
+
+#Small stewardship bonus
+character_event = {
+	id = TOG.7042
+	desc = EVTDESC_TOG_7042
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7042
+
+		add_character_modifier = {
+			name = bargainer
+			years = 10
+		}
+	}
+}
+
+#Bad tax modifier
+character_event = {
+	id = TOG.7043
+	desc = EVTDESC_TOG_7043
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7043
+
+		add_character_modifier = {
+			name = overtaxed_subjects
+			years = 5
+		}
+	}
+}
+
+#Decrease depopulation
+character_event = {
+	id = TOG.7044
+	desc = EVTDESC_TOG_7044
+	border = GFX_event_normal_frame_economy
+	picture = GFX_evt_tribal_lands
+
+	is_triggered_only = yes
+
+	trigger = {
+		capital_scope = {
+			OR = {
+				has_province_modifier = depopulated_1
+				has_province_modifier = depopulated_2
+				has_province_modifier = depopulated_3
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7044
+
+		capital_scope = {
+
+			if = {
+				limit = { has_province_modifier = depopulated_1 }
+
+				remove_province_modifier = depopulated_1
+				break = yes
+			}
+				
+			if = {
+				limit = { has_province_modifier = depopulated_2 }
+
+				remove_province_modifier = depopulated_2
+				add_province_modifier = { name = depopulated_1 duration = -1 }
+				break = yes
+			}
+
+			if = {
+				limit = { has_province_modifier = depopulated_3 }
+
+				remove_province_modifier = depopulated_3
+				add_province_modifier = { name = depopulated_2 duration = -1 }
+				break = yes
+			}
+		}
+	}
+}
+
+#WISDOM
+
+#Shrewd
+character_event = {
+	id = TOG.7050
+	desc = EVTDESC_TOG_7050
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_library
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7050
+		add_trait = shrewd
+
+		if = {
+			limit = { trait = dull }
+			remove_trait = dull 
+		}
+		if = {
+			limit = { trait = imbecile }
+			remove_trait = imbecile 
+		}
+		if = {
+			limit = { trait = slow }
+			remove_trait = slow 
+		}
+	}
+}
+
+#Wise woman joins court
+character_event = {
+	id = TOG.7051
+	desc = EVTDESC_TOG_7051
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_tribal_shrine
+
+	is_triggered_only = yes
+
+	immediate = {
+		create_character = {
+			religion = ROOT
+			age = 32
+			female = yes
+			random_traits = yes
+			dynasty = none
+			trait = mystic
+			trait = genius
+			trait = mastermind_theologian
+		}
+		new_character = {
+			remove_trait = dull
+			remove_trait = imbecile
+			save_event_target_as = ancestors_wise_woman
+		}
+	}
+
+	option = {
+		name = EVTOPTA_TOG_7051
+
+		event_target:ancestors_wise_woman = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+				months = 1200
+			}
+		}
+	}
+}
+
+#Small learning bonus
+character_event = {
+	id = TOG.7052
+	desc = EVTDESC_TOG_7052
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_library
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7052
+		add_character_modifier = {
+			name = new_insights
+			years = 10
+		}
+	}
+}
+
+#Dull
+character_event = {
+	id = TOG.7053
+	desc = EVTDESC_TOG_7053
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_library
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7053
+
+		if = {
+			limit = { is_smart_trigger = no }
+			add_trait = dull
+		}
+		if = {
+			limit = { trait = genius }
+			remove_trait = genius 
+		}
+		if = {
+			limit = { trait = quick }
+			remove_trait = quick 
+		}
+		if = {
+			limit = { trait = shrewd }
+			remove_trait = shrewd 
+		}
+	}
+}
+
+#Get an owl
+character_event = {
+	id = TOG.7054
+	desc = EVTDESC_TOG_7054
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_falconing
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_TOG_7054
+		add_character_modifier = {
+			name = pet_owl
+			duration = -1
+		}
+	}
+
+	option = {
+		name = EVTOPTB_TOG_7054
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+

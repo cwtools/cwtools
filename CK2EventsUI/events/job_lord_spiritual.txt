@@ -1,0 +1,2625 @@
+##############################
+# LORD SPIRITUAL
+#
+# Job: action_inquisition
+# 	900: County Religion Converted
+# 	901: Subject Religion Converted
+# 	902: Heathens Attack the Lord Spiritual
+# 	903: Heretic Noble
+#
+# Job: action_improve_rel_relations
+# 	906: The Lord Spiritual attempts to improve relations with a priest
+# 	907: The Lord Spiritual attempts to sabotage the relations of a priest towards the official head of the religion
+#
+# Job: action_advance_cul_tech
+# 	926: A Great Inventor offers his help: Random Culture Tech increases
+# 	927: Lord Spiritual = heretic
+#
+##############################
+
+
+##############################
+# LORD SPIRITUAL
+# JOB: action_inquisition
+##############################
+
+# 900: The Lord Spiritual converts a province!
+character_event = {
+	id = 900
+	title = "EVTNAME900"
+	desc = "EVTDESC900"
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		NOT = { location = { religion = ROOT } }
+		location = {
+			owner = { same_realm = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 960
+		
+		modifier = {
+			factor = 2.0
+			liege = {
+				tier = count
+				ai = yes
+			}
+		}
+		
+		modifier = {
+			factor = 0.75
+			location = { culture_group = ROOT }
+		}
+		modifier = {
+			factor = 0.75
+			location = { culture = ROOT }
+		}
+		modifier = {
+			factor = 0.5
+			location = { religion_group = ROOT }
+		}
+		modifier = {
+			factor = 0.75
+			location = { has_province_modifier = depopulated_1 }
+		}
+		modifier = {
+			factor = 0.50
+			location = { has_province_modifier = depopulated_2 }
+		}
+		modifier = {
+			factor = 0.25
+			location = { has_province_modifier = depopulated_3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 3.0
+			NOT = { religion_authority = 0.1 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { religion_authority = 0.3 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { religion_authority = 0.5 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.7
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.9
+		}
+		
+		# Hindus and Buddhists have a hard time converting other Indian religions
+		modifier = {
+			factor = 3.0
+			OR = {
+				religion = hindu
+				religion = buddhist
+			}
+			location = {
+				religion_group = indian_group
+			}
+		}
+		# Jains have a hard time converting ALL non-pagans
+		modifier = {
+			factor = 3.0
+			religion = jain
+			location = {
+				NOT = { religion_group = pagan_group }
+			}
+		}
+		
+		modifier = {
+			factor = 3.0
+			religion_group = pagan_group
+			is_reformed_religion = no
+			location = {
+				OR = {
+					NOT = { religion_group = pagan_group }
+					is_reformed_religion = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			location = { is_heresy_of = ROOT }
+		}
+		modifier = {
+			factor = 0.75
+			location = {
+				has_province_modifier = force_converting
+			}
+		}
+		modifier = {
+			factor = 3.0
+			location = {
+				has_province_modifier = heretic_stronghold
+			}
+		}
+		modifier = {
+			factor = 3
+			has_game_rule = {
+				name = religious_conversion
+				value = slower
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTA900"
+		piety = 10
+		location = { religion = ROOT }
+		hidden_tooltip = {
+			location = {
+				if = {
+					limit = { has_province_modifier = heretic_stronghold }
+					remove_province_modifier = heretic_stronghold
+				}
+			}
+		}
+		liege = {
+			letter_event = { id = 20000 tooltip = EVTTOOLTIP20000 }
+			hidden_tooltip = {
+				if = {
+					limit = {
+						top_liege = {
+							NOT = { character = PREV }
+							religion = ROOT
+						}
+					}
+					top_liege = { character_event = { id = 20001 } }
+				}
+			}
+		}
+	}
+}
+
+# 20000: The Lord Spiritual informs his liege of the conversion
+letter_event = {
+	id = 20000
+	desc = "EVTDESC20000"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA20000"
+		piety = 15
+		if = {
+			limit = {
+				is_heretic = no
+				rightful_religious_head_scope = {
+					ROOT = {
+						NOT = { excommunicated_for = PREV }
+					}
+				}
+			}
+			religion_head = {
+				opinion = {
+					modifier = opinion_converted_province
+					who = ROOT
+					months = 24
+				}
+			}
+		}
+	}
+}
+
+# 20001: Informs top liege
+character_event = {
+	id = 20001
+	desc = EVTDESC20001
+	picture = GFX_evt_heretic
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	notification = yes
+
+	option = {
+		name = "EXCELLENT"
+	}
+}
+
+# 901: The Lord Spiritual converts a subject character
+character_event = {
+	id = 901
+	title = "EVTNAME901"
+	desc = "EVTDESC901"
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			any_province_character = {
+				is_adult = yes
+				NOT = { character = ROOT }
+				NOT = { is_liege_of = ROOT }
+				NOT = { religion = ROOT }
+				OR = {
+					is_ruler = no
+					primary_title = {
+						controls_religion = no
+						mercenary = no
+						holy_order = no
+					}
+				}
+				same_realm = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 3.0
+			religion_group = pagan_group
+			is_reformed_religion = no
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA901"
+		piety = 5
+		location = {
+			random_province_character = {
+				limit = {
+					is_adult = yes
+					NOT = { character = ROOT }
+					NOT = { is_liege_of = ROOT }
+					NOT = { religion = ROOT }
+					OR = {
+						is_ruler = no
+						primary_title = {
+							controls_religion = no
+							mercenary = no
+							holy_order = no
+						}
+					}
+					same_realm = ROOT
+				}
+				letter_event = { id = 20010 tooltip = "EVTTOOLTIP20010" }
+			}
+		}
+	}
+}
+
+# 20010: Inform the target character about this
+letter_event = {
+	id = 20010
+	desc = "EVTDESC20010"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20010"
+		
+		if = {
+			limit = { higher_tier_than = BARON }
+			religion_authority = {
+				modifier = ruler_converted_from
+			}
+		}
+		
+		religion = FROM
+		
+		if = {
+			limit = { higher_tier_than = BARON }
+			religion_authority = {
+				modifier = ruler_converted_to
+			}
+		}
+		
+		hidden_tooltip = {
+			FROM = {
+				liege = { letter_event = { id = 20011 } }
+			}
+			if = {
+				limit = {
+					liege = {
+						job_spiritual = {
+							NOT = { character = FROM }
+						}
+					}
+				}
+				liege = { letter_event = { id = 20012 } }
+			}
+		}
+	}
+}
+
+# 20011: Inform Lord Spiritual's Liege about this
+letter_event = {
+	id = 20011
+	desc = "EVTDESC20011"
+	border = GFX_event_letter_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20011"
+	}
+}
+
+# 20012: Inform character's Liege about this
+letter_event = {
+	id = 20012
+	desc = "EVTDESC20012"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20012"
+		trigger = { FROM = { religion = ROOT } }
+	}
+	option = {
+		name = "EVTOPTB20012"
+		trigger = { FROM = { NOT = { religion = ROOT } } }
+	}
+}
+
+
+# 902: The Lord Spiritual is attacked by heathens (Gets away, Is wounded, Is killed)
+character_event = {
+	id = 902
+	title = "EVTNAME902"
+	desc = "EVTDESC902"
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			NOT = { religion = ROOT }
+			owner = { same_realm = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 2.0
+			liege = {
+				tier = count
+				ai = yes
+			}
+		}
+	
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			learning = 10
+		}
+		modifier = {
+			factor = 1.25
+			learning = 11
+		}
+		modifier = {
+			factor = 1.25
+			learning = 12
+		}
+		modifier = {
+			factor = 1.25
+			learning = 13
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor =0.75
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.8
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA902"
+		random_list = {
+			50 = { character_event = { id = 20020 tooltip = "EVTTOOLTIP20020" } }
+			40 = { character_event = { id = 20021 tooltip = "EVTTOOLTIP20021" } }
+			10 = {
+				hidden_tooltip = {
+					liege = { character_event = { id = 20023 } }
+				}
+				death = {
+					death_reason = death_rabble
+				}
+			}
+		}
+	}
+}
+
+# 20020: Lord Spiritual gets away
+character_event = {
+	id = 20020
+	desc = "EVTDESC20020"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20020"
+		prestige = -10
+	}
+}
+
+# 20021: Lord Spiritual gets wounded
+character_event = {
+	id = 20021
+	desc = "EVTDESC20021"
+	picture = GFX_evt_illness
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	immediate = {
+		location = {
+			save_event_target_as = wounded_location
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20021"
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+			NOT = {
+				trait = wroth
+			}
+		}
+		add_trait = wounded
+		liege = { letter_event = { id = 20022 tooltip = "EVTTOOLTIP20022" } }
+	}
+	option = {
+		name = "EVTOPTB20021"
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+			NOT = { trait = humble}
+		}
+		add_trait = wounded
+		add_trait = zealous
+		liege = { letter_event = { id = 20022 tooltip = "EVTTOOLTIP20022" } }
+	}
+	option = {
+		name = "EVTOPTC20021"
+		trigger = {
+			religion_group = muslim
+			NOT = {
+				AND = {
+					trait = wroth
+					NOT = { trait = humble }
+				}
+			}
+		}
+		add_trait = wounded
+		liege = { letter_event = { id = 20022 tooltip = "EVTTOOLTIP20022" } }
+	}
+}
+
+# 20022: Inform the Liege about wounding
+letter_event = {
+	id = 20022
+	desc = "EVTDESC20022"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20022"
+		prestige = -10
+	}
+}
+
+# 20023: Inform the Liege about death
+character_event = {
+	id = 20023
+	desc = "EVTDESC20023"
+	picture = GFX_evt_death
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20023"
+		prestige = -15
+	}
+}
+
+
+# 903: The Lord Spiritual suspects a subject character of heresy
+character_event = {
+	id = 903
+	title = "EVTNAME903"
+	desc = "EVTDESC903"
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		NOT = { religion_group = pagan_group }
+		NOT = { religion_group = indian_group }
+		trait = zealous
+		location = {
+			any_province_lord = {
+				trait = cynical
+				NOT = { is_liege_of = ROOT }
+				NOT = { has_character_flag = no_heretic }
+				NOT = { has_character_flag = branded_heretic }
+				NOT = { character = ROOT }
+				age = 20
+				same_realm = ROOT
+				religion_group = ROOT
+				can_change_religion = yes
+				NOT = { piety = 100 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+	}
+	
+	immediate = {
+		location = {
+			random_province_lord = {
+				limit = {
+					trait = cynical
+					NOT = { is_liege_of = ROOT }
+					NOT = { has_character_flag = no_heretic }
+					NOT = { has_character_flag = branded_heretic }
+					NOT = { character = ROOT }
+					age = 20
+					same_realm = ROOT
+					religion_group = ROOT
+					can_change_religion = yes
+					NOT = { piety = 100 }
+				}
+				save_event_target_as = suspected_heretic
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA903"
+		ai_chance = { factor = 75 }
+		location = {
+			event_target:suspected_heretic = {
+				character_event = { id = 20030 days = 7 tooltip = "EVTTOOLTIP20030" }
+			}
+		}
+	}
+}
+
+# 20030: Noble reacts to the accusations
+character_event = {
+	id = 20030
+	desc = "EVTDESC20030"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20030"
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+		}
+		FROM = {
+			liege = { letter_event = { id = 20032 tooltip = "EVTTOOLTIP20032" } }
+		}
+	}
+	option = {
+		name = "EVTOPTB20030"
+		trigger = {
+			religion_group = muslim
+		}
+		FROM = {
+			liege = { letter_event = { id = 20032 tooltip = "EVTTOOLTIP20032" } }
+		}
+	}
+}
+
+# 20032: Liege: The noble complains
+letter_event = {
+	id = 20032
+	desc = "EVTDESC20032"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20032" #Noble = no heretic
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2.0
+				opinion = { who = FROM value = 50 }
+			}
+			modifier = {
+				factor = 2.0
+				opinion = { who = FROM value = 75 }
+			}
+		}
+		FROM = {
+			letter_event = { id = 20033 days = 7 tooltip = "EVTTOOLTIP20033" }
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 1
+			}
+			set_character_flag = no_heretic
+		}
+		job_spiritual = {
+			letter_event = { id = 20034 days = 7 tooltip = "EVTTOOLTIP20034" }
+			opinion = {
+				modifier = opinion_chastised_by_liege
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB20032" #Noble = heretic
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2.0
+				NOT = { opinion = { who = FROM value = -25 } }
+			}
+			modifier = {
+				factor = 2.0
+				NOT = { opinion = { who = FROM value = -50 } }
+			}
+		}
+		FROM = {
+			letter_event = { id = 20035 days = 7 tooltip = "EVTTOOLTIP20035" }
+			opinion = {
+				modifier = opinion_branded_heretic
+				who = ROOT
+				years = 5
+			}
+			set_character_flag = branded_heretic
+		}
+		job_spiritual = {
+			letter_event = { id = 20036 days = 7 tooltip = "EVTTOOLTIP20036" }
+		}
+	}
+}
+
+# 20033: Noble: Noble isn't heretic
+letter_event = {
+	id = 20033
+	desc = "EVTDESC20033"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20033"
+		trigger = {
+			NOT = {
+				religion_group = muslim
+			}
+		}
+		piety = 5
+	}
+	option = {
+		name = "EVTOPTB20033"
+		trigger = {
+			religion_group = muslim
+		}
+		piety = 5
+	}
+}
+
+# 20034: Lord Spiritual: Noble isn't heretic
+letter_event = {
+	id = 20034
+	desc = "EVTDESC20034"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20034"
+		liege = {	
+			reverse_opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# 20035: Noble: Noble is heretic
+letter_event = {
+	id = 20035
+	desc = "EVTDESC20035"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20035"
+		FROM = {
+			opinion = {
+				modifier = opinion_branded_heretic
+				who = ROOT
+				years = 5
+			}
+		}
+		piety = -50
+	}
+}
+
+# 20036: Lord Spiritual: Noble is heretic
+letter_event = {
+	id = 20036
+	desc = "EVTDESC20036"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20036"
+		piety = 10
+	}
+}
+
+# 20037: Increased revolt risk
+character_event = {
+	id = 20037
+	desc = "EVTDESC20037"
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			NOT = { religion = ROOT }
+			NOT = { has_province_modifier = religious_tension }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			learning = 10
+		}
+		modifier = {
+			factor = 1.25
+			learning = 11
+		}
+		modifier = {
+			factor = 1.25
+			learning = 12
+		}
+		modifier = {
+			factor = 1.25
+			learning = 13
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor =0.75
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.8
+		}
+	}
+
+	option = {
+		name = "EVTOPTA20037"
+		hidden_tooltip = {
+			location = {
+				# Inform barons about the rebels
+				owner = {
+					if = {
+						limit = {
+							is_liege_of = ROOT
+						}
+						set_character_flag = liege_informed
+					}
+				}
+				any_province_lord = {
+					limit = {
+						NOT = { has_character_flag = liege_informed }
+						ai = no
+					}
+					character_event = { id = 20038 days = 1 }
+				}
+				# Inform liege
+				ROOT = {
+					liege = { letter_event = { id = 20039 } }
+					clr_character_flag = liege_informed
+				}
+			}
+		}
+	}
+}
+
+# 20038: Inform province lords
+character_event = {
+	id = 20038
+	desc = "EVTDESC20038"
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20038"
+	}
+}
+
+# 20039: Inform liege
+letter_event = {
+	id = 20039
+	desc = "EVTDESC20039"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20039"
+		FROM = {
+			location = {
+				# Increase revolt risk
+				add_province_modifier = {
+					name = religious_tension
+					duration = 365
+				}
+				# Province barons
+				any_province_lord = {
+					limit = {
+						NOT = { character = ROOT }
+						NOT = { character = FROM }
+					}
+					opinion = {
+						who = ROOT
+						modifier = opinion_irritated
+						months = 12
+					}
+				}
+			}
+		}
+	}
+}
+
+# Chaplain arrives at Pagan capital
+character_event = {
+	id = 39650
+	desc = EVTDESC39650
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_inquisition
+		NOT = { has_character_flag = preacher_arrives }
+		location = {
+			owner = {
+				NOT = { character = ROOT }
+				NOT = { is_liege_of = ROOT }
+				NOT = { religion = ROOT }
+				religion_group = pagan_group
+				NOT = { same_realm = ROOT }
+				controls_religion = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA39650
+		set_character_flag = preacher_arrives
+		location = {
+			owner = {
+				character_event = { id = 39600 days = 4 tooltip = EVTTOOLTIP39600 }
+			}
+		}
+	}
+}
+
+# Chaplain has a chance of converting the Pagan lord
+character_event = {
+	id = 39651
+	desc = EVTDESC39651
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = preacher_arrives
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			owner = {
+				is_adult = yes
+				NOT = { trait = incapable }
+				NOT = { character = ROOT }
+				NOT = { is_liege_of = ROOT }
+				NOT = { religion = ROOT }
+				religion_group = pagan_group
+				is_reformed_religion = no
+				NOT = { same_realm = ROOT }
+				controls_religion = no
+				# at_location = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+		# Local Pagan religion authority
+		modifier = {
+			factor = 0.75
+			location = {
+				owner = {
+					NOT = { religion_authority = 0.2 }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75
+			location = {
+				owner = {
+					NOT = { religion_authority = 0.4 }
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			location = {
+				owner = {
+					religion_authority = 0.6
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			location = {
+				owner = {
+					religion_authority = 0.8
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA39651
+		hidden_tooltip = {
+			location = {
+				owner = {
+					character_event = { id = 39601 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Chaplain converts Pagan courtier
+character_event = {
+	id = 39652
+	desc = EVTDESC39652
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = preacher_arrives
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			owner = {
+				NOT = { character = ROOT }
+				NOT = { is_liege_of = ROOT }
+				NOT = { religion = ROOT }
+				religion_group = pagan_group
+				is_reformed_religion = no
+				NOT = { same_realm = ROOT }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+	}
+	
+	option = {
+		name = EVTOPTA39652
+		hidden_tooltip = {
+			location = {
+				owner = {
+					random_courtier = {
+						limit = { 
+							age = 10
+							prisoner = no
+							at_location = ROOT
+							NOT = { trait = incapable }
+							ai = yes
+							religion_group = pagan_group
+						}
+						character_event = { id = 39610 days = 1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Chaplain squabbles with other chaplain
+character_event = {
+	id = 39653
+	desc = EVTDESC39653
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = preacher_arrives
+	
+	trigger = {
+		has_job_action = action_inquisition
+		location = {
+			owner = {
+				NOT = { character = ROOT }
+				NOT = { is_liege_of = ROOT }
+				NOT = { religion = ROOT }
+				religion_group = pagan_group
+				NOT = { same_realm = ROOT }
+			}
+		}
+		any_playable_ruler = {
+			any_courtier = {
+				has_job_action = action_inquisition
+				has_character_flag = preacher_arrives
+				at_location = ROOT
+				NOT = { character = ROOT }
+				NOT = { same_liege = ROOT }
+			}
+		}			
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = EVTOPTA39653
+		hidden_tooltip = {
+			random_playable_ruler = {
+				limit = {
+					any_courtier = {
+						has_job_action = action_inquisition
+						has_character_flag = preacher_arrives
+						at_location = ROOT
+						NOT = { character = ROOT }
+						NOT = { same_liege = ROOT }
+					}
+				}
+				random_courtier = {
+					limit = {
+						has_job_action = action_inquisition
+						has_character_flag = preacher_arrives
+						at_location = ROOT
+						NOT = { character = ROOT }
+						NOT = { same_liege = ROOT }
+					}
+					character_event = { id = 39611 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Clear preacher_arrives flag
+character_event = {
+	id = 39654
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_character_flag = preacher_arrives
+	
+	trigger = {
+		NOT = { has_job_action = action_inquisition }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clr_character_flag = preacher_arrives
+	}
+}
+
+
+
+##############################
+# LORD SPIRITUAL
+# JOB: action_improve_rel_relations
+##############################
+
+# 906: The Lord Spiritual improves relations between the liege and a bishop
+character_event = {
+	id = 906
+	title = "EVTNAME906"
+	desc = "EVTDESC906"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_improve_rel_relations
+		location = { 
+			any_province_lord = {
+				NOT = { character = ROOT }
+				is_priest = yes
+				religion = ROOT
+				NOT = { is_liege_of = ROOT }
+			}
+		}
+	}
+	
+	mean_time_to_happen = { 
+		months = 240
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA906"
+		hidden_tooltip = {
+			location = {
+				random_province_lord = {
+					limit = {
+						is_priest = yes
+						religion = ROOT
+						NOT = { is_liege_of = ROOT }
+					}
+					character_event = { id = 20060 days = 7 }
+				}
+			}
+		}
+	}
+}
+
+# 20060: Inform the bishop
+character_event = {
+	id = 20060
+	desc = "EVTDESC20060"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20060"
+		hidden_tooltip = {
+			FROM = {
+				liege = { letter_event = { id = 20061 } }
+			}
+		}
+	}
+}
+
+# 20061: The liege is informed of the success
+letter_event = {
+	id = 20061
+	desc = "EVTDESC20061"
+	border = GFX_event_letter_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20061"
+		FROM = {
+			opinion = {
+				modifier = opinion_improved_relations
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+
+# 907: The Lord Spiritual attempts to sabotage the relations of a subject priest towards the official head of the religion
+character_event = {
+	id = 907
+	title = "EVTNAME907"
+	desc = "EVTDESC907"
+	picture = GFX_evt_pope_feast
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_improve_rel_relations
+		NOT = { religion_group = indian_group }
+		religion_head = {
+			NOT = { character = liege }
+		}
+		location = { 
+			any_province_lord = {
+				NOT = { character = ROOT }
+				is_priest = yes
+				NOT = { is_liege_of = ROOT }
+				same_realm = ROOT
+				religion = ROOT
+				religion_head = {
+					NOT = { character = PREV }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA907"
+		hidden_tooltip = {
+			location = {
+				random_province_lord = {
+					limit = {
+						is_priest = yes
+						NOT = { is_liege_of = ROOT }
+						same_realm = ROOT
+						religion = ROOT
+						religion_head = {
+							NOT = { character = PREV }
+						}
+					}
+					character_event = { id = 20070 days = 7 }
+				}
+			}
+		}
+	}
+}
+
+# 20070: Inform the bishop
+character_event = {
+	id = 20070
+	desc = "EVTDESC20070"
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20070"
+		hidden_tooltip = {
+			FROM = {
+				liege = { letter_event = { id = 20071 } }
+			}
+		}
+	}
+}
+
+# 20071: The liege is informed of the success
+letter_event = {
+	id = 20071
+	desc = "EVTDESC20071"
+	border = GFX_event_letter_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA20071"
+		FROM = {
+			religion_head = {
+				reverse_opinion = {
+					modifier = opinion_head_of_religion_negative
+					who = PREV
+					years = 2
+				}
+			}
+		}
+	}
+}
+
+
+##############################
+# LORD SPIRITUAL
+# JOB: action_advance_cul_tech
+##############################
+
+# 926: A Great Inventor offers his help: Random Culture Tech increases
+character_event = {
+	id = 926
+	title = "EVTNAME926"
+	desc = "EVTDESC926"
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_advance_cul_tech
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_focus = focus_scholarship
+				liege = { has_focus = focus_scholarship }
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA926"
+		liege = { letter_event = { id = 20260 tooltip = "EVTTOOLTIP20260" } }
+	}
+}
+
+# 20260: The liege is informed of the success
+letter_event = {
+	id = 20260
+	desc = "EVTDESC20260"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20260"
+		scaled_wealth = -0.5
+		culture_techpoints = 50
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			custom_tooltip = {
+				text = increase_prosperity_custom_tooltip
+				hidden_tooltip = {
+					FROM = {
+						location = {
+							change_variable = { which = prosperity_value value = 6 }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB20260"
+	}
+}
+
+
+# 927: Lord Spiritual = heretic
+character_event = {
+	id = 927
+	title = "EVTNAME927"
+	desc = "EVTDESC927"
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_advance_cul_tech
+		NOT = { religion_group = indian_group }
+		is_heretic = no
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+			religion_group = jewish_group
+		}
+		liege = {
+			is_heretic = no
+			OR = {
+				religion_group = christian
+				religion_group = muslim
+				religion_group = jewish_group
+			}
+		}
+		NOT = {
+			religion_head = { character = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA927"
+		ai_chance = { factor = 80 }
+		become_heretic = yes
+		hidden_tooltip = {
+			liege = { letter_event = { id = 20270 } }
+		}
+	}
+	option = {
+		name = "EVTOPTB927"
+		ai_chance = { factor = 20 }
+	}
+}
+
+# 20270: Liege get a letter
+letter_event = {
+	id = 20270
+	desc = "EVTDESC20270"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20270"
+		ai_chance = { factor = 100 }
+		FROM = { imprison = yes }
+	}
+	option = {
+		name = "EVTOPTB20270"
+		ai_chance = { factor = 0 }
+		religion = FROM
+	}
+}
+
+##############################
+# MUSLIM LORD SPIRITUAL (Mufti)
+# JOB: action_charity
+##############################
+
+# 20040: The Mufti improves relations between the liege and a vassal
+character_event = {
+	id = 20040
+	desc = "EVTDESC20040"
+	title = "EVTNAME20040"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_charity
+		location = { 
+			any_province_lord = {
+				religion = ROOT
+				NOT = { is_liege_of = ROOT }
+			}
+		}
+	}
+	
+	mean_time_to_happen = { 
+		months = 220
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.75
+			religion_authority = 0.8
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20040"
+		hidden_tooltip = {
+			location = {
+				random_province_lord = {
+					limit = {
+						religion = ROOT
+						NOT = { is_liege_of = ROOT }
+					}
+					character_event = { id = 20041 days = 7 }
+				}
+			}
+		}
+	}
+}
+
+# 20041: Inform the vassal
+character_event = {
+	id = 20041
+	desc = "EVTDESC20041"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20041"
+		hidden_tooltip = {
+			FROM = {
+				liege = { character_event = { id = 20042 days = 7 } }
+			}
+		}
+	}
+}
+
+# 20042: The liege is informed of the success
+character_event = {
+	id = 20042
+	desc = "EVTDESC20042"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20042"
+		FROM = {
+			opinion = {
+				modifier = opinion_improved_relations
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+# 20043: The Mufti is trampled by a peasant mob (Gets away, Is wounded, Is killed)
+character_event = {
+	id = 20043
+	desc = "EVTDESC20043"
+	title = "EVTNAME20043"
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_charity
+		location = {
+			religion = ROOT
+			owner = { same_realm = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			learning = 10
+		}
+		modifier = {
+			factor = 1.25
+			learning = 11
+		}
+		modifier = {
+			factor = 1.25
+			learning = 12
+		}
+		modifier = {
+			factor = 1.25
+			learning = 13
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor =0.75
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 2.0
+			religion_authority = 0.8
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20043"
+		random_list = {
+			50 = { character_event = { id = 20044 tooltip = "EVTTOOLTIP20020" } }
+			40 = { character_event = { id = 20045 tooltip = "EVTTOOLTIP20021" } }
+			10 = {
+				hidden_tooltip = {
+					liege = { character_event = { id = 20047 } }
+				}
+				death = {
+					death_reason = death_rabble
+				}
+			}
+		}
+	}
+}
+
+# 20044: Mufti gets away
+character_event = {
+	id = 20044
+	desc = "EVTDESC20044"
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20044"
+		prestige = -30
+	}
+}
+
+# 20045: Mufti gets wounded
+character_event = {
+	id = 20045
+	desc = "EVTDESC20045"
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20045"
+		add_trait = wounded
+		hidden_tooltip = {
+			liege = { character_event = { id = 20046 days = 7 } }
+		}
+	}
+}
+
+# 20046: Inform the Liege about wounding
+character_event = {
+	id = 20046
+	desc = "EVTDESC20046"
+	picture = GFX_evt_bloody_man
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20046"
+		prestige = -10
+	}
+}
+
+# 20047: Inform the Liege about death
+character_event = {
+	id = 20047
+	desc = "EVTDESC20047"
+	picture = GFX_evt_death
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20047"
+		prestige = -15
+	}
+}
+
+# 20048: The Mufti pockets money meant for the pooor 
+character_event = {
+	id = 20048
+	desc = "EVTDESC20048"
+	title = "EVTNAME20048"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_charity
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+		
+		modifier = {
+			factor = 1.5
+			trait = charitable
+		}
+		modifier = {
+			factor = 1.25
+			trait = just
+		}
+		modifier = {
+			factor = 0.50
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.75
+			trait = envious
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20048"
+		ai_chance = { factor = 80 }
+		wealth = 35
+		hidden_tooltip = {
+			liege = { character_event = { id = 20049 days = 2 } }
+		}
+	}
+	option = {
+		name = "EVTOPTB20048"
+		ai_chance = { factor = 20 }
+		piety = 30
+	}
+}
+
+# 20049: Liege informed about Mufti's theft
+character_event = {
+	id = 20049
+	desc = "EVTDESC20049"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20049"
+		wealth = 35
+		decadence = 10
+	}
+	option = {
+		name = "EVTOPTB20049"
+		FROM = { imprison = yes }
+		piety = 20
+	}
+}
+
+# 20050: Mullah gains piety for the liege
+character_event = {
+	id = 20050
+	desc = "EVTDESC20050"
+	title = "EVTNAME20050"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_charity
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20050"
+		liege = { character_event = { id = 20051 days = 2 tooltip = "EVTTOOLTIP20051" } }
+	}
+}
+
+# 20051: Liege gains piety
+character_event = {
+	id = 20051
+	desc = "EVTDESC20051"
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20051"
+		piety = 15
+	}
+}
+
+##############################
+# COURT CHAPLAIN
+# JOB: action_build_zeal
+##############################
+
+# 20218: The Court Priest has managed to raise an eager force of holy warriors
+character_event = {
+	id = 20218
+	title = EVTNAME20218
+	desc = EVTDESC20218
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_build_zeal
+		liege = {
+			is_adult = yes
+			prisoner = no
+			piety = 10
+			NOT = { trait = incapable }
+			OR = {
+				NOT = { has_character_flag = tribal_build_zeal_troops }
+				had_character_flag = { flag = tribal_build_zeal_troops days = 1825 }
+			}
+			OR = {
+				war = no
+				any_war = {
+					OR = {
+						using_cb = crusade
+						using_cb = religious
+						using_cb = religious_revolt
+						using_cb = pagan_holy_war
+						using_cb = buddhist_holy_war
+						using_cb = muslim_invasion
+						using_cb = manifest_destiny_invasion
+					}
+				}
+			}
+		}
+		location = {
+			county = {
+				is_occupied = no
+			}
+			ROOT = {
+				liege = {
+					is_capital = PREVPREV
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 3.0
+			liege = {
+				tier = count
+			}
+		}
+		
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 9
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 11
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 13
+		}
+	}
+	
+	option = {
+		name = EVTOPTA20218
+		
+		piety = 25
+		hidden_tooltip  = {
+			liege = { character_event = { id = 20219 } }
+		}
+	}
+}
+
+# 20219: The liege is informed
+character_event = {
+	id = 20219
+	desc = EVTDESC20219
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					#leader = none
+					match_character = THIS
+					match_mult = 0.075
+					match_min = 100
+					match_max = 3000
+					attrition = 1.0
+					earmark = tribal_build_zeal
+					disband_on_peace = yes
+					can_toggle_looting = no
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					#leader = none
+					match_character = THIS
+					match_mult = 0.075
+					match_min = 100
+					match_max = 3000
+					attrition = 1.0
+					earmark = tribal_build_zeal
+					disband_on_peace = yes
+					can_toggle_looting = no
+				}
+				spawn_unit = {
+					province = PREV
+					home = PREV
+					owner = THIS
+					#leader = none
+					match_character = THIS
+					match_mult = 0.075
+					match_min = 100
+					match_max = 3000
+					attrition = 1.0
+					earmark = tribal_build_zeal
+					disband_on_peace = yes
+					can_toggle_looting = no
+				}
+			}
+		}
+		
+		clr_character_flag = tribal_build_zeal_troops
+		set_character_flag = tribal_build_zeal_troops
+		
+		character_event = { id = 20220 days = 365 random = 90 }
+	}
+	
+	option = {
+		name = EVTOPTA20219
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 60
+		}
+	}
+}
+
+# 20220: The men are displeased and disband
+character_event = {
+	id = 20220
+	desc = EVTDESC20220
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_earmarked_regiments = tribal_build_zeal
+		
+		NOT = {
+			any_war = {
+				OR = {
+					using_cb = crusade
+					using_cb = religious
+					using_cb = religious_revolt
+					using_cb = pagan_holy_war
+					using_cb = buddhist_holy_war
+					using_cb = muslim_invasion
+					using_cb = manifest_destiny_invasion
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA20220
+		piety = -25
+		clr_character_flag = tribal_build_zeal_troops
+		disband_event_forces = tribal_build_zeal
+	}
+}

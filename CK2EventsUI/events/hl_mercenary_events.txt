@@ -1,0 +1,2094 @@
+###########################################
+#                                         #
+# Horse Lords Mercenaries Events  		  #
+#                                         #
+# ID HL.10000-HL.10999     	              #
+#                                         #
+###########################################
+
+# 10100 - 10199 Military Education
+# 10200 - 10299 Trait development
+# 10300 - 10399 Prestigious events
+# 10400 - 10499 Religious Events
+# 10500 - 10599 Relationship events
+# 10600 - 10699 Education events
+# 10700 - 10799 External notification events
+
+# Written by Henrik "Groogy" Hansson
+
+namespace = HL
+
+### Improve on military education
+character_event = {
+	id = HL.10100
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		OR = {
+			trait = misguided_warrior
+			trait = tough_soldier
+			trait = skilled_tactician	
+		}
+	}
+	
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10101 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		if = {	 # In case daddy is dead
+			limit = {
+				trait = misguided_warrior
+			}
+			remove_trait = misguided_warrior
+			add_trait = tough_soldier
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = tough_soldier
+			}
+			remove_trait = tough_soldier
+			add_trait = skilled_tactician
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = skilled_tactician
+			}
+			remove_trait = skilled_tactician
+			add_trait = brilliant_strategist
+			break = yes
+		}
+	}
+}
+
+### Notify band creator of education change
+character_event = {
+	id = HL.10101
+	desc = EVTDESC_HL_10101
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10101"
+		FROM = {
+			if = {
+				limit = {
+					trait = misguided_warrior
+				}
+				remove_trait = misguided_warrior
+				add_trait = tough_soldier
+				break = yes
+			}
+			if = {
+				limit = {
+					trait = tough_soldier
+				}
+				remove_trait = tough_soldier
+				add_trait = skilled_tactician
+				break = yes
+			}
+			if = {
+				limit = {
+					trait = skilled_tactician
+				}
+				remove_trait = skilled_tactician
+				add_trait = brilliant_strategist
+				break = yes
+			}
+		}
+	}
+}
+
+### Mercenary captain stop being a silly coward
+character_event = {
+	id = HL.10200
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		trait = craven
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10201 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		remove_trait = craven # In case daddy is dead
+	}
+}
+
+### Notify band creator of craven removal
+character_event = {
+	id = HL.10201
+	desc = EVTDESC_HL_10201
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10201"
+		FROM = {
+			remove_trait = craven
+		}
+	}
+}
+
+### Mercenary captain becomes brave
+character_event = {
+	id = HL.10210
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = craven }
+		NOT = { trait = brave }
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10211 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		add_trait = brave # In case daddy is dead
+	}
+}
+
+### Notify band creator of brave added
+character_event = {
+	id = HL.10211
+	desc = EVTDESC_HL_10211
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10211"
+		FROM = {
+			add_trait = brave
+		}
+	}
+}
+
+### Mercenary captain becomes diligent
+character_event = {
+	id = HL.10220
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = diligent }
+		NOT = { trait = slothful }
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10221 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		add_trait = diligent # In case daddy is dead
+	}
+}
+
+### Notify band creator of brave added
+character_event = {
+	id = HL.10221
+	desc = EVTDESC_HL_10221
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10221"
+		FROM = {
+			add_trait = diligent
+		}
+	}
+}
+
+### Mercenary captain stopped being kind
+character_event = {
+	id = HL.10230
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		trait = kind
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10231 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		remove_trait = kind # In case daddy is dead
+	}
+}
+
+### Notify band creator of kind removed
+character_event = {
+	id = HL.10231
+	desc = EVTDESC_HL_10231
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10231"
+		FROM = {
+			remove_trait = kind
+		}
+	}
+}
+
+### Mercenary captain stops being humble
+character_event = {
+	id = HL.10240
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		trait = humble
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10241 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		remove_trait = humble # In case daddy is dead
+	}
+}
+
+### Notify band creator of humble removed
+character_event = {
+	id = HL.10241
+	desc = EVTDESC_HL_10241
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10241"
+		FROM = {
+			remove_trait = humble
+		}
+	}
+}
+
+### Mercenary captain becomes lustful
+character_event = {
+	id = HL.10250
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = lustful }
+		NOT = { trait = chaste }
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10251 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		add_trait = lustful # In case daddy is dead
+	}
+}
+
+### Notify band creator of lustful added
+character_event = {
+	id = HL.10251
+	desc = EVTDESC_HL_10251
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10251"
+		FROM = {
+			add_trait = lustful
+		}
+	}
+}
+
+### Mercenary captain becomes very angry
+character_event = {
+	id = HL.10260
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = wroth }
+		NOT = { trait = patient }
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10261 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		add_trait = wroth # In case daddy is dead
+	}
+}
+
+### Notify band creator of wroth added
+character_event = {
+	id = HL.10261
+	desc = EVTDESC_HL_10261
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10261"
+		FROM = {
+			add_trait = wroth
+		}
+	}
+}
+
+### Mercenary captain becomes cruel
+character_event = {
+	id = HL.10270
+	
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = cruel }
+		NOT = { trait = kind }
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10271 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		add_trait = cruel # In case daddy is dead
+	}
+}
+
+### Notify band creator of cruel added
+character_event = {
+	id = HL.10271
+	desc = EVTDESC_HL_10271
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10271"
+		FROM = {
+			add_trait = cruel
+		}
+	}
+}
+
+### Fighting a great commander
+character_event = {
+	id = HL.10300
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		OR = {
+			NOT = { has_character_flag = fought_great_commander }
+			had_character_flag = { flag = fought_great_commander days = 180 }
+		}
+
+		FROM = {
+			OR = {
+				martial = 15
+				has_nickname = yes
+				higher_tier_than = DUKE
+				prestige = 2500
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = fought_great_commander
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10301 } # Notify daddy about progress
+					break = yes
+				}
+			}
+		}
+		prestige = 100
+	}
+}
+
+### Notify band creator of awesome fight with prestigious commander
+character_event = {
+	id = HL.10301
+	desc = EVTDESC_HL_10301
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10301"
+		FROM = {
+			prestige = 100
+		}
+	}
+}
+
+### Mercenary captain starts to gain sympathy for local religion
+character_event = {
+	id = HL.10400
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = zealous }
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0
+			primary_title = {
+				capital_scope = {
+					owner = {
+						religion_group = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_friend = ROOT
+			}
+		}
+
+		modifier = {
+			factor = 2
+			primary_title = {
+				capital_scope = {
+					owner = {
+						NOT = { religion_group = ROOT }
+						is_friend = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		primary_title = {
+			capital_scope = {
+				save_event_target_as = merc_location
+			}
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10401 }
+					break = yes
+				}
+			}
+		}
+		clear_event_target = merc_location
+	}
+}
+
+character_event = {
+	id = HL.10401
+	desc = EVTDESC_HL_10401
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10401"
+		event_target:merc_location = {
+			owner = {
+				trigger_switch = {
+					on_trigger = religion_group
+					christian 			= { FROM = { add_trait = sympathy_christendom } }
+					muslim 				= { FROM = { add_trait = sympathy_islam } }
+					pagan_group 		= { FROM = { add_trait = sympathy_pagans } }
+					zoroastrian_group 	= { FROM = { add_trait = sympathy_zoroastrianism } }
+					jewish_group 		= { FROM = { add_trait = sympathy_judaism } }
+					indian_group 		= { FROM = { add_trait = sympathy_indian } }
+				}
+			}
+		}
+	}
+}
+
+### Mercenary captain converts to local religion
+character_event = {
+	id = HL.10410
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = zealous }
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0
+			primary_title = {
+				capital_scope = {
+					owner = {
+						religion = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_friend = ROOT
+			}
+		}
+
+		modifier = {
+			factor = 2
+			primary_title = {
+				capital_scope = {
+					owner = {
+						NOT = { religion = ROOT }
+						is_friend = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 4
+			primary_title = {
+				capital_scope = {
+					owner = {
+						OR = {
+							AND = {
+								religion_group = christian
+								ROOT = {
+									trait = sympathy_christendom
+								}
+							}
+							AND = {
+								religion_group = muslim
+								ROOT = {
+									trait = sympathy_islam
+								}
+							}
+							AND = {
+								religion_group = pagan_group
+								ROOT = {
+									trait = sympathy_pagans
+								}
+							}
+							AND = {
+								religion_group = zoroastrian_group
+								ROOT = {
+									trait = sympathy_zoroastrianism
+								}
+							}
+							AND = {
+								religion_group = jewish_group
+								ROOT = {
+									trait = sympathy_judaism
+								}
+							}
+							AND = {
+								religion_group = indian_group
+								ROOT = {
+									trait = sympathy_indian
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		primary_title = {
+			capital_scope = {
+				save_event_target_as = merc_location
+			}
+		}
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10411 }
+					break = yes
+				}
+			}
+		}
+		clear_event_target = merc_location
+	}
+}
+
+character_event = {
+	id = HL.10411
+	desc = EVTDESC_HL_10411
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10411"
+		event_target:merc_location = {
+			owner = {
+				FROM = {
+					unsafe_religion = PREV
+
+					random_list = {
+						10 = {
+							add_trait = zealous
+						}
+						90 = {
+						}
+					}
+
+					if = {
+						limit = {
+							ROOT = {
+								NOT = { trait = zealous }
+								NOT = { religion_group = PREVPREV }
+							}
+						}
+						ROOT = {
+							if = { limit = { trait = sympathy_christendom } remove_trait = sympathy_christendom }
+							if = { limit = { trait = sympathy_islam } remove_trait = sympathy_islam }
+							if = { limit = { trait = sympathy_pagans } remove_trait = sympathy_pagans }
+							if = { limit = { trait = sympathy_zoroastrianism } remove_trait = sympathy_zoroastrianism }
+							if = { limit = { trait = sympathy_judaism } remove_trait = sympathy_judaism }
+							if = { limit = { trait = sympathy_indian } remove_trait = sympathy_indian }
+						}
+						random_list = {
+							25 = {}
+							75 = {
+								PREV = {
+									trigger_switch = {
+										on_trigger = religion_group
+										christian 			= { ROOT = { add_trait = sympathy_christendom } }
+										muslim 				= { ROOT = { add_trait = sympathy_islam } }
+										pagan_group 		= { ROOT = { add_trait = sympathy_pagans } }
+										zoroastrian_group 	= { ROOT = { add_trait = sympathy_zoroastrianism } }
+										jewish_group 		= { ROOT = { add_trait = sympathy_judaism } }
+										indian_group 		= { ROOT = { add_trait = sympathy_indian } }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Seduction event between captain and child of employer
+character_event = {
+	id = HL.10500
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = chaste }
+		NOT = { trait = celibate }
+
+		primary_title = {
+			capital_scope = {
+				owner = {
+					any_courtier = {
+						prisoner = no
+						is_landed = no
+						is_married = no
+						has_lover = no
+						is_consort = no
+						is_adult = yes
+						NOT = { trait = celibate }
+						OR = {
+							is_child_of = PREV
+							martial = 20
+							diplomacy = 20
+							intrigue = 20
+							stewardship = 20
+							learning = 20
+						}
+						OR = { 
+							AND = {
+								is_opposite_sex = ROOT
+								NOT = { trait = homosexual }
+								ROOT = {
+									NOT = { trait = homosexual }
+								}
+							}
+							AND = {
+								NOT = { is_opposite_sex = ROOT }
+								trait = homosexual
+								ROOT = {
+									trait = homosexual
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 2
+			trait = lustful
+		}
+
+		modifier = {
+			factor = 2
+			trait = hedonist
+		}
+
+		modifier = {
+			factor = 2
+			trait = seducer
+		}
+
+		modifier = {
+			factor = 1.5
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			primary_title = {
+				capital_scope = {
+					owner = {
+						any_liege = {
+							is_friend = ROOT
+						}
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			mercenary_employer = {
+				is_friend = ROOT
+			}
+		}
+	}
+
+	immediate = {
+		primary_title = {
+			capital_scope = {
+				owner = {
+					any_courtier = {
+						limit = {
+							prisoner = no
+							is_landed = no
+							is_married = no
+							has_lover = no
+							is_consort = no
+							is_adult = yes
+							NOT = { trait = celibate }
+							OR = {
+								is_child_of = PREV
+								martial = 20
+								diplomacy = 20
+								intrigue = 20
+								stewardship = 20
+								learning = 20
+							}
+							OR = { 
+								AND = {
+									is_opposite_sex = ROOT
+									NOT = { trait = homosexual }
+									ROOT = {
+										NOT = { trait = homosexual }
+									}
+								}
+								AND = {
+									NOT = { is_opposite_sex = ROOT }
+									trait = homosexual
+									ROOT = {
+										trait = homosexual
+									}
+								}
+							}
+						}
+
+						save_event_target_as = eloper
+						PREV = {
+							save_event_target_as = eloper_host
+						}
+
+						ROOT = {
+							primary_title = {
+								band_creator = {
+									if = {
+										limit = {
+											is_alive = yes
+										}
+										character_event = { id = HL.10502 }
+									}
+								}
+							}
+						}
+
+						PREV = {
+							character_event = { id = HL.10501 }
+						}
+
+						add_lover = ROOT
+						move_character = ROOT
+						if = {
+							limit = {
+								is_child_of = PREV
+							}
+							PREV = {
+								add_rival = ROOT
+							}
+						}
+
+						break = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# Notify daddy about eloping
+character_event = {
+	id = HL.10501
+	desc = {
+		text = EVTDESC_HL_10501
+		trigger = {
+			event_target:eloper = {
+				is_child_of = ROOT
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_HL_10501B
+		trigger = {
+			event_target:eloper = {
+				NOT = { is_child_of = ROOT }
+			}
+		}
+	}
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10501"
+		trigger = {
+			event_target:eloper = {
+				reverse_opinion = {
+					who = ROOT
+					value = 0
+				}
+			}
+		}
+	}
+	option = {
+		name = GOOD_RIDDANCE
+		trigger = {
+			event_target:eloper = {
+				NOT = {
+					reverse_opinion = {
+						who = ROOT
+						value = 0
+					}
+				}
+			}
+		}
+	}
+}
+
+# Notify host about eloping
+character_event = {
+	id = HL.10502
+	desc = EVTDESC_HL_10502
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10501"
+		trigger = {
+			event_target:eloper = {
+				reverse_opinion = {
+					who = ROOT
+					value = 0
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			event_target:eloper = {
+				NOT = {
+					reverse_opinion = {
+						who = ROOT
+						value = 0
+					}
+				}
+			}
+		}
+		name = GOOD_RIDDANCE
+	}
+}
+
+### Duel between son of employer and mercenary captain
+character_event = {
+	id = HL.10510
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = kind }
+		NOT = { trait = humble }
+
+		primary_title = {
+			capital_scope = {
+				owner = {
+					any_courtier = {
+						is_landed = no
+						is_female = no
+						is_child_of = PREV
+						is_adult = yes
+					}
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		modifier = {
+			factor = 0.25
+		}
+
+		modifier = {
+			factor = 2
+			trait = wroth
+		}
+
+		modifier = {
+			factor = 2
+			trait = cruel
+		}
+
+		modifier = {
+			factor = 1.5
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			primary_title = {
+				capital_scope = {
+					owner = {
+						any_liege = {
+							is_friend = ROOT
+						}
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.25
+			mercenary_employer = {
+				is_friend = ROOT
+			}
+		}
+	}
+
+	immediate = {
+		primary_title = {
+			capital_scope = {
+				owner = {
+					any_courtier = {
+						count = 1
+						limit = {
+							is_landed = no
+							is_female = no
+							is_child_of = PREV
+							is_adult = yes
+						}
+
+						save_event_target_as = challenger
+
+						ROOT = {
+							random_list = {
+								40 = { # Nothing Happens
+									modifier = {
+										NOT = { combat_rating_diff = { who = PREV value = 0 } }
+										factor = 2
+									}
+									character_event = { id = HL.10511 }
+								}
+								75 = { # Wounded
+									modifier = {
+										combat_rating_diff = { who = PREV value = 3 }
+										factor = 2
+									}
+									modifier = {
+										OR = {
+											trait = maimed
+											trait = wounded
+											trait = severely_injured
+										}
+										factor = 0
+									}
+									character_event = { id = HL.10512 }
+								}
+								25 = { # Maimed
+									modifier = {
+										combat_rating_diff = { who = PREV value = 3 }
+										factor = 2
+									}
+									modifier = {
+										combat_rating_diff = { who = PREV value = 4 }
+										factor = 2
+									}
+									character_event = { id = HL.10513 }
+								}
+								10 = { # Dies
+									modifier = {
+										combat_rating_diff = { who = PREV value = 3 }
+										factor = 2
+									}
+									modifier = {
+										combat_rating_diff = { who = PREV value = 4 }
+										factor = 2
+									}
+									modifier = {
+										combat_rating_diff = { who = PREV value = 5 }
+										factor = 2
+									}
+									character_event = { id = HL.10514 }
+								}
+							}
+						}
+						break = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# Nothing happens result
+character_event = {
+	id = HL.10511
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:challenger = {
+			add_rival = FROM
+			father = {
+				character_event = { id = HL.10515 }
+			}
+		}
+		primary_title = {
+			band_creator = {
+				character_event = { id = HL.10516 }
+			}
+		}
+	}
+}
+
+# Wound result
+character_event = {
+	id = HL.10512
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:challenger = {
+			add_trait = wounded
+			add_rival = ROOT
+			random_list = {
+				50 = {
+				}
+				50 = {
+					father = {
+						add_rival = ROOT
+					}
+				}
+			}
+
+			father = {
+				character_event = { id = HL.10517 }
+			}
+		}
+
+		primary_title = {
+			band_creator = {
+				character_event = { id = HL.10518 }
+			}
+		}
+	}
+}
+
+# Maimed result
+character_event = {
+	id = HL.10513
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:challenger = {
+			add_maimed_trait_effect = yes
+			add_rival = ROOT
+			random_list = {
+				10 = {
+				}
+				90 = {
+					father = {
+						add_rival = ROOT
+					}
+				}
+			}
+			father = {
+				character_event = { id = HL.10519 }
+			}
+		}
+		primary_title = {
+			band_creator = {
+				character_event = { id = HL.10520 }
+			}
+		}
+	}
+}
+
+# Death result
+character_event = {
+	id = HL.10514
+
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:challenger = {
+			father = {
+				add_rival = ROOT
+			}
+			death = { death_reason = death_duel killer = ROOT }
+
+			father = {
+				character_event = { id = HL.10521 }
+			}
+		}
+		primary_title = {
+			band_creator = {
+				character_event = { id = HL.10522 }
+			}
+		}
+	}
+}
+
+# Notify daddy about nothing happening duel
+character_event = {
+	id = HL.10515
+	desc = EVTDESC_HL_10515
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10515"
+		event_target:challenger = {}
+	}
+}
+
+# Notify band creator about nothing happening duel
+character_event = {
+	id = HL.10516
+	desc = EVTDESC_HL_10516
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10516"
+		event_target:challenger = {}
+	}
+}
+
+
+# Notify daddy about wound duel
+character_event = {
+	id = HL.10517
+	desc = EVTDESC_HL_10517
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10517"
+		event_target:challenger = {}
+	}
+}
+
+# Notify band creator about wound duel
+character_event = {
+	id = HL.10518
+	desc = EVTDESC_HL_10518
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10518"
+		event_target:challenger = {}
+	}
+}
+
+# Notify daddy about maimed duel
+character_event = {
+	id = HL.10519
+	desc = EVTDESC_HL_10519
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10517"
+		event_target:challenger = {}
+	}
+}
+
+# Notify band creator about maimed duel
+character_event = {
+	id = HL.10520
+	desc = EVTDESC_HL_10520
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10520"
+		event_target:challenger = {}
+	}
+}
+
+# Notify daddy about death duel
+character_event = {
+	id = HL.10521
+	desc = EVTDESC_HL_10521
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10521"
+		event_target:challenger = {}
+	}
+}
+
+# Notify band creator about death duel
+character_event = {
+	id = HL.10522
+	desc = EVTDESC_HL_10522
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10520"
+		event_target:challenger = {}
+	}
+}
+
+### Possibility to invite mercenary captain to a feast
+character_event = {
+	id = HL.10530
+	desc = EVTDESC_HL_10530
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+
+	trigger = {
+		any_mercenary_band = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			holder_scope = {
+				has_character_flag = is_mercenary_leader
+				NOT = { is_friend = ROOT }
+				NOT = { is_rival = ROOT }
+				NOT = { is_close_relative = ROOT }
+			}
+			capital_scope = {
+				ROOT = {
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+	}
+
+	option = {
+		name = "EVTOPTA_HL_10530"
+		any_mercenary_band = {
+			limit = {
+				NOT = { has_title_flag = ze_dyn_merc }
+				holder_scope = {
+					has_character_flag = is_mercenary_leader
+					NOT = { is_friend = ROOT }
+					NOT = { is_rival = ROOT }
+					NOT = { is_close_relative = ROOT }
+				}
+				capital_scope = {
+					ROOT = {
+						capital_scope = {
+							province = PREVPREV
+						}
+					}
+				}
+			}
+			holder_scope = {
+				character_event = { id = HL.10531 days = 3 }
+			}
+			break = yes
+		}
+	}
+
+	option = {
+		name = "EVTOPTB_HL_10530"
+	}
+}
+
+### Mercenary captain responds
+character_event = {
+	id = HL.10531
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	option = {
+		FROM = {
+			character_event = { id = HL.10532 days = 3 }
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 1.3
+				trait = kind
+			}
+			modifier = {
+				factor = 1.5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value =  25 }
+			}
+			modifier = {
+				factor = 3
+				opinion = { who = FROM value =  50 }
+			}
+		}
+	}
+
+	option = {
+		FROM = {
+			character_event = { id = HL.10533 days = 3 }
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 1.5
+				trait = shy
+			}
+			modifier = {
+				factor = 1.5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 2
+				AND = {
+					trait = zealous
+					NOT = { religion_group = FROM }
+				}
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value =  -25 }
+			}
+			modifier = {
+				factor = 3
+				opinion = { who = FROM value =  -50 }
+			}
+		}
+	}
+}
+
+### Response to feast from mercenary captain is positive
+character_event = {
+	id = HL.10532
+	desc = EVTDESC_HL_10532
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10532"
+		add_friend = FROM
+	}
+}
+
+### Response to feast from mercenary captain is negative
+character_event = {
+	id = HL.10533
+	desc = EVTDESC_HL_10533
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10533"
+	}
+}
+
+### The captain gain mercenary traditions from being on the field
+character_event = {
+	id = HL.10600
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	ai = yes
+	only_rulers = yes
+
+	trigger = {
+		primary_title = {
+			NOT = { has_title_flag = ze_dyn_merc }
+			mercenary = yes
+			band_creator = {
+				is_alive = yes
+			}
+		}
+		has_character_flag = is_mercenary_leader
+		NOT = { trait = craven }
+	}
+
+	weight_multiplier = {
+		days = 1
+	
+		modifier = {
+			factor = 2
+			mercenary_employer = {
+				is_alive = yes
+			}
+		}
+	}
+
+	immediate = {
+		primary_title = {
+			band_creator = {
+				if = {
+					limit = {
+						is_alive = yes
+					}
+					character_event = { id = HL.10601 }
+				}
+			}
+		}
+		if = { # Just to make sure
+			limit = {
+				NOT = { has_character_modifier = mercenary_traditions }
+			}
+			add_character_modifier = { name = mercenary_traditions duration = -1 }
+		}
+	}
+}
+
+### Notifying Daddy about becomming skilled with handling mercenaries
+character_event = {
+	id = HL.10601
+	desc = EVTDESC_HL_10601
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10601"
+		add_character_modifier = { name = mercenary_traditions duration = -1 }
+	}
+}
+
+### Curious about tales from dads past for ward
+character_event = {
+	id = HL.10610
+	desc = EVTDESC_HL_10610
+	picture = GFX_evt_guardian
+	
+	min_age = 6
+	max_age = 16
+	prisoner = no
+	capable_only = yes
+	only_men = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_guardian = yes
+		father = {
+			has_character_modifier = mercenary_traditions
+			primary_title = {
+				mercenary = no
+			}
+		}
+		NOT = { has_character_modifier = mercenary_traditions }
+	}
+
+	option = {
+		name = "EVTOPTA_HL_10610"
+		guardian = {
+			if = {
+				limit = {
+					ROOT = {
+						father = {
+							character = PREVPREV
+						}
+					}
+				}
+				character_event = { id = HL.10612 }
+				break = yes
+			}
+			character_event = { id = HL.10611 }
+		}
+	}
+}
+
+### Non-father guardian event
+character_event = {
+	id = HL.10611
+	desc = EVTDESC_HL_10611
+	picture = GFX_evt_guardian
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10611"
+		FROM = {
+			character_event = { id = HL.10613 }
+		}
+	}
+
+	option = {
+		name = "EVTOPTB_HL_10611"
+		FROM = {
+			character_event = { id = HL.10614 }
+		}
+	}
+}
+
+### Father guardian event
+character_event = {
+	id = HL.10612
+	desc = EVTDESC_HL_10612
+	picture = GFX_evt_guardian
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10611"
+		FROM = {
+			character_event = { id = HL.10613 }
+		}
+	}
+
+	option = {
+		name = "EVTOPTB_HL_10611"
+		FROM = {
+			character_event = { id = HL.10614 }
+		}
+	}
+}
+
+### Ward is told tales of his fathers deeds
+character_event = {
+	id = HL.10613
+	desc = EVTDESC_HL_10613
+	picture = GFX_evt_steppe_mercenaries
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10613"
+		add_character_modifier = { name = mercenary_traditions duration = -1 }
+	}
+}
+
+### Ward is refused the tales of his father
+character_event = {
+	id = HL.10614
+	desc = EVTDESC_HL_10614
+	picture = GFX_evt_guardian
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10614"
+	}
+}
+
+### Notification event for increase in mercenary size
+character_event = {
+	id = HL.10700
+	desc =  EVTDESC_HL_10700
+	picture = GFX_evt_steppe_mercenaries
+	
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10700"
+		custom_tooltip = { text = EVTOPTA_HL_10700_TOOLTIP }
+	}
+}
+
+### Notification event for wasting money on debauchery
+character_event = {
+	id = HL.10701
+	desc = EVTDESC_HL_10701
+	picture = GFX_evt_steppe_mercenaries
+	
+	capable_only = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA_HL_10701"
+		tooltip = {
+			FROM = {
+				wealth = -25
+				prestige = 10
+			}
+		}
+	}
+}

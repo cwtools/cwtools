@@ -1,0 +1,176 @@
+###########################################
+#                                         #
+# War Chest Passive events			      #
+# by Alexander Oltner                     #
+# ID      	              				  #
+#                                         #
+###########################################
+
+namespace = ZE
+
+# Vassal offer donation in return for favor
+character_event = {
+	id = ZE.22000
+	desc = EVTDESC_ZE_22000
+	picture = GFX_evt_bribe_accepted
+	
+	is_triggered_only = yes
+	
+	
+	# Thank you!
+	option = {
+		name = EVTOPTA_ZE_22000
+		
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 5
+				NOT = { wealth = 0 }
+			}
+			
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			
+			modifier = {
+				factor = 2
+				trait = trusting
+			}
+			
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			
+			modifier = {
+				factor = 2
+				NOT = { wealth = 100 }
+				independent = yes
+			}
+		}
+		
+		trigger = {
+			FROM = {
+				NAND = {
+					is_friend = ROOT 
+					ai = yes
+				}
+			}
+		}
+		
+		hidden_tooltip = { 
+			FROM = { character_event = { id = ZE.22100 days = 3 } } 
+		}
+		wealth = 200
+		tooltip = {
+			FROM = {
+				add_favor = ROOT 
+			}
+		}	
+	}
+	
+	# No thanks
+	option = {
+		name = EVTOPTB_ZE_22000
+		
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 5
+				trait = proud
+			}
+			
+			modifier = {
+				factor = 2
+				FROM = { is_councillor = yes }
+			}
+			
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+			
+			modifier = {
+				factor = 2
+				trait = content
+			}
+			
+			modifier = {
+				factor = 2
+				wealth = 300
+				independent = yes
+			}
+		}
+		
+		hidden_tooltip = {
+			FROM = { character_event = { id = ZE.22200 days = 3 } }
+		}
+		
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_insulted
+				years = 3
+			}
+		}
+	}
+	
+	option = { # Thank you, friend!
+		name = EVTOPTC_ZE_22000
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		trigger = {
+			FROM = {
+				is_friend = ROOT 
+				ai = yes
+			}
+		}
+		
+		wealth = 200	
+	}
+}
+
+# Offer accepted
+character_event = {
+	id = ZE.22100
+	desc = EVTDESC_ZE_22100
+	picture = GFX_evt_bribe_accepted
+	
+	is_triggered_only = yes
+	
+	# Offer was accepted
+	option = {
+		name = EXCELLENT
+		
+		ROOT = { 
+			add_favor = FROM 
+		}
+	}
+}
+
+# Offer declined
+character_event = {
+	id = ZE.22200
+	desc = EVTDESC_ZE_22200
+	picture = GFX_evt_bribe_declined
+	
+	is_triggered_only = yes
+	
+	# Too bad
+	option = {
+		name = EVTOPTA_ZE_22200
+		
+		wealth = 200
+		opinion = {
+			who = FROM
+			modifier = opinion_insulted
+			years = 3
+		}
+	}
+}

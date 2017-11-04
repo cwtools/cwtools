@@ -1,0 +1,1023 @@
+################################
+# Steam Achievement Events
+################################
+
+# Viking Raider
+unit_event = {
+	id = 700
+	hide_window = yes
+	
+	ai = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			culture_group = north_germanic
+			OR = {
+				religion = norse_pagan
+				religion = norse_pagan_reformed
+			}
+		}
+		loot = 1000
+	}
+	
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					NOT = { has_character_flag = achievement_viking_raider }
+				}
+				set_character_flag = achievement_viking_raider
+			}
+		}
+	}
+}
+
+# Mr. Doge-Elect
+character_event = {
+	id = 701
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_doge_elect }
+	}
+	
+	immediate = {
+		set_character_flag = achievement_doge_elect
+	}
+}
+
+# Empressive
+character_event = {
+	id = 702
+	hide_window = yes
+	
+	ai = no
+	only_women = yes
+	
+	trigger = {
+		primary_title = { tier = EMPEROR }
+		mother_even_if_dead = {
+			primary_title = { tier = EMPEROR }
+		}
+		mother_even_if_dead = {
+			mother_even_if_dead = {
+				primary_title = { tier = EMPEROR }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_empressive
+	}
+}
+
+# Black Widow
+character_event = {
+	id = 703
+	hide_window = yes
+	
+	ai = no
+	only_women = yes
+	min_age = 16
+	
+	trigger = {
+		any_spouse_even_if_dead = {
+			count = 3
+			is_alive = no
+			killer = { character = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_black_widow
+	}
+}
+
+# The Black Bishop
+character_event = {
+	id = 704
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = bad_priest_christian
+		any_liege = {
+			ai = no
+			reverse_has_opinion_modifier = { who = ROOT modifier = opinion_supported_pope }
+			NOT = { has_character_flag = achievement_black_bishop }
+		}
+	}
+	
+	immediate = {
+		any_liege = {
+			limit = {
+				ai = no
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_supported_pope }
+				NOT = { has_character_flag = achievement_black_bishop }
+			}
+			set_character_flag = achievement_black_bishop
+		}
+	}
+}
+
+# Turbulent Priest
+character_event = {
+	id = 705
+	hide_window = yes
+	
+	is_triggered_only = yes
+	religion = catholic
+	
+	trigger = {
+		is_theocracy = yes
+		killer = {
+			ai = no
+			is_liege_of = ROOT
+			religion = catholic
+			NOT = { has_character_flag = achievement_turbulent_priest }
+		}
+		killer = {
+			rightful_religious_head_scope = {
+				ROOT = {
+					likes_better_than = { 
+						who = PREV
+						than = PREVPREV
+					}
+				}
+			}
+		}	
+	}
+	
+	immediate = {
+		killer = {
+			set_character_flag = achievement_turbulent_priest
+		}
+	}
+}
+
+# Full House
+character_event = {
+	id = 706
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			father = {
+				ai = no
+				NOT = { has_character_flag = achievement_full_house }
+			}
+			mother = { 
+				ai = no 
+				NOT = { has_character_flag = achievement_full_house }
+			}
+		}
+	}
+	
+	immediate = {
+		
+		if = {
+			limit = {
+				father = { 
+					ai = no
+					NOT = { has_character_flag = achievement_full_house }
+					NOT = { check_variable = { which = "bob_saget" value = 4.5 } }
+				}
+			}
+			father = {
+				change_variable = { which = "bob_saget" value = 1 }
+			}
+		}
+		if = {
+			limit = {
+				mother = { 
+					ai = no
+					NOT = { has_character_flag = achievement_full_house }
+					NOT = { check_variable = { which = "bob_saget" value = 4.5 } }
+				}
+			}
+			mother = {
+				change_variable = { which = "bob_saget" value = 1 }
+			}
+		}
+		
+		if = {
+			limit = {
+				father = { 
+					ai = no
+					NOT = { has_character_flag = achievement_full_house }
+					check_variable = { which = "bob_saget" value = 4.5 }
+				}
+			}
+			father = {
+				set_character_flag = achievement_full_house
+			}
+		}
+		if = {
+			limit = {
+				mother = { 
+					ai = no
+					NOT = { has_character_flag = achievement_full_house }
+					check_variable = { which = "bob_saget" value = 4.5 }
+				}
+			}
+			mother = {
+				set_character_flag = achievement_full_house
+			}
+		}
+	}
+}
+
+# Keeping it in the Family
+character_event = {
+	id = 707
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = inbred
+		OR = {
+			father = {
+				ai = no
+				NOT = { has_character_flag = achievement_in_the_family }
+			}
+			mother = {
+				ai = no
+				NOT = { has_character_flag = achievement_in_the_family }
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				father = {
+					ai = no
+					NOT = { has_character_flag = achievement_in_the_family }
+				}
+			}
+			father = { set_character_flag = achievement_in_the_family }
+		}
+		if = {
+			limit = {
+				mother = {
+					ai = no
+					NOT = { has_character_flag = achievement_in_the_family }
+				}
+			}
+			mother = { set_character_flag = achievement_in_the_family }
+		}
+	}	
+}
+
+# The Marriage Game
+character_event = {
+	id = 708
+	hide_window = yes
+	
+	ai = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_get_married }
+	}
+	
+	immediate = {
+		set_character_flag = achievement_get_married
+	}	
+}
+
+# The British Raj
+character_event = {
+	id = 709
+	hide_window = yes
+	
+	ai = no
+	religion_group = indian_group
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_the_british_raj }
+		has_landed_title = e_britannia
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_the_british_raj
+	}	
+}
+
+# Beyond the Indus
+character_event = {
+	id = 710
+
+	hide_window = yes
+	
+	ai = no
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_beyond_the_indus }
+		NOT = { culture_group = indo_aryan_group }
+		NOT = { culture_group = dravidian_group }
+		OR = {
+			has_landed_title = e_rajastan
+			has_landed_title = e_bengal
+			has_landed_title = e_deccan
+			has_landed_title = e_india
+			any_realm_title = {
+				tier = KING
+				de_jure_liege = e_rajastan 
+			}
+			any_realm_title = {
+				tier = KING
+				de_jure_liege = e_bengal 
+			}
+			any_realm_title = {
+				tier = KING
+				de_jure_liege = e_deccan 
+			}
+			any_realm_title = {
+				tier = KING
+				de_jure_liege = e_india 
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_beyond_the_indus
+	}	
+}
+
+# Great Indian Sultanate
+character_event = {
+	id = 711
+	hide_window = yes
+	
+	ai = no
+	religion_group = muslim
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_great_indian_sultanate }
+		OR = {
+			AND = {
+				has_landed_title = e_rajastan
+				NOT = {
+					any_independent_ruler = {
+						any_realm_province = {
+							county = { empire = { title = e_rajastan } }
+							NOT = { religion_group = muslim }
+						}
+					}
+				}
+			}
+			AND = {
+				has_landed_title = e_india
+				NOT = {
+					any_independent_ruler = {
+						any_realm_province = {
+							county = { empire = { title = e_india } }
+							NOT = { religion_group = muslim }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_great_indian_sultanate
+	}	
+}
+
+# Saint Thomas' Dream
+character_event = {
+	id = 712
+	hide_window = yes
+	
+	ai = no
+	religion_group = christian
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_saint_thomas_dream }
+		any_demesne_title = {
+			higher_tier_than = DUKE
+			region = world_india
+			NOT = {
+				any_independent_ruler = {
+					any_realm_province = {
+						county = {
+							OR = {
+								kingdom = { title = PREVPREVPREVPREV }
+								empire = { title = PREVPREVPREVPREV }
+							}
+						}
+						NOT = { religion_group = christian }
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_saint_thomas_dream
+	}	
+}
+
+# What Schism?
+character_event = {
+	id = 713
+	hide_window = yes
+	
+	ai = no
+	religion_group = indian_group
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_what_schism }
+		333 = { # Rome
+			religion = ROOT
+			OR = {
+				owner = { character = ROOT }
+				owner = {
+					top_liege = {
+						character = ROOT
+					}
+				}
+			}
+		}
+		496 = { # Constantinople
+			religion = ROOT
+			OR = {
+				owner = { character = ROOT }
+				owner = {
+					top_liege = {
+						character = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_what_schism
+	}	
+}
+
+# Red Sea Resort
+character_event = {
+	id = 714
+	hide_window = yes
+	
+	ai = no
+	religion_group = indian_group
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_red_sea_resort }
+		719 = { # Mecca
+			religion = ROOT
+			OR = {
+				owner = { character = ROOT }
+				owner = {
+					top_liege = {
+						character = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_red_sea_resort
+	}	
+}
+
+# Looking East and West
+character_event = {
+	id = 715
+	hide_window = yes
+	
+	ai = no
+	
+	trigger = {
+		has_dlc = "Rajas of India"
+		NOT = { has_character_flag = achievement_looking_east_and_west }
+		has_landed_title = e_persia
+		OR = {
+			has_landed_title = e_rajastan
+			has_landed_title = e_india
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_looking_east_and_west
+	}	
+}
+
+# Medieval Schlieffen
+character_event = {
+	id = 716
+	hide_window = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = {
+			culture = mongol
+		}
+		OR = {
+			any_war = {
+				defender = { character = ROOT }
+				attacker = {
+					culture = mongol			
+				}
+			}
+			any_war = {
+				attacker = { character = ROOT }
+				defender = {
+					culture = mongol				
+				}
+			}
+		}
+		OR = {
+			any_war = {
+				defender = { character = ROOT }
+				attacker = { culture = nahuatl }
+			}
+			any_war = {
+				attacker = { character = ROOT }
+				defender = { culture = nahuatl }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_medieval_schlieffen
+	}		
+}
+
+# I'm sorry, Desiderata
+character_event = {
+	id = 717
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		culture = lombard
+		is_female = yes
+		father = { 
+			primary_title = { higher_tier_than = DUKE }
+		}
+		FROM = {
+			ai = no
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			set_character_flag = achievement_desiderata
+		}
+	}	
+}
+
+# Casanova
+character_event = {
+	id = 718
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_casanova }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { check_variable = { which = "casanova_check" value = 9.5 } }
+			}
+			change_variable = { which = "casanova_check" value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = "casanova_check" value = 9.5 }
+			}
+			set_character_flag = achievement_casanova
+		}
+	}
+}
+
+# Mudslinger
+character_event = {
+	id = 719
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_mudslinger }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { check_variable = { which = "mudslinger_check" value = 19.5 } }
+			}
+			change_variable = { which = "mudslinger_check" value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = "mudslinger_check" value = 19.5 }
+			}
+			set_character_flag = achievement_mudslinger
+		}
+	}
+}
+
+# Bring it On
+character_event = {
+	id = 720
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_bring_it_on }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { check_variable = { which = bring_it_on_check value = 6.5 } }
+			}
+			change_variable = { which = bring_it_on_check value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = bring_it_on_check value = 6.5 }
+			}
+			set_character_flag = achievement_bring_it_on
+		}
+	}
+}
+
+# Family Bliss
+character_event = {
+	id = 721
+	hide_window = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_family_bliss }
+		any_close_relative = {
+			count = 6
+			is_friend = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		set_character_flag = achievement_family_bliss
+	}
+}
+
+# Until Death Do Us Part
+character_event = {
+	id = 722
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		killer = {
+			ai = no
+			any_spouse = {
+				character = ROOT
+			}
+		}
+	}
+	
+	immediate = {
+		killer = {
+			if = {
+				limit = {
+					NOT = { has_character_flag = achievement_spouse_killer }
+				}
+				set_character_flag = achievement_spouse_killer 
+			}
+		}
+	}
+}
+
+# Who needs Vasco da Gama? Own all the silk route ports in india as a European merchant republic.
+character_event = {
+	id = 723
+	hide_window = yes
+
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_no_vasco_da_gama }
+		has_dlc = "Horse Lords"
+		is_patrician = yes
+		capital_scope = { 
+			OR = {
+				region = world_europe
+				region = world_asia_minor
+			}
+		}
+		completely_controls = c_debul
+		completely_controls = c_navasarika
+		completely_controls = c_mahoyadapuram
+		completely_controls = c_vijayawada
+		completely_controls = c_candradvipa
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_no_vasco_da_gama
+	}
+}
+
+# Pax Mongolica
+character_event = {
+	id = 724
+	hide_window = yes
+	
+	ai = no
+	
+	trigger = {
+		NOT = { has_character_flag = achievement_pax_mongolica }
+		any_demesne_province = {
+			count = 3
+			trade_post_has_building = tr_silk_road_3
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = achievement_pax_mongolica
+	}
+}
+
+# Just don't point that pointy thing at me! Achievement + flag clearing
+character_event = {
+	id = 725
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {  
+					has_character_flag = is_mercenary_leader
+				}
+				ai = no 
+			}
+			set_character_flag = achievement_pointy_thing
+		}
+		clr_character_flag = is_mercenary_leader
+		clr_character_flag = raiding_adventurer
+	}
+}
+
+# I am the law
+character_event = {
+	id = 726
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { 
+			ai = no
+			NOT = { character = ROOT }
+		}
+	}
+	
+	immediate = {
+		FROM = { set_character_flag = achievement_i_am_the_law }
+	}
+}
+
+# Peace in our time
+character_event = {
+	id = 727
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ai = no
+	}
+	
+	immediate = {
+		set_character_flag = achievement_peace_in_our_time
+	}
+}
+
+# Somebody paid to win
+character_event = {
+	id = 728
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = achievement_someone_paid_to_win
+	}
+}
+
+# Pay to win (Victory)
+character_event = {
+	id = 729
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { 
+			ai = no
+			owns_mercenary_units = yes
+		}
+	}
+	
+	immediate = {
+		FROM = { set_character_flag = achievement_pay_to_win }
+	}
+}
+
+# Pay to win (Reverse Demands)
+character_event = {
+	id = 730
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ai = no
+		owns_mercenary_units = yes
+	}
+	
+	immediate = {
+		set_character_flag = achievement_pay_to_win
+	}
+}
+
+# Eternity Denied (on death check)
+character_event = {
+	id = 731
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Reapers"
+		immortal = yes
+		killer = {
+			has_dlc = "Reapers"
+			ai = no
+			NOT = { has_character_flag = achievement_eternity_denied }
+		}
+	}
+	
+	immediate = {
+		killer = { set_character_flag = achievement_eternity_denied }
+	}
+}
+
+# Papal Mache ping (on death check)
+character_event = {
+	id = 732
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Reapers"
+		OR = {
+			primary_title = { title = k_papal_state }
+			primary_title = { title = d_fraticelli }
+			has_landed_title = d_sunni 
+			has_landed_title = d_shiite
+			has_landed_title = d_ibadi
+			has_landed_title = d_kharijite
+		}
+		death_reason = death_execution_elephants
+		killer = {
+			ai = no
+			NOT = { has_character_flag = achievement_papal_mache }
+		}
+	}
+	
+	immediate = {
+		killer = { set_character_flag = achievement_papal_mache }
+	}
+}
+
+# Hospitable, build a hospital
+character_event = {
+	id = 733
+	hide_window = yes
+	
+	ai = no
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Reapers"
+		NOT = { has_character_flag = achievement_hospitable }
+	}
+	
+	immediate = {
+		set_character_flag = achievement_hospitable
+	}
+}
+
+# Aptly Named (on death check)
+character_event = {
+	id = 734
+	hide_window = yes
+	
+	is_triggered_only = yes
+	ai = no
+	
+	trigger = {
+		is_ironman = yes
+		has_dlc = "Reapers"
+		trait = has_bubonic_plague
+		death_reason = death_trait
+	}
+	
+	immediate = {
+		set_global_flag = achievement_aptly_named
+	}
+}

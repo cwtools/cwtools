@@ -1,0 +1,2993 @@
+###################################
+#
+# THE OLD GODS 
+# - Mongol Events
+#
+###################################
+
+# Written by Henrik Eklund
+
+namespace = TOG
+
+#######################
+# Mongols sack cities #
+#######################
+
+# Mongols sack Kiev
+narrative_event = {
+	id = TOG.1
+	title = EVTNAME_TOG_001
+	desc = EVTDESC_TOG_001
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Novgorod
+narrative_event = {
+	id = TOG.2
+	title = EVTNAME_TOG_002
+	desc = EVTDESC_TOG_002
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Krakow
+narrative_event = {
+	id = TOG.3
+	title = EVTNAME_TOG_003
+	desc = EVTDESC_TOG_003
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Aachen
+narrative_event = {
+	id = TOG.4
+	title = EVTNAME_TOG_004
+	desc = EVTDESC_TOG_004
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Paris
+narrative_event = {
+	id = TOG.5
+	title = EVTNAME_TOG_005
+	desc = EVTDESC_TOG_005
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack London
+narrative_event = {
+	id = TOG.6
+	title = EVTNAME_TOG_006
+	desc = EVTDESC_TOG_006
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Rome
+narrative_event = {
+	id = TOG.7
+	title = EVTNAME_TOG_007
+	desc = EVTDESC_TOG_007
+	picture = GFX_evt_rome_falls
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Venice
+narrative_event = {
+	id = TOG.8
+	title = EVTNAME_TOG_008
+	desc = EVTDESC_TOG_008
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Constantinople
+narrative_event = {
+	id = TOG.9
+	title = EVTNAME_TOG_009
+	desc = EVTDESC_TOG_009
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Lisbon
+narrative_event = {
+	id = TOG.10
+	title = EVTNAME_TOG_010
+	desc = EVTDESC_TOG_010
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Smolensk
+narrative_event = {
+	id = TOG.11
+	title = EVTNAME_TOG_011
+	desc = EVTDESC_TOG_011
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Prague
+narrative_event = {
+	id = TOG.12
+	title = EVTNAME_TOG_012
+	desc = EVTDESC_TOG_012
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Vienna
+narrative_event = {
+	id = TOG.13
+	title = EVTNAME_TOG_013
+	desc = EVTDESC_TOG_013
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Esztergom
+narrative_event = {
+	id = TOG.14
+	title = EVTNAME_TOG_014
+	desc = EVTDESC_TOG_014
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Athens
+narrative_event = {
+	id = TOG.15
+	title = EVTNAME_TOG_015
+	desc = EVTDESC_TOG_015
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Belgrade
+narrative_event = {
+	id = TOG.16
+	title = EVTNAME_TOG_016
+	desc = EVTDESC_TOG_016
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Baghdad
+narrative_event = {
+	id = TOG.17
+	title = EVTNAME_TOG_017
+	desc = EVTDESC_TOG_017
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Damascus
+narrative_event = {
+	id = TOG.18
+	title = EVTNAME_TOG_018
+	desc = EVTDESC_TOG_018
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Jerusalem
+narrative_event = {
+	id = TOG.19
+	title = EVTNAME_TOG_019
+	desc = EVTDESC_TOG_019
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Alexandria
+narrative_event = {
+	id = TOG.20
+	title = EVTNAME_TOG_020
+	desc = EVTDESC_TOG_020
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Cairo
+narrative_event = {
+	id = TOG.21
+	title = EVTNAME_TOG_021
+	desc = EVTDESC_TOG_021
+	picture = GFX_evt_mongols_pillage_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+# Mongols sack Mecca
+narrative_event = {
+	id = TOG.22
+	title = EVTNAME_TOG_022
+	desc = EVTDESC_TOG_022
+	picture = GFX_evt_mecca_falls_soa
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_001
+		prestige = 100
+	}
+}
+
+##################
+# The Great Hunt #
+##################
+
+### Starting Phase
+
+# Organize the Hunt
+character_event = {
+	id = TOG.100
+	desc = EVTDESC_TOG_100
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_100
+		any_vassal = {
+			limit = {
+				age = 18
+				NOT = { age = 55 }
+				is_female = no
+				prisoner = no
+				war = no
+				higher_tier_than = baron
+				NOT = {
+					trait = incapable
+					trait = wounded
+					is_maimed_trigger = yes
+					trait = infirm
+				}
+			}
+			set_character_flag = do_not_disturb
+			hidden_tooltip = { character_event = { id = TOG.299 days = 100 } } # Safety catch flag clearing
+			character_event = { id = TOG.101 tooltip = EVTTOOLTIP_TOG_101 }
+			hidden_tooltip = { character_event = { id = TOG.103 days = 10 } }
+		}
+		hidden_tooltip = { character_event = { id = TOG.102 days = 10 } }
+	}
+}
+
+# Invitation (Attendance is Mandatory)
+character_event = {
+	id = TOG.101
+	desc = EVTDESC_TOG_101
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA_TOG_101
+		custom_tooltip = { text = nerge_assemble }
+	}
+}
+
+# Khagan informed Hunt Begins!
+character_event = {
+	id = TOG.102
+	desc = EVTDESC_TOG_102
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_102
+		set_character_flag = khagan_holding_nerge
+		custom_tooltip = { 
+			text = nerge_starts
+			hidden_tooltip = {
+				character_event = { id = TOG.150 days = 60 random = 10 }
+			}	
+		}
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_HELD_NERGE
+				picture = GFX_evt_tengri_throneroom_oldgods
+			}
+		}
+	}
+}
+
+# Vassal informed Hunt Begins!
+character_event = {
+	id = TOG.103
+	desc = EVTDESC_TOG_103
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_102
+		set_character_flag = vassal_holding_nerge
+		custom_tooltip = { text = nerge_starts }
+	}
+}
+
+### During Hunt
+
+# Vassal is injured
+character_event = {
+	id = TOG.110
+	desc = EVTDESC_TOG_110
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = vassal_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		days = 380
+		
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = imbecile
+		}
+		modifier = {
+			factor = 1.2
+			martial = 10
+		}
+		modifier = {
+			factor = 1.5
+			martial = 14
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 5 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 15 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 25 }
+		}
+		modifier = {
+			factor = 1.6
+			liege = { num_of_vassals = 30 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_110
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = TOG.111 }
+			}
+		}
+		add_trait = wounded
+	}
+}
+
+# Vassal is injured (Liege informed)
+character_event = {
+	id = TOG.111
+	desc = EVTDESC_TOG_111
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_111
+		tooltip = { FROM = { add_trait = wounded } }
+	}
+}
+
+# Vassal comes to blow with another vassal
+character_event = {
+	id = TOG.119
+	hide_window = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = vassal_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		days = 380
+		
+		modifier = {
+			factor = 0.6
+			trait = wroth
+		}
+		modifier = {
+			factor = 1.4
+			trait = kind
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 5 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 15 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 25 }
+		}
+		modifier = {
+			factor = 1.6
+			liege = { num_of_vassals = 30 }
+		}
+	}
+	
+	immediate = {
+		liege = {
+			random_vassal = {
+				limit = {
+					has_character_flag = vassal_holding_nerge
+					NOT = { character = ROOT }
+				}
+				character_event = { id = TOG.112 }
+			}
+		}
+	}
+}
+
+# Vassal comes to blow with another vassal
+character_event = {
+	id = TOG.112
+	desc = EVTDESC_TOG_112
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_112
+		hidden_tooltip = {
+			liege = { character_event = { id = TOG.113 } }
+			FROM = { character_event = { id = TOG.120 } }
+		}
+		opinion = {
+			modifier = opinion_nerge_rival
+			who = FROM
+		}
+	}
+}
+
+# Vassal comes to blow with another vassal 2
+character_event = {
+	id = TOG.120
+	desc = EVTDESC_TOG_112
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_112
+		opinion = {
+			modifier = opinion_nerge_rival
+			who = FROM
+		}
+	}
+}
+
+# Vassal comes to blow with another vassal (Liege informed)
+character_event = {
+	id = TOG.113
+	desc = EVTDESC_TOG_113
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_113
+		tooltip = {
+			FROM = {
+				opinion = {
+					modifier = opinion_nerge_rival
+					who = FROMFROM
+				}
+			}
+			FROM = {
+				reverse_opinion = {
+					modifier = opinion_nerge_rival
+					who = FROMFROM
+				}
+			}
+		}
+	}
+}
+
+# Vassal's forces let wild game escape
+character_event = {
+	id = TOG.114
+	desc = EVTDESC_TOG_114
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = vassal_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		days = 380
+		
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.8
+			trait = imbecile
+		}
+		modifier = {
+			factor = 1.4
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.2
+			martial = 10
+		}
+		modifier = {
+			factor = 1.5
+			martial = 14
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 5 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 15 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 25 }
+		}
+		modifier = {
+			factor = 1.6
+			liege = { num_of_vassals = 30 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_114
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = TOG.115 }
+			}
+		}	
+	}
+}
+
+# Vassal's forces let wild game escape (Liege informed)
+character_event = {
+	id = TOG.115
+	desc = EVTDESC_TOG_115
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = { # Punish
+		name = EVTOPTA_TOG_115
+		FROM = { 
+			character_event = { id = TOG.116 tooltip = EVTTOOLTIP_TOG_116 } 
+			opinion = {
+				modifier = opinion_punished_nerge
+				who = ROOT
+			}
+		}
+		tooltip = { FROM = { add_trait = wounded } }
+	}
+	option = { # Do not punish
+		name = EVTOPTB_TOG_115
+		FROM = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+			}
+		}
+		random_vassal = {
+			limit = { 
+				has_character_flag = vassal_holding_nerge 
+				NOT = {
+					character = FROM
+					has_opinion_modifier = { who = ROOT modifier = opinion_disappointed }
+				}
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+		random_vassal = {
+			limit = { 
+				has_character_flag = vassal_holding_nerge 
+				NOT = {
+					character = FROM
+					has_opinion_modifier = { who = ROOT modifier = opinion_disappointed }
+				}
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+# Vassal is punished
+character_event = {
+	id = TOG.116
+	desc = EVTDESC_TOG_116
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_116
+		add_trait = wounded
+	}
+}
+
+# Vassal killed animal without permission
+character_event = {
+	id = TOG.117
+	desc = EVTDESC_TOG_117
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = vassal_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		days = 380
+		
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 0.8
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.8
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 0.8
+			trait = imbecile
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 5 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 15 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 25 }
+		}
+		modifier = {
+			factor = 1.6
+			liege = { num_of_vassals = 30 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_117
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = TOG.118 }
+			}
+		}	
+	}
+}
+
+# Vassal killed animal without permission (Liege informed)
+character_event = {
+	id = TOG.118
+	desc = EVTDESC_TOG_118
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = { # Punish
+		name = EVTOPTA_TOG_118
+		FROM = { 
+			character_event = { id = TOG.116 tooltip = EVTTOOLTIP_TOG_116 }
+			opinion = {
+				modifier = opinion_punished_nerge
+				who = ROOT
+			}
+		}
+		tooltip = { FROM = { add_trait = wounded } }
+	}
+	option = { # Do not punish
+		name = EVTOPTB_TOG_118
+		FROM = {
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+			}
+		}
+		random_vassal = {
+			limit = { 
+				has_character_flag = vassal_holding_nerge 
+				NOT = {
+					character = FROM
+					has_opinion_modifier = { who = ROOT modifier = opinion_disappointed }
+				}
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+		random_vassal = {
+			limit = { 
+				has_character_flag = vassal_holding_nerge 
+				NOT = {
+					character = FROM
+					has_opinion_modifier = { who = ROOT modifier = opinion_disappointed }
+				}
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 1
+			}
+		}
+	}
+}
+
+### Hunt Ends
+
+# Animals corralled, Khagan takes first shot
+character_event = {
+	id = TOG.150
+	desc = EVTDESC_TOG_150
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		has_character_flag = khagan_holding_nerge
+	}
+	
+	hide_from = yes
+	
+	immediate = {
+		clr_character_flag = khagan_holding_nerge
+		set_character_flag = khagan_finishing_nerge
+		any_vassal = {
+			limit = {
+				has_character_flag = vassal_holding_nerge
+			}
+			clr_character_flag = vassal_holding_nerge
+			set_character_flag = vassal_finishing_nerge
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_150
+		custom_tooltip = { 
+			text = hunt_animals
+			hidden_tooltip = {
+				any_vassal = {
+					limit = {
+						has_character_flag = vassal_finishing_nerge
+					}
+					character_event = { id = TOG.151 }
+				}
+				if = {
+					limit = { trait = hunter }
+					character_event = { id = TOG.152 days = 2 }
+				}
+				if = {
+					limit = { NOT = { lifestyle_traits = 1 } }
+					random = {
+						chance = 25
+					
+						character_event = { id = TOG.152 days = 2 }
+					}
+				}	
+				character_event = { id = TOG.169 days = 10 }
+			}
+		}
+	}
+}
+
+# Animals corralled, Vassals get their turn
+character_event = {
+	id = TOG.151
+	desc = EVTDESC_TOG_151
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_151
+		custom_tooltip = { 
+			text = hunt_animals
+			hidden_tooltip = {
+				if = {
+					limit = { trait = hunter }
+					character_event = { id = TOG.152 days = 2 }
+				}
+				if = {
+					limit = { NOT = { lifestyle_traits = 1 } }
+					random = {
+						chance = 25
+					
+						character_event = { id = TOG.152 days = 2 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Hunt Over, Character did well
+character_event = {
+	id = TOG.152
+	desc = EVTDESC_TOG_152
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_152
+		if = {
+			limit = {
+				NOT = { lifestyle_traits = 1 }
+				NOT = { has_dlc = "Way of Life" }
+			}
+			add_trait = hunter
+		}
+		prestige = 100
+	}
+}
+
+# Hunt Over, Exceptional Soldier brought to Khagan's attention
+character_event = {
+	id = TOG.158
+	desc = EVTDESC_TOG_158
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = khagan_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = exceptional_soldier }
+	}
+		
+	mean_time_to_happen = {
+		days = 480
+	}
+	
+	option = { # Bring to court
+		name = EVTOPTA_TOG_158
+		set_character_flag = exceptional_soldier
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 26
+			religion = ROOT
+			culture = ROOT
+			trait = diligent
+			trait = quick
+			trait = brave
+			trait = brilliant_strategist
+			attributes = {
+				martial = 10
+			}
+		}
+	}
+	option = { # Leave as soldier
+		name = EVTOPTB_TOG_158
+		set_character_flag = exceptional_soldier
+	}
+}
+
+# Hunt Over, Exceptional Bear Captured
+character_event = {
+	id = TOG.159
+	desc = EVTDESC_TOG_159
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = khagan_holding_nerge
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = pet_bear }
+	}
+		
+	mean_time_to_happen = {
+		days = 480
+	}
+	
+	option = { # Keep as pet
+		name = EVTOPTA_TOG_159
+		set_character_flag = pet_bear
+		custom_tooltip = { text = pet_bear }
+	}
+	option = { # Kill
+		name = EVTOPTB_TOG_159
+		custom_tooltip = { text = dead_bear }
+	}
+}
+
+# Bear attacks courtier (AI event)
+character_event = {
+	id = TOG.168
+	hide_window = yes
+	
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	ai = yes
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		liege = { 
+			has_character_flag = pet_bear
+			NOT = { is_close_relative = ROOT }
+		}
+		NOT = { has_character_flag = pet_bear }
+		host = { 
+			character = liege
+			prisoner = no
+		}
+		is_primary_heir = no
+		is_pretender = no
+		in_command = no
+		NOT = { spouse = { character = host } }
+	}
+	
+	mean_time_to_happen = {
+		months = 680
+	}
+	
+	immediate = {
+		random_list = {
+			33 = {
+				liege = { character_event = { id = TOG.160 } }
+			}
+			33 = {
+				liege = { character_event = { id = TOG.161 } }
+			}
+			33 = {
+				liege = { character_event = { id = TOG.162 } }
+			}
+		}
+	}
+}
+
+# Bear wounds courtier
+character_event = {
+	id = TOG.160
+	desc = EVTDESC_TOG_160
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_160
+		FROM = { add_trait = wounded }
+	}
+}
+
+# Bear maims courtier
+character_event = {
+	id = TOG.161
+	desc = EVTDESC_TOG_161
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_160
+		FROM = { add_maimed_trait_effect = yes }
+	}
+}
+
+# Bear kills courtier
+character_event = {
+	id = TOG.162
+	desc = EVTDESC_TOG_162
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_160
+		FROM = { 
+			death = { death_reason = death_accident_bear }
+		}
+	}
+}
+
+# Visiting dignitaries impressed by bear
+character_event = {
+	id = TOG.163
+	desc = EVTDESC_TOG_163
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = pet_bear
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_163
+		prestige = 200
+	}
+}
+
+# Bear taught to dance
+character_event = {
+	id = TOG.164
+	desc = EVTDESC_TOG_164
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = pet_bear
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		capital_scope = {
+			NOT = { region = world_india }
+			NOT = { region = world_persia }
+		}
+		location = {
+			county = {
+				NOT = { region = world_india }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_164
+		prestige = 200
+	}
+}
+
+# Bear depressed
+character_event = {
+	id = TOG.165
+	desc = EVTDESC_TOG_165
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = pet_bear
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = { # Release
+		name = EVTOPTA_TOG_165
+		custom_tooltip = { text = bear_released }
+		clr_character_flag = pet_bear
+		prestige = -50
+		if = {
+			limit = {
+				NOT = {
+					trait = kind
+					trait = cruel
+				}
+			}
+			add_trait = kind
+			hidden_tooltip = {
+				character_event = {
+					days = 2
+					id = 38268 #Notify Kind
+				}
+			}
+		}
+		if = {
+			limit = { trait = cruel }
+			remove_trait = cruel
+		}
+	}
+	option = { # Keep
+		name = EVTOPTB_TOG_165
+		custom_tooltip = { text = keep_bear }
+		set_character_flag = pet_bear_depressed
+		random = {
+			chance = 33
+				
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event = {
+					days = 2
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+	}
+}
+
+# Bear dies
+character_event = {
+	id = TOG.166
+	desc = EVTDESC_TOG_166
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_character_flag = pet_bear
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+	}
+	
+	mean_time_to_happen = {
+		months = 680
+		
+		modifier = {
+			factor = 0.5
+			has_character_flag = pet_bear_depressed
+		}
+	}
+	
+	option = { #
+		name = EVTOPTA_TOG_166
+		custom_tooltip = { text = bear_passes_away }
+		clr_character_flag = pet_bear
+		clr_character_flag = pet_bear_depressed
+		random = {
+			chance = 20
+				
+			add_trait = depressed
+			hidden_tooltip = {
+				character_event = {
+					days = 2
+					id = 38288 #Notify Depressed
+				}
+			}
+		}
+	}
+}
+
+# Per tradition, Khagan asked to spare remaining animals
+character_event = {
+	id = TOG.169
+	desc = EVTDESC_TOG_169
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		has_character_flag = khagan_finishing_nerge
+	}
+	
+	hide_from = yes
+	
+	option = { # Yes
+		name = EVTOPTA_TOG_169
+		hidden_tooltip = {
+			character_event = { id = TOG.170 days = 5 }
+		}
+		random = {
+			chance = 33
+			
+			if = {
+				limit = {
+					NOT = {
+						trait = kind
+						trait = cruel
+					}
+				}
+				add_trait = kind
+				hidden_tooltip = {
+					character_event = {
+						days = 2
+						id = 38268 #Notify Kind
+					}
+				}
+			}
+		}
+		random = {
+			chance = 33
+			
+			if = {
+				limit = { trait = cruel }
+				remove_trait = cruel
+			}
+		}
+		prestige = 25
+	}
+	option = { # No
+		name = EVTOPTB_TOG_169
+		if = {
+			limit = {
+				NOT = { 
+					trait = cruel
+					trait = kind
+				}
+			}
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event = {
+					days = 2
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+		if = {
+			limit = { trait = kind }
+			remove_trait = kind
+		}
+		hidden_tooltip = {
+			character_event = { id = TOG.170 days = 5 }
+		}
+		prestige = -25
+	}
+}
+
+# Hunt over! Feast can commence! (Liege)
+character_event = {
+	id = TOG.170
+	desc = EVTDESC_TOG_170
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		has_character_flag = khagan_finishing_nerge
+	}
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_170
+		hidden_tooltip = {
+			character_event = { id = TOG.180 days = 25 }
+		}
+		any_vassal = {
+			limit = { has_character_flag = vassal_finishing_nerge }
+			opinion = {
+				modifier = opinion_held_nerge
+				who = ROOT
+			}
+			hidden_tooltip = {
+				character_event = { id = TOG.171 }
+			}
+		}
+	}
+}
+
+# Hunt over! Feast can commence! (Vassals)
+character_event = {
+	id = TOG.171
+	desc = EVTDESC_TOG_170
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_170
+		set_character_flag = nerge_feast_vassal
+	}
+}
+
+# Feast over! The Nerge is completed (Liege)
+character_event = {
+	id = TOG.180
+	desc = EVTDESC_TOG_180
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		has_character_flag = khagan_finishing_nerge
+	}
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_TOG_180
+		clr_character_flag = exceptional_soldier
+		clr_character_flag = khagan_finishing_nerge
+		clr_character_flag = holding_nerge
+		clr_character_flag = do_not_disturb
+		any_vassal = {
+			limit = { has_character_flag = vassal_finishing_nerge }
+			hidden_tooltip = {
+				character_event = { id = TOG.179 }
+				clr_character_flag = vassal_finishing_nerge
+				clr_character_flag = nerge_feast_vassal
+				clr_character_flag = do_not_disturb
+			}
+		}
+		add_character_modifier = {
+			name = morale_from_nerge
+			duration = 730
+		}
+		add_character_modifier = {
+			name = held_nerge_timer
+			duration = 1460
+			hidden = yes
+		}
+	}
+}
+
+# Feast over! The Nerge is completed (Vassal)
+character_event = {
+	id = TOG.179
+	desc = EVTDESC_TOG_180
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_180
+	}
+}
+
+# Nerge abandoned due to war
+character_event = {
+	id = TOG.181
+	desc = EVTDESC_TOG_181
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	culture = mongol
+	has_dlc = "The Old Gods"
+	war = yes
+	
+	trigger = {
+		OR = {
+			has_character_flag = khagan_holding_nerge
+			has_character_flag = khagan_finishing_nerge
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_181
+		clr_character_flag = exceptional_soldier
+		clr_character_flag = khagan_holding_nerge
+		clr_character_flag = khagan_finishing_nerge
+		clr_character_flag = holding_nerge
+		clr_character_flag = do_not_disturb
+		hidden_tooltip = {
+			any_vassal = {
+				limit = {
+					OR = {
+						has_character_flag = vassal_holding_nerge
+						has_character_flag = vassal_finishing_nerge
+					}
+				}
+				character_event = { id = TOG.182 }
+				clr_character_flag = vassal_holding_nerge
+				clr_character_flag = vassal_finishing_nerge
+				clr_character_flag = do_not_disturb
+			}
+		}
+	}
+}
+
+# Nerge abandoned due to war (for vassals)
+character_event = {
+	id = TOG.182
+	desc = EVTDESC_TOG_181
+	picture = GFX_evt_tengri_throneroom_oldgods
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_181
+	}
+}
+
+### Nerge Feast Events
+
+# Drunkard (Guest)
+character_event = {
+	id = TOG.200
+	desc = EVTDESC_TOG_650
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = feast_drunkard }
+		liege = { 
+			has_character_flag = khagan_finishing_nerge
+			NOT = { has_character_flag = feast_drunkard }
+		}
+		trait = drunkard
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_650
+		tooltip_info = drunkard
+		set_character_flag = feast_drunkard
+		hidden_tooltip = {
+			liege = {
+				set_character_flag = feast_drunkard
+				character_event = { id = TOG.201 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+					}
+					character_event = { id = TOG.201 }
+				}
+			}
+		}
+		tooltip = {
+			liege = {
+				if = {
+					limit = { NOT = { trait = drunkard } }
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				if = {
+					limit = { trait = drunkard }
+					opinion = {
+						modifier = opinion_drinking_buddy
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						NOT = { trait = drunkard }
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						trait = drunkard
+					}
+					opinion = {
+						modifier = opinion_drinking_buddy
+						who = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+# Drunkard (Host and Other Guests)
+character_event = {
+	id = TOG.201
+	desc = EVTDESC_TOG_651
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_651
+		trigger = { 
+			NOT = { trait = drunkard } 
+		}
+		opinion = {
+			modifier = opinion_feast_scandal
+			who = FROM
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_651
+		tooltip_info = drunkard
+		trigger = { 
+			trait = drunkard
+		}
+		opinion = {
+			modifier = opinion_drinking_buddy
+			who = FROM
+		}
+	}
+}
+
+# Gluttonous (Victim Hidden)
+character_event = {
+	id = TOG.202
+	hide_window = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		liege = {
+			has_character_flag = khagan_finishing_nerge
+			NOT = { has_character_flag = feast_gluttonous }
+			any_vassal = {
+				has_character_flag = nerge_feast_vassal
+				NOT = { has_character_flag = feast_gluttonous }
+				trait = gluttonous
+				NOT = { character = ROOT }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	immediate = {
+		liege = {
+			set_character_flag = feast_gluttonous
+			random_vassal = {
+				limit = {
+					has_character_flag = nerge_feast_vassal
+					trait = gluttonous
+					NOT = { character = ROOT }
+				}
+				character_event = { id = TOG.203 }
+				set_character_flag = feast_gluttonous
+			}
+		}
+	}
+}
+
+# Gluttonous (Guest)
+character_event = {
+	id = TOG.203
+	desc = EVTDESC_TOG_653
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_653
+		tooltip_info = gluttonous
+		FROM = {
+			character_event = { id = TOG.204 tooltip = EVTTOOLTIP_TOG_654 }
+		}	
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = TOG.205 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { 
+							character = ROOT 
+							character = FROM
+						}
+					}
+					character_event = { id = TOG.205 }
+				}
+			}
+		}
+		tooltip = {
+			FROM = {
+				opinion = {
+					modifier = opinion_vomit
+					who = ROOT
+				}
+			}
+			liege = {
+				opinion = {
+					modifier = opinion_feast_scandal
+					who = ROOT
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { 
+							character = ROOT 
+							character = FROM
+						}
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+# Gluttonous (Victim)
+character_event = {
+	id = TOG.204
+	desc = EVTDESC_TOG_654
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_654
+		opinion = {
+			modifier = opinion_vomit
+			who = FROM
+		}
+	}
+}
+
+# Gluttonous (Host and Other Guests)
+character_event = {
+	id = TOG.205
+	desc = EVTDESC_TOG_655
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_655
+		opinion = {
+			modifier = opinion_feast_scandal
+			who = FROM
+		}
+	}
+}
+
+# Lunatic (Guest)
+character_event = {
+	id = TOG.206
+	desc = EVTDESC_TOG_656
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = feast_lunatic }
+		liege = { 
+			has_character_flag = khagan_finishing_nerge
+			NOT = { has_character_flag = feast_lunatic }
+		}
+		trait = lunatic
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_656
+		tooltip_info = lunatic
+		set_character_flag = feast_lunatic
+		hidden_tooltip = {
+			liege = {
+				set_character_flag = feast_lunatic
+				character_event = { id = TOG.207 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+					}
+					character_event = { id = TOG.207 }
+				}
+			}
+		}
+		tooltip = {
+			liege = {
+				if = {
+					limit = { NOT = { trait = lunatic } }
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				if = {
+					limit = { trait = lunatic }
+					opinion = {
+						modifier = opinion_feast_friend
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						NOT = { trait = lunatic }
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						trait = lunatic
+					}
+					opinion = {
+						modifier = opinion_feast_friend
+						who = ROOT
+					}
+				}
+			}
+		}	
+	}
+}
+
+# Lunatic (Host and Other Guests)
+character_event = {
+	id = TOG.207
+	desc = EVTDESC_TOG_657
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_657
+		trigger = {
+			NOT = { trait = lunatic }
+		}
+		opinion = {
+			modifier = opinion_feast_scandal
+			who = ROOT
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_657
+		tooltip_info = lunatic
+		trigger = {
+			trait = lunatic
+		}
+		opinion = {
+			modifier = opinion_feast_friend
+			who = ROOT
+		}
+	}
+}
+
+# Lustful (Guest)
+character_event = {
+	id = TOG.208
+	desc = EVTDESC_TOG_658
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = feast_lustful }
+		liege = { 
+			has_character_flag = khagan_finishing_nerge
+			NOT = { has_character_flag = feast_lustful }
+		}
+		trait = lustful
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_658
+		tooltip_info = lustful
+		set_character_flag = feast_lustful
+		trigger = {
+			is_married = no
+		}
+		hidden_tooltip = {
+			liege = {
+				set_character_flag = feast_lustful
+				character_event = { id = TOG.209 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+					}
+					character_event = { id = TOG.209 }
+				}
+			}
+		}
+		tooltip = {
+			liege = {
+				if = {
+					limit = { NOT = { trait = lustful } }
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				if = {
+					limit = { trait = lustful }
+					opinion = {
+						modifier = opinion_lustful_buddy
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						NOT = { trait = lustful }
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						trait = lustful
+					}
+					opinion = {
+						modifier = opinion_lustful_buddy
+						who = ROOT
+					}
+				}
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTB_TOG_658
+		tooltip_info = lustful
+		set_character_flag = feast_lustful
+		trigger = {
+			is_married = yes
+		}
+		hidden_tooltip = {
+			liege = {
+				set_character_flag = feast_lustful
+				character_event = { id = TOG.209 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+					}
+					character_event = { id = TOG.209 }
+				}
+			}
+		}
+		tooltip = {
+			liege = {
+				if = {
+					limit = { NOT = { trait = lustful } }
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				if = {
+					limit = { trait = lustful }
+					opinion = {
+						modifier = opinion_lustful_buddy
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						NOT = { trait = lustful }
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						trait = lustful
+					}
+					opinion = {
+						modifier = opinion_lustful_buddy
+						who = ROOT
+					}
+				}
+			}
+			any_spouse = {
+				opinion = {
+					modifier = opinion_mad_as_hell
+					who = ROOT
+					years = 1
+				}
+			}
+		}	
+	}
+}
+
+# Lustful (Host and Other Guests)
+character_event = {
+	id = TOG.209
+	desc = EVTDESC_TOG_659
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_659
+		trigger = {
+			NOT = { trait = lustful }
+			NOT = { any_spouse = { character = FROM } }
+		}
+		opinion = {
+			modifier = opinion_feast_scandal
+			who = FROM
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_659
+		tooltip_info = lustful
+		trigger = {
+			trait = lustful
+			NOT = { any_spouse = { character = FROM } }
+		}
+		opinion = {
+			modifier = opinion_lustful_buddy
+			who = FROM
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_659
+		trigger = {
+			any_spouse = { character = FROM }
+		}
+		opinion = {
+			modifier = opinion_mad_as_hell
+			who = FROM
+			years = 1
+		}
+	}
+}
+
+# Friendship Formed (Guest 1 Hidden)
+character_event = {
+	id = TOG.210
+	hide_window = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = feast_friendship }
+		liege = { 
+			has_character_flag = khagan_finishing_nerge
+			any_vassal = {
+				has_character_flag = nerge_feast_vassal
+				NOT = { has_character_flag = feast_friendship }
+				NOT = { character = ROOT }
+				opinion = { who = ROOT value =  20 }
+			}		
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = feast_friendship
+		liege = { 
+			random_vassal = {
+				limit = {
+					has_character_flag = nerge_feast_vassal
+					NOT = { character = ROOT }
+					opinion = { who = ROOT value =  20 }
+				}
+				character_event = { id = TOG.211 }
+				set_character_flag = feast_friendship
+				opinion = {
+					modifier = opinion_feast_friend
+					who = ROOT
+				}
+				reverse_opinion = {
+					modifier = opinion_feast_friend
+					who = ROOT
+				}
+			}		
+		}
+	}
+}
+
+# Friendship Formed (Guest 2)
+character_event = {
+	id = TOG.211
+	desc = EVTDESC_TOG_661
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_661
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = TOG.212 }
+			}
+		}
+		tooltip = {
+			FROM = {
+				opinion = {
+					modifier = opinion_feast_friend
+					who = ROOT
+				}
+			}
+			opinion = {
+				modifier = opinion_feast_friend
+				who = FROM
+			}
+		}
+	}
+}
+
+# Friendship Formed (Guest 1)
+character_event = {
+	id = TOG.212
+	desc = EVTDESC_TOG_661
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_661
+		tooltip = {
+			FROM = {
+				opinion = {
+					modifier = opinion_feast_friend
+					who = ROOT
+				}
+			}
+			opinion = {
+				modifier = opinion_feast_friend
+				who = FROM
+			}
+		}
+	}
+}
+
+# Homosexual Male (Guest 1 Hidden)
+character_event = {
+	id = TOG.213
+	hide_window = yes
+	
+	only_playable = yes
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	only_capable = yes
+	has_character_flag = nerge_feast_vassal
+	
+	trigger = {
+		has_dlc = "The Old Gods"
+		NOT = { has_character_flag = feast_homosexual }
+		trait = homosexual
+		is_female = no
+		has_lover = no
+		liege = { 
+			has_character_flag = khagan_finishing_nerge
+			NOT = { has_character_flag = feast_homosexual }
+			any_vassal = {
+				has_character_flag = nerge_feast_vassal
+				NOT = { has_character_flag = feast_homosexual }
+				NOT = { character = ROOT }
+				opinion = { who = ROOT value =  0 }
+				trait = homosexual
+				is_female = no
+				has_lover = no
+			}		
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 40
+		
+		modifier = {
+			factor = 1.1
+			liege = { num_of_vassals = 10 }
+		}
+		modifier = {
+			factor = 1.2
+			liege = { num_of_vassals = 20 }
+		}
+		modifier = {
+			factor = 1.3
+			liege = { num_of_vassals = 30 }
+		}
+		modifier = {
+			factor = 1.4
+			liege = { num_of_vassals = 40 }
+		}
+		modifier = {
+			factor = 1.5
+			liege = { num_of_vassals = 50 }
+		}
+		modifier = {
+			factor = 3
+			liege = { num_of_vassals = 100 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = feast_homosexual
+		liege = { 
+			set_character_flag = feast_homosexual
+			random_vassal = {
+				limit = {
+					has_character_flag = nerge_feast_vassal
+					NOT = { has_character_flag = feast_homosexual }
+					NOT = { character = ROOT }
+					opinion = { who = ROOT value =  0 }
+					trait = homosexual
+					is_female = no
+				}
+				character_event = { id = TOG.214 }
+				add_lover = ROOT
+				set_character_flag = feast_homosexual
+			}		
+		}
+	}
+}
+
+# Homosexual Male (Guest 2)
+character_event = {
+	id = TOG.214
+	desc = EVTDESC_TOG_664
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_664
+		tooltip_info = homosexual
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = TOG.215 }
+			}
+			liege = {
+				character_event = { id = TOG.220 }
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = {
+							character = ROOT
+							character = FROM
+						}
+					}
+					character_event = { id = TOG.220 }
+				}
+			}
+		}
+		tooltip = {
+			random = {
+				chance = 50
+				character_event = { id = TOG.219 tooltip = EVTTOOLTIP_TOG_669 }
+			}
+			add_lover = FROM
+		}
+	}
+}
+
+# Homosexual Male (Guest 1)
+character_event = {
+	id = TOG.215
+	desc = EVTDESC_TOG_664
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_664
+		tooltip_info = homosexual
+		random = {
+			chance = 50
+			character_event = { id = TOG.219 tooltip = EVTTOOLTIP_TOG_669 }
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = TOG.219 }
+				}
+			}
+		}
+		tooltip = {
+			add_lover = FROM
+		}
+	}
+}
+
+## Homosexual Female (Guest 1 Hidden)
+#character_event = {
+#	id = TOG.216
+#	hide_window = yes
+#	
+#	only_playable = yes
+#	only_women = yes
+#	min_age = 16
+#	prisoner = no
+#	only_capable = yes
+#	has_character_flag = nerge_feast_vassal
+#	
+#	trigger = {
+#		has_dlc = "The Old Gods"
+#		NOT = { has_character_flag = feast_homosexual }
+#		trait = homosexual
+#		is_female = yes
+#		has_lover = no
+#		liege = { 
+#			NOT = { has_character_flag = feast_homosexual }
+#			has_character_flag = khagan_finishing_nerge
+#			any_vassal = {
+#				has_character_flag = nerge_feast_vassal
+#				NOT = { has_character_flag = feast_homosexual }
+#				NOT = { character = ROOT }
+#				opinion = { who = ROOT value =  0 }
+#				trait = homosexual
+#				is_female = yes
+#				has_lover = no
+#			}		
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 40
+#		
+#		modifier = {
+#			factor = 1.1
+#			liege = { num_of_vassals = 10 }
+#		}
+#		modifier = {
+#			factor = 1.2
+#			liege = { num_of_vassals = 20 }
+#		}
+#		modifier = {
+#			factor = 1.3
+#			liege = { num_of_vassals = 30 }
+#		}
+#		modifier = {
+#			factor = 1.4
+#			liege = { num_of_vassals = 40 }
+#		}
+#		modifier = {
+#			factor = 1.5
+#			liege = { num_of_vassals = 50 }
+#		}
+#		modifier = {
+#			factor = 3
+#			liege = { num_of_vassals = 100 }
+#		}
+#	}
+#	
+#	immediate = {
+#		set_character_flag = feast_homosexual
+#		liege = { 
+#			set_character_flag = feast_homosexual
+#			random_vassal = {
+#				limit = {
+#					has_character_flag = nerge_feast_vassal
+#					NOT = { has_character_flag = feast_homosexual }
+#					NOT = { character = ROOT }
+#					opinion = { who = ROOT value =  0 }
+#					trait = homosexual
+#					is_female = yes
+#				}
+#				character_event = { id = TOG.217 }
+#				set_character_flag = feast_homosexual
+#				add_lover = ROOT
+#			}		
+#		}
+#	}
+#}
+#
+## Homosexual Female (Guest 2)
+#character_event = {
+#	id = TOG.217
+#	desc = EVTDESC_TOG_664
+#	picture = GFX_evt_viking_throneroom_oldgods
+#	border = GFX_event_normal_frame_diplomacy
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = EVTOPTA_TOG_664
+#		tooltip_info = homosexual
+#		hidden_tooltip = {
+#			FROM = {
+#				character_event = { id = TOG.218 }
+#			}
+#			liege = {
+#				character_event = { id = TOG.220 }
+#				any_vassal = {
+#					limit = {
+#						has_character_flag = nerge_feast_vassal
+#						NOT = {
+#							character = ROOT
+#							character = FROM
+#						}
+#					}
+#					character_event = { id = TOG.220 }
+#				}
+#			}			
+#		}
+#		tooltip = {
+#			random = {
+#				chance = 50
+#				character_event = { id = TOG.219 tooltip = EVTTOOLTIP_TOG_669 }
+#			}
+#			add_lover = FROM
+#		}
+#	}
+#}
+#
+## Homosexual Female (Guest 1)
+#character_event = {
+#	id = TOG.218
+#	desc = EVTDESC_TOG_664
+#	picture = GFX_evt_viking_throneroom_oldgods
+#	border = GFX_event_normal_frame_diplomacy
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = EVTOPTA_TOG_664
+#		tooltip_info = homosexual
+#		random = {
+#			chance = 50
+#			character_event = { id = TOG.219 tooltip = EVTTOOLTIP_TOG_669 }
+#			hidden_tooltip = {
+#				FROM = {
+#					character_event = { id = TOG.219 }
+#				}
+#			}
+#		}
+#		tooltip = {
+#			add_lover = FROM
+#		}
+#	}
+#}
+
+# Homosexual Caught
+character_event = {
+	id = TOG.219
+	desc = EVTDESC_TOG_669
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_669
+		tooltip = {
+			liege = {
+				if = {
+					limit = { NOT = { trait = homosexual } }
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				if = {
+					limit = { trait = homosexual }
+					opinion = {
+						modifier = opinion_homosexual_sympathy
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						NOT = { trait = homosexual }
+					}
+					opinion = {
+						modifier = opinion_feast_scandal
+						who = ROOT
+					}
+				}
+				any_vassal = {
+					limit = {
+						has_character_flag = nerge_feast_vassal
+						NOT = { character = ROOT }
+						trait = homosexual
+					}
+					opinion = {
+						modifier = opinion_homosexual_sympathy
+						who = ROOT
+					}
+				}
+			}
+		}	
+	}
+}
+
+# Homosexual Caught (Host and Other Guests)
+character_event = {
+	id = TOG.220
+	desc = EVTDESC_TOG_670
+	picture = GFX_evt_viking_throneroom_oldgods
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_670
+		trigger = {
+			NOT = { trait = homosexual }
+		}
+		opinion = {
+			modifier = opinion_feast_scandal
+			who = FROM
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_670
+		tooltip_info = homosexual
+		trigger = {
+			trait = homosexual
+		}
+		opinion = {
+			modifier = opinion_homosexual_sympathy
+			who = FROM
+		}
+	}
+}
+
+###########################################
+# Flag management                         #
+###########################################
+
+# Safety catch - clears character flags and modifiers
+character_event = {
+	id = TOG.299
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = do_not_disturb
+		clr_character_flag = khagan_holding_nerge
+		clr_character_flag = vassal_holding_nerge
+		clr_character_flag = khagan_finishing_nerge
+		clr_character_flag = vassal_finishing_nerge
+		clr_character_flag = feast_drunkard
+		clr_character_flag = feast_gluttonous
+		clr_character_flag = feast_friendship
+		clr_character_flag = feast_lunatic
+		clr_character_flag = feast_lustful
+		clr_character_flag = feast_homosexual
+	}
+}

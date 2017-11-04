@@ -1,0 +1,644 @@
+###########################################
+#                                         #
+# ZE Lord Spiritual Events                #
+# ID ZE.5000-ZE.5999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = ZE
+
+
+# Zealous Lord Spiritual asks to go and proselytize among heathens
+character_event = {
+	id = ZE.5000
+	desc = EVTDESC_ZE_5000
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	ai = no
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"		
+		OR = {
+			independent = yes
+			higher_tier_than = DUKE
+		}
+		NOT = { religion_group = pagan_group }
+		job_spiritual = {
+			ai = yes
+			trait = zealous
+			NOR = {
+				trait = craven
+				trait = slothful
+				 has_character_flag = lord_spiritual_wants_to_proselytize_ze
+				has_job_action = action_inquisition
+				is_inaccessible_trigger = yes
+				has_character_flag = do_not_disturb
+			}
+			prisoner = no
+		}
+		any_independent_ruler = {
+			NOT = {
+				religion = ROOT
+				has_opinion_modifier = { who = ROOT modifier = opinion_sent_preacher }
+			}
+			religion_group = pagan_group
+			OR = {
+				NOT = { religion = aztec }
+				year = 1350
+			}
+			is_reformed_religion = no
+			controls_religion = no
+			ROOT = {
+				higher_tier_than = COUNT
+				OR = {
+					independent = yes
+					higher_tier_than = DUKE
+				}
+			}
+			is_within_diplo_range = ROOT
+			is_landed = yes
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			job_spiritual = { trait = brave }
+		}
+		modifier = {
+			factor = 1.5
+			job_spiritual = { trait = diligent }
+		}
+	}
+
+	
+	immediate = {
+		job_spiritual = {
+			set_character_flag = lord_spiritual_wants_to_proselytize_ze
+		}
+		random_independent_ruler = {
+			limit = {
+				NOR = {
+					religion = ROOT
+					has_opinion_modifier = { who = ROOT modifier = opinion_sent_preacher }
+				}
+				religion_group = pagan_group
+				OR = {
+					NOT = { religion = aztec }
+					year = 1350
+				}
+				is_reformed_religion = no
+				controls_religion = no
+				ROOT = {
+					higher_tier_than = COUNT
+					OR = {
+						independent = yes
+						higher_tier_than = DUKE
+					}
+				}
+				is_within_diplo_range = ROOT
+				is_landed = yes
+			}
+			capital_scope = {
+				save_event_target_as = event_ze_5000_province
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5000 # Go ahead
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		job_spiritual = {
+			set_job_action = {
+				action = action_inquisition
+				where = event_target:event_ze_5000_province
+			}
+		}
+		clear_event_target = event_ze_5000_province
+		clr_character_flag = lord_spiritual_wants_to_proselytize_ze
+	}
+	option = {
+		name = EVTOPTB_ZE_5000 # Go ahead
+		trigger = {
+			trait = cynical
+		}
+		job_spiritual = {
+			set_job_action = {
+				action = action_inquisition
+				where = event_target:event_ze_5000_province
+			}
+		}
+		clear_event_target = event_ze_5000_province
+		clr_character_flag = lord_spiritual_wants_to_proselytize_ze
+	}
+	option = {
+		name = EVTOPTC_ZE_5000 # No
+		job_spiritual = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_very_disappointed
+				years = 3
+			}
+		}
+		clear_event_target = event_ze_5000_province
+		clr_character_flag = lord_spiritual_wants_to_proselytize_ze
+	}
+}
+
+# Zealous Lord Spiritual wants to build temple, willing to donate own money
+letter_event = {
+	id = ZE.5010
+	desc = EVTDESC_ZE_5010
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	only_capable = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"
+		wealth = 250
+		any_demesne_province = { has_empty_holding = yes }
+		job_spiritual = {
+			ai = yes
+			trait = zealous
+			wealth = 350
+			NOR = {
+				trait = greedy
+				is_inaccessible_trigger = yes
+				has_character_flag = lord_spiritual_build_temple_ze
+			}
+			prisoner = no
+			opinion = { who = ROOT value = 25 }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			wealth = 1000
+		}
+	}
+	
+	immediate = {
+		job_spiritual = { set_character_flag = lord_spiritual_build_temple_ze }
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5010 # Let's do it
+		wealth = -250
+		job_spiritual = {
+			wealth = -250
+			piety = 100
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 5
+			}		
+		}
+		random_demesne_province = {
+			limit = { has_empty_holding = yes }
+			build_holding = {
+			   type = temple
+			   holder = ROOT
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_5010 # No
+		piety = -30
+	}
+}
+
+# Lord Spiritual on mission turns disloyal and and writes letters home about virtues of enemy religion, converting courtiers...
+character_event = {
+	id = ZE.5020
+	desc = EVTDESC_ZE_5020
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		ai = no
+		job_spiritual = {
+			ai = yes
+			NOT = { opinion = { who = ROOT value = -75 } }
+			has_job_action = action_inquisition
+			NOT = { trait = honest }
+			diplomacy = 10
+			location = { NOT = { religion_group = ROOT } }
+			OR = {
+				trait = cynical
+				trait = sympathy_christendom
+				trait = sympathy_islam
+				trait = sympathy_pagans
+				trait = sympathy_zoroastrianism
+				trait = sympathy_judaism
+				trait = sympathy_indian
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			job_spiritual = { trait = deceitful }
+		}
+		modifier = {
+			factor = 0.5
+			job_spiritual = { trait = craven }
+		}
+	}
+	
+	immediate = {
+		job_spiritual = {
+			set_character_flag = spiritual_reverse_convert_ze_5020
+			location = {
+				save_event_target_as = ze_5020_province
+				trigger_switch = {
+					on_trigger = religion_group
+					christian 			= { PREV = { add_trait = sympathy_christendom } }
+					muslim 				= { PREV = { add_trait = sympathy_islam } }
+					pagan_group 		= { PREV = { add_trait = sympathy_pagans } }
+					zoroastrian_group 	= { PREV = { add_trait = sympathy_zoroastrianism } }
+					jewish_group 		= { PREV = { add_trait = sympathy_judaism } }
+					indian_group 		= { PREV = { add_trait = sympathy_indian } }
+				}
+			}
+		}
+		random_courtier = {
+			limit = {
+				is_ruler = no
+				is_adult = yes
+				religion = ROOT
+				NOR = {
+					trait = zealous
+					is_primary_heir = ROOT
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+				prisoner = no
+			}
+			save_event_target_as = target_courtier
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5020  # Strange, why convert?
+		event_target:target_courtier = {
+			event_target:ze_5020_province = {
+				reverse_religion = PREV
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				80 = {
+					character_event = { id = ZE.5022 days = 100 }  # Convert one more...
+				}
+				20 = {
+					character_event = { id = ZE.5027 days = 100 } # Letters discovered!
+					modifier = {
+						factor = 2
+						attribute_diff = {
+							character = job_spiritual
+							attribute = intrigue
+							value = 4
+						}
+					}
+					modifier = {
+						factor = 2
+						attribute_diff = {
+							character = job_spiritual
+							attribute = intrigue
+							value = 8
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Lord Spiritual continues converting courtiers...
+character_event = {
+	id = ZE.5022
+	desc = EVTDESC_ZE_5022
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_spiritual = {
+			has_job_action = action_inquisition
+			has_character_flag = spiritual_reverse_convert_ze_5020
+			location = {
+				province = event_target:ze_5020_province
+			}
+		}
+	}
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				is_ruler = no
+				is_adult = yes
+				religion = ROOT
+				NOR = {
+					trait = zealous
+					is_primary_heir = ROOT
+					trait = incapable
+					is_inaccessible_trigger = yes
+				}
+				prisoner = no
+			}
+			save_event_target_as = target_courtier
+		}
+		job_spiritual = {
+			save_event_target_as = target_spiritual
+		}
+	}
+
+	option = {
+		name = EVTOPTA_ZE_5022  # Strange, why convert?
+		event_target:target_courtier = {
+			event_target:ze_5020_province = {
+				reverse_religion = PREV
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				80 = {
+					repeat_event = { id = ZE.5022 days = 100 }  # Convert one more...
+				}
+				20 = {
+					character_event = { id = ZE.5027 days = 100 } # Letters discovered!
+					modifier = {
+						factor = 2
+						attribute_diff = {
+							character = event_target:target_spiritual
+							attribute = intrigue
+							value = 4
+						}
+					}
+					modifier = {
+						factor = 2
+						attribute_diff = {
+							character = event_target:target_spiritual
+							attribute = intrigue
+							value = 8
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Lord Spiritual discovered reverse-converting!
+character_event = {
+	id = ZE.5027
+	desc = EVTDESC_ZE_5027
+	picture = GFX_evt_recieve_letter
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_spiritual = {
+			has_character_flag = spiritual_reverse_convert_ze_5020
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5027  # Accuse him of treason!
+		job_spiritual = {
+			remove_title = job_spiritual
+			add_character_modifier = {
+				name = annoyed_religious
+				years = 5
+			}
+			reverse_opinion = {
+				who = ROOT
+				years = 5
+				modifier = opinion_traitor
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_5027  # Depose but forgive him on condition he stops misbehaving.
+		job_spiritual = {
+			remove_title = job_spiritual
+			add_character_modifier = {
+				name = annoyed_religious
+				years = 5
+			}
+		}
+		add_character_modifier = {
+			name = annoyed_religious
+			years = 5
+		}
+	}
+}
+
+
+
+# Abuse of office - charges money from populace for temple favors
+character_event = {
+	id = ZE.5030
+	desc = EVTDESC_ZE_5030
+	picture = GFX_evt_pope_feast
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	capable_only = yes
+	only_rulers = yes
+	prisoner = no
+	
+	trigger = {
+		has_dlc = "Zeus"
+		job_spiritual = {
+			ai = yes
+			NOR = {
+				trait = zealous
+				trait = honest
+				trait = just
+				has_character_flag = lord_spiritual_abuse_of_office
+				is_inaccessible_trigger = yes
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 1.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 2
+			trait = arbitrary
+		}
+		modifier = {
+			factor = 2
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = slothful
+		}
+	}
+	
+	immediate = {
+		job_spiritual = {
+			wealth = 100
+			set_character_flag = lord_spiritual_abuse_of_office
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5030 # Depose + get imprison reason
+		job_spiritual = {
+			prestige = -50
+			piety = -50
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+			remove_title = job_spiritual
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_5030 # Turn a blind eye for now but get imprison reason
+		job_spiritual = {
+			reverse_opinion = {
+				who = ROOT
+				years = 3
+				modifier = abuse_of_office
+			}
+		}
+		add_character_modifier = {
+			name = annoyed_religious
+			years = 5
+		}
+	}
+}
+
+# Craven or Cynical Lord Spiritual complains about dangerous mission to convert heathens
+letter_event = {
+	id = ZE.5040
+	desc = EVTDESC_ZE_5040
+	border = GFX_event_letter_frame_religion
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		NOT = { religion_group = pagan_group }
+		job_spiritual = {
+			has_job_action = action_inquisition
+			location = { owner = { religion_group = pagan_group } }
+			OR = {
+				trait = craven
+				trait = cynical
+			}
+			NOT = { has_character_flag = lord_spiritual_wants_to_go_home_ze_5040 }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 4
+			job_spiritual = { trait = craven }
+		}
+	}
+
+
+	immediate = {
+		job_spiritual = { set_character_flag = lord_spiritual_wants_to_go_home_ze_5040 }
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_5040  # Allow him to return home
+		trigger = {
+			OR = {
+				trait = kind
+				trait = charitable
+			}
+		}
+		job_spiritual = {
+			cancel_job_action = action_inquisition
+			opinion = {
+				who = ROOT
+				modifier = opinion_grateful
+				years = 5
+			}
+			clr_character_flag = lord_spiritual_wants_to_go_home_ze_5040
+			add_character_modifier = {
+				name = spiritual_refused_pagans
+				duration = -1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_5040  # Allow him to return home
+		trigger = {
+			NOR = {
+				trait = kind
+				trait = charitable
+			}
+		}
+		job_spiritual = {
+			cancel_job_action = action_inquisition
+			opinion = {
+				who = ROOT
+				modifier = opinion_grateful
+				years = 5
+			}
+			clr_character_flag = lord_spiritual_wants_to_go_home_ze_5040
+			add_character_modifier = {
+				name = spiritual_refused_pagans
+				duration = -1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_ZE_5040  # Insist that he stays
+		job_spiritual = {
+			opinion = {
+				who = ROOT
+				modifier = opinion_unhappy
+				years = 5
+			}
+		}
+	}
+}

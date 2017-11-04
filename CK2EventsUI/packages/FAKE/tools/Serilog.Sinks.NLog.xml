@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Serilog.Sinks.NLog</name>
+    </assembly>
+    <members>
+        <member name="T:Serilog.LoggerConfigurationsNLogExtensions">
+            <summary>
+            Adds the WriteTo.NLog() extension method to <see cref="T:Serilog.LoggerConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:Serilog.LoggerConfigurationsNLogExtensions.NLog(Serilog.Configuration.LoggerSinkConfiguration,Serilog.Events.LogEventLevel,System.IFormatProvider)">
+            <summary>
+            Adds a sink that writes adapted log events to NLog.
+            </summary>
+            <param name="loggerConfiguration">The logger configuration.</param>
+            <param name="restrictedToMinimumLevel">The minimum log event level required in order to write an event to the sink.</param>
+            <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <returns>Logger configuration, allowing configuration to continue.</returns>
+            <exception cref="T:System.ArgumentNullException">A required parameter is null.</exception>
+        </member>
+    </members>
+</doc>

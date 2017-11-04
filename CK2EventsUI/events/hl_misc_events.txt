@@ -1,0 +1,299 @@
+# Written by Magnus Karlsson
+
+###########################################
+#                                         #
+# Horse Lords Misc events				  #
+# ID HL.1-HL.49 	     	              #
+#                                         #
+###########################################
+
+namespace = HL
+
+# Informed about nomad settling as feudal
+narrative_event = {
+	id = HL.1
+	title = EVTNAMEHL1
+	desc = EVTDESCHL1
+	
+	picture = GFX_evt_steppe_mercenaries
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62911
+	}
+}
+
+# Informed about nomad settling as tribal
+narrative_event = {
+	id = HL.2
+	title = EVTNAMEHL2
+	desc = EVTDESCHL2
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA62911
+	}
+}
+
+character_event = {
+	id = 44482
+
+	hide_window = yes
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			holding_type = TEMPLE
+		}
+	}
+
+	immediate = {
+		ROOT = {
+			religion_authority = { modifier = temple_built years = 20 }
+		}
+	}
+}
+
+character_event = {
+	id = HL.4
+
+	hide_window = yes
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+
+		FROM = {
+			holding_type = TEMPLE
+		}
+
+		ROOT = {
+			clan_title = {
+				clan = yes
+			}
+		}
+	}
+
+	immediate = {
+		ROOT = {
+			clan_title = {
+				holder_scope = {
+					top_liege = {
+						if = {
+							limit = {
+								religion = ROOT
+								NOT = { character = ROOT }
+								NOT = { has_feud_with = ROOT }
+							}
+							clan_title = {
+								clan_reverse_opinion = { 
+									who = PREVPREVPREV
+									modifier = opinion_built_temple
+									years = 20
+								}
+							}
+						}
+
+						any_vassal = {
+							limit = {
+								clan = yes
+								religion = ROOT
+								NOT = { character = ROOT }
+								NOT = { has_feud_with = ROOT }
+							}
+							clan_title = {
+								clan_reverse_opinion = {
+									who = PREVPREVPREVPREV
+									modifier = opinion_built_temple
+									years = 20
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Notify about feud started between clans
+character_event = {
+	id = HL.6
+	title = EVTNAMEHL6
+	desc = EVTDESCHL6
+	
+	picture = GFX_evt_shaman
+	border = GFX_event_normal_frame_war
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+	}
+
+	option = {
+		name = EVTOPTAHL6
+	}
+}
+
+## Feud started between two clans ( Bounce event )
+#character_event = {
+#	id = HL.7
+#
+#	hide_window = yes
+#
+#	only_playable = yes
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		has_dlc = "Horse Lords"
+#	}
+#
+#	immediate = {
+#		FROM = {
+#			character_event = { id = HL.6 }
+#		}
+#	}
+#}
+
+# Feud started between two clans because of raid and pillaging
+character_event = {
+	id = HL.8
+
+	hide_window = yes
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+		is_nomadic = yes
+		FROM = {
+			owner = {
+				is_nomadic = yes
+				is_ruler = yes
+				same_realm = ROOT
+				NOT = { has_feud_with = ROOT }
+			}
+		}
+	}
+
+	immediate = {
+		clan_title = {
+			FROM = {
+				owner = {
+					clan_title = {
+						create_feud = PREVPREVPREV
+					}
+#					character_event = { id = HL.6 } # Already notified by on_feud_started
+#					character_event = { id = HL.7 }
+				}
+			}
+		}
+	}
+}
+
+# Notify about clan adopting another faith
+character_event = {
+	id = HL.9
+	title = EVTNAMEHL9
+	desc = EVTDESCHL9
+	
+	picture = GFX_evt_tribal_shrine
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+	}
+
+	option = {
+		name = OK
+	}
+}
+
+# Death of blood brother
+character_event = {
+	id = HL.10
+	title = EVTNAMEHL10
+	desc = EVTDESCHL10
+	
+	picture = GFX_evt_tribal_shrine
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+	}
+
+	option = {
+		name = EVTOPTAHL10
+	}
+}
+
+# Notify about clan adopting another faith
+character_event = {
+	id = HL.11
+	title = EVTNAMEHL11
+	desc = EVTDESCHL11
+	
+	picture = GFX_evt_tribal_shrine
+	border = GFX_event_normal_frame_religion
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+
+# End blood oath on death
+character_event = {
+	id = HL.12
+
+	hide_window = yes
+
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "Horse Lords"
+		is_nomadic = yes
+	}
+
+	immediate = {
+		clan_title = {
+			end_oath = THIS
+		}
+	}
+}

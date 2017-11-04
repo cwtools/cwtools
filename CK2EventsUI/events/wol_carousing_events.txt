@@ -1,0 +1,2227 @@
+###########################################
+#                                         #
+# Way of Life carousing events            #
+#                                         #
+# ID WoL.4000-WoL.4999                    #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = WoL
+
+# Invitee receives invitation
+letter_event = {
+	id = WoL.4000
+	desc = EVTDESC_WoL_4000
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4000 # Accept
+		trigger = {
+			NOT = { has_character_flag = do_not_disturb }
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				religion_group = muslim
+				NOR = {
+					trait = decadent
+					trait = hedonist
+					trait = drunkard
+				}
+			}
+			modifier = {
+				factor = 0
+				is_rival = FROMFROM
+			}
+			modifier = {
+				factor = 0
+				war = yes
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { opinion = { who = FROMFROM value = -25 } }
+			}
+			modifier = {
+				factor = 5
+				liege = { character = FROMFROM }
+				is_ruler = no
+			}
+			modifier = {
+				factor = 2
+				liege = { character = FROMFROM }
+				is_ruler = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = stressed
+			}
+			modifier = {
+				factor = 0.1
+				trait = depressed
+			}
+			modifier = {
+				factor = 10
+				trait = drunkard
+			}
+			modifier = {
+				factor = 0.1
+				OR = {
+					trait = leper
+					trait = has_bubonic_plague
+					trait = has_typhoid_fever
+					trait = has_typhus
+					trait = has_measles
+					trait = has_small_pox
+				}
+			}
+			modifier = {
+				factor = 0.5
+				trait = celibate
+			}
+			modifier = {
+				factor = 0.5
+				trait = chaste
+			}
+			modifier = {
+				factor = 2.0
+				trait = lustful
+			}
+			modifier = {
+				factor = 10
+				trait = hedonist
+			}
+			modifier = {
+				factor = 0.2
+				trait = temperate
+			}
+			modifier = {
+				factor = 2
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			modifier = {
+				factor = 0.3
+				trait = shy
+			}
+			modifier = {
+				factor = 0.5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 10
+				trait = decadent
+			}
+			modifier = {
+				factor = 10
+				has_character_flag = fake_guru
+			}
+		}
+		hidden_tooltip = { FROMFROM = { letter_event = { id = WoL.4001 days = 7 } } }
+		set_character_flag = do_not_disturb # NOTE
+		clr_character_flag = carousing_invite
+	}
+	option = {
+		name = EVTOPTB_WoL_4000 # Decline
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = {
+			opinion = {
+				modifier = opinion_declined_party
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { FROMFROM = { letter_event = { id = WoL.4002 days = 7 } } }
+		clr_character_flag = carousing_invite
+	}
+	option = {
+		name = EVTOPTC_WoL_4000 # Decline and condemn decadence
+		piety = 30
+		prestige = 30
+		trigger = {
+			OR = {
+				AND = {
+					religion_group = muslim
+					trait = zealous
+				}
+				AND = {
+					has_minor_title = title_guru
+					NOT = { has_character_flag = fake_guru }
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+					trait = brave
+					opinion = { who = ROOT value = -50 }
+				}
+			}
+		}
+		FROMFROM = {
+			opinion = {
+				modifier = opinion_declined_party
+				who = ROOT
+				years = 2
+			}
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 2
+			}
+		}
+		hidden_tooltip = { FROMFROM = { letter_event = { id = WoL.4003 days = 7 } } }
+		clr_character_flag = carousing_invite
+	}
+}
+
+# Host receives positive answer to invitation
+letter_event = {
+	id = WoL.4001
+	desc = EVTDESC_WoL_4001
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4001
+		reverse_opinion = {
+			modifier = opinion_carousing
+			who = FROM
+			years = 1
+		}
+	}
+}
+
+# Host receives negative answer to invitation
+letter_event = {
+	id = WoL.4002
+	desc = EVTDESC_WoL_4002
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4002
+		prestige = -3
+	}
+}
+
+# Host receives negative answer and condemnation
+letter_event = {
+	id = WoL.4003
+	desc = EVTDESC_WoL_4003
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4003
+		trigger = {
+			trait = zealous
+		}
+		prestige = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_condemned_decadence
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_4003
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		prestige = -10
+		FROM = {
+			opinion = {
+				modifier = opinion_condemned_decadence
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+
+
+# Check if party can start or not and send on to appropriate event
+character_event = {
+	id = WoL.4010
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = inviting_guests_to_party_timer
+		hidden_tooltip = {
+			if = {
+				limit = {
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4015 }  # Cancel carousing due to no one accepting invitation
+				break = yes
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					war = yes
+					trait = incapable
+				}
+			}
+			character_event = { id = WoL.4011 }  # Cancel carousing due to unforeseen circumstances
+			break = yes
+		}
+		character_event = { id = WoL.4030 } # ... or start the party!
+	}
+}
+
+# Cancel due to unforeseen circumstances
+character_event = {
+	id = WoL.4011
+	desc = EVTDESC_WoL_4011
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = CURSES
+		clr_character_flag = do_not_disturb
+		remove_character_modifier = organizing_party
+		hidden_tooltip = {
+			top_liege = {
+				any_realm_character = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = opinion_carousing
+							who = ROOT
+						}
+					}
+					letter_event = { id = WoL.4012 } # Notify by letter
+				}
+			}
+		}
+	}
+}
+
+# Invitee notified of cancellation
+letter_event = {
+	id = WoL.4012
+	desc = EVTDESC_WoL_4012
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA63054
+		clr_character_flag = do_not_disturb
+		remove_opinion = {
+			modifier = opinion_carousing
+			who = FROM
+		}
+	}
+}
+
+# Cancel due to no one accepting invitation
+character_event = {
+	id = WoL.4015
+	desc = EVTDESC_WoL_4015
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4015
+		clr_character_flag = do_not_disturb
+		remove_character_modifier = organizing_party
+	}
+}
+
+
+# Party begins
+character_event = {
+	id = WoL.4030
+	desc = EVTDESC_WoL_4030
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4030
+		remove_character_modifier = organizing_party
+		set_character_flag = party_host
+		add_character_modifier = {
+			name = party_carousing
+			days = 40
+		}
+		hidden_tooltip = {
+			top_liege = {
+				any_realm_character = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = opinion_carousing
+							who = ROOT
+						}
+					}
+					character_event = { id = WoL.4031 } # Notify guests that carousing starts
+					character_event = { id = WoL.4800 days = 30 } # End of party
+				}
+			}
+			character_event = { id = WoL.4035 days = 15 } # Select outcome/events
+			character_event = { id = WoL.4800 days = 30 } # End of party
+		}
+	}
+}
+
+# Party begins, notify guests
+character_event = {
+	id = WoL.4031
+	desc = EVTDESC_WoL_4031
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4031
+		set_character_flag = party_guest
+		add_character_modifier = {
+			name = party_carousing
+			days = 40
+		}
+	}
+}
+
+# Carousing - select outcome/events (host)
+character_event = {
+	id = WoL.4035
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		top_liege = {
+			any_realm_character = {
+				has_opinion_modifier = {
+					modifier = opinion_carousing
+					who = ROOT
+				}
+			}
+		}
+	}
+	
+	immediate = {         # Select interesting party event
+		random_list = {
+			2 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						AND = {
+							OR = {
+								trait = lunatic
+								trait = possessed
+								trait = impaler
+								top_liege = {
+									any_realm_character = {
+										has_opinion_modifier = {
+											modifier = opinion_carousing
+											who = ROOT
+										}
+										OR = {
+											trait = lunatic
+											trait = possessed
+											trait = impaler
+										}
+									}
+								}
+							}
+							OR = {
+								ai = yes
+								top_liege = {
+									any_realm_character = {
+										ai = yes
+										has_opinion_modifier = {
+											modifier = opinion_carousing
+											who = ROOT
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_modifier = cannibal
+				}
+				modifier = {
+					factor = 1.5
+					trait = gluttonous
+				}
+				character_event = { id = WoL.4100 }  # Cannibal, eat your guest? (or guest may eat host)
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								ROOT = {
+									OR = {
+										trait = lustful
+										trait = hedonist
+									}
+								}
+								OR = {
+									trait = lustful
+									trait = hedonist
+								}
+								OR = {
+									AND = {
+										is_opposite_sex = ROOT
+										NOT = { trait = homosexual }
+										ROOT = {
+											NOT = { trait = homosexual }
+										}
+									}
+									AND = {
+										same_sex = ROOT
+										trait = homosexual
+										ROOT = {
+											trait = homosexual
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4110 }  # Party fling if both lustful
+			}
+			30 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								NOT = { is_friend = ROOT }
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4120 } # Makes new friend
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								NOT = { is_rival = ROOT }
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						OR = {
+							trait = wroth
+							trait = lunatic
+							trait = paranoid
+							top_liege = {
+								any_realm_character = {
+									has_opinion_modifier = {
+										modifier = opinion_carousing
+										who = ROOT
+									}
+									OR = {
+										trait = wroth
+										trait = lunatic
+										trait = paranoid
+									}
+								}
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4130 } # Fight breaks out, might make new enemy
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						trait = lunatic
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								trait = lunatic
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4140 } # Lunatic starts raising hell, in a good way
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						trait = drunkard
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								trait = drunkard
+							}
+						}
+					}
+				}
+				character_event = { id = WoL.4150 } # Drunkard drinks waaaaay too much
+			}
+			10 = {
+				modifier = {
+					factor = 3
+					OR = {
+						trait = gamer
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								trait = gamer
+							}
+						}
+					}
+				}
+				top_liege = {
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+							trait = gamer
+						}
+						character_event = { id = WoL.4160 }
+						break = yes
+					}
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+						}
+						character_event = { id = WoL.4160 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Cannibal - who is the possible cannibal?
+character_event = {
+	id = WoL.4100
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					trait = lunatic
+					trait = possessed
+					trait = impaler
+				}
+			}
+			character_event = { id = WoL.4101 }
+			break = yes
+		}
+		top_liege = {
+			random_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+					OR = {
+						trait = lunatic
+						trait = possessed
+						trait = impaler
+					}
+					ROOT = { ai = yes }
+				}
+				character_event = { id = WoL.4101 }
+			}
+		}
+	}
+}
+
+# Cannibal - eat?
+character_event = {
+	id = WoL.4101
+	desc = EVTDESC_WoL_4101
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4101 # No
+		ai_chance = {
+			factor = 0
+		}
+		if = {
+			limit = {
+				trait = craven
+				trait = stressed
+				NOT = { trait = depressed }
+			}
+			add_trait = depressed
+		}
+		if = {
+			limit = {
+				trait = craven
+				NOT = { trait = stressed }
+			}
+			add_trait = stressed
+		}
+		if = {
+			limit = {
+				NOR = { trait = craven trait = berserker }
+			}
+			add_trait = craven
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_4101 # Eat, for host
+		trigger = {
+			has_character_flag = party_host
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = { NOT = { has_character_modifier = cannibal } }
+			add_character_modifier = {
+				name = cannibal
+				duration = -1
+			}
+		}
+		top_liege = {
+			random_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+				}
+				death = {
+					death_reason = death_murder_unknown_butchered
+					killer = ROOT
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_4101 # Eat, for guest
+		trigger = {
+			has_character_flag = party_guest
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = { NOT = { has_character_modifier = cannibal } }
+			add_character_modifier = {
+				name = cannibal
+				duration = -1
+			}
+		}
+		FROM = {
+			death = {
+				death_reason = death_murder_unknown_butchered
+				killer = ROOT
+			}
+		}
+	}
+}
+
+# Party fling - who takes initiative?
+character_event = {
+	id = WoL.4110
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				character_event = { id = WoL.4111 }
+			}
+			10 = {
+				top_liege = {
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+							OR = {
+								trait = lustful
+								trait = hedonist
+							}
+							OR = {
+								AND = {
+									is_opposite_sex = ROOT
+									NOT = { trait = homosexual }
+									ROOT = {
+										NOT = { trait = homosexual }
+									}
+								}
+								AND = {
+									same_sex = ROOT
+									trait = homosexual
+									ROOT = {
+										trait = homosexual
+									}
+								}
+							}
+						}
+						character_event = { id = WoL.4111 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Fling - propose carnal knowledge?
+character_event = {
+	id = WoL.4111
+	desc = EVTDESC_WoL_4111
+	picture = GFX_evt_brothel
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4111 # Host initiative
+		trigger = {
+			has_character_flag = party_host
+		}
+		ai_chance = {
+			factor = 1
+		}
+		top_liege = {
+			random_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+					OR = {
+						AND = {
+							is_opposite_sex = ROOT
+							NOT = { trait = homosexual }
+							ROOT = {
+								NOT = { trait = homosexual }
+							}
+						}
+						AND = {
+							trait = homosexual
+							ROOT = {
+								trait = homosexual
+							}
+							same_sex = ROOT
+						}
+					}
+				}
+				character_event = { id = WoL.4112 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WoL_4111 # Guest initiative
+		trigger = {
+			has_character_flag = party_guest
+		}
+		ai_chance = {
+			factor = 1
+		}
+		FROM = {
+			character_event = { id = WoL.4112 }
+		}
+	}
+	option = {
+		name = EVTOPTC_WoL_4111 # No
+		ai_chance = {
+			factor = 0
+		}
+		if = {
+			limit = {
+				trait = lustful
+				trait = depressed
+				NOT = { trait = stressed }
+			}
+			random = {
+				chance = 50
+				add_trait = stressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38282 #Notify Stressed
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trait = lustful
+				NOT = { trait = depressed }
+			}
+			random = {
+				chance = 50
+				add_trait = depressed
+				hidden_tooltip = {
+					character_event = {
+						id = 38288 #Notify Depressed
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = chaste
+					trait = lustful
+				}
+			}
+			add_trait = chaste
+			hidden_tooltip = {
+				character_event = {
+					id = 38274 #Notify Chaste
+				}
+			}
+		}
+	}
+}
+
+# Fling - accept or decline proposal of carnal knowledge
+character_event = {
+	id = WoL.4112
+	desc = EVTDESC_WoL_4112
+	picture = GFX_evt_brothel
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4112 # Yes
+		add_character_modifier = {
+			name = good_times
+			duration = 730
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					is_opposite_sex = FROM
+						AND = {
+							is_female = yes
+							NOT = { age = 45 }
+							is_pregnant = no
+							OR = {
+								AND = {
+									is_married = no
+									is_consort = no
+								}
+								AND = {
+									is_consort = yes
+									consort = {
+										character = FROM
+									}
+								}
+								AND = {
+									is_married = yes
+									spouse = {
+										character = FROM
+									}
+								}
+							}
+							NOT = { health_traits = 1 }
+						}
+				}
+				random = {
+					chance = 10
+					FROM = { impregnate = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					is_opposite_sex = FROM
+					AND = {
+						is_female = yes
+						NOT = { age = 45 }
+						is_pregnant = no
+						OR = {
+							is_married = yes
+							is_consort = yes
+						}
+						NOR = {
+							health_traits = 1
+							consort = {
+								character = FROM
+							}
+							spouse = {
+								character = FROM
+							}
+						}
+					}
+				}
+				random = {
+					chance = 10
+					FROM = { impregnate_cuckoo = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					is_opposite_sex = FROM
+					FROM = {
+						is_female = yes
+						NOT = { age = 45 }
+						is_pregnant = no
+						OR = {
+							AND = {
+								is_married = no
+								is_consort = no
+							}
+							AND = {
+								is_consort = yes
+								consort = {
+									character = ROOT
+								}
+							}
+							AND = {
+								is_married = yes
+								spouse = {
+									character = ROOT
+								}
+							}
+						}
+						NOT = { health_traits = 1 }
+					}
+				}
+				random = {
+					chance = 10
+					impregnate = FROM
+				}
+			}
+				
+			if = {
+				limit = {
+					is_opposite_sex = FROM	
+						FROM = {
+							is_female = yes
+							NOT = { age = 45 }
+							is_pregnant = no
+							OR = {
+								is_married = yes
+								is_consort = yes
+							}
+							NOR = {
+								health_traits = 1
+								consort = {
+									character = ROOT
+								}
+								spouse = {
+									character = ROOT
+								}
+							}
+						}
+				}
+					random = {
+						chance = 10
+						impregnate_cuckoo = FROM
+					}
+			}				
+		}
+		if = {
+			limit = {
+				FROM = { trait = syphilitic }
+			}
+			random = {
+				chance = 20
+				add_trait = syphilitic
+			}
+		}
+		hidden_tooltip = { FROM = { character_event = { id = WoL.4113 } } }
+	}
+	option = {
+		name = EVTOPTB_WoL_4112 # No
+		reverse_opinion = {
+			modifier = opinion_spurned
+			who = FROM
+			years = 5
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = chaste
+					trait = lustful
+				}
+			}
+			add_trait = chaste
+		}
+		hidden_tooltip = { FROM = { character_event = { id = WoL.4114 } } }
+	}
+}
+	
+# Carnal knowledge accepted - do it
+character_event = {
+	id = WoL.4113
+	desc = EVTDESC_WoL_4113
+	picture = GFX_evt_lovers
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4113
+		add_character_modifier = {
+			name = good_times
+			duration = 730
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					is_female = no
+					FROM = {
+						is_female = yes
+						is_pregnant = no
+						OR = {
+							AND = {
+								is_married = no
+								is_consort = no
+							}
+							AND = {
+								is_consort = yes
+								consort = {
+									character = ROOT
+								}
+							}
+							AND = {
+								is_married = yes
+								spouse = {
+									character = ROOT
+								}
+							}
+						}
+						NOT = { health_traits = 1 }
+					}
+				}
+				random = {
+					chance = 10
+					impregnate = FROM
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					FROM = {
+						is_female = yes
+						is_pregnant = no
+						OR = {
+							is_married = yes
+							is_consort = yes
+						}
+						NOR = {
+							health_traits = 1
+							spouse = {
+								character = ROOT
+							}
+							consort = {
+								character = ROOT
+							}
+						}
+					}
+				}
+				random = {
+					chance = 10
+					impregnate_cuckoo = FROM
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { trait = syphilitic }
+			}
+			random = {
+				chance = 20
+				add_trait = syphilitic
+			}
+		}
+	}
+}
+	
+# Carnal knowledge declined - notify
+character_event = {
+	id = WoL.4114
+	desc = EVTDESC_WoL_4114
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4114
+		tooltip = {
+			opinion = {
+				modifier = opinion_spurned
+				who = FROM
+				years = 5
+			}
+		}
+		prestige = -5
+	}
+}
+
+# Makes friend
+character_event = {
+	id = WoL.4120
+	picture = GFX_evt_feast
+	desc = EVTDESC_WoL_4120
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4120
+		top_liege = {
+			random_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+					NOT = { is_friend = ROOT }
+				}
+				add_friend = ROOT
+				hidden_tooltip = { character_event = { id = WoL.4121 } }
+			}
+		}
+	}
+}
+
+# Notify new friend
+character_event = {
+	id = WoL.4121
+	picture = GFX_evt_feast
+	desc = EVTDESC_WoL_4120
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4120
+		add_friend = FROM
+	}
+}
+
+# Fight - who starts it?
+character_event = {
+	id = WoL.4130
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						trait = wroth
+						trait = lunatic
+						trait = paranoid
+					}
+				}
+				character_event = { id = WoL.4131 }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								OR = {
+									trait = wroth
+									trait = lunatic
+									trait = paranoid
+								}
+							}
+						}
+					}
+				}
+				top_liege = {
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+							OR = {
+								trait = wroth
+								trait = lunatic
+								trait = paranoid
+							}
+						}
+						character_event = { id = WoL.4131 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Fight starts - you can't control your rage
+character_event = {
+	id = WoL.4131
+	desc =  EVTDESC_WoL_4131
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4131
+		trigger = {
+			has_character_flag = party_host
+		}
+		top_liege = {
+			random_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+				}
+				hidden_tooltip = { character_event = { id = WoL.4132 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WoL_4131
+		trigger = {
+			has_character_flag = party_guest
+		}
+		FROM = { hidden_tooltip = { character_event = { id = WoL.4132 } } }
+	}
+}
+
+# He's coming at me - avoid or fight back?
+character_event = {
+	id = WoL.4132
+	picture = GFX_evt_feast
+	desc = EVTDESC_WoL_4132
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4132 # Fight!
+		FROM = {
+			set_character_flag = party_fight_fight
+			hidden_tooltip = { character_event = { id = WoL.4133 } }
+		}
+		random_list = {
+			89 = {
+				add_character_modifier = {
+					name = beaten_up
+					days = 180
+				}
+			}
+			10 = {
+				add_trait = wounded
+			}
+			1 = {
+				add_maimed_trait_effect = yes
+			}
+		}
+		random = {
+			chance = 30
+			add_rival = FROM
+			set_character_flag = party_fight_became_rivals
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_4132 # Talk - best option
+		trigger = {
+			diplomacy = 15
+		}
+		tooltip_info = diplomacy
+		FROM = {
+			set_character_flag = party_fight_talk
+			hidden_tooltip = { character_event = { id = WoL.4133 } }
+		}
+		random = {
+			chance = 20
+			change_diplomacy = 1
+		}
+		if = {
+			limit = {
+				NOT = { is_friend = FROM }
+			}
+			random = {
+				chance = 20
+				add_friend = FROM
+				set_character_flag = party_fight_made_friend
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_WoL_4132 # Hide!
+		if = {
+			limit = {
+				NOR = {
+					trait = craven
+					trait = brave
+					trait = berserker
+				}
+			}
+			random = {
+				chance = 30
+				add_trait = craven
+				hidden_tooltip = {
+					character_event = {
+						id = 38257 #Notify Craven
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				trait = brave
+			}
+			remove_trait = brave
+		}
+		FROM = {
+			set_character_flag = party_fight_hide
+			hidden_tooltip = { character_event = { id = WoL.4133 } }
+		}
+	}
+}
+
+# Aggressor gets results
+character_event = {
+	id = WoL.4133
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = {
+			has_character_flag = party_fight_fight
+		}
+		text = EVTDESC_WoL_4133_fight
+	}
+	desc = {
+		trigger = {
+			has_character_flag = party_fight_talk
+		}
+		text = EVTDESC_WoL_4133_talk
+	}
+	desc = {
+		trigger = {
+			has_character_flag = party_fight_hide
+		}
+		text = EVTDESC_WoL_4133_hide
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_4133 # Fought  (both are at risk of injury)
+		trigger = {
+			has_character_flag = party_fight_fight
+		}
+		random_list = {
+			89 = {
+				add_character_modifier = {
+					name = beaten_up
+					days = 180
+				}
+			}
+			10 = {
+				add_trait = wounded
+			}
+			1 = {
+				add_maimed_trait_effect = yes
+			}
+		}
+		if = {
+			limit = {
+				has_character_flag = party_fight_became_rivals
+			}
+			tooltip = { add_rival = FROM }
+			clr_character_flag = party_fight_became_rivals
+		}
+		if = {
+			limit = { has_nickname = no }
+			random = {
+				chance = 20
+				give_nickname = nick_the_quarreller
+			}
+		}
+		clr_character_flag = party_fight_fight
+	}
+	option = {
+		name = EVTOPTB_WoL_4133 # Talked
+		trigger = {
+			has_character_flag = party_fight_talk
+		}
+		if = {
+			limit = {
+				has_character_flag = party_fight_made_friend
+			}
+			tooltip = { add_friend = FROM }
+			clr_character_flag = party_fight_made_friend
+		}
+		clr_character_flag = party_fight_talk
+	}
+	option = {
+		name = EVTOPTC_WoL_4133 # Hid
+		trigger = {
+			has_character_flag = party_fight_hide
+		}
+		reverse_opinion = {
+			modifier = opinion_cautious
+			who = FROM
+			years = 3
+		}
+		clr_character_flag = party_fight_hide
+	}
+}
+
+# Lunatic goes wild
+character_event = {
+	id = WoL.4140
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {	trait = lunatic }
+				}
+				character_event = { id = WoL.4141 }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								trait = lunatic
+							}
+						}
+					}
+				}
+				top_liege = {
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+							trait = lunatic
+						}
+						character_event = { id = WoL.4141 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Lunatic goes wild at party
+character_event = {
+	id = WoL.4141
+	desc = EVTDESC_WoL_4141
+	picture = GFX_evt_pope_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4141
+		trigger = {
+			has_character_flag = party_host
+		}
+		add_character_modifier = {
+			name = good_times
+			years = 2
+		}
+		if = {
+			limit = { has_nickname = no }
+			random = {
+				chance = 20
+				give_nickname = nick_the_merry
+			}
+		}
+		top_liege = {
+			any_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+				}
+				opinion = {
+					modifier = opinion_approves
+					who = ROOT
+					years = 4
+				}
+				hidden_tooltip = { character_event = { id = WoL.4142 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WoL_4141
+		trigger = {
+			has_character_flag = party_guest
+		}
+		add_character_modifier = {
+			name = good_times
+			years = 2
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 4
+			}
+			hidden_tooltip = { character_event = { id = WoL.4142 } }
+		}
+	}
+}
+	
+# Other person perspective on lunatic behavior
+character_event = {
+	id = WoL.4142
+	desc = EVTDESC_WoL_4142
+	picture = GFX_evt_pope_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_WoL_4142
+		add_character_modifier = {
+			name = good_times
+			years = 2
+		}
+	}
+}
+
+# Drunkard drinks waaaaay too much and things go bad
+character_event = {
+	id = WoL.4150
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {	trait = drunkard }
+				}
+				character_event = { id = WoL.4151 }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						top_liege = {
+							any_realm_character = {
+								has_opinion_modifier = {
+									modifier = opinion_carousing
+									who = ROOT
+								}
+								trait = drunkard
+							}
+						}
+					}
+				}
+				top_liege = {
+					random_realm_character = {
+						limit = {
+							has_opinion_modifier = {
+								modifier = opinion_carousing
+								who = ROOT
+							}
+							trait = drunkard
+						}
+						character_event = { id = WoL.4151 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Drunkard
+character_event = {
+	id = WoL.4151
+	desc = EVTDESC_WoL_4151
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_WoL_4151
+		trigger = {
+			has_character_flag = party_host
+		}
+		add_character_modifier = {
+			name = epic_hangover
+			years = 1
+		}
+		if = {
+			limit = { has_nickname = no }
+			random = {
+				chance = 20
+				give_nickname = nick_the_drunkard
+			}
+		}
+		top_liege = {
+			any_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+					NOT = { trait = drunkard }
+				}
+				opinion = {
+					modifier = despise_drunkard
+					who = ROOT
+					years = 4
+				}
+				hidden_tooltip = { character_event = { id = WoL.4152 } }
+			}
+			any_realm_character = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_carousing
+						who = ROOT
+					}
+					trait = drunkard
+				}
+				opinion = {
+					modifier = opinion_gained_respect
+					who = ROOT
+					years = 4
+				}
+				hidden_tooltip = { character_event = { id = WoL.4152 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WoL_4151
+		trigger = {
+			has_character_flag = party_guest
+		}
+		add_character_modifier = {
+			name = epic_hangover
+			years = 1
+		}
+		FROM = {
+			if = {
+				limit = { NOT = { trait = drunkard } }
+				opinion = {
+					modifier = despise_drunkard
+					who = ROOT
+					years = 4
+				}
+			}
+			if = {
+				limit = { trait = drunkard }
+				opinion = {
+					modifier = opinion_gained_respect
+					who = ROOT
+					years = 4
+				}
+			}
+			hidden_tooltip = { character_event = { id = WoL.4152 } }
+		}
+	}
+}
+	
+# Other person perspective on drunkard behavior
+character_event = {
+	id = WoL.4152
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			NOT = { trait = drunkard }
+		}
+		text = EVTDESC_WoL_4152_non_drunkard
+	}
+	desc = {
+		trigger = {
+			trait = drunkard
+		}
+		text = EVTDESC_WoL_4152_drunkard
+	}
+
+	option = {
+		name = EVTOPTA_WoL_4152
+		trigger = {
+			NOT = { trait = drunkard }
+		}
+		tooltip = {
+			opinion = {
+				modifier = despise_drunkard
+				who = FROM
+				years = 4
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_WoL_4152
+		trigger = {
+			trait = drunkard
+		}
+		tooltip = {
+			opinion = {
+				modifier = opinion_gained_respect
+				who = FROM
+				years = 4
+			}
+		}
+	}
+}
+
+# Play games - Player 2 bounce event
+character_event = {
+	id = WoL.4160
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = WoL.4161 } }
+	}
+}
+
+# Player 1 (host)
+character_event = {
+	id = WoL.4161
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = {
+			OR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+			}
+		}
+		text = EVTDESC_WoL_4161_gamer
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+			}
+		}
+		text = EVTDESC_WoL_4161_non_gamer
+	}
+	
+	option = { # Play for money
+		name = EVTOPTA_WoL_4161
+		set_character_flag = game_play_for_money
+		hidden_tooltip = {
+			FROM = { character_event = { id = WoL.4162 } }
+		}
+	}
+	option = { # Play just for fun
+		name = EVTOPTB_WoL_4161
+		hidden_tooltip = {
+			FROM = { character_event = { id = WoL.4162 } }
+		}
+	}
+}
+	
+# Player 2
+character_event = {
+	id = WoL.4162
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			FROM = { has_character_flag = game_play_for_money }
+			OR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+			}
+		}
+		text = EVTDESC_WoL_4162_money_i_suggest
+	}
+	desc = {
+		trigger = {
+			FROM = { NOT = { has_character_flag = game_play_for_money } }
+			OR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+			}
+		}
+		text = EVTDESC_WoL_4162_not_money_i_suggest
+	}
+	desc = {
+		trigger = {
+			FROM = { has_character_flag = game_play_for_money }
+			NOR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+			}
+		}
+		text = EVTDESC_WoL_4162_money_they_suggest
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				trait = gamer
+				has_character_modifier = apprentice_boardgamer
+				FROM = { has_character_flag = game_play_for_money }
+			}
+		}
+		text = EVTDESC_WoL_4162_not_money_they_suggest
+	}
+
+	option = { # Accept and get results
+		name = EVTOPTA_WoL_4162
+		hidden_tooltip = {
+			random_list = {
+				10 = { # Player 1 wins
+					modifier = {
+						factor = 3
+						is_smart_trigger = yes  # MORE
+					}
+					FROM = { set_character_flag = game_player_winner }
+				}
+				10 = { # Player 2 wins
+					set_character_flag = game_player_winner
+				}
+			}
+			character_event = { id = WoL.4163 }
+			FROM = { character_event = { id = WoL.4163 } }
+		}
+	}
+}
+
+# Game results
+character_event = {
+	id = WoL.4163
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = game_player_winner
+		}
+		text = EVTDESC_WoL_4163_win
+	}
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = game_player_winner }
+		}
+		text = EVTDESC_WoL_4163_loss
+	}
+	
+	option = { # Win
+		name = EVTOPTA_WoL_4163
+		trigger = {
+			has_character_flag = game_player_winner
+		}
+		set_character_flag = played_games_today
+		if = {
+			limit = {
+				has_character_flag = game_play_for_money
+			}
+			wealth = 5
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_character_modifier = apprentice_boardgamer
+					trait = gamer
+				}
+			}
+			add_character_modifier = {
+				name = apprentice_boardgamer
+				days = -1
+			}
+		}
+		clr_character_flag = game_play_for_money
+		clr_character_flag = game_player_winner
+	}
+	option = { # Loss
+		name = EVTOPTB_WoL_4163
+		trigger = {
+			NOT = { has_character_flag = game_player_winner }
+		}
+		set_character_flag = played_games_today
+		if = {
+			limit = {
+				has_character_flag = game_play_for_money
+			}
+			wealth = -5
+		}
+		clr_character_flag = game_play_for_money
+	}
+}
+
+# Party's over, had a good time
+character_event = {
+	id = WoL.4800
+	picture = GFX_evt_feast
+	desc = EVTDESC_WoL_4800
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = do_not_disturb
+		clr_character_flag = party_host
+		clr_character_flag = party_guest
+	}
+	
+	option = {
+		name = EVTOPTA_WoL_4800  # This was fun
+		prestige = 20
+		clr_character_flag = played_games_today
+		clr_character_flag = game_play_for_money
+		if = {
+			limit = {
+				has_focus = focus_carousing
+				has_character_modifier = carouser
+				NOT = { has_character_modifier = dedicated_carouser }
+			}
+			remove_character_modifier = carouser
+			add_character_modifier = {
+				name = dedicated_carouser
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				has_focus = focus_carousing
+				NOR = {
+					has_character_modifier = carouser
+					has_character_modifier = dedicated_carouser
+					trait = socializer
+					trait = hedonist
+				}
+			}
+			add_character_modifier = {
+				name = carouser
+				days = -1
+			}
+		}
+		if = {
+			limit = { trait = stressed }
+			random = {
+				chance = 30
+				remove_trait = stressed
+			}
+		}
+		if = {
+			limit = { trait = depressed }
+			random = {
+				chance = 30
+				remove_trait = depressed
+			}
+		}
+		add_character_modifier = {
+			name = party_timer
+			duration = 90
+		}
+	}
+	option = {
+		name = EVTOPTB_WoL_4800 # Party and carousing is all I wanna do...
+		trigger = {
+			has_focus = focus_carousing
+			NOT = { lifestyle_traits = 1 }
+			has_character_modifier = dedicated_carouser
+		}
+		prestige = 20
+		remove_character_modifier = dedicated_carouser
+		add_trait = hedonist
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_lets_play
+		}
+		clr_character_flag = played_games_today
+		clr_character_flag = game_play_for_money
+		if = {
+			limit = { trait = stressed }
+			random = {
+				chance = 30
+				remove_trait = stressed
+			}
+		}
+		if = {
+			limit = { trait = depressed }
+			random = {
+				chance = 30
+				remove_trait = depressed
+			}
+		}
+		add_character_modifier = {
+			name = party_timer
+			duration = 90
+		}
+	}
+	option = {
+		name = EVTOPTC_WoL_4800 # Great way to meet new people...
+		trigger = {
+			has_focus = focus_carousing
+			NOT = { lifestyle_traits = 1 }
+			has_character_modifier = dedicated_carouser
+		}
+		prestige = 20
+		remove_character_modifier = dedicated_carouser
+		add_trait = socializer
+		clr_character_flag = played_games_today
+		clr_character_flag = game_play_for_money
+		if = {
+			limit = { trait = stressed }
+			random = {
+				chance = 30
+				remove_trait = stressed
+			}
+		}
+		if = {
+			limit = { trait = depressed }
+			random = {
+				chance = 30
+				remove_trait = depressed
+			}
+		}
+		add_character_modifier = {
+			name = party_timer
+			duration = 90
+		}
+	}
+	option = {
+		name = EVTOPTD_WoL_4800 # Gamer Lifestyle...
+		trigger = {
+			has_character_flag = played_games_today
+			has_character_modifier = apprentice_boardgamer
+			NOT = { trait = gamer }
+		}
+		clr_character_flag = played_games_today
+		clr_character_flag = game_play_for_money
+		remove_character_modifier = apprentice_boardgamer
+		if = {
+			limit = { NOT = { lifestyle_traits = 1 } }
+			add_trait = gamer
+		}
+		if = {
+			limit = { trait = stressed }
+			random = {
+				chance = 30
+				remove_trait = stressed
+			}
+		}
+		if = {
+			limit = { trait = depressed }
+			random = {
+				chance = 30
+				remove_trait = depressed
+			}
+		}
+		add_character_modifier = {
+			name = party_timer
+			duration = 90
+		}
+	}
+}

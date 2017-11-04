@@ -1,0 +1,194 @@
+###########################################
+#
+# Easter-eggs
+#
+# ID 6500-6899 is reserved
+#
+###########################################
+#
+# Written by Sara Wendel-Örtqvist
+
+#Sex Crusader Kings
+character_event = {
+	id = 6500
+	desc = "EVTDESC6500"
+	picture = GFX_evt_brothel
+	
+	min_age = 35
+	only_men = yes
+	only_playable = yes
+	prisoner = no
+	ai = no
+	
+	trigger = {
+		NOT = {
+			num_traits = 4
+		}
+		trait = indulgent_wastrel
+		NOT = { is_inaccessible_trigger = yes }
+		immortal = no
+	}
+	
+	mean_time_to_happen = {
+		months = 50000
+		
+		modifier = {
+			factor = 0.8
+			trait = imbecile
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA6500"
+		random_list = {
+			50 = {
+				add_trait = lustful
+			}
+			50 = {
+				add_trait = infirm
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB6500"
+		random_list = {
+			25 = {
+				add_trait = lustful
+			}
+			25 = {
+				add_trait = ambitious
+			}
+			25 = {
+				add_trait = greedy
+			}
+			25 = {
+				if = {
+					limit = {
+						immortal = no
+					}
+					add_trait = incapable
+				}
+			}
+		}
+	}
+}
+
+#Marco... 
+character_event = {
+	id = 6501
+	desc = "EVTDESC6501"
+	picture = GFX_evt_lunatic
+	
+	min_age = 20
+	only_playable = yes
+	ai = no
+	
+	mean_time_to_happen = {
+		months = 100000
+	}
+	
+	option = {
+		name = "EVTOPTA6501" #...Polo
+		prestige = 50
+	}
+}
+
+#Stroke the kitty
+character_event = {
+	id = 6502
+	picture = "GFX_evt_family"
+
+	desc = {
+		trigger = { has_dlc = "Reapers" }
+		text = "EVTDESC6502"
+		picture = "GFX_evt_cat"
+	}
+	desc = {
+		trigger = { NOT = { has_dlc = "Reapers" } }
+		text = "EVTDESC6502"
+		picture = "GFX_evt_family"
+	}
+	
+	min_age = 20
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	ai = no
+	
+	mean_time_to_happen = {
+		months = 3500
+	}
+	
+	option = {
+		name = "EVTOPTA6502"
+		
+		if = {
+			limit = { trait = kind }
+			prestige = 25
+		}
+		if = {
+			limit = { NOT = { trait = kind } }
+			random = {
+				chance = 20
+				add_trait = kind
+				character_event = { id = 38268 }
+			}
+		}
+	}
+
+	option = {
+		trigger =  { NOT = { has_character_modifier = pet_cat } }
+		name = "EVTOPTC6502"
+
+		add_character_modifier = {
+			name = pet_cat
+			duration = -1
+		}
+		hidden_tooltip = { character_event = { id = 77802 days = 3000 random = 2000 } } # Cat dies
+	}
+
+
+	option = {
+		name = "EVTOPTB6502"
+
+		if = {
+			limit = { NOT = { trait = cruel } }
+			add_trait = cruel
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						NOT = { has_dlc = "Reapers" }
+						NOT = { trait = maimed }
+					}
+					AND = {
+						has_dlc = "Reapers"
+						NOT = { trait = one_eyed }
+					}
+				}
+			}
+			random = {
+				chance = 25
+				if = {
+					limit = {
+						NOT = { has_dlc = "Reapers" }
+					}
+					add_trait = maimed
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_trait = one_eyed
+					character_event = { id = RIP.11501 } #Notify one-eyed
+				}
+			}
+		}
+	}
+}
+
+#Bohemian Rhapsody - only for the king of Bohemia
+
+#Letter event - "Mama, I killed a man" - after a battle?

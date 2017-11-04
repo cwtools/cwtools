@@ -1,0 +1,1741 @@
+#############################################
+#
+# Events for Hunting
+#
+# Event ID 36000-36999 is reserved
+#
+# Deer Park ID: 4075
+#
+#############################################
+#Written by Johan Andersson, Chris King & Sara Wendel-Örtqvist
+
+
+#A Majestic Stag
+character_event = {
+	id = 36000
+	desc = "EVTDESC36000"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+	
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}
+
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = content
+		}
+		modifier = {
+			factor = 0.8
+			trait = hunter
+		}
+		modifier = {
+			factor = 5.0
+			martial = 15
+		}
+		modifier = {
+			factor = 2.0
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.5
+			has_character_flag = hunt_good_hounds
+		}
+		modifier = {
+			factor = 1.25
+			trait = craven
+		}
+
+	}
+
+	option = {
+		name = "EVTOPTA36000"
+		trigger = {
+			NOT = {
+				trait = craven
+			}
+		}
+		prestige = 5
+	}
+
+	option = {
+		name = "EVTOPTB36000"
+		tooltip_info = craven
+		trigger = {
+			trait = craven
+		}
+		prestige = -10
+	}
+	option = {
+		name = "EVTOPTC36000"
+		trigger = {
+			NOT = { trait = greedy }
+			NOT = { trait = arbitrary }
+			NOT = { trait = envious }
+			NOT = { trait = craven }
+			NOT = { trait = cruel }
+		}
+		add_trait = kind
+	}
+
+	option = {
+		name = "EVTOPTD36000"
+		trigger = {
+			NOT = { trait = craven }
+			NOT = { trait = humble }
+			NOT = { trait = content }
+		}
+		random_list = {
+			50 = { }
+			10 = { 
+				if = {
+					limit = {
+						NOT = { trait = diligent }
+					}
+					add_trait = diligent
+					hidden_tooltip = {
+						character_event = {
+							id = 38256 #Notify Diligent
+						}
+					}
+				}
+				if = {
+					limit = {
+						trait = diligent
+					}
+					prestige = 10
+				}						
+			}
+			20 = { change_martial = 1 }
+			14 = {
+				add_trait = wounded
+				hidden_tooltip = { character_event = { id = 38280 } }
+			}
+			4 = {
+				add_maimed_trait_effect = yes
+			}
+			1 = {
+				death = { death_reason = death_accident }
+			}
+		}
+		set_character_flag = hunt_killed_something
+		prestige = 20
+	}
+}
+
+#Paranoia in the hunt
+character_event = {
+	id = 36001
+	desc = "EVTDESC36001"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = { has_character_flag = hunt_paranoia }
+		trait = paranoid
+		NOT = {	health_traits = 1 }
+		any_courtier = {
+			has_plot = plot_kill_character
+			plot_target_char = {
+				character = root
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+	
+	immediate = {
+		set_character_flag = hunt_event_happened
+		set_character_flag = hunt_paranoia
+	}	
+
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+	}
+
+
+	option = {
+		name = "EVTOPTA36001"
+		random_list = {
+			75 = {}
+			20 = {
+				add_trait = wounded
+				character_event = {
+					id = 36003
+					days = 1
+				}
+			}
+			4 = {
+				add_maimed_trait_effect = yes
+				character_event = {
+					id = 36003
+					days = 1
+				}
+			}
+			1 = {
+				random_courtier = {
+					limit = {
+						has_plot = plot_kill_character
+						plot_target_char = {
+							character = root
+						}
+					}
+					save_event_target_as = killer_target
+				}
+				death = { 
+					death_reason = death_murder_unknown_arrow 
+					killer = event_target:killer_target 
+				}
+				any_courtier = {
+					limit = {
+						has_plot = plot_kill_character
+						plot_target_char = {
+							character = root
+						}
+					}
+					character_event = {
+						id = 36002
+						days = 1
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB36001"
+		trigger = {
+			trait = patient
+		}
+		random_list = {
+			85 = {}
+			5 = {
+				any_courtier = {
+					limit = {
+						is_adult = yes
+						NOT = {
+							has_plot = plot_kill_character
+							plot_target_char = {
+								character = root
+							}
+						}
+					}
+					character_event = {
+						id = 36005
+						days = 1
+						tooltip = "EVTTOOLTIP36004"
+					}
+				}
+			}
+			5 = {
+				any_courtier = {
+					limit = {
+						has_plot = plot_kill_character
+						plot_target_char = {
+							character = root
+						}
+					}
+					character_event = {
+						id = 36004
+						days = 1
+						tooltip = "EVTTOOLTIP36004"
+					}
+				}
+			}
+			5 = {
+				random_courtier = {
+					limit = {
+						has_plot = plot_kill_character
+						plot_target_char = {
+							character = root
+						}
+					}
+					save_event_target_as = killer_target
+				}
+				death = { 
+					death_reason = death_murder_unknown_arrow 
+					killer = event_target:killer_target 
+				}
+				any_courtier = {
+					limit = {
+						has_plot = plot_kill_character
+						plot_target_char = {
+							character = root
+						}
+					}
+					character_event = {
+						id = 36002
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = 36002
+	desc = "EVTDESC36002"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36002"
+		prestige = 250
+	}
+}
+
+character_event = {
+	id = 36003
+	desc = "EVTDESC36003"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36003"
+		prestige = 25
+	}
+}
+
+character_event = {
+	id = 36004
+	desc = "EVTDESC36004"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36004"
+		death = { 
+			death_reason = death_murder_unknown_arrow
+			killer = FROM
+		}
+	}
+}
+
+character_event = {
+	id = 36005
+	desc = "EVTDESC36005"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36005"
+		death = { 
+			death_reason = death_murder_unknown_arrow
+			killer = FROM
+		}
+	}
+}
+
+
+#Deer Hunter, The White Hart
+character_event = {
+	id = 36010
+	desc = "EVTDESC36010"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.75
+			trait = hunter
+		}
+
+		modifier = {
+			factor = 0.5
+			has_character_flag = hunt_good_hounds
+		}
+	}
+
+	option = {
+		name = "EVTOPTA36010"
+		trigger = {
+			NOT = { trait = greedy }
+			NOT = { trait = cruel }
+		}
+		random_courtier = {
+			limit = {
+				trait = brave
+				war = no
+				prisoner = no
+				is_adult = yes
+				in_command = no
+				is_abroad = no
+			}
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		piety = 25
+	}
+
+	option = {
+		name = "EVTOPTB36010"
+		trigger = {
+			any_courtier = {
+				is_female = no
+				OR = {
+					martial = 10
+					trait = hunter
+					has_job_title = job_marshal
+				}
+			}
+		}
+		random_courtier = {
+			limit = {
+				is_female = no
+				OR = {
+					martial = 10
+					trait = hunter
+					has_job_title = job_marshal
+				}
+			}
+			opinion = {
+				modifier = opinion_delighted
+				who = ROOT
+				years = 10
+			}
+			prestige = 20
+		}
+	}
+
+	option = {
+		name = "EVTOPTC36010"
+		trigger = {
+			NOT = {	trait = craven }
+		}
+		random_list = {
+			65 = {}
+			10 = { 
+				if = {
+					limit = {
+						NOT = { trait = diligent }
+					}
+					add_trait = diligent
+					hidden_tooltip = {
+						character_event = {
+							id = 38256 #Notify Diligent
+						}
+					}
+				}
+				if = {
+					limit = {
+						trait = diligent
+					}
+					prestige = 10
+				}					
+			}		
+			10 = { change_martial = 1 }
+			10 = {
+				add_trait = wounded
+				hidden_tooltip = { character_event = { id = 38280 } }
+			}
+			5 = {
+				add_maimed_trait_effect = yes
+			}
+		}
+		prestige = 10
+		set_character_flag = hunt_killed_something
+	}
+}
+
+
+#Boars
+character_event = {
+	id = 36015
+	desc = "EVTDESC36015"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.75
+			trait = hunter
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = slothful
+		}
+
+
+		modifier = {
+			factor = 0.5
+			has_character_flag = hunt_good_hounds
+		}
+
+	}
+
+
+	option = {
+		name = "EVTOPTA36015"
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				OR = {
+					trait = brave
+					trait = ambitious
+					trait = proud
+				}
+			}
+			modifier = {
+				factor = 0
+				martial = 9
+			}
+		}
+
+		prestige = 5
+		random_list = {
+			70 = {}
+			30 = { 
+				if = { 
+					limit = { NOT = { trait = berserker } }
+					add_trait = craven 
+					hidden_tooltip = { character_event = { id = 38257 } } 
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB36015"
+		trigger = {
+			NOT = { trait = craven }
+		}
+		random_list = {
+			65 = {}
+			10 = { 
+				if = {
+					limit = {
+						NOT = { trait = diligent }
+					}
+					add_trait = diligent
+					hidden_tooltip = {
+						character_event = {
+							id = 38256 #Notify Diligent
+						}
+					}
+				}
+				if = {
+					limit = {
+						trait = diligent
+					}
+					prestige = 10
+				}						
+			}			
+			10 = { change_martial = 1 }
+			10 = {
+				add_trait = wounded
+				hidden_tooltip = { character_event = { id = 38280 } }
+			}
+			5 = {
+				add_maimed_trait_effect = yes
+			}
+		}
+
+		prestige = 10
+		set_character_flag = hunt_killed_something
+
+	}
+}
+
+
+#Bear
+character_event = {
+	id = 36020
+	desc = "EVTDESC36020"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}	
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}
+	
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.75
+			trait = hunter
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = slothful
+		}
+		modifier = {
+			factor = 5.0
+			martial = 15
+		}
+
+	}
+
+	option = {
+		name = "EVTOPTA36020"
+		trigger = {
+			NOT = {	trait = craven }
+		}
+		prestige = 5
+	}
+
+	option = {
+		name = "EVTOPTB36020"
+		trigger = {
+			NOT = {	trait = craven }
+		}
+		random_list = {
+			65 = {}
+			10 = { 
+				if = {
+					limit = {
+						NOT = { trait = diligent }
+					}
+					add_trait = diligent
+					hidden_tooltip = {
+						character_event = {
+							id = 38256 #Notify Diligent
+						}
+					}
+				}
+				if = {
+					limit = {
+						trait = diligent
+					}
+					prestige = 10
+				}					
+			}			
+			10 = { change_martial = 1 }
+			10 = {
+				add_trait = wounded
+				hidden_tooltip = { character_event = { id = 38280 } }
+			}
+			5 = {
+				add_maimed_trait_effect = yes
+			}
+		}
+		set_character_flag = hunt_killed_something
+		prestige = 10
+
+	}
+
+	option = {
+		name = "EVTOPTC36020"
+		tooltip_info = craven
+		trigger = {
+			trait = craven
+		}
+		any_courtier = {
+			limit = {
+				is_abroad = no
+				martial = 10
+			}
+			opinion = {
+				modifier = craven_neg
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+
+
+#Hound
+character_event = {
+	id = 36025
+	desc = "EVTDESC36025"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = { has_character_flag = hunt_good_hounds }
+		NOT = { trait = craven }
+		NOT = { trait = content }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}	
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+	
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = slothful
+		}
+	}
+
+	option = {
+		name = "EVTOPTA36025"
+		set_character_flag = hunt_good_hounds
+		prestige = 10
+		random = {
+			chance = 15
+			add_trait = wounded
+			hidden_tooltip = { character_event = { id = 38280 } }
+		}
+	}
+
+	option = {
+		name = "EVTOPTC36025"
+		set_character_flag = hunt_good_hounds
+		prestige = 10
+		random = {
+			chance = 25
+			character_event = { id = 36026 days = 1 random = 2 tooltip = "EVTTOOLTIP36026" }
+		}
+	}
+
+	option = {
+		name = "EVTOPTD36025"
+		prestige = -10
+	}
+}
+
+character_event = {
+	id = 36026
+	desc = "EVTDESC36026"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36026"
+		treasury = -15
+		prestige = -10
+	}
+	option = {
+		name = "EVTOPTB36026"
+		piety = -50
+		add_trait = cruel
+	}
+}
+
+
+
+#Horse
+character_event = {
+	id = 36030
+	desc = "EVTDESC36030"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+	
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 2.0
+			has_character_flag = hunt_good_hounds
+		}
+
+	}
+
+	option = {
+		name = "EVTOPTA36030"
+		trigger = {
+			NOT = { trait = slothful }
+		}
+		piety = 10
+	}
+
+	option = {
+		name = "EVTOPTB36030"
+		tooltip_info = slothful
+		trigger = {
+			trait = slothful
+		}
+		piety = -10
+	}
+}
+
+#Hare
+character_event = {
+	id = 36035
+	desc = "EVTDESC36035"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}		
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+	
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.9
+			trait = ambitious
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = slothful
+		}
+	}
+
+	option = {
+		name = "EVTOPTA36035"
+		prestige = 5
+	}
+}
+
+
+#Low martial guy, inability to kill something.
+character_event = {
+	id = 36040
+	desc = "EVTDESC36040"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		NOT = { martial = 8 }
+		NOT = { trait = hunter }
+		NOT = { has_character_flag = hunt_killed_something }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+		set_character_flag = hunt_killed_something
+	}	
+	
+	mean_time_to_happen = {
+		days = 100
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.8
+			trait = craven
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.8
+			trait = poet
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 0.8
+			NOT = { martial = 4 }
+		}
+	}
+
+	option = {
+		name = "EVTOPTA36040"
+		prestige = -20
+	}
+	option = {
+		name = "EVTOPTB36040"
+		random_courtier = {
+			limit = {
+				is_adult = yes
+				is_female = no
+				martial = 8
+			}
+			opinion = {
+				modifier = opinion_disgruntled
+				who = ROOT
+				years = 10
+			}
+		}
+		prestige = -10
+
+	}
+
+}
+
+
+#High Martial, Overconfidence
+character_event = {
+	id = 36045
+	desc = "EVTDESC36045"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		martial = 10
+		NOT = {	health_traits = 1 }
+		NOT = { has_character_flag = hunt_killed_something }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+		set_character_flag = hunt_killed_something
+	}	
+	
+	mean_time_to_happen = {
+		days = 400
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = hunter
+		}
+
+	}
+
+	option = {
+		name = "EVTOPTA36045"
+		random_list = {
+			50 = {}
+			10 = { 
+				if = {
+					limit = {
+						NOT = { trait = diligent }
+					}
+					add_trait = diligent
+					hidden_tooltip = {
+						character_event = {
+							id = 38256 #Notify Diligent
+						}
+					}
+				}
+				if = {
+					limit = {
+						trait = diligent
+					}
+					prestige = 10
+				}						
+			}			
+			25 = {
+				add_trait = wounded
+				hidden_tooltip = { character_event = { id = 38280 } }
+			}
+			10 = {
+				add_maimed_trait_effect = yes
+			}
+			5 = {
+				death = { death_reason = death_accident }
+			}
+		}
+		set_character_flag = hunt_killed_something
+		prestige = 20
+
+	}
+	option = {
+		name = "EVTOPTB36045"
+		if = {
+			limit = { NOT = { trait = berserker } }
+			add_trait = craven
+			hidden_tooltip = { character_event = { id = 38257 } } 
+		}
+	}
+}
+
+# courtier/vassal with hunter trait kills something,
+character_event = {
+	id = 36050
+	desc = "EVTDESC36050"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+	war = no
+	has_character_flag = hunt_begin
+
+	trigger = {
+		trait = hunter
+		liege = { has_character_modifier = holding_grand_hunt }
+		in_command = no
+		independent = no
+		NOT = { liege = { has_character_flag = hunt_killed_something } }
+		NOT = {	health_traits = 1 }
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}		
+	}
+
+	immediate = {
+		set_character_flag = hunt_event_happened
+	}	
+	
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = hunter
+		}
+
+	}
+
+	option = {
+		name = "EVTOPTA36050"
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				trait = content
+			}
+			modifier = {
+				factor = 0
+				trait = humble
+			}
+		}
+		prestige = 5
+		random = {
+			chance = 10
+			liege = { character_event = { id = 36051 } }
+		}
+	}
+	option = {
+		name = "EVTOPTB36050"
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0
+				trait = proud
+			}
+		}
+		liege = { character_event = { id = 36052 } }
+	}
+}
+
+character_event = {
+	id = 36051
+	desc = "EVTDESC36051"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36051"
+		FROM = {
+			imprison = ROOT
+		}
+		prestige = -5
+	}
+	option = {
+		name = "EVTOPTB36051"
+		piety = 5
+	}
+}
+
+character_event = {
+	id = 36052
+	desc = "EVTDESC36052"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA36052"
+		prestige = 5
+		FROM = {
+			opinion = {
+				modifier = opinion_proud
+				who = root
+				years = 10
+			}
+		}
+	}
+}
+
+character_event = {
+	id = 36080
+	picture = "GFX_evt_hunt"
+	desc = "EVTDESC36080"
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = hunt_begin
+	}	
+
+	option = {
+		name = "EVTOPTA36080"
+	}
+}
+
+
+#end if we go to war.
+character_event = {
+	id = 36089
+	desc = "EVTDESC36089"
+	picture = "GFX_evt_hunt"
+
+	min_age =  16
+	only_playable = yes
+	war = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		remove_character_modifier = holding_grand_hunt
+		clr_character_flag = hunt_paranoia
+		clr_character_flag = hunt_good_hounds
+		clr_character_flag = hunt_killed_something
+		clr_character_flag = do_not_disturb
+		clr_character_flag = hunt_event_happened
+		clr_character_flag = hunt_begin
+	}
+
+	option = {
+		name = "EVTOPTA36089"
+	}
+}
+
+#Normal end.
+character_event = {
+	id = 36090
+	desc = "EVTDESC36090"
+	picture = "GFX_evt_hunt"
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+	}
+
+	immediate = {
+		remove_character_modifier = holding_grand_hunt
+		clr_character_flag = hunt_paranoia
+		clr_character_flag = hunt_good_hounds
+		clr_character_flag = hunt_killed_something
+		clr_character_flag = do_not_disturb
+		clr_character_flag = hunt_event_happened
+		clr_character_flag = hunt_begin
+	}
+
+	option = {
+		name = "EVTOPTA36090"
+		prestige = 10
+	}
+}
+
+#Deer Park
+character_event = {
+	id = 4075
+	desc = "EVTDESC4075"
+	picture = GFX_evt_hunt
+
+	min_age = 20
+	only_playable = yes
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	war = no
+	has_character_flag = hunt_begin
+
+	trigger = {
+		has_character_modifier = holding_grand_hunt
+		in_command = no
+		NOT = { has_character_flag = hunt_killed_something }
+		job_treasurer = {
+			NOT = {
+				trait = greedy
+			}
+			NOT = {
+				trait = deceitful
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = hunt_event_happened }
+			had_character_flag = {
+				flag = hunt_event_happened
+				days = 3
+			}
+		}	
+		had_character_flag = {
+			flag = hunt_begin
+			days = 3
+		}
+		any_vassal = {
+			prisoner = no
+			NOT = { trait = incapable }
+			war = no
+			in_command = no
+			is_adult = yes
+			OR = {
+				is_abroad = no
+				at_location = ROOT
+			}
+			OR = {
+				trait = ambitious
+				NOT = {
+					trait = slothful
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = hunt_event_happened
+		random_vassal = {
+			limit = {
+				prisoner = no
+				NOT = { trait = incapable }
+				war = no
+				in_command = no
+				is_adult = yes
+				OR = {
+					is_abroad = no
+					at_location = ROOT
+				}
+				OR = {
+					trait = ambitious
+					NOT = {
+						trait = slothful
+					}
+				}
+			}
+			save_event_target_as = target_vassal
+		}
+	}	
+
+	mean_time_to_happen = {
+		days = 200
+		
+		modifier = {
+			factor = 0.33
+			NOT = { has_character_flag = hunt_event_happened }
+		}	
+		
+		modifier = {
+			factor = 1.5
+			has_character_flag = hunt_event_happened
+		}		
+		
+		modifier = {
+			factor = 0.5
+			trait = brave
+		}
+		
+		modifier = {
+			factor = 2
+			trait = content
+		}
+	}
+
+	option = {
+		name = "EVTOPTA4075"
+		trigger = {
+			NOT = {
+				trait = greedy
+				trait = content
+			}
+		}
+		event_target:target_vassal = {
+			opinion = {
+				modifier = opinion_irritated
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTB4075"
+		trigger = {
+			NOT = {
+				trait = greedy
+				trait = content
+			}
+		}
+		treasury = -10
+		event_target:target_vassal = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTC4075"
+		trigger = {
+			OR = {
+				trait = greedy
+				trait = content
+			}
+		}
+		event_target:target_vassal = {
+			opinion = {
+				modifier = content_neg
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+###########################################
+# Flag management                         #
+###########################################
+
+# Safety catch - clears character flags and modifiers
+character_event = {
+	id = 36999
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = holding_grand_hunt
+		clr_character_flag = hunt_paranoia
+		clr_character_flag = hunt_good_hounds
+		clr_character_flag = hunt_killed_something
+		clr_character_flag = do_not_disturb
+		clr_character_flag = hunt_event_happened
+		clr_character_flag = hunt_begin
+	}
+}

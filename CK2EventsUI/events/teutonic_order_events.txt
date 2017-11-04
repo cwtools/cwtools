@@ -1,0 +1,555 @@
+###########################################
+#
+# Holy Order Events
+#
+# ID 8700-9999 is reserved
+#
+###########################################
+
+
+########################################
+# The Teutonic Order
+########################################
+
+### Ask for a County in order to help against Pagans ###
+
+# Hochmeister writes a letter
+character_event = {
+	id = 8700
+	desc = "EVTDESC8700"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	only_playable = yes
+	religion_group = christian
+	only_independent = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		# Teutonic Order is active
+		is_title_active = d_teutonic_order
+		primary_title = {
+			title = d_teutonic_order
+		}
+
+		NOT = { has_global_flag = teutonic_order_invited_to_kingdom }
+		NOT = { has_global_flag = land_wanted_by_teutonic_order }
+		OR = {
+			NOT = { has_character_flag = land_given_to_teutonic_order }
+			had_character_flag = { flag = land_given_to_teutonic_order days = 365 }
+			had_character_flag = { flag = no_land_to_teutonic_order_at_the_moment days = 720 }
+		}
+
+		# There is a valid province
+		any_independent_ruler = {
+			religion = ROOT
+			primary_title = {
+				tier = KING
+			}
+			NOT = { has_character_flag = no_land_to_religious_orders }
+			any_demesne_province = {
+				NOT = { religion = ROOT }
+				any_province_holding = {
+					NOT = { holding_type = nomad }
+				}
+				any_neighbor_province = {
+					has_owner = yes
+					owner = {
+						religion_group = pagan_group
+					}
+				}
+				kingdom = {
+					OR = {
+						has_holder = no
+						holder_scope = {
+							NOT = { religion = ROOT }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			set_global_flag = land_wanted_by_teutonic_order
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA8700"
+		random_independent_ruler = {
+			limit = {
+				religion = ROOT
+				primary_title = {
+					tier = KING
+				}
+				any_demesne_province = {
+					NOT = { religion = ROOT }
+					any_province_holding = {
+						NOT = { holding_type = nomad }
+					}
+					any_neighbor_province = {
+						has_owner = yes
+						owner = {
+							religion_group = pagan_group
+						}
+					}
+					kingdom = {
+						OR = {
+							has_holder = no
+							holder_scope = {
+								NOT = { religion = ROOT }
+							}
+						}
+					}
+				}
+			}
+			random_demesne_province = {
+				limit = {
+					NOT = { religion = ROOT }
+					any_province_holding = {
+						NOT = { holding_type = nomad }
+					}
+					any_neighbor_province = {
+						has_owner = yes
+						owner = {
+							religion_group = pagan_group
+						}
+					}
+					kingdom = {
+						OR = {
+							has_holder = no
+							holder_scope = {
+								NOT = { religion = ROOT }
+							}
+						}
+					}
+				}
+				save_event_target_as = land_wanted_by_teutonic_order
+				owner = {
+					letter_event = { id = 8701 days = 7 }
+				}
+			}
+		}
+	}
+}
+
+# Ask permission from the King
+letter_event = {
+	id = 8701
+	desc = "EVTDESC8701"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8501"
+		ai_chance = { factor = 100 }
+		prestige = 50
+		piety = 50
+		event_target:land_wanted_by_teutonic_order = {
+			county = {
+				grant_title = FROM
+				FROM = {
+					gain_settlements_under_title = {
+						title = PREV
+						enemy = ROOT
+					}
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_granted_county_to_holy_order
+				who = ROOT
+				years = 100
+			}
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_exalted
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				event_target:land_wanted_by_teutonic_order = {
+					province_event = { id = 8702 days = 1 }
+				}
+			}
+		}
+		set_character_flag = land_given_to_teutonic_order
+	}
+	option = {
+		name = "EVTOPTB8501"
+		ai_chance = { factor = 0 }
+		set_character_flag = no_land_to_teutonic_order_at_the_moment
+	}
+	option = {
+		name = "EVTOPTC8501"
+		ai_chance = { factor = 0 }
+		piety = -25
+		FROM = {
+			opinion = {
+				modifier = opinion_angry
+				who = ROOT
+				years = 20
+			}
+		}
+		religion_head = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			FROM = { letter_event = { id = 8800 days = 1 } }
+		}
+		set_character_flag = no_land_to_religious_orders
+		clr_global_flag = land_wanted_by_teutonic_order
+	}
+}
+
+# The county has been seceded
+province_event = {
+	id = 8702
+	desc = "EVTDESC8702"
+	picture = "GFX_evt_castle_construction"
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EXCELLENT"
+		hidden_tooltip = {
+			clr_province_flag = land_wanted_by_teutonic_order
+			clr_global_flag = land_wanted_by_teutonic_order
+			owner = { narrative_event = { id = 8703 days = 7 } }
+			any_playable_ruler = {
+				limit = {
+					ai = no
+					NOT = { character = FROM }
+					OR = {
+						religion_group = christian
+						war_with = FROM
+						capital_scope = {
+							NOT = {
+								distance = {
+								where = ROOT
+								value = 100	# Means we live fairly near the province where the castle is built
+								}
+							}
+						}
+					}
+				}
+				narrative_event = { id = 8703 days = 7 }
+			}
+		}
+	}
+}
+
+# News spread about the new county
+narrative_event = {
+	id = 8703
+	title = "EVTNAME8703"
+	desc = "EVTDESC8703"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	only_rulers = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8503"
+		trigger = {
+			has_character_flag = land_given_to_teutonic_order
+		}
+		prestige = 100
+		clr_character_flag = land_given_to_teutonic_order
+	}
+	option = {
+		name = "EVTOPTB8503"
+		trigger = {
+			NOT = { has_character_flag = land_given_to_teutonic_order }
+			religion = FROMFROM
+		}
+	}
+	option = {
+		name = "EVTOPTC8503"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTD8503"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = FROMFROM }
+		}
+	}
+}
+
+
+### HRE vassal wants to give land to the Teutonic Order ###
+
+# HRE vassal wants to donate land to the Teutonic Order
+province_event = {
+	id = 8720
+	desc = "EVTDESC8720"
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	trigger = {
+		owner = {
+			NOT = { has_character_flag = no_land_to_teutonic_order }
+			NOT = { has_character_flag = wants_to_give_land_to_teutonic_order }
+			
+			war = no
+			
+			# The Emperor is Top liege
+			top_liege = {
+				OR = {
+					AND = {
+						primary_title = { title = e_hre	}
+						e_germany = { has_holder = no }
+						culture_group = central_germanic
+					}
+					primary_title = { title = e_germany	}
+				}
+			}
+
+			# Teutonic Order is active
+			is_title_active = d_teutonic_order
+			any_independent_ruler = {
+				primary_title = {
+					title = d_teutonic_order
+				}
+			}
+		}
+		# There is a valid province
+		any_province_holding = {
+			NOT = { holding_type = nomad }
+		}
+		region = custom_eastern_baltic
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 0.75
+			religion_group = pagan_group
+		}
+		modifier = {
+			factor = 0.75
+			any_neighbor_province = {
+				has_owner = yes
+				owner = {
+					religion_group = pagan_group
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			owner = { set_character_flag = wants_to_give_land_to_teutonic_order }
+			set_province_flag = province_to_the_teutonic_order
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA8720"
+		tooltip = {
+			owner = {
+				any_independent_ruler = {
+					limit = {
+						primary_title = {
+							title = d_teutonic_order
+						}
+					}
+					ROOT = {
+						county = {
+							grant_title = PREVPREV
+						}
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				liege = { letter_event = { id = 8721 days = 3 } }
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB8720"
+		owner = { set_character_flag = no_land_to_teutonic_order }
+	}
+}
+
+# Liege decides
+letter_event = {
+	id = 8721
+	desc = "EVTDESC8721"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8721"	# Ask top liege
+		trigger = { independent = no }
+		liege = { letter_event = { id = 8722 days = 3 } }
+	}
+	option = {
+		name = "EVTOPTB8721"	# Yes
+		ai_chance = { factor = 100 }
+		trigger = { independent = yes }
+		FROM = {
+			owner = {
+				letter_event = {
+					id = 8723
+					days = 3
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC8721"	# No
+		ai_chance = { factor = 0 }
+		trigger = { independent = yes }
+		FROM = {
+			owner = {
+				letter_event = {
+					id = 8724
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+# Top liege decides
+letter_event = {
+	id = 8722
+	desc = "EVTDESC8722"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8722"	# Yes
+		ai_chance = { factor = 100 }
+		FROMFROM = {
+			owner = {
+				letter_event = {
+					id = 8723
+					days = 3
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB8722"	# No
+		ai_chance = { factor = 0 }
+		FROMFROM = {
+			owner = {
+				letter_event = {
+					id = 8724
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+# Gift was allowed
+letter_event = {
+	id = 8723
+	desc = "EVTDESC8723"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8723"
+		any_independent_ruler = {
+			limit = {
+				primary_title = {
+					title = d_teutonic_order
+				}
+			}
+			letter_event = { id = 8725 days = 3 }
+		}
+	}
+}
+
+# Gift was not allowed
+letter_event = {
+	id = 8724
+	desc = "EVTDESC8724"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8724"
+	}
+}
+
+# The Teutonic Order is informed
+letter_event = {
+	id = 8725
+	desc = "EVTDESC8725"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EXCELLENT"
+		FROM = {
+			random_demesne_province = {
+				limit = { has_province_flag = province_to_the_teutonic_order }
+				clr_province_flag = province_to_the_teutonic_order
+				county = {
+					grant_title = ROOT
+					ROOT = {
+						gain_settlements_under_title = {
+							title = PREV
+							enemy = FROM
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+########################################
+# General Holy Order Events
+########################################
+
+### No Religious Orders Allowed ###
+
+letter_event = {
+	id = 8800
+	desc = "EVTDESC8800"
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8800"
+	}
+}

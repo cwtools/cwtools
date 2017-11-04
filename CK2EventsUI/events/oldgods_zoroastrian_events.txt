@@ -1,0 +1,142 @@
+###################################
+#
+# THE OLD GODS 
+# - Zoroastrian Events
+#
+###################################
+
+# Written by Henrik Eklund
+
+namespace = TOG
+
+# The Saoshyant
+narrative_event = {
+	id = TOG.6000
+	title = EVTNAME_TOG_6000
+	desc = EVTDESC_TOG_6000
+	picture = GFX_evt_imam
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				ai = no
+			}
+			set_character_flag = achievement_brings_benefit
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_6000
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = { 
+					ai = no 
+					NOT = { character = ROOT }
+				}
+				narrative_event = { id = TOG.6003 }
+			}
+		}
+	}
+}
+
+# Children gains Saoshyant Descendant trait from Saoshyant
+character_event = {
+	id = TOG.6001
+	hide_window = yes
+	
+	max_age = 2
+	has_dlc = "The Old Gods"
+	has_global_flag = saoshyant_appears
+	
+	trigger = {
+		OR = {
+			mother = { trait = saoshyant }
+			father = { trait = saoshyant }
+			mother = { trait = saoshyant_descendant }
+			father = { trait = saoshyant_descendant } 
+		}
+		NOT = { trait = saoshyant_descendant }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		add_trait = saoshyant_descendant
+	}
+}
+
+# The Saoshyant Major
+narrative_event = {
+	id = TOG.6003
+	title = EVTNAME_TOG_6000
+	desc = EVTDESC_TOG_6003
+	picture = GFX_evt_imam
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_6003
+		trigger = {
+			religion_group = zoroastrian_group
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_6003
+		trigger = {
+			NOT = {
+				religion_group = zoroastrian_group
+				religion_group = muslim
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_6003
+		trigger = {
+			religion_group = muslim
+		}
+	}
+}
+
+# The Priesthood Restored
+narrative_event = {
+	id = TOG.6004
+	title = EVTNAME_TOG_6004
+	desc = EVTDESC_TOG_6004
+	picture = GFX_evt_imam
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_TOG_6004
+		trigger = {
+			religion_group = zoroastrian_group
+		}
+	}
+	option = {
+		name = EVTOPTB_TOG_6004
+		trigger = {
+			NOT = {
+				religion_group = zoroastrian_group
+				religion_group = muslim
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_TOG_6004
+		trigger = {
+			religion_group = muslim
+		}
+	}
+}
+

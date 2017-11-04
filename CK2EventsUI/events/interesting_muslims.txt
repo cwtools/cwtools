@@ -1,0 +1,3665 @@
+###################################
+#
+# Events for Interesting Muslims
+#
+# Id 106000 - 106999 is reserved
+#
+#
+###################################
+#
+# Written by Sara Wendel-Örtqvist
+
+### Al-Ghazali ###
+province_event = {
+	id = 106000
+	desc = EVTDESC106000
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 632 #Tus
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				NOT = {
+					any_courtier = {
+						has_character_flag = al_ghazali_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = al_ghazali_flag
+					}
+				}
+				religion_group = muslim
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106000
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106001
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106001
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Al-Ghazali
+character_event = {
+	id = 106001
+	desc = EVTDESC106001
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106001
+		create_character = {
+			name = "Abu Hamid"
+			dynasty = 1031100
+			attributes = {
+				learning = 8
+				diplomacy = 13
+			}
+			religion = ROOT
+			culture = persian
+			age = 27
+			female = no
+			trait = mystic
+			trait = mastermind_theologian
+			trait = zealous
+			trait = just
+			trait = faqih
+		}
+		new_character = {
+			set_character_flag = al_ghazali_flag
+		}
+	}
+}
+
+### Muhammad al-Idrisi ###
+province_event = {
+	id = 106005
+	desc = EVTDESC106005
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 839 #Cebta
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				NOT = {
+					any_courtier = {
+						has_character_flag = muhammad_alidrisi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = muhammad_alidrisi_flag
+					}
+				}
+				religion_group = muslim
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106005
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106006
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106006
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Muhammad al-Idrisi
+character_event = {
+	id = 106006
+	desc = EVTDESC106006
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106001
+		create_character = {
+			name = Muhammad
+			dynasty = 1031101
+			attributes = {
+				learning = 15
+				stewardship = 15
+			}
+			religion = ROOT
+			culture = maghreb_arabic
+			age = 25
+			female = no
+			trait = sayyid
+			trait = scholar
+			trait = charismatic_negotiator
+			trait = quick
+		}
+		new_character = {
+			set_character_flag = muhammad_alidrisi_flag
+		}
+	}
+}
+
+### Ibn Khaldun ###
+province_event = {
+	id = 106010
+	desc = EVTDESC106010
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 817 #Tunis
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_khaldun_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_khaldun_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106010
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106011
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106011
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn Khaldun
+character_event = {
+	id = 106011
+	desc = EVTDESC106011
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106011
+		create_character = {
+			name = Ibn
+			dynasty = 1031102
+			attributes = {
+				learning = 15
+			}
+			religion = ROOT
+			culture = maghreb_arabic
+			age = 30
+			female = no
+			trait = sayyid
+			trait = scholar
+			trait = ambitious
+			trait = quick
+			trait = charismatic_negotiator
+			trait = gregarious
+		}
+		new_character = {
+			set_character_flag = ibn_khaldun_flag
+		}
+	}
+}
+
+### Zakariya al-Qazwini ###
+province_event = {
+	id = 106015
+	desc = EVTDESC106015
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 664 #Qazwin
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = zakariya_al_qazwini_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = zakariya_al_qazwini_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106015
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106016
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106016
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Zakariya al-Qazwini
+character_event = {
+	id = 106016
+	desc = EVTDESC106016
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106016
+		create_character = {
+			name = Zakariya
+			dynasty = 1031103
+			culture = persian
+			religion = sunni
+			attributes = {
+				learning = 15
+			}
+			age = 35
+			female = no
+			trait = diligent
+			trait = scholar
+			trait = fortune_builder
+			trait = quick
+			trait = gregarious
+		}
+		new_character = {
+			set_character_flag = zakariya_al_qazwini_flag
+			if = {
+				limit = {
+					ROOT = {
+						OR = {
+							tier = emperor
+							tier = king
+						}
+						NOT = {
+							any_courtier = {
+								has_minor_title = title_chief_qadi
+							}
+						}
+						NOT = {
+							any_vassal = {
+								has_minor_title = title_chief_qadi
+							}
+						}
+					}
+				}
+				give_minor_title = title_chief_qadi
+			}
+		}
+	}
+}
+
+### Al-Juwayni ###
+province_event = {
+	id = 106020
+	desc = EVTDESC106020
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		OR = {
+			province_id = 719 #Mecca
+			province_id = 718 #Medina
+		}
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = al_juwayni_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = al_juwayni_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106020
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106021
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106021
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Al-Juwayni
+character_event = {
+	id = 106021
+	desc = EVTDESC106021
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106021
+		create_character = {
+			name = Ibn
+			dynasty = 1031104
+			culture = persian
+			religion = sunni
+			attributes = {
+				learning = 9
+			}
+			age = 20
+			female = no
+			trait = scholar
+			trait = mastermind_theologian
+			trait = just
+		}
+		new_character = {
+			set_character_flag = al_juwayni_flag
+		}
+	}
+}
+
+### Kamal al-Din al-Farisi ###
+province_event = {
+	id = 106025
+	desc = EVTDESC106025
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 667 #Tabriz
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = kamal_aldin_alfarisi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = kamal_aldin_alfarisi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106025
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106026
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106026
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Kamal al-Din al-Farisi
+character_event = {
+	id = 106026
+	desc = EVTDESC106026
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106026
+		create_character = {
+			name = "Kamal al-Din"
+			dynasty = 1031105
+			religion = ROOT
+			culture = persian
+			attributes = {
+				learning = 11
+			}
+			age = 30
+			female = no
+			trait = scholar
+			trait = quick
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = kamal_aldin_alfarisi_flag
+		}
+	}
+}
+
+### Rashid al-Din Tabib ###
+province_event = {
+	id = 106030
+	desc = EVTDESC106030
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 658 #Hamadan
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = rashid_aldin_hamadani_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = rashid_aldin_hamadani_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106030
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106031
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106031
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Rashid al-Din Hamadani
+character_event = {
+	id = 106031
+	desc = EVTDESC106031
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106031
+		create_character = {
+			name = "Rashid al-Din"
+			dynasty = 1031106
+			religion = ROOT
+			culture = persian
+			attributes = {
+				learning = 11
+			}
+			age = 55
+			female = no
+			trait = ambitious
+			trait = scholar
+			trait = quick
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = rashid_aldin_hamadani_flag
+		}
+	}
+}
+
+### Ibn al-Nafis ###
+province_event = {
+	id = 106035
+	desc = EVTDESC106035
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 728 #Damascus
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_alnafis_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_alnafis_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106035
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106036
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106036
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn al-Nafis
+character_event = {
+	id = 106036
+	desc = EVTDESC106036
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106036
+		create_character = {
+			name = Ibn
+			dynasty = 1031107
+			attributes = {
+				learning = 11
+			}
+			religion = ROOT
+			culture = levantine_arabic
+			age = 23
+			female = no
+			trait = mystic
+			trait = quick
+			trait = charitable
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = ibn_alnafis_flag
+		}
+	}
+}
+
+### Abu'l-Barakat al-Baghdadi ###
+province_event = {
+	id = 106040
+	desc = EVTDESC106040
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 693 #Baghdad
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = abul_barakat_albaghdadi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = abul_barakat_albaghdadi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106040
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106041
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106041
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Abu'l-Barakat al-Baghdadi
+character_event = {
+	id = 106041
+	desc = EVTDESC106041
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106041
+		create_character = {
+			name = Abu'l-Barakat
+			dynasty = 1031108
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = levantine_arabic
+			age = 55
+			female = no
+			trait = genius
+			trait = scholar
+			trait = scholarly_theologian
+			trait = cynical
+		}
+		new_character = {
+			set_character_flag = abul_barakat_albaghdadi_flag
+		}
+	}
+}
+
+### Avempace ###
+province_event = {
+	id = 106045
+	desc = EVTDESC106045
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 202 #Zaragoza
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = avempace_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = avempace_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106045
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106046
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106046
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Avempace
+character_event = {
+	id = 106046
+	desc = EVTDESC106046
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106046
+		create_character = {
+			name = Avempace
+			dynasty = 1031109
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = andalusian_arabic
+			age = 55
+			female = no
+			trait = scholar
+			trait = poet
+			trait = genius
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = avempace_flag
+		}
+	}
+}
+
+### Nizami Ganjavi ###
+province_event = {
+	id = 106050
+	desc = EVTDESC106050
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 673 #Albania
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = nizami_ganjavi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = nizami_ganjavi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106050
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106051
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106051
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Nizami Ganjavi
+character_event = {
+	id = 106051
+	desc = EVTDESC106051
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106051
+		create_character = {
+			name = Nizami
+			dynasty = 1031110
+			attributes = {
+				learning = 9
+			}
+			religion = sunni
+			culture = persian
+			age = 25
+			female = no
+			trait = poet
+			trait = quick
+			trait = charismatic_negotiator
+		}
+		new_character = {
+			set_character_flag = nizami_ganjavi_flag
+		}
+	}
+}
+
+### Muhammad ibn Mahmud Amuli ###
+province_event = {
+	id = 106055
+	desc = EVTDESC106055
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 661 #Tabaristan (Amol)
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = muhammad_ibn_mahmud_amuli_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = muhammad_ibn_mahmud_amuli_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106055
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106056
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106056
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Muhammad ibn Mahmud Amuli
+character_event = {
+	id = 106056
+	desc = EVTDESC106056
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106056
+		create_character = {
+			name = Muhammad
+			dynasty = 1031111
+			attributes = {
+				learning = 7
+			}
+			religion = ROOT
+			culture = persian
+			age = 25
+			female = no
+			trait = scholar
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = muhammad_ibn_mahmud_amuli_flag
+		}
+	}
+}
+
+### Jalal ad-Din Muhammad Balkhi ###
+province_event = {
+	id = 106060
+	desc = EVTDESC106060
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 904 #Balkh
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = rumi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = rumi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106060
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106061
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106061
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Jalal ad-Din Muhammad Balkhi
+character_event = {
+	id = 106061
+	desc = EVTDESC106061
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106061
+		create_character = {
+			name = "Jalal ad-Din Muhammad"
+			dynasty = 1031112
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = scholarly_theologian
+			trait = poet
+			trait = scholar
+			trait = mystic
+		}
+		new_character = {
+			set_character_flag = rumi_flag
+		}
+	}
+}
+
+### Baha-ud-Din Naqshband Bukhari ###
+province_event = {
+	id = 106065
+	desc = EVTDESC106065
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 628 #Bukhara
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = naqshband_bukhari_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = naqshband_bukhari_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106065
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106066
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106066
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Baha-ud-Din Naqshband Bukhari
+character_event = {
+	id = 106066
+	desc = EVTDESC106066
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106066
+		create_character = {
+			name = "Baha-ud-Din Naqshband"
+			dynasty = 1031113
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 25
+			female = no
+			trait = mastermind_theologian
+			trait = mystic
+			trait = genius
+		}
+		new_character = {
+			set_character_flag = naqshband_bukhari_flag
+		}
+	}
+}
+
+### Shahab al-Din Suhrawardi ###
+province_event = {
+	id = 106070
+	desc = EVTDESC106070
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 665 #Dailam
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = shahab_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = shahab_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106070
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106071
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106071
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Shahab al-Din Suhrawardi
+character_event = {
+	id = 106071
+	desc = EVTDESC106071
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106071
+		create_character = {
+			name = "Shahab al-Din"
+			dynasty = 1031114
+			attributes = {
+				learning = 9
+			}
+			religion = shiite
+			culture = persian
+			age = 25
+			female = no
+			trait = mystic
+			trait = genius
+			trait = mastermind_theologian
+		}
+		new_character = {
+			set_character_flag = shahab_flag
+		}
+	}
+}
+
+### Athir al-Din al-Abhari ###
+province_event = {
+	id = 106075
+	desc = EVTDESC106075
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 697 #Mosul
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = athir_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = athir_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106075
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106076
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106076
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Athir al-Din al-Abhari
+character_event = {
+	id = 106076
+	desc = EVTDESC106076
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106076
+		create_character = {
+			name = "Athir al-Din"
+			dynasty = 1031115
+			attributes = {
+				learning = 8
+			}
+			religion = shiite
+			culture = persian
+			age = 35
+			is_female = no
+			trait = scholar
+			trait = genius
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = athir_flag
+		}
+	}
+}
+
+### Nasir al-Din al-Tusi ###
+province_event = {
+	id = 106080
+	desc = EVTDESC106080
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 632 #Tus
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = nasir_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = nasir_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106080
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106081
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106081
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Nasir al-Din al-Tusi
+character_event = {
+	id = 106081
+	desc = EVTDESC106081
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106081
+		create_character = {
+			name = "Nasir al-Din"
+			dynasty = 1031116
+			attributes = {
+				learning = 11
+			}
+			religion = shiite
+			culture = persian
+			age = 30
+			female = no
+			trait = scholarly_theologian
+			trait = scholar
+			trait = diligent
+		}
+		new_character = {
+			set_character_flag = nasir_flag
+		}
+	}
+}
+
+### Ibn Zuhr ###
+province_event = {
+	id = 106085
+	desc = EVTDESC106085
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 182 #Sevilla
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_zuhr_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_zuhr_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106085
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106086
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106086
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn Zuhr
+character_event = {
+	id = 106086
+	desc = EVTDESC106086
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106086
+		create_character = {
+			name = Ibn
+			dynasty = 1031117
+			attributes = {
+				learning = 9
+			}
+			religion = sunni
+			culture = andalusian_arabic
+			age = 30
+			female = no
+			trait = scholar
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = ibn_zuhr_flag
+		}
+	}
+}
+
+### Mir Sayyid Ali Hamadani ###
+province_event = {
+	id = 106090
+	desc = EVTDESC106090
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 658 #Hamadan
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = mir_sayyid_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = mir_sayyid_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106090
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106091
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106091
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Mir Sayyid Ali Hamadani
+character_event = {
+	id = 106091
+	desc = EVTDESC106091
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106091
+		create_character = {
+			name = "Mir Sayyid Ali"
+			dynasty = 1031118
+			attributes = {
+				learning = 9
+			}
+			religion = sunni
+			culture = persian
+			age = 40
+			female = no
+			trait = hafiz
+			trait = hajjaj
+			trait = humble
+			trait = scholar
+			trait = mastermind_theologian
+		}
+		new_character = {
+			set_character_flag = mir_sayyid_flag
+		}
+	}
+}
+
+### Qutb al-Din al-Shirazi ###
+province_event = {
+	id = 106095
+	desc = EVTDESC106095
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 643 #Fars
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = qutb_shirazi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = qutb_shirazi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106095
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106096
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106096
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Qutb al-Din al-Shirazi
+character_event = {
+	id = 106096
+	desc = EVTDESC106096
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106096
+		create_character = {
+			name = "Qutb al-Din"
+			dynasty = 1031119
+			attributes = {
+				learning = 9
+			}
+			religion = sunni
+			culture = persian
+			age = 35
+			female = no
+			trait = mystic
+			trait = elusive_shadow
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = qutb_shirazi_flag
+		}
+	}
+}
+
+### Al-Dakhwar ###
+province_event = {
+	id = 106100
+	desc = EVTDESC106100
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 728 #Damascus
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = al_dakhwar_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = al_dakhwar_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106100
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106101
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106101
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Al-Dakhwar
+character_event = {
+	id = 106101
+	desc = EVTDESC106101
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106101
+		create_character = {
+			name = Muhadhdhabuddin
+			dynasty = 1031120
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = levantine_arabic
+			age = 23
+			female = no
+			trait = scholar
+			trait = quick
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = al_dakhwar_flag
+		}
+	}
+	option = {
+		name = EVTOPTB106101
+		prestige = -10
+	}
+}
+
+### Zayn al-Din Gorgani ###
+province_event = {
+	id = 106105
+	desc = EVTDESC106105
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 633 #Gurgan
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = zayn_gorgani_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = zayn_gorgani_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106105
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106106
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106106
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Zayn al-Din Gorgani
+character_event = {
+	id = 106106
+	desc = EVTDESC106106
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106106
+		create_character = {
+			name = "Zayn al-Din"
+			dynasty = 1031121
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 45
+			female = no
+			trait = scholar
+			trait = quick
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = zayn_gorgani_flag
+		}
+	}
+}
+
+### Rashidun al-Suri ###
+province_event = {
+	id = 106110
+	desc = EVTDESC106110
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 774 #Jerusalem
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = rashidun_al_suri_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = rashidun_al_suri_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106110
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106111
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106111
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Rashidun al-Suri
+character_event = {
+	id = 106111
+	desc = EVTDESC106111
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106111
+		create_character = {
+			name = Rashidun
+			dynasty = 1031122
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = levantine_arabic
+			age = 30
+			female = no
+			trait = gardener
+			trait = mystic
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = rashidun_al_suri_flag
+		}
+	}
+}
+
+### Ibn al-Baitar ###
+province_event = {
+	id = 106115
+	desc = EVTDESC106115
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 167 #Malaga
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_baitar_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_baitar_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106115
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106116
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106116
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn al-Baitar
+character_event = {
+	id = 106116
+	desc = EVTDESC106116
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106116
+		create_character = {
+			name = Ibn
+			dynasty = 1031123
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = andalusian_arabic
+			age = 30
+			female = no
+			trait = gardener
+			trait = scholar
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = ibn_baitar_flag
+		}
+	}
+}
+
+### Hamdallah Mustawfi ###
+province_event = {
+	id = 106120
+	desc = EVTDESC106120
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 664 #Qazwin
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = hamdallah_mustawfi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = hamdallah_mustawfi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106120
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106121
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106121
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Hamdallah Mustawfi
+character_event = {
+	id = 106121
+	desc = EVTDESC106121
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106121
+		create_character = {
+			name = Hamdallah
+			dynasty = 1031124
+			attributes = {
+				learning = 7
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = poet
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = hamdallah_mustawfi_flag
+		}
+	}
+}
+
+### Khwaja Abdullah Ansari ###
+province_event = {
+	id = 106125
+	desc = EVTDESC106125
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 905 #Herat
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = khwaja_abdullah_ansari_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = khwaja_abdullah_ansari_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106125
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106126
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106126
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Khwaja Abdullah Ansari
+character_event = {
+	id = 106126
+	desc = EVTDESC106126
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106126
+		create_character = {
+			name = "Khwaja Abdullah"
+			dynasty = 1031125
+			attributes = {
+				learning = 9
+				diplomacy = 10
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = mastermind_theologian
+			trait = poet
+			trait = gregarious
+		}
+		new_character = {
+			set_character_flag = khwaja_abdullah_ansari_flag
+		}
+	}
+}
+
+### Jamshid al-Kashi ###
+province_event = {
+	id = 106130
+	desc = EVTDESC106130
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 646 #Esfahan (Kashan)
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = jamshid_al_kashi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = jamshid_al_kashi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106130
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106131
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106131
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Jamshid al-Kashi
+character_event = {
+	id = 106131
+	desc = EVTDESC106131
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106131
+		create_character = {
+			name = Jamshid
+			dynasty = 1031126
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 35
+			female = no
+			trait = scholar
+			trait = genius
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = jamshid_al_kashi_flag
+		}
+	}
+}
+
+### Najmuddin Kubra ###
+province_event = {
+	id = 106135
+	desc = EVTDESC106135
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 623 #Khwarizm
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = najmuddin_kubra_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = najmuddin_kubra_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106135
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106136
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106136
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Najmuddin Kubra
+character_event = {
+	id = 106136
+	desc = EVTDESC106136
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106136
+		create_character = {
+			name = Najmuddin
+			dynasty = 1031127
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = scholar
+			trait = quick
+			trait = mastermind_theologian
+		}
+		new_character = {
+			set_character_flag = najmuddin_kubra_flag
+		}
+	}
+}
+
+### Omar Khayyám ###
+province_event = {
+	id = 106140
+	desc = EVTDESC106140
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 634 #Nishapur
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = omar_khayyam_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = omar_khayyam_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106140
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106141
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106141
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Omar Khayyám
+character_event = {
+	id = 106141
+	desc = EVTDESC106141
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106141
+		create_character = {
+			name = Omar
+			dynasty = 1031128
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = scholar
+			trait = hajjaj
+			trait = quick
+			trait = mastermind_theologian
+		}
+		new_character = {
+			set_character_flag = omar_khayyam_flag
+		}
+	}
+}
+
+### Ibn Battuta ###
+province_event = {
+	id = 106145
+	desc = EVTDESC106145
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 841 #Tangier
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_battuta_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_battuta_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106145
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106146
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106146
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn Battuta
+character_event = {
+	id = 106146
+	desc = EVTDESC106146
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106146
+		create_character = {
+			name = Ibn
+			dynasty = 1031129
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = maghreb_arabic
+			age = 30
+			female = no
+			trait = hajjaj
+			trait = ambitious
+			trait = poet
+			trait = charismatic_negotiator
+		}
+		new_character = {
+			set_character_flag = ibn_battuta_flag
+		}
+	}
+}
+
+### Fakhr al-Din al-Razi ###
+province_event = {
+	id = 106150
+	desc = EVTDESC106150
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 663 #Rayy
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = fakhr_razi_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = fakhr_razi_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106150
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106151
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106151
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Fakhr al-Din al-Razi
+character_event = {
+	id = 106151
+	desc = EVTDESC106151
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106151
+		create_character = {
+			name = "Fakhr al-Din"
+			dynasty = 1031130
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = ambitious
+			trait = scholarly_theologian
+			trait = scholar
+		}
+		new_character = {
+			set_character_flag = fakhr_razi_flag
+		}
+	}
+}
+
+### Ibn al-Khatib ###
+province_event = {
+	id = 106155
+	desc = EVTDESC106155
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 180 #Granada
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_al_khatib_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_al_khatib_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106155
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106156
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106156
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn al-Khatib
+character_event = {
+	id = 106156
+	desc = EVTDESC106156
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106156
+		create_character = {
+			name = Ibn
+			dynasty = 1031131
+			attributes = {
+				learning = 9
+				diplomacy = 11
+			}
+			religion = ROOT
+			culture = andalusian_arabic
+			age = 30
+			female = no
+			trait = poet
+			trait = ambitious
+			trait = charismatic_negotiator
+			trait = gregarious
+		}
+		new_character = {
+			set_character_flag = ibn_al_khatib_flag
+			add_ambition = obj_become_chancellor
+		}
+	}
+}
+
+### Ibn Rushd ###
+province_event = {
+	id = 106160
+	desc = EVTDESC106160
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 181 #Cordoba
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = ibn_rushd_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = ibn_rushd_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106160
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106161
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106161
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn Rushd
+character_event = {
+	id = 106161
+	desc = EVTDESC106161
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106161
+		create_character = {
+			name = Ibn
+			dynasty = 1031132
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = andalusian_arabic
+			age = 30
+			female = no
+			trait = ambitious
+			trait = scholar
+			trait = faqih
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = ibn_rushd_flag
+		}
+	}
+}
+
+### Ibn Sina ###
+province_event = {
+	id = 106165
+	desc = EVTDESC106165
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 628 #Bukhara
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = avicenna_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = avicenna_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106165
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106166
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106166
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Ibn Sina
+character_event = {
+	id = 106166
+	desc = EVTDESC106166
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106166
+		create_character = {
+			name = Ibn
+			dynasty = 1031133
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = ambitious
+			trait = poet
+			trait = scholar
+			trait = scholarly_theologian
+		}
+		new_character = {
+			set_character_flag = avicenna_flag
+		}
+	}
+}
+
+### Al-Jaldaki ###
+province_event = {
+	id = 106170
+	desc = EVTDESC106170
+	picture = GFX_evt_emissary
+	
+	trigger = {
+		province_id = 635 #Qohistan
+		NOT = {
+			has_province_modifier = famous_muslim_timer
+		}
+		owner = {
+			religion_group = muslim
+			top_liege = {
+				in_command = no
+				age = 16
+				NOT = {
+					trait = on_hajj
+				}
+				religion_group = muslim
+				NOT = {
+					any_courtier = {
+						has_character_flag = al_jaldaki_flag
+					}
+				}
+				NOT = {
+					any_vassal = {
+						has_character_flag = al_jaldaki_flag
+					}
+				}
+				NOT = {
+					has_character_modifier = muslim_famous_timer
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1000
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			add_province_modifier = {
+				name = famous_muslim_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA106170
+		owner = {
+			top_liege = {
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = muslim_famous_timer
+						duration = 1825
+						hidden = yes
+					}
+				}
+				character_event = {
+					id = 106171
+					days = 3
+					random = 4
+					tooltip = EVTTOOLTIP106171
+				}
+			}
+		}
+	}
+}
+
+#Liege get new character: Al-Jaldaki
+character_event = {
+	id = 106171
+	desc = EVTDESC106171
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA106171
+		create_character = {
+			name = "Izz al-Din Aydamir"
+			dynasty = 1031134
+			attributes = {
+				learning = 9
+			}
+			religion = ROOT
+			culture = persian
+			age = 30
+			female = no
+			trait = mystic
+			trait = scholarly_theologian
+			trait = quick
+		}
+		new_character = {
+			set_character_flag = al_jaldaki_flag
+		}
+	}
+}
