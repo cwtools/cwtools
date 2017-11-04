@@ -12,7 +12,7 @@ open FParsec
 type HomeController () =
     inherit Controller()
 
-    static let ck2 = Events.parseAll
+    static let ck2 = Events.parseTen
 
     member this.Index () =
         eprintfn "Test"
