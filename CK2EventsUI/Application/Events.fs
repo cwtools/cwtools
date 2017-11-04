@@ -14,16 +14,17 @@ module Events =
     let shuffle a =
         Array.iteri (fun i _ -> swap a i (rand.Next(i, Array.length a))) a
 
-    let parseAll =
-        Directory.EnumerateFiles("events")
-        |> Seq.map (CKParser.parseEventFile >> CKParser.prettyPrint)
-        |> List.ofSeq
+    let parseAll directory =
+        Directory.EnumerateFiles(directory)
+        |> Array.ofSeq
+        |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
+        |> List.ofArray
 
-    let parseTen =
-            let all = Directory.EnumerateFiles("events")
+    let parseTen directory =
+            let all = Directory.EnumerateFiles(directory)
                     |> Array.ofSeq
             shuffle all
             Array.take 10 all
-            |> Array.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
+            |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
             |> List.ofArray
             
