@@ -3,6 +3,11 @@ namespace CK2_Events.Application
 open FParsec
 
 module CKParser =
+
+    // type SimpleTag(name: string, value:string) =
+    //     member val Name = name with get, set
+    //     member val Value = value with get, set
+
     type ID =
         | ID of string
         override x.ToString() = let (ID v) = x in sprintf "%s" v  
