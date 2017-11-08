@@ -2,6 +2,8 @@ namespace CK2_Events.Application
 
 open CK2_Events.Application.CKParser
 module Process =
+    type Option() =
+        member val Name = "" with get, set      
     type Event() =
         member val ID = "" with get, set
         member val Desc = "" with get, set

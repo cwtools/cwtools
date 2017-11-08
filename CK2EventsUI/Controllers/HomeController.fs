@@ -16,9 +16,11 @@ type HomeController () =
 
     member this.Index () =
         eprintfn "Test"
-        let ck2 = Events.parseTen
+        let ck2 = Events.parseTen "events"
         this.View(ck2)  
         
-
+    member this.Test () =
+        this.View();
+        
     member this.Error () =
         this.View();
