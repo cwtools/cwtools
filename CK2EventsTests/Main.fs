@@ -29,7 +29,7 @@ let parserTests =
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
             Expect.isTrue error (sprintf "%A" message)
-        
+
         testCase "process one" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
 
@@ -40,6 +40,17 @@ let parserTests =
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
                     Expect.equal (firstEvent.Tag "id") (CKParser.Value.String("WoL.10100")) "ID wrong"
+                |Failure(msg, _, _) -> 
+                    Expect.isTrue false msg
+        
+        testCase "foldback" <| fun () ->
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
+
+            match parsed with
+                |Success(v,_,_) -> 
+                    let root = Process.processEventFile v
+                    let test = Process.testNode root.Events.[0]
+                    Expect.isTrue false (sprintf "%A" test)
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
     ]
