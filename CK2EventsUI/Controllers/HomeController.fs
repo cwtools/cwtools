@@ -10,11 +10,13 @@ open FParsec
 open CK2_Events.Application.Process
 open System.Reflection
 open Newtonsoft.Json
+open Newtonsoft.Json.FSharp
 
 module Utils = 
+    let opts = [| TupleArrayConverter() :> JsonConverter |] // this goes global
     type System.Object with
         member x.ToJson =
-            JsonConvert.SerializeObject x
+            JsonConvert.SerializeObject(x,opts)
         
 open Utils
 
@@ -32,7 +34,6 @@ type HomeController () =
                     | Success(v, _, _) -> processEventFile v
                     | _ -> failwith "No root"
         this.View(ck2)
-
 
 
     member this.GetData () =

@@ -16,5 +16,6 @@
     <PackageReference Include="FParsec" Version="*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="*" />
     <PackageReference Include="Newtonsoft.Json" Version="*"/>
+    <PackageReference Include="Newtonsoft.Json.FSharp" Version="*"/>
   </ItemGroup>
 </Project>

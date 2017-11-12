@@ -13,7 +13,7 @@
       // Program starts here. Creates a sample graph in the
       // DOM node with the specified ID. This function is invoked
       // from the onLoad event handler of the document (see below).
-      function main(container, data)
+      function main(container, data, triggers)
       {
          // Checks if the browser is supported
          if (!mxClient.isBrowserSupported())
@@ -38,6 +38,7 @@
             // is normally the first child of the root (ie. layer 0).
             var parent = graph.getDefaultParent();
             var roots = [];
+            var options = [];
 
 
             try
@@ -47,8 +48,9 @@
             data.forEach(function(element) {
                 var name = element.ID;
                 // create graph element
-                var graphElement = graph.insertVertex(parent, null,
+                var graphElement = graph.insertVertex(parent, name,
                                                     name, 20, 20, 80, 30);
+                
                 // check if any parent element
                 if(false && element.parentObjects.length > 0) {
                     // run through each parent element
@@ -64,6 +66,21 @@
                 // add element to dictionary. this is needed to find object later(parent)
                 dict[name] = graphElement;
             });
+            var vertices = graph.getChildVertices(graph.getDefaultParent());
+            triggers.forEach(function(trigger) {
+                var parentID = trigger[0];
+                var parent = vertices.find(function(e){return e.id == parentID});
+                var children = trigger[1];
+                children.forEach(function(childID) {
+                    var child = vertices.find(function(e){return e.id == childID});
+                    var option = graph.insertVertex(parent, null, '', 20, 20, 20, 20, 'constituent=1;')
+                    options.push(option);
+                    //roots.push(option);
+                    graph.insertEdge(option, null,  '',option, child);
+                    var t = graph.insertEdge(parent, null, '', parent, child);
+                    t.visible = false;
+                });
+            });
             }
             finally
             {
@@ -73,11 +90,21 @@
             // Creates a layout algorithm to be used
             // with the graph
             var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_NORTH);
+            //layout.resizeParent = true;
+            //layout.moveParent = true;
+            //layout.parentBorder = 1;
+            //layout.traverseAncestors = true;
 
             // Moves stuff wider apart than usual
             //layout.forceConstant = 140;
             if(roots) {
+                //roots.forEach(function(root){
+                  //  graph.groupCells(null,0,)
+                    //layout.execute(root, root.children);
+                //});
+                //layout.execute(parent, options);
                 layout.execute(parent, roots);
+                
             }
             }
          }
@@ -108,7 +135,7 @@ $(function() {
         url: "GetData"
     })
     .done(function(data){
-        main(document.getElementById('graphContainer'), JSON.parse(data));
+        main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2));
     })
 });
 </script>

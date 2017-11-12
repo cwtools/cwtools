@@ -128,7 +128,7 @@ module Process =
                         match x.Tag "id" with
                         | Some v -> v.ToString()::children
                         | None -> children)
-        let fCombine = (fun child children -> child @ children)
+        let fCombine = (@)
         (event.ID, event.Children |> List.collect (foldNode2 fNode fCombine []))
 
     let getTriggeredEventsAll (root:Root) =
