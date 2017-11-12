@@ -2,13 +2,15 @@ namespace CK2_Events.Application
 
 open CK2_Events.Application.CKParser
 open System.Net.NetworkInformation
+open Microsoft.CodeAnalysis
+open Microsoft.CodeAnalysis
 
 module Process =
     type Node () =
         member val AllTags : KeyValueItem list = List.empty with get, set
         member val Children : Node list = List.empty with get, set
         member val Comments : string list = List.empty with get, set
-        member this.Tag x = this.AllTags |> List.pick (function |KeyValueItem(ID(y), v) when x=y -> Some v |_ -> None)
+        member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(ID(y), v) when x=y -> Some v |_ -> None)
     type Option() = 
         inherit Node()
         member val Name = "" with get, set      
@@ -88,19 +90,75 @@ module Process =
         // |> List.filter (function |Comment _ -> false |_ -> true)
         // |> List.map processRoot
 
-    let rec foldbackNode fNode generator (node : Node) :'r =
-        let recurse = foldbackNode fNode  
-        // let newGenerator innerVal =
-        //     let newInnerVal = fNode innerVal node
-        //     generator newInnerVal
-        let newGenerator = fNode generator node
-        node.Children |> List.fold recurse newGenerator
-        // let newGenerator innerVal =
-        //     let newInnerVal = fNode innerVal node 
-        //     generator newInnerVal
-        // recurse newGenerator (fNode node.Children node)
+    let rec foldNode fNode acc (node : Node) :'r =
+        let recurse = foldNode fNode
+        let newAcc = fNode acc node
+        node.Children |> List.fold recurse newAcc
 
-    let testNode node =
-        let fNode innerCount (node:Node) = node.Children.Length::innerCount
-        let initialAcc = []
-        foldbackNode fNode initialAcc node  
+    let foldNode2 fNode fCombine acc (node:Node) =
+        let rec loop nodes cont =
+            match nodes with
+            | (x : Node)::tail ->
+                loop x.Children (fun accChildren ->
+                    let resNode = fNode x accChildren
+                    loop tail (fun accTail ->
+                        cont(fCombine resNode accTail) ))
+            | [] -> cont acc
+        loop [node] (fun x -> x)
+    
+    let rec cata fNode (node:Node) :'r =
+        let recurse = cata fNode
+        fNode node (node.Children |> List.map recurse)
+
+    let testNode (node:Node) =
+        let fNode = (fun (x:Node) children -> 
+                        let cString =
+                            match children with
+                            | [] -> ""
+                            | [x] -> x
+                            | x -> ", {" + List.reduce (fun a b -> a + ", " + b) x + "}"
+                        match x.Tag "id" with
+                        | Some v -> "{" + v.ToString() + cString + "}"
+                        | None -> cString)
+        let fCombine = (fun child children -> if child = "" then children else children @ [child])
+        foldNode2 fNode fCombine [] node
+
+    let getTriggeredEvents (event:Event) =
+        let fNode = (fun (x:Node) children ->
+                        match x.Tag "id" with
+                        | Some v -> v.ToString()::children
+                        | None -> children)
+        let fCombine = (fun child children -> child @ children)
+        (event.ID, event.Children |> List.collect (foldNode2 fNode fCombine []))
+
+    let getTriggeredEventsAll (root:Root) =
+        List.map getTriggeredEvents root.Events
+    // let testNode (node:Node) =
+    //     let fNode (inEvent, ) (node:Node) = 
+    //         match node.Tag "character_event" with
+    //         | Some v -> v.ToString() + (List.fold (+) "" children)
+    //         | None -> (List.fold (+) "" children)
+    //         //(node.Children.Length, children)
+    //     foldNode fNode node
+
+    
+    // let rec foldbackNode fNode (node : Node) generator :'r =
+    //     let recurse = foldbackNode fNode  
+    //     // let newGenerator innerVal =
+    //     //     let newInnerVal = fNode innerVal node
+    //     //     generator newInnerVal
+    //     let newGenerator innerVal = 
+    //         let newInnerVal = fNode innerVal
+    //         generator newInnerVal
+    //     node.Children |> List.fold (fun c -> recurse c newGenerator)
+    //     // fNode generator node
+    //     // node.Children |> List.fold recurse newGenerator
+    //     // let newGenerator innerVal =
+    //     //     let newInnerVal = fNode innerVal node 
+    //     //     generator newInnerVal
+    //     // recurse newGenerator (fNode node.Children node)
+
+    // let testNode node =
+    //     let fNode innerCount (node:Node) = (node.Children.Length, innerCount)
+    //     let initialAcc = ()
+    //     foldbackNode fNode initialAcc node

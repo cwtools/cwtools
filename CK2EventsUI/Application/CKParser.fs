@@ -25,6 +25,7 @@ module CKParser =
         override x.ToString() =
             match x with
             | Block b -> "{ " + sprintf "%O" b + " }"
+            | String s -> s
             | x -> sprintf "%A" x
     
     and Statement =

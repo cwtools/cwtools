@@ -30,6 +30,7 @@ type HomeController () =
         let t = (CKParser.parseEventFile "wol_business_events.txt")
         let ck2 = match t with
                     | Success(v, _, _) -> processEventFile v
+                    | _ -> failwith "No root"
         this.View(ck2)
 
 
@@ -37,9 +38,11 @@ type HomeController () =
     member this.GetData () =
         let t = (CKParser.parseEventFile "wol_business_events.txt")
         let ck2 = match t with
-                    | Success(v, _, _) -> processEventFile v  
+                    | Success(v, _, _) -> processEventFile v 
+                    | _ -> failwith "No root"
+        let triggers = getTriggeredEventsAll ck2
         //ck2.Events |> list.map ()
-        ck2.Events.ToJson
+        (ck2.Events.ToJson, triggers.ToJson)
            
     member this.Test () =
         this.View();

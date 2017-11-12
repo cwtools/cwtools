@@ -39,7 +39,7 @@ let parserTests =
                     Expect.equal root.Namespace "WoL" "Namespace wrong"
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
-                    Expect.equal (firstEvent.Tag "id") (CKParser.Value.String("WoL.10100")) "ID wrong"
+                    Expect.equal (firstEvent.Tag "id").Value (CKParser.Value.String("WoL.10100")) "ID wrong"
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
         
@@ -49,7 +49,9 @@ let parserTests =
             match parsed with
                 |Success(v,_,_) -> 
                     let root = Process.processEventFile v
-                    let test = Process.testNode root.Events.[0]
+                    let test = List.map Process.getTriggeredEvents root.Events
+                    // let test = List.map Process.testNode root.Events |> List.rev
+                    // let test2 = List.fold (List.fold (+)) "" test
                     Expect.isTrue false (sprintf "%A" test)
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
