@@ -131,6 +131,7 @@ module Process =
         let fCombine = (@)
         (event.ID, event.Children |> List.collect (foldNode2 fNode fCombine []))
 
+    
     let getTriggeredEventsAll (root:Root) =
         List.map getTriggeredEvents root.Events
     // let testNode (node:Node) =

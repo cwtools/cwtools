@@ -98,13 +98,16 @@
             // Moves stuff wider apart than usual
             //layout.forceConstant = 140;
             if(roots) {
-                //roots.forEach(function(root){
-                  //  graph.groupCells(null,0,)
-                    //layout.execute(root, root.children);
-                //});
+                roots.forEach(function(root){
+                    graph.groupCells(null,1,root.children)
+                    layout.execute(root, root.children);
+                });
                 //layout.execute(parent, options);
                 layout.execute(parent, roots);
-                
+                //layout.traverseAncestors = true;
+                //roots.forEach(function(root){
+                //    layout.execute(root, root.children);
+                //})
             }
             }
          }
