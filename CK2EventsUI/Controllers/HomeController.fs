@@ -41,14 +41,18 @@ type HomeController () =
         let ck2 = match t with
                     | Success(v, _, _) -> processEventFile v 
                     | _ -> failwith "No root"
+        let ck3 = addLocalisedDescAll ck2
         let triggers = getTriggeredEventsAll ck2
         //ck2.Events |> list.map ()
-        (ck2.Events.ToJson, triggers.ToJson)
+        (ck3.Events.ToJson, triggers.ToJson)
            
     member this.Test () =
         this.View();
 
     member this.Graph () =
+        this.View();
+    
+    member this.Graph2 () =
         this.View();
         
     member this.Error () =

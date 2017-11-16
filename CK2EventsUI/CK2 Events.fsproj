@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Application/CKParser.fs" />
+    <Compile Include="Application/Localization.fs" />
     <Compile Include="Application/Process.fs" />
     <Compile Include="Application/Events.fs" />
     <Compile Include="Controllers/HomeController.fs" />
@@ -17,5 +18,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="*" />
     <PackageReference Include="Newtonsoft.Json" Version="*"/>
     <PackageReference Include="Newtonsoft.Json.FSharp" Version="*"/>
+    <PackageReference Include="FSharp.Data" Version="*"/>
   </ItemGroup>
+  <Import Project="fsc.props" />
+  <ItemGroup>
+    <Content Include="localization\*" CopyToOutputDirectory="Always"/>
+  </ItemGroup>
+  <!-- <Target Name = "CopyFiles">
+    <Copy DestinationFolder="$(OutputPath)" SourceFiles="coremodule.psd1" SkipUnchangedFiles = "false" />
+  </Target> -->
 </Project>

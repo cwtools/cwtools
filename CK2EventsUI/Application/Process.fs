@@ -134,6 +134,20 @@ module Process =
     
     let getTriggeredEventsAll (root:Root) =
         List.map getTriggeredEvents root.Events
+
+    let addLocalisedDesc (event:Node) =
+        let fNode = (fun (x:Node) children -> 
+                        match x with
+                        | :? Event as e -> e.Desc <- Localization.GetDesc e.Desc
+                        | _ -> ()
+                        )
+        let fCombine = (fun x c -> x)
+        foldNode2 fNode fCombine () event
+    
+    let addLocalisedDescAll (root:Root) =
+        root.Events |> List.iter addLocalisedDesc
+        root
+                        
     // let testNode (node:Node) =
     //     let fNode (inEvent, ) (node:Node) = 
     //         match node.Tag "character_event" with

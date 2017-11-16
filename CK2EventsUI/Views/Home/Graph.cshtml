@@ -48,6 +48,7 @@
             data.forEach(function(element) {
                 var name = element.ID;
                 // create graph element
+                var graphElement = graph.addCell()
                 var graphElement = graph.insertVertex(parent, name,
                                                     name, 20, 20, 80, 30);
                 
@@ -86,6 +87,7 @@
             {
             // Updates the display
             graph.getModel().endUpdate();
+            graph.getModel().beginUpdate();
             
             // Creates a layout algorithm to be used
             // with the graph
@@ -99,11 +101,15 @@
             //layout.forceConstant = 140;
             if(roots) {
                 roots.forEach(function(root){
-                    graph.groupCells(null,1,root.children)
+                    //graph.groupCells(null,1,root.children)
                     layout.execute(root, root.children);
                 });
+                graph.getModel().endUpdate();
+                graph.getModel().beginUpdate();
                 //layout.execute(parent, options);
                 layout.execute(parent, roots);
+                                graph.getModel().endUpdate();
+
                 //layout.traverseAncestors = true;
                 //roots.forEach(function(root){
                 //    layout.execute(root, root.children);

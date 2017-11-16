@@ -1,0 +1,112 @@
+
+
+
+
+ <!-- Loads and initializes the library -->
+ <script src="https://d3js.org/d3.v3.min.js"></script>
+ <script type="text/javascript" src="../js/dagre-d3.js"></script>
+
+
+ <!-- Example code -->
+ <script type="text/javascript">
+    // Program starts here. Creates a sample graph in the
+    // DOM node with the specified ID. This function is invoked
+    // from the onLoad event handler of the document (see below).
+    function main(container, data, triggers)
+    {
+        var g = new dagreD3.graphlib.Graph({compound:true})
+            .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
+            .setDefaultEdgeLabel(function() { return {}; });
+
+      
+          //var parent = graph.getDefaultParent();
+          var roots = [];
+          var options = [];
+
+          data.forEach(function(element){
+              var name = element.ID;
+              var desc;
+              if(element.Desc === '')
+              {
+                desc = element.ID;
+              }
+              else
+              {
+                  desc= element.Desc;
+              }
+
+              g.setNode(name, {label:desc});
+          });
+           g.nodes().forEach(function(v) {
+            var node = g.node(v);
+            // Round the corners of the nodes
+            node.rx = node.ry = 5;
+            });
+          triggers.forEach(function(trigger){
+                var parentID = trigger[0];
+                if(g.node(parentID) !== undefined){
+                    var children = trigger[1];
+                children.forEach(function(childID) {
+                    //var child = vertices.find(function(e){return e.id == childID});
+                    if(g.node(childID) !== undefined){
+                    g.setEdge(parentID, childID, {arrowhead:'vee'});
+                    }
+                });
+                }
+                //var parent = vertices.find(function(e){return e.id == parentID});
+                
+          });
+                    
+            // Create the renderer
+            var render = new dagreD3.render();
+
+            // Set up an SVG group so that we can translate the final graph.
+            var svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+                
+
+            // Run the renderer. This is what draws the final graph.
+            render(d3.select("svg g"), g);
+
+            // Center the graph
+            var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+            svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+            svg.attr("height", g.graph().height + 40);
+
+
+            zoom = d3.behavior.zoom().on("zoom", function() {
+            svgGroup.attr("transform", "translate(" + d3.event.translate + ")" +
+                                        "scale(" + d3.event.scale + ")");
+            });
+svg.call(zoom);
+    };
+ </script>
+
+<div class="row">
+  <div class="col-md-4" id="dropzone" style="height=200px">
+      <ul>
+
+      </ul>
+  </div>
+  <div class="col-md-8">
+      <ul>
+          <li>One</li>
+          <li>Two</li>
+      </ul>
+  </div>
+    <svg id="svg-canvas" width=960 height=600></svg>
+
+</div>
+
+@section Scripts {
+<script>
+$(function() {
+  $.ajax({
+      url: "GetData"
+  })
+  .done(function(data){
+      main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2));
+  })
+});
+</script>
+}

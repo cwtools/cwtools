@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "CK2EventsUI"
+		},
+		{
+			"path": "CK2EventsTests"
+		}
+	],
+	"settings": {}
+}
