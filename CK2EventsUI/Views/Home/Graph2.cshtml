@@ -9,6 +9,10 @@
 
  <!-- Example code -->
  <script type="text/javascript">
+    // Simple function to style the tooltip for the given node.
+    var styleTooltip = function(name, description) {
+        return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
+    };
     // Program starts here. Creates a sample graph in the
     // DOM node with the specified ID. This function is invoked
     // from the onLoad event handler of the document (see below).
@@ -24,7 +28,9 @@
           var options = [];
 
           data.forEach(function(element){
+              var value = {};
               var name = element.ID;
+              value.name = name;
               var desc;
               if(element.Desc === '')
               {
@@ -34,8 +40,8 @@
               {
                   desc= element.Desc;
               }
-
-              g.setNode(name, {label:desc});
+              value.description = desc;
+              g.setNode(name, value);
           });
            g.nodes().forEach(function(v) {
             var node = g.node(v);
@@ -67,6 +73,9 @@
 
             // Run the renderer. This is what draws the final graph.
             render(d3.select("svg g"), g);
+            svgGroup.selectAll("g.node")    
+                .attr("title", function(v) {return styleTooltip(v, g.node(v).description)})
+                .each(function(v) { $(this).tooltip({ container: "body", html: true }); });
 
             // Center the graph
             var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
@@ -94,7 +103,7 @@ svg.call(zoom);
           <li>Two</li>
       </ul>
   </div>
-    <svg id="svg-canvas" width=960 height=600></svg>
+    <svg id="svg-canvas" width=100% height=100%></svg>
 
 </div>
 
@@ -109,4 +118,6 @@ $(function() {
   })
 });
 </script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.css" integrity="sha256-7ZmxuRX3e7bQScYnzl6vtCBxtjf1jzqU4xnV5MoDIrw=" crossorigin="anonymous" />
 }

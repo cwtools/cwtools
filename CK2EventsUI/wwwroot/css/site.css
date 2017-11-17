@@ -58,3 +58,22 @@ textarea {
     stroke: #333;
     stroke-width: 1.5px;
   }
+  
+/* This styles the title of the tooltip */
+.tooltip .name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #60b1fc;
+    margin: 0;
+  }
+  
+  /* This styles the body of the tooltip */
+  .tooltip .description {
+    font-size: 1.2em;
+  }
+
+  svg {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    margin: 0 auto;
+  }

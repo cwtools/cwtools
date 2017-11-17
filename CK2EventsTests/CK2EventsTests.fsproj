@@ -17,4 +17,5 @@
     <PackageReference Include="FParsec" Version="*"/>
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
   </ItemGroup>
+    <Import Project="fsc.props" />
 </Project>

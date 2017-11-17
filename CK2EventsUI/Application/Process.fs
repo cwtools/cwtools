@@ -147,6 +147,17 @@ module Process =
     let addLocalisedDescAll (root:Root) =
         root.Events |> List.iter addLocalisedDesc
         root
+
+    let getOptions (event:Node) =
+        let fNode = (fun (x:Node) children ->
+                        let name = x.Tag "name"
+                        match name with
+                        | Some n -> ((n.ToString()), children)
+                        | _ -> ("", children)
+        )
+        let fCombine = (fun x c -> c)
+        foldNode2 fNode fCombine ("", "") event
+
                         
     // let testNode (node:Node) =
     //     let fNode (inEvent, ) (node:Node) = 
