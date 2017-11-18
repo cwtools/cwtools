@@ -77,3 +77,9 @@ textarea {
     overflow: hidden;
     margin: 0 auto;
   }
+
+  .edgePath path.path {
+    stroke: #333;
+    fill: none;
+    stroke-width: 1.5px;
+  }

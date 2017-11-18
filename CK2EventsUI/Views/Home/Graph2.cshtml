@@ -16,7 +16,7 @@
     // Program starts here. Creates a sample graph in the
     // DOM node with the specified ID. This function is invoked
     // from the onLoad event handler of the document (see below).
-    function main(container, data, triggers)
+    function main(container, data, triggers, options)
     {
         var g = new dagreD3.graphlib.Graph({compound:true})
             .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
@@ -25,7 +25,6 @@
       
           //var parent = graph.getDefaultParent();
           var roots = [];
-          var options = [];
 
           data.forEach(function(element){
               var value = {};
@@ -48,19 +47,33 @@
             // Round the corners of the nodes
             node.rx = node.ry = 5;
             });
-          triggers.forEach(function(trigger){
-                var parentID = trigger[0];
-                if(g.node(parentID) !== undefined){
-                    var children = trigger[1];
-                children.forEach(function(childID) {
-                    //var child = vertices.find(function(e){return e.id == childID});
-                    if(g.node(childID) !== undefined){
-                    g.setEdge(parentID, childID, {arrowhead:'vee'});
-                    }
-                });
-                }
-                //var parent = vertices.find(function(e){return e.id == parentID});
-                
+          options.forEach(function(event){
+              var parentID = event[0];
+              if(g.node(parentID) !== undefined){
+                event[1].forEach(function(option){
+                    var optionName = option[0];
+                    option[1].forEach(function(target){
+                        var childID = target;
+                        if(g.node(target) !== undefined){
+                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee'});
+                        }
+                    })
+                })
+              }
+          });
+          triggers.forEach(function(event){
+              var parentID = event[0];
+              if(g.node(parentID) !== undefined){
+                  event[1].forEach(function(immediates){
+                      immediates.forEach(function(target){
+                          var childID = target;
+                            if(g.node(childID) !== undefined){
+                                g.setEdge(parentID, childID, {arrowhead:'vee', style:'stroke-dasharray: 5, 5'});
+                            }
+                      })
+                     
+                  })
+              }
           });
                     
             // Create the renderer
@@ -114,7 +127,7 @@ $(function() {
       url: "GetData"
   })
   .done(function(data){
-      main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2));
+      main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2),JSON.parse(data.item3));
   })
 });
 </script>

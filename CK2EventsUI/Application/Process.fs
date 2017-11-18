@@ -1,24 +1,26 @@
 namespace CK2_Events.Application
 
 open CK2_Events.Application.CKParser
-open FSharp.Data.Runtime.IO
+open Microsoft.CodeAnalysis
+open System.Xml.Serialization
 
 module Process =
-    type Node () =
+    type Node (key : string) =
+        member val Key = key
         member val AllTags : KeyValueItem list = List.empty with get, set
         member val Children : Node list = List.empty with get, set
         member val Comments : string list = List.empty with get, set
         member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(ID(y), v) when x=y -> Some v |_ -> None)
     type Option() = 
-        inherit Node()
+        inherit Node("option")
         member val Name = "" with get, set      
-    type Event() =
-        inherit Node()
+    type Event(key) =
+        inherit Node(key)
         member val ID = "" with get, set
         member val Desc = "" with get, set
 
     type Root() =
-        inherit Node()
+        inherit Node("root")
         member val Namespace = "" with get, set
         member val Events : Event list = List.empty with get, set
 
@@ -31,19 +33,36 @@ module Process =
     
     let addTagNode (node : Node) tag =
         node.AllTags <- tag::node.AllTags
+
+    let addTagOption (option : Option) tag =
+        option.AllTags <- tag::option.AllTags
+        match tag with
+            | KeyValueItem(ID("name"), String(v)) -> option.Name <- v
+            | _ -> ()
     
-    let rec processNode sl =
-        let node = Node()
+    let rec processNode k sl =
+        let node = Node(k)
         sl |> List.iter (processNodeInner node)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
         let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
         List.iter (fun t -> addTagNode node t) tags
         node.Comments <- comments 
         node
+    
+    and processOption sl =
+        let option = Option()
+        sl |> List.iter (processNodeInner option)
+        let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
+        let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
+        List.iter (fun t -> addTagOption option t) tags
+        option.Comments <- comments
+        option
+
 
     and processNodeInner (node : Node) statement =
         match statement with
-            | KeyValue(KeyValueItem(_ , Block(sl))) -> node.Children <- (processNode sl)::node.Children
+            | KeyValue(KeyValueItem(ID("option"), Block(sl))) -> node.Children <- (upcast processOption sl)::node.Children
+            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> node.Children <- (processNode k sl)::node.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> node.AllTags <- kv::node.AllTags
             | Comment(c) -> node.Comments <- c::node.Comments
@@ -51,14 +70,15 @@ module Process =
 
     let processEventInner (event : Event) statement =
         match statement with
-            | KeyValue(KeyValueItem(_ , Block(sl))) -> event.Children <- (processNode sl)::event.Children
+            | KeyValue(KeyValueItem(ID("option"), Block(sl))) -> event.Children <- (upcast processOption sl)::event.Children
+            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> event.Children <- (processNode k sl)::event.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> event.AllTags <- kv::event.AllTags
             | Comment(c) -> event.Comments <- c::event.Comments
             | _ -> ()
     
-    let processEvent sl =
-        let event = Event()
+    let processEvent k sl =
+        let event = Event(k)
         sl |> List.iter (processEventInner event)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
         let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
@@ -73,7 +93,7 @@ module Process =
     let processRoot (root : Root) statement =
         //root.AllTags <- statement::root.AllTags
         match statement with
-            | KeyValue(KeyValueItem(_ , Block(sl))) -> root.Events <- (processEvent sl)::root.Events
+            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> root.Events <- (processEvent k sl)::root.Events
             | KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> root.AllTags <- kv::root.AllTags
             | Comment(c) -> root.Comments <- c::root.Comments
@@ -146,14 +166,23 @@ module Process =
     let getTriggeredEventsAll (root:Root) =
         List.map getTriggeredEvents root.Events
 
-    let addLocalisedDesc (event:Node) =
+    let getIDs (node:Node) =
+        let fNode = (fun (x:Node) children ->
+                        match x.Tag "id" with
+                        | Some v -> v.ToString()::children
+                        | None -> children)
+        let fCombine = (@)
+        foldNode2 fNode fCombine [] node
+
+    let addLocalisedDesc (node:Node) =
         let fNode = (fun (x:Node) children -> 
                         match x with
                         | :? Event as e -> e.Desc <- Localization.GetDesc e.Desc
+                        | :? Option as o -> o.Name <- Localization.GetDesc o.Name
                         | _ -> ()
                         )
-        let fCombine = (fun x c -> x)
-        foldNode2 fNode fCombine () event
+        let fCombine = (fun x c -> ())
+        foldNode2 fNode fCombine () node
     
     let addLocalisedDescAll (root:Root) =
         root.Events |> List.iter addLocalisedDesc
@@ -168,28 +197,38 @@ module Process =
     //     )
     //     let fCombine = (fun x c -> c)
     //     foldNode2 fNode fCombine ("", "") event
-    let getOptions (event:Event) =
+    let getOption (option:Option) =
         let fNode = (fun (x:Node) (d,i) ->
                         match x.Tag "id" with
-                        |Some v -> (d, (v.ToString()))
+                        |Some v -> (d, (v.ToString()) :: i)
                         |_ -> (d, i)
                         )
         let fOption = (fun (x:Option) (d,i) ->
-                        match x.Tag "name" with
-                        |Some v -> ((v.ToString()),i)
-                        |None -> (d,i)
-                        // match x.Tag "desc" with
-                        // |Some v -> ((v.ToString()), i)
-                        // |_ -> (d, i)
+                        match x.Name with
+                        |"" -> (d,i)
+                        |v -> (v,i)
                         )
         let fEvent = (fun x c -> c)
         let fCombine    x c =
             match x, c with
-            |("",""), c -> c
-            |("", i), (d,"") -> (d,i)
-            |(d,""),("",i) -> (d,i)
-            | x,_ -> x
-        foldNode3 fNode fOption fEvent fCombine ("","") event
+            |("",[]), c -> c
+            |("",l), (a,b) -> (a, l@b)
+            |(d,l), (_,b) -> (d,l@b)
+        foldNode3 fNode fOption fEvent fCombine ("",[]) option
+    
+    let getOptions (event : Event) =
+        event.Children |> List.choose (function | :? Option as o -> Some o |_ -> None)
+                       |> List.map getOption
+
+    let getEventsOptions (root : Root) =
+        root.Events |> List.map (fun e -> (e.ID, getOptions e))
+
+    let getImmediate (event : Event)=
+        event.Children |> List.filter (fun c -> c.Key = "immediate")
+                       |> List.map getIDs
+    
+    let getAllImmediates (root : Root) =
+        root.Events |> List.map (fun e -> (e.ID, getImmediate e))
                         
     // let testNode (node:Node) =
     //     let fNode (inEvent, ) (node:Node) = 
