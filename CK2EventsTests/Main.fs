@@ -67,7 +67,7 @@ let parserTests =
             match parsed with
                 |Success(v,_,_) -> 
                     let root = Process.processEventFile v
-                    let opts = root.Events.[2] |> Process.getOptions
+                    let opts = root.Events.[5] |> Process.getOptions
                     Expect.isTrue false (sprintf "%A" opts) 
                 |Failure(msg, _, _) ->
                     Expect.isTrue false msg

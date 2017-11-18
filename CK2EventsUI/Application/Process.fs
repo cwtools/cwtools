@@ -1,9 +1,7 @@
 namespace CK2_Events.Application
 
 open CK2_Events.Application.CKParser
-open System.Net.NetworkInformation
-open Microsoft.CodeAnalysis
-open Microsoft.CodeAnalysis
+open FSharp.Data.Runtime.IO
 
 module Process =
     type Node () =
@@ -106,6 +104,19 @@ module Process =
             | [] -> cont acc
         loop [node] (fun x -> x)
     
+    let foldNode3 fNode fOption fEvent fCombine acc (node:Node) =
+        let rec loop nodes cont =
+            let inner (x : #Node) tail fInner = loop x.Children (fun accChildren ->
+                let resNode = fInner x accChildren
+                loop tail (fun accTail ->
+                    cont(fCombine resNode accTail)))
+            match nodes with
+            | (:? Option as x)::tail -> inner x tail fOption
+            | (:? Event as x)::tail -> inner x tail fEvent
+            | (x : Node)::tail -> inner x tail fNode
+            | [] -> cont acc
+        loop [node] (fun x -> x)
+
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> List.map recurse)
@@ -148,16 +159,37 @@ module Process =
         root.Events |> List.iter addLocalisedDesc
         root
 
-    let getOptions (event:Node) =
-        let fNode = (fun (x:Node) children ->
-                        let name = x.Tag "name"
-                        match name with
-                        | Some n -> ((n.ToString()), children)
-                        | _ -> ("", children)
-        )
-        let fCombine = (fun x c -> c)
-        foldNode2 fNode fCombine ("", "") event
-
+    // let getOptions (event:Node) =
+    //     let fNode = (fun (x:Node) children ->
+    //                     let name = x.Tag "name"
+    //                     match name with
+    //                     | Some n -> ((n.ToString()), children)
+    //                     | _ -> ("", children)
+    //     )
+    //     let fCombine = (fun x c -> c)
+    //     foldNode2 fNode fCombine ("", "") event
+    let getOptions (event:Event) =
+        let fNode = (fun (x:Node) (d,i) ->
+                        match x.Tag "id" with
+                        |Some v -> (d, (v.ToString()))
+                        |_ -> (d, i)
+                        )
+        let fOption = (fun (x:Option) (d,i) ->
+                        match x.Tag "name" with
+                        |Some v -> ((v.ToString()),i)
+                        |None -> (d,i)
+                        // match x.Tag "desc" with
+                        // |Some v -> ((v.ToString()), i)
+                        // |_ -> (d, i)
+                        )
+        let fEvent = (fun x c -> c)
+        let fCombine    x c =
+            match x, c with
+            |("",""), c -> c
+            |("", i), (d,"") -> (d,i)
+            |(d,""),("",i) -> (d,i)
+            | x,_ -> x
+        foldNode3 fNode fOption fEvent fCombine ("","") event
                         
     // let testNode (node:Node) =
     //     let fNode (inEvent, ) (node:Node) = 
