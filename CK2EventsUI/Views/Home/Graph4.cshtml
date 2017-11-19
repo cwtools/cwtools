@@ -4,7 +4,11 @@
 
  <!-- Loads and initializes the library -->
  <script src="https://d3js.org/d3.v3.min.js"></script>
- <script type="text/javascript" src="../js/dagre-d3.js"></script>   
+ <script type="text/javascript" src="../js/dagre-d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js"></script>
+    <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+    <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
+  
 
 
  <!-- Example code -->
@@ -18,10 +22,33 @@
     // from the onLoad event handler of the document (see below).
     function main(container, data, triggers, options)
     {
-        var g = new dagreD3.graphlib.Graph({multigraph:true, compound:true})
+        var cy = cytoscape({
+            container: document.getElementById('cy'),
+  style: [ // the stylesheet for the graph
+    {
+      selector: 'node',
+      style: {
+        'background-color': '#666',
+        'label': 'data(id)'
+      }
+    },
+
+    {
+      selector: 'edge',
+      style: {
+        'width': 3,
+        'line-color': '#ccc',
+        'mid-target-arrow-color': '#ccc',
+        'mid-target-arrow-shape': 'triangle',
+        'curve-style': 'bezier'
+      }
+    }
+  ],
+        })
+        /* var g = new dagreD3.graphlib.Graph({multigraph:true, compound:true})
             .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
             .setDefaultEdgeLabel(function() { return {}; })
-            .setDefaultNodeLabel(function(){return {};});
+            .setDefaultNodeLabel(function(){return {};}); */
 
       
           //var parent = graph.getDefaultParent();
@@ -42,36 +69,54 @@
                   desc= element.Desc;
               }
               value.description = desc;
-              g.setNode(name, value);
-              g.setNode(name+'G', {label:name+'G'});
+              cy.add({group:'nodes',data:{id:name}});
+              //g.setNode(name, value);
+              //g.setNode(name+'G', {label:name+'G'});
               //g.setNode(name+'GP', {label:name+'GP'});
               //g.setParent(name+'GP',name+'G');
-              g.setParent(name, name+'G');
+             // g.setParent(name, name+'G');
           });
-           g.nodes().forEach(function(v) {
+          /* g.nodes().forEach(function(v) {
             if(v !== undefined){
                             var node = g.node(v);
             // Round the corners of the nodes
             node.rx = node.ry = 5;
-            }
+            }*/
 
-            });
+            //});
             triggers.forEach(function(event){
               var parentID = event[0];
-              if(g.node(parentID) !== undefined){
+              //if(g.node(parentID) !== undefined){
                   event[1].forEach(function(immediates){
                       immediates.forEach(function(target){
                           var childID = target;
-                            if(g.node(childID) !== undefined){
-                                uniqueID = uniqueID + 1;
-                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' }, uniqueID);
-                            }
+                           // if(g.node(childID) !== undefined){
+                             //   uniqueID = uniqueID + 1;
+                             cy.add({group:'edges',data:{source:parentID,target:childID}})
+                             //   g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' }, uniqueID);
+                           // }
                       })
                      
                   })
-              }
+              //}
           });
           options.forEach(function(event){
+              var parentID = event[0];
+              event[1].forEach(function(option){
+                  var optionName = option[0];
+                  option[1].forEach(function(target){
+                      if(cy.$id(target).length > 0){
+                        cy.add({group:'edges',data:{source:parentID,target:target}});
+
+                      }
+                  })
+              })
+          })
+          cy.fit();
+          var layout = cy.layout({name:'dagre'});
+            layout.run();
+            cy.fit();
+          /*options.forEach(function(event){
               var parentID = event[0];
               
               g.setNode(name+'GO', {label:name+'GO'});
@@ -98,8 +143,8 @@
                     })
                 })
               }
-          });
-          
+          });*/
+          /*
                     
             // Create the renderer
             var render = new dagreD3.render();
@@ -128,7 +173,7 @@
             svgGroup.attr("transform", "translate(" + d3.event.translate + ")" +
                                         "scale(" + d3.event.scale + ")");
             });
-svg.call(zoom);
+svg.call(zoom);*/
     };
  </script>
 
@@ -144,7 +189,7 @@ svg.call(zoom);
           <li>Two</li>
       </ul>
   </div>
-    <svg id="svg-canvas" width=100% height=100%></svg>
+    <div class="test" id="cy" width=1000px height=1000px></div>
 
 </div>
 
@@ -156,9 +201,9 @@ $(function() {
       data: {"file":"@Model"}
   })
   .done(function(data){
-      main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2),JSON.parse(data.item3));
-  })
-});
+      main(null, JSON.parse(data.item1), JSON.parse(data.item2),JSON.parse(data.item3));
+  })});
+
 </script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.css" integrity="sha256-7ZmxuRX3e7bQScYnzl6vtCBxtjf1jzqU4xnV5MoDIrw=" crossorigin="anonymous" />

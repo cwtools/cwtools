@@ -59,7 +59,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
         this.View();
     
     member this.Graph3 (file : string) =
-        this.View("Graph2", file);
+        this.View("Graph4", file);
         
     member this.Error () =
         this.View();
