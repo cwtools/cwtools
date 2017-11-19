@@ -18,13 +18,15 @@
     // from the onLoad event handler of the document (see below).
     function main(container, data, triggers, options)
     {
-        var g = new dagreD3.graphlib.Graph({multigraph:true})
-            .setGraph({ranker:"tight-tree", acyclicer:"greedy"})
-            .setDefaultEdgeLabel(function() { return {}; });
+        var g = new dagreD3.graphlib.Graph({multigraph:true, compound:true})
+            .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
+            .setDefaultEdgeLabel(function() { return {}; })
+            .setDefaultNodeLabel(function(){return {};});
 
       
           //var parent = graph.getDefaultParent();
           var roots = [];
+          var uniqueID = 1;
 
           data.forEach(function(element){
               var value = {};
@@ -41,11 +43,18 @@
               }
               value.description = desc;
               g.setNode(name, value);
+              g.setNode(name+'G', {label:name+'G'});
+              g.setNode(name+'GP', {label:name+'GP'});
+              g.setParent(name+'GP',name+'G');
+              g.setParent(name, name+'GP');
           });
            g.nodes().forEach(function(v) {
-            var node = g.node(v);
+            if(v !== undefined){
+                            var node = g.node(v);
             // Round the corners of the nodes
             node.rx = node.ry = 5;
+            }
+
             });
             triggers.forEach(function(event){
               var parentID = event[0];
@@ -54,7 +63,8 @@
                       immediates.forEach(function(target){
                           var childID = target;
                             if(g.node(childID) !== undefined){
-                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' });
+                                uniqueID = uniqueID + 1;
+                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' }, uniqueID);
                             }
                       })
                      
@@ -63,13 +73,27 @@
           });
           options.forEach(function(event){
               var parentID = event[0];
-              if(g.node(parentID) !== undefined){
+              
+              g.setNode(name+'GO', {label:name+'GO'});
+              
+              g.setParent(name+'GO',name+'G');
+              if(g.node(parentID) !== undefined){   
                 event[1].forEach(function(option){
                     var optionName = option[0];
-                    option[1].forEach(function(target){
+                    option[1].forEach(function(target, i){
                         var childID = target;
+                        g.setNode(parentID+'GO'+i, {label:parentID+'GO'+i});
+                        g.setParent(parentID+'GO'+i, parentID+'GO')
+                        g.setEdge(parentID, parentID+'GO'+i)
+                        uniqueID = uniqueID + 1;
+                        //g.setEdge(parentID+'GP', parentID+'GO', {label:"a"}, uniqueID)
+                        //g.setNode(parentID+i, {label:parentID+i})
+                        
+                        //g.setEdge(parentID+'G', parentID+i, {label:parentID+i}, uniqueID)
+                        //g.setParent(parentID+i, parentID+'GO')
                         if(g.node(target) !== undefined){
-                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee'});
+                            uniqueID = uniqueID + 1;
+                            g.setEdge(parentID+'GO'+i, childID, {label:optionName, arrowhead:'vee', minlen:2}, uniqueID);
                         }
                     })
                 })
