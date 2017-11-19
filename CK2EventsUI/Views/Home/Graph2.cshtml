@@ -4,7 +4,7 @@
 
  <!-- Loads and initializes the library -->
  <script src="https://d3js.org/d3.v3.min.js"></script>
- <script type="text/javascript" src="../js/dagre-d3.js"></script>
+ <script type="text/javascript" src="../js/dagre-d3.js"></script>   
 
 
  <!-- Example code -->
@@ -54,7 +54,7 @@
                       immediates.forEach(function(target){
                           var childID = target;
                             if(g.node(childID) !== undefined){
-                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5',lineInterpolate: 'basis' });
+                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' });
                             }
                       })
                      
@@ -69,7 +69,7 @@
                     option[1].forEach(function(target){
                         var childID = target;
                         if(g.node(target) !== undefined){
-                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee', lineInterpolate: 'basis'});
+                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee'});
                         }
                     })
                 })
