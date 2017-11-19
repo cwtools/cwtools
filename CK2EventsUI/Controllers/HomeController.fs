@@ -11,6 +11,8 @@ open CK2_Events.Application.Process
 open System.Reflection
 open Newtonsoft.Json
 open Newtonsoft.Json.FSharp
+open Microsoft.AspNetCore.Mvc.Infrastructure
+open FSharp.Core
 
 module Utils = 
     let opts = [| TupleArrayConverter() :> JsonConverter |] // this goes global
@@ -20,8 +22,10 @@ module Utils =
         
 open Utils
 
-type HomeController () =
+type HomeController (provider : IActionDescriptorCollectionProvider) =
     inherit Controller()
+
+    member val provider = provider
     
 
     //static let ck2 = Events.parseTen
@@ -29,15 +33,12 @@ type HomeController () =
     member this.Index () =
         //eprintfn "Test"
         //let ck2 = Events.parseTen "events"
-        let t = (CKParser.parseEventFile "wol_business_events.txt")
-        let ck2 = match t with
-                    | Success(v, _, _) -> processEventFile v
-                    | _ -> failwith "No root"
-        this.View(ck2)
+         let files = Events.getFileList "./events/"
+         this.View(files)
 
 
-    member this.GetData () =
-        let t = (CKParser.parseEventFile "wol_business_events.txt")
+    member this.GetData (file) =
+        let t = (CKParser.parseEventFile file)
         let ck2 = match t with
                     | Success(v, _, _) -> processEventFile v 
                     | _ -> failwith "No root"
@@ -56,6 +57,9 @@ type HomeController () =
     
     member this.Graph2 () =
         this.View();
+    
+    member this.Graph3 (file : string) =
+        this.View("Graph2", file);
         
     member this.Error () =
         this.View();

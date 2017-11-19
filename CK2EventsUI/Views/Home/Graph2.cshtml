@@ -1,4 +1,4 @@
-
+@Model string
 
 
 
@@ -18,8 +18,8 @@
     // from the onLoad event handler of the document (see below).
     function main(container, data, triggers, options)
     {
-        var g = new dagreD3.graphlib.Graph({compound:true})
-            .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
+        var g = new dagreD3.graphlib.Graph({multigraph:true})
+            .setGraph({ranker:"tight-tree", acyclicer:"greedy"})
             .setDefaultEdgeLabel(function() { return {}; });
 
       
@@ -47,6 +47,20 @@
             // Round the corners of the nodes
             node.rx = node.ry = 5;
             });
+            triggers.forEach(function(event){
+              var parentID = event[0];
+              if(g.node(parentID) !== undefined){
+                  event[1].forEach(function(immediates){
+                      immediates.forEach(function(target){
+                          var childID = target;
+                            if(g.node(childID) !== undefined){
+                                g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5',lineInterpolate: 'basis' });
+                            }
+                      })
+                     
+                  })
+              }
+          });
           options.forEach(function(event){
               var parentID = event[0];
               if(g.node(parentID) !== undefined){
@@ -55,26 +69,13 @@
                     option[1].forEach(function(target){
                         var childID = target;
                         if(g.node(target) !== undefined){
-                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee'});
+                            g.setEdge(parentID, childID, {label:optionName, arrowhead:'vee', lineInterpolate: 'basis'});
                         }
                     })
                 })
               }
           });
-          triggers.forEach(function(event){
-              var parentID = event[0];
-              if(g.node(parentID) !== undefined){
-                  event[1].forEach(function(immediates){
-                      immediates.forEach(function(target){
-                          var childID = target;
-                            if(g.node(childID) !== undefined){
-                                g.setEdge(parentID, childID, {arrowhead:'vee', style:'stroke-dasharray: 5, 5'});
-                            }
-                      })
-                     
-                  })
-              }
-          });
+          
                     
             // Create the renderer
             var render = new dagreD3.render();
@@ -95,8 +96,11 @@
             svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
             svg.attr("height", g.graph().height + 40);
 
-
+           // zoom = d3.zoom().on("zoom", function(){
+             //   svgGroup.attr("transform",d3.event.transform);
+            //});
             zoom = d3.behavior.zoom().on("zoom", function() {
+            
             svgGroup.attr("transform", "translate(" + d3.event.translate + ")" +
                                         "scale(" + d3.event.scale + ")");
             });
@@ -124,7 +128,8 @@ svg.call(zoom);
 <script>
 $(function() {
   $.ajax({
-      url: "GetData"
+      url: "GetData",
+      data: {"file":"@Model"}
   })
   .done(function(data){
       main(document.getElementById('graphContainer'), JSON.parse(data.item1), JSON.parse(data.item2),JSON.parse(data.item3));

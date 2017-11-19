@@ -1,6 +1,7 @@
 namespace CK2_Events.Application
 
 open System.IO
+open Microsoft.IdentityModel.Clients.ActiveDirectory
 
 module Events =
     let rand = System.Random()
@@ -27,4 +28,8 @@ module Events =
             Array.take 10 all
             |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
             |> List.ofArray
+    
+    let getFileList directory =
+        Directory.EnumerateFiles(directory)
+        |> List.ofSeq
             

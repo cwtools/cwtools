@@ -8,6 +8,7 @@
     <Compile Include="Application/Process.fs" />
     <Compile Include="Application/Events.fs" />
     <Compile Include="Controllers/HomeController.fs" />
+    <Compile Include="Controllers/MonitorController.fs" />
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
