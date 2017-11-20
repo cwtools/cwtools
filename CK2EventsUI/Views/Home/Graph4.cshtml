@@ -41,15 +41,9 @@
     }
   ],
         })
-        /* var g = new dagreD3.graphlib.Graph({multigraph:true, compound:true})
-            .setGraph({ranker:"network-simplex", acyclicer:"greedy"})
-            .setDefaultEdgeLabel(function() { return {}; })
-            .setDefaultNodeLabel(function(){return {};}); */
 
-      
-          //var parent = graph.getDefaultParent();
           var roots = [];
-          var uniqueID = 1;
+          var qtipname = function(text) { return {content:text, position:{my:'top center', at:'bottom center'},style:{classes:'qtip-bootstrap',tip:{width:16,height:8}},show:{event:'mouseover'},hide:{event:'mouseout'}};}
 
           data.forEach(function(element){
               var value = {};
@@ -66,51 +60,19 @@
               }
               value.description = desc;
               var node = cy.add({group:'nodes',data:{id:name}});
-              node[0].qtip({content:desc, position: {
-						my: 'top center',
-						at: 'bottom center'
-					},
-					style: {
-						classes: 'qtip-bootstrap',
-						tip: {
-							width: 16,
-							height: 8
-						}
-					},  show: {
-        event: 'mouseover'
-    },
-    hide: {
-        event: 'mouseout'
-    }})
-              //g.setNode(name, value);
-              //g.setNode(name+'G', {label:name+'G'});
-              //g.setNode(name+'GP', {label:name+'GP'});
-              //g.setParent(name+'GP',name+'G');
-             // g.setParent(name, name+'G');
+              node.qtip(qtipname(desc));
           });
-          /* g.nodes().forEach(function(v) {
-            if(v !== undefined){
-                            var node = g.node(v);
-            // Round the corners of the nodes
-            node.rx = node.ry = 5;
-            }*/
 
-            //});
             triggers.forEach(function(event){
               var parentID = event[0];
-              //if(g.node(parentID) !== undefined){
                   event[1].forEach(function(immediates){
                       immediates.forEach(function(target){
                           var childID = target;
-                           // if(g.node(childID) !== undefined){
-                             //   uniqueID = uniqueID + 1;
                              cy.add({group:'edges',data:{source:parentID,target:childID}})
-                             //   g.setEdge(parentID, childID, {arrowhead:'vee', style:' stroke-dasharray: 5, 5' }, uniqueID);
-                           // }
+
                       })
                      
                   })
-              //}
           });
           options.forEach(function(event){
               var parentID = event[0];
@@ -120,22 +82,9 @@
                       if(cy.$id(target).length > 0){
                         var edge = cy.add({group:'edges',data:{source:parentID,target:target}});
                                                 if(optionName !== ""){
-                        edge[0].qtip({content:optionName, position: {
-						my: 'top center',
-						at: 'bottom center'
-					},
-					style: {
-						classes: 'qtip-bootstrap',
-						tip: {
-							width: 16,
-							height: 8
-						}
-					},  show: {
-        event: 'mouseover'
-    },
-    hide: {
-        event: 'mouseout'
-    }});}
+                                                    edge[0].qtip(qtipname(optionName));
+                                                }
+                        
                       }
                   })
               })
@@ -144,64 +93,7 @@
           var layout = cy.layout({name:'dagre'});
             layout.run();
             cy.fit();
-          /*options.forEach(function(event){
-              var parentID = event[0];
-              
-              g.setNode(name+'GO', {label:name+'GO'});
-              
-              g.setParent(name+'GO',name+'G');
-              if(g.node(parentID) !== undefined){   
-                event[1].forEach(function(option){
-                    var optionName = option[0];
-                    option[1].forEach(function(target, i){
-                        var childID = target;
-                        g.setNode(parentID+'GO'+i, {label:parentID+'GO'+i});
-                        g.setParent(parentID+'GO'+i, parentID+'GO')
-                        g.setEdge(parentID, parentID+'GO'+i)
-                        uniqueID = uniqueID + 1;
-                        //g.setEdge(parentID+'GP', parentID+'GO', {label:"a"}, uniqueID)
-                        //g.setNode(parentID+i, {label:parentID+i})
-                        
-                        //g.setEdge(parentID+'G', parentID+i, {label:parentID+i}, uniqueID)
-                        //g.setParent(parentID+i, parentID+'GO')
-                        if(g.node(target) !== undefined){
-                            uniqueID = uniqueID + 1;
-                            g.setEdge(parentID+'GO'+i, childID, {label:optionName, arrowhead:'vee', minlen:2}, uniqueID);
-                        }
-                    })
-                })
-              }
-          });*/
-          /*
-                    
-            // Create the renderer
-            var render = new dagreD3.render();
-
-            // Set up an SVG group so that we can translate the final graph.
-            var svg = d3.select("svg"),
-                svgGroup = svg.append("g");
-                
-
-            // Run the renderer. This is what draws the final graph.
-            render(d3.select("svg g"), g);
-            svgGroup.selectAll("g.node")    
-                .attr("title", function(v) {return styleTooltip(v, g.node(v).description)})
-                .each(function(v) { $(this).tooltip({ container: "body", html: true }); });
-
-            // Center the graph
-            var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-            svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
-            svg.attr("height", g.graph().height + 40);
-
-           // zoom = d3.zoom().on("zoom", function(){
-             //   svgGroup.attr("transform",d3.event.transform);
-            //});
-            zoom = d3.behavior.zoom().on("zoom", function() {
-            
-            svgGroup.attr("transform", "translate(" + d3.event.translate + ")" +
-                                        "scale(" + d3.event.scale + ")");
-            });
-svg.call(zoom);*/
+          
     };
  </script>
 
