@@ -3,11 +3,7 @@
 
 
  <!-- Loads and initializes the library -->
- <script src="https://d3js.org/d3.v3.min.js"></script>
- <script type="text/javascript" src="../js/dagre-d3.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js"></script>
-    <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
-    <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
+
   
 
 
@@ -69,7 +65,23 @@
                   desc= element.Desc;
               }
               value.description = desc;
-              cy.add({group:'nodes',data:{id:name}});
+              var node = cy.add({group:'nodes',data:{id:name}});
+              node[0].qtip({content:desc, position: {
+						my: 'top center',
+						at: 'bottom center'
+					},
+					style: {
+						classes: 'qtip-bootstrap',
+						tip: {
+							width: 16,
+							height: 8
+						}
+					},  show: {
+        event: 'mouseover'
+    },
+    hide: {
+        event: 'mouseout'
+    }})
               //g.setNode(name, value);
               //g.setNode(name+'G', {label:name+'G'});
               //g.setNode(name+'GP', {label:name+'GP'});
@@ -106,8 +118,24 @@
                   var optionName = option[0];
                   option[1].forEach(function(target){
                       if(cy.$id(target).length > 0){
-                        cy.add({group:'edges',data:{source:parentID,target:target}});
-
+                        var edge = cy.add({group:'edges',data:{source:parentID,target:target}});
+                                                if(optionName !== ""){
+                        edge[0].qtip({content:optionName, position: {
+						my: 'top center',
+						at: 'bottom center'
+					},
+					style: {
+						classes: 'qtip-bootstrap',
+						tip: {
+							width: 16,
+							height: 8
+						}
+					},  show: {
+        event: 'mouseover'
+    },
+    hide: {
+        event: 'mouseout'
+    }});}
                       }
                   })
               })
@@ -205,6 +233,14 @@ $(function() {
   })});
 
 </script>
+ <script src="https://d3js.org/d3.v3.min.js"></script>
+ <script type="text/javascript" src="../js/dagre-d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js"></script>
+    <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+    <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+<link rel="stylesheet" href ="http://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css"/>
+<script type="text/javascript" src="../js/cytoscape-qtip.js"/>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.css" integrity="sha256-7ZmxuRX3e7bQScYnzl6vtCBxtjf1jzqU4xnV5MoDIrw=" crossorigin="anonymous" />
 }

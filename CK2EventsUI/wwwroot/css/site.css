@@ -85,10 +85,10 @@ textarea {
   }
 
   #cy {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 999;
+    margin: auto;
+    border: 1px solid #ddd;
+    height: 680px;
+    width: 1000px;
+    overflow: auto !important;
+    border-radius: 0.25em;
   }
