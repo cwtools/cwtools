@@ -8,7 +8,7 @@
 
 
  <!-- Example code -->
- <script type="text/javascript">
+ <!-- <script type="text/javascript">
     // Simple function to style the tooltip for the given node.
     var styleTooltip = function(name, description) {
         return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
@@ -95,7 +95,7 @@
             cy.fit();
           
     };
- </script>
+ </script> -->
 
 <div class="row">
   <div class="col-md-4" id="dropzone" style="height=200px">
@@ -114,7 +114,7 @@
 </div>
 
 @section Scripts {
-<script>
+<!-- <script>
 $(function() {
   $.ajax({
       url: "GetData",
@@ -124,15 +124,46 @@ $(function() {
       main(null, JSON.parse(data.item1), JSON.parse(data.item2),JSON.parse(data.item3));
   })});
 
-</script>
+</script> -->
  <script src="https://d3js.org/d3.v3.min.js"></script>
  <script type="text/javascript" src="../js/dagre-d3.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js"></script> -->
     <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
     <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
 <link rel="stylesheet" href ="http://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css"/>
-<script type="text/javascript" src="../js/cytoscape-qtip.js"/>
+<!-- <script type="text/javascript" src="../js/cytoscape-qtip.js"/> -->
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.min.css" integrity="sha256-7ZmxuRX3e7bQScYnzl6vtCBxtjf1jzqU4xnV5MoDIrw=" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.19/system.js"></script>
+<script>
+    SystemJS.config({
+        map:{
+            'cytoscape' : 'https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js',
+            'graph': '../js/graph.js',
+            'cytoscape-qtip':'../js/cytoscape-qtip.js',
+            'dagre':'https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js',
+            'cytoscape-dagre':'https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js'
+        },
+        bundles:{
+            'graph':'graph',
+            'cytoscape':'cytoscape',
+            'cytoscape-qtip':'cytoscape-qtip',
+            'dagre':'dagre',
+            'cytoscape-dagre':'cytoscape-dagre'
+        }
+    })
+        //SystemJS.import('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.6/cytoscape.js', 'cytoscape');
+        SystemJS.import('dagre').then(function(dagre){
+        SystemJS.import('cytoscape').then(function(cytoscape){
+        SystemJS.import('cytoscape-dagre').then(function(cytoscapedagre){
+        SystemJS.import('cytoscape-qtip').then(function(cyqtip) {
+   SystemJS.import('graph').then(function(graph){ cyqtip( cytoscape, $ ); cytoscapedagre(cytoscape,dagre);  graph.go('@Model') });
+        });
+        });
+        });
+        });
+    $(function () { 
+});
+</script>
 }
