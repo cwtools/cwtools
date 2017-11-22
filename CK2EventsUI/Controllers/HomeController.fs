@@ -52,14 +52,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
     member this.Test () =
         this.View();
 
-    member this.Graph () =
-        this.View();
-    
-    member this.Graph2 () =
-        this.View();
-    
-    member this.Graph3 (file : string) =
-        this.View("Graph4", file);
+    member this.Graph (file : string) =
+        this.View(model = file);
         
     member this.Error () =
         this.View();
