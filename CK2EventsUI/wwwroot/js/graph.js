@@ -1,4 +1,4 @@
-System.register(["cytoscape"], function (exports_1, context_1) {
+System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function sayHello() {
@@ -7,6 +7,9 @@ System.register(["cytoscape"], function (exports_1, context_1) {
         return "Hello from " + compiler + " and " + framework + "!";
     }
     function main(data, triggers, options) {
+        cytoscape_qtip_1["default"](cytoscape_1["default"], $);
+        cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
+        var nav = cytoscape_navigator_1["default"](cytoscape_1["default"]);
         var cy = cytoscape_1["default"]({
             container: document.getElementById('cy'),
             style: [
@@ -70,6 +73,16 @@ System.register(["cytoscape"], function (exports_1, context_1) {
         var layout = cy.layout({ name: 'dagre' });
         layout.run();
         cy.fit();
+        var defaults = {
+            container: false,
+            viewLiveFramerate: 0,
+            thumbnailEventFramerate: 30,
+            thumbnailLiveFramerate: false,
+            dblClickDelay: 200,
+            removeCustomContainer: true,
+            rerenderDelay: 100
+        };
+        cy.navigator(defaults);
     }
     function go(file) {
         $.ajax({
@@ -81,11 +94,23 @@ System.register(["cytoscape"], function (exports_1, context_1) {
         });
     }
     exports_1("go", go);
-    var cytoscape_1;
+    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1;
     return {
         setters: [
+            function (dagre_1_1) {
+                dagre_1 = dagre_1_1;
+            },
             function (cytoscape_1_1) {
                 cytoscape_1 = cytoscape_1_1;
+            },
+            function (cytoscape_qtip_1_1) {
+                cytoscape_qtip_1 = cytoscape_qtip_1_1;
+            },
+            function (cytoscape_dagre_1_1) {
+                cytoscape_dagre_1 = cytoscape_dagre_1_1;
+            },
+            function (cytoscape_navigator_1_1) {
+                cytoscape_navigator_1 = cytoscape_navigator_1_1;
             }
         ],
         execute: function () {

@@ -1,9 +1,15 @@
+import dagre from 'dagre'
 import cytoscape from 'cytoscape'
-import { } from 'cytoscape-qtip'
+import cyqtip from 'cytoscape-qtip'
+import cytoscapedagre from 'cytoscape-dagre'
+import cytoscapenav from 'cytoscape-navigator'
 
 declare module 'cytoscape' {
     interface CollectionElements{
         qtip(qtip:any) : any;
+    }
+    interface Core{
+        navigator(options:any):any;
     }
 }
 
@@ -17,6 +23,10 @@ function sayHello() {
 }
 
 function main(data: any, triggers: any, options: any) {
+    cyqtip( cytoscape, $ );
+    cytoscapedagre(cytoscape,dagre);
+    var nav = cytoscapenav(cytoscape);
+
     var cy = cytoscape({
         container: document.getElementById('cy'),
         style: [ // the stylesheet for the graph
@@ -89,6 +99,17 @@ function main(data: any, triggers: any, options: any) {
     layout.run();
     cy.fit();
 
+    var defaults = {
+        container: false // can be a HTML or jQuery element or jQuery selector
+      , viewLiveFramerate: 0 // set false to update graph pan only on drag end; set 0 to do it instantly; set a number (frames per second) to update not more than N times per second
+      , thumbnailEventFramerate: 30 // max thumbnail's updates per second triggered by graph updates
+      , thumbnailLiveFramerate: false // max thumbnail's updates per second. Set false to disable
+      , dblClickDelay: 200 // milliseconds
+      , removeCustomContainer: true // destroy the container specified by user on plugin destroy
+      , rerenderDelay: 100 // ms to throttle rerender updates to the panzoom for performance
+    };
+
+    cy.navigator(defaults);
 }
 
 export function go(file : string){
