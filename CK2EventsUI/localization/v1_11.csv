@@ -1,0 +1,73 @@
+#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x
+MENU_BAR_GAME_CONVERT;Export Game;Exporter une partie;Spiel exportieren;;Exportar Partida;;;;;;;;;x
+MENU_BAR_GAME_CONVERT_DEL;Export game to EU4;Exporter une partie vers EU4;Spiel nach EU4 exportieren;;Exportar partuda a EU4;;;;;;;;;x
+BARBER_TOOLTIP;Go to the Barber;Aller chez le barbier;Zum Barbier gehen;;Ir al Peluquero;;;;;;;;;x
+RENAME_TITLE_TOOLTIP;Rename Title;Renommer titre;Titel umbenennen;;Renombrar Título;;;;;;;;;x
+CUSTOMIZE_HOUSE_TOOLTIP;Customize House;Personnaliser dynastie;Haus anpassen;;Personaliza tu Dinastía;;;;;;;;;x
+CUSTOMIZE_HOUSE_TOOLTIP_DISABLED;You can't customize this dynasty as you have to be top liege of all its members.;Vous ne pouvez pas personnaliser cette dynastie car vous devez être le plus haut seigneur de tous ses membres.;Du kannst diese Dynastie nicht anpassen, da du der oberste Lehnsherr all ihrer Mitglieder sein musst.;;No puedes personalizar esta dinastía porque tienes que ser el Señor de todos sus miembros.;;;;;;;;;x
+c_lappland_adj;Sápmi;samie;Samisch;;Sápmi;;;;;;;;;x
+RENAME;Rename;Renommer;Umbenennen;;Renombrar;;;;;;;;;x
+NAME;Name;Nom;Name;;Nombre;;;;;;;;;x
+ADJECTIVE;Adjective;Gentilé;Adjektiv;;Adjetivo;;;;;;;;;x
+POSSIBLE_PLOT_POWER;Possible Plot Power;Puissance possible du complot;Mögliche Verschwörungsstärke;;Potencial posible del complot;;;;;;;;;x
+AUTO_INVITE_PLOTTERS;Auto Invite Plotters;Invitation automatique des comploteurs;Verschwörer automatisch einladen;;Autoinvitar conspiradores;;;;;;;;;x
+AUTO_STOP_PLOTS;Auto Stop Plots;Arrêt auto. des complots;Automatisch beenden;;Autodetener complots;;;;;;;;;x
+AUTO_STOPPED_PLOT_SETUP;Plot Uncovered;Complot découvert;Verschwörung aufgedeckt;;Complot descubierto;;;;;;;;x
+AUTO_STOPPED_PLOT_LOG;§Y$PLOTTER$§!$PLOTTERJOB$ seeks to §Y$PLOTNAME$§!.;§Y$PLOTTER$§!$PLOTTERJOB$ cherche à §Y$PLOTNAME$§!.;§Y$PLOTTER$§!$PLOTTERJOB$ strebt nach §Y$PLOTNAME$§!.;;§Y$PLOTTER$§!$PLOTTERJOB$ pretende §Y$PLOTNAME$§!.;;;;;;;;x
+AUTO_STOPPED_PLOT_LETTER;I have discovered a plot where $PLOTTER$ seeks to $PLOTNAME$. I have dispatched an emissary to have him cease this at once.\n\nYour humble spymaster,\n$SPYMASTER$;J'ai découvert un complot par lequel $PLOTTER$ cherche à $PLOTNAME$. J'ai dépêché un émissaire pour lui demander de cesser ces agissements sur l'instant. \n\nVotre humble maître-espion,\n$SPYMASTER$;Ich habe eine Verschwörung aufgedeckt, bei der $PLOTTER$ $PLOTNAME$ erreichen will. Ich habe einen Abgesandten geschickt, um ihn dieses beenden zu lassen.\n\nIhr demütiger Hofspitzel\n$SPYMASTER$;;He descubierto un complot en el que $PLOTTER$ pretende $PLOTNAME$. Le he enviado un emisario para que desista de ello. \n\nTu humilde jefe de espías,\n$SPYMASTER$;;;;;;;;;x
+AUTO_STOP_PLOT_START_SETUP;Spymaster sends messengers;Le maître-espion envoie des messagers;Hofspitzel schickt Boten;;El jefe de espías envía emisarios;;;;;;;;;x
+AUTO_STOP_PLOT_START_LOG;$SPYMASTER$ sent out messenger to stop plotters;$SPYMASTER$ envoie des émissaires pour faire cesser les complots;$SPYMASTER$ hat Boten ausgeschickt, um Verschwörer zu stoppen.;;$SPYMASTER$ envia emisarios para hacer desistir a los conspiradores;;;;;;;;;x
+AUTO_STOP_PLOT_START_LETTER;I have sent out emissaries to all known plotters to cease immediately.\n\nYour humble spymaster,\n$SPYMASTER$;J'ai envoyé des émissaires auprès de tous les comploteurs connus afin qu'ils cessent immédiatement leurs actions.\n\nVotre humble maître-espion,\n$SPYMASTER$;Ich habe Abgesandte zu allen bekannten Verschwörern geschickt, um diese davon zu unterrichten, ihre Verschwörungen zu beenden.\n\nIhr demütiger Hofspitzel\n$SPYMASTER$;;He enviado emisarios a todos los conspiradores conocidos para que desistan de inmediato.\n\nTu humilde jefe de espías,\n$SPYMASTER$;;;;;;;;;x
+siege_leader;Siege Leader;Spécialiste des sièges;Belagerungsführer;;Líder del Asedio;;;;;;;;;x
+siege_leader_desc;This character is skilled at leading sieges.;Ce personnage est particulièrement doué pour mener à bien les sièges;Dieser Charakter ist geübt, Belagerungen zu führen;;Este personaje está especializado en liderar asedios;;;;;;;;;x
+SIEGE;Siege;Siège;Belagerung;;Asedio;;;;;;;;;x
+ADD_IP;Add IP;Ajouter IP;IP hinzufügen;;Añadir IP;;;;;;;;;x
+REMOVE_IP;Remove IP;Retirer IP;IP entfernen;;Borrar IP;;;;;;;;;x
+PENDING_PLOT_REQUEST;Waiting for answer.;Attend une réponse.;Wartet auf Antwort.;;Esperando respuesta.;;;;;;;;;x
+ACCEPTED_PLOT_REQUEST;Is backing plot.;Soutient un complot.;Unterstützt Verschwörung.;;Apoyando un complot.;;;;;;;;;x
+LOADING_TIP_52;You can make selection choose fleets exclusively using the ALT key.;Vous pouvez ne sélectionner que vos flottes en utilisant la touche ALT.;Sie können eine Auswahl nur auf Flotten treffen, indem Sie die Alt-Taste gedrückt halten.;;Puedes hacer que la tropa seleccionada se embarque usando simplemente la tecla ALT;;;;;;;;;x
+EXIT;Exit;Sortie;Schließen;;Salir;;;;;;;;;x
+CUT;Cut!;Coupez !;Schnitt!;;¡Cortar!;;;;;;;;;x
+#CONFIRMEXPORTTITLE;Export CK2 Game to EU4;;CK2-Spiel nach EU4 exportieren;;Exportar partida a EU4;;;;;;;;;x
+#CONFIRMEXPORTTEXT;The game will be exported with the name $NAME$. This might take a couple of minutes.;;Das Spiel wird mit dem Namen $NAME$ exportiert. Es kann möglicherweise ein paar Minuten dauern.;;La partida se exportará con el nombre $NAME$. Esta operación puede tardar un par de minutos.;;;;;;;;;x
+#CONFIRMEXPORTTEXT_WARNING;The game will be exported with the name $NAME$.\n\n THIS NAME IS ALREADY IN USE!\nAre you sure you want to continue?;;Das Spiel wird mit dem Namen $NAME$ exportiert.\n\nDIESER NAME WIRD BEREITS BENUTZT!\nSind Sie sicher, dass Sie fortfahren wollen?;;La partida se exportará con el nombre $NAME$.\n\n ¡ESTE NOMBRE YA ESTÁ EN USO!\n¿Seguro que quieres continuar?;;;;;;;;;x
+STYLE;Style;Style;Stil;;Estilo;;;;;;;;;x
+CAN_PERSUADE_TO_JOIN_PLOT;Might be persuaded with a bag of gold...;Peut être convaincu par une escarcelle d'or...;Könnte von einem Sack Gold überzeugt werden.;;Puede convencersele con un saco de oro...;;;;;;;;;x
+city_job_chancellor_arabic;Grand Vizier;Grand vizir;Großwesir;;Gran Visir;;;;;;;;;x
+city_job_chancellor_iranian;Grand Vizier;Grand vizir;Großwesir;;Gran Visir;;;;;;;;;x
+city_job_chancellor_turkish;Grand Vizier;Grand vizir;Großwesir;;Gran Visir;;;;;;;;;x
+city_job_chancellor_west_african;Grand Vizier;Grand vizir;Großwesir;;Gran Visir;;;;;;;;;x
+city_job_chancellor_greek;Magistros;Magistros;Magistros;;Magistros;;;;;;;;;x
+city_job_spymaster_greek;Mystikos;Mystikos;Mystikos;;Mystikos;;;;;;;;;x
+city_job_treasurer_greek;Sakellarios;Sakellarios;Sakellarios;;Sakellarios;;;;;;;;;x
+#city_job_marshal_greek;Strategos;;Strategos;;Estratega;;;;;;;;;x
+city_job_chancellor_aztec;Cihuacoatl;Cihuacoatl;Cihuacoatl;;Cihuacoatl;;;;;;;;;x
+city_job_treasurer_aztec;Petlacalcatl;Petlacalcatl;Petlacalcatl;;Petlacalcatl;;;;;;;;;x
+city_job_spiritual_aztec;Sahagun;Sahagún;Sahagun;;Sahagun;;;;;;;;;x
+city_job_spymaster_aztec;Tillancalqui;Tillancalqui;Tillancalqui;;Tillancalqui;;;;;;;;;x
+city_job_marshal_aztec;Tlacateccatl;Tlacateccatl;Tlacateccatl;;Tlacateccatl;;;;;;;;;x
+city_job_chancellor_zoroastrian_group;Astabadh;Astabadh;Astabadh;;Astabadh;;;;;;;;;x
+city_job_treasurer_zoroastrian_group;Darik-Pat;Darik-Pat;Darik-Pat;;Darik-Pat;;;;;;;;;x
+city_job_marshal_zoroastrian_group;Eran Spahbod;Eran Spahbod;Eran Spahbod;;Eran Spahbod;;;;;;;;;x
+city_job_spiritual_zoroastrian_group;Mobad;Mobad;Mobad;;Mobad;;;;;;;;;x
+city_job_spiritual_zoroastrian;Mobad;Mobad;Mobed;;Mobad;;;;;;;;;x
+city_job_spiritual_christian;Court Chaplain;Chapelain;Hofprediger;;Capellán;;;;;;;;;x
+city_job_spiritual_orthodox;Ecclesiarch;Ecclesiarque;Ekklesiarch;;Eclesiarca;;;;;;;;;x
+city_job_spiritual_muslim;Court Imam;Imam;Hof-Imam;;Imán de la corte;;;;;;;;;x
+city_job_spiritual_shiite;Court Mullah;Mollah de la Cour;Hof-Mullah;;Mulá de la corte;;;;;;;;;x
+city_job_spiritual_pagan_group;Chief Diviner;Devin;Oberster Wahrsager;;Gran Chamán;;;;;;;;;x
+city_job_spiritual_pagan;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_baltic_pagan;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_baltic_pagan_reformed;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_finnish_pagan;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_finnish_pagan_reformed;Diviner;Devin ;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_norse_pagan_reformed;Seer;Voyant;Seher;;Vidente;;;;;;;;;x
+city_job_spiritual_norse_pagan;Seer;Voyant;Seher;;Vidente;;;;;;;;;x
+city_job_spiritual_female_norse_pagan_reformed;Seeress;Voyante;Seherin;;Vidente;;;;;;;;;x
+city_job_spiritual_female_norse_pagan;Seeress;Voyante;Seherin;;Vidente;;;;;;;;;x
+city_job_spiritual_slavic_pagan;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_slavic_pagan_reformed;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_tengri_pagan;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+city_job_spiritual_tengri_pagan_reformed;Diviner;Devin;Wahrsager;;Augur;;;;;;;;;x
+EU4ConverterDLC;EUIV Converter;Convertisseur EUIV;EUIV Converter;;;;;;;;;;;x
+CustomizationPackDLC;Customization Pack;;Customization Pack;;;;;;;;;;;x

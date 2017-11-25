@@ -1,0 +1,334 @@
+#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x
+###German custom_loc. DO NOT TRANSLATE IN OTHER LANGUAGES! 
+string_DE_der;;;der;;;;;;;;;;;x
+string_DE_Der;;;Der;;;;;;;;;;;x
+string_DE_die;;;die;;;;;;;;;;;x
+string_DE_Die;;;Die;;;;;;;;;;;x
+string_DE_den;;;den;;;;;;;;;;;x
+string_DE_Den;;;Den;;;;;;;;;;;x
+string_DE_ein;;;ein;;;;;;;;;;;x
+string_DE_Ein;;;Ein;;;;;;;;;;;x
+string_DE_eine;;;eine;;;;;;;;;;;x
+string_DE_Eine;;;Eine;;;;;;;;;;;x
+string_DE_des;;;des;;;;;;;;;;;x
+string_DE_Des;;;Des;;;;;;;;;;;x
+string_DE_derdie;;;der/die;;;;;;;;;;;x
+string_DE_DerDie;;;Der/Die;;;;;;;;;;;x
+string_DE_dendie;;;den/die;;;;;;;;;;;x
+string_DE_DenDie;;;Den/Die;;;;;;;;;;;x
+string_DE_eineine;;;ein(e);;;;;;;;;;;x
+string_DE_EinEine;;;Ein(e);;;;;;;;;;;x
+string_DE_DesDer;;;des/der;;;;;;;;;;;x
+string_DE_desder;;;Des/Der;;;;;;;;;;;x
+string_DE_unseres;;;unseres;;;;;;;;;;;x
+string_DE_Unseres;;;Unseres;;;;;;;;;;;x
+string_DE_unserer;;;unserer;;;;;;;;;;;x
+string_DE_Unserer;;;Unserer;;;;;;;;;;;x
+string_DE_unser;;;unser;;;;;;;;;;;x
+string_DE_Unser;;;Unser;;;;;;;;;;;x
+string_DE_unsere;;;unsere;;;;;;;;;;;x
+string_DE_Unsere;;;Unsere;;;;;;;;;;;x
+string_DE_unserem;;;unserem;;;;;;;;;;;x
+string_DE_Unserem;;;Unserem;;;;;;;;;;;x
+string_DE_eines;;;eines;;;;;;;;;;;x
+string_DE_Eines;;;Eines;;;;;;;;;;;x
+string_DE_einer;;;einer;;;;;;;;;;;x
+string_DE_Einer;;;Einer;;;;;;;;;;;x
+string_DE_einem;;;einem;;;;;;;;;;;x
+string_DE_Einem;;;Einer;;;;;;;;;;;x
+string_DE_einen;;;einen;;;;;;;;;;;x
+string_DE_Einen;;;Einen;;;;;;;;;;;x
+string_DE_eineneine;;;eine(n);;;;;;;;;;;x
+string_DE_EinenEinen;;;Eine(n);;;;;;;;;;;x
+string_DE_unseresunserer;;;unseres/r;;;;;;;;;;;x
+string_DE_UnseresUnserer;;;Unseres/r;;;;;;;;;;;x
+string_DE_unserunsere;;;unser(e);;;;;;;;;;;x
+string_DE_UnserUnsere;;;Unser(e);;;;;;;;;;;x
+string_DE_unseremunserer;;;unserem/r;;;;;;;;;;;x
+string_DE_UnseremUnserer;;;Unserem/r;;;;;;;;;;;x
+string_DE_eineseiner;;;eines/r;;;;;;;;;;;x
+string_DE_EinesEiner;;;Eines/r;;;;;;;;;;;x
+string_DE_einemeiner;;;einem/r;;;;;;;;;;;x
+string_DE_Einemeiner;;;Einem/r;;;;;;;;;;;x
+string_DE_kein;;;kein;;;;;;;;;;;x
+string_DE_Kein;;;Kein;;;;;;;;;;;x
+string_DE_keine;;;keine;;;;;;;;;;;x
+string_DE_Keine;;;Keine;;;;;;;;;;;x
+string_DE_irgendein;;;irgendein;;;;;;;;;;;x
+string_DE_Irgendein;;;Irgendein;;;;;;;;;;;x
+string_DE_irgendeine;;;irgendeine;;;;;;;;;;;x
+string_DE_Irgendeine;;;Irgendeine;;;;;;;;;;;x
+string_DE_keinem;;;keinem;;;;;;;;;;;x
+string_DE_Keinem;;;Keinem;;;;;;;;;;;x
+string_DE_keiner;;;keiner;;;;;;;;;;;x
+string_DE_Keiner;;;Keiner;;;;;;;;;;;x
+string_DE_keinkeine;;;kein(e);;;;;;;;;;;x
+string_DE_KeinKeine;;;Kein(e);;;;;;;;;;;x
+string_DE_irgendeinirgendeine;;;irgendein(e);;;;;;;;;;;x
+string_DE_IrgendeinIrgendeine;;;Irgendein(e);;;;;;;;;;;x
+string_DE_keinemkeiner;;;keinem/r;;;;;;;;;;;x
+string_DE_KeinemKeiner;;;Keinem/r;;;;;;;;;;;x
+string_DE_dieser;;;dieser;;;;;;;;;;;x
+string_DE_Dieser;;;Dieser;;;;;;;;;;;x
+string_DE_diese;;;diese;;;;;;;;;;;x
+string_DE_Diese;;;Diese;;;;;;;;;;;x
+string_DE_dieses;;;dieses;;;;;;;;;;;x
+string_DE_Dieses;;;Dieses;;;;;;;;;;;x
+string_DE_diesem;;;diesem;;;;;;;;;;;x
+string_DE_Diesem;;;Diesem;;;;;;;;;;;x
+string_DE_dieserdiese;;;diese(r);;;;;;;;;;;x
+string_DE_DieserDiese;;;Diese(r);;;;;;;;;;;x
+string_DE_diesesdieser;;;dieses/r;;;;;;;;;;;x
+string_DE_DiesesDieser;;;Dieses/r;;;;;;;;;;;x
+string_DE_diesemdieser;;;diesem/r;;;;;;;;;;;x
+string_DE_DiesemDieser;;;Diesem/r;;;;;;;;;;;x
+string_DE_ihm;;;ihm;;;;;;;;;;;x
+string_DE_Ihm;;;Ihm;;;;;;;;;;;x
+string_DE_ihr;;;ihr;;;;;;;;;;;x
+string_DE_Ihr;;;Ihr;;;;;;;;;;;x
+string_DE_ihmihr;;;ihm/ihr;;;;;;;;;;;x
+string_DE_IhmIhr;;;Ihm/Ihr;;;;;;;;;;;x
+string_DE_dem;;;dem;;;;;;;;;;;x
+string_DE_Dem;;;Dem;;;;;;;;;;;x
+string_DE_demder;;;dem/der;;;;;;;;;;;x
+string_DE_DemDer;;;Dem/Der;;;;;;;;;;;x
+string_DE_meinem;;;meinem;;;;;;;;;;;x
+string_DE_Meinem;;;Meinem;;;;;;;;;;;x
+string_DE_meiner;;;meiner;;;;;;;;;;;x
+string_DE_Meiner;;;Meiner;;;;;;;;;;;x
+string_DE_meinemmeiner;;;meinem/r;;;;;;;;;;;x
+string_DE_MeinemMeiner;;;Meinem/r;;;;;;;;;;;x
+string_DE_euer;;;euer;;;;;;;;;;;x
+string_DE_Euer;;;Euer;;;;;;;;;;;x
+string_DE_eure;;;eure;;;;;;;;;;;x
+string_DE_Eure;;;Eure;;;;;;;;;;;x
+string_DE_euereure;;;euer/eure;;;;;;;;;;;x
+string_DE_EuerEure;;;Euer/Eure;;;;;;;;;;;x
+string_DE_eurem;;;eurem;;;;;;;;;;;x
+string_DE_Eurem;;;Eurem;;;;;;;;;;;x
+string_DE_eurer;;;eurer;;;;;;;;;;;x
+string_DE_Eurer;;;Eurer;;;;;;;;;;;x
+string_DE_euremeurer;;;eurem/eurer;;;;;;;;;;;x
+string_DE_EuremEurer;;;Eurem/Eurer;;;;;;;;;;;x
+string_DE_ihn;;;ihn;;;;;;;;;;;x
+string_DE_Ihn;;;Ihn;;;;;;;;;;;x
+string_DE_sie;;;sie;;;;;;;;;;;x
+string_DE_Sie;;;Sie;;;;;;;;;;;x
+string_DE_ihnsie;;;ihn/sie;;;;;;;;;;;x
+string_DE_IhnSie;;;Ihn/Sie;;;;;;;;;;;x
+string_DE_euren;;;euren;;;;;;;;;;;x
+string_DE_Euren;;;Euren;;;;;;;;;;;x
+string_DE_eureneure;;;eure(n);;;;;;;;;;;x
+string_DE_EurenEure;;;Eure(n);;;;;;;;;;;x
+
+#Endungen
+string_DE_endingS;;;s;;;;;;;;;;;x
+string_DE_FB_endingS;;;(s);;;;;;;;;;;x
+string_DE_endingE;;;e;;;;;;;;;;;x
+string_DE_FB_endingE;;;(e);;;;;;;;;;;x
+string_DE_endingN;;;n;;;;;;;;;;;x
+string_DE_FB_endingN;;;(n);;;;;;;;;;;x
+string_DE_endingR;;;r;;;;;;;;;;;x
+string_DE_FB_endingR;;;(r);;;;;;;;;;;x
+string_DE_endingIN;;;in;;;;;;;;;;;x
+string_DE_FB_endingIN;;;(in);;;;;;;;;;;x
+string_DE_endingEM;;;em;;;;;;;;;;;x
+string_DE_FB_endingEM;;;(em);;;;;;;;;;;x
+string_DE_endingER;;;er;;;;;;;;;;;x
+string_DE_FB_endingER;;;(er);;;;;;;;;;;x
+string_DE_endinga;;;a;;;;;;;;;;;x
+string_DE_FB_endinga;;;(a);;;;;;;;;;;x
+
+#Rare special cases
+string_DE_Arzt;;;Arzt;;;;;;;;;;;x
+string_DE_Ärztin;;;Ärztin;;;;;;;;;;;x
+string_DE_Kannibale;;;Kannibale;;;;;;;;;;;x
+string_DE_Kannibalin;;;Kannibalin;;;;;;;;;;;x
+string_DE_Propheten;;;dem Propheten;;;;;;;;;;;x
+string_DE_Prophetin;;;der Prophetin;;;;;;;;;;;x
+string_DE_Missgestalteter;;;Missgestalteter;;;;;;;;;;;x
+string_DE_Missgestalt;;;Missgestalt;;;;;;;;;;;x
+string_DE_Folterer;;;Folterer;;;;;;;;;;;x
+string_DE_Folterin;;;Folterin;;;;;;;;;;;x
+string_DE_Feigling;;;Feigling;;;;;;;;;;;x
+string_DE_Memme;;;Memme;;;;;;;;;;;x
+string_DE_Narr;;;Narr;;;;;;;;;;;x
+string_DE_Närrin;;;Närrin;;;;;;;;;;;x
+string_DE_Krüppel;;;Krüppel;;;;;;;;;;;x
+string_DE_Behinderte;;;Behinderte;;;;;;;;;;;x
+string_DE_Esel;;;Esel;;;;;;;;;;;x
+string_DE_Ziege;;;Ziege;;;;;;;;;;;x
+string_DE_Strohmann;;;Strohmann;;;;;;;;;;;x
+string_DE_Vogelscheuche;;;Vogelscheuche;;;;;;;;;;;x
+string_DE_Dschungelbewohner;;;Dschungelbewohner;;;;;;;;;;;x
+string_DE_Dschungelnatter;;;Dschungelnatter;;;;;;;;;;;x
+string_DE_Bücherwurm;;;Bücherwurm;;;;;;;;;;;x
+string_DE_Leseratte;;;Leseratte;;;;;;;;;;;x
+string_DE_Bengel;;;Bengel;;;;;;;;;;;x
+string_DE_Göre;;;Göre;;;;;;;;;;;x
+string_DE_Blutsauger;;;Blutsauger;;;;;;;;;;;x
+string_DE_Zecke;;;Zecke;;;;;;;;;;;x
+string_DE_Wurm;;;Wurm;;;;;;;;;;;x
+string_DE_Made;;;Made;;;;;;;;;;;x
+string_DE_Wüstenkäfer;;;Wüstenkäfer;;;;;;;;;;;x
+string_DE_Wüstenratte;;;Wüstenratte;;;;;;;;;;;x
+string_DE_Fiesling;;;Fiesling;;;;;;;;;;;x
+string_DE_Vettel;;;Vettel;;;;;;;;;;;x
+string_DE_Zuchtstute;;;Zuchtstute;;;;;;;;;;;x
+string_DE_Stohkopf;;;Strohkopf;;;;;;;;;;;x
+string_DE_Hohlbirne;;;Hohlbirne;;;;;;;;;;;x
+string_DE_Gesichtskrapfen;;;Gesichtskrapfen;;;;;;;;;;;x
+string_DE_Hackfresse;;;Hackfresse;;;;;;;;;;;x
+string_DE_Überflieger;;;Überflieger;;;;;;;;;;;x
+string_DE_Koriphäe;;;Koriphäe;;;;;;;;;;;x
+
+#English custom loc for german
+#GetHouseOfWorshipeineine
+string_DE_GetHouseOfWorship_Christian_eineine;;;eine Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_eineine;;;eine Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_eineine;;;eine Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_eineine;;;ein Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipeineine;;;ein(e) [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipEinEine
+string_DE_GetHouseOfWorship_Christian__EinEine;;;Eine Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_EinEine;;;Eine Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_EinEine;;;Eine Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_EinEine;;;Ein Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipEinEine;;;Ein(e) [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipeineneine
+string_DE_GetHouseOfWorship_Christian_eineneine;;;eine Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_eineneine;;;eine Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_eineneine;;;eine Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_eineneine;;;einen Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipeineneine;;;eine(n) [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipeinemeiner
+string_DE_GetHouseOfWorship_Christian_einemeiner;;;einer Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_einemeiner;;;einer Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_einemeiner;;;einer Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_einemeiner;;;einem Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipeinemeiner;;;einer/einem [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipzumzur
+string_DE_GetHouseOfWorship_Christian_zumzur;;;zur Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_zumzur;;;zur Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_zumzur;;;zur Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_zumzur;;;zum Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipzumzur;;;zum/zur [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipiminder
+string_DE_GetHouseOfWorship_Christian_iminder;;;in der Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_iminder;;;in der Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_iminder;;;in der Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_iminder;;;im Tempel;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipiminder;;;im/in der [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetHouseOfWorshipdesder
+string_DE_GetHouseOfWorship_Christian_desder;;;der Kirche;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Muslim_desder;;;der Moschee;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Pagan_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Zoroastrian_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jewish_desder;;;der Synagoge;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Hindu_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Buddhist_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Jain_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_GetHouseOfWorship_Taoist_desder;;;des Tempels;;;;;;;;;;;x
+string_DE_FB_GetHouseOfWorshipdesder;;;des/der [This.GetHouseOfWorship];;;;;;;;;;;x
+
+#GetMOCodedemder
+string_DE_the_Rule_of_Saint_Benedict_demder;;;der Regel des Heiligen Benedikt;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Augustine_demder;;;der Regel des Heiligen Augustin;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Basil_demder;;;der Regel des Heiligen Basilius;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Abraham_demder;;;der Regel des Heiligen Abraham;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Anthony_demder;;;der Regel des Heiligen Antonius;;;;;;;;;;;x
+string_DE_the_Noble_Eightfold_Path_demder;;;dem edlen achtfachen Pfad;;;;;;;;;;;x
+string_DE_the_four_Purusartha_demder;;;den vier Purusarthas;;;;;;;;;;;x
+string_DE_the_Anuvrata_demder;;;der Anuvrata;;;;;;;;;;;x
+string_DE_FB_GetMOCode_demder;;;dem/der [This.GetMOCode];;;;;;;;;;;x
+
+#GetMOCodedieden
+string_DE_the_Rule_of_Saint_Benedict_dieden;;;die Regel des Heiligen Benedikt;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Augustine_dieden;;;die Regel des Heiligen Augustin;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Basil_dieden;;;die Regel des Heiligen Basilius;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Abraham_dieden;;;die Regel des Heiligen Abraham;;;;;;;;;;;x
+string_DE_the_Rule_of_Saint_Anthony_dieden;;;die Regel des Heiligen Antonius;;;;;;;;;;;x
+string_DE_the_Noble_Eightfold_Path_dieden;;;den edlen achtfachen Pfad;;;;;;;;;;;x
+string_DE_the_four_Purusartha_dieden;;;den Weg der vier Purusarthas;;;;;;;;;;;x
+string_DE_the_Anuvrata_dieden;;;den Anuvrata;;;;;;;;;;;x
+string_DE_FB_GetMOCode_dieden;;;die/den [This.GetMOCode];;;;;;;;;;;x
+
+#GetHoldingdiedasden
+string_DE_GetHolding_Castle_1_diedasden;;;die Burg;;;;;;;;;;;x
+string_DE_GetHolding_Castle_2_diedasden;;;die Burg;;;;;;;;;;;x
+string_DE_GetHolding_Castle_3_diedasden;;;den Palast;;;;;;;;;;;x
+string_DE_GetHolding_Temple_1_diedasden;;;den Tempel;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_1_diedasden;;;das Lager;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_2_diedasden;;;das Feldlager;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_3_diedasden;;;den Palast;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_1_diedasden;;;das Dorf;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_2_diedasden;;;das Städtchen;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_3_diedasden;;;die Festung;;;;;;;;;;;x
+string_DE_GetHolding_City_1_diedasden;;;die Stadt;;;;;;;;;;;x
+string_DE_GetHolding_City_2_diedasden;;;die Stadt;;;;;;;;;;;x
+string_DE_GetHolding_City_3_diedasden;;;die Metropole;;;;;;;;;;;x
+string_DE_settlement_diedasden;;;die Siedlung;;;;;;;;;;;x
+string_DE_FB_GetHolding_diedasden;;;die Hauptstadt;;;;;;;;;;;x
+
+#GetHoldingdieserdieses
+string_DE_GetHolding_Castle_1_dieserdieses;;;dieser Burg;;;;;;;;;;;x
+string_DE_GetHolding_Castle_2_dieserdieses;;;dieser Burg;;;;;;;;;;;x
+string_DE_GetHolding_Castle_3_dieserdieses;;;dieses Palastes;;;;;;;;;;;x
+string_DE_GetHolding_Temple_1_dieserdieses;;;dieses Tempels;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_1_dieserdieses;;;dieses Lagers;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_2_dieserdieses;;;dieses Feldlagers;;;;;;;;;;;x
+string_DE_GetHolding_Nomad_3_dieserdieses;;;dieses Palastes;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_1_dieserdieses;;;dieses Dorfes;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_2_dieserdieses;;;dieses Städtchen;;;;;;;;;;;x
+string_DE_GetHolding_Tribal_3_dieserdieses;;;dieser Festung;;;;;;;;;;;x
+string_DE_GetHolding_City_1_dieserdieses;;;dieser Stadt;;;;;;;;;;;x
+string_DE_GetHolding_City_2_dieserdieses;;;dieser Stadt;;;;;;;;;;;x
+string_DE_GetHolding_City_3_dieserdieses;;;dieser Metropole;;;;;;;;;;;x
+string_DE_settlement_dieserdieses;;;dieser Siedlung;;;;;;;;;;;x
+string_DE_FB_GetHolding_dieserdieses;;;der Hauptstadt;;;;;;;;;;;x
+
+#GetDWSettlementdiedas
+string_DE_town_diedas;;;die Stadt;;;;;;;;;;;x
+string_DE_camp_diedas;;;das Lager;;;;;;;;;;;x
+string_DE_FB_DWSettlement_diedas;;;die/das [This.GetDWSettlement];;;;;;;;;;;x
+
+#GetDWSettlementjedejedes
+string_DE_town_jedejedes;;;jede Stadt;;;;;;;;;;;x
+string_DE_camp_jedejedes;;;jedes Lager;;;;;;;;;;;x
+string_DE_FB_DWSettlement_jedejedes;;;jede(s) [This.GetDWSettlement];;;;;;;;;;;x

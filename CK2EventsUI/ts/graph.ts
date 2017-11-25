@@ -3,6 +3,7 @@ import cytoscape from 'cytoscape'
 import cyqtip from 'cytoscape-qtip'
 import cytoscapedagre from 'cytoscape-dagre'
 import cytoscapenav from 'cytoscape-navigator'
+import cytoscapecanvas from 'cytoscape-canvas'
 
 declare module 'cytoscape' {
     interface CollectionElements{
@@ -10,6 +11,7 @@ declare module 'cytoscape' {
     }
     interface Core{
         navigator(options:any):any;
+        cyCanvas():any;
     }
 }
 
@@ -25,6 +27,7 @@ function sayHello() {
 function main(data: any, triggers: any, options: any) {
     cyqtip( cytoscape, $ );
     cytoscapedagre(cytoscape,dagre);
+    cytoscapecanvas(cytoscape);
     var nav = cytoscapenav(cytoscape);
 
     var cy = cytoscape({
@@ -33,7 +36,7 @@ function main(data: any, triggers: any, options: any) {
             {
                 selector: 'node',
                 style: {
-                    'background-color': '#666',
+                    //'background-color': '#666',
                     'label': 'data(id)'
                 }
             },
@@ -64,7 +67,7 @@ function main(data: any, triggers: any, options: any) {
         else {
             desc = element.Desc;
         }
-        var node = cy.add({ group: 'nodes', data: { id: name } });
+        var node = cy.add({ group: 'nodes', data: { id: name, type: element.Key } });
         node.qtip(qtipname(desc));
     });
 
@@ -98,6 +101,38 @@ function main(data: any, triggers: any, options: any) {
     var layout = cy.layout({ name: 'dagre' });
     layout.run();
     cy.fit();
+
+    var layer = cy.cyCanvas();
+    var canvas = layer.getCanvas();
+    var ctx = canvas.getContext('2d');
+
+    cy.on("render cyCanvas.resize", function(evt) {
+        layer.resetTransform(ctx);
+        layer.clear(ctx);
+    
+    
+        layer.setTransform(ctx);
+    
+
+        // Draw shadows under nodes
+					ctx.shadowColor = "black";
+					ctx.shadowBlur = 25 * cy.zoom();
+					ctx.fillStyle = "#666";
+					cy.nodes().forEach((node) => {
+                        let text:string = node.data('type');
+                        const eventChars = text.split('_').map(f => f[0].toUpperCase()).join('');
+                        const eventChar = text[0].toUpperCase();
+                        const pos = node.position();
+                        //Set text to black, center it and set font.
+                        ctx.fillStyle = "black";
+                        ctx.font = "16px sans-serif";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(eventChars, pos.x,pos.y);
+					});
+					ctx.restore();
+    });
+    
 
     var defaults = {
         container: false // can be a HTML or jQuery element or jQuery selector

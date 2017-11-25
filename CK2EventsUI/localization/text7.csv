@@ -1,0 +1,65 @@
+#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x
+WIKIPEDIA_LINK;§YWikipedia Link§W;§YLien Wikipédia§W;§YWikipedia Link§W;;§YEnlace a Wikipedia§W;;;;;;;;;x
+WIKIPEDIA_LINK_DESC;Opens a browser to the Wikipedia page for this character;Ouvre un navigateur vers la page Wikipedia du personnage;Öffnet den Browser und zeigt die Wikipediaseite für diesen Charakter an;;Abre un enlace en el explorador a la página de Wikipedia de este personaje;;;;;;;;;x
+WIKIPEDIA_LINK_MISSING;§YThis character has no Wikipedia link§W;§YCe personnage n'a pas de page wikipédia§!;§YDieser Charakter besitzt keinen Wikipedia-Link§!;;§YEste personaje no tiene enlace en Wikipedia§W;;;;;;;;;x
+WIKIPEDIA_LINK_DISABLED;Wikipedia Links are disabled;Les liens wikipedia sont désactivés;Wikipedia-Links sind deaktiviert;;Los enlaces a la Wikipedia están desactivados;;;;;;;;;x
+AIREASON_TARGET_HAS_REPENTED_SINS;§Y[GetBestName]§! has recently repented [GetPossPronoun] sins;§Y[GetBestName]§! s'est récemment repenti de ses péchés;§Y[GetBestName]§! hat jüngst für [GetPossPronoun]e Sünden Buße getan;;§Y[GetBestName]§! se ha arrepentido recientemente de sus [GetPossPronoun] pecados;;;;;;;;;x
+OL_DISABLED_ALERTS;Disabled Alerts;Alertes déactivées;Alarme sind deaktiviert;;Desactivar Avisos;;;;;;;;;x
+alert_deficits_name;Deficits;Déficits;Defizite;;Déficits;;;;;;;;;x
+alert_country_at_war_name;Country at war;Pays en guerre;Land befindet sich im Krieg;;País en Guerra;;;;;;;;;x
+alert_casus_belli_will_expire_name;Temporary Casus belli;Casus belli temporaire;Temporärer Casus Belli;;Casus Belli temporal;;;;;;;;;x
+alert_allies_not_called_in_name;We can call in allies;Nous pouvons solliciter de l'aide à nos alliés;Es können Verbündete um Beistand gebeten werden;;Podemos llamar a nuestros aliados;;;;;;;;;x
+alert_build_province_improvement_name;Can build county improvements;Peut contruire des améliorations comtales;Es können Provinzverbesserungen gebaut werden;;Podemos construir mejoras en nuestras provincias;;;;;;;;;x
+alert_troops_in_foreign_territory_name;Troops in foreign territory;Troupes en territoire étranger;Truppen im fremden Gebiet;;Tropas en tierras extranjeras;;;;;;;;;x
+alert_revoltrisk_in_provinces_name;Revolts possible;Révoltes possibles;Es sind Revolten möglich;;Posibles revueltas;;;;;;;;;x
+alert_available_decision_name;Important Decisions;Décisions importantes;Wichtige Entscheidungen;;Decisiones Importantes;;;;;;;;;x
+alert_noheir_name;No heir;Pas d'héritier;Kein Erbe;;No tienes Heredero;;;;;;;;;x
+alert_court_not_filled_name;Open council positions;Postes vacants au Conseil;Ratspositionen nicht besetzt;;Puestos disponibles en el Consejo;;;;;;;;;x
+alert_lose_title_on_succ_name;Title loss on succession;Perte de titre lors de la succession;Titel geht bei Nachfolge verloren;;Título perdido en la Sucesión;;;;;;;;;x
+alert_should_nominate_heir_name;Succession nomination;Nomination d'un successeur;Nachfolgenominierung;;Nominar Sucesor;;;;;;;;;x
+alert_you_can_create_titles_name;Can create titles;Des titres peuvent être créés;Es können Titel geschaffen werden;;Puedes crear títulos;;;;;;;;;x
+alert_you_can_usurp_titles_name;Can usurp titles;Des titres peuvent être usurpés;Es können Titel usurpiert werden;;Puedes usurpar títulos;;;;;;;;;x
+alert_ruler_should_marry_name;Ruler unmarried;Souverain célibataire;Herrscher ist nicht vermählt;;Gobernante soltero;;;;;;;;;x
+alert_heir_should_marry_name;Heir unmarried;Héritier célibataire;Erbe ist nicht vermählt;;Heredero soltero;;;;;;;;;x
+alert_should_appoint_guardian_name;Children lack guardian;Enfants sans tuteur;Kein Vormund für Kinder;;Infante sin tutor;;;;;;;;;x
+alert_demesne_too_big_name;Demesne too big;Domaine trop vaste;Domäne zu groß;;Heredad demasiado grande;;;;;;;;;x
+alert_adult_sons_notitle_name;Unlanded sons;Fils sans terres;Söhne besitzen kein Land;;Hijos sin tierras;;;;;;;;;x
+alert_betrothed_should_marry_name;Betrothed can marry;Les fiancés peuvent se marier;Verlobte können heiraten;;Prometido se puede casar;;;;;;;;;x
+alert_can_imprison_name;Righteous imprisonment;Emprisonnement justifié;Rechtmäßige Inhaftierung;;Arresto legítimo;;;;;;;;;x
+alert_titles_may_pass_from_realm_name;Vassal inheritance warning;Avertissement sur la succession de certains vassaux;Titel fällt möglicherweise an eine Person außerhalb des Reiches;;Aviso de herencia de vasallos;;;;;;;;;x
+alert_can_call_vassals_to_arms_name;Can call vassals of former liege;Nous pouvons faire appel à des vassaux de notre ancien seigneur lige;Vasallen unseres früheren Lehnsherrn können um Beistand ersucht werden;;Puedes llamar a los vasallos de tu antiguo señor;;;;;;;;;x
+alert_available_plot_name;New plots available;De nouveaux complots sont disponibles;Neue Verschwörung möglich;;Nuevos complots disponibles;;;;;;;;;x
+alert_vassal_levies_raised_long_name;Vassal levies raised too long;Les troupes des vassaux sont levées depuis trop longtemps;Wir beanspruchen die Streitkräfte unserer Vasallen zu lang;;Levas de los vasallos reclutadas durante mucho tiempo;;;;;;;;;x
+alert_owns_wrong_settlement_type_name;Wrong type of holding in demesne;Mauvais type de possession dans le domaine;Falscher Besitztumstyp in Domäne;;Tipo de población erróneo en la heredad;;;;;;;;;x
+alert_no_ambition_name;Pick an ambition;Choisissez une ambition;Wähle eine Ambition;;Escoge una ambición;;;;;;;;;x
+alert_dejure_claim_name;Can press de jure claim;Peut revendiquer des titres de jure;Es können De-jure-Ansprüche durchgesetzt werden;;Puedes ejercer una reclamación de ducado de iure;;;;;;;;;x
+alert_truce_expiring_name;Truces are expiring;Des trêves s'achèvent;Waffenstillstand läuft aus;;Finalizando treguas;;;;;;;;;x
+OPINION_OF_ME;Opinion of Me;Son opinion sur moi;Meinung über mich;;Opinión sobre mi;;;;;;;;;x
+MY_OPINION_OF_CHAR;My Opinion of $CHAR$;Mon opinion sur $CHAR$;Meine Meinung von $CHAR$;;Mi opinión sobre $CHAR$;;;;;;;;;x
+ALERT_DISABLED;Disabled;Désactivé;Deaktiviert;;Desactivada;;;;;;;;;x
+ALERT_DISABLED_TOOLTIP;Disabled\n§YClick to reenable§!;Désactivé\n§YCliquez pour réactiver§!;Deaktiviert\n§YWählen zum Reaktivieren§!;;Desactivada\n§YPincha para activar§!;;;;;;;;;x
+ALERT_DISMISSED;Dismissed;Écarté;Abgelehnt;;Descartada;;;;;;;;;x
+ALERT_DISMISSED_TOOLTIP;Dismissed\n§YClick to reenable§!;Écarté\n§YCliquez pour réactiver§!;Abgelehnt\n§YWählen zum Reaktivieren§!;;Descartada\n§YPincha para activar§!;;;;;;;;;x
+SAME_GUARDIAN_AS;Same Guardian as ;Même tuteur que ;Hat denselben Vormund wie ;;Mismo tutor que ;;;;;;;;;x
+NOT_SAME_GUARDIAN_AS;NOT Same Guardian as ;Pas le même tuteur que ;Hat nicht denselben Vormund wie ;;Distinto tutor que ;;;;;;;;;x
+GARRISON_REINFORCE_PROVINCEVIEW_TOOLTIP;Reinforcement: §Y+$NUM$§!/month;Renforts : §Y+$NUM$§!/mois;Verstärkung: §Y+$NUM$§!/Monat;;Refuerzos: §Y+$NUM$§!/mes;;;;;;;;;x
+NO_LEVY_REINF_GARRISON;§RLevy will not reinforce until the garrison is full§!;§RLes levées ne se renforceront pas tant que la garnison restera incomplète§!;§RAufgebot wird nicht verstärkt, solange die Garnison nicht vollzählig ist§!;;§RLa leva no se reforzará hasta que la guarnición esté completa§!;;;;;;;;;x
+d_ghilman;Ghilman;Bande de ghulams;Ghilman;;Ghilman;;;;;;;;;x
+d_ghilman_adj;Ghilman;ghulame;Ghilman;;Ghulam;;;;;;;;;x
+county_isolated;Isolated County;Comté isolé;Isolierte Grafschaft;;Condado Aislado;;;;;;;;;x
+TITLE_TIER_IS_LOWER;§Y$NAME$'s§! rank is lower than §Y$RANK$§!\n;Le rang de §Y$NAME$§! est inférieur à §Y$RANK$§!\n;§Y$NAME$'s§! Rang ist niedriger als §Y$RANK$§!\n;;El rango de §Y$NAME$'s§! es inferior al de §Y$RANK$§!\n;;;;;;;;;x
+TITLE_TIER_IS_NOT_LOWER;§Y$NAME$'s§! rank is NOT lower than §Y$RANK$§!\n;Le rang de §Y$NAME$§! n'est pas inférieur à §Y$RANK$§!\n;§Y$NAME$'s§! Rang ist nicht niedriger als §Y$RANK$§!\n;;El rango de §Y$NAME$'s§! NO es inferior al de §Y$RANK$§!\n;;;;;;;;;x
+TITLE_TIER_IS_HIGHER;§Y$NAME$'s§! rank is higher than §Y$RANK$§!\n;Le rang de §Y$NAME$§! est supérieur à §Y$RANK$§!\n;§Y$NAME$'s§! Rang ist höher als §Y$RANK$§!\n;;El rango de §Y$NAME$'s§! es superior al de §Y$RANK$§!\n;;;;;;;;;x
+TITLE_TIER_IS_NOT_HIGHER;§Y$NAME$'s§! rank is NOT higher than §Y$RANK$§!\n;Le rang de §Y$NAME$§! n'est pas supérieur à §Y$RANK$§!\n;§Y$NAME$'s§! Rang ist NICHT höher als §Y$RANK$§!\n;;El rango de §Y$NAME$'s§! NO es superior al de §Y$RANK$§!\n;;;;;;;;;x
+MSG_SETTING_PRIO6;Will pause the game.;Mettre le jeu en pause;Pausiert das Spiel;;Pausará el juego;;;;;;;;;x
+MSG_SETTING_CLOSE_COL;This column controls the behavior of this message when regarding you or close and unlanded family members;Cette colonne contrôle le comportement de ce message vous concernant ou ceux d'un membre de la famille qui est sans terre;Diese Spalte beeinflusst das Verhalten dieser Nachricht in Hinsicht auf dich oder nahe und besitzlose Familienmitglieder;;Esta columna controla el comportamiento de los mensajes que te atañen a ti o a tus familiares cercanos en la Corte;;;;;;;;;x
+MSG_SETTING_OTHER_COL;This column controls the behavior of this message when regarding other characters of message interest;Cette colonne contrôle le comportement de ce message concernant d'autres personnages;Diese Spalte beeinflusst das Verhalten dieser Nachricht in Hinsicht auf das Interesse von Nachrichten anderer Charaktere;;Esta columna controla el comportamiento de los mensajes que atañen a otros personajes interesantes;;;;;;;;;x
+MSG_SETTING_INTEREST_COL;This column controls the behavior of this message when regarding characters set as special interest;Cette colonne contrôle le comportement du message concernant des personnages importants;Diese Spalte beeinflusst das Verhalten dieser Nachricht bezüglich Charakteren von besonderem Interesse;;Esta columna controla el comportamiento de los mensajes que atañen a personajes marcados como especialmente interesantes;;;;;;;;;x
+MSG_SETTING_CLOSE_BUT;This button shows settings for messages when regarding you or close and unlanded family members;Ce bouton affiche les options pour les messages vous concernant ou à propos des membres de votre famille sans terre;Dieser Schalter beeinflusst das Verhalten dieser Nachricht in Hinsicht auf dich oder nahe und besitzlose Familienmitglieder;;Este botón muestra las opciones para mensajes referentes a tí o a tu familia cercana o en la corte;;;;;;;;;x
+MSG_SETTING_INTEREST_BUT;This button shows settings for messages when regarding characters set as special interest;Ce bouton affiche les options pour les messages concernant les personnages importants;Dieser Schalter beeinflusst das Verhalten dieser Nachricht bezüglich Charakteren von besonderem Interesse;;Este botón muestra las opciones para mensajes referentes a personajes especialmente interesantes;;;;;;;;;x
+MSG_SETTING_OTHER_BUT;This button shows settings for messages when regarding other characters of message interest;Ce bouton affiche les options pour les messages concernant les personnages anodins;Dieser Schalter beeinflusst das Verhalten dieser Nachricht in Hinsicht auf das Interesse von Nachrichten anderer Charaktere;;Este botón muestra las opciones para mensajes referentes a otros personajes interesantes;;;;;;;;;x
+SPECIAL_INTEREST_CHARACTERS;Characters of Special Interest;Personnages importants;Wichtige Charaktere;;Personajes especialmente interesantes;;;;;;;;;x
+CIW_MESSAGES;§YToggle Special Interest§!;§YMarquer comme personnage soit important soit quelconque§!;§YKennzeichne als Charakter von besonderem Interesse§!;;Seleccionar/Deseleccionar como personaje especialmente interesante;;;;;;;;;x
+CIW_MESSAGES_DEL;Characters of special interest are listed in the Outliner and have their own message settings;Les personnages qui sont marqués comme important sont plus faciles à suivre car ils sont dans l'index et ont leur propre configuration de messages;Charaktere von besonderem Interesse sind leichter zu verfolgen, da sie eine Outlinerkategorie und ihre eigene Nachrichteneinstellung haben.;;Los personajes especialmente interesantes son más fáciles de seguir pues tienen una categoría especial y su propia configuración de mensajes;;;;;;;;;x
+EVTDESC24503;The rest of my sons are nowhere near the abilities of [From.GetTitledFirstName]. He knew how to handle a sword, and would have been a great [Root.GetTitle] after my death.;Mes fils survivants, hélas, n'arrivent pas à la cheville de [From.GetTitledFirstName]. Lui, au moins, savait manier l'épée, et aurait été un grand [Root.GetTitle] après ma mort.;Meine verbleibenden Söhne haben bei weitem nicht die Fähigkeiten, die [From.GetTitledFirstName] hatte. Er wusste, wie man ein Schwert führte, und wäre ein großartiger [Root.GetTitle] nach meinem Tod gewesen.;;El resto de mis hijos ni se acercan a la capacidad de [From.GetTitledFirstName]. Sabía como blandir una espada, y hubiera sido un gran [Root.GetTitle] a mi muerte;;;;;;;;;x
+EVTOPTD50006;But... didn't I release you?;Mais... ne t'avais-je pas libéré ?;Aber ... habe ich dich nicht freigelassen?;;Pero... ¿No te había liberado? ;;;;;;;;;x

@@ -1,0 +1,258 @@
+#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x
+create_aragon_desc;I can begin a new era in these lands by founding the Kingdom of Aragon.;Je peux marquer le début d'une nouvelle ère sur ces terres en créant le royaume d'Aragon.;Ich kann in diesen Landen eine neue Ära beginnen lassen, indem ich das Königreich Aragon gründe.;;Puedo comenzar una nueva era en estas tierras fundando el Reino de Aragón.;;;;;;;;;x
+create_portugal_desc;I can begin a new era in these lands by founding the Kingdom of Portugal.;Je peux marquer le début d'une nouvelle ère sur ces terres en créant le royaume du Portugal.;Ich kann in diesen Landen eine neue Ära beginnen lassen, indem ich das Königreich Portugal gründe.;;Puedo comenzar una nueva era en estas tierras fundando el Reino de Portugal.;;;;;;;;;x
+create_castille_desc;I can begin a new era in these lands by founding the Kingdom of Castille.;Je peux marquer le début d'une nouvelle ère sur ces terres en créant le royaume de Castille.;Ich kann in diesen Landen eine neue Ära beginnen lassen, indem ich das Königreich Kastilien gründe.;;Puedo comenzar una nueva era en estas tierras fundando el Reino de Castilla.;;;;;;;;;x
+EVTDESC_39617;To the [GetFromRootCompliment] [Root.GetTitledFirstName],\n\nOur Liege, the [GetRootFromCompliment] [From.GetTitledNameWithNick] has, in [From.GetHerHis] great wisdom, decided to adopt the [From.Religion.GetName] faith. As [From.GetHerHis] [From.GetLordSpiritualName], I would suggest that you consider doing the same.\n\nIn service of [From.Religion.GetRandomGodName],\n[convert_lord_spiritual.GetBestName], [From.GetLordSpiritualName] of  [From.PrimaryTitle.GetName];[Root.GetTitledFirstName], [GetFromRootComplimentNounAdj]\n\nNotre [From.GetLordLady] lige, [GetRootFromComplimentNounAdj] [From.GetTitledNameWithNick], a, dans sa grande sagesse, décidé d'adopter la foi [From.Religion.GetName]. En tant que [From.GetLordSpiritualName], je vous suggère d'en faire autant.\n\nServant [From.Religion.GetRandomGodName],\n[convert_lord_spiritual.GetBestName], [From.GetLordSpiritualName] de [From.PrimaryTitle.GetName];Geschätzte[Root.GetrMale] [Root.GetTitledFirstName],\nunser verehrter Lehnsherr [From.GetTitledNameWithNick] hat in großer Weisheit entschieden, zum [From.Religion.GetName]en Glauben überzutreten. Als [From.GetHerHis] [From.GetLordSpiritualName] möchte ich Euch vorschlagen, dasselbe zu tun.\n\nGelobt sei [From.Religion.GetRandomGodName]!\n[convert_lord_spiritual.GetBestName], [From.GetLordSpiritualName] von [From.PrimaryTitle.GetName];;Para el [GetFromRootCompliment] [Root.GetTitledFirstName],\n\nNuestra Lieja, el[GetRootFromCompliment] [From.GetTitledNameWithNick] tiene, con [From.GetHerHis] gran sabiduría, decidido adoptar la fe de [From.Religion.GetName]. Como [From.GetHerHis] [From.GetLordSpiritualName], le sugiero que considera hacer lo mismo. \n\nEn el servicio de [From.Religion.GetRandomGodName]\n[convert_lord_spiritual.GetBestName], [From.GetLordSpiritualName] de  [From.PrimaryTitle.GetName];;;;;;;;;x
+EVTOPTA_39617;Very well, I shall embrace this new faith!;C'est d'accord, je me convertis à cette religion !;So sei es. Ich werde diesen neuen Glauben annehmen!;;Muy bien, abrazaré esta nueva fe!;;;;;;;;;x
+EVTOPTB_39617;No, I will stand by [Root.Religion.GetRandomGodName]!;Hors de question, je continuerai à honorer [Root.Religion.GetRandomGodName] !;Nein. Ich bleibe [Root.Religion.GetRandomGodName] treu!;;No, yo estaré con [Root.Religion.GetRandomGodName]!;;;;;;;;;x
+EVTOPTC_39617;I spit on your gods!;Je crache sur vos dieux !;Verflucht seien Eure Götter!;;Escupo sobre vuestros dioses!;;;;;;;;;x
+EVTDESC62923;[From.GetDynName] has founded a new [From.PrimaryTitle.GetTier] in Spain, and now rules supreme over [From.PrimaryTitle.GetName]!;[From.GetDynName] a créé un nouveau [From.PrimaryTitle.GetTier] en Espagne et règne désormais en maître sur [From.PrimaryTitle.GetName] !;[From.GetDynName] gründete ein neues [From.PrimaryTitle.GetTier] in Spanien und herrscht nun über [From.PrimaryTitle.GetName]!;;[From.GetDynName]ha fundado un nuevo [From.PrimaryTitle.GetTier] en España, y ahora gobierna supremo sobre [From.PrimaryTitle.GetName]!;;;;;;;;;x
+EVTDESC62925;[From.GetDynName] has founded a new [From.PrimaryTitle.GetTier] in Spain, and now rules supreme over [From.PrimaryTitle.GetName]!;[From.GetDynName] a créé un nouveau [From.PrimaryTitle.GetTier] en Espagne et règne désormais en maître sur [From.PrimaryTitle.GetName] !;[From.GetDynName] gründete ein neues [From.PrimaryTitle.GetTier] in Spanien und herrscht nun über [From.PrimaryTitle.GetName]!;;[From.GetDynName]ha fundado un nuevo [From.PrimaryTitle.GetTier] en España, y ahora gobierna supremo sobre [From.PrimaryTitle.GetName]!;;;;;;;;;x
+EVTDESC62927;[From.GetDynName] has founded a new [From.PrimaryTitle.GetTier] in Spain, and now rules supreme over [From.PrimaryTitle.GetName]!;[From.GetDynName] a créé un nouveau [From.PrimaryTitle.GetTier] en Espagne et règne désormais en maître sur [From.PrimaryTitle.GetName] !;[From.GetDynName] gründete ein neues [From.PrimaryTitle.GetTier] in Spanien und herrscht nun über [From.PrimaryTitle.GetName]!;;­[From.GetDynName]ha fundado un nuevo [From.PrimaryTitle.GetTier]en España, y ahora gobierna supremo sobre [From.PrimaryTitle.GetName]!;;;;;;;;;x
+EVTDESC62921;[From.GetDynName] has decided to found the [From.PrimaryTitle.GetTier] of León. The ancient [From.PrimaryTitle.GetTier] of Asturias is no more!;[From.GetDynName] a décidé de créer le [From.PrimaryTitle.GetTier] de León. L'ancien [From.PrimaryTitle.GetTier] des Asturies n'est plus !;[From.GetDynName] hat beschlossen, das [From.PrimaryTitle.GetTier] von León zu gründen. Das alte [From.PrimaryTitle.GetTier] Asturien ist damit Geschichte!;;[From.GetDynName] ha decidido fundar [From.PrimaryTitle.GetTier] de León. El antiguo [From.PrimaryTitle.GetTier] de Asturias ya no existe más!;;;;;;;;;x
+SM_CONTEXTSOUND;Dynamic Ambient Sounds;Sons contextuels;Kontextsound;;Sonido de contexto;;;;;;;;;x
+BUILD_FORT_DESC;Forts can be built in any counties that you control, as well as in hostile provinces where you have troops present. They cost §Y$COST$§!¤ to build. Forts lock down your occupation of empty nomad provinces and negate the crushing Attrition penalty suffered in some Pagan homelands.;Vous pouvez construire des forts dans les comtés que vous contrôlez, y compris dans les comtés ennemis occupés. Construire un fort coûte §Y$COST$§!¤. Les forts pérennisent l'occupation de territoires nomades vides et annulent la forte attrition dans les terres païennes.;Der Bau von Forts ist in allen Provinzen, die von Euch kontrolliert werden, möglich, auch in feindlichen, wenn Ihr dort Truppen stationiert habt. Der Bau kostet §Y$COST$§!¤. Forts ermöglichen es, leere Nomadenprovinzen dauerhaft zu besetzen, und sie wirken der vernichtenden Zermürbung entgegen, die im Territorium mancher heidnischer Stämme auftritt.;;Las fortalezas pueden ser construidas en cualquier provincia que controlas, así como en las provincias hostiles donde tienes tropas presentes. Cuesta §Y$COST$§!¤ para construir. Las fortalezas cierran tu ocupación de provincias de nómada vacías y niegue la pena de desgaste aplastante sufrida en algunas patrias Paganas.;;;;;;;;;x
+POPULATION_EFFECT_SCALED;$DIRECTION$ $VALUE$ of Population;$DIRECTION$ $VALUE$ en population;$DIRECTION$ $VALUE$ der Bevölkerung;;$DIRECTION$ $VALUE$ de la población;;;;;;;;;x
+DISBAND_SUBUNIT;Disband Regiment;Disperser le régiment;Regiment auflösen;;Disuelva regimiento;;;;;;;;;x
+CONFIRM_DISBAND_TITLE_SUBUNIT;Do you wish to dismiss this regiment?;Souhaitez-vous démobiliser ce régiment ?;Wollt Ihr dieses Regiment entlassen?;;Deseas descartar este regimiento?;;;;;;;;;x
+create_aragon;Create Aragon;Créer Aragon;Aragon gründen;;Crear Aragon;;;;;;;;;x
+create_portugal;Create Portugal;Créer le Portugal;Portugal gründen;;Crear Portugal;;;;;;;;;x
+create_castille;Create Castille;Créer Castille;Kastilien gründen;;Crear Castilla;;;;;;;;;x
+EVTTOOLTIP72035;[This.GetTitledFirstName] is notified about the fate of your opponent.;[This.GetTitledFirstName] s'est vu informer du sort de votre adversaire.;[This.GetTitledFirstName] wird über das Schicksal Eures Gegners informiert.;;[This.GetTitledFirstName] es notificado sobre el destino de tu oponente.;;;;;;;;;x
+MERCHANT_REPUBLICS_CANNOT_MOVE_CAPITAL;Merchant Republics are not allowed to change Capital, unless they are moving it to a city in a province with a port from a province without a port;Les républiques marchandes ne peuvent pas déplacer leur capitale à moins de la déplacer d'une ville de province sans port à une ville de province avec port.;Kaufmannsrepubliken dürfen ihre Hauptstadt nicht verlegen, es sei denn, die Verlegung erfolgt von einer Provinz ohne Hafen in eine Provinz mit Hafen.;;Las repúblicas mercantes no son permitidas cambiar capital, a menos que lo muevan a una ciudad en una provincia con puerto desde una provincia sin  puerto.;;;;;;;;;x
+PRESTIGE_LAW_PASSED_SETUP;Law Instituted;Loi instaurée;Gesetz eingeführt;;Ley instituida;;;;;;;;;x
+GOV_BUILD_WITH_PIETY_DESC;Uses Piety to build $HOLDINGS_LIST$ Holdings;L'établissement de propriétés de type '$HOLDINGS_LIST$' consomme de la piété;Verwendet Pietät, um die Besitztümer $HOLDINGS_LIST$ zu errichten;;Utiliza piedad para construir  $HOLDINGS_LIST$ propiedades;;;;;;;;;x
+GOVERNMENT_VASSALS_LESS_THAN;Have less than §Y$NUM$§! §Y$GOVERNMENT$§! vassals;Avoir moins de §Y$NUM$§! vassaux d'un gouvernement de type '§Y$GOVERNMENT$§!';Weniger als §Y$NUM$§! Vasallen der Regierungsform §Y$GOVERNMENT$§!;;Tiene menos de §Y$NUM$§! §Y$GOVERNMENT$§!vasallos. ;;;;;;;;;x
+GOVERNMENT_VASSALS_AT_LEAST;Have at least §Y$NUM$§! §Y$GOVERNMENT$§! vassals;Avoir au moins §Y$NUM$§! vassaux d'un gouvernement de type '§Y$GOVERNMENT$§!';Mindestens §Y$NUM$§! Vasallen der Regierungsform §Y$GOVERNMENT$§!;;Tiene por lo menos §Y$NUM$§! §Y$GOVERNMENT$§!vasallos.;;;;;;;;;x
+FEATURES;Features;Caractéristiques;Merkmale;;Características;;;;;;;;;x
+HINT_SPLASH_2_INTRO;You are playing a [Culture.GetName] [Religion.GetName] [PrimaryTitle.GetRulerTitle]!;Vous endossez le rôle d'un[GetNoneE] [PrimaryTitle.GetRulerTitle] [GetReligionMascFem] [GetCultureMascFem] !;Ihr spielt als: [Culture.GetName] [Religion.GetName]er [PrimaryTitle.GetRulerTitle];;Estás jugando como un [Culture.GetName] [Religion.GetName] [PrimaryTitle.GetRulerTitle].;;;;;;;;;x
+UNSELECT_CHAR;Unselect Character;Désélectionner le personnage;Charakterauswahl aufheben;;Cancelar selección de personaje;;;;;;;;;x
+tribal_governments_FEATURES;§Y*§! Can reform to Feudal, Iqta and Merchant Republic governments;§Y*§! Peut se réformer en gouvernement féodal, en iqtâ ou en république marchande;§Y*§! Kann durch Reformierung die Regierungsformen Feudal, Iqta und Kaufmannsrepublik annehmen;;§Y*§! Puede reformar al Feudal, Iqta y los gobiernos de las Repúblicas Mercantiles.;;;;;;;;;x
+nomadic_governments_FEATURES;§Y*§! Can reform to Feudal, Iqta and Merchant Republic governments\n§Y*§! Can pillage settlements to gain wealth and technology\n§Y*§! Can abandon provinces to gain increased population and manpower growth;§Y*§! Peut se réformer en gouvernement féodal, en iqtâ ou en république marchande\n§Y*§! Peut piller des colonies pour accroître sa richesse et sa technologie\n§Y*§! Peut abandonner des provinces pour gagner en population et en effectifs;§Y*§! Kann durch Reformierung die Regierungsformen Feudal, Iqta und Kaufmannsrepublik annehmen\n§Y*§! Kann Siedlungen plündern und dabei Reichtum und technischen Fortschritt erwerben\n§Y*§!Kann Provinzen aufgeben, um ein erhöhtes Wachstum der Bevölkerung und Mannstärke zu erlangen.;;§Y*§! Puede reformar al feudalismo, Iqta y los gobiernos de las Repúblicas Mercantiles.\n§Y*§! Puede saquear los asentamientos para ganar riqueza y tecnología\n§Y*§! puede abandonar provincias para obtener mayor crecimiento de la población y la soldadesca;;;;;;;;;x
+GOVERNMENT_UNLOCKS;Governments unlocked: ;Gouvernements débloqués : ;Regierungsformen freigeschaltet: ;;Gobiernos desbloqueados:;;;;;;;;;x
+REVOKE_TITLE_INTERACTION_2G;Our $GOVERNMENT$ administration allows us to revoke §Y$TIER$§! titles without objections from the aristocracy.;Notre administration $GOVERNMENT$ nous autorise à révoquer les titres de §Y$TIER$§! sans opposition de l'aristocratie.;Unsere $GOVERNMENT$-Verwaltung ermöglicht uns den Entzug von Titeln des Ranges §Y$TIER$§! ohne Widerspruch der Aristokratie.;;Nuestra administración de $GOVERNMENT$ permite que nosotros revoquemos el §Y$TIER$§! títulos sin objeciones por parte de la aristocracia.;;;;;;;;;x
+IS_DIVINE_BLOOD;The §Y$DYNASTY$§! Dynasty is of Divine Blood;La dynastie §Y$DYNASTY$§! est une dynastie de sang divin.;Die §Y$DYNASTY$§!-Dynastie ist von göttlichem Blut.;;La §Y$DYNASTY$§!dinastía es de Sangre Divina;;;;;;;;;x
+IS_NOT_DIVINE_BLOOD;The §Y$DYNASTY$§! Dynasty is NOT of Divine Blood;La dynastie §Y$DYNASTY$§! n'est pas une dynastie de sang divin.;Die §Y$DYNASTY$§!-Dynastie ist NICHT von göttlichem Blut.;;La §Y$DYNASTY$§!dinastía NO es de Sangre Divina;;;;;;;;;x
+SET_DIVINE_BLOOD;The §Y$DYNASTY$§! Dynasty is now considered of Divine Blood\n;La dynastie §Y$DYNASTY$§! est désormais considérée comme une dynastie de sang divin.\n;Die §Y$DYNASTY$§!-Dynastie gilt nun als Dynastie von göttlichem Blut\n;;La §Y$DYNASTY$§!Dinastía se considera ahora de Sangre divina\n;;;;;;;;;x
+UNSET_DIVINE_BLOOD;The §Y$DYNASTY$§! Dynasty is no longer considered of Divine Blood\n;La dynastie §Y$DYNASTY$§! n'est plus considérée comme une dynastie de sang divin.\n;Die §Y$DYNASTY$§!-Dynastie gilt nun nicht mehr als Dynastie von göttlichem Blut\n;;La §Y$DYNASTY$§!Dinastía ya no se considera de la Sangre Divina;;;;;;;;;x
+AIREASON_AMBITION;Ambition;Ambition;Ambition;;Ambición;;;;;;;;;x
+b_kroran;Krorän;Krorän;Krorän;;Krorän;;;;;;;;;x
+b_endere;Endere;Endere;Endere;;Endere;;;;;;;;;x
+b_dandan_uilik;Dandan-Uiliq;Dandan-Uiliq;Dandan-Uiliq;;Dandan-Uiliq;;;;;;;;;x
+b_korla;Korla;Korla;Korla;;Korla;;;;;;;;;x
+b_shanguo;Shanguo;Shanguo;Shanguo;;Shanguo;;;;;;;;;x
+b_turfan;Turfan;Turfan;Turfan;;Turfan;;;;;;;;;x
+b_tashkurgan;Tashkurgan;Tashkurgan;Tashkurgan;;Tashkurgan;;;;;;;;;x
+b_yecheng;Yecheng;Yecheng;Yecheng;;Yecheng;;;;;;;;;x
+b_mazar;Mazar;Mazar;Mazar;;Mazar;;;;;;;;;x
+b_jiaohe;Jiaohe;Jiaohe;Jiaohe;;Jiaohe;;;;;;;;;x
+b_guma;Guma;Guma;Guma;;Guma;;;;;;;;;x
+b_wensu;Wensu;Wensu;Wensu;;Wensu;;;;;;;;;x
+b_xayar;Xayar;Xayar;Xayar;;Xayar;;;;;;;;;x
+b_danhuan;Danhuan;Danhuan;Danhuan;;Danhuan;;;;;;;;;x
+b_wutanzili;Wutanzili;Wutanzili;Wutanzili;;Wutanzili;;;;;;;;;x
+b_huhu;Huhu;Huhu;Huhu;;Huhu;;;;;;;;;x
+b_loulan;Loulan;Loulan;Loulan;;Loulan;;;;;;;;;x
+b_kargan;Kargan;Kargan;Kargan;;Kargan;;;;;;;;;x
+b_ruoqiang;Ruoqiang;Ruoqiang;Ruoqiang;;Ruoqiang;;;;;;;;;x
+b_mocheng;Mocheng;Mocheng;Mocheng;;Mocheng;;;;;;;;;x
+b_zuomo;Zuomo;Zuomo;Zuomo;;Zuomo;;;;;;;;;x
+b_yuling;Yuling;Yuling;Yuling;;Yuling;;;;;;;;;x
+b_jingjue;Jingjue;Jingjue;Jingjue;;Jingjue;;;;;;;;;x
+b_jiandu;Jiandu;Jiandu;Jiandu;;Jiandu;;;;;;;;;x
+b_shangwangguo;Shangwangguo;Shangwangguo;Shangwangguo;;Shangwangguo;;;;;;;;;x
+b_xiuxun;Xiuxun;Xiuxun;Xiuxun;;Xiuxun;;;;;;;;;x
+b_wulei;Wulei;Wulei;Wulei;;Wulei;;;;;;;;;x
+b_bay;Bay;Bay;Bay;;Bay;;;;;;;;;x
+b_toqsu;Toqsu;Toqsu;Toqsu;;Toqsu;;;;;;;;;x
+b_awat;Awat;Awat;Awat;;Awat;;;;;;;;;x
+b_kelpin;Kelpin;Kelpin;Kelpin;;Kelpin;;;;;;;;;x
+b_fukang;Fukang;Fukang;Fukang;;Fukang;;;;;;;;;x
+b_qiemi;Qiemi;Qiemi;Qiemi;;Qiemi;;;;;;;;;x
+b_balikun;Balikun;Balikun;Balikun;;Balikun;;;;;;;;;x
+b_qian_pulei;Qian Pulei;Qian Pulei;Qian Pulei;;Qian Pulei;;;;;;;;;x
+b_hou_pulei;Hou Pulei;Hou Pulei;Hou Pulei;;Hou Pulei;;;;;;;;;x
+b_yulishi;Yulishi;Yulishi;Yulishi;;Yulishi;;;;;;;;;x
+b_karghalik;Karghalik;Karghalik;Karghalik;;Karghalik;;;;;;;;;x
+b_weixu;Weixu;Weixu;Weixu;;Weixu;;;;;;;;;x
+b_weili;Weili;Weili;Weili;;Weili;;;;;;;;;x
+b_weitou;Weitou;Weitou;Weitou;;Weitou;;;;;;;;;x
+CHRONICLE_ADOPTED_FEUDALISM;[From.GetDynName] adopted a feudal system in [From.GetHerHis] domains, abandoning the old tribal ways.;[GetDynName] a adopté un système féodal dans son domaine, abandonnant les anciennes coutumes tribales.;[From.GetDynName] führte in [From.GetHerHis]en Gebieten das Feudalsystem ein und gab die Stammestraditionen auf.;;[From.GetDynName] adoptó un sistema feudal en [From.GetHerHis] dominios, abandonando las viejas costumbres tribales.;;;;;;;;;x
+b_poskam;Poskam;Poskam;Poskam;;Poskam;;;;;;;;;x
+b_yopurga;Yopurga;Yopurga;Yopurga;;Yopurga;;;;;;;;;x
+b_atush;Atush;Atush;Atush;;Atush;;;;;;;;;x
+b_akto;Akto;Akto;Akto;;Akto;;;;;;;;;x
+b_ulugqat;Ulugqat;Ulugqat;Ulugqat:;Ulugqat;;;;;;;;;x
+b_uqturpan;Uqturpan;Uqturpan;Uqturpan;;Uqturpan;;;;;;;;;x
+b_aral;Aral;Aral;Aral;;Aral;;;;;;;;;x
+b_qira;Qira;Qira;Qira;;Qira;;;;;;;;;x
+b_yeyik;Yeyik;Yeyik;Yeyik;;Yeyik;;;;;;;;;x
+b_sutang;Sutang;Sutang;Sutang;;Sutang;;;;;;;;;x
+b_lop;Lop;Lop;Lop;;Lop;;;;;;;;;x
+b_merdek;Merdek;Merdek;Merdek;;Merdek;;;;;;;;;x
+b_yuni;Yuni;Yuni;Yuni;;Yuni;;;;;;;;;x
+b_tiemenguan;Tiemenguan;Tiemenguan;Tiemenguan;;Tiemenguan;;;;;;;;;x
+b_qigexing;Qigexing;Qigexing;Qigexing;;Qigexing;;;;;;;;;x
+b_kizil;Kizil;Kizil;Kizil;;Kizil;;;;;;;;;x
+b_subashi;Subashi;Subashi;Subashi;;Subashi;;;;;;;;;x
+b_kumtura;Kumtura;Kumtura;Kumtura;;Kumtura;;;;;;;;;x
+b_bezeklik;Bezeklik;Bezeklik;Bezeklik;;Bezeklik;;;;;;;;;x
+b_astana;Astana;Astana;Astana;;Astana;;;;;;;;;x
+b_manas;Manas;Manas;Manas;;Manas;;;;;;;;;x
+b_changjo;Changjo;Changjo;Changjo;;Changjo;;;;;;;;;x
+b_kara_koshun;Kara-Koshun;Kara-Koshun;Kara-Koshun;;Kara-Koshun;;;;;;;;;x
+b_lopnor;Lop Nor;Lop Nor;Lopnor;;Lop Nor;;;;;;;;;x
+b_shanshan;Shanshan;Shanshan;Shanshan;;Shanshan;;;;;;;;;x
+b_kumtag;Kumtag;Kumtag;Kumtag;;Kumtag;;;;;;;;;x
+b_yingpan;Yingpan;Yingpan;Yingpan;;Yingpan;;;;;;;;;x
+b_yiwu;Yiwu;Yiwu;Yiwu;;Yiwu;;;;;;;;;x
+b_dahe;Dahe;Dahe;Dahe;;Dahe;;;;;;;;;x
+b_piqan;Piqan;Piqan;Piqan;;Piqan;;;;;;;;;x
+b_yanghai;Yanghai;Yanghai;Yanghai;;Yanghai;;;;;;;;;x
+b_toyuq;Toyuq;Toyuq;Toyuq;;Toyuq;;;;;;;;;x
+b_nanhu_tarim;Nanhu;Nanhu;Nanhu;;Nanhu;;;;;;;;;x
+b_fangpan;Fangpan;Fangpan;Fangpan;;Fangpan;;;;;;;;;x
+b_mogao;Mogao;Mogao;Mogao;;Mogao;;;;;;;;;x
+b_yueyaquan;Yueyaquan;Yueyaquan;Yueyaquan;;Yueyaquan;;;;;;;;;x
+b_hongliuwan;Hongliuwan;Hongliuwan;Hongliuwan;;Hongliuwan;;;;;;;;;x
+b_xuanquanzhi;Xuanquanzhi;Xuanquanzhi;Xuanquanzhi;;Xuanquanzhi;;;;;;;;;x
+b_yumenquan;Yumenquan;Yumenquan;Yumenquan;;Yumenquan;;;;;;;;;x
+b_xingcheng;Xingcheng;Xingcheng;Xingcheng;;Xingcheng;;;;;;;;;x
+b_yuanquan;Yuanquan;Yuanquan;Yuanquan;;Yuanquan;;;;;;;;;x
+b_yulin;Yulin;Yulin;Yulin;;Yulin;;;;;;;;;x
+b_suoyang;Suoyang;Suoyang;Suoyang;;Suoyang;;;;;;;;;x
+b_mazongshan;Mazongshan;Mazongshan;Mazongshan;;Mazongshan;;;;;;;;;x
+b_changji;Changji;Changji;Changji;;Changji;;;;;;;;;x
+b_xincheng;Xincheng;Xincheng;Xincheng;;Xincheng;;;;;;;;;x
+ANSWER_YES;Yes.;Oui.;Ja.;;Sí.;;;;;;;;;x
+ANSWER_NO;No.;Non.;Nein.;;No.;;;;;;;;;x
+b_yumen;Yumen;Yumen;Yumen;;Yumen;;;;;;;;;x
+CHRONICLE_FOUNDED_MERCHANT_REPUBLIC;[From.GetDynName] founded a merchant republic in [From.GetHerHis] domains, abandoning the old tribal ways.;[From.GetDynName] a fondé une république marchande dans son domaine, abandonnant les anciennes coutumes tribales.;[From.GetDynName] gründete in [From.GetHerHis]en Gebieten eine Handelsrepublik und gab die Stammestraditionen auf.;;;;;;;;;;;x
+nomadic_emperor_female;Khatun;Khatoun;Khatun;;Khatun;;;;;;;;;x
+nomadic_king_female;Khanum;Khanoum;Khanum;;Khanum;;;;;;;;;x
+e_chagatai;Chagatai;Chagatai;Chagatai;;Chagatai;;;;;;;;;x
+FACTIONS_MENU;§YFactions§!;§YFactions§!;§YFraktionen§!;;§YFacciones§!;;;;;;;;;x
+CLANS_MENU;§YClans§!;§YClans§!;§YKlans§!;;§YClanes§!;;;;;;;;x
+THE_REPUBLIC_MENU;§YThe Republic§!;§YLa République§!;§YDie Republik§!;;§YLa República§!;;;;;;;;;x
+STAT_WEALTH_MENU;§YWealth§!;§YRichesses§!;§YReichtum§!;;§YRiqueza§!;;;;;;;;;x
+STAT_PRESTIGE_MENU;§YPrestige§!;§YPrestige;§YPrestige§!;;§YPrestigio§!;;;;;;;;;x
+STAT_PIETY_MENU;§YPiety§!;§YPiété§!;§YPietät§!;;§YPiedad§!;;;;;;;;;x
+STAT_PIETY_MENU_HONOR;§YHonor§!;§YHonneur§!;§YEhre§!;;§YHonor§!;;;;;;;;;x
+STAT_PIETY_MENU_KARMA;§YKarma§!;§YKarma§!;§YKarma§!;;§YKarma§!;;;;;;;;;x
+STAT_PIETY_MENU_PURITY;§YPurity§!;§YPureté§!;§YReinheit§!;;§YPureza§!;;;;;;;;;x
+STAT_DEMESNE_SIZE_MENU;§YDemesne Size§!;§YTaille du domaine§!;§YDomänengröße§!;;§YTamaño de la heredad§!;;;;;;;;;x
+STAT_VASSAL_LIMIT_MENU;§YVassal Limit§!;§YNombre limite de vassaux§!;§YVasallenlimit§!;;§YLímite de Vasallos§!;;;;;;;;;x
+STAT_REALM_SIZE_MENU;§YRealm Size§!;§YTaille du pays§!;§YReichsgröße§!;;§YTamaño del reino§!;;;;;;;;;x
+STAT_SCORE_MENU;§YScore§!;§YScore§!;§YPunkte§!;;§YPuntuación§!;;;;;;;;;x
+STAT_POPULATION_MENU;§YPopulation§!;§YPopulation§!;§YBevölkerung§!;;§YPoblación§!;;;;;;;;;x
+STAT_MANPOWER_MENU;§YManpower§!;§YEffectifs§!;§YMannstärke§!;;§YMano de obra§!;;;;;;;;;x
+TECHNOLOGY;Technology;Technologie;Technologie;Technologia;Tecnología;Tecnologia;Technológia;Technologie;;;;;;x
+LAW;Laws;Lois;Gesetze;;Leyes;;;;;;;;;x
+MILITARY;Military;Armée;Militär;;Fuerzas armadas;Militare;;;;;;;;x
+INTRIGUE;Intrigue;Intrigue;Intrige;;Intriga;;;;;;;;;x
+DEMESNE_INTERFACE_LABEL;§YDemesne§!;§YDomaine§!;§YDomäne§!;;§YHeredad§!;;;;;;;;;x
+TRADE_INTERFACE_LABEL;§YTrade§!;§YCommerce§!;§YHandel§!;;§YComerciar§!;;;;;;;;;x
+FORTS_INTERFACE_LABEL;§YForts§!;§YForts§!;§YForts§!;;§YFortalezas§!;;;;;;;;;x
+SIEGES_INTERFACE_LABEL;§YSieges§!;§YSièges§!;§YBelagerungen§!;§YOblenia§!;§YAsedios§!;§YAssedi§!;§YOstromok§!;§YObležení§!;;;;;;x
+ENEMY_SIEGES_INTERFACE_LABEL;§YHostile Sieges§!;§YSièges hostiles§!;§YFeindliche Belagerungen§!;;§YAsedios hostiles§!;§YAssedi del nemico§!;;;;;;;;x
+COMBATS_INTERFACE_LABEL;§YLand Combat§!;§YBatailles§!;§YGefechte§!;§YWalki§!;§YCombates§!;§YCombattimento terrestre§!;§YCsaták§!;§YPozemní boj§!;;;;;;x
+ARMIES_INTERFACE_LABEL;§YArmies§!;§YArmées§!;§YArmeen§!;;§YEjércitos§!;§YEserciti§!;;;;;;;;x
+NAVIES_INTERFACE_LABEL;§YNavies§!;§YFlottes§!;§YFlotten§!;;§YArmada§!;§YFlotte§!;;;;;;;;x
+MESSAGERULES_INTERFACE_LABEL;§YMessage Rules§!;§YRègles des messages§!;§YNachrichtenregeln§!;;§YReglas de mensaje§!;;;;;;;;;x
+SPECIAL_INTEREST_CHARACTERS_INTERFACE_LABEL;§YCharacters of Special Interest§!;§YPersonnages importants§!;§YCharaktere von besonderem Interesse§!;;§YPersonajes especialmente interesantes§!;;;;;;;;;x
+OL_COURT_INTERFACE_LABEL;§YCourt§!;§YCour§!;§YHof§!;;§YCorte§!;;;;;;;;;x
+OL_MP_PLAYERLIST_INTERFACE_LABEL;§YPlayers in Multiplayer§!;§YJoueurs si multijoueur§!;§YSpieler im Multiplayermodus§!;;§YJugadores en multijugador§!;;;;;;;;;x
+OL_DISABLED_ALERTS_INTERFACE_LABEL;§YDisabled Alerts§!;§YAlertes désactivés§!;§YDeaktivierte Alarme§!;;§YAvisos desactivados§!;;;;;;;;;x
+MESSWINDOW_HIGHPRIO_INTERFACE_LABEL;§YHigh Priority Messages§!;§YMessages de haute priorité§!;§YNachrichten mit hoher Priorität§!;;§YMensajes de alta prioridad§!;;;;;;;;;x
+MESSWINDOW_LOWPRIO_INTERFACE_LABEL;§YLow Priority Messages§!;§YMessages de basse priorité§!;§YNachrichten mit niedriger Priorität§!;;§YMensajes de baja prioridad§!;;;;;;;;;x
+FC_FIND_CHARACTERS_INTERFACE_LABEL;§YFind Characters§!;§YTrouver des personnages§!;§YCharakter suchen§!;;§YEncontrar personajes§!;;;;;;;;;x
+MAIN_MENU_INTERFACE_LABEL;§YMain Menu§!;§YMenu principal§!;§YHauptmenü§!;;§YMenú principal§!;§YMenu principale§!;;;;;;;;x
+ZOOM_IN_INTERFACE_LABEL;§YZoom in§!;§YEffectuer un zoom avant§!;§YVergrößern§!;§YPowiêksz§!;§YAcerca el zum§!;§YIngrandire§!;§YKözelítés§!;§YZaostøit nablízko§!;;;;;;x
+ZOOM_OUT_INTERFACE_LABEL;§YZoom out§!;§YEffectuer un zoom arrière§!;§YVerkleinern§!;§YPomniejsz§!;§YAleja el zum§!;§YRidurre§!;§YTávolítás§!;§YZaostøit na dálku§!;;;;;;x
+HOME_INTERFACE_LABEL;§YGo to Home Province§!;§YAller à la province d'origine§!;§YGehe zur Heimatprovinz§!;;§YIr a la Provincia de Origen§!;§YAndare alla Capitale§!;;;;;;;;x
+LEDGER_MENU_INTERFACE_LABEL;§YLedger§!;§YGrand livre§!;§YArchiv§!;;§YLibro de contabilidad§!;§YRegistro§!;;;;;;;;x
+LOGGER_MENU_INTERFACE_LABEL;§YMessage Log§!;§YJournal des messages§!;§YNachrichten-Log§!;;§YRegistro de mensajes§!;;;;;;;;;x
+FIND_PROVINCE_INTERFACE_LABEL;§YFind Title or Region§!;§YTrouver un titre ou une région§!;§YTitel oder Region suchen§!;;§YEncuentra título o región§!;;;;;;;;;x
+OPEN_CHRONICLE_INTERFACE_LABEL;§YOpen Chronicle§!;§YOuvrir la chronique§!;§YÖffne Chronik§!;;§YAbrir Crónica§!;;;;;;;;x
+DYNASTYTREE_INTERFACE_LABEL;§YDynasty Tree§!;§YArbre dynastique§!;§YDynastiebaum§!;;§YÁrbol dinástico§!;;;;;;;;;x
+FAMILYTREE_INTERFACE_LABEL;§YFamily Tree§!;§YArbre familial§!;§YStammbaum§!;;§YÁrbol genealógico§!;;;;;;;;;x
+REALM_TREE_INTERFACE_LABEL;§YRealm Tree§!;§YArbre hiérarchique§!;§YReichsbaum§!;;§YÁrbol del Reino§!;;;;;;;;;x
+b_qinggil;Qinggil;Qinggil;Qinggil;;Qinggil;;;;;;;;;x
+b_koktokay;Koktokay;Koktokay;Koktokay;;Koktokay;;;;;;;;;x
+b_burqin;Burqin;Burqin;Burqin;;Burqin;;;;;;;;;x
+b_burultokay;Burultokay;Burultokay;Burultokay;;Burultokay;;;;;;;;;x
+b_kokagax;Kokagax;Kokagax;Kokagax;;Kokagax;;;;;;;;;x
+b_jeminay;Jeminay;Jeminay;Jeminay;;Jeminay;;;;;;;;;x
+b_beshbalik;Beshbalik;Beshbalik;Beshbalik;;Beshbalik;;;;;;;;;x
+b_gucheng;Gucheng;Gucheng;Gucheng;;Gucheng;;;;;;;;;x
+b_mori;Mori;Mori;Mori;;Mori;;;;;;;;;x
+b_jiangjunmiao;Jiangjunmiao;Jiangjunmiao;Jiangjunmiao;;Jiangjunmiao;;;;;;;;;x
+b_zyryan;Zyryan;Zyryan;Zyryan;;Zyryan;;;;;;;;;x
+b_oskemen;Öskemen;Öskemen;Öskemen;;Öskemen;;;;;;;;;x
+b_urunkhayka;Urunkhayka;Urunkhayka;Urunkhayka;;Urunkhayka;;;;;;;;;x
+b_kurchum;Kurchum;Kurchum;Kurchum;;Kurchum;;;;;;;;;x
+b_uryl;Uryl;Uryl;Uryl;;Uryl;;;;;;;;;x
+b_turan;Turan;Turan;Turan;;Turan;;;;;;;;;x
+b_chadaana;Chadaana;Chadaana;Chadaana;;Chadaana;;;;;;;;;x
+b_ulala;Ulala;Ulala;Ulala;;Ulala;;;;;;;;;x
+b_ulagan;Ulagan;Ulagan;Ulagan;;Ulagan;;;;;;;;;x
+b_sayan;Sayan;Sayan;Sayan;;Sayan;;;;;;;;;x
+b_khori_tumed;Khori-Tümed;Khori-Tümed;Khori-Tümed;;Khori-Tümed;;;;;;;;;x
+b_kyren;Kyren;Kyren;Kyren;;Kyren;;;;;;;;;x
+b_kutulik;Kutulik;Kutulik;Kutulik;;Kutulik;;;;;;;;;x
+b_tulun;Tulun;Tulun;Tulun;;Tulun;;;;;;;;;x
+b_korya;Korya;Korya;Korya;;Korya;;;;;;;;;x
+b_semey;Semey;Semey;Semey;;Semey;;;;;;;;;x
+b_aqsw;Aqsw;Aqsw;Aqsw;;Aqsw;;;;;;;;;x
+b_ekibastuz;Ekibastuz;Ekibastuz;Ekibastuz;;Ekibastuz;;;;;;;;;x
+b_ertis;Ertis;Ertis;Ertis;;Ertis;;;;;;;;;x
+b_koktobe;Koktobe;Koktobe;Koktobe;;Koktobe;;;;;;;;;x
+b_abaza;Abaza;Abaza;Abaza;;Abaza;;;;;;;;;x
+b_tashtyp;Tashtyp;Tashtyp;Tashtyp;;Tashtyp;;;;;;;;;x
+b_terkhiin_tsagaan;Terkhiin Tsagaan;Terkhiin Tsagaan;Terkhiin Tsagaan;;Terkhiin Tsagaan;;;;;;;;;x
+b_ogii;Ögii;Ögii;Ögii;;Ögii;;;;;;;;;x
+b_tsetserleg;Tsetserleg;Tsetserleg;Tsetserleg;;Tsetserleg;;;;;;;;;x
+b_uliastai;Uliastai;Uliastai;Uliastai;;Uliastai;;;;;;;;;x
+b_orgil;Orgil;Orgil;Orgil;;Orgil;;;;;;;;;x
+b_erdenet;Erdenet;Erdenet;Erdenet;;Erdenet;;;;;;;;;x
+b_luut;Luut;Luut;Luut;;Luut;;;;;;;;;x
+b_noin_ula;Noin Ula;Noin Ula;Noin Ula;;Noin Ula;;;;;;;;;x
+b_zuunmod;Zuunmod;Zuunmod;Zuunmod;;Zuunmod;;;;;;;;;x
+b_khamag;Khamag;Khamag;Khamag;;Khamag;;;;;;;;;x
+b_lun;Lün;Lün;Lün;;Lün;;;;;;;;;x
+b_bayan;Bayan;Bayan;Bayan;;Bayan;;;;;;;;;x
+b_darkhan;Darkhan;Darkhan;Darkhan;;Darkhan;;;;;;;;;x
+b_bargujin;Bargujin;Bargujin;Bargujin;;Bargujin;;;;;;;;;x
+b_merkit;Merkit;Merkit;Merkit;;Merkit;;;;;;;;;x
+b_kyakhta;Kyakhta;Kyakhta;Kyakhta;;Kyakhta;;;;;;;;;x
+b_uda;Uda;Uda;Uda;;Uda;;;;;;;;;x
+b_galuuta;Galuuta;Galuuta;Galuuta;;Galuuta;;;;;;;;;x
+b_barkul;Barkul;Barkul;Barkul;;Barkul;;;;;;;;;x
+b_khoid;Khoid;Khoid;Khoid;;Khoid;;;;;;;;;x
+b_erdene;Erdene;Erdene;Erdene;;Erdene;;;;;;;;;x
+b_gurvantes;Gurvantes;Gurvantes;Gurvantes;;Gurvantes;;;;;;;;;x
+b_khereid;Khereid;Khereid;Khereid;;Khereid;;;;;;;;;x
+b_zubu;Zübü;Zübü;Zübü;;Zübü;;;;;;;;;x
+b_nuuruudyn_hondij;Nuuruudyn Hondij;Nuuruudyn Hondij;Nuuruudyn Hondij;;Nuuruudyn Hondij;;;;;;;;;x
+b_arguut;Arguut;Arguut;Arguut;;Arguut;;;;;;;;;x
+b_khuld;Khuld;Khuld;Khuld;;Khuld;;;;;;;;;x
+b_naiman;Naiman;Naiman;Naiman;;Naiman;;;;;;;;;x
+b_khovd;Khovd;Khovd;Khovd;;Khovd;;;;;;;;;x
+b_khar;Khar;Khar;Khar;;Khar;;;;;;;;;x
+b_mankhan;Mankhan;Mankhan;Mankhan;;Mankhan;;;;;;;;;x
+b_darvi;Darvi;Darvi;Darvi;;Darvi;;;;;;;;;x
+b_khaliun;Khaliun;Khaliun;Khaliun;;Khaliun;;;;;;;;;x
+HAS_LESS_SETTLEMENTS;Less than §Y$VAL$§! holdings.;Moins de §Y$VAL$§! propriétés.;Weniger als §Y$VAL$§! Gebäude.;;Menos de §Y$VAL$§! posesiones.;;;;;;;;;x
+HAS_LEAST_SETTLEMENTS;At least §Y$VAL$§! holdings.;Au moins §Y$VAL$§! propriétés.;Mindestens §Y$VAL$§! Gebäude.;;§Y$VAL$§! posesiones como máximo.;;;;;;;;;x
+CAPTAIN_female; ;; ;;;;;;;;;;;x
+messalian_FEATURES;§Y*§! Women may hold all councillor positions\n§Y*§! Women may lead armies;§Y*§! Les femmes peuvent occuper tous les postes du Conseil\n§Y*§! Les femmes peuvent mener des armées au combat;§Y*§! Frauen können alle Ratspositionen bekleiden\n§Y*§! Frauen können Armeen befehligen;;§Y*§! Las mujeres pueden ocupar todos los puestos de consejero\n§Y*§!Las mujeres pueden dirigir ejércitos;;;;;;;;;x
+CONFIRM_BUILD_EXTRA_PRESTIGE_OR_PIETY_HOLDING_DESC;Are you sure you want to build a $TYPE$?\nIt will cost you §Y$COST$§! and will be finished on §Y$FINISHED$§!;Voulez-vous vraiment établir une propriété de type '$TYPE$' ?\nVous devrez payer §Y$COST$§! et cela s'achèvera le §Y$FINISHED$§!;$TYPE$ wirklich bauen?\nDies kostet §Y$COST$§! und wird fertiggestellt am §Y$FINISHED$§!.;;¿Estás seguro/a de que desea construir un/a $TYPE$?\n Te costará §Y$COST$§! y estará terminado en §Y$FINISHED$§!;;;;;;;;;x
+EVTDESC_HL_10501B;[eloper.GetFirstName] has eloped with the notorious mercenary [From.GetFirstName].;[eloper.GetFirstName] a fui avec le célèbre mercenaire [From.GetFirstName].;[eloper.GetFirstName] ist mit dem berüchtigten Söldner [From.GetFirstName] durchgebrannt.;;[eloper.GetFirstName] se fugó con el famoso mercenario [From.GetFirstName].;;;;;;;;;x
+#recently_burnt_the_land_not_owner;Recently Burned the Land;Terre brûlée récemment;Steckte vor kurzem das Land in Brand;;Tierra recientemente quemada;;;;;;;;;x
+PRESTIGE_LAW_PASSED_LOG;§Y$RULER$§! has instituted the §Y$LAW$§! Law in §Y$TITLE$§!.;§Y$RULER$§! a institué la loi §Y$LAW$§! en §Y$TITLE$§!.;§Y$RULER$§! hat das Gesetz §Y$LAW$§! in §Y$TITLE$§! eingeführt.;;§Y$RULER$§! ha instituido la  ley §Y$LAW$§! en §Y$TITLE$§!.;;;;;;;;;x
+EVTTITLE_HL_1031;[From.GetSonDaughter] of the Wolf?;[From.GetSonDaughter] du Loup ?;[From.GetSonDaughter] einer Wölfin?;;¿[From.GetSonDaughter] de la loba?;;;;;;;;;x
+EVTNAME62923;The [From.PrimaryTitle.GetTier] of Castille;Le [From.PrimaryTitle.GetTier] de Castille;Das [From.PrimaryTitle.GetTier] von Kastilien;;El [From.PrimaryTitle.GetTier] de Castilla;;;;;;;;;x
+EVTNAME62925;The [From.PrimaryTitle.GetTier] of Portugal;Le [From.PrimaryTitle.GetTier] du Portugal;Das [From.PrimaryTitle.GetTier] von Portugal;;El [From.PrimaryTitle.GetTier] de Portugal;;;;;;;;;x
+EVTNAME62927;The [From.PrimaryTitle.GetTier] of Aragon;Le [From.PrimaryTitle.GetTier] d'Aragon;Das [From.PrimaryTitle.GetTier] von Aragon;;El [From.PrimaryTitle.GetTier] de Aragón;;;;;;;;;x
+CONTAINS_UNAVAILABLE_DECISION_UNLOCKS;Unlocks decisions not available for your character.;Débloque des décisions actuellement non disponibles pour votre personnage.;Ermöglicht Entscheidungen, die jetzt für Ihre Charakter nicht verfügbar sind.;;Desbloquea decisiones que no están actualmente disponibles para su personaje.;;;;;;;;;x
+LAND_OF_CLAN;§YNomadic Counties held by Clan $CLAN$§!;§YComtés nomades détenus par le clan $CLAN$§!;§YNomadische Grafschaften unter der Kontrolle von Klan $CLAN$§!;;§YCondados nómadas poseídos por clan $CLAN$§!;;;;;;;;;x

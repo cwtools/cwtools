@@ -1,0 +1,2713 @@
+### GERMAN
+#When adding new custom loc keys, add them to the appropriate category (or add a new one) and describe them. Name the strings "string_DE_X" where x is its content.
+# To not display anything, you can use 'localisation_key = ""'
+
+## German gender differentiation with non capital letters
+#Getderdie
+#Getdendie
+#Geteineine
+#Getdesder
+#Getunseresunserer
+#Getunserunsere
+#Getunsermunserer
+#Geteineseiner
+#Geteineneine
+#Geteinemeiner
+#Getkeinkeine
+#Getirgendeinirgendeine
+#Getkeinemkeiner
+#Getdieserdiese
+#Getdiesesdieser
+#Getdiesemdieser
+#Getihmihr
+#Getdemder
+#Getmeinemmeiner
+#Geteuereure
+#Geteuremeurer
+#Getihnsie
+#Geteureneure
+
+## German gender differentiation with capital letters
+#GetDerDie
+#GetDenDie
+#GetEinEine
+#GetDesDer
+#GetUnseresUnserer
+#GetUnserUnsere
+#GetUnsermUnserer
+#GetEinesEiner
+#GetEinemEiner
+#GetEinenEine
+#GetKeinKeine
+#GetIrgendeinIrgendeine
+#GetKeinemKeiner
+#GetDieserDiese
+#GetDiesesDieser
+#GetDiesemDieser
+#GetIhmIhr
+#GetDemDer
+#GetMeinemMeiner
+#GetEuerEure
+#GetEuremEurer
+#GetIhnSie
+#GetEurenEure
+
+##Opposite german gender differentiation 
+#GeteineineOpp
+#GetEinEineOpp
+#GeteinemeinerOpp
+#GeteineineOpp
+#GetEinEineOpp
+#GeteinemeinerOpp
+#GetEinemEinerOpp
+#GeteineseinerOpp
+#GetEinesEinerOpp
+#GetihmihrOpp
+#GetIhmIhrOpp
+#GetdendieOpp
+#GetDenDieOpp
+
+## German endings
+#GetsMale
+#GeteFemale
+#GetnMale
+#GetrMale
+#GetinFemale
+#GetemMale
+#GeterFemale
+#GetaFemale
+
+## Opposite endings
+#GetsMaleOpp
+#GeteFemaleOpp
+#GetnMaleOpp
+#GetrMaleOpp
+#GetinFemaleOpp
+#GetemMaleOpp
+#GeterFemaleOpp
+#GetaFemaleOPP
+
+#Rare special cases
+#GetArztÄrztin
+#GetKannibaleKannibalin
+#GetProphetenProphetin
+#GetMissgestalteterMissgestalt
+#GetFoltererFolterin
+#GetFeiglingMemme
+#GetNarrNärrin
+#GetKrüppelBehinderte
+#GetEselZiege
+#GetStrohmannVogelscheuche
+#GetDschungelbewohnerDschungelnatter
+#GetBücherwurmLeseratte
+#GetBengelGöre
+#GetBlutsaugerZecke
+#GetWurmMade
+#GetWüstenkäferWüstenratte
+#GetFieslingVettel
+#GetEselZuchtstute
+
+##English custom localisation commands with german gender differentiation
+#GetHouseOfWorshipeineine
+#GetHouseOfWorshipEinEine
+#GetHouseOfWorshipeineneine
+#GetHouseOfWorshipeinemeiner
+#GetHouseOfWorshipzumzur
+#GetHouseOfWorshipiminder
+#GetHouseOfWorshipdesder
+#GetMOCodedemder
+#GetMOCodedieden
+#GetHoldingdiedasden
+#GetHoldingdieserdieses
+#GetDWSettlementdiedas
+#GetDWSettlementjedejedes
+
+# ********************************************************************************
+### German gender differentiation
+##Example: "Der König", "Die Königin", "...der König...", "...die Königin..."
+defined_text = {
+    name = Getderdie
+    text = {
+        localisation_key = string_DE_der
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_die
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_derdie
+	}
+}
+
+defined_text = {
+    name = GetDerDie
+    text = {
+        localisation_key = string_DE_Der
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Die
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DerDie
+	}
+}
+
+defined_text = {
+    name = Getdendie
+
+    text = {
+        localisation_key = string_DE_den
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_die
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_dendie
+	}
+}
+
+defined_text = {
+    name = GetDenDie
+
+   text = {
+        localisation_key = string_DE_Den
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Die
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DenDie
+	}
+}
+
+	
+defined_text = {
+    name = Geteineine
+
+    text = {
+        localisation_key = string_DE_ein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_eine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineine
+	}
+}
+
+defined_text = {
+    name = GetEinEine
+
+   text = {
+        localisation_key = string_DE_Ein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinEine
+	}
+}
+
+defined_text = {
+    name = GetDesDer
+
+   text = {
+        localisation_key = string_DE_Des
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Der
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DesDer
+	}
+}
+
+defined_text = {
+    name = Getdesder
+
+   text = {
+        localisation_key = string_DE_des
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_der
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_desder
+	}
+}
+
+defined_text = {
+    name = Getunseresunserer
+
+    text = {
+        localisation_key = string_DE_unseres
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_unserer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_unseresunserer
+	}
+}
+
+defined_text = {
+    name = GetUnseresUnserer
+
+    text = {
+        localisation_key = string_DE_Unseres
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Unserer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_UnseresUnserer
+	}
+}
+
+defined_text = {
+    name = Getunserunsere
+
+    text = {
+        localisation_key = string_DE_unser
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_unsere
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_unserunsere
+	}
+}
+
+defined_text = {
+    name = GetUnserUnsere
+
+    text = {
+        localisation_key = string_DE_Unser
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Unsere
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_UnserUnsere
+	}
+}
+
+defined_text = {
+    name = Getunsermunserer
+
+    text = {
+        localisation_key = string_DE_unserem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_unserer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_unseremunserer
+	}
+}
+
+defined_text = {
+    name = GetUnseremUnserer
+
+    text = {
+        localisation_key = string_DE_Unserem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Unserer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_UnseremUnserer
+	}
+}
+
+defined_text = {
+    name = Geteineseiner
+
+    text = {
+        localisation_key = string_DE_eines
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_einer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineseiner
+	}
+}
+
+defined_text = {
+    name = GetEinesEiner
+
+    text = {
+        localisation_key = string_DE_Eines
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Einer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinesEiner
+	}
+}
+
+defined_text = {
+    name = Geteineneine
+
+    text = {
+        localisation_key = string_DE_einen
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_einen
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineneine
+	}
+}
+
+defined_text = {
+    name = GetEinenEine
+
+    text = {
+        localisation_key = string_DE_Einen
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinenEinen
+	}
+}
+
+defined_text = {
+    name = Geteinemeiner
+
+    text = {
+        localisation_key = string_DE_einem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_einer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_einemeiner
+	}
+}
+
+defined_text = {
+    name = GetEinemEiner
+
+    text = {
+        localisation_key = string_DE_Einem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Einer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinemEiner
+	}
+}
+
+defined_text = {
+    name = Getkeinkeine
+
+    text = {
+        localisation_key = string_DE_kein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_keine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_keinkeine
+	}
+}
+
+defined_text = {
+    name = GetKeinKeine
+
+    text = {
+        localisation_key = string_DE_Kein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Keine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_KeinKeine
+	}
+}
+
+defined_text = {
+    name = Getirgendeinirgendeine
+
+    text = {
+        localisation_key = string_DE_irgendein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_irgendeine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_irgendeinirgendeine
+	}
+}
+
+defined_text = {
+    name = GetIrgendeinIrgendeine
+
+    text = {
+        localisation_key = string_DE_Irgendein
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Irgendeine
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_IrgendeinIrgendeine
+	}
+}
+
+defined_text = {
+    name = Getkeinemkeiner
+
+    text = {
+        localisation_key = string_DE_keinem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_keiner
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_keinemkeiner
+	}
+}
+
+defined_text = {
+    name = GetKeinemKeiner
+
+    text = {
+        localisation_key = string_DE_Keinem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Keiner
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_KeinemKeiner
+	}
+}
+
+defined_text = {
+    name = Getdieserdiese
+
+    text = {
+        localisation_key = string_DE_dieser
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_diese
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_dieserdiese
+	}
+}
+
+defined_text = {
+    name = GetDieserDiese
+
+    text = {
+        localisation_key = string_DE_Dieser
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Diese
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DieserDiese
+	}
+}
+
+defined_text = {
+    name = Getdiesesdieser
+
+    text = {
+        localisation_key = string_DE_dieses
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_dieser
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_diesesdieser
+	}
+}
+
+defined_text = {
+    name = GetDiesesDieser
+
+    text = {
+        localisation_key = string_DE_Dieses
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Dieser
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DiesesDieser
+	}
+}
+
+defined_text = {
+    name = Getdiesemdieser
+
+    text = {
+        localisation_key = string_DE_diesem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_dieser
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_diesemdieser
+	}
+}
+
+defined_text = {
+    name = GetDiesemDieser
+
+    text = {
+        localisation_key = string_DE_Diesem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Dieser
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DiesemDieser
+	}
+}
+
+defined_text = {
+    name = Getihmihr
+
+    text = {
+        localisation_key = string_DE_ihm
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_ihr
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_ihmihr
+	}
+}
+
+defined_text = {
+    name = GetIhmIhr
+
+    text = {
+        localisation_key = string_DE_Ihm
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ihr
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_IhmIhr
+	}
+}
+
+defined_text = {
+    name = Getdemder
+
+    text = {
+        localisation_key = string_DE_dem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_der
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_demder
+	}
+}
+
+defined_text = {
+    name = GetDemDer
+
+    text = {
+        localisation_key = string_DE_Dem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Der
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DemDer
+	}
+}
+
+defined_text = {
+    name = Getmeinemmeiner
+
+    text = {
+        localisation_key = string_DE_meinem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_meiner
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_meinemmeiner
+	}
+}
+
+defined_text = {
+    name = GetMeinemMeiner
+
+    text = {
+        localisation_key = string_DE_Meinem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Meiner
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_MeinemMeiner
+	}
+}
+
+defined_text = {
+    name = Geteuereure
+
+    text = {
+        localisation_key = string_DE_euer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_eure
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_euereure
+	}
+}
+
+defined_text = {
+    name = GetEuerEure
+
+    text = {
+        localisation_key = string_DE_Euer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eure
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EuerEure
+	}
+}
+
+defined_text = {
+    name = Geteuremeurer
+
+    text = {
+        localisation_key = string_DE_eurem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_eurer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_euremeurer
+	}
+}
+
+defined_text = {
+    name = GetEuremEurer
+
+    text = {
+        localisation_key = string_DE_Eurem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eurer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EuremEurer
+	}
+}
+
+defined_text = {
+    name = Getihnsie
+
+    text = {
+        localisation_key = string_DE_ihn
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_sie
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_ihnsie
+	}
+}
+
+defined_text = {
+    name = GetIhnSie
+
+    text = {
+        localisation_key = string_DE_Ihn
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Sie
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_IhnSie
+	}
+}
+
+defined_text = {
+    name = Geteureneure
+
+    text = {
+        localisation_key = string_DE_euren
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_eure
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eureneure
+	}
+}
+
+defined_text = {
+    name = GetEurenEure
+
+    text = {
+        localisation_key = string_DE_Euren
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eure
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EurenEure
+	}
+}
+
+##Opposite
+defined_text = {
+    name = GeteineineOpp
+
+    text = {
+        localisation_key = string_DE_eine
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_ein
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineine
+	}
+}
+
+defined_text = {
+    name = GetEinEineOpp
+
+   text = {
+        localisation_key = string_DE_Eine
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ein
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinEine
+	}
+}
+
+defined_text = {
+    name = GeteinemeinerOpp
+
+    text = {
+        localisation_key = string_DE_einer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_einem
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_einemeiner
+	}
+}
+
+defined_text = {
+    name = GetEinemEiner
+
+    text = {
+        localisation_key = string_DE_Einem
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Einer
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinemEiner
+	}
+}
+
+defined_text = {
+    name = GeteineineOpp
+
+    text = {
+        localisation_key = string_DE_eine
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_ein
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineine
+	}
+}
+
+defined_text = {
+    name = GetEinEineOpp
+
+   text = {
+        localisation_key = string_DE_Eine
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ein
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinEine
+	}
+}
+
+defined_text = {
+    name = GeteinemeinerOpp
+
+    text = {
+        localisation_key = string_DE_einer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_einem
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_einemeiner
+	}
+}
+
+defined_text = {
+    name = GetEinemEinerOpp
+
+    text = {
+        localisation_key = string_DE_Einer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Einem
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinemEiner
+	}
+}
+
+defined_text = {
+    name = GeteineseinerOpp
+
+    text = {
+        localisation_key = string_DE_einer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_eines
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_eineseiner
+	}
+}
+
+defined_text = {
+    name = GetEinesEinerOpp
+
+    text = {
+        localisation_key = string_DE_Einer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Eines
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_EinesEiner
+	}
+}
+
+defined_text = {
+    name = GetihmihrOpp
+
+    text = {
+        localisation_key = string_DE_ihr
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_ihm
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_ihmihr
+	}
+}
+
+defined_text = {
+    name = GetIhmIhrOpp
+
+    text = {
+        localisation_key = string_DE_Ihr
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ihm
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_IhmIhr
+	}
+}
+
+defined_text = {
+    name = GetdendieOpp
+
+    text = {
+        localisation_key = string_DE_die
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_den
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_dendie
+	}
+}
+
+defined_text = {
+    name = GetDenDieOpp
+
+    text = {
+        localisation_key = string_DE_Die
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Den
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_DenDie
+	}
+}
+
+###German endings
+#Example: König-->Königs while keeping Königin --> Königin
+defined_text = {
+    name = GetsMale
+
+    text = {
+        localisation_key = string_DE_endingS
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingS
+	}
+}
+
+defined_text = {
+    name = GeteFemale
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingE
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingE
+	}
+}
+
+defined_text = {
+    name = GetnMale
+
+    text = {
+        localisation_key = string_DE_endingN
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingN
+	}
+}
+
+defined_text = {
+    name = GetrMale
+
+    text = {
+        localisation_key = string_DE_endingR
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingR
+	}
+}
+
+defined_text = {
+    name = GetinFemale
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingIN
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingIN
+	}
+}
+
+defined_text = {
+    name = GetemMale
+
+    text = {
+        localisation_key = string_DE_endingEM
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingEM
+	}
+}
+
+defined_text = {
+    name = GeterFemale
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingER
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingER
+	}
+}
+
+defined_text = {
+    name = GetaFemale
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endinga
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endinga
+	}
+}
+
+##Opposite endings
+defined_text = {
+    name = GetsMaleOpp
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingS
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingS
+	}
+}
+
+defined_text = {
+    name = GeteFemaleOpp
+
+    text = {
+        localisation_key = string_DE_endingE
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingE
+	}
+}
+
+defined_text = {
+    name = GetnMaleOpp
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingN
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingN
+	}
+}
+
+defined_text = {
+    name = GetrMaleOpp
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingR
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingR
+	}
+}
+
+defined_text = {
+    name = GetinFemaleOpp
+
+    text = {
+        localisation_key = string_DE_endingIN
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingIN
+	}
+}
+
+defined_text = {
+    name = GetemMaleOpp
+
+    text = {
+        localisation_key = ""
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = string_DE_endingEM
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingEM
+	}
+}
+
+defined_text = {
+    name = GeterFemaleOpp
+
+    text = {
+        localisation_key = string_DE_endingER
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endingER
+	}
+}
+
+defined_text = {
+    name = GetaFemaleOpp
+
+    text = {
+        localisation_key = string_DE_endinga
+        trigger = {
+			is_female = no
+        }
+    }
+	
+	text = {
+        localisation_key = ""
+        trigger = {
+			is_female = yes
+        }
+    }
+	fallback_text = {
+		localisation_key = string_DE_FB_endinga
+	}
+}
+
+###English custom localisation commands with german gender differentiation
+#Example: eine Kirche/Moschee/Synagoge, ein Tempel
+
+defined_text = {
+	name = GetHouseOfWorshipeineine # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_eineine
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_eineine
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_eineine
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_eineine
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_eineine
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_eineine
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_eineine
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_eineine
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_eineine
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipeineine
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipEinEine # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_EinEine
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_EinEine
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_EinEine
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_EinEine
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_EinEine
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_EinEine
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_EinEine
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_EinEine
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_EinEine
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipEinEine
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipeineneine # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_eineneine
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_eineneine
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_eineneine
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_eineneine
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_eineneine
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_eineneine
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_eineneine
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_eineneine
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_eineneine
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipeineneine
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipeinemeiner # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_einemeiner
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_einemeiner
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_einemeiner
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_einemeiner
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_einemeiner
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_einemeiner
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_einemeiner
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_einemeiner
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_einemeiner
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipeinemeiner
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipzumzur # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_zumzur
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_zumzur
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_zumzur
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_zumzur
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_zumzur
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_zumzur
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_zumzur
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_zumzur
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_zumzur
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipzumzur
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipiminder # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_iminder
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_iminder
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_iminder
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_iminder
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_iminder
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_iminder
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_iminder
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_iminder
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_iminder
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipiminder
+	}
+}
+
+defined_text = {
+	name = GetHouseOfWorshipdesder # Returns a suitable name for the house of worship of your religion (WIP)
+	
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Christian_desder
+		trigger = { religion_group = christian }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Muslim_desder
+		trigger = { religion_group = muslim }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Pagan_desder
+		trigger = { religion_group = pagan_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Zoroastrian_desder
+		trigger = { religion_group = zoroastrian_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jewish_desder
+		trigger = { religion_group = jewish_group }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Hindu_desder
+		trigger = { religion = hindu }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Buddhist_desder
+		trigger = { religion = buddhist }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Jain_desder
+		trigger = { religion = jain }
+	}
+	text = {
+		localisation_key = string_DE_GetHouseOfWorship_Taoist_desder
+		trigger = { religion = taoist }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHouseOfWorshipdesder
+	}
+}
+
+defined_text = {
+	name = GetMOCodedemder
+
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Benedict_demder
+		trigger = { society_member_of = monastic_order_benedictine }
+	}
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Augustine_demder
+		trigger = { society_member_of = monastic_order_dominican }
+	}
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Basil_demder
+		trigger = { society_member_of = monastic_order_orthodox }
+	}	
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Abraham_demder
+		trigger = { society_member_of = monastic_order_nestorian }
+	}	
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Anthony_demder
+		trigger = { society_member_of = monastic_order_monophysite }
+	}		
+	text = {
+		localisation_key = string_DE_the_Noble_Eightfold_Path_demder
+		trigger = { society_member_of = monastic_order_buddhist }
+	}
+	text = {
+		localisation_key = string_DE_the_four_Purusartha_demder
+		trigger = { society_member_of = monastic_order_hindu }
+	}
+	text = {
+		localisation_key = string_DE_the_Anuvrata_demder
+		trigger = { society_member_of = monastic_order_jain }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetMOCode_demder
+	}
+}
+
+defined_text = {
+	name = GetMOCodedieden
+
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Benedict_dieden
+		trigger = { society_member_of = monastic_order_benedictine }
+	}
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Augustine_dieden
+		trigger = { society_member_of = monastic_order_dominican }
+	}
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Basil_dieden
+		trigger = { society_member_of = monastic_order_orthodox }
+	}	
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Abraham_dieden
+		trigger = { society_member_of = monastic_order_nestorian }
+	}	
+	text = {
+		localisation_key = string_DE_the_Rule_of_Saint_Anthony_dieden
+		trigger = { society_member_of = monastic_order_monophysite }
+	}		
+	text = {
+		localisation_key = string_DE_the_Noble_Eightfold_Path_dieden
+		trigger = { society_member_of = monastic_order_buddhist }
+	}
+	text = {
+		localisation_key = string_DE_the_four_Purusartha_dieden
+		trigger = { society_member_of = monastic_order_hindu }
+	}
+	text = {
+		localisation_key = string_DE_the_Anuvrata_dieden
+		trigger = { society_member_of = monastic_order_jain }
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetMOCode_dieden
+	}
+}
+
+defined_text = {
+	name = GetHoldingdiedasden # Returns a suitable name for a holding
+
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_1_diedasden
+		trigger = {
+			holding_type = castle
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_2_diedasden
+		trigger = {
+			holding_type = castle
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_3_diedasden
+		trigger = {
+			holding_type = castle
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Temple_1_diedasden
+		trigger = { holding_type = temple }
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_1_diedasden
+		trigger = {
+			holding_type = nomad
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_2_diedasden
+		trigger = {
+			holding_type = nomad
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_3_diedasden
+		trigger = {
+			holding_type = nomad
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_1_diedasden
+		trigger = {
+			holding_type = tribal
+			county = { holder_scope = { NOT = { higher_tier_than = COUNT } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_2_diedasden
+		trigger = {
+			holding_type = tribal
+			county = { 
+				holder_scope = { 
+					higher_tier_than = COUNT
+					NOT = { higher_tier_than = DUKE }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_3_diedasden
+		trigger = {
+			holding_type = tribal
+			county = { holder_scope = { higher_tier_than = DUKE } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_1_diedasden
+		trigger = {
+			holding_type = city
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_2_diedasden
+		trigger = {
+			holding_type = city
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_3_diedasden
+		trigger = {
+			holding_type = city
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_settlement_diedasden
+		trigger = {
+			NOT = {
+				OR = {
+					holding_type = castle
+					holding_type = temple
+					holding_type = nomad
+					holding_type = tribal
+					holding_type = city
+				}	
+			}
+		}
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHolding_diedasden
+	}
+}
+
+defined_text = {
+	name = GetHoldingdieserdieses # Returns a suitable name for a holding
+
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_1_dieserdieses
+		trigger = {
+			holding_type = castle
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_2_dieserdieses
+		trigger = {
+			holding_type = castle
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Castle_3_dieserdieses
+		trigger = {
+			holding_type = castle
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Temple_1_dieserdieses
+		trigger = { holding_type = temple }
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_1_dieserdieses
+		trigger = {
+			holding_type = nomad
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_2_dieserdieses
+		trigger = {
+			holding_type = nomad
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Nomad_3_dieserdieses
+		trigger = {
+			holding_type = nomad
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_1_dieserdieses
+		trigger = {
+			holding_type = tribal
+			county = { holder_scope = { NOT = { higher_tier_than = COUNT } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_2_dieserdieses
+		trigger = {
+			holding_type = tribal
+			county = { 
+				holder_scope = { 
+					higher_tier_than = COUNT
+					NOT = { higher_tier_than = DUKE }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_Tribal_3_dieserdieses
+		trigger = {
+			holding_type = tribal
+			county = { holder_scope = { higher_tier_than = DUKE } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_1_dieserdieses
+		trigger = {
+			holding_type = city
+			county = { holder_scope = { NOT = { higher_tier_than = DUKE } } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_2_dieserdieses
+		trigger = {
+			holding_type = city
+			county = { 
+				holder_scope = { 
+					higher_tier_than = DUKE
+					NOT = { higher_tier_than = KING }
+				}
+			}
+		}
+	}
+	text = {
+		localisation_key = string_DE_GetHolding_City_3_dieserdieses
+		trigger = {
+			holding_type = city
+			county = { holder_scope = { higher_tier_than = KING } }
+		}
+	}
+	text = {
+		localisation_key = string_DE_settlement_dieserdieses
+		trigger = {
+			NOT = {
+				OR = {
+					holding_type = castle
+					holding_type = temple
+					holding_type = nomad
+					holding_type = tribal
+					holding_type = city
+				}	
+			}
+		}
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_GetHolding_dieserdieses
+	}
+}
+
+defined_text = {
+	name = GetDWSettlement_diedas
+	text = {
+		trigger = {
+			NOT = { society_member_of = the_plaguebringers }
+		}
+		localisation_key = string_DE_town_diedas
+	}
+	text = {
+		trigger = {
+			society_member_of = the_plaguebringers
+		}
+		localisation_key = string_DE_camp_diedas
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_DWSettlement_diedas
+	}
+}
+
+defined_text = {
+	name = GetDWSettlement_jedejedes
+	text = {
+		trigger = {
+			NOT = { society_member_of = the_plaguebringers }
+		}
+		localisation_key = string_DE_town_jedejedes
+	}
+	text = {
+		trigger = {
+			society_member_of = the_plaguebringers
+		}
+		localisation_key = string_DE_camp_jedejedes
+	}
+	fallback_text = {
+		localisation_key = string_DE_FB_DWSettlement_jedejedes
+	}
+}
+
+##Rare special cases
+defined_text = {
+    name = GetArztÄrztin
+
+    text = {
+        localisation_key = string_DE_Arzt
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ärztin
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetKannibaleKannibalin
+
+    text = {
+        localisation_key = string_DE_Kannibale
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Kannibalin
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetProphetenProphetin
+
+    text = {
+        localisation_key = string_DE_Propheten
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Prophetin
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetMissgestalteterMissgestalt
+
+    text = {
+        localisation_key = string_DE_Missgestalteter
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Missgestalt
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetFoltererFolterin
+
+    text = {
+        localisation_key = string_DE_Folterer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Folterin
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetFeiglingMemme
+
+    text = {
+        localisation_key = string_DE_Feigling
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Memme
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetNarrNärrin
+
+    text = {
+        localisation_key = string_DE_Narr
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Närrin
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetKrüppelBehinderte
+
+    text = {
+        localisation_key = string_DE_Krüppel
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Behinderte
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetEselZiege
+
+    text = {
+        localisation_key = string_DE_Esel
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Ziege
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetStrohmannVogelscheuche
+
+    text = {
+        localisation_key = string_DE_Strohmann
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Vogelscheuche
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetDschungelbewohnerDschungelnatter
+
+    text = {
+        localisation_key = string_DE_Dschungelbewohner
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Dschungelnatter
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetBücherwurmLeseratte
+
+    text = {
+        localisation_key = string_DE_Bücherwurm
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Leseratte
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+
+defined_text = {
+    name = GetBengelGöre
+
+    text = {
+        localisation_key = string_DE_Bengel
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Göre
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetBlutsaugerZecke
+
+    text = {
+        localisation_key = string_DE_Blutsauger
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Zecke
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetWurmMade
+
+    text = {
+        localisation_key = string_DE_Wurm
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Made
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetWüstenkäferWüstenratte
+
+    text = {
+        localisation_key = string_DE_Wüstenkäfer
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Wüstenratte
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetFieslingVettel
+
+    text = {
+        localisation_key = string_DE_Fiesling
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Vettel
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetEselZuchtstute
+
+    text = {
+        localisation_key = string_DE_Esel
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Zuchtstute
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetStohkopfHohlbirne
+
+    text = {
+        localisation_key = string_DE_Stohkopf
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Hohlbirne
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetGesichtskrapfenHackfresse
+
+    text = {
+        localisation_key = string_DE_Gesichtskrapfen
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Hackfresse
+        trigger = {
+			is_female = yes
+        }
+    }
+}
+
+defined_text = {
+    name = GetÜberfliegerKoriphäe
+
+    text = {
+        localisation_key = string_DE_Überflieger
+        trigger = {
+			is_female = no
+        }
+    }
+	text = {
+        localisation_key = string_DE_Koriphäe
+        trigger = {
+			is_female = yes
+        }
+    }
+}

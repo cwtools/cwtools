@@ -1,4 +1,4 @@
-System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator"], function (exports_1, context_1) {
+System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function sayHello() {
@@ -9,6 +9,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
     function main(data, triggers, options) {
         cytoscape_qtip_1["default"](cytoscape_1["default"], $);
         cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
+        cytoscape_canvas_1["default"](cytoscape_1["default"]);
         var nav = cytoscape_navigator_1["default"](cytoscape_1["default"]);
         var cy = cytoscape_1["default"]({
             container: document.getElementById('cy'),
@@ -16,7 +17,6 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 {
                     selector: 'node',
                     style: {
-                        'background-color': '#666',
                         'label': 'data(id)'
                     }
                 },
@@ -43,7 +43,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             else {
                 desc = element.Desc;
             }
-            var node = cy.add({ group: 'nodes', data: { id: name } });
+            var node = cy.add({ group: 'nodes', data: { id: name, type: element.Key } });
             node.qtip(qtipname(desc));
         });
         triggers.forEach(function (event) {
@@ -73,6 +73,29 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var layout = cy.layout({ name: 'dagre' });
         layout.run();
         cy.fit();
+        var layer = cy.cyCanvas();
+        var canvas = layer.getCanvas();
+        var ctx = canvas.getContext('2d');
+        cy.on("render cyCanvas.resize", function (evt) {
+            layer.resetTransform(ctx);
+            layer.clear(ctx);
+            layer.setTransform(ctx);
+            ctx.shadowColor = "black";
+            ctx.shadowBlur = 25 * cy.zoom();
+            ctx.fillStyle = "#666";
+            cy.nodes().forEach(function (node) {
+                var text = node.data('type');
+                var eventChars = text.split('_').map(function (f) { return f[0].toUpperCase(); }).join('');
+                var eventChar = text[0].toUpperCase();
+                var pos = node.position();
+                ctx.fillStyle = "black";
+                ctx.font = "16px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(eventChars, pos.x, pos.y);
+            });
+            ctx.restore();
+        });
         var defaults = {
             container: false,
             viewLiveFramerate: 0,
@@ -94,7 +117,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         });
     }
     exports_1("go", go);
-    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1;
+    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1;
     return {
         setters: [
             function (dagre_1_1) {
@@ -111,6 +134,9 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             },
             function (cytoscape_navigator_1_1) {
                 cytoscape_navigator_1 = cytoscape_navigator_1_1;
+            },
+            function (cytoscape_canvas_1_1) {
+                cytoscape_canvas_1 = cytoscape_canvas_1_1;
             }
         ],
         execute: function () {
