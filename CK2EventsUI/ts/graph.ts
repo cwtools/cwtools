@@ -15,7 +15,7 @@ declare module 'cytoscape' {
     }
 }
 
-
+var labelMaxLength = 30;
 
 
 function sayHello() {
@@ -37,7 +37,7 @@ function main(data: any, triggers: any, options: any) {
                 selector: 'node',
                 style: {
                     //'background-color': '#666',
-                    'label': 'data(id)'
+                    'label': 'data(label)'
                 }
             },
 
@@ -59,15 +59,22 @@ function main(data: any, triggers: any, options: any) {
 
 
     data.forEach(function (element : any) {
-        var name = element.ID;
+        var name;
+        if(element.Comments.length > 0){
+            name = element.Comments[element.Comments.length - 1];
+            name = name.substring(0, Math.min(name.length, labelMaxLength));
+        }
+        else{
+            name = element.ID;
+        }
         var desc;
         if (element.Desc === '') {
-            desc = element.ID;
+            desc = element.ID;  
         }
         else {
             desc = element.Desc;
         }
-        var node = cy.add({ group: 'nodes', data: { id: name, type: element.Key } });
+        var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key } });
         node.qtip(qtipname(desc));
     });
 

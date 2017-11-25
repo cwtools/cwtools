@@ -17,7 +17,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 {
                     selector: 'node',
                     style: {
-                        'label': 'data(id)'
+                        'label': 'data(label)'
                     }
                 },
                 {
@@ -35,7 +35,14 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var roots = [];
         var qtipname = function (text) { return { content: text, position: { my: 'top center', at: 'bottom center' }, style: { classes: 'qtip-bootstrap', tip: { width: 16, height: 8 } }, show: { event: 'mouseover' }, hide: { event: 'mouseout' } }; };
         data.forEach(function (element) {
-            var name = element.ID;
+            var name;
+            if (element.Comments.length > 0) {
+                name = element.Comments[element.Comments.length - 1];
+                name = name.substring(0, Math.min(name.length, labelMaxLength));
+            }
+            else {
+                name = element.ID;
+            }
             var desc;
             if (element.Desc === '') {
                 desc = element.ID;
@@ -43,7 +50,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             else {
                 desc = element.Desc;
             }
-            var node = cy.add({ group: 'nodes', data: { id: name, type: element.Key } });
+            var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key } });
             node.qtip(qtipname(desc));
         });
         triggers.forEach(function (event) {
@@ -117,7 +124,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         });
     }
     exports_1("go", go);
-    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1;
+    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1, labelMaxLength;
     return {
         setters: [
             function (dagre_1_1) {
@@ -140,6 +147,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             }
         ],
         execute: function () {
+            labelMaxLength = 30;
         }
     };
 });

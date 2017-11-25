@@ -90,19 +90,27 @@ module Process =
  
 
 
-    let processRoot (root : Root) statement =
+    let processRoot savedComments (root : Root) statement =
         //root.AllTags <- statement::root.AllTags
+        let mutable comments = savedComments
         match statement with
-            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> root.Events <- (processEvent k sl)::root.Events
+            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> 
+                let e = (processEvent k sl)
+                e.Comments <- savedComments@e.Comments
+                comments <- []
+                root.Events <- e::root.Events
             | KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> root.AllTags <- kv::root.AllTags
-            | Comment(c) -> root.Comments <- c::root.Comments
+            | Comment(c) -> 
+                root.Comments <- c::root.Comments
+                comments <- c::comments
             | _ -> ()
+        comments
 
 
     let processEventFile (ev : Statement list) =
         let root = Root()
-        ev |> List.iter (processRoot root)
+        ev |> List.fold (fun s e -> processRoot s root e) [] |> ignore
         root
         // ev
         // |> List.filter (function |Comment _ -> false |_ -> true)
