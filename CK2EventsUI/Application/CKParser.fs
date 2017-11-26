@@ -57,6 +57,9 @@ module CKParser =
 
     let valueQ = 
         between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> String <?> "valueQ"
+
+    let valueB =
+        (pstring "yes" .>> spaces1 .>> ws |>> (fun _ -> Bool(true))) <|> (pstring "no" .>> spaces1 .>> ws |>> (fun _ -> Bool(false)))
 //    restOfLine false .>> ws |>> String <?> "valueS"
     //let valueBlock = ch '{' >>. inner .>> ch '}'
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
@@ -65,7 +68,7 @@ module CKParser =
     let valueBlock = 
         let list = keyvaluelist |>> Block
         between (ch '{') (ch '}') list <?> "valueBlock"
-    let value = valueQ <|> valueBlock <|> valueS <?> "value"
+    let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
     do keyvalueimpl := 
         pipe2 (id .>> ch '=') (value)
             (fun id value -> KeyValue(KeyValueItem(id, value)))

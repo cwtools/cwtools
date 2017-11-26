@@ -61,8 +61,14 @@ function main(data: any, triggers: any, options: any) {
     data.forEach(function (element : any) {
         var name;
         if(element.Comments.length > 0){
-            name = element.Comments[element.Comments.length - 1];
-            name = name.substring(0, Math.min(name.length, labelMaxLength));
+            name = element.Comments[0] as string;
+            name = name.replace(new RegExp('#','g'),'');
+            if(name.length > labelMaxLength){
+                var endOfWord = name.indexOf(' ',labelMaxLength - 1);
+                //var endOfWord = endOfWord === -1 ? labelMaxLength : endOfWord;
+                var endOfWord = endOfWord === -1 ? name.length : endOfWord;
+                name = name.substring(0, endOfWord);
+            }
         }
         else{
             name = element.ID;
@@ -74,7 +80,7 @@ function main(data: any, triggers: any, options: any) {
         else {
             desc = element.Desc;
         }
-        var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key } });
+        var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key, hidden: element.Hidden } });
         node.qtip(qtipname(desc));
     });
 
@@ -130,12 +136,22 @@ function main(data: any, triggers: any, options: any) {
                         const eventChars = text.split('_').map(f => f[0].toUpperCase()).join('');
                         const eventChar = text[0].toUpperCase();
                         const pos = node.position();
+
+                        ctx.fillStyle = node.data('hidden') ? "#EEE" : '#888';
+                        ctx.beginPath();
+						ctx.arc(pos.x, pos.y, 15, 0, 2 * Math.PI, false);
+                        ctx.fill();
+                        ctx.fillStyle = "black";
+                        ctx.stroke();
+
                         //Set text to black, center it and set font.
                         ctx.fillStyle = "black";
                         ctx.font = "16px sans-serif";
                         ctx.textAlign = "center";
                         ctx.textBaseline = "middle";
                         ctx.fillText(eventChars, pos.x,pos.y);
+
+                        
 					});
 					ctx.restore();
     });

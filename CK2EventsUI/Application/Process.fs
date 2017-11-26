@@ -18,6 +18,7 @@ module Process =
         inherit Node(key)
         member val ID = "" with get, set
         member val Desc = "" with get, set
+        member val Hidden = false with get, set
 
     type Root() =
         inherit Node("root")
@@ -29,6 +30,7 @@ module Process =
         match tag with
             | KeyValueItem(ID("desc"), String(v)) -> event.Desc <- v 
             | KeyValueItem(ID("id"), String(v)) -> event.ID <- v
+            | KeyValueItem(ID("hide_window"), Bool(v)) -> event.Hidden <- v
             | _ -> ()
     
     let addTagNode (node : Node) tag =

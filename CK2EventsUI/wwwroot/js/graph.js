@@ -37,8 +37,13 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         data.forEach(function (element) {
             var name;
             if (element.Comments.length > 0) {
-                name = element.Comments[element.Comments.length - 1];
-                name = name.substring(0, Math.min(name.length, labelMaxLength));
+                name = element.Comments[0];
+                name = name.replace(new RegExp('#', 'g'), '');
+                if (name.length > labelMaxLength) {
+                    var endOfWord = name.indexOf(' ', labelMaxLength - 1);
+                    var endOfWord = endOfWord === -1 ? name.length : endOfWord;
+                    name = name.substring(0, endOfWord);
+                }
             }
             else {
                 name = element.ID;
@@ -50,7 +55,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             else {
                 desc = element.Desc;
             }
-            var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key } });
+            var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key, hidden: element.Hidden } });
             node.qtip(qtipname(desc));
         });
         triggers.forEach(function (event) {
@@ -95,6 +100,12 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 var eventChars = text.split('_').map(function (f) { return f[0].toUpperCase(); }).join('');
                 var eventChar = text[0].toUpperCase();
                 var pos = node.position();
+                ctx.fillStyle = node.data('hidden') ? "#EEE" : '#888';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 15, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.fillStyle = "black";
+                ctx.stroke();
                 ctx.fillStyle = "black";
                 ctx.font = "16px sans-serif";
                 ctx.textAlign = "center";
