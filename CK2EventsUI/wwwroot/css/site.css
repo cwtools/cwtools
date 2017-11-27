@@ -88,7 +88,7 @@ textarea {
     margin: auto;
     border: 1px solid #ddd;
     height: 680px;
-    width: 1000px;
+    /*width: 1000px;*/
     overflow: auto !important;
     border-radius: 0.25em;
   }
