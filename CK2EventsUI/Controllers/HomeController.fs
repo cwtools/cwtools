@@ -42,8 +42,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
         //let triggers = getTriggeredEventsAll ck2
         let immediates = getAllImmediates ck3
         let options = getEventsOptions ck3
-        //ck2.Events |> list.map ()
-        this.Json((ck3.Events.ToJson, immediates.ToJson, options.ToJson))
+        let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKParser.printKeyValueList e.Raw 0))
+        this.Json((ck3.Events.ToJson, immediates.ToJson, options.ToJson, pretties.ToJson))
 
     member this.Graph (file : string) =
         this.View(model = file);

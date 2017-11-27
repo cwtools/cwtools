@@ -1,4 +1,4 @@
-System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas"], function (exports_1, context_1) {
+System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas", "handlebars"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function sayHello() {
@@ -6,7 +6,9 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var framework = document.getElementById("framework").value;
         return "Hello from " + compiler + " and " + framework + "!";
     }
-    function main(data, triggers, options) {
+    function main(data, triggers, options, pretties) {
+        _data = data;
+        _pretty = pretties;
         cytoscape_qtip_1["default"](cytoscape_1["default"], $);
         cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
         cytoscape_canvas_1["default"](cytoscape_1["default"]);
@@ -78,6 +80,9 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                             edge[0].qtip(qtipname(optionName));
                         }
                     }
+                    else {
+                        cy.getElementById(parentID).data('deadend_option', true);
+                    }
                 });
             });
         });
@@ -106,6 +111,10 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 ctx.fill();
                 ctx.fillStyle = "black";
                 ctx.stroke();
+                if (node.data('deadend_option')) {
+                    ctx.arc(pos.x, pos.y, 13, 0, 2 * Math.PI, false);
+                    ctx.stroke();
+                }
                 ctx.fillStyle = "black";
                 ctx.font = "16px sans-serif";
                 ctx.textAlign = "center";
@@ -123,19 +132,32 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             removeCustomContainer: true,
             rerenderDelay: 100
         };
-        cy.navigator(defaults);
+        cy.on('select', 'node', function (e) {
+            var node = cy.$('node:selected');
+            if (node.nonempty()) {
+                showDetails(node.data('id'));
+            }
+        });
     }
+    function showDetails(id) {
+        var node = _data.filter(function (x) { return x.ID === id; })[0];
+        var pretty = _pretty.filter(function (x) { return x[0] === id; })[0][1];
+        var context = { title: node.ID, desc: node.Desc, full: pretty };
+        var html = detailsTemplate(context);
+        document.getElementById('detailsTarget').innerHTML = html;
+    }
+    exports_1("showDetails", showDetails);
     function go(file) {
         $.ajax({
             url: "GetData",
             data: { "file": file }
         })
             .done(function (data) {
-            main(JSON.parse(data.item1), JSON.parse(data.item2), JSON.parse(data.item3));
+            main(JSON.parse(data.item1), JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4));
         });
     }
     exports_1("go", go);
-    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1, labelMaxLength;
+    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1, handlebars_1, labelMaxLength, _data, _pretty, detailsTemplate;
     return {
         setters: [
             function (dagre_1_1) {
@@ -155,10 +177,14 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             },
             function (cytoscape_canvas_1_1) {
                 cytoscape_canvas_1 = cytoscape_canvas_1_1;
+            },
+            function (handlebars_1_1) {
+                handlebars_1 = handlebars_1_1;
             }
         ],
         execute: function () {
             labelMaxLength = 30;
+            detailsTemplate = handlebars_1["default"].compile("<h1>{{title}}</h1><div>{{desc}}</div><pre>{{full}}</pre>");
         }
     };
 });

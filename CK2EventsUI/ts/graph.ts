@@ -4,6 +4,7 @@ import cyqtip from 'cytoscape-qtip'
 import cytoscapedagre from 'cytoscape-dagre'
 import cytoscapenav from 'cytoscape-navigator'
 import cytoscapecanvas from 'cytoscape-canvas'
+import handlebars from 'handlebars'
 
 declare module 'cytoscape' {
     interface CollectionElements{
@@ -24,7 +25,12 @@ function sayHello() {
     return `Hello from ${compiler} and ${framework}!`;
 }
 
-function main(data: any, triggers: any, options: any) {
+var _data : Array<any>;
+var _pretty : Array<any>;
+
+function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>) {
+    _data = data;
+    _pretty = pretties;
     cyqtip( cytoscape, $ );
     cytoscapedagre(cytoscape,dagre);
     cytoscapecanvas(cytoscape);
@@ -105,7 +111,8 @@ function main(data: any, triggers: any, options: any) {
                     if (optionName !== "") {
                         edge[0].qtip(qtipname(optionName));
                     }
-
+                } else {
+                    cy.getElementById(parentID).data('deadend_option', true);
                 }
             })
         })
@@ -144,6 +151,11 @@ function main(data: any, triggers: any, options: any) {
                         ctx.fillStyle = "black";
                         ctx.stroke();
 
+                        if(node.data('deadend_option')){
+                            ctx.arc(pos.x, pos.y, 13, 0, 2 * Math.PI, false);
+                            ctx.stroke();
+                        }
+
                         //Set text to black, center it and set font.
                         ctx.fillStyle = "black";
                         ctx.font = "16px sans-serif";
@@ -167,7 +179,22 @@ function main(data: any, triggers: any, options: any) {
       , rerenderDelay: 100 // ms to throttle rerender updates to the panzoom for performance
     };
 
-    cy.navigator(defaults);
+    cy.on('select', 'node', function(e) {
+        var node = cy.$('node:selected');
+        if(node.nonempty()){
+            showDetails(node.data('id'));
+        }
+    });
+
+}
+
+var detailsTemplate = handlebars.compile("<h1>{{title}}</h1><div>{{desc}}</div><pre>{{full}}</pre>");
+export function showDetails(id : string){
+    var node = _data.filter(x => x.ID === id)[0];
+    var pretty = _pretty.filter(x => x[0] === id)[0][1];
+    var context = {title:node.ID, desc:node.Desc, full:pretty};
+    var html = detailsTemplate(context);
+    document.getElementById('detailsTarget').innerHTML = html;
 }
 
 export function go(file : string){
@@ -176,7 +203,7 @@ export function go(file : string){
         data: { "file": file }
     })
         .done(function (data) {
-            main(JSON.parse(data.item1), JSON.parse(data.item2), JSON.parse(data.item3));
+            main(JSON.parse(data.item1), JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4));
         })
 }
 

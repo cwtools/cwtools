@@ -11,6 +11,7 @@ module Process =
         member val Children : Node list = List.empty with get, set
         member val Comments : string list = List.empty with get, set
         member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(ID(y), v) when x=y -> Some v |_ -> None)
+        member val Raw : Statement list = List.empty with get, set
     type Option() = 
         inherit Node("option")
         member val Name = "" with get, set      
@@ -84,6 +85,7 @@ module Process =
         sl |> List.iter (processEventInner event)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
         let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
+        event.Raw <- sl
         //let event = Event()
         List.iter (fun t -> addTag event t) tags
         event.Comments <- comments 
