@@ -20,10 +20,15 @@
     <PackageReference Include="Newtonsoft.Json" Version="*"/>
     <PackageReference Include="Newtonsoft.Json.FSharp" Version="*"/>
     <PackageReference Include="FSharp.Data" Version="*"/>
+    <PackageReference Include="ElectronNET.API" Version="*"/>
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="ElectronNET.CLI" Version="*" />
   </ItemGroup>
   <Import Project="fsc.props" />
   <ItemGroup>
     <Content Include="localization\*" CopyToOutputDirectory="Always"/>
+    <Content Include="events\*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
   <!-- <Target Name = "CopyFiles">
     <Copy DestinationFolder="$(OutputPath)" SourceFiles="coremodule.psd1" SkipUnchangedFiles = "false" />

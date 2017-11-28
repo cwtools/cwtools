@@ -9,6 +9,7 @@ open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
+open ElectronNET.API
 
 module Program =
     let exitCode = 0
@@ -16,7 +17,10 @@ module Program =
     let BuildWebHost args =
         WebHost
             .CreateDefaultBuilder(args)
+            .CaptureStartupErrors(true)
+            .UseSetting(WebHostDefaults.DetailedErrorsKey, "true")
             .UseStartup<Startup>()
+            .UseElectron(args)
             .Build()
 
     [<EntryPoint>]
