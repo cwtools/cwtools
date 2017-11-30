@@ -124,7 +124,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             ctx.restore();
         });
         var defaults = {
-            container: false,
+            container: ".cy-row",
             viewLiveFramerate: 0,
             thumbnailEventFramerate: 30,
             thumbnailLiveFramerate: false,

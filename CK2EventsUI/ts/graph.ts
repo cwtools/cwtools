@@ -170,7 +170,7 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     
 
     var defaults = {
-        container: false // can be a HTML or jQuery element or jQuery selector
+        container: ".cy-row" // can be a HTML or jQuery element or jQuery selector
       , viewLiveFramerate: 0 // set false to update graph pan only on drag end; set 0 to do it instantly; set a number (frames per second) to update not more than N times per second
       , thumbnailEventFramerate: 30 // max thumbnail's updates per second triggered by graph updates
       , thumbnailLiveFramerate: false // max thumbnail's updates per second. Set false to disable
@@ -179,7 +179,7 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
       , rerenderDelay: 100 // ms to throttle rerender updates to the panzoom for performance
     };
 
-    var nav = cy.navigator(defaults);
+    //var nav = cy.navigator(defaults);
 
     cy.on('select', 'node', function(e) {
         var node = cy.$('node:selected');

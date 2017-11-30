@@ -1,9 +1,40 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
 }
 
+html, body, .viewport {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.vbox {
+
+  /* current syntax */
+  display: -webkit-flex;
+  display:    -moz-flex;
+  display:     -ms-flex;
+  display:         flex;
+
+  -webkit-flex-direction: column;
+     -moz-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.hbox{
+  display: -webkit-flex;
+  display:    -moz-flex;
+  display:     -ms-flex;
+  display:         flex;
+
+  -webkit-flex-direction: row;
+     -moz-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -86,23 +117,23 @@ textarea {
   }
 
   #cy {
-    margin: auto;
     border: 1px solid #ddd;
-    /*height: 680px;*/
-    /* width: 100%; */
-    /* height: auto; */
-    /*width: 1000px;*/
-    /*overflow: auto !important;*/
     border-radius: 0.25em;
-
+    margin:0.25em;
   }
-
-  .cy-row{
-    flex: 1 1 auto;
+.cy-details{
+  overflow-y:scroll;
+  flex: 1;
+}
+   .cy-row{
+    flex: 2;
   }
-
+/* 
   .cy-container{
     display:flex;
     flex-flow: column;
     height: 100%;
+  }  */
+  .cy-container{
+    flex:1;
   }
