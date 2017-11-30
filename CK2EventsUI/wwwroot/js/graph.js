@@ -141,7 +141,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         cy.on("resize", function (e) {
             $("#cy").width(10);
             cy.resize();
-            cy.fit();
+            cy.center();
         });
     }
     function showDetails(id) {

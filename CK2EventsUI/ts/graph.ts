@@ -189,10 +189,11 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
             showDetails(node.data('id'));
         }
     });
+    
     cy.on("resize", function(e){
         $("#cy").width(10);
         cy.resize();
-        cy.fit();
+        cy.center();
     });
 }
 
