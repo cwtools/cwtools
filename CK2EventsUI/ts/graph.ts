@@ -125,8 +125,10 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     var layer = cy.cyCanvas();
     var canvas = layer.getCanvas();
     var ctx = canvas.getContext('2d');
+    
+    
 
-    cy.on("render cyCanvas.resize", function(evt) {
+    cy.on("render", function(evt) {
         layer.resetTransform(ctx);
         layer.clear(ctx);
     
@@ -187,7 +189,11 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
             showDetails(node.data('id'));
         }
     });
-
+    cy.on("resize", function(e){
+        $("#cy").width(10);
+        cy.resize();
+        cy.fit();
+    });
 }
 
 var detailsTemplate = handlebars.compile("<h1>{{title}}</h1><div>{{desc}}</div><pre>{{full}}</pre>");

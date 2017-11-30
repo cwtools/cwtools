@@ -93,7 +93,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var layer = cy.cyCanvas();
         var canvas = layer.getCanvas();
         var ctx = canvas.getContext('2d');
-        cy.on("render cyCanvas.resize", function (evt) {
+        cy.on("render", function (evt) {
             layer.resetTransform(ctx);
             layer.clear(ctx);
             layer.setTransform(ctx);
@@ -132,12 +132,16 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             removeCustomContainer: true,
             rerenderDelay: 100
         };
-        var nav = cy.navigator(defaults);
         cy.on('select', 'node', function (e) {
             var node = cy.$('node:selected');
             if (node.nonempty()) {
                 showDetails(node.data('id'));
             }
+        });
+        cy.on("resize", function (e) {
+            $("#cy").width(10);
+            cy.resize();
+            cy.fit();
         });
     }
     function showDetails(id) {
