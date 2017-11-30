@@ -27,16 +27,18 @@ type Startup private () =
 
     member this.ElectronBootstrap() =
 
-        let prefs = BrowserWindowOptions()
-        let webprefs = WebPreferences()
-        webprefs.NodeIntegration <- false
-        prefs.Show <- true
-        prefs.WebPreferences <- webprefs
+        let webprefs = WebPreferences (NodeIntegration = false)
+        let prefs = BrowserWindowOptions (WebPreferences = webprefs)
+        // webprefs.NodeIntegration <- false
+        // prefs.Show <- true
+        // prefs.WebPreferences <- webprefs
        // prefs.Fullscreen <- true
-
-    //     Electron.WindowManager.CreateWindowAsync(prefs) |> Async.AwaitTask |> Async.RunSynchronously |> ignore
+        Electron.App.CommandLineAppendArgument("--disable-http-cache")
+        Electron.App.CommandLineAppendSwitch("--disable-http-cache")
+        let window = Electron.WindowManager.CreateWindowAsync(prefs) |> Async.AwaitTask |> Async.RunSynchronously
+        window.Maximize()
         
-        Task.Run((fun _ -> async {Electron.WindowManager.CreateWindowAsync(prefs)  |> ignore} |> Async.RunSynchronously |> ignore)) |> ignore
+        //Task.Run((fun _ -> async {Electron.WindowManager.CreateWindowAsync(prefs)  |> ignore} |> Async.RunSynchronously |> ignore)) |> ignore
 
     
 
@@ -52,9 +54,9 @@ type Startup private () =
 
         app.UseMvcWithDefaultRoute() |> ignore
 
-
-        this.ElectronBootstrap()
-        Electron.App.add_Quitting (fun _ -> Electron.Dialog.ShowMessageBoxAsync("Quitting") |> ignore)
+        if HybridSupport.IsElectronActive then
+            this.ElectronBootstrap()
+            Electron.App.add_Quitting (fun _ -> Electron.Dialog.ShowMessageBoxAsync("Quitting") |> ignore)
 
         // app.UseMvc(fun routes ->
         //     routes.MapRoute(

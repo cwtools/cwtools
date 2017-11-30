@@ -34,7 +34,7 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     cyqtip( cytoscape, $ );
     cytoscapedagre(cytoscape,dagre);
     cytoscapecanvas(cytoscape);
-    var nav = cytoscapenav(cytoscape);
+    var nav = cytoscapenav(cytoscape, $);
 
     var cy = cytoscape({
         container: document.getElementById('cy'),
@@ -178,6 +178,8 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
       , removeCustomContainer: true // destroy the container specified by user on plugin destroy
       , rerenderDelay: 100 // ms to throttle rerender updates to the panzoom for performance
     };
+
+    var nav = cy.navigator(defaults);
 
     cy.on('select', 'node', function(e) {
         var node = cy.$('node:selected');

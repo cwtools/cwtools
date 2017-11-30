@@ -12,7 +12,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         cytoscape_qtip_1["default"](cytoscape_1["default"], $);
         cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
         cytoscape_canvas_1["default"](cytoscape_1["default"]);
-        var nav = cytoscape_navigator_1["default"](cytoscape_1["default"]);
+        var nav = cytoscape_navigator_1["default"](cytoscape_1["default"], $);
         var cy = cytoscape_1["default"]({
             container: document.getElementById('cy'),
             style: [
@@ -132,6 +132,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             removeCustomContainer: true,
             rerenderDelay: 100
         };
+        var nav = cy.navigator(defaults);
         cy.on('select', 'node', function (e) {
             var node = cy.$('node:selected');
             if (node.nonempty()) {

@@ -4,7 +4,6 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        // "outFile": "wwwroot/js/site.js",
         "outDir": "wwwroot/js/",
         "sourceMap": false,
         "target": "es3",
