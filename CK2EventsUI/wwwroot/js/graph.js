@@ -119,7 +119,9 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 ctx.font = "16px sans-serif";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillText(eventChars, pos.x, pos.y);
+                ctx.fillText(pos.x.toPrecision(4).toString() + "," + pos.y.toPrecision(4).toString(), pos.x, pos.y);
+                var rPos = node.renderedPosition();
+                ctx.fillText(rPos.x.toPrecision(4).toString() + "," + rPos.y.toPrecision(4).toString(), pos.x + 10, pos.y + 10);
             });
             ctx.restore();
         });
@@ -137,6 +139,28 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             if (node.nonempty()) {
                 showDetails(node.data('id'));
             }
+        });
+        var modelToRenderedPosition = function (p, zoom, pan) {
+            return {
+                x: p.x * zoom + pan.x,
+                y: p.y * zoom + pan.y
+            };
+        };
+        var renderedToModelPosition = function (p, zoom, pan) {
+            return {
+                x: (p.x - pan.x) / zoom,
+                y: (p.y - pan.y) / zoom
+            };
+        };
+        cy.on('select', 'edge', function (e) {
+            var edges = cy.edges('edge:selected');
+            var edge = cy.edges('edge:selected')[0];
+            edges.first().target();
+            var midpoint = edge.midpoint();
+            var opts = {};
+            opts.zoom = cy.zoom();
+            opts.center = { eles: edge };
+            cy.animate(opts);
         });
         cy.on("resize", function (e) {
             $("#cy").width(10);
