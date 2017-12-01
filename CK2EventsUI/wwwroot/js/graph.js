@@ -1,13 +1,9 @@
 System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas", "handlebars"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    function sayHello() {
-        var compiler = document.getElementById("compiler").value;
-        var framework = document.getElementById("framework").value;
-        return "Hello from " + compiler + " and " + framework + "!";
-    }
     function main(data, triggers, options, pretties) {
         _data = data;
+        _options = options;
         _pretty = pretties;
         cytoscape_qtip_1["default"](cytoscape_1["default"], $);
         cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
@@ -155,7 +151,8 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
     function showDetails(id) {
         var node = _data.filter(function (x) { return x.ID === id; })[0];
         var pretty = _pretty.filter(function (x) { return x[0] === id; })[0][1];
-        var context = { title: node.ID, desc: node.Desc, full: pretty };
+        var options = _options.filter(function (x) { return x[0] === id; });
+        var context = { title: node.ID, desc: node.Desc, full: pretty, options: options };
         var html = detailsTemplate(context);
         document.getElementById('detailsTarget').innerHTML = html;
     }
@@ -170,7 +167,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         });
     }
     exports_1("go", go);
-    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1, handlebars_1, labelMaxLength, _data, _pretty, detailsTemplate;
+    var dagre_1, cytoscape_1, cytoscape_qtip_1, cytoscape_dagre_1, cytoscape_navigator_1, cytoscape_canvas_1, handlebars_1, labelMaxLength, _data, _options, _pretty, detailsTemplate;
     return {
         setters: [
             function (dagre_1_1) {
@@ -197,7 +194,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         ],
         execute: function () {
             labelMaxLength = 30;
-            detailsTemplate = handlebars_1["default"].compile("<h1>{{title}}</h1><div>{{desc}}</div><pre>{{full}}</pre>");
+            detailsTemplate = handlebars_1["default"].compile("<h1>{{title}}</h1><div>{{desc}}</div><div><ul>{{#each options}}<li>{{this}}</li>{{/each}}</ul></div><pre>{{full}}</pre>");
         }
     };
 });

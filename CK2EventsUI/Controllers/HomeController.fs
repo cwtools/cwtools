@@ -13,6 +13,7 @@ open Newtonsoft.Json
 open Newtonsoft.Json.FSharp
 open Microsoft.AspNetCore.Mvc.Infrastructure
 open FSharp.Core
+open ElectronNET.API
 
 module Utils = 
     let opts = [| TupleArrayConverter() :> JsonConverter |] // this goes global
@@ -21,6 +22,7 @@ module Utils =
             JsonConvert.SerializeObject(x,opts)
         
 open Utils
+open ElectronNET.API.Entities
 
 type HomeController (provider : IActionDescriptorCollectionProvider) =
     inherit Controller()
@@ -29,8 +31,18 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
     
 
     member this.Index () =
-         let files = Events.getFileList "./events/"
-         this.View(files)
+        let folderPrompt = 
+            let mainWindow = Electron.WindowManager.BrowserWindows.First()
+            let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])
+            let folder = Electron.Dialog.ShowOpenDialogAsync(mainWindow, options) |> Async.AwaitTask
+            folder 
+        let files = match HybridSupport.IsElectronActive with
+                    | true -> 
+                        let folder = Async.RunSynchronously(folderPrompt)
+                        Events.getFileList folder.[0]
+                    | false -> Events.getFileList "./events/"
+        this.View(files)
+    
 
 
     member this.GetData (file) =

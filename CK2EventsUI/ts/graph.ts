@@ -19,17 +19,13 @@ declare module 'cytoscape' {
 var labelMaxLength = 30;
 
 
-function sayHello() {
-    const compiler = (document.getElementById("compiler") as HTMLInputElement).value;
-    const framework = (document.getElementById("framework") as HTMLInputElement).value;
-    return `Hello from ${compiler} and ${framework}!`;
-}
-
 var _data : Array<any>;
+var _options : Array<any>;
 var _pretty : Array<any>;
 
 function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>) {
     _data = data;
+    _options = options;
     _pretty = pretties;
     cyqtip( cytoscape, $ );
     cytoscapedagre(cytoscape,dagre);
@@ -205,11 +201,12 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     });
 }
 
-var detailsTemplate = handlebars.compile("<h1>{{title}}</h1><div>{{desc}}</div><pre>{{full}}</pre>");
+var detailsTemplate = handlebars.compile("<h1>{{title}}</h1><div>{{desc}}</div><div><ul>{{#each options}}<li>{{this}}</li>{{/each}}</ul></div><pre>{{full}}</pre>");
 export function showDetails(id : string){
     var node = _data.filter(x => x.ID === id)[0];
     var pretty = _pretty.filter(x => x[0] === id)[0][1];
-    var context = {title:node.ID, desc:node.Desc, full:pretty};
+    var options = _options.filter(x => x[0] === id);
+    var context = {title:node.ID, desc:node.Desc, full:pretty, options:options};
     var html = detailsTemplate(context);
     document.getElementById('detailsTarget').innerHTML = html;
 }
