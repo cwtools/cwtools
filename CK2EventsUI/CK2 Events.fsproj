@@ -7,6 +7,8 @@
     <Compile Include="Application/Localization.fs" />
     <Compile Include="Application/Process.fs" />
     <Compile Include="Application/Events.fs" />
+    <Compile Include="Application/Settings.fs"/>
+    <Compile Include="ViewModels/BaseViewModel.fs"/>
     <Compile Include="Controllers/HomeController.fs" />
     <Compile Include="Controllers/MonitorController.fs" />
     <Compile Include="Models/ErrorViewModel.fs" />

@@ -104,6 +104,21 @@ module CKParser =
     //let y = runParserOnFile events () "wol_business_events.txt" System.Text.Encoding.UTF8
     let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
+    let memoize keyFunction memFunction =
+        let dict = new System.Collections.Generic.Dictionary<_,_>()
+        fun n ->
+            match dict.TryGetValue(keyFunction(n)) with
+            | (true, v) -> v
+            | _ ->
+                let temp = memFunction(n)
+                dict.Add(keyFunction(n), temp)
+                temp
+
+    let parseEventString fileString fileName =
+        let inner = (fun (file, name) -> runParserOnString all () name file)
+        let hash = (fun (file, name) -> file.GetHashCode(), name)
+        (memoize hash inner) (fileString, fileName)
+
     let tabs n = String.replicate n "\t"
 
     let printTroop t depth = 

@@ -1,0 +1,9 @@
+@model CK2_Events.ViewModels.BaseViewModel
+
+@using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form"})){
+            @Html.DisplayFor(x => x.settings.eventDirectory)
+    @if(Model.isElectronActive){
+        <a asp-area="" asp-controller="Home" asp-action="SetFolder">Set events folder</a>
+    }
+    <button type="submit" class="btn">Save</button>
+}

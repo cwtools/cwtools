@@ -32,4 +32,5 @@ module Events =
     let getFileList directory =
         Directory.EnumerateFiles(directory)
         |> List.ofSeq
+        |> List.map Path.GetFileNameWithoutExtension
             

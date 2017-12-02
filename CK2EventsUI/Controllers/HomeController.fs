@@ -1,19 +1,17 @@
 ﻿namespace CK2_Events.Controllers
 
-open System
-open System.Collections.Generic
 open System.Linq
-open System.Threading.Tasks
 open Microsoft.AspNetCore.Mvc
 open CK2_Events.Application
 open FParsec
-open CK2_Events.Application.Process
-open System.Reflection
+open Process
 open Newtonsoft.Json
 open Newtonsoft.Json.FSharp
 open Microsoft.AspNetCore.Mvc.Infrastructure
 open FSharp.Core
 open ElectronNET.API
+open CK2_Events.ViewModels
+open System.IO
 
 module Utils = 
     let opts = [| TupleArrayConverter() :> JsonConverter |] // this goes global
@@ -24,29 +22,35 @@ module Utils =
 open Utils
 open ElectronNET.API.Entities
 
+
+
 type HomeController (provider : IActionDescriptorCollectionProvider) =
     inherit Controller()
 
     member val provider = provider
-    
+    static member val settings = Settings() with get, set
 
     member this.Index () =
-        let folderPrompt = 
+        let files = Events.getFileList HomeController.settings.eventDirectory
+        this.View(files)
+    
+    member this.SetFolder () =
+        let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])
             let folder = Electron.Dialog.ShowOpenDialogAsync(mainWindow, options) |> Async.AwaitTask
             folder 
         let files = match HybridSupport.IsElectronActive with
-                    | true -> 
-                        let folder = Async.RunSynchronously(folderPrompt)
-                        Events.getFileList folder.[0]
-                    | false -> Events.getFileList "./events/"
-        this.View(files)
-    
-
+                    | true -> Async.RunSynchronously(folderPrompt()).[0]
+                    | false -> "./events/" 
+        HomeController.settings.eventDirectory <- files
+        this.RedirectToAction("Settings")
 
     member this.GetData (file) =
-        let t = (CKParser.parseEventFile file)
+        let filePath = HomeController.settings.eventDirectory + file + ".txt"
+        let fileString = File.ReadAllText(filePath)
+        let t = (CKParser.parseEventString fileString file)
+        //let t = (CKParser.parseEventFile filePath)
         let ck2 = match t with
                     | Success(v, _, _) -> processEventFile v 
                     | _ -> failwith "No root"
@@ -62,3 +66,12 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
         
     member this.Error () =
         this.View();
+
+    [<HttpGet>]
+    member this.Settings () =
+        this.View(BaseViewModel(HomeController.settings))
+    
+    [<HttpPost>]
+    member this.Settings (settings : Settings) =
+        HomeController.settings <- settings
+        this.View(BaseViewModel(HomeController.settings))
