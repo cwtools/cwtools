@@ -1,7 +1,6 @@
-namespace CK2_Events
+namespace CK2Events
 
-open System
-
+#nowarn "1182"
 type ErrorViewModel private () =
     member val RequestId : string = null with get, set
 

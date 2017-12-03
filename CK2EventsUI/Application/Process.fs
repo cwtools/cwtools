@@ -1,8 +1,6 @@
-namespace CK2_Events.Application
+namespace CK2Events.Application
 
-open CK2_Events.Application.CKParser
-open Microsoft.CodeAnalysis
-open System.Xml.Serialization
+open CK2Events.Application.CKParser
 
 module Process =
     type Node (key : string) =
@@ -134,7 +132,7 @@ module Process =
                     loop tail (fun accTail ->
                         cont(fCombine resNode accTail) ))
             | [] -> cont acc
-        loop [node] (fun x -> x)
+        loop [node] Operators.id
     
     let foldNode3 fNode fOption fEvent fCombine acc (node:Node) =
         let rec loop nodes cont =
@@ -147,7 +145,7 @@ module Process =
             | (:? Event as x)::tail -> inner x tail fEvent
             | (x : Node)::tail -> inner x tail fNode
             | [] -> cont acc
-        loop [node] (fun x -> x)
+        loop [node] Operators.id
 
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
@@ -187,13 +185,13 @@ module Process =
         foldNode2 fNode fCombine [] node
 
     let addLocalisedDesc (node:Node) =
-        let fNode = (fun (x:Node) children -> 
+        let fNode = (fun (x:Node) _ -> 
                         match x with
                         | :? Event as e -> e.Desc <- Localization.GetDesc e.Desc
                         | :? Option as o -> o.Name <- Localization.GetDesc o.Name
                         | _ -> ()
                         )
-        let fCombine = (fun x c -> ())
+        let fCombine = (fun _ _ -> ())
         foldNode2 fNode fCombine () node
     
     let addLocalisedDescAll (root:Root) =
@@ -220,7 +218,7 @@ module Process =
                         |"" -> (d,i)
                         |v -> (v,i)
                         )
-        let fEvent = (fun x c -> c)
+        let fEvent = (fun _ c -> c)
         let fCombine    x c =
             match x, c with
             |("",[]), c -> c

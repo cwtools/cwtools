@@ -1,7 +1,7 @@
-namespace CK2_Events.ViewModels
+namespace CK2Events.ViewModels
 
 open ElectronNET.API
-open CK2_Events.Application
+open CK2Events.Application
 
 
 type BaseViewModel (settings) =

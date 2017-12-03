@@ -1,4 +1,4 @@
-namespace CK2_Events.Application
+namespace CK2Events.Application
 
 open FParsec
 
@@ -87,21 +87,6 @@ module CKParser =
     
     
     let all = ws >>. keyvaluelist .>> eof |>> (fun f -> (f : EventFile))
-
-    //let line = (many (attempt comment)) >>. restOfLine false
-    //let keyvalueS key = str key >>. ch '=' >>. valueS
-    //let keyvalueB key inner = str key >>. ch '=' >>. valueBlock inner
-   
-    //let namespaceP = keyvalueS "namespace"
-    //let event = keyvalueS "id" .>>. keyvalueS "is_triggered_only" .>>. keyvalueS "hide_window"
-    //let character_event = keyvalueB "character_event" event
-    //let character_event = str "character_event" >>. ch '=' >>. ch '{' >>. event .>> ch '}' .>> ws
-    //let eventDec = character_event
-
-    //let events = ws >>. namespaceP .>>. character_event .>> (many anyChar) .>> eof
-
-    //let x = run (many line) "#test\nasd\ntest"
-    //let y = runParserOnFile events () "wol_business_events.txt" System.Text.Encoding.UTF8
     let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
     let memoize keyFunction memFunction =

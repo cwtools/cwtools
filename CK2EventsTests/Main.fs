@@ -1,11 +1,8 @@
 ﻿module CK2EventsTests
 open Expecto
-open CK2_Events.Application
-open System
-open System.Collections.Generic
+open CK2Events.Application
 open System.Linq
 open FParsec
-open FSharp.Data
 
 [<Tests>]
 let parserTests =
@@ -18,7 +15,7 @@ let parserTests =
         testCase "parse ten" <| fun () ->
             let parsed = Events.parseTen "CK2EventsUI/events"
             let errors = parsed 
-                            |> List.filter (fun (f, p) -> p.Contains "Error")
+                            |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
             Expect.isTrue error (sprintf "%A" message)
@@ -26,7 +23,7 @@ let parserTests =
         testCase "parse all" <| fun () ->
             let parsed = Events.parseAll "CK2EventsUI/events"
             let errors = parsed 
-                            |> List.filter (fun (f, p) -> p.Contains "Error")
+                            |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
             Expect.isTrue error (sprintf "%A" message)
@@ -77,4 +74,4 @@ let parserTests =
 
 [<EntryPoint>]
 let main argv =
-    Tests.runTestsInAssembly defaultConfig argv
+    runTestsInAssembly defaultConfig argv

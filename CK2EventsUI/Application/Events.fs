@@ -1,7 +1,6 @@
-namespace CK2_Events.Application
+namespace CK2Events.Application
 
 open System.IO
-open Microsoft.IdentityModel.Clients.ActiveDirectory
 
 module Events =
     let rand = System.Random()

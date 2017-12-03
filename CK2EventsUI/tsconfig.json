@@ -8,7 +8,13 @@
         "sourceMap": false,
         "target": "es3",
         "skipLibCheck": true,
-        "listFiles": true
+        "listFiles": true,
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "strict": true
         
         
     },

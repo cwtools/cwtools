@@ -1,8 +1,8 @@
-﻿namespace CK2_Events.Controllers
+﻿namespace CK2Events.Controllers
 
 open System.Linq
 open Microsoft.AspNetCore.Mvc
-open CK2_Events.Application
+open CK2Events.Application
 open FParsec
 open Process
 open Newtonsoft.Json
@@ -10,7 +10,7 @@ open Newtonsoft.Json.FSharp
 open Microsoft.AspNetCore.Mvc.Infrastructure
 open FSharp.Core
 open ElectronNET.API
-open CK2_Events.ViewModels
+open CK2Events.ViewModels
 open System.IO
 
 module Utils = 

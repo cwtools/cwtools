@@ -1,17 +1,11 @@
-﻿namespace CK2_Events
+﻿namespace CK2Events
 
-open System
-open System.Collections.Generic
-open System.Linq
-open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open ElectronNET.API
 open ElectronNET.API.Entities
-open ElectronNET.API.Entities
-open ElectronNET.API
 
 
 
@@ -21,11 +15,11 @@ type Startup private () =
         this.Configuration <- configuration
 
     // This method gets called by the runtime. Use this method to add services to the container.
-    member this.ConfigureServices(services: IServiceCollection) =
+    member __.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
         services.AddMvc() |> ignore
 
-    member this.ElectronBootstrap() =
+    member __.ElectronBootstrap() =
 
         let webprefs = WebPreferences (NodeIntegration = false)
         let prefs = BrowserWindowOptions (WebPreferences = webprefs)

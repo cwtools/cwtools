@@ -1,4 +1,4 @@
-namespace CK2_Events.Application
+namespace CK2Events.Application
 
 open FSharp.Data
 open System.IO

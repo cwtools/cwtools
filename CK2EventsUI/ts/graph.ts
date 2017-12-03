@@ -208,7 +208,7 @@ export function showDetails(id : string){
     var options = _options.filter(x => x[0] === id);
     var context = {title:node.ID, desc:node.Desc, full:pretty, options:options};
     var html = detailsTemplate(context);
-    document.getElementById('detailsTarget').innerHTML = html;
+    document.getElementById('detailsTarget')!.innerHTML = html;
 }
 
 export function go(file : string){
