@@ -1,5 +1,5 @@
 import dagre from 'dagre'
-import cytoscape, { AnimateOptions, CenterOptions } from 'cytoscape'
+import cytoscape, { AnimateOptions, CenterOptions, CollectionElements } from 'cytoscape'
 import cyqtip from 'cytoscape-qtip'
 import cytoscapedagre from 'cytoscape-dagre'
 import cytoscapenav from 'cytoscape-navigator'
@@ -14,6 +14,7 @@ declare module 'cytoscape' {
         navigator(options:any):any;
         cyCanvas():any;
     }
+
 }
 
 var labelMaxLength = 30;
@@ -54,6 +55,12 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
                 }
             }
         ],
+        minZoom: 0.1,
+        maxZoom: 5,
+        layout:{
+            name: 'preset',
+            padding: 10
+        }
     })
 
     var roots = [];
@@ -114,15 +121,32 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
         })
     })
     cy.fit();
-    var layout = cy.layout({ name: 'dagre' });
-    layout.run();
+    var opts = {name:'dagre', ranker:'network-simplex'};
+    //var opts = {name:'grid'};
+    //var layout = cy.layout(opts);
+    //var layout = cy.layout({ name: 'dagre', ranker: 'network-simplex' } );
+    //layout.run();
     cy.fit();
 
+
+    //layout.run();
     var layer = cy.cyCanvas();
     var canvas = layer.getCanvas();
     var ctx = canvas.getContext('2d');
+
+    let toProcess = cy.elements();
+    var groups : CollectionElements[] = [];
+    while(toProcess.size() > 0){
+        var e: any = toProcess.first();
+        var group: CollectionElements = e.closedNeighborhood();
+        groups.push(group);
+        toProcess = toProcess.difference(group);
+    }
+    var t : any = cy.elements();
+    groups = t.components();
     
-    
+    groups.forEach((g : any) => {var l : any = g.layout(opts); l.run();});
+    groups.forEach((g : any, i) => g.shift("y", i*300))
 
     cy.on("render", function(evt) {
         layer.resetTransform(ctx);

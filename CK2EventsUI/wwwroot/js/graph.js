@@ -28,7 +28,13 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                         'curve-style': 'bezier'
                     }
                 }
-            ]
+            ],
+            minZoom: 0.1,
+            maxZoom: 5,
+            layout: {
+                name: 'preset',
+                padding: 10
+            }
         });
         var roots = [];
         var qtipname = function (text) { return { content: text, position: { my: 'top center', at: 'bottom center' }, style: { classes: 'qtip-bootstrap', tip: { width: 16, height: 8 } }, show: { event: 'mouseover' }, hide: { event: 'mouseout' } }; };
@@ -83,12 +89,23 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             });
         });
         cy.fit();
-        var layout = cy.layout({ name: 'dagre' });
-        layout.run();
+        var opts = { name: 'dagre', ranker: 'network-simplex' };
         cy.fit();
         var layer = cy.cyCanvas();
         var canvas = layer.getCanvas();
         var ctx = canvas.getContext('2d');
+        var toProcess = cy.elements();
+        var groups = [];
+        while (toProcess.size() > 0) {
+            var e = toProcess.first();
+            var group = e.closedNeighborhood();
+            groups.push(group);
+            toProcess = toProcess.difference(group);
+        }
+        var t = cy.elements();
+        groups = t.components();
+        groups.forEach(function (g) { var l = g.layout(opts); l.run(); });
+        groups.forEach(function (g, i) { return g.shift("y", i * 300); });
         cy.on("render", function (evt) {
             layer.resetTransform(ctx);
             layer.clear(ctx);
