@@ -94,18 +94,26 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var layer = cy.cyCanvas();
         var canvas = layer.getCanvas();
         var ctx = canvas.getContext('2d');
+        function flatten(arr) {
+            return arr.reduce(function (flat, toFlatten) {
+                return flat.concat(toFlatten);
+            }, []);
+        }
         var toProcess = cy.elements();
         var groups = [];
-        while (toProcess.size() > 0) {
-            var e = toProcess.first();
-            var group = e.closedNeighborhood();
-            groups.push(group);
-            toProcess = toProcess.difference(group);
-        }
         var t = cy.elements();
         groups = t.components();
-        groups.forEach(function (g) { var l = g.layout(opts); l.run(); });
-        groups.forEach(function (g, i) { return g.shift("y", i * 300); });
+        var singles = groups.filter(function (f) { return f.length === 1; });
+        var singles2 = singles.reduce(function (p, c) { return p.union(c); }, cy.collection());
+        var rest = groups.filter(function (f) { return f.length !== 1; });
+        var rest2 = rest.reduce(function (p, c) { return p.union(c); }, cy.collection());
+        var lrest = rest2.layout(opts);
+        lrest.run();
+        var bb = rest2.boundingBox({});
+        var opts2 = { name: 'grid', condense: true, nodeDimensionsIncludeLabels: true };
+        var lsingles = singles2.layout(opts2);
+        lsingles.run();
+        singles2.shift("y", (singles2.boundingBox({}).y2 + 10) * -1);
         cy.on("render", function (evt) {
             layer.resetTransform(ctx);
             layer.clear(ctx);

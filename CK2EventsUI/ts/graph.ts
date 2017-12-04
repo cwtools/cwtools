@@ -134,19 +134,34 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     var canvas = layer.getCanvas();
     var ctx = canvas.getContext('2d');
 
+
+
+    function flatten<T>(arr : Array<Array<T>>) {
+        return arr.reduce(function (flat, toFlatten) {
+          return flat.concat(toFlatten);
+        }, []);
+      }
+
+
     let toProcess = cy.elements();
     var groups : CollectionElements[] = [];
-    while(toProcess.size() > 0){
-        var e: any = toProcess.first();
-        var group: CollectionElements = e.closedNeighborhood();
-        groups.push(group);
-        toProcess = toProcess.difference(group);
-    }
+
     var t : any = cy.elements();
     groups = t.components();
-    
-    groups.forEach((g : any) => {var l : any = g.layout(opts); l.run();});
-    groups.forEach((g : any, i) => g.shift("y", i*300))
+    var singles = groups.filter((f) => f.length === 1);
+    var singles2 : any = singles.reduce((p,c) => p.union(c), cy.collection())
+    var rest = groups.filter((f) => f.length !== 1);
+
+    var rest2 = rest.reduce((p,c) => p.union(c), cy.collection())
+
+    var lrest : any = rest2.layout(opts);
+    lrest.run();
+    var bb = rest2.boundingBox({});
+    var opts2 = { name:'grid', condense:true, nodeDimensionsIncludeLabels:true }
+    var lsingles : any = singles2.layout(opts2);
+    lsingles.run();
+    singles2.shift("y", (singles2.boundingBox({}).y2 + 10) * -1);
+
 
     cy.on("render", function(evt) {
         layer.resetTransform(ctx);
