@@ -5,5 +5,5 @@ open CK2Events.Application
 
 
 type BaseViewModel (settings) =
-    member val settings : Settings = settings
+    member val settings : CK2Settings = settings
     member val isElectronActive = HybridSupport.IsElectronActive

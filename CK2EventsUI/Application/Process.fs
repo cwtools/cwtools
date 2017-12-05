@@ -1,6 +1,7 @@
 namespace CK2Events.Application
 
 open CK2Events.Application.CKParser
+open Localisation
 
 module Process =
     type Node (key : string) =
@@ -184,18 +185,18 @@ module Process =
         let fCombine = (@)
         foldNode2 fNode fCombine [] node
 
-    let addLocalisedDesc (node:Node) =
+    let addLocalisedDesc (localisation : LocalisationService) (node:Node) =
         let fNode = (fun (x:Node) _ -> 
                         match x with
-                        | :? Event as e -> e.Desc <- Localization.GetDesc e.Desc
-                        | :? Option as o -> o.Name <- Localization.GetDesc o.Name
+                        | :? Event as e -> e.Desc <- localisation.GetDesc e.Desc
+                        | :? Option as o -> o.Name <- localisation.GetDesc o.Name
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())
         foldNode2 fNode fCombine () node
     
-    let addLocalisedDescAll (root:Root) =
-        root.Events |> List.iter addLocalisedDesc
+    let addLocalisedDescAll (root:Root) (localisation : LocalisationService) =
+        root.Events |> List.iter (addLocalisedDesc localisation)
         root
 
     // let getOptions (event:Node) =

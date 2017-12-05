@@ -21,18 +21,27 @@ module Utils =
         
 open Utils
 open ElectronNET.API.Entities
+open Microsoft.Extensions.Options
+open CK2Events.Application.Localisation
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : LocalisationService) =
     inherit Controller()
 
-    member val provider = provider
-    static member val settings = Settings() with get, set
+    let settings : CK2Settings = settings.Value
 
-    member this.Index () =
-        let files = Events.getFileList HomeController.settings.eventDirectory
-        this.View(files)
+    member val provider = provider
+
+    member this.Index () : ActionResult =
+        match settings.gameDirectory with
+        | None -> upcast this.RedirectToAction("Settings")
+        | Some _ -> 
+            let files = Events.getFileList settings.eventDirectory.Value
+            upcast this.View(files)
+
+    member this.FirstRun() =
+        this.Settings()
     
     member this.SetFolder () =
         let folderPrompt() = 
@@ -43,19 +52,17 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
         let files = match HybridSupport.IsElectronActive with
                     | true -> Async.RunSynchronously(folderPrompt()).[0]
                     | false -> "./events/" 
-        HomeController.settings.eventDirectory <- files
+        settings.gameDirectory <- Some files
         this.RedirectToAction("Settings")
 
     member this.GetData (file) =
-        let filePath = HomeController.settings.eventDirectory + file + ".txt"
+        let filePath = settings.eventDirectory.Value + file + ".txt"
         let fileString = File.ReadAllText(filePath)
         let t = (CKParser.parseEventString fileString file)
-        //let t = (CKParser.parseEventFile filePath)
         let ck2 = match t with
                     | Success(v, _, _) -> processEventFile v 
                     | _ -> failwith "No root"
-        let ck3 = addLocalisedDescAll ck2
-        //let triggers = getTriggeredEventsAll ck2
+        let ck3 = addLocalisedDescAll ck2 localisation
         let immediates = getAllImmediates ck3
         let options = getEventsOptions ck3
         let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKParser.printKeyValueList e.Raw 0))
@@ -69,9 +76,10 @@ type HomeController (provider : IActionDescriptorCollectionProvider) =
 
     [<HttpGet>]
     member this.Settings () =
-        this.View(BaseViewModel(HomeController.settings))
+        this.View(BaseViewModel(settings))
     
     [<HttpPost>]
-    member this.Settings (settings : Settings) =
-        HomeController.settings <- settings
-        this.View(BaseViewModel(HomeController.settings))
+    member this.Settings (settings : CK2Settings) =
+        let json = settings.ToJson
+        File.WriteAllText("./CK2Events.json", json)
+        this.View(BaseViewModel(settings))

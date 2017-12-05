@@ -55,7 +55,7 @@ let parserTests =
                     Expect.isTrue false msg
 
         testCase "descTest" <| fun () ->
-            let desc = Localization.GetDesc "EVTOPTB_WoL_12005"
+            let desc = Localisation.GetDesc "EVTOPTB_WoL_12005"
             Expect.equal desc "Abandon construction... let us save what we can." "Getdesc fail"
 
         testCase "optionTest" <| fun () ->
@@ -69,7 +69,7 @@ let parserTests =
                 |Failure(msg, _, _) ->
                     Expect.isTrue false msg
         //testCase "descTest2" <| fun () ->
-        //    Expect.isTrue false (sprintf "%A" (Localization.keys |> List.rev))
+        //    Expect.isTrue false (sprintf "%A" (Localisation.keys |> List.rev))
     ]
 
 [<EntryPoint>]
