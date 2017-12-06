@@ -10,7 +10,7 @@ module Localisation =
     type LocalisationService(settings:IOptions<CK2Settings>) =
         let settings : CK2Settings = settings.Value
 
-        let files = match settings.localisationDirectory with |Some dir -> Directory.EnumerateFiles(dir) |> List.ofSeq |None -> []
+        let files = match settings.localisationDirectory with |"/localisation/" -> [] |dir -> Directory.EnumerateFiles(dir) |> List.ofSeq
         
         let allDesc : Runtime.CsvFile<LocalisationEntry.Row> option = 
             match files with

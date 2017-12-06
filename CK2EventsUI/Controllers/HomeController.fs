@@ -23,10 +23,14 @@ open Utils
 open ElectronNET.API.Entities
 open Microsoft.Extensions.Options
 open CK2Events.Application.Localisation
+open Microsoft.AspNetCore.Hosting.Internal
+open Microsoft.AspNetCore.Hosting
+open Microsoft.AspNetCore.Rewrite.Internal.UrlMatches
+open Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : LocalisationService) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : LocalisationService, hostingEnvironment : IHostingEnvironment) =
     inherit Controller()
 
     let settings : CK2Settings = settings.Value
@@ -35,15 +39,19 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
 
     member this.Index () : ActionResult =
         match settings.gameDirectory with
-        | None -> upcast this.RedirectToAction("Settings")
-        | Some _ -> 
-            let files = Events.getFileList settings.eventDirectory.Value
+        | "" -> upcast this.RedirectToAction("Settings")
+        | _ -> 
+            let files = Events.getFileList settings.eventDirectory
             upcast this.View(files)
 
     member this.FirstRun() =
         this.Settings()
+
+        
     
     member this.SetFolder () =
+        
+
         let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])
@@ -51,12 +59,15 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
             folder 
         let files = match HybridSupport.IsElectronActive with
                     | true -> Async.RunSynchronously(folderPrompt()).[0]
-                    | false -> "./events/" 
-        settings.gameDirectory <- Some files
+                    | false -> "" 
+        settings.gameDirectory <- files
         this.RedirectToAction("Settings")
 
+
+        
+
     member this.GetData (file) =
-        let filePath = settings.eventDirectory.Value + file + ".txt"
+        let filePath = settings.eventDirectory + file + ".txt"
         let fileString = File.ReadAllText(filePath)
         let t = (CKParser.parseEventString fileString file)
         let ck2 = match t with
@@ -75,11 +86,11 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         this.View();
 
     [<HttpGet>]
-    member this.Settings () =
-        this.View(BaseViewModel(settings))
+    member this.Settings () =        
+        this.View(SettingsViewModel(settings))
     
     [<HttpPost>]
     member this.Settings (settings : CK2Settings) =
         let json = settings.ToJson
-        File.WriteAllText("./CK2Events.json", json)
-        this.View(BaseViewModel(settings))
+        File.WriteAllText(hostingEnvironment.ContentRootPath+"/appsettings.json", json)
+        this.RedirectToAction("Index")

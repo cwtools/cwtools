@@ -114,6 +114,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var lsingles = singles2.layout(opts2);
         lsingles.run();
         singles2.shift("y", (singles2.boundingBox({}).y2 + 10) * -1);
+        cy.fit();
         cy.on("render", function (evt) {
             layer.resetTransform(ctx);
             layer.clear(ctx);

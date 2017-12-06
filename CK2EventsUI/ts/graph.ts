@@ -161,7 +161,7 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     var lsingles : any = singles2.layout(opts2);
     lsingles.run();
     singles2.shift("y", (singles2.boundingBox({}).y2 + 10) * -1);
-
+    cy.fit();
 
     cy.on("render", function(evt) {
         layer.resetTransform(ctx);
