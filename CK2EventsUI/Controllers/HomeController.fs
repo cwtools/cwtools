@@ -50,8 +50,6 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         
     
     member this.SetFolder () =
-        
-
         let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])

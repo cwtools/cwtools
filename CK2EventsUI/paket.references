@@ -1,0 +1,6 @@
+Microsoft.AspNetCore.All
+FParsec
+Newtonsoft.Json.FSharp
+FSharp.Data
+ElectronNET.API
+ElectronNET.CLI
