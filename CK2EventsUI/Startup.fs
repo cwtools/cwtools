@@ -23,7 +23,7 @@ type Startup private () =
         // Add framework services.  
         services.AddMvc() |> ignore
         services.AddOptions() |> ignore
-        services.Configure<CK2Settings>(this.Configuration) |> ignore
+        services.Configure<CK2Settings>(this.Configuration.GetSection("userSettings")) |> ignore
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
         services.AddTransient<LocalisationService>() |> ignore
 

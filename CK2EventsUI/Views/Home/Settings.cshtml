@@ -1,16 +1,10 @@
 @model CK2Events.ViewModels.SettingsViewModel
 
-@using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form"})){
-    @if(Model.settings.gameDirectory == ""){
-        @:Please select the game directory
-    }
-            @Html.DisplayFor(x => x.settings.gameDirectory)
-            @Html.HiddenFor(x => x.settings.gameDirectory)
-    @if(!Model.validDirectory && Model.settings.gameDirectory == ""){
-        @:Are you sure this is the game directory? Cannot find CK2Game.exe, the localisation folder or the events folder
-    }
-    @if(Model.isElectronActive){
-        <a asp-area="" asp-controller="Home" asp-action="SetFolder">Set events folder</a>
-    }
+@using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form-horizontal"})){
+    <div class="form-group">
+        <label asp-for="settings.gameDirectory" class="control-label col-md-3"></label>
+        <input asp-for="settings.gameDirectory" class="form-control col-md-8" readonly/>
+        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder">Set game folder</a>
+    </div>
     <button type="submit" class="btn">Save</button>
 }

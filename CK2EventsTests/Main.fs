@@ -8,9 +8,11 @@ open FParsec
 let parserTests =
     testList "parser tests" [
         testCase "parser one" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/guilds_events.txt")
             let text = CKParser.prettyPrint parsed
-            Expect.isFalse (text.Contains "Error") text
+            match parsed with
+            | Success(_,_,_) -> ()
+            | Failure(_, _, _) -> Expect.isFalse true text
 
         testCase "parse ten" <| fun () ->
             let parsed = Events.parseTen "CK2EventsUI/events"
@@ -54,9 +56,9 @@ let parserTests =
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
 
-        testCase "descTest" <| fun () ->
-            let desc = Localisation.GetDesc "EVTOPTB_WoL_12005"
-            Expect.equal desc "Abandon construction... let us save what we can." "Getdesc fail"
+        // testCase "descTest" <| fun () ->
+        //     let desc = Localisation.GetDesc "EVTOPTB_WoL_12005"
+        //     Expect.equal desc "Abandon construction... let us save what we can." "Getdesc fail"
 
         testCase "optionTest" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")

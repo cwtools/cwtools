@@ -22,15 +22,11 @@ module Utils =
 open Utils
 open ElectronNET.API.Entities
 open Microsoft.Extensions.Options
-open CK2Events.Application.Localisation
-open Microsoft.AspNetCore.Hosting.Internal
 open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.Rewrite.Internal.UrlMatches
-open Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : LocalisationService, hostingEnvironment : IHostingEnvironment) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment) =
     inherit Controller()
 
     let settings : CK2Settings = settings.Value
@@ -55,14 +51,13 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])
             let folder = Electron.Dialog.ShowOpenDialogAsync(mainWindow, options) |> Async.AwaitTask
             folder 
-        let files = match HybridSupport.IsElectronActive with
-                    | true -> Async.RunSynchronously(folderPrompt()).[0]
-                    | false -> "" 
-        settings.gameDirectory <- files
+        let processFiles = function
+            | [|x|] -> settings.gameDirectory <- x
+            | _ -> ()
+        match HybridSupport.IsElectronActive with
+            | true -> Async.RunSynchronously(folderPrompt()) |> processFiles
+            | false -> () 
         this.RedirectToAction("Settings")
-
-
-        
 
     member this.GetData (file) =
         let filePath = settings.eventDirectory + file + ".txt"
@@ -89,6 +84,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
     
     [<HttpPost>]
     member this.Settings (settings : CK2Settings) =
-        let json = settings.ToJson
-        File.WriteAllText(hostingEnvironment.ContentRootPath+"/appsettings.json", json)
+        let settingsWrap = { userSettings = UserSettings settings}
+        let json = settingsWrap.ToJson
+        
+        File.WriteAllText(hostingEnvironment.ContentRootPath+"/userSettings.json", json)
         this.RedirectToAction("Index")
