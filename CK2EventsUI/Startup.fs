@@ -48,7 +48,7 @@ type Startup private () =
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member this.Configure(app: IApplicationBuilder, env: IHostingEnvironment) =
 
-        if (env.IsDevelopment()) then
+        if (env.IsDevelopment() || HybridSupport.IsElectronActive) then
             app.UseDeveloperExceptionPage() |> ignore
         else
             app.UseExceptionHandler("/Home/Error") |> ignore
