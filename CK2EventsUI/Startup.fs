@@ -32,17 +32,12 @@ type Startup private () =
 
         let webprefs = WebPreferences (NodeIntegration = false)
         let prefs = BrowserWindowOptions (WebPreferences = webprefs)
-        // webprefs.NodeIntegration <- false
-        // prefs.Show <- true
-        // prefs.WebPreferences <- webprefs
-       // prefs.Fullscreen <- true
         Electron.App.CommandLineAppendArgument("--disable-http-cache")
         Electron.App.CommandLineAppendSwitch("--disable-http-cache")
         let window = Electron.WindowManager.CreateWindowAsync(prefs) |> Async.AwaitTask |> Async.RunSynchronously
         window.Maximize()
+        Electron.App.add_WindowAllClosed (fun () -> Electron.App.Exit())
         
-        //Task.Run((fun _ -> async {Electron.WindowManager.CreateWindowAsync(prefs)  |> ignore} |> Async.RunSynchronously |> ignore)) |> ignore
-
     
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,11 +55,5 @@ type Startup private () =
         if HybridSupport.IsElectronActive then
             this.ElectronBootstrap()
             Electron.App.add_Quitting (fun _ -> Electron.Dialog.ShowMessageBoxAsync("Quitting") |> ignore)
-
-        // app.UseMvc(fun routes ->
-        //     routes.MapRoute(
-        //         name = "default",
-        //         template = "{controller=Home}/{action=Index}/{id?}") |> ignore
-        //     ) |> ignore
 
     member val Configuration : IConfiguration = null with get, set
