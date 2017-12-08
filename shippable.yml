@@ -4,7 +4,6 @@ build:
     image_name: dcurylo/fsharp-mono-netcore
     image_tag: latest
     pull: true
-    options: "-e HOME=/root -v `pwd`:/root/src --rm -it bash"
+    options: "-e HOME=/root bash"
   ci: 
-    dotnet build
     exit
