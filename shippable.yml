@@ -10,5 +10,6 @@ build:
       && printf '#!/bin/sh\nexec /usr/bin/mono /usr/local/lib/paket.exe "$@"' >> /usr/local/bin/paket
       && chmod u+x /usr/local/bin/paket
     - paket restore
+    - cd CK2EventsUI
     - dotnet build
     - dotnet electronize build win
