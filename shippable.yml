@@ -18,7 +18,7 @@ build:
     - apt-get install apt-transport-https
     - wget -nc https://dl.winehq.org/wine-builds/Release.key
     - sudo apt-key add Release.key
-    - deb https://dl.winehq.org/wine-builds/debian/ jessie main
+    - echo "deb https://dl.winehq.org/wine-builds/debian/ jessie main" | tee /etc/apt/sources.list.d/docker.list
     - apt-get install -y software-properties-common python-software-properties
     - apt-get update
     - apt-get install --install-recommends winehq-stable
