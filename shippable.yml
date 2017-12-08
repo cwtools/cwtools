@@ -9,8 +9,10 @@ build:
       && chmod a+r paket.exe && mv paket.exe /usr/local/lib/
       && printf '#!/bin/sh\nexec /usr/bin/mono /usr/local/lib/paket.exe "$@"' >> /usr/local/bin/paket
       && chmod u+x /usr/local/bin/paket
-    - curl -sL https://deb.nodesource.com/setup | sudo bash - &&
-      apt-get install -yq nodejs build-essential
+    - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+    - export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    - nvm install node
     - npm install -g npm
     - npm install electron-packager --global
     - paket restore
