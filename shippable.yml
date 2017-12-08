@@ -5,7 +5,7 @@ build:
     image_tag: latest
     pull: true
   ci: 
-    - docker run --entrypoint /bin/bash -v `pwd`:/root/src/ -w /root/src/ dcurylo/paket -c "cd "CK2EventsUI; ls -a"
+    - docker run --entrypoint /bin/bash -v `pwd`:/root/src/ -w /root/src/ dcurylo/paket -c "cd CK2EventsUI; ls -a"
     - pwd
     - ls -a
     - cd ./CK2EventsUI
