@@ -6,4 +6,4 @@ build:
     pull: true
     options: "bash"
   ci: 
-    exit
+    - dotnet build
