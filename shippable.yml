@@ -15,6 +15,7 @@ build:
     - nvm install node
     - npm install -g npm
     - npm install electron-packager --global
+    - apt-get install --install-recommends winehq-stable
     - paket restore
     - cd CK2EventsUI
     - dotnet build
