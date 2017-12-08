@@ -4,6 +4,6 @@ build:
     image_name: dcurylo/fsharp-mono-netcore
     image_tag: latest
     pull: true
-    options: "-e HOME=/root bash"
+    options: "bash"
   ci: 
     exit
