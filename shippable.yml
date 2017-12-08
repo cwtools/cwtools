@@ -5,7 +5,7 @@ build:
     image_tag: latest
     pull: true
   ci: 
-    - docker run -v `pwd`:/root/src/ -w /root/src/ dcurylo/paket restore
+    - docker run -v `pwd`:/root/src/ -w /root/src/ dcurylo/paket restore && ls
     - pwd
     - ls
     - cd ./CK2EventsUI
