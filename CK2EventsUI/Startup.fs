@@ -31,7 +31,7 @@ type Startup private () =
     member __.ElectronBootstrap() =
 
         let webprefs = WebPreferences (NodeIntegration = false)
-        let prefs = BrowserWindowOptions (WebPreferences = webprefs)
+        let prefs = BrowserWindowOptions (WebPreferences = webprefs, Title = "CK2 Events", AutoHideMenuBar = true)
         Electron.App.CommandLineAppendArgument("--disable-http-cache")
         Electron.App.CommandLineAppendSwitch("--disable-http-cache")
         let window = Electron.WindowManager.CreateWindowAsync(prefs) |> Async.AwaitTask |> Async.RunSynchronously

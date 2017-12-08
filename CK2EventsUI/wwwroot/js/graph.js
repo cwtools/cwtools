@@ -184,17 +184,22 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
     }
     exports_1("showDetails", showDetails);
     function go(file) {
+        document.getElementById('detailsTarget').innerHTML = "Parsing event file...";
         $.ajax({
             url: "GetData",
             data: { "file": file }
         })
             .done(function (data) {
             if (data.item1) {
+                document.getElementById('detailsTarget').innerHTML = "Click an event to see details";
                 main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5));
             }
             else {
                 document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error <br/>" + JSON.parse(data.item2);
             }
+        })
+            .fail(function () {
+            document.getElementById('detailsTarget').innerHTML = "Something went wrong";
         });
     }
     exports_1("go", go);

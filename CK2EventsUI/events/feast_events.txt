@@ -9,7 +9,7 @@
 ###################################
 #
 # Designed by Johan Andersson
-# Written by Sara Wendel-Örtqvist
+# Written by Sara Wendel-ï¿½rtqvist
 
 ###################################
 #Events before the Feast
@@ -2487,7 +2487,7 @@ character_event = {
 					}
 				}
 				NOT = {
-					is_friend ROOT
+					is_friend = ROOT
 				}
 			}
 		}
