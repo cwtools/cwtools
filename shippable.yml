@@ -15,11 +15,11 @@ build:
     - nvm install node
     - npm install -g npm
     - npm install electron-packager --global
+    - apt-get install apt-transport-https
     - wget -nc https://dl.winehq.org/wine-builds/Release.key
     - apt-key add Release.key
     - apt-get install -y software-properties-common python-software-properties
     - apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
-    - apt-get install apt-transport-https
     - apt-get update
     - apt-get install --install-recommends winehq-stable
     - paket restore
