@@ -22,7 +22,7 @@ build:
     - apt-get install -y software-properties-common python-software-properties
     - dpkg --add-architecture i386
     - apt-get update
-    - apt-get install --install-recommends winehq-stable
+    - apt-get install --install-recommends winehq-stable -y
     - paket restore
     - cd CK2EventsUI
     - dotnet build
