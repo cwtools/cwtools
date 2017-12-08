@@ -17,6 +17,7 @@ build:
     - npm install electron-packager --global
     - wget -nc https://dl.winehq.org/wine-builds/Release.key
     - apt-key add Release.key
+    - apt-get install -y software-properties-common python-software-properties
     - apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
     - apt-get install --install-recommends winehq-stable
     - paket restore
