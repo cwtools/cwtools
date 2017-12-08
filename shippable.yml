@@ -5,7 +5,7 @@ build:
     image_tag: latest
     pull: true
   ci: 
-    - docker run -v `pwd`/CK2EventsUI:`pwd` dcurylo/paket init
+    - docker run -v `pwd`:/root/src/ dcurylo/paket init
     - pwd
     - cd ./CK2EventsUI
     - ../.paket/paket.bootstrapper.exe restore
