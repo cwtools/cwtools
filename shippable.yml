@@ -9,6 +9,7 @@ build:
       && chmod a+r paket.exe && mv paket.exe /usr/local/lib/
       && printf '#!/bin/sh\nexec /usr/bin/mono /usr/local/lib/paket.exe "$@"' >> /usr/local/bin/paket
       && chmod u+x /usr/local/bin/paket
+    - sudo npm install electron-packager --global
     - paket restore
     - cd CK2EventsUI
     - dotnet build
