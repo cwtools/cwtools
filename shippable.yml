@@ -1,8 +1,4 @@
 language: none
-env:
-  global:
-    #secure variable contains values for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-    - secure: HKwYujx/qmsyQQdHvR2myu8HLUDtcLeDyYV149YJuxIV4J7Hk3SxeY8X3D6aTlR8mvMnd/ZFY+tGNUh4G0xtLLjjZcPsBgvFlB
 build:
   pre_ci_boot:
     image_name: tboby/docker-fsharp-mono-netcore-electronnet
@@ -15,3 +11,8 @@ build:
     - dotnet electronize build win
   on_success:
     - aws s3 sync $SHIPPABLE_BUILD_DIR "s3://ck2events" --region "eu-west-1"
+integrations:
+  hub:
+    - integrationName: AWS    #replace with your integration name
+      region: eu-west-1                   #replace with your AWS region
+      type: s3
