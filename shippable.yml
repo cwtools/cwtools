@@ -5,6 +5,7 @@ build:
     image_tag: latest
     pull: true
   ci: 
+    - ls -a /root
     - docker run -t --entrypoint /bin/bash --mount type=bind,source=/root/src,destination=/root dcurylo/paket -c "pwd; ls -a; cd src/github.com/tboby/ck2eventviewer; ls -a"
     - pwd
     - ls -a
