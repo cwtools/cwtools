@@ -189,7 +189,12 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             data: { "file": file }
         })
             .done(function (data) {
-            main(JSON.parse(data.item1), JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4));
+            if (data.item1) {
+                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5));
+            }
+            else {
+                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error <br/>" + JSON.parse(data.item2);
+            }
         });
     }
     exports_1("go", go);

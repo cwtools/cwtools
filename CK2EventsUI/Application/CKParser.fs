@@ -69,8 +69,9 @@ module CKParser =
         let list = keyvaluelist |>> Block
         between (ch '{') (ch '}') list <?> "valueBlock"
     let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
+    let operator = (attempt (str ">=")) <|> (attempt (str "<=")) <|> (attempt (str "==")) <|> str "=" <|> str "<" <|> str ">"
     do keyvalueimpl := 
-        pipe2 (id .>> ch '=') (value)
+        pipe2 (id .>> operator) (value)
             (fun id value -> KeyValue(KeyValueItem(id, value)))
 
     let troop = 

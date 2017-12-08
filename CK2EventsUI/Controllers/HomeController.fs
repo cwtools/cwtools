@@ -63,14 +63,17 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         let filePath = settings.eventDirectory + file + ".txt"
         let fileString = File.ReadAllText(filePath)
         let t = (CKParser.parseEventString fileString file)
-        let ck2 = match t with
-                    | Success(v, _, _) -> processEventFile v 
-                    | _ -> failwith "No root"
-        let ck3 = addLocalisedDescAll ck2 localisation
-        let immediates = getAllImmediates ck3
-        let options = getEventsOptions ck3
-        let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKParser.printKeyValueList e.Raw 0))
-        this.Json((ck3.Events.ToJson, immediates.ToJson, options.ToJson, pretties.ToJson))
+        match t with
+            | Success(v, _, _) -> 
+                let ck2 = processEventFile v 
+                let ck3 = addLocalisedDescAll ck2 localisation
+                let immediates = getAllImmediates ck3
+                let options = getEventsOptions ck3
+                let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKParser.printKeyValueList e.Raw 0))
+                this.Json((true,ck3.Events.ToJson, immediates.ToJson, options.ToJson, pretties.ToJson))
+            | ParserResult.Failure(msg, _, _) -> 
+                this.Json((false,msg.ToJson))
+        
 
     member this.Graph (file : string) =
         this.View(model = file);
