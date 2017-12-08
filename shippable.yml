@@ -6,6 +6,7 @@ build:
     pull: true
   ci: 
     - docker run -v `pwd`/CK2EventsUI:/root/ dcurylo/paket init
+    - ls
     - cd ./CK2EventsUI
     - ../.paket/paket.bootstrapper.exe restore
     - dotnet build
