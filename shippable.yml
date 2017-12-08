@@ -5,6 +5,7 @@ build:
     image_tag: latest
     pull: true
   ci: 
+    - docker run -v `pwd`/CK2EventsUI:/root/ dcurylo/paket init
     - cd ./CK2EventsUI
     - ../.paket/paket.bootstrapper.exe restore
     - dotnet build
