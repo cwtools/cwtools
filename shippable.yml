@@ -5,10 +5,11 @@ build:
     image_tag: latest
     pull: true
   ci: 
-    - docker run -v `pwd`:/root/src/ dcurylo/paket init
+    - docker run -v `pwd`:/root/src/ dcurylo/paket restore
     - pwd
     - ls
     - cd ./CK2EventsUI
+    - ls
     - ../.paket/paket.bootstrapper.exe restore
     - dotnet build
     - dotnet electronize build win
