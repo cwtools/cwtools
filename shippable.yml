@@ -20,6 +20,7 @@ build:
     - sudo apt-key add Release.key
     - echo "deb https://dl.winehq.org/wine-builds/debian/ jessie main" | tee /etc/apt/sources.list.d/docker.list
     - apt-get install -y software-properties-common python-software-properties
+    - dpkg --add-architecture i386
     - apt-get update
     - apt-get install --install-recommends winehq-stable
     - paket restore
