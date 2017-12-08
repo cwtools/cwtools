@@ -5,12 +5,10 @@ build:
     image_tag: latest
     pull: true
   ci: 
-    - ls -a /root
-    - docker run -t --entrypoint /bin/bash --mount type=bind,source=/root/src,destination=/root dcurylo/paket -c "pwd; ls -a; cd src/github.com/tboby/ck2eventviewer; ls -a"
-    - pwd
-    - ls -a
-    - cd ./CK2EventsUI
-    - ls
+    - wget https://github.com/fsprojects/Paket/releases/download/5.125.3/paket.exe \ 
+    && chmod a+r paket.exe && mv paket.exe /usr/local/lib/ \ 
+    && printf '#!/bin/sh\nexec /usr/bin/mono /usr/local/lib/paket.exe "$@"' >> /usr/local/bin/paket \ 
+    && chmod u+x /usr/local/bin/paket
     - ../.paket/paket.bootstrapper.exe restore
     - dotnet build
     - dotnet electronize build win
