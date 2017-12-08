@@ -11,6 +11,7 @@ build:
       && chmod u+x /usr/local/bin/paket
     - curl -sL https://deb.nodesource.com/setup | sudo bash - &&
       apt-get install -yq nodejs build-essential
+    - npm install -g npm
     - npm install electron-packager --global
     - paket restore
     - cd CK2EventsUI
