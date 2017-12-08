@@ -6,5 +6,6 @@ build:
     pull: true
   ci: 
     - cd ./CK2EventsUI
+    - ../.paket.bootstrapper.exe restore
     - dotnet build
     - dotnet electronize build win
