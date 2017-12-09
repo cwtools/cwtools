@@ -11,8 +11,3 @@ build:
     - dotnet electronize build win
   on_success:
     - aws s3 sync $SHIPPABLE_BUILD_DIR "s3://ck2events" --region "eu-west-1"
-integrations:
-  hub:
-    - integrationName: AWS    #replace with your integration name
-      region: eu-west-1                   #replace with your AWS region
-      type: s3
