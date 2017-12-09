@@ -1,4 +1,7 @@
 language: none
+env:
+  global:
+    - secure: pH/vBEch5Y15WftM3/wefvFTE6dLSlAcxDWASB9Ht8TGjjxkEWxdB+aAS3GITMh1E5Og9hM3eF/YdcIVBeksK9z0ZvB0kuTfk4FoJE7y8BLYyXAuvAdgB8tlj3u4duBJ5+5Ue0CzwLLVHngv7zuUc6f5sgkVFGj/i7SpfRR0/m0gcbu8WHOYJRCdowg3jGzrpsDF7mPqy8YWur1wWGCtlT7Gg2CcAUMHJ0ZKcDBDYRcH5dMbH1vyM7NItBTW5XYqEf+OmKFa39w8+2zay9L4duqssUFxMfEvuflOahkqN/zHdPhK3nlOP9buDw9jP6ZAmdJpRShzVfSw0XjHHazCVg== 
 build:
   pre_ci_boot:
     image_name: tboby/docker-fsharp-mono-netcore-electronnet
@@ -11,7 +14,3 @@ build:
     - dotnet electronize build win
   on_success:
     - aws s3 sync $SHIPPABLE_BUILD_DIR "s3://ck2events" --region "eu-west-1"
-integrations:
-  deploy:
-    - integrationName: AWS
-      type: aws
