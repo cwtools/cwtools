@@ -13,4 +13,4 @@ build:
     - dotnet build
     - dotnet electronize build win
   on_success:
-    - aws s3 sync $SHIPPABLE_BUILD_DIR "s3://ck2events" --region "eu-west-1"
+    - aws s3 sync $(pwd)/bin/desktop "s3://ck2events/desktop" --region "eu-west-1"
