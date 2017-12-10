@@ -14,7 +14,7 @@ build:
     - dotnet build
     - dotnet electronize build win
   on_success:
-    - [ "$IS_RELEASE" == false ] && 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z bin/desktop && aws s3 cp archive.7z "s3://ck2events/win" --region "eu-west-1"
+    - if [ "$IS_RELEASE" == false ]; then 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z bin/desktop && aws s3 cp archive.7z "s3://ck2events/win" --region "eu-west-1"; fi
   cache: true
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/packages
