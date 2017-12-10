@@ -36,6 +36,7 @@ type Startup private () =
         Electron.App.CommandLineAppendSwitch("--disable-http-cache")
         let window = Electron.WindowManager.CreateWindowAsync(prefs) |> Async.AwaitTask |> Async.RunSynchronously
         window.Maximize()
+        window.Reload()
         Electron.App.add_WindowAllClosed (fun () -> Electron.App.Exit())
         
     

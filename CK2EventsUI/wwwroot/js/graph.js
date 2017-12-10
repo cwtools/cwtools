@@ -1,7 +1,7 @@
 System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas", "handlebars"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    function main(data, triggers, options, pretties) {
+    function main(data, triggers, options, pretties, bundleEdges) {
         _data = data;
         _options = options;
         _pretty = pretties;
@@ -25,7 +25,8 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                         'line-color': '#ccc',
                         'mid-target-arrow-color': '#ccc',
                         'mid-target-arrow-shape': 'triangle',
-                        'curve-style': 'bezier'
+                        'curve-style': bundleEdges ? 'haystack' : 'bezier',
+                        'haystack-radius': 0.5
                     }
                 }
             ],
@@ -183,7 +184,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         document.getElementById('detailsTarget').innerHTML = html;
     }
     exports_1("showDetails", showDetails);
-    function go(file) {
+    function go(file, bundleEdges) {
         document.getElementById('detailsTarget').innerHTML = "Parsing event file...";
         $.ajax({
             url: "GetData",
@@ -192,7 +193,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             .done(function (data) {
             if (data.item1) {
                 document.getElementById('detailsTarget').innerHTML = "Click an event to see details";
-                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5));
+                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);
             }
             else {
                 document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error <br/>" + JSON.parse(data.item2);

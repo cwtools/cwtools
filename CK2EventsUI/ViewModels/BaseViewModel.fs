@@ -17,3 +17,7 @@ type SettingsViewModel (settings) =
             exeExists && locExists && eveExists
     
     member val validDirectory = settings.gameDirectory = "" || testGameDirectory settings.gameDirectory
+
+type EventsViewModel (settings, file) =
+    inherit BaseViewModel (settings)
+    member val file : string = file

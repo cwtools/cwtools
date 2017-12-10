@@ -1,6 +1,6 @@
-@model string
+@model CK2Events.ViewModels.EventsViewModel
 @{
-    ViewData["Title"] = @Model;
+    ViewData["Title"] = @Model.file;
 }
 <div class="hbox cy-container">
     <!-- <div class="cy-row"><div class="test" id="cy"%></div></div> -->
@@ -44,7 +44,7 @@
         SystemJS.import('cytoscape-dagre').then(function(cytoscapedagre){
         SystemJS.import('cytoscape-qtip').then(function(cyqtip) {
         SystemJS.import('cytoscape-navigator').then(function(nav){
-   SystemJS.import('graph').then(function(graph){     graph.go('@Model'); });
+   SystemJS.import('graph').then(function(graph){     graph.go('@Model.file', @(Model.settings.bundleEdges ? "true" : "false")) });
         }); 
         });
         });

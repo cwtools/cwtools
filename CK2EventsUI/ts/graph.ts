@@ -24,7 +24,7 @@ var _data : Array<any>;
 var _options : Array<any>;
 var _pretty : Array<any>;
 
-function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>) {
+function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, bundleEdges : boolean) {
     _data = data;
     _options = options;
     _pretty = pretties;
@@ -51,7 +51,8 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
                     'line-color': '#ccc',
                     'mid-target-arrow-color': '#ccc',
                     'mid-target-arrow-shape': 'triangle',
-                    'curve-style': 'bezier'
+                    'curve-style': bundleEdges ? 'haystack' : 'bezier',
+                    'haystack-radius': 0.5
                 }
             }
         ],
@@ -250,7 +251,7 @@ export function showDetails(id : string){
     document.getElementById('detailsTarget')!.innerHTML = html;
 }
 
-export function go(file : string){
+export function go(file : string, bundleEdges : boolean){
     document.getElementById('detailsTarget')!.innerHTML = "Parsing event file...";
     $.ajax({
         url: "GetData",
@@ -259,7 +260,7 @@ export function go(file : string){
         .done(function (data) {
             if(data.item1){
                 document.getElementById('detailsTarget')!.innerHTML = "Click an event to see details";
-                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5));
+                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);
             }
             else{
                 document.getElementById('detailsTarget')!.innerHTML = "Failed to parse file with error <br/>"+JSON.parse(data.item2)

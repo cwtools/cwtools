@@ -2,12 +2,12 @@
 
 @using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form-horizontal"})){
     <div class="form-group">
-        <label asp-for="settings.gameDirectory" class="control-label col-md-3"></label>
+        <label asp-for="settings.gameDirectory" class="control-label col-md-3">CK2 game directory</label>
         <input asp-for="settings.gameDirectory" class="form-control col-md-8" readonly/>
         <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder">Set game folder</a>
     </div>
     <div class="form-group">
-        <label asp-for="settings.bundleEdges" class="control-label col-md-3"></label>
+        <label asp-for="settings.bundleEdges" class="control-label col-md-3">Bundle edges</label>
         <input asp-for="settings.bundleEdges" class="form-control col-md-8"/>
     </div>
     <button type="submit" class="btn">Save</button>

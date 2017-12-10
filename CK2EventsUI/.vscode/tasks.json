@@ -4,9 +4,10 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label":"linux start elc",
-            "command":"chmod +x './obj/Host/bin/CK2 Events' && ./obj/Host/node_modules/.bin/electron ./obj/Host/main.js",
-            "type":"shell"
+            "label": "linux start elc",
+            "command": "chmod +x './obj/Host/bin/CK2 Events' && ./obj/Host/node_modules/.bin/electron ./obj/Host/main.js",
+            "type": "shell",
+            "problemMatcher": []
         },
         {
             "label": "build",
@@ -32,13 +33,11 @@
             "problemMatcher": [
                 "$tsc-watch"
             ],
-            "args": [
-                
-            ]
+            "args": []
         },
         {
             "label": "paket update",
-            "command":"./.paket/paket.exe update",
+            "command": "./.paket/paket.exe update",
             "type": "shell",
             "group": "build",
             "identifier": "paketupdate"
@@ -48,11 +47,11 @@
             "command": "./.paket/paket.exe restore",
             "type": "shell",
             "group": "build",
-            "dependsOn":"paketupdate"
+            "dependsOn": "paketupdate"
         },
         {
             "label": "electronize start",
-            "command" : "dotnet electronize start",
+            "command": "dotnet electronize start",
             "type": "shell",
             "presentation": {
                 "reveal": "silent"
@@ -63,24 +62,24 @@
             },
             "identifier": "electronizestart",
             "isBackground": true,
-            "problemMatcher":[
+            "problemMatcher": [
                 {
                     "pattern": [
                         {
-                          "regexp": "\\b\\B",
-                          "file": 1,
-                          "location": 2,
-                          "message": 3
+                            "regexp": "\\b\\B",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
                         }
-                      ],
+                    ],
                     "background": {
                         "activeOnStart": true,
-                        "beginsPattern":"^Start Electron Desktop Application.*",
-                        "endsPattern":"^stdout: BridgeConnector connected.*"
+                        "beginsPattern": "^Start Electron Desktop Application.*",
+                        "endsPattern": "^stdout: BridgeConnector connected.*"
                     }
                 }
             ],
-            "dependsOn":"typescriptbuild"
+            "dependsOn": "typescriptbuild"
         }
     ]
 }
