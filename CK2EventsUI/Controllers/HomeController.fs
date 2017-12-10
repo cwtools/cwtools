@@ -30,7 +30,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
     inherit Controller()
 
     let settings : CK2Settings = settings.Value
-
+ 
     member val provider = provider
 
     member this.Index () : ActionResult =

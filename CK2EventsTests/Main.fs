@@ -3,6 +3,7 @@ open Expecto
 open CK2Events.Application
 open System.Linq
 open FParsec
+open CK2Events.Application.Localisation
 
 [<Tests>]
 let parserTests =
@@ -74,6 +75,14 @@ let parserTests =
         //    Expect.isTrue false (sprintf "%A" (Localisation.keys |> List.rev))
     ]
 
+[<Tests>]
+let localisationTests =
+    testList "localisation tests" [
+        testCase "localisation folder" <| fun () ->
+            let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (gameDirectory="CK2EventsUI/localization"))
+            let parsed = LocalisationService settings
+            ()
+    ]
 [<EntryPoint>]
 let main argv =
     runTestsInAssembly defaultConfig argv
