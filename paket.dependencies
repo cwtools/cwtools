@@ -1,4 +1,5 @@
 source https://api.nuget.org/v3/index.json
+cache ./nupkgs versions: all
 
 nuget ElectronNET.API
 clitool ElectronNET.CLI
