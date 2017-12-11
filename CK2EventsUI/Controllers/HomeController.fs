@@ -39,6 +39,10 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         | _ -> 
             let files = Events.getFileList settings.eventDirectory
             upcast this.View(files)
+    
+    member this.Localisation () =
+        let viewmodel = LocalisationViewModel(settings, localisation)
+        this.View(model = viewmodel)
 
     member this.FirstRun() =
         this.Settings()

@@ -3,6 +3,8 @@ namespace CK2Events.ViewModels
 open ElectronNET.API
 open CK2Events.Application
 open System.IO
+open SQLitePCL
+open CK2Events.Application.Localisation
 
 type BaseViewModel (settings) =
     member val settings : CK2Settings = settings
@@ -21,3 +23,7 @@ type SettingsViewModel (settings) =
 type EventsViewModel (settings, file) =
     inherit BaseViewModel (settings)
     member val file : string = file
+
+type LocalisationViewModel (settings, localisation) =
+    inherit BaseViewModel (settings)
+    member val localisation : LocalisationService = localisation

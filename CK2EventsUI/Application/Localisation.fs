@@ -14,14 +14,17 @@ module Localisation =
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let mutable csvFallback : Runtime.CsvFile<LocalisationEntryFallback.Row> = upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         member __.Results =
-            let files = Directory.EnumerateFiles settings.localisationDirectory |> List.ofSeq
+            let files = Directory.EnumerateFiles settings.localisationDirectory |> List.ofSeq |> List.sort
             this.AddFiles files |> dict
         member this.AddFile (x : string) =
             let retry file msg =
                 let rows = LocalisationEntryFallback.ParseRows file |> List.ofSeq
                 csvFallback <- csvFallback.Append(rows)
                 (false, rows.Length, msg)
-            let file = File.ReadAllText x
+            let file = 
+                File.ReadAllLines x 
+                |> Array.filter(fun l -> l.StartsWith("#CODE") || not(l.StartsWith("#")))
+                |> String.concat "\n"
             try
                 let rows = LocalisationEntry.ParseRows file |> List.ofSeq
                 csv <- csv.Append(rows)
