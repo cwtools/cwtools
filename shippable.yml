@@ -11,6 +11,7 @@ build:
     - apt-get install -y p7zip-full
     - paket restore
     - cd CK2EventsUI
+    - dotnet restore
     - dotnet electronize build win
     - mv ./bin/desktop/ElectronNET.Host-win-x64 ./bin/desktop/CK2Events
     - mv ./bin/desktop/CK2Events/ElectronNET.Host.exe ./bin/desktop/CK2Events/CK2Events.exe
