@@ -11,8 +11,9 @@ build:
     - apt-get install -y p7zip-full
     - paket restore
     - cd CK2EventsUI
-    - dotnet build
     - dotnet electronize build win
+    - mv ./bin/desktop/ElectronNET.Host-win-x64 ./bin/desktop/CK2Events
+    - mv ./bin/desktop/CK2Events/ElectronNET.Host.exe ./bin/desktop/CK2Events/CK2Events.exe
   on_success:
     - if [ "$IS_RELEASE" == true ]; then 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/* && aws s3 cp archive.7z "s3://ck2events/win/CK2Events-win.7zip" --region "eu-west-1"; fi
   cache: true
