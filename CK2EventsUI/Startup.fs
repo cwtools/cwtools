@@ -25,7 +25,7 @@ type Startup private () =
         services.AddOptions() |> ignore
         services.Configure<CK2Settings>(this.Configuration.GetSection("userSettings")) |> ignore
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
-        services.AddTransient<LocalisationService>() |> ignore
+        services.AddScoped<LocalisationService>() |> ignore
 
 
     member __.ElectronBootstrap() =

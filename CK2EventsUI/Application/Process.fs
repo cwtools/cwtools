@@ -186,10 +186,14 @@ module Process =
         foldNode2 fNode fCombine [] node
 
     let addLocalisedDesc (localisation : LocalisationService) (node:Node) =
+        let getDesc x = 
+            match localisation.Values.ContainsKey(x) with
+            | true -> localisation.Values.[x]
+            | false -> x
         let fNode = (fun (x:Node) _ -> 
                         match x with
-                        | :? Event as e -> e.Desc <- localisation.GetDesc e.Desc
-                        | :? Option as o -> o.Name <- localisation.GetDesc o.Name
+                        | :? Event as e -> e.Desc <- getDesc e.Desc
+                        | :? Option as o -> o.Name <- getDesc o.Name
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())
