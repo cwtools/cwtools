@@ -45,6 +45,8 @@ module Localisation =
         
         member this.AddFiles (x : string list) = List.map (fun f -> (f, this.AddFile f)) x
 
+        member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
+
         member __.GetDesc x =
             let one = csv.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x) 
             let two = csvFallback.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x)
