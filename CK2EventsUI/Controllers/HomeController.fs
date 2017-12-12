@@ -79,8 +79,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
                 this.Json((false,msg.ToJson))
         
 
-    member this.Graph (file : string) =
-        let viewmodel = EventsViewModel(settings, file)
+    member this.Graph (files : string list) =
+        let viewmodel = EventsViewModel(settings, files)
         this.View(model = viewmodel);
         
     member this.Error () =

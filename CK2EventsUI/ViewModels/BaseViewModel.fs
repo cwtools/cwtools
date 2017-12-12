@@ -20,9 +20,9 @@ type SettingsViewModel (settings) =
     
     member val validDirectory = settings.gameDirectory = "" || testGameDirectory settings.gameDirectory
 
-type EventsViewModel (settings, file) =
+type EventsViewModel (settings, files) =
     inherit BaseViewModel (settings)
-    member val file : string = file
+    member val files : string list = files
 
 type LocalisationViewModel (settings, localisation) =
     inherit BaseViewModel (settings)

@@ -2,12 +2,15 @@
 @{
     ViewData["Title"] = "Event file list";
 }
+<form asp-controller="Home" asp-action="Graph" method="post">
 <table class="table">
 @foreach(var file in Model){
   <tr><td><a asp-controller="" 
    asp-action="Graph" 
    asp-route-file="@file">
-    @file</a></td></tr>
+    @file</a></td><td><input type="checkbox" name="files" value="@file"/></td></tr>
   
 }
 </table>
+<button type="submit">View</button>
+</form>
