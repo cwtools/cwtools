@@ -22,7 +22,7 @@ type SettingsViewModel (settings) =
 
 type EventsViewModel (settings, files) =
     inherit BaseViewModel (settings)
-    member val files : string list = files
+    member val files : string = files
 
 type LocalisationViewModel (settings, localisation) =
     inherit BaseViewModel (settings)

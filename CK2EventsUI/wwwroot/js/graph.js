@@ -184,19 +184,21 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         document.getElementById('detailsTarget').innerHTML = html;
     }
     exports_1("showDetails", showDetails);
-    function go(file, bundleEdges) {
+    function go(filesString, bundleEdges) {
         document.getElementById('detailsTarget').innerHTML = "Parsing event file...";
+        var files = JSON.parse(filesString);
         $.ajax({
             url: "GetData",
-            data: { "file": file }
+            data: { "files": JSON.parse(filesString) },
+            contentType: "application/json"
         })
             .done(function (data) {
+            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);
             if (data.item1) {
                 document.getElementById('detailsTarget').innerHTML = "Click an event to see details";
-                main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);
             }
             else {
-                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error <br/>" + JSON.parse(data.item2);
+                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error(s) <br/>" + JSON.parse(data.item6);
             }
         })
             .fail(function () {
