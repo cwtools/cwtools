@@ -45,8 +45,11 @@ module Localisation =
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
 
         do
-            let files = Directory.EnumerateFiles settings.localisationDirectory |> List.ofSeq |> List.sort
-            results <- addFiles files |> dict
+            match Directory.Exists(settings.localisationDirectory) with
+            | true -> 
+                        let files = Directory.EnumerateFiles settings.localisationDirectory |> List.ofSeq |> List.sort
+                        results <- addFiles files |> dict
+            | false -> ()
         member val Results = results with get, set
 
         member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
