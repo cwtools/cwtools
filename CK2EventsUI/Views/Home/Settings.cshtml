@@ -1,6 +1,10 @@
 @model CK2Events.ViewModels.SettingsViewModel
 
 @using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form-horizontal"})){
+    @if(!Model.validDirectory)
+    {
+        <span>The current folder doesn't look like the game directory of Crusader Kings 2</span>
+    }
     <div class="form-group">
         <label asp-for="settings.gameDirectory" class="control-label col-md-3">CK2 game directory</label>
         <input asp-for="settings.gameDirectory" class="form-control col-md-8" readonly/>
