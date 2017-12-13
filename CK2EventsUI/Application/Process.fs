@@ -111,7 +111,7 @@ module Process =
         comments
 
 
-    let processEventFile (ev : Statement list) =
+    let processEventFile (ev : EventFile) =
         let root = Root()
         ev |> List.fold (fun s e -> processRoot s root e) [] |> ignore
         root

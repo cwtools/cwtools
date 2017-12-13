@@ -11,25 +11,28 @@ module CKParser =
     type ID =
         | ID of string
         override x.ToString() = let (ID v) = x in sprintf "%s" v  
+    
     type Troop =
         | Troop of ID * int * int
+        override x.ToString() = let (Troop (id, a, b)) = x in sprintf "%O = { %O %O }" id a b
     
     type KeyValueItem = 
         | KeyValueItem of ID * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
         | String of string
+        | QString of string
         | Float of float
         | Bool of bool
         | Block of Statement list
         override x.ToString() =
             match x with
             | Block b -> "{ " + sprintf "%O" b + " }"
+            | QString s -> "\"" + s + "\""
             | String s -> s
-            | Bool b -> if b then "true" else "false"
+            | Bool b -> if b then "yes" else "no"
             | Float f -> sprintf "%A" f
-            | x -> sprintf "%A" x
-    
+   
     and Statement =
         | Comment of string
         | KeyValue of KeyValueItem
@@ -58,7 +61,7 @@ module CKParser =
         (many1Chars valuechar) .>> ws |>> string |>> String <?> "valueS"
 
     let valueQ = 
-        between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> String <?> "valueQ"
+        between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "valueQ"
 
     let valueB =
         (pstring "yes" .>> spaces1 .>> ws |>> (fun _ -> Bool(true))) <|> (pstring "no" .>> spaces1 .>> ws |>> (fun _ -> Bool(false)))
@@ -109,9 +112,10 @@ module CKParser =
 
     let tabs n = String.replicate n "\t"
 
-    let printTroop t depth = 
-        match t with
-        | Troop (id, t1, t2) -> tabs depth + string id + " = " + string t1 + " " + string t2 + "\n"
+    let printTroop depth t = (tabs depth) + t.ToString()  + "\n"
+        //match t with
+        //| Troop (id, t1, t2) -> tabs depth + string id + " = " + string t1 + " " + string t2 + "\n"
+        
 
     let rec printValue v depth =
         match v with
@@ -123,7 +127,12 @@ module CKParser =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
         | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
-        | Troops tl -> tabs depth + "troops = {\n" + (List.map (fun t -> printTroop t (depth + 1)) tl |> List.fold (+) "") + tabs depth + "}\n"
+        //| Troops tl -> (tabs depth) + tl.ToString() + "\n"
+        | Troops tl ->
+            (tabs depth) + "troops = {\n" +
+            (List.map (printTroop (depth + 1)) tl |> List.fold (+) "") +
+            (tabs depth) + "}\n"
+        //| Troops tl -> tabs depth + "troops = {\n" + (List.map (fun t -> (tabs (depth + 1)) + t.ToString() + "\n" ) tl |> List.fold (+) "") + tabs depth + "}\n"
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint =

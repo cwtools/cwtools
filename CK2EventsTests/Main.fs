@@ -4,7 +4,7 @@ open CK2Events.Application
 open System.Linq
 open FParsec
 open CK2Events.Application.Localisation
-open System
+open System.IO
 open Expecto.Expect
 
 [<Tests>]
@@ -32,15 +32,45 @@ let parserTests =
             let error = List.isEmpty errors
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
             Expect.isTrue error (sprintf "%A" message)
-
+           
         testCase "parse output then parse again" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
             let pretty = CKParser.prettyPrint parsed
             let parsedAgain = (CKParser.parseEventString pretty "wol_business_events.txt")
+            let prettyAgain = CKParser.prettyPrint parsedAgain
             match (parsed, parsedAgain) with
-            |( Success(p, _, _), Success(pa, _, _)) -> Expect.equal p pa "Not equal"
+            |( Success(p, _, _), Success(pa, _, _)) -> 
+                Expect.equal pretty prettyAgain "Not equal"
             | (Failure(msg, _, _), _) -> Expect.isTrue false msg
             |(_, Failure(msg, _, _)) -> Expect.isTrue false msg
+
+        testCase "double parse all string check" <| fun () ->
+            let test x = 
+                let parsed = (CKParser.parseEventFile x)
+                let pretty = CKParser.prettyPrint parsed
+                let parsedAgain = (CKParser.parseEventString pretty "2nd")
+                let prettyAgain = CKParser.prettyPrint parsedAgain
+                match (parsed, parsedAgain) with
+                |( Success(p, _, _), Success(pa, _, _)) -> 
+                    Expect.equal pretty prettyAgain "Not equal"
+                | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
+                |(_, Failure(msg, _, _)) -> 
+                    Expect.isTrue false (x + msg)
+            Directory.EnumerateFiles "CK2EventsUI/events" |> List.ofSeq |> List.iter test
+
+        testCase "double parse all equality check" <| fun () ->
+            let test x = 
+                let parsed = (CKParser.parseEventFile x)
+                let pretty = CKParser.prettyPrint parsed
+                let parsedAgain = (CKParser.parseEventString pretty "2nd")
+                let prettyAgain = CKParser.prettyPrint parsedAgain
+                match (parsed, parsedAgain) with
+                |( Success(p, _, _), Success(pa, _, _)) -> 
+                    Expect.equal p pa "Not equal"
+                | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
+                |(_, Failure(msg, _, _)) -> 
+                    Expect.isTrue false (x + msg)
+            Directory.EnumerateFiles "CK2EventsUI/events" |> List.ofSeq |> List.iter test
 
         testCase "process one" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
