@@ -26,6 +26,8 @@ module CKParser =
             match x with
             | Block b -> "{ " + sprintf "%O" b + " }"
             | String s -> s
+            | Bool b -> if b then "true" else "false"
+            | Float f -> sprintf "%A" f
             | x -> sprintf "%A" x
     
     and Statement =

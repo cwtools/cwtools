@@ -4,6 +4,8 @@ open CK2Events.Application
 open System.Linq
 open FParsec
 open CK2Events.Application.Localisation
+open System
+open Expecto.Expect
 
 [<Tests>]
 let parserTests =
@@ -31,6 +33,15 @@ let parserTests =
             let message = if not error then sprintf "%A" (errors.First()) else "No error"
             Expect.isTrue error (sprintf "%A" message)
 
+        testCase "parse output then parse again" <| fun () ->
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
+            let pretty = CKParser.prettyPrint parsed
+            let parsedAgain = (CKParser.parseEventString pretty "wol_business_events.txt")
+            match (parsed, parsedAgain) with
+            |( Success(p, _, _), Success(pa, _, _)) -> Expect.equal p pa "Not equal"
+            | (Failure(msg, _, _), _) -> Expect.isTrue false msg
+            |(_, Failure(msg, _, _)) -> Expect.isTrue false msg
+
         testCase "process one" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
 
@@ -43,36 +54,7 @@ let parserTests =
                     Expect.equal (firstEvent.Tag "id").Value (CKParser.Value.String("WoL.10100")) "ID wrong"
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
-        
-        testCase "foldback" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
 
-            match parsed with
-                |Success(v,_,_) -> 
-                    let root = Process.processEventFile v
-                    let test = List.map Process.getTriggeredEvents root.Events
-                    // let test = List.map Process.testNode root.Events |> List.rev
-                    // let test2 = List.fold (List.fold (+)) "" test
-                    Expect.isTrue false (sprintf "%A" test)
-                |Failure(msg, _, _) -> 
-                    Expect.isTrue false msg
-
-        // testCase "descTest" <| fun () ->
-        //     let desc = Localisation.GetDesc "EVTOPTB_WoL_12005"
-        //     Expect.equal desc "Abandon construction... let us save what we can." "Getdesc fail"
-
-        testCase "optionTest" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
-
-            match parsed with
-                |Success(v,_,_) -> 
-                    let root = Process.processEventFile v
-                    let opts = root.Events.[5] |> Process.getOptions
-                    Expect.isTrue false (sprintf "%A" opts) 
-                |Failure(msg, _, _) ->
-                    Expect.isTrue false msg
-        //testCase "descTest2" <| fun () ->
-        //    Expect.isTrue false (sprintf "%A" (Localisation.keys |> List.rev))
     ]
 
 [<Tests>]
