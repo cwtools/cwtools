@@ -4,6 +4,7 @@ open CK2Events.Application
 open System.Linq
 open FParsec
 open CK2Events.Application.Localisation
+open CK2Events.Application.CKParser
 open System.IO
 open Expecto.Expect
 
@@ -34,13 +35,18 @@ let parserTests =
             Expect.isTrue error (sprintf "%A" message)
            
         testCase "parse output then parse again" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/test.txt")
             let pretty = CKParser.prettyPrint parsed
-            let parsedAgain = (CKParser.parseEventString pretty "wol_business_events.txt")
+            let parsedAgain = (CKParser.parseEventString pretty "test.txt")
             let prettyAgain = CKParser.prettyPrint parsedAgain
             match (parsed, parsedAgain) with
             |( Success(p, _, _), Success(pa, _, _)) -> 
+                File.WriteAllText("e.txt", pretty, System.Text.Encoding.UTF8)
+                File.WriteAllText("f.txt", prettyAgain, System.Text.Encoding.UTF8)
+                File.WriteAllText("g.txt", pretty, System.Text.Encoding.UTF8)
+                File.WriteAllText("h.txt", prettyAgain, System.Text.Encoding.UTF8)
                 Expect.equal pretty prettyAgain "Not equal"
+                Expect.equal p pa "Not equal"
             | (Failure(msg, _, _), _) -> Expect.isTrue false msg
             |(_, Failure(msg, _, _)) -> Expect.isTrue false msg
 
@@ -52,6 +58,8 @@ let parserTests =
                 let prettyAgain = CKParser.prettyPrint parsedAgain
                 match (parsed, parsedAgain) with
                 |( Success(p, _, _), Success(pa, _, _)) -> 
+                    File.WriteAllText("c.txt", pretty, System.Text.Encoding.UTF8)
+                    File.WriteAllText("d.txt", prettyAgain, System.Text.Encoding.UTF8)
                     Expect.equal pretty prettyAgain "Not equal"
                 | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
                 |(_, Failure(msg, _, _)) -> 
@@ -65,8 +73,11 @@ let parserTests =
                 let parsedAgain = (CKParser.parseEventString pretty "2nd")
                 let prettyAgain = CKParser.prettyPrint parsedAgain
                 match (parsed, parsedAgain) with
-                |( Success(p, _, _), Success(pa, _, _)) -> 
-                    Expect.equal p pa "Not equal"
+                |( Success((EventFile p), _, _), Success((EventFile pa), _, _)) -> 
+                    File.WriteAllText("a.txt", pretty, System.Text.Encoding.UTF8)
+                    File.WriteAllText("b.txt", prettyAgain, System.Text.Encoding.UTF8)
+                    List.iter2 (fun sa sb -> Expect.equal sa sb "Not equal") p pa
+                    //Expect.equal p pa "Not equal"
                 | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
                 |(_, Failure(msg, _, _)) -> 
                     Expect.isTrue false (x + msg)

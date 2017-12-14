@@ -37,8 +37,8 @@ module CKParser =
         | Comment of string
         | KeyValue of KeyValueItem
         | Troops of Troop list
-    
-    type EventFile = Statement list
+    [<StructuralEquality; StructuralComparison>]
+    type EventFile = |EventFile of  Statement list
     let whitespaceTextChars = " \t\r\n"
 
     //let spaceAsStr = anyOf whitespaceTextChars |>> fun chr -> string chr
@@ -92,7 +92,7 @@ module CKParser =
         
     
     
-    let all = ws >>. keyvaluelist .>> eof |>> (fun f -> (f : EventFile))
+    let all = ws >>. keyvaluelist .>> eof |>> (fun f -> (EventFile f : EventFile))
     let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
     let memoize keyFunction memFunction =
@@ -119,7 +119,7 @@ module CKParser =
 
     let rec printValue v depth =
         match v with
-        | Block kvl -> "{\n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + "}\n"
+        | Block kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
         | x -> x.ToString() + "\n"
     
 
@@ -137,5 +137,7 @@ module CKParser =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint =
         function
-        | Success (v,_,_) -> printKeyValueList v 0
+        | Success (v,_,_) -> 
+            let (EventFile ev) = v
+            printKeyValueList ev 0
         | Failure (msg, _, _) -> msg

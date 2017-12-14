@@ -113,7 +113,8 @@ module Process =
 
     let processEventFile (ev : EventFile) =
         let root = Root()
-        ev |> List.fold (fun s e -> processRoot s root e) [] |> ignore
+        let (EventFile evs) = ev
+        evs |> List.fold (fun s e -> processRoot s root e) [] |> ignore
         root
         // ev
         // |> List.filter (function |Comment _ -> false |_ -> true)
