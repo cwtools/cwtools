@@ -19,7 +19,7 @@ let parserTests =
             | Failure(_, _, _) -> Expect.isFalse true text
 
         testCase "parse ten" <| fun () ->
-            let parsed = Events.parseTen "CK2EventsUI/events"
+            let parsed = Events.parseTen "CK2EventsTests/events"
             let errors = parsed 
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
@@ -27,7 +27,7 @@ let parserTests =
             Expect.isTrue error (sprintf "%A" message)
 
         testCase "parse all" <| fun () ->
-            let parsed = Events.parseAll "CK2EventsUI/events"
+            let parsed = Events.parseAll "CK2EventsTests/events"
             let errors = parsed 
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
@@ -58,7 +58,7 @@ let parserTests =
                 | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
                 |(_, Failure(msg, _, _)) -> 
                     Expect.isTrue false (x + msg)
-            Directory.EnumerateFiles "CK2EventsUI/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
 
         testCase "double parse all equality check" <| fun () ->
             let test x = 
@@ -73,7 +73,7 @@ let parserTests =
                 | (Failure(msg, _, _), _) -> Expect.isTrue false (x + msg)
                 |(_, Failure(msg, _, _)) -> 
                     Expect.isTrue false (x + msg)
-            Directory.EnumerateFiles "CK2EventsUI/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
 
         testCase "process one" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")

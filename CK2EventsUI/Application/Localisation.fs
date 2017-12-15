@@ -6,8 +6,8 @@ open Microsoft.Extensions.Options
 
 module Localisation =
     open System.Collections.Generic
-    type LocalisationEntry = CsvProvider<"./localization/v2_30c.csv", ";",IgnoreErrors=false,Quote='~',HasHeaders=true>
-    type LocalisationEntryFallback = CsvProvider<"./localization/v2_30c.csv", ";",IgnoreErrors=true,Quote='~',HasHeaders=true>
+    type LocalisationEntry = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=false,Quote='~',HasHeaders=true>
+    type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true>
 
 
     type LocalisationService(settings:IOptions<CK2Settings>) as this =
