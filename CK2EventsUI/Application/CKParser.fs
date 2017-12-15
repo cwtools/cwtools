@@ -50,23 +50,17 @@ module CKParser =
     let id =
         let idchar = asciiLetter <|> digit <|> pchar '_' <|> pchar ':'
         (many1Chars idchar) .>> ws |>> ID <?> "id"
-    //let comment = pchar '#' >>. restOfLine true
 
-
-    //let skipWhitespace = skipMany1 ws
-
-    //let namespaceP = pstring "namespace = " >>. restOfLine false .>> ws
+    let valuechar = asciiLetter <|> digit <|> pchar '_' <|> pchar '.' <|> pchar '-' <|> pchar '.' <|> pchar ':' <|> pchar '\'' <|> pchar '[' <|> pchar ']'
     let valueS = 
-        let valuechar = asciiLetter <|> digit <|> pchar '_' <|> pchar '.' <|> pchar '-' <|> pchar '.' <|> pchar ':' <|> pchar '\'' <|> pchar '[' <|> pchar ']'
         (many1Chars valuechar) .>> ws |>> string |>> String <?> "valueS"
 
     let valueQ = 
         between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "valueQ"
 
     let valueB =
-        (pstring "yes" .>> spaces1 .>> ws |>> (fun _ -> Bool(true))) <|> (pstring "no" .>> spaces1 .>> ws |>> (fun _ -> Bool(false)))
-//    restOfLine false .>> ws |>> String <?> "valueS"
-    //let valueBlock = ch '{' >>. inner .>> ch '}'
+        (notFollowedBy (valuechar) >>.  pstring "yes" .>> ws |>> (fun _ -> Bool(true))) <|> (notFollowedBy (valuechar) >>. pstring "no" .>> ws |>> (fun _ -> Bool(false)))
+
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let troops, troopsimpl = createParserForwardedToRef()
     let keyvaluelist = many (comment <|> (attempt troops) <|> keyvalue)
