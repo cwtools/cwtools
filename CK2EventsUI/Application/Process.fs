@@ -9,7 +9,7 @@ module Process =
         member val AllTags : KeyValueItem list = List.empty with get, set
         member val Children : Node list = List.empty with get, set
         member val Comments : string list = List.empty with get, set
-        member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(ID(y), v) when x=y -> Some v |_ -> None)
+        member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(Key(y), v) when x=y -> Some v |_ -> None)
         member val Raw : Statement list = List.empty with get, set
     type Option() = 
         inherit Node("option")
@@ -28,9 +28,9 @@ module Process =
     let addTag (event : Event) tag =
         event.AllTags <- tag::event.AllTags
         match tag with
-            | KeyValueItem(ID("desc"), String(v)) -> event.Desc <- v 
-            | KeyValueItem(ID("id"), String(v)) -> event.ID <- v
-            | KeyValueItem(ID("hide_window"), Bool(v)) -> event.Hidden <- v
+            | KeyValueItem(Key("desc"), String(v)) -> event.Desc <- v 
+            | KeyValueItem(Key("id"), String(v)) -> event.ID <- v
+            | KeyValueItem(Key("hide_window"), Bool(v)) -> event.Hidden <- v
             | _ -> ()
     
     let addTagNode (node : Node) tag =
@@ -39,7 +39,7 @@ module Process =
     let addTagOption (option : Option) tag =
         option.AllTags <- tag::option.AllTags
         match tag with
-            | KeyValueItem(ID("name"), String(v)) -> option.Name <- v
+            | KeyValueItem(Key("name"), String(v)) -> option.Name <- v
             | _ -> ()
     
     let rec processNode k sl =
@@ -63,8 +63,8 @@ module Process =
 
     and processNodeInner (node : Node) statement =
         match statement with
-            | KeyValue(KeyValueItem(ID("option"), Block(sl))) -> node.Children <- (upcast processOption sl)::node.Children
-            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> node.Children <- (processNode k sl)::node.Children
+            | KeyValue(KeyValueItem(Key("option"), Block(sl))) -> node.Children <- (upcast processOption sl)::node.Children
+            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> node.Children <- (processNode k sl)::node.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> node.AllTags <- kv::node.AllTags
             | Comment(c) -> node.Comments <- c::node.Comments
@@ -72,8 +72,8 @@ module Process =
 
     let processEventInner (event : Event) statement =
         match statement with
-            | KeyValue(KeyValueItem(ID("option"), Block(sl))) -> event.Children <- (upcast processOption sl)::event.Children
-            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> event.Children <- (processNode k sl)::event.Children
+            | KeyValue(KeyValueItem(Key("option"), Block(sl))) -> event.Children <- (upcast processOption sl)::event.Children
+            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> event.Children <- (processNode k sl)::event.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> event.AllTags <- kv::event.AllTags
             | Comment(c) -> event.Comments <- c::event.Comments
@@ -97,12 +97,12 @@ module Process =
         //root.AllTags <- statement::root.AllTags
         let mutable comments = savedComments
         match statement with
-            | KeyValue(KeyValueItem(ID(k) , Block(sl))) -> 
+            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> 
                 let e = (processEvent k sl)
                 e.Comments <- savedComments@e.Comments
                 comments <- []
                 root.Events <- e::root.Events
-            | KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
+            | KeyValue(KeyValueItem(Key("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> root.AllTags <- kv::root.AllTags
             | Comment(c) -> 
                 root.Comments <- c::root.Comments

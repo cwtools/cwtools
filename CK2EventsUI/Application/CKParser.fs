@@ -4,20 +4,16 @@ open FParsec
 
 module CKParser =
 
-    // type SimpleTag(name: string, value:string) =
-    //     member val Name = name with get, set
-    //     member val Value = value with get, set
-
-    type ID =
-        | ID of string
-        override x.ToString() = let (ID v) = x in sprintf "%s" v  
+    type Key =
+        | Key of string
+        override x.ToString() = let (Key v) = x in sprintf "%s" v  
     
     type Troop =
-        | Troop of ID * int * int
+        | Troop of Key * int * int
         override x.ToString() = let (Troop (id, a, b)) = x in sprintf "%O = { %O %O }" id a b
     
     type KeyValueItem = 
-        | KeyValueItem of ID * Value
+        | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
         | String of string
@@ -39,19 +35,20 @@ module CKParser =
         | Troops of Troop list
     [<StructuralEquality; StructuralComparison>]
     type EventFile = |EventFile of  Statement list
-    let whitespaceTextChars = " \t\r\n"
 
-    //let spaceAsStr = anyOf whitespaceTextChars |>> fun chr -> string chr
+    let whitespaceTextChars = " \t\r\n"
+    let idchar = asciiLetter <|> digit <|> anyOf ['_'; ':']
+    let valuechar = asciiLetter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']']
+
+
     let ws = (many spaces1 |>> ignore) <?> "whitespace"
     let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment
     let wsc = (many (comment |>> ignore <|> spaces1) |>> ignore) <?> "whitespace_comment"
     let str s = pstring s .>> ws
     let ch c = skipChar c >>. ws
     let id =
-        let idchar = asciiLetter <|> digit <|> pchar '_' <|> pchar ':'
-        (many1Chars idchar) .>> ws |>> ID <?> "id"
+        (many1Chars idchar) .>> ws |>> Key <?> "id"
 
-    let valuechar = asciiLetter <|> digit <|> pchar '_' <|> pchar '.' <|> pchar '-' <|> pchar '.' <|> pchar ':' <|> pchar '\'' <|> pchar '[' <|> pchar ']'
     let valueS = 
         (many1Chars valuechar) .>> ws |>> string |>> String <?> "valueS"
 
