@@ -24,7 +24,11 @@ var _data : Array<any>;
 var _options : Array<any>;
 var _pretty : Array<any>;
 
-function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, bundleEdges : boolean) {
+function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, locs : Array<any> , eventComment : Array<any>, bundleEdges : boolean) {
+    var localised = new Map<string, string>(locs);
+    var eventComments = new Map<string, string>(eventComment);
+    var getLoc = (key : string) => localised.has(key) ? localised.get(key) : key
+    var getName = (id : string) => eventComments.has(id) ? eventComments.get(id) == "" ? id : eventComments.get(id) : id
     _data = data;
     _options = options;
     _pretty = pretties;
@@ -70,25 +74,14 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
 
     data.forEach(function (element : any) {
         var name;
-        if(element.Comments.length > 0){
-            name = element.Comments[0] as string;
-            name = name.replace(new RegExp('#','g'),'');
-            if(name.length > labelMaxLength){
-                var endOfWord = name.indexOf(' ',labelMaxLength - 1);
-                //var endOfWord = endOfWord === -1 ? labelMaxLength : endOfWord;
-                var endOfWord = endOfWord === -1 ? name.length : endOfWord;
-                name = name.substring(0, endOfWord);
-            }
-        }
-        else{
-            name = element.ID;
-        }
+
+        name = getName(element.ID);
         var desc;
         if (element.Desc === '') {
             desc = element.ID;  
         }
         else {
-            desc = element.Desc;
+            desc = getLoc(element.Desc);
         }
         var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key, hidden: element.Hidden } });
         node.qtip(qtipname(desc));
@@ -260,12 +253,12 @@ export function go(filesString : string, bundleEdges : boolean){
         contentType: "application/json"
     })
         .done(function (data) {
-            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);            
+            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6), JSON.parse(data.item7) , bundleEdges);            
             if(data.item1){
                 document.getElementById('detailsTarget')!.innerHTML = "Click an event to see details";
             }
             else{
-                document.getElementById('detailsTarget')!.innerHTML = "Failed to parse file with error(s) <br/>"+JSON.parse(data.item6)
+                document.getElementById('detailsTarget')!.innerHTML = "Failed to parse file with error(s) <br/>"+JSON.parse(data.item8)
             }
         })
         .fail(function() {

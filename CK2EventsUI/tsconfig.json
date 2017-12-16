@@ -6,7 +6,7 @@
         "preserveConstEnums": true,
         "outDir": "wwwroot/js/",
         "sourceMap": false,
-        "target": "es3",
+        "target": "es6",
         "skipLibCheck": true,
         "listFiles": true,
         "alwaysStrict": true,

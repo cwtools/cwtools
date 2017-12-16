@@ -1,15 +1,19 @@
 System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas", "handlebars"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    function main(data, triggers, options, pretties, bundleEdges) {
+    function main(data, triggers, options, pretties, locs, eventComment, bundleEdges) {
+        var localised = new Map(locs);
+        var eventComments = new Map(eventComment);
+        var getLoc = (key) => localised.has(key) ? localised.get(key) : key;
+        var getName = (id) => eventComments.has(id) ? eventComments.get(id) == "" ? id : eventComments.get(id) : id;
         _data = data;
         _options = options;
         _pretty = pretties;
-        cytoscape_qtip_1["default"](cytoscape_1["default"], $);
-        cytoscape_dagre_1["default"](cytoscape_1["default"], dagre_1["default"]);
-        cytoscape_canvas_1["default"](cytoscape_1["default"]);
-        var nav = cytoscape_navigator_1["default"](cytoscape_1["default"], $);
-        var cy = cytoscape_1["default"]({
+        cytoscape_qtip_1.default(cytoscape_1.default, $);
+        cytoscape_dagre_1.default(cytoscape_1.default, dagre_1.default);
+        cytoscape_canvas_1.default(cytoscape_1.default);
+        var nav = cytoscape_navigator_1.default(cytoscape_1.default, $);
+        var cy = cytoscape_1.default({
             container: document.getElementById('cy'),
             style: [
                 {
@@ -41,24 +45,13 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         var qtipname = function (text) { return { content: text, position: { my: 'top center', at: 'bottom center' }, style: { classes: 'qtip-bootstrap', tip: { width: 16, height: 8 } }, show: { event: 'mouseover' }, hide: { event: 'mouseout' } }; };
         data.forEach(function (element) {
             var name;
-            if (element.Comments.length > 0) {
-                name = element.Comments[0];
-                name = name.replace(new RegExp('#', 'g'), '');
-                if (name.length > labelMaxLength) {
-                    var endOfWord = name.indexOf(' ', labelMaxLength - 1);
-                    var endOfWord = endOfWord === -1 ? name.length : endOfWord;
-                    name = name.substring(0, endOfWord);
-                }
-            }
-            else {
-                name = element.ID;
-            }
+            name = getName(element.ID);
             var desc;
             if (element.Desc === '') {
                 desc = element.ID;
             }
             else {
-                desc = element.Desc;
+                desc = getLoc(element.Desc);
             }
             var node = cy.add({ group: 'nodes', data: { id: element.ID, label: name, type: element.Key, hidden: element.Hidden } });
             node.qtip(qtipname(desc));
@@ -100,14 +93,14 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
                 return flat.concat(toFlatten);
             }, []);
         }
-        var toProcess = cy.elements();
+        let toProcess = cy.elements();
         var groups = [];
         var t = cy.elements();
         groups = t.components();
-        var singles = groups.filter(function (f) { return f.length === 1; });
-        var singles2 = singles.reduce(function (p, c) { return p.union(c); }, cy.collection());
-        var rest = groups.filter(function (f) { return f.length !== 1; });
-        var rest2 = rest.reduce(function (p, c) { return p.union(c); }, cy.collection());
+        var singles = groups.filter((f) => f.length === 1);
+        var singles2 = singles.reduce((p, c) => p.union(c), cy.collection());
+        var rest = groups.filter((f) => f.length !== 1);
+        var rest2 = rest.reduce((p, c) => p.union(c), cy.collection());
         var lrest = rest2.layout(opts);
         lrest.run();
         var bb = rest2.boundingBox({});
@@ -123,11 +116,11 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             ctx.shadowColor = "black";
             ctx.shadowBlur = 25 * cy.zoom();
             ctx.fillStyle = "#666";
-            cy.nodes().forEach(function (node) {
-                var text = node.data('type');
-                var eventChars = text.split('_').map(function (f) { return f[0].toUpperCase(); }).join('');
-                var eventChar = text[0].toUpperCase();
-                var pos = node.position();
+            cy.nodes().forEach((node) => {
+                let text = node.data('type');
+                const eventChars = text.split('_').map(f => f[0].toUpperCase()).join('');
+                const eventChar = text[0].toUpperCase();
+                const pos = node.position();
                 ctx.fillStyle = node.data('hidden') ? "#EEE" : '#888';
                 ctx.beginPath();
                 ctx.arc(pos.x, pos.y, 15, 0, 2 * Math.PI, false);
@@ -176,9 +169,9 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         });
     }
     function showDetails(id) {
-        var node = _data.filter(function (x) { return x.ID === id; })[0];
-        var pretty = _pretty.filter(function (x) { return x[0] === id; })[0][1];
-        var options = _options.filter(function (x) { return x[0] === id; });
+        var node = _data.filter(x => x.ID === id)[0];
+        var pretty = _pretty.filter(x => x[0] === id)[0][1];
+        var options = _options.filter(x => x[0] === id);
         var context = { title: node.ID, desc: node.Desc, full: pretty, options: options };
         var html = detailsTemplate(context);
         document.getElementById('detailsTarget').innerHTML = html;
@@ -193,12 +186,12 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             contentType: "application/json"
         })
             .done(function (data) {
-            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), bundleEdges);
+            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6), JSON.parse(data.item7), bundleEdges);
             if (data.item1) {
                 document.getElementById('detailsTarget').innerHTML = "Click an event to see details";
             }
             else {
-                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error(s) <br/>" + JSON.parse(data.item6);
+                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error(s) <br/>" + JSON.parse(data.item8);
             }
         })
             .fail(function () {
@@ -233,7 +226,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         ],
         execute: function () {
             labelMaxLength = 30;
-            detailsTemplate = handlebars_1["default"].compile("<h1>{{title}}</h1><div>{{desc}}</div><div><ul>{{#each options}}<li>{{this}}</li>{{/each}}</ul></div><pre>{{full}}</pre>");
+            detailsTemplate = handlebars_1.default.compile("<h1>{{title}}</h1><div>{{desc}}</div><div><ul>{{#each options}}<li>{{this}}</li>{{/each}}</ul></div><pre>{{full}}</pre>");
         }
     };
 });
