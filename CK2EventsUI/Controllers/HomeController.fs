@@ -75,7 +75,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
                     let ck3 = addLocalisedDescAll ck2 localisation
                     let immediates = getAllImmediates ck3
                     let options = getEventsOptions ck3
-                    let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKParser.printKeyValueList e.Raw 0))
+                    let pretties = ck3.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.Raw))
                     (true,ck3.Events, immediates, options, pretties, "")
                 | ParserResult.Failure(msg, _, _) -> 
                     (false,[],[],[],[], msg)

@@ -1,6 +1,7 @@
 namespace CK2Events.Application
 
 open System.IO
+open ParserDomain
 
 module Events =
     let rand = System.Random()
@@ -14,18 +15,18 @@ module Events =
     let shuffle a =
         Array.iteri (fun i _ -> swap a i (rand.Next(i, Array.length a))) a
 
-    let parseAll directory =
+    let parseAll directory (printer : PrinterAPI) =
         Directory.EnumerateFiles(directory)
         |> Array.ofSeq
-        |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
+        |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> printer.prettyPrintFileResult) f))
         |> List.ofArray
 
-    let parseTen directory =
+    let parseTen directory (printer : PrinterAPI) =
             let all = Directory.EnumerateFiles(directory)
                     |> Array.ofSeq
             shuffle all
             Array.take 10 all
-            |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> CKParser.prettyPrint) f))
+            |> Array.Parallel.map (fun f -> (f, (CKParser.parseEventFile >> printer.prettyPrintFileResult) f))
             |> List.ofArray
     
     let getFileList directory =

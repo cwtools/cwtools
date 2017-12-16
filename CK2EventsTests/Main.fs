@@ -7,12 +7,16 @@ open CKParser
 open Localisation
 open System.IO
 open Expecto.Expect
+open ParserDomain
+
+let printer = CKPrinter.api
+let parser = CKParser.api
 
 let parseEqualityCheck file =
-    let parsed = parseEventFile file
-    let pretty = prettyPrint parsed
-    let parsedAgain = parseEventString pretty "test"
-    let prettyAgain = prettyPrint parsedAgain
+    let parsed = parser.parseFile file
+    let pretty = printer.prettyPrintFileResult parsed
+    let parsedAgain = parser.parseString pretty "test"
+    let prettyAgain = printer.prettyPrintFileResult parsedAgain
     match (parsed, parsedAgain) with
     |( Success(p, _, _), Success(pa, _, _)) -> 
         Expect.equal pretty prettyAgain "Not equal"
@@ -27,13 +31,13 @@ let parserTests =
     testList "parser tests" [
         testCase "parser one" <| fun () ->
             let parsed = (CKParser.parseEventFile "CK2EventsTests/guilds_events.txt")
-            let text = CKParser.prettyPrint parsed
+            let text = printer.prettyPrintFileResult parsed
             match parsed with
             | Success(_,_,_) -> ()
             | Failure(_, _, _) -> Expect.isFalse true text
 
         testCase "parse ten" <| fun () ->
-            let parsed = Events.parseTen "CK2EventsTests/events"
+            let parsed = Events.parseTen "CK2EventsTests/events" printer
             let errors = parsed 
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
@@ -41,7 +45,7 @@ let parserTests =
             Expect.isTrue error (sprintf "%A" message)
 
         testCase "parse all" <| fun () ->
-            let parsed = Events.parseAll "CK2EventsTests/events"
+            let parsed = Events.parseAll "CK2EventsTests/events" printer
             let errors = parsed 
                             |> List.filter (fun (_, p) -> p.Contains "Error")
             let error = List.isEmpty errors
@@ -55,7 +59,7 @@ let parserTests =
             Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter parseEqualityCheck
 
         testCase "process one" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/wol_business_events.txt")
+            let parsed = (parser.parseFile "CK2EventsTests/wol_business_events.txt")
 
             match parsed with
                 |Success(v,_,_) -> 
@@ -63,7 +67,7 @@ let parserTests =
                     Expect.equal root.Namespace "WoL" "Namespace wrong"
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
-                    Expect.equal (firstEvent.Tag "id").Value (CKParser.Value.String("WoL.10100")) "ID wrong"
+                    Expect.equal (firstEvent.Tag "id").Value (String("WoL.10100")) "ID wrong"
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
 

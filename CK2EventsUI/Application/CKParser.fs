@@ -1,8 +1,9 @@
 namespace CK2Events.Application
 
 open FParsec
+open Microsoft.WindowsAzure.Storage.File
 
-module CKParser =
+module ParserDomain =
 
     type Key =
         | Key of string
@@ -20,10 +21,10 @@ module CKParser =
         | QString of string
         | Float of float
         | Bool of bool
-        | Block of Statement list
+        | Clause of Statement list
         override x.ToString() =
             match x with
-            | Block b -> "{ " + sprintf "%O" b + " }"
+            | Clause b -> "{ " + sprintf "%O" b + " }"
             | QString s -> "\"" + s + "\""
             | String s -> s
             | Bool b -> if b then "yes" else "no"
@@ -36,6 +37,28 @@ module CKParser =
     [<StructuralEquality; StructuralComparison>]
     type EventFile = |EventFile of  Statement list
 
+    type ParseFile = string -> ParserResult<EventFile, unit>
+    type ParseString = string -> string -> ParserResult<EventFile, unit>
+    type PrettyPrintFile = EventFile -> string
+    type PrettyPrintStatements = Statement list -> string
+    type PrettyPrintFileResult = ParserResult<EventFile, unit> -> string
+
+    type ParserAPI =
+        {
+            parseFile : ParseFile
+            parseString : ParseString
+        }
+    
+    type PrinterAPI =
+        {
+            prettyPrintFile : PrettyPrintFile
+            prettyPrintStatements : PrettyPrintStatements
+            prettyPrintFileResult : PrettyPrintFileResult
+        }
+    
+
+module CKParser =
+    open ParserDomain
 
     // Sets of chars
     // =======
@@ -51,7 +74,7 @@ module CKParser =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
-    let block inner = between (chSkip '{') (chSkip '}') inner
+    let clause inner = between (chSkip '{') (chSkip '}') inner
 
     // Base types
     // =======
@@ -75,19 +98,20 @@ module CKParser =
     // =======
     let troops = 
         let troopValue = pipe2 (puint64 .>> ws) (puint64 .>> ws) (fun t1 t2 -> (t1, t2))
-        let troop = pipe2 (key .>> chSkip '=') (block troopValue) (fun key (t1, t2) -> Troop(key, int t1, int t2))
-        strSkip "troops" >>. chSkip '=' >>. block (many troop) |>> Troops
+        let troop = pipe2 (key .>> chSkip '=') (clause troopValue) (fun key (t1, t2) -> Troop(key, int t1, int t2))
+        strSkip "troops" >>. chSkip '=' >>. clause (many troop) |>> Troops
 
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
 
     let statement = comment <|> (attempt troops) <|> keyvalue <?> "statement"
-    let valueBlock = block (many statement) |>> Block <?> "statement block"
+    let valueBlock = clause (many statement) |>> Clause <?> "statement clause"
     let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
     
     do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
     
     let all = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
+
     let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
     let memoize keyFunction memFunction =
@@ -105,6 +129,14 @@ module CKParser =
         let hash = (fun (file, name) -> file.GetHashCode(), name)
         (memoize hash inner) (fileString, fileName)
 
+    let api =
+        {
+            parseFile = parseEventFile
+            parseString = parseEventString
+        }
+
+module CKPrinter =
+    open ParserDomain
     let tabs n = String.replicate n "\t"
 
     let printTroop depth t = (tabs depth) + t.ToString()  + "\n"
@@ -114,7 +146,7 @@ module CKParser =
 
     let rec printValue v depth =
         match v with
-        | Block kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
+        | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
         | x -> x.ToString() + "\n"
     
 
@@ -130,9 +162,19 @@ module CKParser =
         //| Troops tl -> tabs depth + "troops = {\n" + (List.map (fun t -> (tabs (depth + 1)) + t.ToString() + "\n" ) tl |> List.fold (+) "") + tabs depth + "}\n"
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
-    let prettyPrint =
+    let prettyPrint ef =
+        let (EventFile sl) = ef
+        printKeyValueList sl 0 
+    let prettyPrintResult =
         function
         | Success (v,_,_) -> 
             let (EventFile ev) = v
             printKeyValueList ev 0
         | Failure (msg, _, _) -> msg
+
+    let api = 
+    {
+        prettyPrintFile = prettyPrint
+        prettyPrintStatements = (fun f -> printKeyValueList f 0)
+        prettyPrintFileResult = prettyPrintResult
+    }

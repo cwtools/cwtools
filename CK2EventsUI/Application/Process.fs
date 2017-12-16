@@ -4,6 +4,7 @@ open CK2Events.Application.CKParser
 open Localisation
 
 module Process =
+    open ParserDomain
     type Node (key : string) =
         member val Key = key
         member val AllTags : KeyValueItem list = List.empty with get, set
@@ -63,8 +64,8 @@ module Process =
 
     and processNodeInner (node : Node) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key("option"), Block(sl))) -> node.Children <- (upcast processOption sl)::node.Children
-            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> node.Children <- (processNode k sl)::node.Children
+            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.Children <- (upcast processOption sl)::node.Children
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.Children <- (processNode k sl)::node.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> node.AllTags <- kv::node.AllTags
             | Comment(c) -> node.Comments <- c::node.Comments
@@ -72,8 +73,8 @@ module Process =
 
     let processEventInner (event : Event) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key("option"), Block(sl))) -> event.Children <- (upcast processOption sl)::event.Children
-            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> event.Children <- (processNode k sl)::event.Children
+            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> event.Children <- (upcast processOption sl)::event.Children
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> event.Children <- (processNode k sl)::event.Children
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> event.AllTags <- kv::event.AllTags
             | Comment(c) -> event.Comments <- c::event.Comments
@@ -97,7 +98,7 @@ module Process =
         //root.AllTags <- statement::root.AllTags
         let mutable comments = savedComments
         match statement with
-            | KeyValue(KeyValueItem(Key(k) , Block(sl))) -> 
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> 
                 let e = (processEvent k sl)
                 e.Comments <- savedComments@e.Comments
                 comments <- []
