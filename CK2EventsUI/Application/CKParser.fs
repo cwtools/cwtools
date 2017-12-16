@@ -51,12 +51,15 @@ module CKParser =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
+    let block inner = between (chSkip '{') (chSkip '}') inner
 
     // Base types
     // =======
+    let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
+
     let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment <?> "comment"
 
-    let id = (many1Chars idchar) .>> ws |>> Key <?> "id"
+    let key = (many1Chars idchar) .>> ws |>> Key <?> "id"
 
     let valueS = (many1Chars valuechar) .>> ws |>> string |>> String <?> "string"
 
@@ -66,37 +69,25 @@ module CKParser =
                     ((skipString "yes"  |>> (fun _ -> Bool(true)))   <|> 
                     (skipString "no"   |>> (fun _ -> Bool(false))) )) .>> ws
 
+                    
+
     // Complex types
     // =======
+    let troops = 
+        let troopValue = pipe2 (puint64 .>> ws) (puint64 .>> ws) (fun t1 t2 -> (t1, t2))
+        let troop = pipe2 (key .>> chSkip '=') (block troopValue) (fun key (t1, t2) -> Troop(key, int t1, int t2))
+        strSkip "troops" >>. chSkip '=' >>. block (many troop) |>> Troops
 
-    // Mutually recursive types
+    // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
-    let troops, troopsimpl = createParserForwardedToRef()
 
-    let keyvaluelist = many (comment <|> (attempt troops) <|> keyvalue)
-    let valueBlock = 
-        let list = keyvaluelist |>> Block
-        between (ch '{') (ch '}') list <?> "valueBlock"
+    let statement = comment <|> (attempt troops) <|> keyvalue <?> "statement"
+    let valueBlock = block (many statement) |>> Block <?> "statement block"
     let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
-    let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
-    do keyvalueimpl := 
-        pipe2 (id .>> operator) (value)
-            (fun id value -> KeyValue(KeyValueItem(id, value)))
-
-    let troop = 
-
-        let troopInner = pipe2 (puint64 .>> ws) (puint64 .>> ws) (fun t1 t2 -> (t1, t2)) 
-        let troopValue = many (pipe2 (id .>> ch '=') (between (ch '{') (ch '}') troopInner)
-                            (fun id (t1, t2) -> Troop(id, int t1 , int t2)))
-        between (ch '{') (ch '}') troopValue
-
-    do troopsimpl :=
-        str "troops" .>> ch '=' >>. troop
-        |>> Troops
-        
     
+    do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
     
-    let all = ws >>. keyvaluelist .>> eof |>> (fun f -> (EventFile f : EventFile))
+    let all = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
 
     let memoize keyFunction memFunction =
