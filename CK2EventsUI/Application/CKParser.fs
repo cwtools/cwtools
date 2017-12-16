@@ -36,36 +36,49 @@ module CKParser =
     [<StructuralEquality; StructuralComparison>]
     type EventFile = |EventFile of  Statement list
 
+
+    // Sets of chars
+    // =======
     let whitespaceTextChars = " \t\r\n"
     let idchar = asciiLetter <|> digit <|> anyOf ['_'; ':']
     let valuechar = asciiLetter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']']
 
 
-    let ws = (many spaces1 |>> ignore) <?> "whitespace"
-    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment
-    let wsc = (many (comment |>> ignore <|> spaces1) |>> ignore) <?> "whitespace_comment"
-    let str s = pstring s .>> ws
-    let ch c = skipChar c >>. ws
-    let id =
-        (many1Chars idchar) .>> ws |>> Key <?> "id"
+    // Utility parsers
+    // =======
+    let ws = (skipMany spaces1 |>> ignore) <?> "whitespace"
+    let str s = pstring s .>> ws <?> ("string " + s)
+    let strSkip s = skipString s .>> ws <?> ("skip string " + s)
+    let ch c = pchar c .>> ws <?> ("char " + string c)
+    let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
 
-    let valueS = 
-        (many1Chars valuechar) .>> ws |>> string |>> String <?> "valueS"
+    // Base types
+    // =======
+    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment <?> "comment"
 
-    let valueQ = 
-        between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "valueQ"
+    let id = (many1Chars idchar) .>> ws |>> Key <?> "id"
 
-    let valueB =
-        (notFollowedBy (valuechar) >>.  pstring "yes" .>> ws |>> (fun _ -> Bool(true))) <|> (notFollowedBy (valuechar) >>. pstring "no" .>> ws |>> (fun _ -> Bool(false)))
+    let valueS = (many1Chars valuechar) .>> ws |>> string |>> String <?> "string"
 
+    let valueQ = between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "quoted string"
+
+    let valueB = (notFollowedBy (valuechar) >>.
+                    ((skipString "yes"  |>> (fun _ -> Bool(true)))   <|> 
+                    (skipString "no"   |>> (fun _ -> Bool(false))) )) .>> ws
+
+    // Complex types
+    // =======
+
+    // Mutually recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let troops, troopsimpl = createParserForwardedToRef()
+
     let keyvaluelist = many (comment <|> (attempt troops) <|> keyvalue)
     let valueBlock = 
         let list = keyvaluelist |>> Block
         between (ch '{') (ch '}') list <?> "valueBlock"
     let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
-    let operator = (attempt (str ">=")) <|> (attempt (str "<=")) <|> (attempt (str "==")) <|> str "=" <|> str "<" <|> str ">"
+    let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
     do keyvalueimpl := 
         pipe2 (id .>> operator) (value)
             (fun id value -> KeyValue(KeyValueItem(id, value)))

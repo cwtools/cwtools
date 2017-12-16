@@ -1,0 +1,3 @@
+character_event = {
+    test = nomad
+}
