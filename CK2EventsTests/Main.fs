@@ -67,7 +67,7 @@ let parserTests =
                     Expect.equal root.Namespace "WoL" "Namespace wrong"
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
-                    Expect.equal (firstEvent.Tag "id").Value (String("WoL.10100")) "ID wrong"
+                   // Expect.equal (firstEvent.Tag "id").Value.Value (String("WoL.10100")) "ID wrong"
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
 
@@ -80,6 +80,20 @@ let localisationTests =
             let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (gameDirectory="CK2EventsUI/localization"))
             let parsed = LocalisationService settings
             ()
+    ]
+
+[<Tests>]
+let processingTests =
+    testList "processing tests" [
+        testCase "process one" <| fun () ->
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/events/ze_ambition_events_2.txt")
+            match parsed with
+            |Success(v, _, _) ->
+                let processed = Process.processEventFile v
+                let rawAgain = processed.ToRaw |> EventFile
+                Expect.equal v rawAgain "Not equal"
+            | _ -> ()
+
     ]
 [<EntryPoint>]
 let main argv =

@@ -2,43 +2,61 @@ namespace CK2Events.Application
 
 open CK2Events.Application.CKParser
 open Localisation
+open System.Collections.Generic
+open FParsec.CharParsers
+open Newtonsoft.Json
 
 module Process =
     open ParserDomain
+    type Leaf(keyvalueitem : KeyValueItem) =
+        let (KeyValueItem (Key(key), value)) = keyvalueitem
+        member val Key = key with get, set
+        member val Value = value with get, set
+        member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     type Node (key : string) =
         member val Key = key
-        member val AllTags : KeyValueItem list = List.empty with get, set
-        member val Children : Node list = List.empty with get, set
-        member val Comments : string list = List.empty with get, set
-        member this.Tag x = this.AllTags |> List.tryPick (function |KeyValueItem(Key(y), v) when x=y -> Some v |_ -> None)
-        member val Raw : Statement list = List.empty with get, set
+        member val All : Both list = List.empty with get, set
+        member this.Children = this.All |> List.choose (function |NodeI n -> Some n |_ -> None)
+        member this.Values = this.All |> List.choose (function |LeafI l -> Some l |_ -> None)
+        member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
+        member this.Tag x = this.Values |> List.tryFind (fun l -> l.Key = x)
+        [<JsonIgnore>]
+        member this.ToRaw : Statement list = this.All |> List.rev |>
+                                             List.map (function 
+                                               |NodeI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
+                                               |LeafI l -> KeyValue l.ToRaw 
+                                               |CommentI c -> (Comment c))
+        
+    and Both = |NodeI of Node | LeafI of Leaf |CommentI of string
+
     type Option() = 
         inherit Node("option")
         member val Name = "" with get, set      
     type Event(key) =
         inherit Node(key)
-        member val ID = "" with get, set
+        member this.ID = this.Tag "id" |> (function |Some s -> s.Value.ToString() |None -> "")
         member val Desc = "" with get, set
         member val Hidden = false with get, set
 
     type Root() =
         inherit Node("root")
-        member val Namespace = "" with get, set
-        member val Events : Event list = List.empty with get, set
+        member this.Namespace = this.Tag "namespace" |> (function |Some s -> s.Value.ToString() |None -> "")
+        member val test = base.All |> List.choose (function |NodeI n -> Some n |_ -> None)
+        member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
 
     let addTag (event : Event) tag =
-        event.AllTags <- tag::event.AllTags
+        //event.All <- LeafI (new Leaf(tag))::event.All
         match tag with
             | KeyValueItem(Key("desc"), String(v)) -> event.Desc <- v 
-            | KeyValueItem(Key("id"), String(v)) -> event.ID <- v
+            //| KeyValueItem(Key("id"), String(v)) -> event.ID <- v
             | KeyValueItem(Key("hide_window"), Bool(v)) -> event.Hidden <- v
             | _ -> ()
     
-    let addTagNode (node : Node) tag =
-        node.AllTags <- tag::node.AllTags
+    let addTagNode (node : Node) tag = ()
+        //node.All <- LeafI (new Leaf(tag))::node.All
 
     let addTagOption (option : Option) tag =
-        option.AllTags <- tag::option.AllTags
+        //option.All <- LeafI (new Leaf(tag))::option.All
         match tag with
             | KeyValueItem(Key("name"), String(v)) -> option.Name <- v
             | _ -> ()
@@ -47,48 +65,48 @@ module Process =
         let node = Node(k)
         sl |> List.iter (processNodeInner node)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
+        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
         List.iter (fun t -> addTagNode node t) tags
-        node.Comments <- comments 
+        //node.Comments <- comments 
         node
     
     and processOption sl =
         let option = Option()
         sl |> List.iter (processNodeInner option)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
+        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
         List.iter (fun t -> addTagOption option t) tags
-        option.Comments <- comments
+        //option.Comments <- comments
         option
 
 
     and processNodeInner (node : Node) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.Children <- (upcast processOption sl)::node.Children
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.Children <- (processNode k sl)::node.Children
+            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.All <- NodeI(processOption sl)::node.All
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- NodeI(processNode k sl)::node.All
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
-            | KeyValue(kv) -> node.AllTags <- kv::node.AllTags
-            | Comment(c) -> node.Comments <- c::node.Comments
+            | KeyValue(kv) -> node.All <- LeafI(new Leaf(kv))::node.All
+            | Comment(c) -> node.All <- CommentI c::node.All
             | _ -> ()
 
     let processEventInner (event : Event) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> event.Children <- (upcast processOption sl)::event.Children
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> event.Children <- (processNode k sl)::event.Children
+            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> event.All <- NodeI(processOption sl)::event.All
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> event.All <- NodeI(processNode k sl)::event.All
             //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
-            | KeyValue(kv) -> event.AllTags <- kv::event.AllTags
-            | Comment(c) -> event.Comments <- c::event.Comments
+            | KeyValue(kv) -> event.All <- LeafI(new Leaf(kv))::event.All
+            | Comment(c) -> event.All <- CommentI c::event.All
             | _ -> ()
     
     let processEvent k sl =
         let event = Event(k)
         sl |> List.iter (processEventInner event)
         let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
-        event.Raw <- sl
+        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
+        //event.Raw <- sl
         //let event = Event()
         List.iter (fun t -> addTag event t) tags
-        event.Comments <- comments 
+        //event.Comments <- comments 
         event
 
  
@@ -100,14 +118,14 @@ module Process =
         match statement with
             | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> 
                 let e = (processEvent k sl)
-                e.Comments <- savedComments@e.Comments
-                comments <- []
-                root.Events <- e::root.Events
-            | KeyValue(KeyValueItem(Key("namespace"), String(v))) -> root.Namespace <- v
-            | KeyValue(kv) -> root.AllTags <- kv::root.AllTags
+                //e.All <- comments@e.All
+                //comments <- []
+                root.All <- NodeI e::root.All
+            //| KeyValue(KeyValueItem(Key("namespace"), String(v))) -> root.Namespace <- v
+            | KeyValue(kv) -> root.All <- LeafI (Leaf kv)::root.All
             | Comment(c) -> 
-                root.Comments <- c::root.Comments
-                comments <- c::comments
+                root.All <- CommentI c::root.All
+                //comments <- CommentI c::comments
             | _ -> ()
         comments
 
