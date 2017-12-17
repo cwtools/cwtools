@@ -73,12 +73,12 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
                 | Success(v, _, _) -> 
                     let ck2 = processEventFile v 
                     let locs = getAllLocalisationKeys localisation ck2
-                    //let ck3 = addLocalisedDescAll ck2 localisation
                     let comments = getEventComments ck2
                     let immediates = getAllImmediates ck2
                     let options = getEventsOptions localisation ck2
                     let pretties = ck2.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
-                    (true, ck2.Events, immediates, options, pretties, locs, comments, "")
+                    let ck3 = addLocalisedDescAll ck2 localisation
+                    (true, ck3.Events, immediates, options, pretties, locs, comments, "")
                 | ParserResult.Failure(msg, _, _) -> 
                     (false,[],[],[],[],[],[], msg)
         let combineResults (s, e, i, o, p, l, c, m) (ns, ne, ni, no, np, nl, nc, nm)=

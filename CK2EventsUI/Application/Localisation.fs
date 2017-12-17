@@ -10,8 +10,8 @@ module Localisation =
     type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true>
 
 
-    type LocalisationService(settings:IOptions<CK2Settings>) as this =
-        let settings : CK2Settings = settings.Value
+    type LocalisationService(localisationDirectory : string, debug : bool) as this =
+        let localisationFolder : string = localisationDirectory
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let mutable csvFallback : Runtime.CsvFile<LocalisationEntryFallback.Row> = upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let addFile (x : string) =
@@ -45,11 +45,13 @@ module Localisation =
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
 
         do
-            match Directory.Exists(settings.localisationDirectory) with
+            match Directory.Exists(localisationFolder) with
             | true -> 
-                        let files = Directory.EnumerateFiles settings.localisationDirectory |> List.ofSeq |> List.sort
+                        let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
                         results <- addFiles files |> dict
             | false -> ()
+        new (settings : IOptions<CK2Settings>) = LocalisationService(settings.Value.localisationDirectory, false)
+
         member val Results = results with get, set
 
         member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq

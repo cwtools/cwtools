@@ -25,7 +25,7 @@ var _options : Array<any>;
 var _pretty : Array<any>;
 
 function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, locs : Array<any> , eventComment : Array<any>, bundleEdges : boolean) {
-    var localised = new Map<string, string>(locs);
+    var localised = new Map<string, string>();
     var eventComments = new Map<string, string>(eventComment);
     var getLoc = (key : string) => localised.has(key) ? localised.get(key) : key
     var getName = (id : string) => eventComments.has(id) ? eventComments.get(id) == "" ? id : eventComments.get(id) : id

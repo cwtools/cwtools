@@ -102,6 +102,17 @@ let processingTests =
                 Expect.equal v rawAgain "Not equal"
             | _ -> ()
 
+        testCase "addLocalisation" <| fun () ->
+            let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
+            let service = LocalisationService("CK2EventsTests/localisation test files", true)
+            match parsed with
+            |Success(v, _, _) ->
+                let processed = Process.processEventFile v
+                let descAdded = Process.addLocalisedDescAll processed service
+                Expect.equal (descAdded.Events |> List.head |> (fun e -> e.Desc)) "Localisation string" "Not equal"
+            | _ -> ()
+
+
     ]
 [<EntryPoint>]
 let main argv =

@@ -7,8 +7,27 @@ open FParsec.CharParsers
 open Newtonsoft.Json
 open System.Text.RegularExpressions
 
+module List =
+  let replace f sub xs = 
+    let rec finish acc = function
+      | [] -> acc
+      | x::xs -> finish (x::acc) xs
+    let rec search acc = function
+      | [] -> None
+      | x::xs -> 
+        if f x then Some(finish ((sub x)::xs) acc)
+        else search (x::acc) xs
+    search [] xs
+  let replaceOrAdd f sub add xs =
+    let result = replace f sub xs
+    match result with
+    | Some ls -> ls
+    | None -> add::xs
+     
+
 module Process =
     open ParserDomain
+
     type Leaf(keyvalueitem : KeyValueItem) =
         let (KeyValueItem (Key(key), value)) = keyvalueitem
         member val Key = key with get, set
@@ -16,13 +35,17 @@ module Process =
         [<JsonIgnore>]
         member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
     type Node (key : string) =
+        let bothFind x = function |NodeI n when n.Key = x -> true |LeafI l when l.Key = x -> true |_ -> false
+
         member val Key = key
         member val All : Both list = List.empty with get, set
         member this.Children = this.All |> List.choose (function |NodeI n -> Some n |_ -> None)
         member this.Values = this.All |> List.choose (function |LeafI l -> Some l |_ -> None)
         member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
+        member this.Has x = this.All |> (List.exists (bothFind x))
         member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-        //member this.TagOrDefault x = this.Tag x |> (function |Some s -> s.Value)
+        member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
+
         [<JsonIgnore>]
         member this.ToRaw : Statement list = this.All |> List.rev |>
                                              List.map (function 
@@ -34,11 +57,11 @@ module Process =
 
     type Option() = 
         inherit Node("option")
-        member val Name = "" with get, set
+        member this.Name = this.Tag "name" |> (function | Some (String s) -> s | _ -> "")
     type Event(key) =
         inherit Node(key)
         member this.ID = this.Tag "id" |> (function | Some (String s) -> s | _ -> "")
-        member val Desc = "" with get, set
+        member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | _ -> "")
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
     type Root() =
@@ -47,39 +70,15 @@ module Process =
         member val test = base.All |> List.choose (function |NodeI n -> Some n |_ -> None)
         member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
 
-    let addTag (event : Event) tag =
-        //event.All <- LeafI (new Leaf(tag))::event.All
-        match tag with
-            | KeyValueItem(Key("desc"), String(v)) -> event.Desc <- v 
-            //| KeyValueItem(Key("id"), String(v)) -> event.ID <- v
-            //| KeyValueItem(Key("hide_window"), Bool(v)) -> event.Hidden <- v
-            | _ -> ()
-    
-    let addTagNode (node : Node) tag = ()
-        //node.All <- LeafI (new Leaf(tag))::node.All
-
-    let addTagOption (option : Option) tag =
-        //option.All <- LeafI (new Leaf(tag))::option.All
-        match tag with
-            | KeyValueItem(Key("name"), String(v)) -> option.Name <- v
-            | _ -> ()
     
     let rec processNode k sl =
         let node = Node(k)
-        sl |> List.iter (processNodeInner node)
-        let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
-        List.iter (fun t -> addTagNode node t) tags
-        //node.Comments <- comments 
+        sl |> List.iter (processNodeInner node) 
         node
     
     and processOption sl =
         let option = Option()
         sl |> List.iter (processNodeInner option)
-        let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
-        List.iter (fun t -> addTagOption option t) tags
-        //option.Comments <- comments
         option
 
 
@@ -87,60 +86,35 @@ module Process =
         match statement with
             | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.All <- NodeI(processOption sl)::node.All
             | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- NodeI(processNode k sl)::node.All
-            //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
-            | KeyValue(kv) -> node.All <- LeafI(new Leaf(kv))::node.All
+            | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
             | Comment(c) -> node.All <- CommentI c::node.All
             | _ -> ()
 
-    let processEventInner (event : Event) statement =
-        match statement with
-            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> event.All <- NodeI(processOption sl)::event.All
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> event.All <- NodeI(processNode k sl)::event.All
-            //| KeyValue(KeyValueItem(ID("namespace"), String(v))) -> root.Namespace <- v
-            | KeyValue(kv) -> event.All <- LeafI(new Leaf(kv))::event.All
-            | Comment(c) -> event.All <- CommentI c::event.All
-            | _ -> ()
     
     let processEvent k sl =
         let event = Event(k)
-        sl |> List.iter (processEventInner event)
-        let tags = sl |> List.choose (function |KeyValue kv -> Some kv |_ -> None)
-        //let comments = sl |> List.choose (function |Comment c -> Some c |_ -> None)
-        //event.Raw <- sl
-        //let event = Event()
-        List.iter (fun t -> addTag event t) tags
-        //event.Comments <- comments 
+        sl |> List.iter (processNodeInner event)
         event
 
  
 
 
-    let processRoot savedComments (root : Root) statement =
-        //root.AllTags <- statement::root.AllTags
-        let mutable comments = savedComments
+    let processRoot (root : Root) statement =
         match statement with
             | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> 
                 let e = (processEvent k sl)
-                //e.All <- comments@e.All
-                //comments <- []
                 root.All <- NodeI e::root.All
-            //| KeyValue(KeyValueItem(Key("namespace"), String(v))) -> root.Namespace <- v
             | KeyValue(kv) -> root.All <- LeafI (Leaf kv)::root.All
             | Comment(c) -> 
                 root.All <- CommentI c::root.All
-                //comments <- CommentI c::comments
             | _ -> ()
-        comments
 
 
     let processEventFile (ev : EventFile) =
         let root = Root()
         let (EventFile evs) = ev
-        evs |> List.fold (fun s e -> processRoot s root e) [] |> ignore
+        evs |> List.iter (fun e -> processRoot root e) |> ignore
         root
-        // ev
-        // |> List.filter (function |Comment _ -> false |_ -> true)
-        // |> List.map processRoot
 
     let rec foldNode fNode acc (node : Node) :'r =
         let recurse = foldNode fNode
@@ -156,7 +130,7 @@ module Process =
                     loop tail (fun accTail ->
                         cont(fCombine resNode accTail) ))
             | [] -> cont acc
-        loop [node] Operators.id
+        loop [node] id
     
     let foldNode3 fNode fOption fEvent fCombine acc (node:Node) =
         let rec loop nodes cont =
@@ -169,7 +143,7 @@ module Process =
             | (:? Event as x)::tail -> inner x tail fEvent
             | (x : Node)::tail -> inner x tail fNode
             | [] -> cont acc
-        loop [node] Operators.id
+        loop [node] id
 
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
@@ -229,8 +203,8 @@ module Process =
             | false -> x
         let fNode = (fun (x:Node) _ -> 
                         match x with
-                        | :? Event as e -> e.Desc <- getDesc e.Desc
-                        | :? Option as o -> o.Name <- getDesc o.Name
+                        | :? Event as e -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), String (getDesc e.Desc)))))
+                        | :? Option as o -> o.SetTag "name" (LeafI (Leaf (KeyValueItem(Key("name"), String (getDesc o.Name)))))
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())
@@ -240,15 +214,6 @@ module Process =
         root.Events |> List.iter (addLocalisedDesc localisation)
         root
 
-    // let getOptions (event:Node) =
-    //     let fNode = (fun (x:Node) children ->
-    //                     let name = x.Tag "name"
-    //                     match name with
-    //                     | Some n -> ((n.ToString()), children)
-    //                     | _ -> ("", children)
-    //     )
-    //     let fCombine = (fun x c -> c)
-    //     foldNode2 fNode fCombine ("", "") event
     let getOption (localisation : LocalisationService) (option:Option) =
         let fNode = (fun (x:Node) (d,i) ->
                         match x.Tag "id" with
@@ -290,33 +255,3 @@ module Process =
     
     let getAllImmediates (root : Root) =
         root.Events |> List.map (fun e -> (e.ID, getImmediate e))
-                        
-    // let testNode (node:Node) =
-    //     let fNode (inEvent, ) (node:Node) = 
-    //         match node.Tag "character_event" with
-    //         | Some v -> v.ToString() + (List.fold (+) "" children)
-    //         | None -> (List.fold (+) "" children)
-    //         //(node.Children.Length, children) 
-    //     foldNode fNode node
-
-    
-    // let rec foldbackNode fNode (node : Node) generator :'r =
-    //     let recurse = foldbackNode fNode  
-    //     // let newGenerator innerVal =
-    //     //     let newInnerVal = fNode innerVal node
-    //     //     generator newInnerVal
-    //     let newGenerator innerVal = 
-    //         let newInnerVal = fNode innerVal
-    //         generator newInnerVal
-    //     node.Children |> List.fold (fun c -> recurse c newGenerator)
-    //     // fNode generator node
-    //     // node.Children |> List.fold recurse newGenerator
-    //     // let newGenerator innerVal =
-    //     //     let newInnerVal = fNode innerVal node 
-    //     //     generator newInnerVal
-    //     // recurse newGenerator (fNode node.Children node)
-
-    // let testNode node =
-    //     let fNode innerCount (node:Node) = (node.Children.Length, innerCount)
-    //     let initialAcc = ()
-    //     foldbackNode fNode initialAcc node

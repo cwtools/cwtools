@@ -2,7 +2,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function main(data, triggers, options, pretties, locs, eventComment, bundleEdges) {
-        var localised = new Map(locs);
+        var localised = new Map();
         var eventComments = new Map(eventComment);
         var getLoc = (key) => localised.has(key) ? localised.get(key) : key;
         var getName = (id) => eventComments.has(id) ? eventComments.get(id) == "" ? id : eventComments.get(id) : id;
