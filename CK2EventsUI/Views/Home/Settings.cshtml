@@ -1,14 +1,23 @@
 @model CK2Events.ViewModels.SettingsViewModel
 
 @using (Html.BeginForm("Settings", "Home", null, FormMethod.Post, false, new {@class="form-horizontal"})){
-    @if(!Model.validDirectory)
+    @if(!Model.validCK2Directory)
     {
         <span>The current folder doesn't look like the game directory of Crusader Kings 2</span>
     }
     <div class="form-group">
-        <label asp-for="settings.gameDirectory" class="control-label col-md-3">CK2 game directory</label>
-        <input asp-for="settings.gameDirectory" class="form-control col-md-8" readonly/>
-        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder">Set game folder</a>
+        <label asp-for="settings.ck2Directory" class="control-label col-md-3">CK2 game directory</label>
+        <input asp-for="settings.ck2Directory" class="form-control col-md-8" readonly/>
+        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="ck2">Set game folder</a>
+    </div>
+    @if(!Model.validHOI4Directory)
+    {
+        <span>The current folder doesn't look like the game directory of Hearts of Iron IV</span>
+    }
+    <div class="form-group">
+        <label asp-for="settings.hoi4Directory" class="control-label col-md-3">HOI4 game directory</label>
+        <input asp-for="settings.hoi4Directory" class="form-control col-md-8" readonly/>
+        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="hoi4">Set game folder</a>
     </div>
     <div class="form-group">
         <label asp-for="settings.bundleEdges" class="control-label col-md-3">Bundle edges</label>

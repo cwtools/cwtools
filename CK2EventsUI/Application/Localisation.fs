@@ -50,7 +50,7 @@ module Localisation =
                         let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
                         results <- addFiles files |> dict
             | false -> ()
-        new (settings : IOptions<CK2Settings>) = LocalisationService(settings.Value.localisationDirectory, false)
+        new (settings : IOptions<CK2Settings>) = LocalisationService(settings.Value.CK2Directory.localisationDirectory, false)
 
         member val Results = results with get, set
 

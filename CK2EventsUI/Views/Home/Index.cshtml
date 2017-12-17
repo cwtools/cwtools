@@ -1,16 +1,18 @@
-﻿@model IEnumerable<string>
+﻿@model IndexViewModel
 @{
     ViewData["Title"] = "Event file list";
 }
 <span>Click file name to view one file or tick multiple and press "View" at the bottom of the page to view many.</span>
 <form asp-controller="Home" asp-action="Graph" method="post">
 <table class="table">
-@foreach(var file in Model){
+@foreach(var file in Model.files){
+    <input type="hidden" name="game" value="@Model.game"
   <tr>
       <td><input type="checkbox" name="files" value="@file"/></td>
       <td><a asp-controller="" 
    asp-action="Graph" 
-   asp-route-files="@file">
+   asp-route-files="@file"
+   asp-route-game="@Model.game">
     @file</a></td></tr>
   
 }

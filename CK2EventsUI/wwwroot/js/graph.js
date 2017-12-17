@@ -177,12 +177,12 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         document.getElementById('detailsTarget').innerHTML = html;
     }
     exports_1("showDetails", showDetails);
-    function go(filesString, bundleEdges) {
+    function go(filesString, bundleEdges, game) {
         document.getElementById('detailsTarget').innerHTML = "Parsing event file...";
         var files = JSON.parse(filesString);
         $.ajax({
             url: "GetData",
-            data: { "files": JSON.parse(filesString) },
+            data: { "files": JSON.parse(filesString), "game": game },
             contentType: "application/json"
         })
             .done(function (data) {

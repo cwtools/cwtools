@@ -244,12 +244,12 @@ export function showDetails(id : string){
     document.getElementById('detailsTarget')!.innerHTML = html;
 }
 
-export function go(filesString : string, bundleEdges : boolean){
+export function go(filesString : string, bundleEdges : boolean, game : number){
     document.getElementById('detailsTarget')!.innerHTML = "Parsing event file...";
     var files : Array<string> = JSON.parse(filesString);
     $.ajax({
         url: "GetData",
-        data: { "files": JSON.parse(filesString) },
+        data: { "files": JSON.parse(filesString), "game" : game },
         contentType: "application/json"
     })
         .done(function (data) {

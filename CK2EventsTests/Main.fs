@@ -85,7 +85,7 @@ let parserTests =
 let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
-            let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (gameDirectory="CK2EventsUI/localization"))
+            let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
             let parsed = LocalisationService settings
             ()
     ]

@@ -45,7 +45,7 @@
         SystemJS.import('cytoscape-dagre').then(function(cytoscapedagre){
         SystemJS.import('cytoscape-qtip').then(function(cyqtip) {
         SystemJS.import('cytoscape-navigator').then(function(nav){
-   SystemJS.import('graph').then(function(graph){     graph.go('@Html.Raw(Model.files)', @(Model.settings.bundleEdges ? "true" : "false")) });
+   SystemJS.import('graph').then(function(graph){     graph.go('@Html.Raw(Model.files)', @(Model.settings.bundleEdges ? "true" : "false"), @Model.game) });
         }); 
         });
         });

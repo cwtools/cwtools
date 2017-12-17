@@ -13,16 +13,22 @@ type BaseViewModel (settings) =
 type SettingsViewModel (settings) = 
     inherit BaseViewModel (settings)
     let testGameDirectory dir =
-            let exeExists = Directory.EnumerateFiles dir |> List.ofSeq |> List.exists (fun f -> Path.GetFileName(f) = "CK2game.exe")
             let locExists = Directory.EnumerateDirectories dir |> List.ofSeq |> List.exists (fun f -> (DirectoryInfo(f)).Name = "localisation")
             let eveExists = Directory.EnumerateDirectories dir |> List.ofSeq |> List.exists (fun f -> (DirectoryInfo(f)).Name = "events")
-            exeExists && locExists && eveExists
+            locExists && eveExists
     
-    member val validDirectory = settings.gameDirectory = "" || testGameDirectory settings.gameDirectory
+    member val validCK2Directory = settings.CK2Directory.gameDirectory = "" || testGameDirectory settings.CK2Directory.gameDirectory
+    member val validHOI4Directory = settings.HOI4Directory.gameDirectory = "" || testGameDirectory settings.HOI4Directory.gameDirectory
 
-type EventsViewModel (settings, files) =
+type IndexViewModel (settings, files, game) =
+    inherit BaseViewModel (settings)
+    member val files : string list = files
+    member val game : Game = game
+    
+type EventsViewModel (settings, files, game) =
     inherit BaseViewModel (settings)
     member val files : string = files
+    member val game : Game = game
 
 type LocalisationViewModel (settings, localisation) =
     inherit BaseViewModel (settings)

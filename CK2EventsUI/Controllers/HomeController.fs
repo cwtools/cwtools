@@ -33,11 +33,12 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
  
     member val provider = provider
 
-    member this.Index () : ActionResult =
-        match Directory.Exists(settings.eventDirectory) with
+    member this.Index (game : Game) : ActionResult =
+        match Directory.Exists(settings.Directory(game).gameDirectory) with
         | false -> upcast this.RedirectToAction("Settings")
         | true -> 
-            let files = Events.getFileList settings.eventDirectory
+            let files = Events.getFileList (settings.Directory(game).eventDirectory)
+            let viewmodel = IndexViewModel(settings, files, game)
             upcast this.View(files)
     
     member this.Localisation () =
@@ -49,24 +50,28 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
 
         
     
-    member this.SetFolder () =
+    member this.SetFolder (game : Game) =
+        let setGameSettings x = 
+            match game with
+            |Game.CK2 -> settings.ck2Directory <- x
+            |Game.HOI4 -> settings.hoi4Directory <- x
         let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])
             let folder = Electron.Dialog.ShowOpenDialogAsync(mainWindow, options) |> Async.AwaitTask
             folder 
         let processFiles = function
-            | [|x|] -> settings.gameDirectory <- x
+            | [|x|] -> setGameSettings x
             | _ -> ()
         match HybridSupport.IsElectronActive with
             | true -> Async.RunSynchronously(folderPrompt()) |> processFiles
             | false -> () 
         this.RedirectToAction("Settings")
 
-    member this.GetData (``files[]`` : string[]) =
+    member this.GetData (game : Game, ``files[]`` : string[]) =
         let files = ``files[]`` |> List.ofSeq
         let processFile file = 
-            let filePath = settings.eventDirectory + file + ".txt"
+            let filePath = settings.Directory(game).eventDirectory + file + ".txt"
             let fileString = File.ReadAllText(filePath)
             let t = (CKParser.parseEventString fileString file)
             match t with
@@ -89,8 +94,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         let formatted = results |> (fun (s, e, i, o, p, c, m) -> (s, e.ToJson, i.ToJson, o.ToJson, p.ToJson, c.ToJson, m.ToJson))
         this.Json(formatted)
 
-    member this.Graph (files : System.Collections.Generic.List<System.String>) =
-        let viewmodel = EventsViewModel(settings, files.ToJson)
+    member this.Graph (files : System.Collections.Generic.List<System.String>, game : Game) =
+        let viewmodel = EventsViewModel(settings, files.ToJson, game)
         this.View(model = viewmodel);
         
     member this.Error () =
