@@ -71,6 +71,14 @@ let parserTests =
                 |Failure(msg, _, _) -> 
                     Expect.isTrue false msg
 
+        testCase "bool test" <| fun () ->
+            let parsed = (parser.parseFile "CK2EventsTests/event test files/bool.txt")
+            match parsed with
+                | Success(v,_,_) ->
+                    let target = (EventFile [KeyValue(KeyValueItem(Key("test"),Bool(true)))])
+                    Expect.equal v target "Not equal"
+                | _ -> ()
+
     ]
 
 [<Tests>]

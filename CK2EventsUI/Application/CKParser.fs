@@ -88,9 +88,8 @@ module CKParser =
 
     let valueQ = between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "quoted string"
 
-    let valueB = (notFollowedBy (valuechar) >>.
-                    ((skipString "yes"  |>> (fun _ -> Bool(true)))   <|> 
-                    (skipString "no"   |>> (fun _ -> Bool(false))) )) .>> ws
+    let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
+                    ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
 
                     
 
