@@ -20,15 +20,19 @@ module ParserDomain =
         | String of string
         | QString of string
         | Float of float
+        //| Int of int
         | Bool of bool
         | Clause of Statement list
+        | ValueBlock of Value list
         override x.ToString() =
             match x with
             | Clause b -> "{ " + sprintf "%O" b + " }"
+            | ValueBlock nb -> "{ " + sprintf "%O" nb + " }"
             | QString s -> "\"" + s + "\""
             | String s -> s
             | Bool b -> if b then "yes" else "no"
             | Float f -> sprintf "%A" f
+            //| Int i -> sprintf "%A" i
    
     and Statement =
         | Comment of string
@@ -91,6 +95,7 @@ module CKParser =
     let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
                     ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
 
+    let valueI = puint64 .>> ws |>> int
                     
 
     // Complex types
@@ -102,10 +107,13 @@ module CKParser =
 
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
+    let value, valueimpl = createParserForwardedToRef()
 
     let statement = comment <|> (attempt troops) <|> keyvalue <?> "statement"
-    let valueBlock = clause (many statement) |>> Clause <?> "statement clause"
-    let value = valueQ <|> valueBlock <|> (attempt valueB) <|> valueS <?> "value"
+    let valueBlock = clause (many1 value) |>> ValueBlock <?> "value clause"
+    let valueClause = clause (many statement) |>> Clause <?> "statement clause"
+
+    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> valueS <?> "value"
     
     do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
     
@@ -139,6 +147,9 @@ module CKPrinter =
     let tabs n = String.replicate n "\t"
 
     let printTroop depth t = (tabs depth) + t.ToString()  + "\n"
+    let printValuelist depth is =
+        let printOne = (fun i -> tabs (depth) + (string i) + "\n")
+        List.map printOne is |> List.fold (+) ""
         //match t with
         //| Troop (id, t1, t2) -> tabs depth + string id + " = " + string t1 + " " + string t2 + "\n"
         
@@ -146,6 +157,8 @@ module CKPrinter =
     let rec printValue v depth =
         match v with
         | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
+        | ValueBlock nbl -> "{ \n" + printValuelist (depth + 1) nbl +
+                            tabs (depth + 1) + " }\n"
         | x -> x.ToString() + "\n"
     
 

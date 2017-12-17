@@ -72,22 +72,21 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
             match t with
                 | Success(v, _, _) -> 
                     let ck2 = processEventFile v 
-                    let locs = getAllLocalisationKeys localisation ck2
                     let comments = getEventComments ck2
                     let immediates = getAllImmediates ck2
                     let options = getEventsOptions localisation ck2
                     let pretties = ck2.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
                     let ck3 = addLocalisedDescAll ck2 localisation
-                    (true, ck3.Events, immediates, options, pretties, locs, comments, "")
+                    (true, ck3.Events, immediates, options, pretties, comments, "")
                 | ParserResult.Failure(msg, _, _) -> 
-                    (false,[],[],[],[],[],[], msg)
-        let combineResults (s, e, i, o, p, l, c, m) (ns, ne, ni, no, np, nl, nc, nm)=
+                    (false,[],[],[],[],[], msg)
+        let combineResults (s, e, i, o, p, c, m) (ns, ne, ni, no, np, nc, nm)=
             match ns with
-            | false -> (ns && s, e, i, o, p, l, c, nm::m)
-            | true -> (ns && s, e @ ne, i @ ni, o @ no, p @ np, l @ nl, c @ nc, nm::m)
+            | false -> (ns && s, e, i, o, p, c, nm::m)
+            | true -> (ns && s, e @ ne, i @ ni, o @ no, p @ np, c @ nc, nm::m)
         let processed = files |> List.map processFile
-        let results = processed |> List.fold combineResults (true, [], [], [], [], [], [], [])
-        let formatted = results |> (fun (s, e, i, o, p, l, c, m) -> (s, e.ToJson, i.ToJson, o.ToJson, p.ToJson, l.ToJson, c.ToJson, m.ToJson))
+        let results = processed |> List.fold combineResults (true, [], [], [], [], [], [])
+        let formatted = results |> (fun (s, e, i, o, p, c, m) -> (s, e.ToJson, i.ToJson, o.ToJson, p.ToJson, c.ToJson, m.ToJson))
         this.Json(formatted)
 
     member this.Graph (files : System.Collections.Generic.List<System.String>) =

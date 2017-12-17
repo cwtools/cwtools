@@ -24,7 +24,7 @@ var _data : Array<any>;
 var _options : Array<any>;
 var _pretty : Array<any>;
 
-function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, locs : Array<any> , eventComment : Array<any>, bundleEdges : boolean) {
+function main(data: Array<any>, triggers: any, options: any, pretties : Array<any>, eventComment : Array<any>, bundleEdges : boolean) {
     var localised = new Map<string, string>();
     var eventComments = new Map<string, string>(eventComment);
     var getLoc = (key : string) => localised.has(key) ? localised.get(key) : key
@@ -253,12 +253,12 @@ export function go(filesString : string, bundleEdges : boolean){
         contentType: "application/json"
     })
         .done(function (data) {
-            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6), JSON.parse(data.item7) , bundleEdges);            
-            if(data.item1){
+            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6) , bundleEdges);            
+            if(data.item1 === true){
                 document.getElementById('detailsTarget')!.innerHTML = "Click an event to see details";
             }
             else{
-                document.getElementById('detailsTarget')!.innerHTML = "Failed to parse file with error(s) <br/>"+JSON.parse(data.item8)
+                document.getElementById('detailsTarget')!.innerHTML = "Failed to parse file with error(s) <br/>"+JSON.parse(data.item7)
             }
         })
         .fail(function() {

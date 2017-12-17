@@ -1,7 +1,7 @@
 System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cytoscape-navigator", "cytoscape-canvas", "handlebars"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    function main(data, triggers, options, pretties, locs, eventComment, bundleEdges) {
+    function main(data, triggers, options, pretties, eventComment, bundleEdges) {
         var localised = new Map();
         var eventComments = new Map(eventComment);
         var getLoc = (key) => localised.has(key) ? localised.get(key) : key;
@@ -186,12 +186,12 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
             contentType: "application/json"
         })
             .done(function (data) {
-            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6), JSON.parse(data.item7), bundleEdges);
-            if (data.item1) {
+            main(JSON.parse(data.item2), JSON.parse(data.item3), JSON.parse(data.item4), JSON.parse(data.item5), JSON.parse(data.item6), bundleEdges);
+            if (data.item1 === true) {
                 document.getElementById('detailsTarget').innerHTML = "Click an event to see details";
             }
             else {
-                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error(s) <br/>" + JSON.parse(data.item8);
+                document.getElementById('detailsTarget').innerHTML = "Failed to parse file with error(s) <br/>" + JSON.parse(data.item7);
             }
         })
             .fail(function () {
