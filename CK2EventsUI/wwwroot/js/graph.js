@@ -171,8 +171,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
     function showDetails(id) {
         var node = _data.filter(x => x.ID === id)[0];
         var pretty = _pretty.filter(x => x[0] === id)[0][1];
-        var options = _options.filter(x => x[0] === id);
-        var context = { title: node.ID, desc: node.Desc, full: pretty, options: options };
+        var context = { title: node.ID, desc: node.Desc, full: pretty };
         var html = detailsTemplate(context);
         document.getElementById('detailsTarget').innerHTML = html;
     }
@@ -226,7 +225,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         ],
         execute: function () {
             labelMaxLength = 30;
-            detailsTemplate = handlebars_1.default.compile("<h1>{{title}}</h1><div>{{desc}}</div><div><ul>{{#each options}}<li>{{this}}</li>{{/each}}</ul></div><pre>{{full}}</pre>");
+            detailsTemplate = handlebars_1.default.compile("<h1>{{title}}</h1><div>{{desc}}</div><div></div><pre>{{full}}</pre>");
         }
     };
 });

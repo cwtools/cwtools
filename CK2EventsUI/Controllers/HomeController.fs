@@ -39,7 +39,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         | true -> 
             let files = Events.getFileList (settings.Directory(game).eventDirectory)
             let viewmodel = IndexViewModel(settings, files, game)
-            upcast this.View(files)
+            upcast this.View(viewmodel)
     
     member this.Localisation () =
         let viewmodel = LocalisationViewModel(settings, localisation)
