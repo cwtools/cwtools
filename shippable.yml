@@ -13,11 +13,14 @@ build:
     - cd CK2EventsUI
     - dotnet restore
     - dotnet electronize build win
-    - mv ./bin/desktop/ElectronNET.Host-win32-x64 ./bin/desktop/CK2Events
-    - mv ./bin/desktop/CK2Events/ElectronNET.Host.exe ./bin/desktop/CK2Events/CK2Events.exe
+    - dotnet electronize build linux
+    - mv ./bin/desktop/ElectronNET.Host-win32-x64 ./bin/desktop/CK2Events-win
+    - mv ./bin/desktop/CK2Events-win/ElectronNET.Host.exe ./bin/desktop/CK2Events-win/CK2Events.exe
+    - mv ./bin/desktop/ElectronNET.Host-linux-x64 ./bin/desktop/CK2Events-linux
+    - mv ./bin/desktop/CK2Events-linux/ElectronNET.Host ./bin/desktop/CK2Events-linux/CK2Events
   on_success:
-    - if [ "$IS_RELEASE" == true ]; then 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/* && aws s3 cp archive.7z "s3://ck2events/win/CK2Events-$GIT_TAG_NAME.7zip" --region "eu-west-1"; fi
+    - if [ "$IS_RELEASE" == true ]; then 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/CK2Events-win/* && aws s3 cp archive.7z "s3://ck2events/win/CK2Events-win-$GIT_TAG_NAME.7z" --region "eu-west-1" && 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/CK2Events-linux/* && aws s3 cp archive.7z "s3://ck2events/linux/CK2Events-linux-$GIT_TAG_NAME.7z" --region "eu-west-1"; fi
   cache: true
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/packages
-    - $SHIPPABLE_BUILD_DIR/.nupkgs
+    - $SHIPPABLE_BUILD_DIR/nupkgs
