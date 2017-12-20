@@ -110,8 +110,19 @@ let processingTests =
                     let processed = Process.processEventFile v
                     let rawAgain = processed.ToRaw |> EventFile
                     Expect.equal v rawAgain "Not equal"
+                    let eventComment = Process.getEventComments processed
+                    let immediates = Process.getAllImmediates processed
+                    let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
+                    let localisation = LocalisationService settings  
+                    let options = Process.getEventsOptions localisation processed
+                    let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
+                    let ck3 = Process.addLocalisedDescAll processed localisation
+                    let x = Json
+                    ()
                 | _ -> ()
             Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter test
+
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
