@@ -14,10 +14,18 @@ open CK2Events.ViewModels
 open System.IO
 
 module Utils = 
+    open Microsoft.AspNetCore.Mvc.ViewFeatures
     let opts = [| TupleArrayConverter() :> JsonConverter |] // this goes global
     type System.Object with
         member x.ToJson =
             JsonConvert.SerializeObject(x,opts)
+
+    type ITempDataDictionary with
+        member this.Put<'T>(key : string, value : 'T) = this.[key] <- JsonConvert.SerializeObject(value)
+        member this.Get<'T>(key : string) = 
+            match this.ContainsKey(key) with
+            | true -> Some (JsonConvert.DeserializeObject<'T>(string this.[key]))
+            | false -> None
         
 open Utils
 open ElectronNET.API.Entities
@@ -26,15 +34,15 @@ open Microsoft.AspNetCore.Hosting
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptions<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment) =
-    inherit Controller()
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptionsSnapshot<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment) =
+    inherit BaseController()
 
     let settings : CK2Settings = settings.Value
  
     member val provider = provider
 
     member this.Index (game : Game) : ActionResult =
-        match Directory.Exists(settings.Directory(game).gameDirectory) with
+        match Directory.Exists(settings.Directory(game).eventDirectory) with
         | false -> upcast this.RedirectToAction("Settings")
         | true -> 
             let files = Events.getFileList (settings.Directory(game).eventDirectory)
@@ -66,6 +74,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         match HybridSupport.IsElectronActive with
             | true -> Async.RunSynchronously(folderPrompt()) |> processFiles
             | false -> () 
+        this.TempData.Put("settings", settings)
         this.RedirectToAction("Settings")
 
     member this.GetData (game : Game, ``files[]`` : string[]) =
@@ -103,7 +112,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
 
     [<HttpGet>]
     member this.Settings () =        
-        this.View(SettingsViewModel(settings))
+        let newSettings = this.TempData.Get("settings") |> Option.defaultValue settings
+        this.View(SettingsViewModel(newSettings))
     
     [<HttpPost>]
     member this.Settings (settings : CK2Settings) =
