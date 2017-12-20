@@ -30,7 +30,7 @@ let parseEqualityCheck file =
 let parserTests =
     testList "parser tests" [
         testCase "parser one" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/guilds_events.txt")
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/event test files/guilds_events.txt")
             let text = printer.prettyPrintFileResult parsed
             match parsed with
             | Success(_,_,_) -> ()
@@ -101,6 +101,17 @@ let processingTests =
                 let rawAgain = processed.ToRaw |> EventFile
                 Expect.equal v rawAgain "Not equal"
             | _ -> ()
+
+        testCase "process all" <| fun () ->
+            let test file =
+                let parsed = (CKParser.parseEventFile file)
+                match parsed with
+                |Success(v, _, _) ->
+                    let processed = Process.processEventFile v
+                    let rawAgain = processed.ToRaw |> EventFile
+                    Expect.equal v rawAgain "Not equal"
+                | _ -> ()
+            Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"

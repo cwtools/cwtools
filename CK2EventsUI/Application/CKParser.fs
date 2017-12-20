@@ -100,10 +100,11 @@ module CKParser =
 
     // Complex types
     // =======
-    let troops = 
-        let troopValue = pipe2 (puint64 .>> ws) (puint64 .>> ws) (fun t1 t2 -> (t1, t2))
-        let troop = pipe2 (key .>> chSkip '=') (clause troopValue) (fun key (t1, t2) -> Troop(key, int t1, int t2))
-        strSkip "troops" >>. chSkip '=' >>. clause (many troop) |>> Troops
+
+
+    let troopValue = pipe2 (puint64 .>> ws) (puint64 .>> ws) (fun t1 t2 -> (t1, t2))
+    let troop = pipe2 (key .>> chSkip '=') (clause troopValue) (fun key (t1, t2) -> Troop(key, int t1, int t2))
+    let troops = strSkip "troops" >>. chSkip '=' >>. clause (many troop) |>> Troops
 
     // Recursive types
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
