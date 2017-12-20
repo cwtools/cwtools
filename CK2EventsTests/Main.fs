@@ -8,6 +8,8 @@ open Localisation
 open System.IO
 open Expecto.Expect
 open ParserDomain
+open Newtonsoft.Json
+open CK2Events.Controllers.Utils
 
 let printer = CKPrinter.api
 let parser = CKParser.api
@@ -90,6 +92,40 @@ let localisationTests =
             ()
     ]
 
+let test file =
+    let parsed = (CKParser.parseEventFile file)
+    match parsed with
+    |Success(v, _, _) ->
+        let processed = Process.processEventFile v
+        let rawAgain = processed.ToRaw |> EventFile
+        Expect.equal v rawAgain "Not equal"
+        let eventComment = Process.getEventComments processed
+        let immediates = Process.getAllImmediates processed
+        let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
+        let localisation = LocalisationService settings  
+        let options = Process.getEventsOptions localisation processed
+        let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
+        let ck3 = Process.addLocalisedDescAll processed localisation
+        ()
+    | _ -> ()
+
+let test2 file =
+    let parsed = (CKParser.parseEventFile file)
+    match parsed with
+    |Success(v, _, _) ->
+        let processed = Process.processEventFile v
+        let rawAgain = processed.ToRaw |> EventFile
+        Expect.equal v rawAgain "Not equal"
+        let eventComment = Process.getEventComments processed
+        let immediates = Process.getAllImmediates processed
+        let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
+        let localisation = LocalisationService settings  
+        let options = Process.getEventsOptions localisation processed
+        let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
+        let ck3 = Process.addLocalisedDescAll processed localisation
+        (ck3.ToJson, eventComment.ToJson, immediates.ToJson, options.ToJson, pretties.ToJson)
+        ()
+    | _ -> ()
 [<Tests>]
 let processingTests =
     testList "processing tests" [
@@ -103,23 +139,7 @@ let processingTests =
             | _ -> ()
 
         testCase "process all" <| fun () ->
-            let test file =
-                let parsed = (CKParser.parseEventFile file)
-                match parsed with
-                |Success(v, _, _) ->
-                    let processed = Process.processEventFile v
-                    let rawAgain = processed.ToRaw |> EventFile
-                    Expect.equal v rawAgain "Not equal"
-                    let eventComment = Process.getEventComments processed
-                    let immediates = Process.getAllImmediates processed
-                    let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
-                    let localisation = LocalisationService settings  
-                    let options = Process.getEventsOptions localisation processed
-                    let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
-                    let ck3 = Process.addLocalisedDescAll processed localisation
-                    let x = Json
-                    ()
-                | _ -> ()
+
             Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
             Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter test
 

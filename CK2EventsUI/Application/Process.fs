@@ -255,3 +255,11 @@ module Process =
     
     let getAllImmediates (root : Root) =
         root.Events |> List.map (fun e -> (e.ID, getImmediate e))
+
+    type eventView = { ID :string; Desc:string; Hidden:bool; Key:string}
+
+    let getEventViews (root : Root) =
+        let getView (e : Event) =
+            //let etype = e.Tag "type" |> (function | Some (String s) -> s | _ -> "")
+            {ID = e.ID; Desc = e.Desc; Hidden = e.Hidden; Key = e.Key}
+        root.Events |> List.map getView
