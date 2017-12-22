@@ -34,19 +34,19 @@ open Microsoft.AspNetCore.Hosting
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptionsSnapshot<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptionsSnapshot<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment, appSettings : AppSettings) =
     inherit BaseController()
 
     let settings : CK2Settings = settings.Value
  
     member val provider = provider
 
-    member this.Index (game : Game) : ActionResult =
-        match Directory.Exists(settings.Directory(game).eventDirectory) with
+    member this.Index () : ActionResult =
+        match Directory.Exists(settings.Directory(appSettings.currentGame).eventDirectory) with
         | false -> upcast this.RedirectToAction("Settings")
         | true -> 
-            let files = Events.getFileList (settings.Directory(game).eventDirectory)
-            let viewmodel = IndexViewModel(settings, files, game)
+            let files = Events.getFileList (settings.Directory(appSettings.currentGame).eventDirectory)
+            let viewmodel = IndexViewModel(settings, files, appSettings)
             upcast this.View(viewmodel)
     
     member this.Localisation () =

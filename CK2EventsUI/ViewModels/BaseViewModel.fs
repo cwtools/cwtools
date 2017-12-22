@@ -27,10 +27,11 @@ type SettingsViewModel (settings) =
         enums |> Seq.map (fun e -> SelectListItem(Value = (int e).ToString(), Text = e.ToString()))
               |> (fun l -> SelectList(l, "Value", "Text"))
 
-type IndexViewModel (settings, files, game) =
+type IndexViewModel (settings, files, appSettings : AppSettings) =
     inherit BaseViewModel (settings)
     member val files : string list = files
-    member val game : Game = game
+    member val game : Game = appSettings.currentGame
+    
     
 type EventsViewModel (settings, files, game) =
     inherit BaseViewModel (settings)

@@ -29,3 +29,9 @@ type UserSettings (settings:CK2Settings) =
 
 type CK2SettingsJson =
     { userSettings : UserSettings }
+
+type AppSettings () =
+    member val currentGame : Game = Game.CK2 with get, set
+
+// type AppSettingsService() =
+//     member __.SetGame g = appSettings.currentGame <- g
