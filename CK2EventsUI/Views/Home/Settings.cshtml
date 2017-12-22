@@ -10,6 +10,10 @@
         <input asp-for="settings.ck2Directory" class="form-control col-md-8" readonly/>
         <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="ck2">Set game folder</a>
     </div>
+    <div class="form-group">
+        <label asp-for="settings.ck2Language" class="control-label col-md-3">CK2 localisation language</label>
+        <select asp-for="settings.ck2Language" asp-items="Model.ck2Languages" class="form-control col-md-8"></select>
+    </div>
     @if(!Model.validHOI4Directory)
     {
         <span>The current folder doesn't look like the game directory of Hearts of Iron IV</span>

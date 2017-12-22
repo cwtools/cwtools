@@ -2,6 +2,7 @@ namespace CK2Events.Application
 
 open System.Text.RegularExpressions
 type Game = |CK2 = 0 |HOI4 = 1
+type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3
 
 type GameDirectory (directory : string) =
     member val gameDirectory : string = directory with get, set
@@ -11,6 +12,7 @@ type GameDirectory (directory : string) =
 type CK2Settings () =
     member val ck2Directory : string = "" with get, set
     member this.CK2Directory = GameDirectory(this.ck2Directory)
+    member val ck2Language : CK2Lang = CK2Lang.English with get, set
     member val hoi4Directory : string = "" with get, set
     member this.HOI4Directory = GameDirectory(this.hoi4Directory)
     member this.Directory x = 
@@ -21,6 +23,7 @@ type CK2Settings () =
 
 type UserSettings (settings:CK2Settings) =
     member this.ck2Directory = settings.ck2Directory
+    member this.ck2Language = settings.ck2Language
     member this.hoi4Directory = settings.hoi4Directory
     member this.bundleEdges = settings.bundleEdges
 
