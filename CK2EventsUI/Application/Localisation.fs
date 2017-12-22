@@ -6,8 +6,8 @@ open Microsoft.Extensions.Options
 
 module Localisation =
     open System.Collections.Generic
-    type LocalisationEntry = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=false,Quote='~',HasHeaders=true>
-    type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true>
+    type LocalisationEntry = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=false,Quote='~',HasHeaders=true,Encoding="1252">
+    type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true,Encoding="1252">
 
 
     type LocalisationService(localisationDirectory : string, language : CK2Lang) as this =
@@ -21,7 +21,7 @@ module Localisation =
                 csvFallback <- csvFallback.Append(rows)
                 (false, rows.Length, msg)
             let file = 
-                File.ReadAllLines x 
+                File.ReadAllLines(x, System.Text.Encoding.GetEncoding(1252))
                 |> Array.filter(fun l -> l.StartsWith("#CODE") || not(l.StartsWith("#")))
                 |> String.concat "\n"
             try
@@ -67,15 +67,15 @@ module Localisation =
                         let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
                         results <- addFiles files |> dict
             | false -> ()
-        new (settings : IOptions<CK2Settings>) = LocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
+        new (settings : IOptionsSnapshot<CK2Settings>) = LocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
 
         member val Results = results with get, set
 
         member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
 
         member __.Values = 
-            let one = csv.Rows |> Seq.map(fun f -> (f.``#CODE``, f.ENGLISH))
-            let two = csvFallback.Rows |> Seq.map(fun f -> (f.``#CODE``, f.ENGLISH))
+            let one = csv.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLang f))
+            let two = csvFallback.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback f))
             Seq.concat [one; two] |> dict
 
 

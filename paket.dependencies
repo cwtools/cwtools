@@ -18,3 +18,4 @@ nuget runtime.linux-x64.Microsoft.NETCore.App
 nuget runtime.linux-x64.Microsoft.NETCore.DotNetHostPolicy
 nuget runtime.linux-x64.Microsoft.NETCore.DotNetHostResolver
 nuget runtime.linux-x64.Microsoft.NETCore.DotNetAppHost
+nuget System.Text.Encoding.CodePages

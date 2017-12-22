@@ -5,6 +5,7 @@ open Microsoft.AspNetCore.Hosting
 open ElectronNET.API
 open Microsoft.Extensions.Configuration
 open CK2Events.Application
+open System.Text
 
 module Program =
     let exitCode = 0
@@ -21,6 +22,7 @@ module Program =
 
     [<EntryPoint>]
     let main args =
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         BuildWebHost(args).Run()
 
         exitCode
