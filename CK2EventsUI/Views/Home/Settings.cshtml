@@ -23,6 +23,24 @@
         <input asp-for="settings.hoi4Directory" class="form-control col-md-8" readonly/>
         <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="hoi4">Set game folder</a>
     </div>
+    @if(!Model.validEU4Directory)
+    {
+        <span>The current folder doesn't look like the game directory of Europa Universalis IV</span>
+    }
+    <div class="form-group">
+        <label asp-for="settings.eu4Directory" class="control-label col-md-3">EUIV game directory</label>
+        <input asp-for="settings.eu4Directory" class="form-control col-md-8" readonly/>
+        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="eu4">Set game folder</a>
+    </div>
+        @if(!Model.validSTLDirectory)
+    {
+        <span>The current folder doesn't look like the game directory of Stellaris</span>
+    }
+    <div class="form-group">
+        <label asp-for="settings.stlDirectory" class="control-label col-md-3">Stellaris game directory</label>
+        <input asp-for="settings.stlDirectory" class="form-control col-md-8" readonly/>
+        <a class="btn btn-default col-md-1" asp-area="" asp-controller="Home" asp-action="SetFolder" asp-route-game="stl">Set game folder</a>
+    </div>
     <div class="form-group">
         <label asp-for="settings.bundleEdges" class="control-label col-md-3">Bundle edges</label>
         <input asp-for="settings.bundleEdges" class="form-control col-md-8"/>

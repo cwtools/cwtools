@@ -3,7 +3,6 @@ namespace CK2Events.ViewModels
 open ElectronNET.API
 open CK2Events.Application
 open System.IO
-open SQLitePCL
 open CK2Events.Application.Localisation
 open System
 open Microsoft.AspNetCore.Mvc.Rendering
@@ -21,7 +20,8 @@ type SettingsViewModel (settings) =
     
     member val validCK2Directory = settings.CK2Directory.gameDirectory = "" || testGameDirectory settings.CK2Directory.gameDirectory
     member val validHOI4Directory = settings.HOI4Directory.gameDirectory = "" || testGameDirectory settings.HOI4Directory.gameDirectory
-
+    member val validEU4Directory = settings.EU4Directory.gameDirectory = "" || testGameDirectory settings.EU4Directory.gameDirectory
+    member val validSTLDirectory = settings.STLDirectory.gameDirectory = "" || testGameDirectory settings.STLDirectory.gameDirectory
     member val ck2Languages = 
         let enums : CK2Lang seq = unbox (Enum.GetValues(typeof<CK2Lang>))
         enums |> Seq.map (fun e -> SelectListItem(Value = (int e).ToString(), Text = e.ToString()))

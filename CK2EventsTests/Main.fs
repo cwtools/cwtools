@@ -10,6 +10,7 @@ open Expecto.Expect
 open ParserDomain
 open Newtonsoft.Json
 open CK2Events.Controllers.Utils
+open System.Text
 
 let printer = CKPrinter.api
 let parser = CKParser.api
@@ -87,8 +88,7 @@ let parserTests =
 let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
-            let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
-            let parsed = LocalisationService settings
+            let parsed = LocalisationService("CK2EventsUI/localization", CK2Lang.English)
             ()
     ]
 
@@ -101,13 +101,12 @@ let test file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = Process.getEventComments processed
         let immediates = Process.getAllImmediates processed
-        let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
-        let localisation = LocalisationService settings  
+        let localisation = LocalisationService("CK2EventsUI/localization", CK2Lang.English)  
         let options = Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = Process.addLocalisedDescAll processed localisation
         ()
-    | _ -> ()
+    |Failure(m, _, _) -> Expect.isTrue false (file + m)
 
 let test2 file =
     let parsed = (CKParser.parseEventFile file)
@@ -118,8 +117,7 @@ let test2 file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = Process.getEventComments processed
         let immediates = Process.getAllImmediates processed
-        let settings = Microsoft.Extensions.Options.Options.Create(CK2Settings (ck2Directory="CK2EventsUI/localization"))
-        let localisation = LocalisationService settings  
+        let localisation = LocalisationService("CK2EventsUI/localization", CK2Lang.English)
         let options = Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = Process.addLocalisedDescAll processed localisation
@@ -142,11 +140,15 @@ let processingTests =
 
             Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
             Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Stellaris/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Europa Universalis IV/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Hearts of Iron IV/events" |> List.ofSeq |> List.iter test
+            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/events" |> List.ofSeq |> List.iter test
 
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
-            let service = LocalisationService("CK2EventsTests/localisation test files", true)
+            let service = LocalisationService("CK2EventsTests/localisation test files", CK2Lang.English)
             match parsed with
             |Success(v, _, _) ->
                 let processed = Process.processEventFile v
@@ -158,4 +160,5 @@ let processingTests =
     ]
 [<EntryPoint>]
 let main argv =
+    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     runTestsInAssembly defaultConfig argv

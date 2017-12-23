@@ -1,7 +1,6 @@
 namespace CK2Events.Application
 
 open FParsec
-open Microsoft.WindowsAzure.Storage.File
 
 module ParserDomain =
 
@@ -67,8 +66,8 @@ module CKParser =
     // Sets of chars
     // =======
     let whitespaceTextChars = " \t\r\n"
-    let idchar = asciiLetter <|> digit <|> anyOf ['_'; ':']
-    let valuechar = asciiLetter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']']
+    let idchar = asciiLetter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"']
+    let valuechar = asciiLetter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']'; '@']
 
 
     // Utility parsers
@@ -146,8 +145,6 @@ module CKPrinter =
     let printValuelist depth is =
         let printOne = (fun i -> tabs (depth) + (string i) + "\n")
         List.map printOne is |> List.fold (+) ""
-        //match t with
-        //| Troop (id, t1, t2) -> tabs depth + string id + " = " + string t1 + " " + string t2 + "\n"
         
 
     let rec printValue v depth =
@@ -162,12 +159,10 @@ module CKPrinter =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
         | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
-        //| Troops tl -> (tabs depth) + tl.ToString() + "\n"
         | Troops tl ->
             (tabs depth) + "troops = {\n" +
             (List.map (printTroop (depth + 1)) tl |> List.fold (+) "") +
             (tabs depth) + "}\n"
-        //| Troops tl -> tabs depth + "troops = {\n" + (List.map (fun t -> (tabs (depth + 1)) + t.ToString() + "\n" ) tl |> List.fold (+) "") + tabs depth + "}\n"
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint ef =
@@ -181,8 +176,8 @@ module CKPrinter =
         | Failure (msg, _, _) -> msg
 
     let api = 
-    {
+        {
         prettyPrintFile = prettyPrint
         prettyPrintStatements = (fun f -> printKeyValueList f 0)
         prettyPrintFileResult = prettyPrintResult
-    }
+        }

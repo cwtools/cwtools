@@ -68,7 +68,6 @@ module Localisation =
                         results <- addFiles files |> dict
             | false -> ()
         new (settings : IOptionsSnapshot<CK2Settings>) = LocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
-
         member val Results = results with get, set
 
         member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq

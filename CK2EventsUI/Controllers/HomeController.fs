@@ -63,6 +63,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
             match game with
             |Game.CK2 -> settings.ck2Directory <- x
             |Game.HOI4 -> settings.hoi4Directory <- x
+            |Game.EU4 -> settings.eu4Directory <- x
+            |Game.STL -> settings.stlDirectory <- x
         let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])

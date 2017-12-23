@@ -40,7 +40,9 @@ type Startup private () =
         let goToGame (x : Game) = Electron.WindowManager.BrowserWindows |> Seq.iter (fun w -> w.LoadURL ("http://localhost:" + port + "/home/index?game=" + x.ToString()))
         let click (x : Game) = (fun _ -> appSettings.currentGame <- x; goToGame x; gameSelects |> Array.iteri (setChecked x); Electron.Menu.SetApplicationMenu(newMenu) )
         gameSelects <- [|MenuItem(Label="Crusader Kings 2", Click = Action (click Game.CK2), Type = MenuType.radio, Checked = true);
-                        MenuItem(Label="Hearts of Iron IV", Click = Action (click Game.HOI4), Type = MenuType.radio);|]
+                        MenuItem(Label="Hearts of Iron IV", Click = Action (click Game.HOI4), Type = MenuType.radio);
+                        MenuItem(Label="Europa Universalis IV", Click = Action (click Game.EU4), Type = MenuType.radio);
+                        MenuItem(Label="Stellaris", Click = Action (click Game.STL), Type = MenuType.radio);|]
 
         let hiddenMenuItems = [|MenuItem(Role = MenuRole.cut);
                                 MenuItem(Role = MenuRole.copy);
