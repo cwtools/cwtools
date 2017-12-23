@@ -31,16 +31,33 @@ type Startup private () =
 
 
     member __.ElectronBootstrap(appSettings : AppSettings, port : string) =
-        let devTools = MenuItem(Label = "Open Developer Tools",
-                        Accelerator = "CmdOrCtrl+I",
-                        Click = (fun _ -> Electron.WindowManager.BrowserWindows |> Seq.head |> (fun f -> f.WebContents.OpenDevTools())))
+        let mutable newMenu = [||]
+        let mutable gameSelects = [||]
+        let setChecked (g : Game) (i : int) (m : MenuItem) =
+            let enums : Game seq = unbox (Enum.GetValues(typeof<Game>))
+            if List.exists (fun f -> (int f) = i) (enums |> List.ofSeq) then m.Checked <- ((int g) = i)
+            
         let goToGame (x : Game) = Electron.WindowManager.BrowserWindows |> Seq.iter (fun w -> w.LoadURL ("http://localhost:" + port + "/home/index?game=" + x.ToString()))
-        let click (x : Game) = (fun _ -> appSettings.currentGame <- x; goToGame x)
-        let submenu = [|MenuItem(Label="Crusader Kings 2", Click = Action (click Game.CK2), Type = MenuType.radio, Checked = true);
+        let click (x : Game) = (fun _ -> appSettings.currentGame <- x; goToGame x; gameSelects |> Array.iteri (setChecked x); Electron.Menu.SetApplicationMenu(newMenu) )
+        gameSelects <- [|MenuItem(Label="Crusader Kings 2", Click = Action (click Game.CK2), Type = MenuType.radio, Checked = true);
                         MenuItem(Label="Hearts of Iron IV", Click = Action (click Game.HOI4), Type = MenuType.radio);|]
-                        //devTools|]
-        let menu = MenuItem(Label="Game", Submenu = submenu)
-        let newMenu = Electron.Menu.MenuItems |> List.ofSeq |> (fun l -> menu::l) |> Array.ofList
+
+        let hiddenMenuItems = [|MenuItem(Role = MenuRole.cut);
+                                MenuItem(Role = MenuRole.copy);
+                                MenuItem(Role = MenuRole.paste);
+                                MenuItem(Role = MenuRole.selectall);
+                                MenuItem(Role = MenuRole.minimize);
+                                MenuItem(Role = MenuRole.quit);
+                                MenuItem(Role = MenuRole.close);
+                                MenuItem(Role = MenuRole.togglefullscreen);
+                                MenuItem(Type = MenuType.separator, Label="Debug");
+                                MenuItem(Role = MenuRole.reload);
+                                MenuItem(Role = MenuRole.toggledevtools);
+                                |]
+
+        let gameItem = MenuItem(Label="Game", Submenu = gameSelects)
+        let miscItems = MenuItem(Label = "Misc", Submenu = hiddenMenuItems)
+        newMenu <- [|gameItem; miscItems|]
         Electron.Menu.SetApplicationMenu(newMenu)
 
         let webprefs = WebPreferences (NodeIntegration = false)
