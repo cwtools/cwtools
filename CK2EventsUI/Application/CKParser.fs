@@ -8,11 +8,10 @@ module ParserDomain =
         | Key of string
         override x.ToString() = let (Key v) = x in sprintf "%s" v  
     
-    type Troop =
-        | Troop of Key * int * int
-        override x.ToString() = let (Troop (id, a, b)) = x in sprintf "%O = { %O %O }" id a b
-    
-    type KeyValueItem = 
+    type ValueBlockItem =
+        | Comment of string
+        | Value of Value
+    and KeyValueItem = 
         | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
@@ -22,7 +21,7 @@ module ParserDomain =
         //| Int of int
         | Bool of bool
         | Clause of Statement list
-        | ValueBlock of Value list
+        | ValueBlock of ValueBlockItem list
         override x.ToString() =
             match x with
             | Clause b -> "{ " + sprintf "%O" b + " }"
@@ -36,7 +35,7 @@ module ParserDomain =
     and Statement =
         | Comment of string
         | KeyValue of KeyValueItem
-        | Troops of Troop list
+        | Value of Value
     [<StructuralEquality; StructuralComparison>]
     type EventFile = |EventFile of  Statement list
 
@@ -83,7 +82,7 @@ module CKParser =
     // =======
     let operator = (attempt (strSkip ">=")) <|> (attempt (strSkip "<=")) <|> (attempt (strSkip "==")) <|> chSkip '=' <|> chSkip '<' <|> chSkip '>' <?> "operator"
 
-    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string |>> Comment <?> "comment"
+    let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string <?> "comment"
 
     let key = (many1Chars idchar) .>> ws |>> Key <?> "id"
 
@@ -104,8 +103,8 @@ module CKParser =
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let value, valueimpl = createParserForwardedToRef()
 
-    let statement = comment <|> keyvalue <?> "statement"
-    let valueBlock = clause (many1 value) |>> ValueBlock <?> "value clause"
+    let statement = comment |>> Comment <|> keyvalue <?> "statement"
+    let valueBlock = clause (many1 ((value |>> ValueBlockItem.Value) <|> (comment |>> ValueBlockItem.Comment))) |>> ValueBlock <?> "value clause"
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
     do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> valueS <?> "value"
@@ -150,19 +149,19 @@ module CKPrinter =
     let rec printValue v depth =
         match v with
         | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
-        | ValueBlock nbl -> "{ \n" + printValuelist (depth + 1) nbl +
-                            tabs (depth + 1) + " }\n"
+        | ValueBlock vl -> "{ \n" + printValueBlockItemList vl (depth + 1) + tabs (depth + 1) + " }\n"
         | x -> x.ToString() + "\n"
-    
-
+    and printValueBlockItem value depth = 
+        match value with
+        | ValueBlockItem.Value v -> printValue v depth
+        | ValueBlockItem.Comment c -> (tabs depth) + "#" + c + "\n"
+    and printValueBlockItemList vl depth =
+        vl |> List.map (fun v -> printValueBlockItem v depth) |> List.fold (+) ""
     and printKeyValue kv depth =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
         | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
-        | Troops tl ->
-            (tabs depth) + "troops = {\n" +
-            (List.map (printTroop (depth + 1)) tl |> List.fold (+) "") +
-            (tabs depth) + "}\n"
+        | Value v -> (tabs depth) + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""
     let prettyPrint ef =

@@ -128,7 +128,7 @@ let test2 file =
 let processingTests =
     testList "processing tests" [
         testCase "process one" <| fun () ->
-            let parsed = (CKParser.parseEventFile "CK2EventsTests/events/ze_ambition_events_2.txt")
+            let parsed = (CKParser.parseEventFile "CK2EventsTests/events/hl_nomad_events.txt")
             match parsed with
             |Success(v, _, _) ->
                 let processed = Process.processEventFile v
