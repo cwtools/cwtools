@@ -3,7 +3,7 @@ namespace CK2Events.ViewModels
 open ElectronNET.API
 open CK2Events.Application
 open System.IO
-open CK2Events.Application.Localisation
+open CK2Events.Application.LocalisationDomain
 open System
 open Microsoft.AspNetCore.Mvc.Rendering
 
@@ -40,4 +40,4 @@ type EventsViewModel (settings, files, game) =
 
 type LocalisationViewModel (settings, localisation) =
     inherit BaseViewModel (settings)
-    member val localisation : LocalisationService = localisation
+    member val localisation : LocalisationAPI = localisation

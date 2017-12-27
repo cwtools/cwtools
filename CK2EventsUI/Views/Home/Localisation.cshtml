@@ -1,7 +1,7 @@
 @model CK2Events.ViewModels.LocalisationViewModel
 <table>
     <tr><th>Localisation file</th><th>(Strict pass, # rows added, error)</th></tr>
-@foreach(var result in Model.localisation.Results){
+@foreach(var result in Model.localisation.results){
     <tr><td>@result.Key</td><td>@result.Value</td></tr>
 }
 </table>

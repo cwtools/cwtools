@@ -3,8 +3,6 @@
 open System.Linq
 open Microsoft.AspNetCore.Mvc
 open CK2Events.Application
-open FParsec
-open Process
 open Newtonsoft.Json
 open Newtonsoft.Json.FSharp
 open Microsoft.AspNetCore.Mvc.Infrastructure
@@ -34,7 +32,7 @@ open Microsoft.AspNetCore.Hosting
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptionsSnapshot<CK2Settings>, localisation : Localisation.LocalisationService, hostingEnvironment : IHostingEnvironment, appSettings : AppSettings) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : IOptionsSnapshot<CK2Settings>, localisation : LocalisationDomain.LocalisationAPI, hostingEnvironment : IHostingEnvironment, appSettings : AppSettings) =
     inherit BaseController()
 
     let settings : CK2Settings = settings.Value

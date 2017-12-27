@@ -9,6 +9,7 @@ open ElectronNET.API
 open ElectronNET.API.Entities
 open CK2Events.Application
 open Application.Localisation
+open Application.LocalisationDomain
 open System
 
 
@@ -28,6 +29,11 @@ type Startup private () =
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
         services.AddScoped<LocalisationService>() |> ignore
         services.AddSingleton<AppSettings>() |> ignore
+        services.AddScoped<LocalisationAPI>(fun provider -> 
+            let settings = provider.GetService<AppSettings>()
+            match settings.currentGame with
+            |Game.CK2 -> provider.GetService<LocalisationService>().Api
+            ) |> ignore
 
 
     member __.ElectronBootstrap(appSettings : AppSettings, port : string) =

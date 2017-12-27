@@ -3,14 +3,30 @@ namespace CK2Events.Application
 open FSharp.Data
 open System.IO
 open Microsoft.Extensions.Options
+open System.Collections.Generic
+open ParserDomain
 
-module Localisation =
-    open System.Collections.Generic
+module LocalisationDomain =
+    type GetDesc = string -> string
+    type GetKeys = string list
+    type Values = IDictionary<string, string>
+    type Results = IDictionary<string, (bool * int * string)>
+
+    type LocalisationAPI =
+        {
+            results : Results
+            values : Values
+            getKeys : GetKeys
+            getDesc : GetDesc
+        }
+
+module CKLocalisation =
+    open LocalisationDomain
     type LocalisationEntry = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=false,Quote='~',HasHeaders=true,Encoding="1252">
     type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true,Encoding="1252">
 
 
-    type LocalisationService(localisationDirectory : string, language : CK2Lang) as this =
+    type CKLocalisationService(localisationDirectory : string, language : CK2Lang) =
         let localisationFolder : string = localisationDirectory
         let language : CK2Lang = language
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
@@ -61,28 +77,36 @@ module Localisation =
             |CK2Lang.Spanish -> x.SPANISH
             |_ -> x.ENGLISH
 
-        do
-            match Directory.Exists(localisationFolder) with
-            | true -> 
-                        let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
-                        results <- addFiles files |> dict
-            | false -> ()
-        new (settings : IOptionsSnapshot<CK2Settings>) = LocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
-        member val Results = results with get, set
+        let getKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
 
-        member __.GetKeys = csv.Rows |> Seq.map (fun f -> f.``#CODE``) |> List.ofSeq
-
-        member __.Values = 
+        let values = 
             let one = csv.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLang f))
             let two = csvFallback.Rows |> Seq.map(fun f -> (f.``#CODE``, getForLangFallback f))
             Seq.concat [one; two] |> dict
 
-
-
-        member __.GetDesc x =
+        let getDesc x =
             let one = csv.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x) 
             let two = csvFallback.Rows |> Seq.tryFind (fun f -> f.``#CODE`` = x)
             match (one, two) with
             | (Some x, _) -> getForLang x
             | (None, Some x) -> getForLangFallback x
             | _ -> x
+        
+        do
+            match Directory.Exists(localisationFolder) with
+            | true -> 
+                        let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
+                        results <- addFiles files |> dict
+            | false -> ()
+        new (settings : IOptionsSnapshot<CK2Settings>) = CKLocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
+
+      
+  
+        member val Results = results with get, set
+        member __.Api = 
+            {
+                results = results
+                values = values
+                getDesc = getDesc
+                getKeys = getKeys
+            }
