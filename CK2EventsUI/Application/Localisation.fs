@@ -4,7 +4,6 @@ open FSharp.Data
 open System.IO
 open Microsoft.Extensions.Options
 open System.Collections.Generic
-open ParserDomain
 
 module LocalisationDomain =
     type GetDesc = string -> string
@@ -105,6 +104,70 @@ module CKLocalisation =
         member val Results = results with get, set
         member __.Api = 
             {
+                results = results
+                values = values
+                getDesc = getDesc
+                getKeys = getKeys
+            }
+
+module YAMLLocalisationParser =
+    open FParsec
+
+    type Entry = {
+        key : string
+        value : string
+        desc : string
+    }
+
+    type LocFile = {
+        key : string
+        entries : Entry list
+    }
+    
+    //let key = charsTillString ":" true 1000 .>> spaces <?> "key"
+    let key = many1CharsTill anyChar (pchar ':') .>> spaces <?> "key"
+    //let descInner = (charsTillString "§")
+    let stringThenEscaped = pipe2 (manyCharsTill (noneOf ['"']) (pchar '§')) (manyCharsTill anyChar (pstring "§!")) (+) <?> "escaped"
+    //let desc = pipe2 (pchar '"') (many ((attempt stringThenEscaped) <|> manyCharsTill anyChar (pchar '"')) |>> List.reduce (+)) (fun a b -> string a + b)
+    //let desc = between (pchar '"') (pchar '"') (charsTillString "\"" false 10000) .>> spaces <?> "desc"
+    let desc = pipe3 (pchar '"' |>> string) (many (attempt stringThenEscaped) |>> List.fold (+) "")  (manyCharsTill (noneOf ['§']) (pchar '"')) (fun a b c -> string a + b + c) <?> "string"
+    let value = digit .>> spaces <?> "version"
+    let entry = pipe3 (key) (value) (desc .>> spaces) (fun k v d -> {key = k; value = string v; desc = d}) <?> "entry"
+    let manyEntries = many entry <?> "entry list"
+    let file = pipe2 (key) (many entry .>> eof) (fun k es -> {key = k; entries = es}) <?> "file"
+
+    let parseLocFile filepath name = runParserOnFile file () filepath System.Text.Encoding.UTF8
+
+module EU4Localisation =
+    open YAMLLocalisationParser
+    open LocalisationDomain
+    open FParsec
+
+    type EU4LocalisationService (localisationFolder : string, language : CK2Lang) =
+        let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
+        let mutable records : Entry list = []
+        let addFile f = 
+            match parseLocFile f f with
+            | Success(v, _, _) -> records <- v.entries@records; (true, v.entries.Length, "")
+            | Failure(msg, _, _) -> (false, 0, msg)
+        let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
+
+        let values = records |> List.map (fun r -> (r.key, r.desc)) |> dict
+
+        let getDesc x = records |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
+
+        let getKeys = records |> List.map (fun r -> r.key)
+
+        do
+            match Directory.Exists(localisationFolder) with
+            | true -> 
+                        let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
+                        results <- addFiles files |> dict
+            | false -> ()
+
+        new (settings : IOptionsSnapshot<CK2Settings>) = EU4LocalisationService(settings.Value.EU4Directory.localisationDirectory, settings.Value.ck2Language)
+        member __.Api =
+            {       
                 results = results
                 values = values
                 getDesc = getDesc

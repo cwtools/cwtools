@@ -8,7 +8,8 @@ open Microsoft.Extensions.DependencyInjection
 open ElectronNET.API
 open ElectronNET.API.Entities
 open CK2Events.Application
-open Application.Localisation
+open Application.CKLocalisation
+open Application.EU4Localisation
 open Application.LocalisationDomain
 open System
 
@@ -27,12 +28,14 @@ type Startup private () =
         services.AddOptions() |> ignore
         services.Configure<CK2Settings>(this.Configuration.GetSection("userSettings")) |> ignore
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
-        services.AddScoped<LocalisationService>() |> ignore
+        services.AddScoped<CKLocalisationService>() |> ignore
+        services.AddScoped<EU4LocalisationService>() |> ignore
         services.AddSingleton<AppSettings>() |> ignore
         services.AddScoped<LocalisationAPI>(fun provider -> 
             let settings = provider.GetService<AppSettings>()
             match settings.currentGame with
-            |Game.CK2 -> provider.GetService<LocalisationService>().Api
+            |Game.CK2 -> provider.GetService<CKLocalisationService>().Api
+            |Game.EU4 -> provider.GetService<EU4LocalisationService>().Api
             ) |> ignore
 
 
