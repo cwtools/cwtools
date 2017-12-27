@@ -2,6 +2,9 @@ namespace CK2Events.Application
 
 open System.IO
 open ParserDomain
+open FParsec
+open Process
+open Localisation
 
 module Events =
     let rand = System.Random()
@@ -33,5 +36,21 @@ module Events =
         Directory.EnumerateFiles(directory)
         |> List.ofSeq
         |> List.sort
-        |> List.map Path.GetFileNameWithoutExtension
-            
+        |> List.map Path.GetFileNameWithoutExtension    
+
+    let getProcessedEvent (settings : CK2Settings) (game : Game) (localisation : LocalisationService) file =
+        let filePath = settings.Directory(game).eventDirectory + file + ".txt"
+        let fileString = File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(1252))
+        let t = (CKParser.parseEventString fileString file)
+        match t with
+            | Success(v, _, _) -> 
+                let ck2 = processEventFile v 
+                let comments = getEventComments ck2
+                let immediates = getAllImmediates ck2
+                let options = getEventsOptions localisation ck2
+                let pretties = ck2.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
+                let ck3 = addLocalisedDescAll ck2 localisation
+                let events = getEventViews ck3
+                (true, events, immediates, options, pretties, comments, "")
+            | ParserResult.Failure(msg, _, _) -> 
+                (false,[],[],[],[],[], msg)

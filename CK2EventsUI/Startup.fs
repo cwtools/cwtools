@@ -43,7 +43,14 @@ type Startup private () =
                         MenuItem(Label="Hearts of Iron IV", Click = Action (click Game.HOI4), Type = MenuType.radio);
                         MenuItem(Label="Europa Universalis IV", Click = Action (click Game.EU4), Type = MenuType.radio);
                         MenuItem(Label="Stellaris", Click = Action (click Game.STL), Type = MenuType.radio);|]
+        let createURL action controller = "http://localhost:" + port + "/" + controller + "/" + action
+        let goToUrl action controller = Electron.WindowManager.BrowserWindows |> Seq.iter (fun w -> w.LoadURL(createURL action controller))
 
+        let windowMenuItems = [|MenuItem(Label = "Events", Click = Action (fun _ -> goToUrl "index" "home"));
+                                MenuItem(Label = "Localisation", Click = Action (fun _ -> goToUrl "localisation" "home"));
+                                MenuItem(Label = "Settings", Click = Action (fun _ -> goToUrl "settings" "home"));
+                                MenuItem(Label = "Select game", Submenu = gameSelects)
+                                |]        
         let hiddenMenuItems = [|MenuItem(Role = MenuRole.cut);
                                 MenuItem(Role = MenuRole.copy);
                                 MenuItem(Role = MenuRole.paste);
@@ -57,9 +64,10 @@ type Startup private () =
                                 MenuItem(Role = MenuRole.toggledevtools);
                                 |]
 
+        let windowItem = MenuItem(Label="Menu", Submenu = windowMenuItems)
         let gameItem = MenuItem(Label="Game", Submenu = gameSelects)
         let miscItems = MenuItem(Label = "Misc", Submenu = hiddenMenuItems)
-        newMenu <- [|gameItem; miscItems|]
+        newMenu <- [|windowItem; miscItems|]
         Electron.Menu.SetApplicationMenu(newMenu)
 
         let webprefs = WebPreferences (NodeIntegration = false)

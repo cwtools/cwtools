@@ -81,27 +81,11 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
 
     member this.GetData (game : Game, ``files[]`` : string[]) =
         let files = ``files[]`` |> List.ofSeq
-        let processFile file = 
-            let filePath = settings.Directory(game).eventDirectory + file + ".txt"
-            let fileString = File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(1252))
-            let t = (CKParser.parseEventString fileString file)
-            match t with
-                | Success(v, _, _) -> 
-                    let ck2 = processEventFile v 
-                    let comments = getEventComments ck2
-                    let immediates = getAllImmediates ck2
-                    let options = getEventsOptions localisation ck2
-                    let pretties = ck2.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
-                    let ck3 = addLocalisedDescAll ck2 localisation
-                    let events = getEventViews ck3
-                    (true, events, immediates, options, pretties, comments, "")
-                | ParserResult.Failure(msg, _, _) -> 
-                    (false,[],[],[],[],[], msg)
         let combineResults (s, e, i, o, p, c, m) (ns, ne, ni, no, np, nc, nm)=
             match ns with
             | false -> (ns && s, e, i, o, p, c, nm::m)
             | true -> (ns && s, e @ ne, i @ ni, o @ no, p @ np, c @ nc, nm::m)
-        let processed = files |> List.map processFile
+        let processed = files |> List.map (Events.getProcessedEvent settings game localisation)
         let results = processed |> List.fold combineResults (true, [], [], [], [], [], [])
         let formatted = results |> (fun (s, e, i, o, p, c, m) -> (s, e.ToJson, i.ToJson, o.ToJson, p.ToJson, c.ToJson, m.ToJson))
         this.Json(formatted)
