@@ -93,7 +93,9 @@ let localisationTests =
     ]
 
 let test file =
-    let parsed = (CKParser.parseEventFile file)
+    let fileString = File.ReadAllText(file, System.Text.Encoding.GetEncoding(1252))
+    let parsed = (CKParser.parseEventString fileString "file")
+    //let parsed = (CKParser.parseEventFile file)
     match parsed with
     |Success(v, _, _) ->
         let processed = Process.processEventFile v

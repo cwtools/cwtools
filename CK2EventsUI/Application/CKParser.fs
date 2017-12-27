@@ -7,11 +7,8 @@ module ParserDomain =
     type Key =
         | Key of string
         override x.ToString() = let (Key v) = x in sprintf "%s" v  
-    
-    type ValueBlockItem =
-        | Comment of string
-        | Value of Value
-    and KeyValueItem = 
+
+    type KeyValueItem = 
         | KeyValueItem of Key * Value
         override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
     and Value =
@@ -21,11 +18,9 @@ module ParserDomain =
         //| Int of int
         | Bool of bool
         | Clause of Statement list
-        | ValueBlock of ValueBlockItem list
         override x.ToString() =
             match x with
             | Clause b -> "{ " + sprintf "%O" b + " }"
-            | ValueBlock nb -> "{ " + sprintf "%O" nb + " }"
             | QString s -> "\"" + s + "\""
             | String s -> s
             | Bool b -> if b then "yes" else "no"
@@ -65,8 +60,8 @@ module CKParser =
     // Sets of chars
     // =======
     let whitespaceTextChars = " \t\r\n"
-    let idchar = asciiLetter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"']
-    let valuechar = asciiLetter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']'; '@']
+    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"']
+    let valuechar = letter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']'; '@']
 
 
     // Utility parsers
@@ -88,7 +83,9 @@ module CKParser =
 
     let valueS = (many1Chars valuechar) .>> ws |>> string |>> String <?> "string"
 
-    let valueQ = between (ch '"') (ch '"') (manyChars (noneOf "\"")) |>> string |>> QString <?> "quoted string"
+    let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
+    let escapedChar = pstring "\\\"" |>> string
+    let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
 
     let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
                     ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
@@ -104,16 +101,17 @@ module CKParser =
     let value, valueimpl = createParserForwardedToRef()
 
     let statement = comment |>> Comment <|> keyvalue <?> "statement"
-    let valueBlock = clause (many1 ((value |>> ValueBlockItem.Value) <|> (comment |>> ValueBlockItem.Comment))) |>> ValueBlock <?> "value clause"
+    let valueBlock = clause (many1 ((value |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
+    
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
     do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> valueS <?> "value"
     
     do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
-    
     let all = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
 
-    let parseEventFile filepath = runParserOnFile all () filepath System.Text.Encoding.UTF8
+    let parseEventFile filepath = runParserOnFile all () filepath (System.Text.Encoding.GetEncoding(1252))
+
 
     let memoize keyFunction memFunction =
         let dict = new System.Collections.Generic.Dictionary<_,_>()
@@ -149,14 +147,7 @@ module CKPrinter =
     let rec printValue v depth =
         match v with
         | Clause kvl -> "{ \n" + printKeyValueList kvl (depth + 1) + tabs (depth + 1) + " }\n"
-        | ValueBlock vl -> "{ \n" + printValueBlockItemList vl (depth + 1) + tabs (depth + 1) + " }\n"
         | x -> x.ToString() + "\n"
-    and printValueBlockItem value depth = 
-        match value with
-        | ValueBlockItem.Value v -> printValue v depth
-        | ValueBlockItem.Comment c -> (tabs depth) + "#" + c + "\n"
-    and printValueBlockItemList vl depth =
-        vl |> List.map (fun v -> printValueBlockItem v depth) |> List.fold (+) ""
     and printKeyValue kv depth =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"

@@ -83,7 +83,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         let files = ``files[]`` |> List.ofSeq
         let processFile file = 
             let filePath = settings.Directory(game).eventDirectory + file + ".txt"
-            let fileString = File.ReadAllText(filePath)
+            let fileString = File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(1252))
             let t = (CKParser.parseEventString fileString file)
             match t with
                 | Success(v, _, _) -> 

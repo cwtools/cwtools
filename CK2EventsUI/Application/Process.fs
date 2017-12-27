@@ -37,7 +37,7 @@ module Process =
     type LeafValue(value : Value) =
         member val Value = value with get, set
         [<JsonIgnore>]
-        member this.ToRaw = ValueBlockItem.Value(this.Value)
+        member this.ToRaw = Value(this.Value)
     type Node (key : string) =
         let bothFind x = function |NodeI n when n.Key = x -> true |LeafI l when l.Key = x -> true |_ -> false
 
@@ -53,12 +53,12 @@ module Process =
         [<JsonIgnore>]
         member this.ToRaw : Statement list = this.All |> List.rev |>
                                              List.map (function 
-                                               |NodeCI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
-                                               |NodeVI n -> KeyValue(KeyValueItem(Key n.Key, ValueBlock n.ToRaw))
+                                               |NodeI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
+                                               |LeafValueI lv -> lv.ToRaw
                                                |LeafI l -> KeyValue l.ToRaw 
                                                |CommentI c -> (Comment c))
         
-    and Both = |NodeCI of Node |NodeVI of Node | LeafI of Leaf |CommentI of string |LeafValueI of LeafValue
+    and Both = |NodeI of Node | LeafI of Leaf |CommentI of string |LeafValueI of LeafValue
 
     type Option() = 
         inherit Node("option")
@@ -91,22 +91,9 @@ module Process =
         match statement with
             | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.All <- NodeI(processOption sl)::node.All
             | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- NodeI(processNode k sl)::node.All
-            | KeyValue(KeyValueItem(Key(k), ValueBlock(vl))) -> node.All <- NodeI(processValueBlock k vl)::node.All
             | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
             | Comment(c) -> node.All <- CommentI c::node.All
-            | _ -> ()
-
-    and processValueBlock k vl =
-        let node = Node(k)
-        vl |> List.iter (processValueBlockInner node)
-        node
-
-    and processValueBlockInner (node : Node) valueBlockItem =
-        match valueBlockItem with
-            | ValueBlockItem.Comment(c) -> node.All <- CommentI c::node.All
-            | ValueBlockItem.Value(v) -> node.All <- LeafValueI (LeafValue v)::node.All
-            | _ -> ()
-
+            | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
     
     let processEvent k sl =
         let event = Event(k)
