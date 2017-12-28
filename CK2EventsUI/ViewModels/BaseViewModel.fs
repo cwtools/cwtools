@@ -3,7 +3,7 @@ namespace CK2Events.ViewModels
 open ElectronNET.API
 open CK2Events.Application
 open System.IO
-open CK2Events.Application.LocalisationDomain
+open CK2Events.Application.Localisation.LocalisationDomain
 open System
 open Microsoft.AspNetCore.Mvc.Rendering
 

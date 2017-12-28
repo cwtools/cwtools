@@ -1,7 +1,7 @@
 namespace CK2Events.Application
 
 open CK2Events.Application.CKParser
-open LocalisationDomain
+open CK2Events.Application.Localisation.LocalisationDomain
 open System.Collections.Generic
 open FParsec.CharParsers
 open Newtonsoft.Json

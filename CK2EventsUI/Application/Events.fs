@@ -4,7 +4,7 @@ open System.IO
 open ParserDomain
 open FParsec
 open Process
-open LocalisationDomain
+open CK2Events.Application.Localisation.LocalisationDomain
 
 module Events =
     let rand = System.Random()

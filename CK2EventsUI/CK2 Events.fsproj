@@ -5,7 +5,10 @@
   <ItemGroup>
     <Compile Include="Application/Settings.fs" />
     <Compile Include="Application/CKParser.fs" />
-    <Compile Include="Application/Localisation.fs" />
+    <Compile Include="Application/Localisation/LocalisationDomain.fs" />
+    <Compile Include="Application/Localisation/YAMLLocalisationParser.fs" />
+    <Compile Include="Application/Localisation/CK2Localisation.fs" />
+    <Compile Include="Application/Localisation/EU4Localisation.fs" />
     <Compile Include="Application/Process.fs" />
     <Compile Include="Application/Events.fs" />
     <Compile Include="ViewModels/BaseViewModel.fs" />

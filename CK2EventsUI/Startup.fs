@@ -8,9 +8,9 @@ open Microsoft.Extensions.DependencyInjection
 open ElectronNET.API
 open ElectronNET.API.Entities
 open CK2Events.Application
-open Application.CKLocalisation
-open Application.EU4Localisation
-open Application.LocalisationDomain
+open CK2Events.Application.Localisation.CKLocalisation
+open CK2Events.Application.Localisation.EU4Localisation
+open CK2Events.Application.Localisation.LocalisationDomain
 open System
 
 
