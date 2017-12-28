@@ -145,11 +145,20 @@ module EU4Localisation =
     open FParsec
 
     type EU4LocalisationService (localisationFolder : string, language : CK2Lang) =
+        let language = language
+        let languageKey =
+            match language with
+            |CK2Lang.English -> "l_english"
+            |CK2Lang.French -> "l_french"
+            |CK2Lang.Spanish -> "l_spanish"
+            |CK2Lang.German -> "l_german"
+            |_ -> failwith "Unknown language enum value"
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable records : Entry list = []
         let addFile f = 
             match parseLocFile f f with
-            | Success(v, _, _) -> records <- v.entries@records; (true, v.entries.Length, "")
+            | Success({key = key; entries = entries}, _, _) when key = languageKey -> records <- entries@records; (true, entries.Length, "")
+            | Success(v, _, _) -> (true, v.entries.Length, "")
             | Failure(msg, _, _) -> (false, 0, msg)
         let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
 
