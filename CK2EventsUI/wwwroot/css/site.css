@@ -1,10 +1,4 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-    /* overflow-y:scroll; */
-}
-
-html, body, .viewport {
+﻿html, body, .viewport {
   width: 100%;
   height: 100%;
   margin: 0;
