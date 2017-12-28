@@ -40,7 +40,7 @@ module EU4Localisation =
                         results <- addFiles files |> dict
             | false -> ()
 
-        new (settings : IOptionsSnapshot<CK2Settings>) = EU4LocalisationService(settings.Value.EU4Directory.localisationDirectory, settings.Value.ck2Language)
+        new (settings : CK2Settings) = EU4LocalisationService(settings.EU4Directory.localisationDirectory, settings.ck2Language)
         member __.Api =
             {       
                 results = results

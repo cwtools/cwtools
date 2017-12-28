@@ -12,6 +12,7 @@ open CK2Events.Application.Localisation.CKLocalisation
 open CK2Events.Application.Localisation.EU4Localisation
 open CK2Events.Application.Localisation.LocalisationDomain
 open System
+open Microsoft.Extensions.Options
 
 
 
@@ -28,6 +29,7 @@ type Startup private () =
         services.AddOptions() |> ignore
         services.Configure<CK2Settings>(this.Configuration.GetSection("userSettings")) |> ignore
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
+        services.AddTransient<CK2Settings>(fun p -> p.GetService<IOptionsSnapshot<CK2Settings>>().Value) |> ignore
         services.AddScoped<CKLocalisationService>() |> ignore
         services.AddScoped<EU4LocalisationService>() |> ignore
         services.AddSingleton<AppSettings>() |> ignore

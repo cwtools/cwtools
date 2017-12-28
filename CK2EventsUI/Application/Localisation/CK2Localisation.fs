@@ -83,7 +83,7 @@ module CKLocalisation =
                         let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
                         results <- addFiles files |> dict
             | false -> ()
-        new (settings : IOptionsSnapshot<CK2Settings>) = CKLocalisationService(settings.Value.CK2Directory.localisationDirectory, settings.Value.ck2Language)
+        new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
 
       
   
