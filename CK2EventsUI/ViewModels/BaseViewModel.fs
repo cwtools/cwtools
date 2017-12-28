@@ -6,6 +6,7 @@ open System.IO
 open CK2Events.Application.Localisation.LocalisationDomain
 open System
 open Microsoft.AspNetCore.Mvc.Rendering
+open System.Linq
 
 type BaseViewModel (settings) =
     member val settings : CK2Settings = settings
@@ -38,6 +39,16 @@ type EventsViewModel (settings, files, game) =
     member val files : string = files
     member val game : Game = game
 
+type LocalisationViewModelRow =
+    {
+        key : string
+        pass : bool
+        entries : int
+        error : string
+    }
+
 type LocalisationViewModel (settings, localisation) =
     inherit BaseViewModel (settings)
+
     member val localisation : LocalisationAPI = localisation
+    member val displayList = localisation.results.Select(fun d -> (d.Key, d.Value)) |> List.ofSeq |> List.map (fun (key, (pass, entries, error)) -> {key = key; pass = pass; entries = entries; error = error})
