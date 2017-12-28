@@ -62,11 +62,11 @@ module Process =
 
     type Option() = 
         inherit Node("option")
-        member this.Name = this.Tag "name" |> (function | Some (String s) -> s | _ -> "")
+        member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
     type Event(key) =
         inherit Node(key)
         member this.ID = this.Tag "id" |> (function | Some (String s) -> s | _ -> "")
-        member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | _ -> "")
+        member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
     type Root() =
@@ -201,10 +201,10 @@ module Process =
         keys |> List.map (fun k -> k, getDesc k)
 
     let addLocalisedDesc (localisation : LocalisationAPI) (node:Node) =
-        let getDesc x = 
-            match localisation.values.ContainsKey(x) with
-            | true -> localisation.values.[x]
-            | false -> x
+        let getDesc x = localisation.getDesc x
+          //  match localisation.values.ContainsKey(x) with
+          //  | true -> localisation.values.[x]
+         //   | false -> x
         let fNode = (fun (x:Node) _ -> 
                         match x with
                         | :? Event as e -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), String (getDesc e.Desc)))))

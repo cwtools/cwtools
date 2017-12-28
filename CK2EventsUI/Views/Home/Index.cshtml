@@ -5,15 +5,15 @@
 <span>Click file name to view one file or tick multiple and press "View" at the bottom of the page to view many.</span>
 <form asp-controller="Home" asp-action="Graph" method="post">
 <table class="table">
-@foreach(var file in Model.files){
+@for(int i = 0; i < Model.files.Length; i++){
     <input type="hidden" name="game" value="@Model.game"
   <tr>
-      <td><input type="checkbox" name="files" value="@file"/></td>
+      <td><input type="checkbox" name="files" value="@Model.files[i]"/></td>
       <td><a asp-controller="" 
    asp-action="Graph" 
-   asp-route-files="@file"
+   asp-route-files="@Model.files[i]"
    asp-route-game="@Model.game">
-    @file</a></td></tr>
+    @Model.files[i]</a></td><td>@Model.filenamespaces[i]</td></tr>
   
 }
 </table>

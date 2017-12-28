@@ -54,3 +54,11 @@ module Events =
                 (true, events, immediates, options, pretties, comments, "")
             | ParserResult.Failure(msg, _, _) -> 
                 (false,[],[],[],[],[], msg)
+
+    let getNamespace (settings : CK2Settings) (game : Game) file =
+        let filePath = settings.Directory(game).eventDirectory + file + ".txt"
+        let fileString = File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(1252))
+        let t = (CKParser.parseEventString fileString file)
+        match t with
+            | Success(v, _, _) -> processEventFile v |> (fun r -> r.Namespace)
+            | _ -> ""

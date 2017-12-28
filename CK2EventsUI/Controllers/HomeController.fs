@@ -45,7 +45,8 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         | false -> upcast this.RedirectToAction("Settings")
         | true -> 
             let files = Events.getFileList (settings.Directory(appSettings.currentGame).eventDirectory)
-            let viewmodel = IndexViewModel(settings, files, appSettings)
+            let filenamespaces = files |> List.map (Events.getNamespace settings appSettings.currentGame)
+            let viewmodel = IndexViewModel(settings, files, filenamespaces, appSettings)
             upcast this.View(viewmodel)
     
     member this.Localisation () =
