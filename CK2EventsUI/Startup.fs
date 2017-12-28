@@ -11,6 +11,7 @@ open CK2Events.Application
 open CK2Events.Application.Localisation.CKLocalisation
 open CK2Events.Application.Localisation.EU4Localisation
 open CK2Events.Application.Localisation.HOI4Localisation
+open CK2Events.Application.Localisation.STLLocalisation
 open CK2Events.Application.Localisation.LocalisationDomain
 open System
 open Microsoft.Extensions.Options
@@ -34,6 +35,7 @@ type Startup private () =
         services.AddScoped<CKLocalisationService>() |> ignore
         services.AddScoped<EU4LocalisationService>() |> ignore
         services.AddScoped<HOI4LocalisationService>() |> ignore
+        services.AddScoped<STLLocalisationService>() |> ignore
         services.AddSingleton<AppSettings>() |> ignore
         services.AddScoped<LocalisationAPI>(fun provider -> 
             let settings = provider.GetService<AppSettings>()
@@ -41,6 +43,7 @@ type Startup private () =
             |Game.CK2 -> provider.GetService<CKLocalisationService>().Api
             |Game.EU4 -> provider.GetService<EU4LocalisationService>().Api
             |Game.HOI4 -> provider.GetService<HOI4LocalisationService>().Api
+            |Game.STL -> provider.GetService<STLLocalisationService>().Api
             ) |> ignore
 
 
