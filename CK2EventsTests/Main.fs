@@ -3,14 +3,16 @@ open Expecto
 open CK2Events.Application
 open System.Linq
 open FParsec
-open CKParser
-open Localisation
 open System.IO
 open Expecto.Expect
-open ParserDomain
 open Newtonsoft.Json
 open CK2Events.Controllers.Utils
 open System.Text
+open CWTools.Common
+open CWTools.Parser
+open CWTools.Process
+open CWTools.Localisation
+open CWTools.Localisation.CK2Localisation
 
 let printer = CKPrinter.api
 let parser = CKParser.api
@@ -88,7 +90,7 @@ let parserTests =
 let localisationTests =
     testList "localisation tests" [
         testCase "localisation folder" <| fun () ->
-            let parsed = LocalisationService("CK2EventsUI/localization", CK2Lang.English)
+            let parsed = CK2LocalisationService({folder = "CK2EventsUI/localization"; language = CK2Lang.English})
             ()
     ]
 
@@ -103,7 +105,7 @@ let test file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = Process.getEventComments processed
         let immediates = Process.getAllImmediates processed
-        let localisation = LocalisationService("CK2EventsUI/localization", CK2Lang.English)  
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api 
         let options = Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = Process.addLocalisedDescAll processed localisation
@@ -119,7 +121,7 @@ let test2 file =
         Expect.equal v rawAgain "Not equal"
         let eventComment = Process.getEventComments processed
         let immediates = Process.getAllImmediates processed
-        let localisation = LocalisationService("CK2EventsUI/localization", CK2Lang.English)
+        let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api
         let options = Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
         let ck3 = Process.addLocalisedDescAll processed localisation
@@ -138,19 +140,30 @@ let processingTests =
                 Expect.equal v rawAgain "Not equal"
             | _ -> ()
 
-        testCase "process all" <| fun () ->
+        testList "process all" [
+            let folders = ["CK2EventsTests/events"; 
+                            "CK2EventsTests/event test files";
+                            "/home/thomas/.steam/steam/steamapps/common/Stellaris/events";
+                            "/home/thomas/.steam/steam/steamapps/common/Europa Universalis IV/events";
+                            "/home/thomas/.steam/steam/steamapps/common/Hearts of Iron IV/events";
+                            "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/events"]
+            let files = folders |> List.map (Directory.EnumerateFiles >> List.ofSeq) |> List.collect id
+            yield! files |> List.map (fun f -> testCase ("process one " + f.ToString()) <| fun () -> test f)
+        ]
 
-            Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
-            Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter test
-            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Stellaris/events" |> List.ofSeq |> List.iter test
-            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Europa Universalis IV/events" |> List.ofSeq |> List.iter test
-            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Hearts of Iron IV/events" |> List.ofSeq |> List.iter test
-            Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/events" |> List.ofSeq |> List.iter test
+        //testCase "process all" <| fun () ->
+
+           // Directory.EnumerateFiles "CK2EventsTests/events" |> List.ofSeq |> List.iter test
+           // Directory.EnumerateFiles "CK2EventsTests/event test files" |> List.ofSeq |> List.iter test
+           // Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Stellaris/events" |> List.ofSeq |> List.iter test
+           // Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Europa Universalis IV/events" |> List.ofSeq |> List.iter test
+           // Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Hearts of Iron IV/events" |> List.ofSeq |> List.iter test
+           // Directory.EnumerateFiles "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/events" |> List.ofSeq |> List.iter test
 
 
         testCase "addLocalisation" <| fun () ->
             let parsed = parser.parseString "character_event = { desc = LOCTEST }" "test"
-            let service = LocalisationService("CK2EventsTests/localisation test files", CK2Lang.English)
+            let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"; language= CK2Lang.English}).Api
             match parsed with
             |Success(v, _, _) ->
                 let processed = Process.processEventFile v

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +6,9 @@
   <ItemGroup>
     <ProjectReference Include="..\CK2EventsUI\CK2 Events.fsproj">
       <Name>CK2 Events.fsproj</Name>
+    </ProjectReference>
+    <ProjectReference Include="../CWTools/CWTools.fsproj">
+      <Name>CWTools.fsproj</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
