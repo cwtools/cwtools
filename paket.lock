@@ -20,6 +20,7 @@ NUGET
       NETStandard.Library (>= 1.6.1) - restriction: && (< net461) (>= netstandard1.6) (< netstandard2.0)
       System.Diagnostics.FileVersionInfo (>= 4.3) - restriction: || (&& (< net461) (>= netstandard1.6) (< netstandard2.0)) (&& (< net461) (>= netstandard2.0))
       System.ValueTuple (>= 4.4) - restriction: || (>= net461) (&& (>= netstandard1.6) (< netstandard2.0))
+    FAKE (4.64.3)
     FParsec (1.0.3)
       FSharp.Core (>= 4.0.0.1) - restriction: >= net40
       FSharp.Core (>= 4.2.3) - restriction: && (< net40) (>= netstandard1.6)

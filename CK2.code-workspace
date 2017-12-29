@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "CK2EventsTests"
+		},
+		{
+			"path": "CWTools"
 		}
 	],
 	"settings": {}

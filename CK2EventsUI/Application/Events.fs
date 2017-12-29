@@ -1,10 +1,11 @@
 namespace CK2Events.Application
 
 open System.IO
-open ParserDomain
 open FParsec
-open Process
-open CK2Events.Application.Localisation.LocalisationDomain
+open CWTools.Common
+open CWTools.Parser
+open CWTools.Localisation
+open CWTools.Process.Process
 
 module Events =
     let rand = System.Random()
@@ -38,7 +39,7 @@ module Events =
         |> List.sort
         |> List.map Path.GetFileNameWithoutExtension    
 
-    let getProcessedEvent (settings : CK2Settings) (game : Game) (localisation : LocalisationAPI) file =
+    let getProcessedEvent (settings : CK2Settings) (game : Game) (localisation : ILocalisationAPI) file =
         let filePath = settings.Directory(game).eventDirectory + file + ".txt"
         let fileString = File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(1252))
         let t = (CKParser.parseEventString fileString file)

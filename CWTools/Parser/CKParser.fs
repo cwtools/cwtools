@@ -1,61 +1,59 @@
-namespace CK2Events.Application
+namespace CWTools.Parser
 
 open FParsec
 
-module ParserDomain =
 
-    type Key =
-        | Key of string
-        override x.ToString() = let (Key v) = x in sprintf "%s" v  
+type Key =
+    | Key of string
+    override x.ToString() = let (Key v) = x in sprintf "%s" v  
 
-    type KeyValueItem = 
-        | KeyValueItem of Key * Value
-        override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
-    and Value =
-        | String of string
-        | QString of string
-        | Float of float
-        //| Int of int
-        | Bool of bool
-        | Clause of Statement list
-        override x.ToString() =
-            match x with
-            | Clause b -> "{ " + sprintf "%O" b + " }"
-            | QString s -> "\"" + s + "\""
-            | String s -> s
-            | Bool b -> if b then "yes" else "no"
-            | Float f -> sprintf "%A" f
-            //| Int i -> sprintf "%A" i
-   
-    and Statement =
-        | Comment of string
-        | KeyValue of KeyValueItem
-        | Value of Value
-    [<StructuralEquality; StructuralComparison>]
-    type EventFile = |EventFile of  Statement list
+type KeyValueItem = 
+    | KeyValueItem of Key * Value
+    override x.ToString() = let (KeyValueItem (id, v)) = x in sprintf "%O = %O" id v
+and Value =
+    | String of string
+    | QString of string
+    | Float of float
+    //| Int of int
+    | Bool of bool
+    | Clause of Statement list
+    override x.ToString() =
+        match x with
+        | Clause b -> "{ " + sprintf "%O" b + " }"
+        | QString s -> "\"" + s + "\""
+        | String s -> s
+        | Bool b -> if b then "yes" else "no"
+        | Float f -> sprintf "%A" f
+        //| Int i -> sprintf "%A" i
 
-    type ParseFile = string -> ParserResult<EventFile, unit>
-    type ParseString = string -> string -> ParserResult<EventFile, unit>
-    type PrettyPrintFile = EventFile -> string
-    type PrettyPrintStatements = Statement list -> string
-    type PrettyPrintFileResult = ParserResult<EventFile, unit> -> string
+and Statement =
+    | Comment of string
+    | KeyValue of KeyValueItem
+    | Value of Value
+[<StructuralEquality; StructuralComparison>]
+type EventFile = |EventFile of  Statement list
 
-    type ParserAPI =
-        {
-            parseFile : ParseFile
-            parseString : ParseString
-        }
-    
-    type PrinterAPI =
-        {
-            prettyPrintFile : PrettyPrintFile
-            prettyPrintStatements : PrettyPrintStatements
-            prettyPrintFileResult : PrettyPrintFileResult
-        }
-    
+type ParseFile = string -> ParserResult<EventFile, unit>
+type ParseString = string -> string -> ParserResult<EventFile, unit>
+type PrettyPrintFile = EventFile -> string
+type PrettyPrintStatements = Statement list -> string
+type PrettyPrintFileResult = ParserResult<EventFile, unit> -> string
+
+type ParserAPI =
+    {
+        parseFile : ParseFile
+        parseString : ParseString
+    }
+
+type PrinterAPI =
+    {
+        prettyPrintFile : PrettyPrintFile
+        prettyPrintStatements : PrettyPrintStatements
+        prettyPrintFileResult : PrettyPrintFileResult
+    }
+
 
 module CKParser =
-    open ParserDomain
 
     // Sets of chars
     // =======
@@ -135,7 +133,6 @@ module CKParser =
         }
 
 module CKPrinter =
-    open ParserDomain
     let tabs n = String.replicate n "\t"
 
     let printTroop depth t = (tabs depth) + t.ToString()  + "\n"

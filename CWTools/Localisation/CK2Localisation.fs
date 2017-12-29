@@ -1,19 +1,18 @@
-namespace CK2Events.Application.Localisation
+namespace CWTools.Localisation
+
 open FSharp.Data
-open CK2Events.Application
-open LocalisationDomain
 open System.IO
 open System.Collections.Generic
-open Microsoft.Extensions.Options
+open CWTools.Common
 
 
-module CKLocalisation =
+module CK2Localisation =
     type LocalisationEntry = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=false,Quote='~',HasHeaders=true,Encoding="1252">
     type LocalisationEntryFallback = CsvProvider<"#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x", ";",IgnoreErrors=true,Quote='~',HasHeaders=true,Encoding="1252">
 
-    type CKLocalisationService(localisationDirectory : string, language : CK2Lang) =
-        let localisationFolder : string = localisationDirectory
-        let language : CK2Lang = language
+    type CK2LocalisationService(localisationSettings : LocalisationSettings) =
+        let localisationFolder : string = localisationSettings.folder
+        let language : CK2Lang = localisationSettings.language
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let mutable csvFallback : Runtime.CsvFile<LocalisationEntryFallback.Row> = upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let addFile (x : string) =
@@ -83,15 +82,16 @@ module CKLocalisation =
                         let files = Directory.EnumerateFiles localisationFolder |> List.ofSeq |> List.sort
                         results <- addFiles files |> dict
             | false -> ()
-        new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
+        //new (settings : CK2Settings) = CKLocalisationService(settings.CK2Directory.localisationDirectory, settings.ck2Language)
 
       
   
         member val Results = results with get, set
-        member __.Api = 
-            {
-                results = results
-                values = values
-                getDesc = getDesc
-                getKeys = getKeys
+
+        member __.Api = {
+            new ILocalisationAPI with
+                member __.Results = results
+                member __.Values = values
+                member __.GetKeys = getKeys
+                member __.GetDesc x = getDesc x
             }

@@ -4,7 +4,6 @@ open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Hosting
 open ElectronNET.API
 open Microsoft.Extensions.Configuration
-open CK2Events.Application
 open System.Text
 
 module Program =

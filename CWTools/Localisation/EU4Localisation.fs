@@ -1,16 +1,15 @@
-namespace CK2Events.Application.Localisation
-open CK2Events.Application
+namespace CWTools.Localisation
 open System.Collections.Generic
-open Microsoft.Extensions.Options
 open System.IO
+open CWTools.Common
 
-module HOI4Localisation =
+module EU4Localisation =
     open YAMLLocalisationParser
-    open LocalisationDomain
     open FParsec
 
-    type HOI4LocalisationService (localisationFolder : string, language : CK2Lang) =
-        let language = language
+    type EU4LocalisationService(localisationSettings : LocalisationSettings) =
+        let localisationFolder : string = localisationSettings.folder
+        let language : CK2Lang = localisationSettings.language
         let languageKey =
             match language with
             |CK2Lang.English -> "l_english"
@@ -21,7 +20,7 @@ module HOI4Localisation =
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable records : Entry list = []
         let addFile f = 
-            match parseLocFile f f with
+            match parseLocFile f with
             | Success({key = key; entries = entries}, _, _) when key = languageKey -> records <- entries@records; (true, entries.Length, "")
             | Success(v, _, _) -> (true, v.entries.Length, "")
             | Failure(msg, _, _) -> (false, 0, msg)
@@ -40,11 +39,11 @@ module HOI4Localisation =
                         results <- addFiles files |> dict
             | false -> ()
 
-        new (settings : CK2Settings) = HOI4LocalisationService(settings.HOI4Directory.localisationDirectory, settings.ck2Language)
-        member __.Api =
-            {       
-                results = results
-                values = values
-                getDesc = getDesc
-                getKeys = getKeys
+        //new (settings : CK2Settings) = EU4LocalisationService(settings.EU4Directory.localisationDirectory, settings.ck2Language)
+        member __.Api = {
+            new ILocalisationAPI with
+                member __.Results = results
+                member __.Values = values
+                member __.GetKeys = getKeys
+                member __.GetDesc x = getDesc x
             }

@@ -3,7 +3,8 @@
 open System.Linq
 open Microsoft.AspNetCore.Mvc
 open CK2Events.Application
-open CK2Events.Application.Localisation
+open CWTools.Localisation
+open CWTools.Common
 open Newtonsoft.Json
 open Newtonsoft.Json.FSharp
 open Microsoft.AspNetCore.Mvc.Infrastructure
@@ -28,13 +29,12 @@ module Utils =
         
 open Utils
 open ElectronNET.API.Entities
-open Microsoft.Extensions.Options
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 
 
 
-type HomeController (provider : IActionDescriptorCollectionProvider, settings : CK2Settings, localisation : LocalisationDomain.LocalisationAPI, hostingEnvironment : IHostingEnvironment, appSettings : AppSettings, configRoot : IConfiguration) =
+type HomeController (provider : IActionDescriptorCollectionProvider, settings : CK2Settings, localisation : ILocalisationAPI, hostingEnvironment : IHostingEnvironment, appSettings : AppSettings, configRoot : IConfiguration) =
     inherit BaseController()
 
  
@@ -65,6 +65,7 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
             |Game.HOI4 -> settings.hoi4Directory <- x
             |Game.EU4 -> settings.eu4Directory <- x
             |Game.STL -> settings.stlDirectory <- x
+            |_ -> failwith ("Unknown game enum value " + game.ToString())
         let folderPrompt() = 
             let mainWindow = Electron.WindowManager.BrowserWindows.First()
             let options = OpenDialogOptions (Properties = Array.ofList [OpenDialogProperty.openDirectory])

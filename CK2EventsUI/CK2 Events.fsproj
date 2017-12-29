@@ -3,15 +3,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="../CWTools/CWTools.fsproj">
+      <Name>CK2EventsCore.fsproj</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Application/Settings.fs" />
-    <Compile Include="Application/CKParser.fs" />
-    <Compile Include="Application/Localisation/LocalisationDomain.fs" />
-    <Compile Include="Application/Localisation/YAMLLocalisationParser.fs" />
-    <Compile Include="Application/Localisation/CK2Localisation.fs" />
-    <Compile Include="Application/Localisation/EU4Localisation.fs" />
-    <Compile Include="Application/Localisation/HOI4Localisation.fs" />
-    <Compile Include="Application/Localisation/STLLocalisation.fs" />
-    <Compile Include="Application/Process.fs" />
     <Compile Include="Application/Events.fs" />
     <Compile Include="ViewModels/BaseViewModel.fs" />
     <Compile Include="Controllers/BaseController.fs" />
@@ -19,14 +16,9 @@
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
+    <Content Include="localisation/*" />
+    <Content Include="events/*" />
   </ItemGroup>
   <Import Project="fsc.props" />
-  <ItemGroup>
-    <Content Include="localisation\*" CopyToOutputDirectory="Always" />
-    <Content Include="events\*" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-  <!-- <Target Name = "CopyFiles">
-    <Copy DestinationFolder="$(OutputPath)" SourceFiles="coremodule.psd1" SkipUnchangedFiles = "false" />
-  </Target> -->
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

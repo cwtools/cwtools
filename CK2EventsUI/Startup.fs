@@ -8,14 +8,14 @@ open Microsoft.Extensions.DependencyInjection
 open ElectronNET.API
 open ElectronNET.API.Entities
 open CK2Events.Application
-open CK2Events.Application.Localisation.CKLocalisation
-open CK2Events.Application.Localisation.EU4Localisation
-open CK2Events.Application.Localisation.HOI4Localisation
-open CK2Events.Application.Localisation.STLLocalisation
-open CK2Events.Application.Localisation.LocalisationDomain
 open System
 open Microsoft.Extensions.Options
-
+open CWTools.Common
+open CWTools.Localisation
+open CWTools.Localisation.CK2Localisation
+open CWTools.Localisation.EU4Localisation
+open CWTools.Localisation.HOI4Localisation
+open CWTools.Localisation.STLLocalisation
 
 
 type Startup private () =
@@ -32,18 +32,16 @@ type Startup private () =
         services.Configure<CK2Settings>(this.Configuration.GetSection("userSettings")) |> ignore
         services.AddSingleton<IConfiguration>(this.Configuration) |> ignore
         services.AddTransient<CK2Settings>(fun p -> p.GetService<IOptionsSnapshot<CK2Settings>>().Value) |> ignore
-        services.AddScoped<CKLocalisationService>() |> ignore
-        services.AddScoped<EU4LocalisationService>() |> ignore
-        services.AddScoped<HOI4LocalisationService>() |> ignore
-        services.AddScoped<STLLocalisationService>() |> ignore
         services.AddSingleton<AppSettings>() |> ignore
-        services.AddScoped<LocalisationAPI>(fun provider -> 
-            let settings = provider.GetService<AppSettings>()
-            match settings.currentGame with
-            |Game.CK2 -> provider.GetService<CKLocalisationService>().Api
-            |Game.EU4 -> provider.GetService<EU4LocalisationService>().Api
-            |Game.HOI4 -> provider.GetService<HOI4LocalisationService>().Api
-            |Game.STL -> provider.GetService<STLLocalisationService>().Api
+        services.AddScoped<ILocalisationAPI>(fun provider -> 
+            let appsettings = provider.GetService<AppSettings>()
+            let settings = provider.GetService<CK2Settings>()
+            match appsettings.currentGame with
+            |Game.CK2 -> CK2LocalisationService({ folder = settings.CK2Directory.localisationDirectory; language = settings.ck2Language}).Api
+            |Game.EU4 -> EU4LocalisationService({ folder = settings.EU4Directory.localisationDirectory; language = settings.ck2Language}).Api
+            |Game.HOI4 -> HOI4LocalisationService({ folder = settings.HOI4Directory.localisationDirectory; language = settings.ck2Language}).Api
+            |Game.STL -> STLLocalisationService({ folder = settings.STLDirectory.localisationDirectory; language = settings.ck2Language}).Api
+            | x -> failwith ("Unknown game enum value " + x.ToString())
             ) |> ignore
 
 
@@ -82,7 +80,6 @@ type Startup private () =
                                 |]
 
         let windowItem = MenuItem(Label="Menu", Submenu = windowMenuItems)
-        let gameItem = MenuItem(Label="Game", Submenu = gameSelects)
         let miscItems = MenuItem(Label = "Misc", Submenu = hiddenMenuItems)
         newMenu <- [|windowItem; miscItems|]
         Electron.Menu.SetApplicationMenu(newMenu)

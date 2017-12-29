@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Common/Constants.fs" />
+    <Compile Include="Parser/CKParser.fs" />
+    <Compile Include="Localisation/LocalisationDomain.fs" />
+    <Compile Include="Localisation/YAMLLocalisationParser.fs" />
+    <Compile Include="Localisation/CK2Localisation.fs" />
+    <Compile Include="Localisation/EU4Localisation.fs" />
+    <Compile Include="Localisation/HOI4Localisation.fs" />
+    <Compile Include="Localisation/STLLocalisation.fs" />
+    <Compile Include="Process/Process.fs" />
+  </ItemGroup>
+  <Import Project="fsc.props" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

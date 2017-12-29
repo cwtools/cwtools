@@ -1,8 +1,5 @@
 namespace CK2Events.Application
-
-open System.Text.RegularExpressions
-type Game = |CK2 = 0 |HOI4 = 1 |EU4 = 2 |STL = 3
-type CK2Lang = |English = 0 |French = 1 |German = 2 |Spanish = 3
+open CWTools.Common
 
 type GameDirectory (directory : string) =
     member val gameDirectory : string = directory with get, set
@@ -25,6 +22,7 @@ type CK2Settings () =
         |Game.HOI4 -> this.HOI4Directory
         |Game.EU4 -> this.EU4Directory
         |Game.STL -> this.STLDirectory
+        |_ -> failwith ("Unknown game enum value " + x.ToString())
     member val bundleEdges : bool = false with get, set
 
 type UserSettings (settings:CK2Settings) =
@@ -40,6 +38,3 @@ type CK2SettingsJson =
 
 type AppSettings () =
     member val currentGame : Game = Game.CK2 with get, set
-
-// type AppSettingsService() =
-//     member __.SetGame g = appSettings.currentGame <- g

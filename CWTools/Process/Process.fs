@@ -1,11 +1,8 @@
-namespace CK2Events.Application
+namespace CWTools.Process
 
-open CK2Events.Application.CKParser
-open CK2Events.Application.Localisation.LocalisationDomain
-open System.Collections.Generic
-open FParsec.CharParsers
+open CWTools.Parser
+open CWTools.Localisation
 open Newtonsoft.Json
-open System.Text.RegularExpressions
 
 module List =
   let replace f sub xs = 
@@ -26,7 +23,6 @@ module List =
      
 
 module Process =
-    open ParserDomain
 
     type Leaf(keyvalueitem : KeyValueItem) =
         let (KeyValueItem (Key(key), value)) = keyvalueitem
@@ -186,10 +182,10 @@ module Process =
         let fCombine = (@)
         foldNode2 fNode fCombine [] node
 
-    let getAllLocalisationKeys (localisation : LocalisationAPI) (node:Node) =
+    let getAllLocalisationKeys (localisation : ILocalisationAPI) (node:Node) =
         let getDesc x = 
-            match localisation.values.ContainsKey(x) with
-            | true -> localisation.values.[x]
+            match localisation.Values.ContainsKey(x) with
+            | true -> localisation.Values.[x]
             | false -> x
         let fNode = (fun (x:Node) keys ->
                         match x with
@@ -200,8 +196,8 @@ module Process =
         let keys = foldNode2 fNode fCombine [] node
         keys |> List.map (fun k -> k, getDesc k)
 
-    let addLocalisedDesc (localisation : LocalisationAPI) (node:Node) =
-        let getDesc x = localisation.getDesc x
+    let addLocalisedDesc (localisation : ILocalisationAPI) (node:Node) =
+        let getDesc x = localisation.GetDesc x
           //  match localisation.values.ContainsKey(x) with
           //  | true -> localisation.values.[x]
          //   | false -> x
@@ -214,11 +210,11 @@ module Process =
         let fCombine = (fun _ _ -> ())
         foldNode2 fNode fCombine () node
     
-    let addLocalisedDescAll (root:Root) (localisation : LocalisationAPI) =
+    let addLocalisedDescAll (root:Root) (localisation : ILocalisationAPI) =
         root.Events |> List.iter (addLocalisedDesc localisation)
         root
 
-    let getOption (localisation : LocalisationAPI) (option:Option) =
+    let getOption (localisation : ILocalisationAPI) (option:Option) =
         let fNode = (fun (x:Node) (d,i) ->
                         match x.Tag "id" with
                         |Some v -> (d, (v.ToString()) :: i)
@@ -227,7 +223,7 @@ module Process =
         let fOption = (fun (x:Option) (d,i) ->
                         match x.Name with
                         |"" -> (d,i)
-                        |v -> (localisation.getDesc(v),i)
+                        |v -> (localisation.GetDesc(v),i)
                         )
         let fEvent = (fun _ c -> c)
         let fCombine    x c =
@@ -237,18 +233,18 @@ module Process =
             |(d,l), (_,b) -> (d,l@b)
         foldNode3 fNode fOption fEvent fCombine ("",[]) option
     
-    let getOptions (localisation : LocalisationAPI) (event : Event) =
+    let getOptions (localisation : ILocalisationAPI) (event : Event) =
         event.Children |> List.choose (function | :? Option as o -> Some o |_ -> None)
                        |> List.map (getOption localisation)
 
-    let getEventsOptions (localisation : LocalisationAPI) (root : Root) =
+    let getEventsOptions (localisation : ILocalisationAPI) (root : Root) =
         root.Events |> List.map (fun e -> (e.ID, getOptions localisation e))
 
     let getEventComments (root : Root) =
         let findComment t s (a : Both) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
-            | ((_, c), CommentI nc) -> (false, nc)
+            | ((_, _), CommentI nc) -> (false, nc)
             | ((_, c), NodeI (:? Event as n)) when n.ID = t -> (true, c)
             | ((_, _), _) -> (false, "")
         root.Events |> List.map (fun e -> e.ID, root.All |> List.fold (findComment e.ID) (false, "") |> snd)

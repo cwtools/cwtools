@@ -1,4 +1,4 @@
-namespace CK2Events.Application.Localisation
+namespace CWTools.Localisation
 
 module YAMLLocalisationParser =
     open FParsec
@@ -27,4 +27,4 @@ module YAMLLocalisationParser =
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
     let file = pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 
-    let parseLocFile filepath name = runParserOnFile file () filepath System.Text.Encoding.UTF8
+    let parseLocFile filepath = runParserOnFile file () filepath System.Text.Encoding.UTF8
