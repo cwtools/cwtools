@@ -5,7 +5,7 @@ open FParsec
 open CWTools.Common
 open CWTools.Parser
 open CWTools.Localisation
-open CWTools.Process.Process
+open CWTools.Process.CK2Process
 
 module Events =
     let rand = System.Random()

@@ -13,7 +13,7 @@ open CWTools.Parser
 open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
-
+open CWTools.Process.CK2Process
 let printer = CKPrinter.api
 let parser = CKParser.api
 
@@ -68,7 +68,7 @@ let parserTests =
 
             match parsed with
                 |Success(v,_,_) -> 
-                    let root = Process.processEventFile v
+                    let root = CK2Process.processEventFile v
                     Expect.equal root.Namespace "WoL" "Namespace wrong"
                     let firstEvent = root.Events |> List.last
                     Expect.equal firstEvent.ID "WoL.10100" "ID wrong"
@@ -100,15 +100,15 @@ let test file =
     //let parsed = (CKParser.parseEventFile file)
     match parsed with
     |Success(v, _, _) ->
-        let processed = Process.processEventFile v
+        let processed = CK2Process.processEventFile v
         let rawAgain = processed.ToRaw |> EventFile
         Expect.equal v rawAgain "Not equal"
-        let eventComment = Process.getEventComments processed
-        let immediates = Process.getAllImmediates processed
+        let eventComment = CK2Process.getEventComments processed
+        let immediates = CK2Process.getAllImmediates processed
         let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api 
-        let options = Process.getEventsOptions localisation processed
+        let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
-        let ck3 = Process.addLocalisedDescAll processed localisation
+        let ck3 = CK2Process.addLocalisedDescAll processed localisation
         ()
     |Failure(m, _, _) -> Expect.isTrue false (file + m)
 
@@ -116,15 +116,15 @@ let test2 file =
     let parsed = (CKParser.parseEventFile file)
     match parsed with
     |Success(v, _, _) ->
-        let processed = Process.processEventFile v
+        let processed = CK2Process.processEventFile v
         let rawAgain = processed.ToRaw |> EventFile
         Expect.equal v rawAgain "Not equal"
-        let eventComment = Process.getEventComments processed
-        let immediates = Process.getAllImmediates processed
+        let eventComment = CK2Process.getEventComments processed
+        let immediates = CK2Process.getAllImmediates processed
         let localisation = CK2LocalisationService({folder="CK2EventsUI/localization"; language= CK2Lang.English}).Api
-        let options = Process.getEventsOptions localisation processed
+        let options = CK2Process.getEventsOptions localisation processed
         let pretties = processed.Events |> List.map (fun e -> (e.ID, CKPrinter.api.prettyPrintStatements e.ToRaw))
-        let ck3 = Process.addLocalisedDescAll processed localisation
+        let ck3 = CK2Process.addLocalisedDescAll processed localisation
         (ck3.ToJson, eventComment.ToJson, immediates.ToJson, options.ToJson, pretties.ToJson)
         ()
     | _ -> ()
@@ -135,7 +135,7 @@ let processingTests =
             let parsed = (CKParser.parseEventFile "CK2EventsTests/events/hl_nomad_events.txt")
             match parsed with
             |Success(v, _, _) ->
-                let processed = Process.processEventFile v
+                let processed = CK2Process.processEventFile v
                 let rawAgain = processed.ToRaw |> EventFile
                 Expect.equal v rawAgain "Not equal"
             | _ -> ()
@@ -166,8 +166,8 @@ let processingTests =
             let service = CK2LocalisationService({folder="CK2EventsTests/localisation test files"; language= CK2Lang.English}).Api
             match parsed with
             |Success(v, _, _) ->
-                let processed = Process.processEventFile v
-                let descAdded = Process.addLocalisedDescAll processed service
+                let processed = CK2Process.processEventFile v
+                let descAdded = CK2Process.addLocalisedDescAll processed service
                 Expect.equal (descAdded.Events |> List.head |> (fun e -> e.Desc)) "Localisation string" "Not equal"
             | _ -> ()
 

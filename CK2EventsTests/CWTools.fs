@@ -13,6 +13,7 @@ open CWTools.Parser
 open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
+open CWTools.Process.CK2Process
 
 [<Tests>]
 let processTests =
@@ -29,6 +30,6 @@ let processTests =
                         ]
             let Success(parsed, _, _) as t = (CKParser.parseFile "CK2EventsTests/crusader kings 2/artifacts.txt")
             let Success(parsed2, _, _) as t2 = (CKParser.parseFile "CK2EventsTests/crusader kings 2/artifacts2.txt")
-            let processed = Process.processArtifact (parsed @ parsed2)
+            let processed = CK2Process.processArtifact (parsed @ parsed2)
             Expect.equal processed.Slots slots "Not equal" 
     ]
