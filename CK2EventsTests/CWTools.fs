@@ -14,7 +14,14 @@ open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
+open CWTools
+open System.Diagnostics
 
+let test f =
+    let x = CKParser.parseFile f
+    match x with
+    |Success(_,_,_) -> ()
+    |Failure(msg,_,_) -> Expect.isTrue false (f + " " + msg)
 [<Tests>]
 let processTests =
     testList "process tests" [
@@ -32,4 +39,25 @@ let processTests =
             let Success(parsed2, _, _) as t2 = (CKParser.parseFile "CK2EventsTests/crusader kings 2/artifacts2.txt")
             let processed = CK2Process.processArtifact (parsed @ parsed2)
             Expect.equal processed.Slots slots "Not equal" 
+        
+        testList "process all" [
+            let folders = Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common" |> List.ofSeq
+            let files = folders |> List.map (Directory.EnumerateFiles >> List.ofSeq) |> List.collect id |> List.filter (fun f -> Path.GetExtension(f) = ".txt")
+            yield! files |> List.map (fun f -> testCase ("process one " + f.ToString()) <| fun () -> test f)
+        ]
+
+        testCase "STLGame test" <| fun () ->
+            let game = CWTools.STLGame("/home/thomas/.steam/steam/steamapps/common/Stellaris")
+            let results = game.Results
+            results |> List.tryFind (function |CWTools.FileResult.Fail(f, e) -> true |_ -> false)
+                    |> function |Some (Fail(k, e)) -> Expect.isTrue false (k + " " + e) |None -> ()
+        // testCase "process all CK2" <| fun () ->
+        //     let commons = 
+        //         Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common"
+        //         |> List.ofSeq
+        //         |> List.map (Directory.EnumerateFiles >> List.ofSeq)
+        //         |> List.collect id
+        //         |> List.filter (fun f -> Path.GetExtension(f) = ".txt")
+        //     commons |> List.map (CKParser.parseFile)
+        //             |> List.iter (function |Success(parsed,_,_) -> () |Failure(msg, _, _) -> Expect.isTrue false msg )
     ]

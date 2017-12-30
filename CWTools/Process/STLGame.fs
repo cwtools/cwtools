@@ -76,7 +76,7 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
-        let allFiles = folders |> List.map (fun f -> f, Directory.EnumerateFiles (gameDirectory + "/" + f) |> List.ofSeq)
+        let allFiles = folders |> List.map (fun f -> f, if Directory.Exists f then Directory.EnumerateFiles (gameDirectory + "/" + f) else Seq.empty |> List.ofSeq)
                                |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
                                |> Map.ofList
         let parseResults = 

@@ -32,13 +32,14 @@ module CK2Process =
             "letter_event", processNode<Event>;
         ] |> Map.ofList
 
-    let processCK2Node = BaseProcess(maps)
+    let ck2Process = BaseProcess(maps)
+    let processCK2Node = ck2Process.ProcessNode<Node>()
     
     let processEventFile (ev : EventFile) = 
         let (EventFile e) = ev
-        (processCK2Node.ProcessNode<EventRoot>()) "" e :?> EventRoot
+        (ck2Process.ProcessNode<EventRoot>()) "" e :?> EventRoot
 
-    let processArtifact = (processCK2Node.ProcessNode<ArtifactFile>()) "" >> (fun n -> n :?> ArtifactFile) 
+    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" >> (fun n -> n :?> ArtifactFile) 
 
 
     let getTriggeredEvents (event:Event) =

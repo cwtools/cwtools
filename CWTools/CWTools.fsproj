@@ -14,7 +14,7 @@
     <Compile Include="Localisation/STLLocalisation.fs" />
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
-    <Compile Include="Process/STLProcess.fs" />
+    <Compile Include="Process/STLGame.fs" />
   </ItemGroup>
   <Import Project="fsc.props" />
   <Import Project="..\.paket\Paket.Restore.targets" />

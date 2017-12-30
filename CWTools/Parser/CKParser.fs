@@ -58,8 +58,9 @@ module CKParser =
     // Sets of chars
     // =======
     let whitespaceTextChars = " \t\r\n"
-    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"']
-    let valuechar = letter <|> digit <|> anyOf ['_'; '.'; '-'; ':'; '\''; '['; ']'; '@']
+    let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
+    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-']
+    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@'] @ ['š'; 'Š'; '’'])
 
 
     // Utility parsers

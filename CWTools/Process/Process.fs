@@ -103,59 +103,5 @@ module ProcessCore =
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> List.map recurse)
-    //let ck2Map = ["option", processNode<Node>] |> Map.ofList
-    //let processNodeCK2 = BaseProcess(ck2Map)
-
-    // let processNodeInnerFact lookup =
-    //     (fun (node : Node) statement ->
-    //         match statement with
-    //         | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- lookup k sl::node.All
-    //         | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
-    //         | Comment(c) -> node.All <- CommentI c::node.All
-    //         | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
-    //     )
-
-    // let processNodeLookup baseCase (maps : Map< string, (string -> Statement list -> Node)> ) =
-    //     (fun key ->
-    //         match maps.TryFind key with
-    //         |Some t -> t key
-    //         |None -> baseCase key
-    //        ) >> (fun f a -> NodeI (f a))
-    // let processNode< 'T when 'T :> Node > inner (key : string) (sl : Statement list) : Node =
-    //     let node = match key with
-    //                 |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
-    //                 |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
-    //     sl |> List.iter (fun e -> inner node e) |> ignore
-    //     node
-    //let processBasicNode = processNode (processNodeInnerFact (processNodeLookup processNode<Node> baseMap))
-    
-     
-    // //let rec processNodeLookup (maps : Map< string, (string -> Statement list -> Node)> ) =
-    // let maps =
-    //     [
-    //         "option", processNode<Option>;
-    //         "character_event", processNode<Event>;
-    //         "province_event", processNode<Event>;
-    //         "letter_event", processNode<Event>;
-    //     ] |> Map.ofList
-    //     (fun key -> 
-    //         match maps.TryFind key with
-    //         |Some t -> t key
-    //         |None -> processNode<Node> key
-    //         ) >> (fun f a -> NodeI (f a))
-
-    // and processNodeInner (node : Node) statement =
-    //     match statement with
-    //         | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- processNodeLookup k sl::node.All
-    //         | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
-    //         | Comment(c) -> node.All <- CommentI c::node.All
-    //         | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
-
-    // and processNode< 'T when 'T :> Node > (key : string) (sl : Statement list) : Node =
-    //     let node = match key with
-    //                 |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
-    //                 |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
-    //     sl |> List.iter (fun e -> processNodeInner node e) |> ignore
-    //     node
 
    
