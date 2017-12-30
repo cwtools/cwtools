@@ -3,11 +3,12 @@ namespace CWTools
 open CWTools.Parser
 open System.IO
 open FParsec
+open CWTools.Process
 
 
 type FileResult =
-        |Pass of string * Statement list
-        |Fail of string * string
+    |Pass of string * Statement list
+    |Fail of string * string
     
 
 type STLGame ( gameDirectory : string ) =
@@ -26,7 +27,7 @@ type STLGame ( gameDirectory : string ) =
                     "common/component_tags";
                     "common/component_templates";
                     "common/country_types";
-                    "common/defines";
+                    //"common/defines";
                     "common/deposits";
                     "common/diplo_phrases";
                     "common/diplomatic_actions";
@@ -76,8 +77,10 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
-        let allFiles = folders |> List.map (fun f -> f, if Directory.Exists f then Directory.EnumerateFiles (gameDirectory + "/" + f) else Seq.empty |> List.ofSeq)
+        let allFiles = folders |> List.map (fun f -> gameDirectory + "/" + f)
+                               |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
                                |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
+                               |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
                                |> Map.ofList
         let parseResults = 
             let matchResult (k, f) = 
@@ -87,5 +90,18 @@ type STLGame ( gameDirectory : string ) =
             allFiles |> Map.toList 
                 |> List.map ((fun (k, f) -> k, CKParser.parseFile f) >> matchResult)
 
+        let findDuplicates (sl : Statement list) =
+            let node = ProcessCore.processNodeBasic "root" sl
+            node.Children |> List.groupBy (fun c -> c.Key)
+                          |> List.filter (fun (k,v) -> v.Length > 1)
+                          |> List.map (fun (k,v) -> k)
+
+        let validateDuplicates =
+            parseResults |> List.choose (function |Pass(k,parsed) -> Some (k, parsed) |_ -> None)
+                |> List.groupBy (fun (k,p) -> k)
+                |> List.map (fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
+                |> List.map (fun (k, vs) -> k, findDuplicates vs)
+
+
         member __.Results = parseResults
-        
+        member __.Duplicates = validateDuplicates

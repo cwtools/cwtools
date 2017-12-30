@@ -14,6 +14,10 @@ open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
+
+let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
+let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
+let steamFolder = winFolder
 let printer = CKPrinter.api
 let parser = CKParser.api
 
@@ -143,10 +147,10 @@ let processingTests =
         testList "process all" [
             let folders = ["CK2EventsTests/events"; 
                             "CK2EventsTests/event test files";
-                            "/home/thomas/.steam/steam/steamapps/common/Stellaris/events";
-                            "/home/thomas/.steam/steam/steamapps/common/Europa Universalis IV/events";
-                            "/home/thomas/.steam/steam/steamapps/common/Hearts of Iron IV/events";
-                            "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/events"]
+                            steamFolder + "Stellaris/events";
+                            //steamFolder + "Europa Universalis IV/events";
+                            steamFolder + "Hearts of Iron IV/events";
+                            steamFolder + "Crusader Kings II/events"]
             let files = folders |> List.map (Directory.EnumerateFiles >> List.ofSeq) |> List.collect id
             yield! files |> List.map (fun f -> testCase ("process one " + f.ToString()) <| fun () -> test f)
         ]

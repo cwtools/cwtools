@@ -17,6 +17,9 @@ open CWTools.Process.CK2Process
 open CWTools
 open System.Diagnostics
 
+let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
+let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
+let steamFolder = winFolder
 let test f =
     let x = CKParser.parseFile f
     match x with
@@ -41,16 +44,21 @@ let processTests =
             Expect.equal processed.Slots slots "Not equal" 
         
         testList "process all" [
-            let folders = Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common" |> List.ofSeq
+            let folders = Directory.EnumerateDirectories (steamFolder + "Crusader Kings II/common") |> List.ofSeq
             let files = folders |> List.map (Directory.EnumerateFiles >> List.ofSeq) |> List.collect id |> List.filter (fun f -> Path.GetExtension(f) = ".txt")
             yield! files |> List.map (fun f -> testCase ("process one " + f.ToString()) <| fun () -> test f)
         ]
 
         testCase "STLGame test" <| fun () ->
-            let game = CWTools.STLGame("/home/thomas/.steam/steam/steamapps/common/Stellaris")
+            let game = CWTools.STLGame(steamFolder + "Stellaris")
             let results = game.Results
             results |> List.tryFind (function |CWTools.FileResult.Fail(f, e) -> true |_ -> false)
                     |> function |Some (Fail(k, e)) -> Expect.isTrue false (k + " " + e) |None -> ()
+        
+        testCase "STLGame test2" <| fun () ->
+            let game = CWTools.STLGame(steamFolder + "Stellaris")
+            let duplicates = game.Duplicates
+            List.iter (fun d -> printfn "%A" d |> ignore) duplicates
         // testCase "process all CK2" <| fun () ->
         //     let commons = 
         //         Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common"
