@@ -14,7 +14,7 @@ and Value =
     | String of string
     | QString of string
     | Float of float
-    //| Int of int
+    | Int of int
     | Bool of bool
     | Clause of Statement list
     override x.ToString() =
@@ -24,7 +24,7 @@ and Value =
         | String s -> s
         | Bool b -> if b then "yes" else "no"
         | Float f -> sprintf "%A" f
-        //| Int i -> sprintf "%A" i
+        | Int i -> sprintf "%A" i
 
 and Statement =
     | Comment of string
@@ -88,8 +88,8 @@ module CKParser =
     let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>
                     ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
 
-    let valueI = puint64 .>> ws |>> int
-                    
+    let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
+    let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float                
 
     // Complex types
     // =======
@@ -103,12 +103,13 @@ module CKParser =
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
-    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> valueS <?> "value"
+    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> valueS <?> "value"
     
     do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
-    let all = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
-
-    let parseEventFile filepath = runParserOnFile all () filepath (System.Text.Encoding.GetEncoding(1252))
+    let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
+    let all = ws >>. many statement .>> eof
+    let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
+    let parseFile filepath = runParserOnFile all () filepath (System.Text.Encoding.GetEncoding(1252))
 
 
     let memoize keyFunction memFunction =
@@ -122,7 +123,7 @@ module CKParser =
                 temp
 
     let parseEventString fileString fileName =
-        let inner = (fun (file, name) -> runParserOnString all () name file)
+        let inner = (fun (file, name) -> runParserOnString alle () name file)
         let hash = (fun (file, name) -> file.GetHashCode(), name)
         (memoize hash inner) (fileString, fileName)
 

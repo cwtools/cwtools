@@ -3,6 +3,7 @@ namespace CWTools.Process
 open CWTools.Parser
 open CWTools.Localisation
 open Newtonsoft.Json
+open System
 
 module List =
   let replace f sub xs = 
@@ -20,102 +21,96 @@ module List =
     match result with
     | Some ls -> ls
     | None -> add::xs
-     
-
-module Process =
-
-    type Leaf(keyvalueitem : KeyValueItem) =
-        let (KeyValueItem (Key(key), value)) = keyvalueitem
-        member val Key = key with get, set
-        member val Value = value with get, set
-        [<JsonIgnore>]
-        member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
-    type LeafValue(value : Value) =
-        member val Value = value with get, set
-        [<JsonIgnore>]
-        member this.ToRaw = Value(this.Value)
-    type Node (key : string) =
-        let bothFind x = function |NodeI n when n.Key = x -> true |LeafI l when l.Key = x -> true |_ -> false
-
-        member val Key = key
-        member val All : Both list = List.empty with get, set
-        member this.Children = this.All |> List.choose (function |NodeI n -> Some n |_ -> None)
-        member this.Values = this.All |> List.choose (function |LeafI l -> Some l |_ -> None)
-        member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
-        member this.Has x = this.All |> (List.exists (bothFind x))
-        member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-        member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
-
-        [<JsonIgnore>]
-        member this.ToRaw : Statement list = this.All |> List.rev |>
-                                             List.map (function 
-                                               |NodeI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
-                                               |LeafValueI lv -> lv.ToRaw
-                                               |LeafI l -> KeyValue l.ToRaw 
-                                               |CommentI c -> (Comment c))
-        
-    and Both = |NodeI of Node | LeafI of Leaf |CommentI of string |LeafValueI of LeafValue
-
-    type Option() = 
-        inherit Node("option")
-        member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
-    type Event(key) =
-        inherit Node(key)
-        member this.ID = this.Tag "id" |> (function | Some (String s) -> s | _ -> "")
-        member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
-        member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
-
-    type Root() =
-        inherit Node("root")
-        member this.Namespace = this.Tag "namespace" |> (function |Some (String s) -> s | _ -> "")
-        member val test = base.All |> List.choose (function |NodeI n -> Some n |_ -> None)
-        member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
-
     
-    let rec processNode k sl =
-        let node = Node(k)
-        sl |> List.iter (processNodeInner node) 
-        node
+type Leaf(keyvalueitem : KeyValueItem) =
+    let (KeyValueItem (Key(key), value)) = keyvalueitem
+    member val Key = key with get, set
+    member val Value = value with get, set
+    [<JsonIgnore>]
+    member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
+type LeafValue(value : Value) =
+    member val Value = value with get, set
+    [<JsonIgnore>]
+    member this.ToRaw = Value(this.Value)
+type Node (key : string) =
+    let bothFind x = function |NodeI n when n.Key = x -> true |LeafI l when l.Key = x -> true |_ -> false
+
+    member val Key = key
+    member val All : Both list = List.empty with get, set
+    member this.Children = this.All |> List.choose (function |NodeI n -> Some n |_ -> None)
+    member this.Values = this.All |> List.choose (function |LeafI l -> Some l |_ -> None)
+    member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
+    member this.Has x = this.All |> (List.exists (bothFind x))
+    member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
+    member this.Child x = this.Children |> List.tryPick (function |c when c.Key = x -> Some c |_ -> None)
+
+    [<JsonIgnore>]
+    member this.ToRaw : Statement list = this.All |> List.rev |>
+                                         List.map (function 
+                                           |NodeI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
+                                           |LeafValueI lv -> lv.ToRaw
+                                           |LeafI l -> KeyValue l.ToRaw 
+                                           |CommentI c -> (Comment c))
     
-    and processOption sl =
-        let option = Option()
-        sl |> List.iter (processNodeInner option)
-        option
+and Both = |NodeI of Node | LeafI of Leaf |CommentI of string |LeafValueI of LeafValue
 
+type Option(key) = 
+    inherit Node(key)
+    member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
+type Event(key) =
+    inherit Node(key)
+    member this.ID = this.Tag "id" |> (function | Some (String s) -> s | _ -> "")
+    member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
+    member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
-    and processNodeInner (node : Node) statement =
+type EventRoot() =
+    inherit Node("events")
+    member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
+    member this.Namespace = this.Tag "namespace" |> (function |Some (String s) -> s | _ -> "")
+
+type ArtifactFile() =
+    inherit Node("artifacts")
+    member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
+    member __.Weapons = base.All |> List.choose (function |NodeI n when n.Key <> "slots" -> Some n |_ -> None)
+
+module Process =    
+
+    let maps =
+        [
+            "option", typeof<Option>;
+            "character_event", typeof<Event>;
+            "province_event", typeof<Event>;
+            "letter_event", typeof<Event>;
+        ]
+
+    let rec processNodeInner (node : Node) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.All <- NodeI(processOption sl)::node.All
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- NodeI(processNode k sl)::node.All
+            | KeyValue(KeyValueItem(Key("option"), Clause(sl))) -> node.All <- NodeI(processNode<Option> "option" sl)::node.All
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- NodeI(processNode<Node> k sl)::node.All
             | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
             | Comment(c) -> node.All <- CommentI c::node.All
             | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
-    
-    let processEvent k sl =
-        let event = Event(k)
-        sl |> List.iter (processNodeInner event)
-        event
 
- 
+    and processNode< 'T when 'T :> Node > (key : string) (sl : Statement list) : Node =
+        let node = match key with
+                    |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
+                    |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
+        sl |> List.iter (fun e -> processNodeInner node e) |> ignore
+        node
 
-
-    let processRoot (root : Root) statement =
+    let processEventRoot (root : EventRoot) statement =
         match statement with
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> 
-                let e = (processEvent k sl)
-                root.All <- NodeI e::root.All
+            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> root.All <- NodeI (processNode<Event> k sl)::root.All
             | KeyValue(kv) -> root.All <- LeafI (Leaf kv)::root.All
-            | Comment(c) -> 
-                root.All <- CommentI c::root.All 
+            | Comment(c) -> root.All <- CommentI c::root.All 
             | _ -> ()
 
+    let processEventFile (ev : EventFile) = 
+        let (EventFile e) = ev
+        processNode<EventRoot> "" e
 
-    let processEventFile (ev : EventFile) =
-        let root = Root()
-        let (EventFile evs) = ev
-        evs |> List.iter (fun e -> processRoot root e) |> ignore
-        root
-
+    let processArtifact = processNode<ArtifactFile> "" >> (fun n -> n :?> ArtifactFile) 
     let rec foldNode fNode acc (node : Node) :'r =
         let recurse = foldNode fNode
         let newAcc = fNode acc node
@@ -171,7 +166,7 @@ module Process =
         (event.ID, event.Children |> List.collect (foldNode2 fNode fCombine []))
 
     
-    let getTriggeredEventsAll (root:Root) =
+    let getTriggeredEventsAll (root:EventRoot) =
         List.map getTriggeredEvents root.Events
 
     let getIDs (node:Node) =
@@ -203,14 +198,14 @@ module Process =
          //   | false -> x
         let fNode = (fun (x:Node) _ -> 
                         match x with
-                        | :? Event as e -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), String (getDesc e.Desc)))))
-                        | :? Option as o -> o.SetTag "name" (LeafI (Leaf (KeyValueItem(Key("name"), String (getDesc o.Name)))))
+                        | :? Event as e -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
+                        | :? Option as o -> o.SetTag "name" (LeafI (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
                         | _ -> ()
                         )
         let fCombine = (fun _ _ -> ())
         foldNode2 fNode fCombine () node
     
-    let addLocalisedDescAll (root:Root) (localisation : ILocalisationAPI) =
+    let addLocalisedDescAll (root:EventRoot) (localisation : ILocalisationAPI) =
         root.Events |> List.iter (addLocalisedDesc localisation)
         root
 
@@ -237,10 +232,10 @@ module Process =
         event.Children |> List.choose (function | :? Option as o -> Some o |_ -> None)
                        |> List.map (getOption localisation)
 
-    let getEventsOptions (localisation : ILocalisationAPI) (root : Root) =
+    let getEventsOptions (localisation : ILocalisationAPI) (root : EventRoot) =
         root.Events |> List.map (fun e -> (e.ID, getOptions localisation e))
 
-    let getEventComments (root : Root) =
+    let getEventComments (root : EventRoot) =
         let findComment t s (a : Both) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
@@ -253,12 +248,12 @@ module Process =
         event.Children |> List.filter (fun c -> c.Key = "immediate")
                        |> List.map getIDs
     
-    let getAllImmediates (root : Root) =
+    let getAllImmediates (root : EventRoot) =
         root.Events |> List.map (fun e -> (e.ID, getImmediate e))
 
     type eventView = { ID :string; Desc:string; Hidden:bool; Key:string}
 
-    let getEventViews (root : Root) =
+    let getEventViews (root : EventRoot) =
         let getView (e : Event) =
             //let etype = e.Tag "type" |> (function | Some (String s) -> s | _ -> "")
             {ID = e.ID; Desc = e.Desc; Hidden = e.Hidden; Key = e.Key}

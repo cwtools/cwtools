@@ -1,0 +1,1732 @@
+# This file contains (hopefully) all artifacts tagged with "book", as they were becoming quite a few. Consider this THE LIBRARY. It's a thing now.
+
+#############################
+##### Random/Misc Books #####
+#############################
+
+necronomicon = { # (DLC: Way of Life)
+	learning = 5
+	diplomacy = -1
+	quality = 4
+	monthly_character_piety = -2
+	flags = { book unholy curse }
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_sinister"
+}
+
+
+####################################
+##### The Hermetic Magnum Opus ##### 
+####################################
+# (DLC: Monks & Mystics)
+
+magnum_opus_theurgy_ritual_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_ritual_2 = {
+	learning = 1
+	monthly_character_piety = 0.5
+	quality = 2
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_ritual_3 = {
+	learning = 1
+	intrigue = 1
+	monthly_character_piety = 0.5
+	quality = 3
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_ritual_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_ritual_4 = {
+	learning = 1
+	intrigue = 1
+	stewardship = 1
+	monthly_character_piety = 0.5
+	quality = 4
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red_glow"
+}
+
+magnum_opus_theurgy_contemplation_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_contemplation_2 = {
+	learning = 1
+	monthly_character_piety = 0.5
+	quality = 2
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_contemplation_3 = {
+	learning = 2
+	monthly_character_piety = 0.5
+	quality = 3
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_theurgy_contemplation_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red"
+}
+
+magnum_opus_theurgy_contemplation_4 = {
+	learning = 2
+	diplomacy = 1
+	monthly_character_piety = 0.5
+	quality = 4
+	flags = { society hermetics lore theurgy book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_red_glow"
+}
+
+magnum_opus_astrology_stars_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_stars_2 = {
+	learning = 1
+	monthly_character_prestige = 0.5
+	quality = 2
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_stars_3 = {
+	learning = 1
+	intrigue = 1
+	monthly_character_prestige = 0.5
+	quality = 3
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_stars_4
+					}
+				}
+			}
+		}
+	}
+	
+	allowed_gift = {
+		always = no
+	}
+	
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_stars_4 = {
+	learning = 1
+	intrigue = 1
+	martial = 1
+	monthly_character_prestige = 0.5
+	quality = 4
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_blue_glow"
+}
+
+magnum_opus_astrology_planets_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_planets_2 = {
+	learning = 1
+	monthly_character_prestige = 0.5
+	quality = 2
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_planets_3 = {
+	learning = 2
+	monthly_character_prestige = 0.5
+	quality = 3
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_astrology_planets_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_blue"
+}
+
+magnum_opus_astrology_planets_4 = {
+	learning = 2
+	diplomacy = 1
+	monthly_character_prestige = 0.5
+	quality = 4
+	flags = { society hermetics lore astrology book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_blue_glow"
+}
+
+magnum_opus_alchemy_panacea_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_panacea_2 = {
+	learning = 2
+	quality = 2
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_panacea_3 = {
+	learning = 2
+	health = 0.5
+	quality = 3
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_panacea_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_panacea_4 = {
+	learning = 2
+	health = 1
+	quality = 4
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green_glow"
+}
+
+magnum_opus_alchemy_transmutation_1 = {
+	learning = 1
+	quality = 1
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 12
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 16
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_2
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_transmutation_2 = {
+	learning = 1
+	stewardship = 1
+	quality = 2
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 16
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 20
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_3
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_transmutation_3 = {
+	learning = 1
+	stewardship = 1
+	martial = 1
+	quality = 3
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 20
+			society_member_of = hermetics 
+		}
+		custom_tooltip = {
+			text = NO_HIGHER_QUALITY_VERSION_ACTIVE
+			NOT = {
+				AND = {
+					OR = {
+						learning = 25
+						society_member_of = hermetics
+					}
+					any_artifact = {
+						artifact_type = magnum_opus_alchemy_transmutation_4
+					}
+				}
+			}
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green"
+}
+
+magnum_opus_alchemy_transmutation_4 = {
+	learning = 1
+	stewardship = 2
+	martial = 1
+	quality = 4
+	flags = { society hermetics lore alchemy book }
+	active = { 
+		OR = {
+			learning = 25
+			society_member_of = hermetics 
+		}
+	}
+	allowed_gift = {
+		always = no
+	}
+	stacking = no
+	picture = "GFX_book_green_glow"
+}
+
+
+
+########## DLC: Jade Dragon ############
+### Section 1: Books from China
+
+art_of_war = {
+	quality = 5
+	monthly_character_prestige = 1
+	martial = 5
+	flags = { chinese book very_rare }
+	picture = "GFX_art_of_war"
+	stacking = no
+}
+classic_of_poetry = {
+	quality = 5
+	monthly_character_piety = 0.5
+	learning = 3
+	flags = { chinese book }
+	picture = "GFX_classic_of_poetry"
+	stacking = no
+}
+chinese_book_health = {
+	quality = 3
+	active = {
+		learning = 6
+	}
+	health = 0.5
+	fertility = 0.15
+	flags = { chinese book }
+	picture = "GFX_chinese_compendium_of_medicine"
+	stacking = no
+}
+chinese_book_law = {
+	quality = 3
+	active = {
+		learning = 6
+	}
+	vassal_opinion = 5
+	flags = { chinese book }
+	picture = "GFX_chinese_treatise_on_law"
+	stacking = no
+}
+chinese_book_history = {
+	quality = 1
+	active = {
+		learning = 6
+	}
+	monthly_character_prestige = 0.1
+	fertility = 0.05
+	flags = { chinese book }
+	picture = "GFX_chinese_history_book"
+	#stacking = no
+}
+chinese_book_economy = {
+	quality = 3
+	active = {
+		learning = 6
+	}
+	stewardship = 1
+	monthly_character_wealth = 1
+	flags = { chinese book }
+	picture = "GFX_chinese_economic_chronicle"
+	stacking = no
+}
+
+#################### Jade Dragon. ##########################
+#### Section 2: Books that can be written by characters ####
+############################################################
+
+#A. Books from the Martial ("battle") category...
+how_to_hold_a_sword = {
+	quality = 1
+	combat_rating = 1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a1"
+}
+a_soldiers_life = {
+	quality = 2
+	combat_rating = 1
+	command_modifier = {
+		morale_defence = 0.05
+	}
+	land_organisation = 0.025
+	flags = { about_martial fiction book created }
+	picture = "GFX_book_martial_a2"
+}
+a_history_of_armor = {
+	quality = 2
+	siege_defence = 0.025
+	command_modifier = {
+		morale_defence = 0.15
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b2"
+}
+the_life_of_root = {
+	quality = 2
+	land_morale = 0.025
+	command_modifier = {
+		morale_defence = 0.15
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a2"
+}
+military_strategy_guide = {
+	quality = 3
+	levy_reinforce_rate = 0.1
+	siege_speed = 0.025
+	command_modifier = {
+		morale_offence = 0.05
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a3"
+}
+my_fechtbuch = {
+	quality = 3
+	combat_rating = 2
+	command_modifier = {
+		narrow_flank = 0.1
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a4"
+}
+codex_dynasty_name = {
+	quality = 3
+	land_morale = 0.05
+	command_modifier = {
+		morale_offence = 0.1
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a5"
+}
+the_sword_and_buckler = {
+	quality = 3
+	combat_rating = 3
+	monthly_character_prestige = 0.25
+	active = {
+		OR = {
+			trait = duelist
+			trait = hunter
+			trait = strategist
+			has_education_martial_trigger = yes
+		}
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b5"
+}
+lessons_taught_to_me_by_rival_1 = {
+	quality = 1
+	martial = 1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b1"
+}
+lessons_taught_to_me_by_rival_2 = {
+	quality = 2
+	martial = 1
+	combat_rating = 1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b2"
+}
+lessons_taught_to_me_by_rival_3 = {
+	quality = 3
+	martial = 1
+	intrigue = 1
+	combat_rating = 1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b3"
+}
+the_wisdom_of_the_heavens = {
+	quality = 2
+	vassal_opinion = 3
+	combat_rating = 1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a2"
+}
+ordinary_beasts = {
+	quality = 3
+	combat_rating = 1
+	defensive_plot_power_modifier = 0.1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a3"
+}
+the_white_animal = {
+	quality = 3
+	vassal_opinion = 3
+	sex_appeal_opinion = 5
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b4"
+}
+the_bestiary = {
+	quality = 4
+	vassal_opinion = 5
+	sex_appeal_opinion = 10
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b5"
+}
+the_book_of_shadows = {
+	quality = 3
+	combat_rating = 2
+	murder_plot_power_modifier = 0.1
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_a4"
+}
+on_government_type_warfare = {
+	quality = 3
+	martial = 1
+	command_modifier = {
+		morale_defence = 0.1
+		morale_offence = 0.1
+	}
+	active = {
+		government = FROMFROM
+	}
+	flags = { about_martial book created }
+	picture = "GFX_book_martial_b3"
+}
+
+#B. Books from the Diplomacy/Intrigue ("relationships") category...
+court_etiquette_1 = {
+	quality = 1
+	liege_opinion = 10
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_etiquette_1"
+}
+court_etiquette_2 = {
+	quality = 2
+	plot_discovery_chance = 0.1
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_etiquette_2"
+}
+court_etiquette_3 = {
+	quality = 3
+	plot_discovery_chance = 0.1
+	vassal_opinion = 5
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_etiquette_3"
+}
+how_to_write_a_letter = {
+	quality = 2
+	general_opinion = 2
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_write_letter"
+}
+notes_from_a_kitchen = {
+	quality = 2
+	fertility = 0.1
+	sex_appeal_opinion = 5
+	flags = { about_diplomacy about_intrigue about_relationships fiction book created }
+	picture = "GFX_book_diplo_simple"
+}
+fifty_shades_of_root = { # Bad Relationship Book
+	quality = 2
+	fertility = 0.25
+	monthly_character_prestige = -0.1
+	flags = { about_relationships fiction book unholy created }
+	picture = "GFX_book_fifty_shade"
+}
+kama_sutra = { # Masterful Relationship Book
+	quality = 3
+	active = {
+		culture_group = indo_aryan_group
+	}
+	sex_appeal_opinion = 20
+	fertility = 0.25
+	monthly_character_prestige = 0.25
+	flags = { about_relationships book created }
+	picture = "GFX_book_kamasutra"
+}
+in_honor_of_roots_beloved_1 = {
+	quality = 1
+	sex_appeal_opinion = 5
+	flags = { about_diplomacy about_relationships poetry book created }
+	picture = "GFX_book_honor_root_1"
+}
+in_honor_of_roots_beloved_2 = {
+	quality = 2
+	monthly_character_prestige = 0.15
+	sex_appeal_opinion = 7
+	flags = { about_diplomacy about_relationships poetry book created }
+	picture = "GFX_book_honor_root_2"
+}
+in_honor_of_roots_beloved_3 = {
+	quality = 3
+	diplomacy = 1
+	sex_appeal_opinion = 10
+	flags = { about_diplomacy about_relationships poetry book created }
+	picture = "GFX_book_honor_root_3"
+}
+how_to_make_allies = {
+	quality = 2
+	vassal_opinion = 5
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_make_allies"
+}
+the_art_of_love = {
+	quality = 3
+	diplomacy = 1
+	sex_appeal_opinion = 5
+	fertility = 0.15
+	flags = { about_diplomacy about_relationships poetry book created }
+	picture = "GFX_book_art_love"
+}
+the_hunchback_of_capital = {
+	quality = 3
+	diplomacy = 1
+	general_opinion = 10
+	active = {
+		OR = {
+			trait = hunchback
+			trait = dwarf
+			trait = scholar
+		}
+	}
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_hunchback"
+}
+the_illiad = {
+	quality = 3
+	diplomacy = 1
+	martial = 1
+	flags = { about_diplomacy about_relationships about_martial poetry book created }
+	picture = "GFX_book_illiad"
+}
+the_odyssey = {
+	quality = 4
+	diplomacy = 2
+	martial = 3
+	flags = { about_diplomacy about_relationships about_martial poetry book created }
+	picture = "GFX_book_odyssey"
+}
+contracts_of_the_romans = {
+	quality = 3
+	stewardship = 1
+	build_cost_modifier = -0.025
+	flags = { about_diplomacy about_relationships about_stewardship book created }
+	picture = "GFX_book_contracts_roman"
+}
+speculum_regale = {
+	quality = 4
+	diplomacy = 1
+	child_opinion = 20
+	vassal_opinion = 5
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_speculum_regale"
+}
+religious_head_culture_courtesy = { #only if religion which has relhead
+	quality = 4
+	diplomacy = 1
+	learning = 1
+	church_opinion = 15
+	active = {
+		religion = FROMFROM
+	}
+	flags = { about_diplomacy about_relationships book created }
+	picture = "GFX_book_rhcc"
+}
+keeping_government_court = {
+	quality = 4
+	liege_opinion = 15
+	vassal_opinion = 5
+	stewardship = 1
+	intrigue = 1
+	active = {
+		government = FROMFROM
+	}
+	flags = { about_diplomacy about_relationships about_stewardship book created }
+	picture = "GFX_book_govt_court"
+}
+
+#C. Books from the Stewardship ("administration") category...
+culinary_diary = {
+	quality = 1
+	town_opinion = 5
+	church_opinion = -5
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cutlery_01"
+}
+yes_I_ate_that = {
+	quality = 1
+	defensive_plot_power_modifier = 0.05
+	sex_appeal_opinion = -5
+	flags = { about_learning cooking book created }
+	picture = "GFX_book_cook_blank_00"
+}
+the_well_dressed_chef = {
+	quality = 1
+	sex_appeal_opinion = 5
+	flags = { about_relationships cooking book created }
+	picture = "GFX_book_chef_01"
+}
+big_book_of_meat = {
+	quality = 1
+	monthly_character_prestige = 0.1
+	monthly_character_wealth = 0.1
+	active = {
+		NOT = { religion = jain }
+	}
+	flags = { about_learning cooking book created }
+	picture = "GFX_book_cook_blank_01"
+}
+a_book_of_vegetables = {
+	quality = 1
+	town_opinion = 5
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_radish"
+}
+fruits_the_book = {
+	quality = 1
+	town_opinion = 2
+	monthly_character_wealth = 0.1
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_apple"
+}
+shoddy_recipes = {
+	quality = 1
+	monthly_character_prestige = 0.2
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_rat"
+}
+decent_cookbook = {
+	quality = 2
+	monthly_character_wealth = 0.5
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cutlery_02"
+}
+honest_recipes = {
+	quality = 2
+	global_tax_modifier = 0.01
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_blank_02"
+}
+gastronomic_tonics = {
+	quality = 2
+	plot_power_modifier = 0.05
+	flags = { about_intrigue cooking book created }
+	picture = "GFX_book_cook_blank_03"
+}
+the_omnivore = {
+	quality = 2
+	stewardship = 3
+	intrigue = 2
+	general_opinion = -10
+	active = {
+		trait = cannibal_trait
+	}
+	flags = { cannibal about_stewardship about_intrigue cooking book created }
+	picture = "GFX_book_chef_02"
+}
+the_dynasty_cookbook = { #A Cookbook
+	quality = 3
+	stewardship = 1
+	dynasty_opinion = 5
+	active = { dynasty = FROMFROM }
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_chef_03"
+}
+modest_measures = {
+	quality = 3
+	stewardship = 1
+	monthly_character_wealth = 1
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_blank_04"
+}
+good_cookbook = { #A Cookbook (Feeding a Realm)
+	quality = 3
+	monthly_character_wealth = 3
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cutlery_03"
+}
+cookbook_3_roman = { #Masterful Cookbook (Roman: Apicius)
+	quality = 3
+	stewardship = 2
+	monthly_character_prestige = 0.25
+	active = {
+		culture_group = latin
+	}
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_roman"
+}
+cookbook_3_arabic = { #Masterful Cookbook (Arabic: Kitab al-Tabikh)
+	quality = 3
+	stewardship = 2
+	learning = 1
+	active = {
+		culture_group = arabic
+	}
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_arabic"
+}
+cookbook_3_chinese_group = { #Masterful Cookbook (Chinese: Yinshan Zhengyao)
+	quality = 3
+	stewardship = 1
+	health = 0.5
+	active = {
+		culture_group = chinese_group
+	}
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_china"
+}
+cookbook_3_central_german = { #Masterful Cookbook (German: Daz buch von guter spise (The Book of Good Food))
+	quality = 3
+	stewardship = 1
+	vassal_opinion = 5
+	active = {
+		culture_group = central_germanic
+	}
+	flags = { about_stewardship cooking book created }
+	picture = "GFX_book_cook_german"
+}
+bad_fishing_book = {
+	quality = 1
+	general_opinion = 1
+	flags = { about_stewardship book created }
+	picture = "GFX_book_fish_01"
+}
+on_culture_architecture = {
+	quality = 3
+	build_cost_modifier = -0.1
+	flags = { about_stewardship book created }
+	picture = "GFX_book_architect_01"
+}
+how_to_build_a_well = {
+	quality = 3
+	build_time_modifier = -0.2
+	flags = { about_stewardship book created }
+	picture = "GFX_book_architect_02"
+}
+gardens_of_planet = {
+	quality = 3
+	stewardship = 1
+	global_tax_modifier = 0.01
+	flags = { about_stewardship book created }
+	picture = "GFX_book_bigflower"
+}
+treatise_on_fishing = {
+	quality = 4
+	diplomacy = 1
+	stewardship = 1
+	general_opinion = 5
+	flags = { about_stewardship book created }
+	picture = "GFX_book_fish_02"
+}
+
+
+#D. Books from the Learning ("religion") category...
+in_honor_of_highgod = { #quiet contemplation, you rock
+	quality = 1
+	monthly_character_piety = 0.1
+	flags = { about_religion book created }
+	picture = "GFX_book_point_01"
+}
+
+faith_eternal = { #Wow, so pious, temple holders love you
+	quality = 1
+	church_opinion = 5
+	flags = { about_religion book created }
+	picture = "GFX_book_learnblank_01"
+}
+
+what_do_monks_wear = { # more superficial, but same religion folks like you
+	quality = 2
+	same_religion_opinion = 2
+	monthly_character_piety = 0.25
+	flags = { about_religion book created }
+	picture = "GFX_book_learnblank_02"
+}
+hymns_to_highgod  = { # beautiful
+	quality = 2
+	church_opinion = 10
+	flags = { about_religion poetry book created }
+	picture = "GFX_book_point_02"
+}
+choice_passages = {
+	quality = 2
+	church_opinion = 5
+	monthly_character_piety = 0.1
+	flags = { about_religion book created }
+	picture = "GFX_book_learnblank_03"
+}
+a_history_of_churches = { # academia, fellow scholars of same religion and temple holders praise it
+	quality = 3
+	stewardship = 1
+	same_religion_opinion = 3
+	church_opinion = 5
+	flags = { about_religion book created }
+	picture = "GFX_book_learnblank_04"
+}
+how_to_worship = { # a bit of a lecture, but very pious
+	quality = 3
+	church_opinion = 10
+	monthly_character_piety = 0.5
+	flags = { about_religion book created }
+	picture = "GFX_book_eye_01"
+}
+the_not_actual_holy_book = { # an outrageous imitation, upsetting many, making others gossip intrigued ( #lunatic only)
+	quality = 3
+	intrigue = 3
+	defensive_plot_power_modifier = 0.05
+	same_religion_opinion = -5
+	church_opinion = -10
+	active = { trait = lunatic }
+	flags = { lunatic about_religion unholy book created }
+	picture = "GFX_book_eye_02"
+}
+the_spirits = { # ancestor worship
+	quality = 3
+	learning = 1
+	monthly_character_piety = 0.75
+	active = {
+		religion_group = pagan_group
+	}
+	flags = { about_religion book created }
+	picture = "GFX_book_eye_03"
+}
+learning_languages_1 = { # so-so
+	quality = 1
+	monthly_character_prestige = 0.1
+	flags = { about_learning book created }
+	picture = "GFX_book_lang_01"
+}
+learning_languages_2 = { # decent
+	quality = 2
+	general_opinion = 2
+	monthly_character_prestige = 0.1
+	flags = { about_learning book created }
+	picture = "GFX_book_lang_02"
+}
+learning_languages_3 = { # good
+	quality = 3
+	general_opinion = 5
+	monthly_character_prestige = 0.25
+	flags = { about_learning book created }
+	picture = "GFX_book_lang_03"
+}
+learning_languages_4 = { #great
+	quality = 4
+	diplomacy = 1
+	general_opinion = 5
+	monthly_character_prestige = 0.5
+	flags = { about_learning book created }
+	picture = "GFX_book_lang_04"
+}
+the_republic = { #philosophy
+	quality = 3
+	diplomacy = 2
+	global_revolt_risk = -0.01
+	flags = { about_learning philosophy book created }
+	active = { government = FROMFROM }
+	picture = "GFX_book_republic"
+}
+unnatural_history = {
+	quality = 2
+	learning = 1
+	church_opinion = -5
+	sex_appeal_opinion = 5
+	flags = { about_intrigue unholy book created }
+	picture = "GFX_book_learnflower_01"
+}
+the_confessions_of_root = {
+	quality = 3
+	learning = 2
+	fertility = -0.2
+	flags = { about_intrigue about_learning book created }
+	picture = "GFX_book_learnflower_02"
+}
+the_book_of_healing = {
+	quality = 4
+	intrigue = 1
+	learning = 1
+	health = 0.25
+	flags = { about_intrigue about_learning book created }
+	picture = "GFX_book_health_03"
+}
+human_anatomy = {
+	quality = 2
+	health = 0.1
+	fertility = 0.05
+	flags = { about_intrigue about_learning book created }
+	picture = "GFX_book_health_02"
+}
+maladies_and_remedies = {
+	quality = 2
+	health_penalty = 1
+	active = { has_minor_disease_trigger = yes }
+	flags = { about_intrigue about_learning book created }
+	picture = "GFX_book_health_01"
+}
+comforting_poetry = {
+	quality = 3
+	health = 0.5
+	active = {
+		OR = {
+			trait = depressed
+			trait = stressed		
+		}
+	}
+	flags = { about_intrigue about_learning poetry book created }
+	picture = "GFX_book_poetry"
+}
+equine_maxims = {
+	quality = 2
+	town_opinion = 3
+	horse_opinion = 15
+	flags = { about_learning poetry book created }
+	picture = "GFX_book"
+}
+equine_sequins = {
+	quality = 3
+	learning = 1
+	build_time_modifier = -0.05
+	horse_opinion = 15
+	flags = { about_learning about_stewardship book created }
+	picture = "GFX_book_green"
+}
+
+
+#E. Books from the Dynasty category...
+to_my_descendants = {
+	quality = 1
+	dynasty_opinion = 5
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_crown_01"
+}
+records_of_roots_dynasty = {
+	quality = 2
+	dynasty_opinion = 5
+	monthly_character_piety = 0.1
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_crown_02"
+}
+the_legend_of_roots_ancestors_1 = {
+	quality = 1
+	dynasty_opinion = 2
+	monthly_character_prestige = 0.1
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_tree_01"
+}
+the_legend_of_roots_ancestors_2 = {
+	quality = 2
+	dynasty_opinion = 5
+	monthly_character_prestige = 0.2
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_tree_02"
+}
+the_legend_of_roots_ancestors_3 = {
+	quality = 3
+	dynasty_opinion = 10
+	child_opinion = 5
+	monthly_character_prestige = 0.25
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_tree_03"
+}
+the_annals_of_roots_dynasty = {
+	quality = 4
+	diplomacy = 1
+	dynasty_opinion = 15
+	monthly_character_prestige = 0.2
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty book created }
+	picture = "GFX_book_roots_tree_04"
+}
+a_story_about_my_aunt = {
+	quality = 3
+	dynasty_opinion = 5
+	female_dynasty_opinion = 15
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty about_relationships fiction book created }
+	picture = "GFX_book_roots_crown_03"
+}
+the_secret_history_of_culture = {
+	quality = 4
+	dynasty_opinion = 10
+	vassal_opinion = 10
+	monthly_character_prestige = 1
+	active = { dynasty = FROMFROM }
+	flags = { about_dynasty about_relationships fiction book created }
+	picture = "GFX_book_roots_crown_04"
+}
+
+#From mourning a Chinese Princess/Prince
+chinese_journal = {
+	quality = 3
+	health = 0.5
+	active = {
+		OR = {
+			trait = depressed
+			trait = stressed
+		}
+		NOT = { trait = cynical }
+	}
+	flags = { poetry book }
+	picture = "GFX_book_chinese_diary"
+}

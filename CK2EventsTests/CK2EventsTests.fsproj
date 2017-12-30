@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sample.fs" />
+    <Compile Include="CWTools.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="fsc.props" />
