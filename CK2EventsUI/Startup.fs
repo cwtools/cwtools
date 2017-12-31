@@ -63,6 +63,7 @@ type Startup private () =
 
         let windowMenuItems = [|MenuItem(Label = "Events", Click = Action (fun _ -> goToUrl "index" "home"));
                                 MenuItem(Label = "Localisation", Click = Action (fun _ -> goToUrl "localisation" "home"));
+                                MenuItem(Label = "Validation", Click = Action (fun _ -> goToUrl "validation" "home"));
                                 MenuItem(Label = "Settings", Click = Action (fun _ -> goToUrl "settings" "home"));
                                 MenuItem(Label = "Select game", Submenu = gameSelects)
                                 |]        

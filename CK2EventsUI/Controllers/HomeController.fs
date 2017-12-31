@@ -53,6 +53,10 @@ type HomeController (provider : IActionDescriptorCollectionProvider, settings : 
         let viewmodel = LocalisationViewModel(settings, localisation)
         this.View(model = viewmodel)
 
+    member this.Validation () =
+        let viewmodel = ValidationViewModel(settings, appSettings)
+        this.View(model = viewmodel)
+
     member this.FirstRun() =
         this.Settings()
 

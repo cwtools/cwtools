@@ -1,0 +1,8 @@
+@model CK2Events.ViewModels.ValidationViewModel
+
+<table class="table">
+    <tr><th>Type</th><th>Error</th><th>Line</th></tr>
+@foreach(var result in Model.validationErrorList){
+    <tr><td>@result.category</td><td>@result.error</td><td>@result.position</td></tr>
+}
+</table>

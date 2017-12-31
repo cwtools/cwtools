@@ -132,7 +132,8 @@ module CKParser =
     
     do keyvalueimpl := pipe3 (getPosition) (key .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
-    let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
+    //let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
+    let all = ws >>. many statement .>> eof
     let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
 
     let internal applyParser (parser: Parser<'Result,'UserState>) (stream: CharStream<'UserState>) =

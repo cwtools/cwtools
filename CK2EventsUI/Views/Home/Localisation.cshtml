@@ -1,5 +1,5 @@
 @model CK2Events.ViewModels.LocalisationViewModel
-<table>
+<table class="table">
     <tr><th>Localisation file</th><th>Strict pass</th><th>Entries added</th><th>Error message</th></tr>
 @foreach(var result in Model.displayList){
     <tr><td>@result.key</td><td>@result.pass</td><td>@result.entries</td><td>@result.error</td></tr>

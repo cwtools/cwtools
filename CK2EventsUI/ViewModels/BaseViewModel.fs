@@ -8,6 +8,8 @@ open Microsoft.AspNetCore.Mvc.Rendering
 open System.Linq
 open CWTools.Common
 open CWTools.Localisation
+open CWTools.Games
+open CWTools.Parser
 
 type BaseViewModel (settings) =
     member val settings : CK2Settings = settings
@@ -54,3 +56,15 @@ type LocalisationViewModel (settings, localisation) =
 
     member val localisation : ILocalisationAPI = localisation
     member val displayList = localisation.Results.Select(fun d -> (d.Key, d.Value)) |> List.ofSeq |> List.map (fun (key, (pass, entries, error)) -> {key = key; pass = pass; entries = entries; error = error})
+
+type ValidationViewModelRow = 
+    {
+        category : string
+        error : string
+        position : string
+    }
+type ValidationViewModel (settings, appSettings : AppSettings) =
+    inherit BaseViewModel(settings)
+    let game = STLGame(settings.STLDirectory.gameDirectory)
+    let validationErrors = game.ValidationErrors
+    member val validationErrorList = validationErrors |> List.map (fun (s,e) -> {category = s.GetType().Name ; error = e; position = s.Position.ToString()})
