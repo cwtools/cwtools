@@ -10,8 +10,8 @@ module CK2Process =
         member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
     type Event(key) =
         inherit Node(key)
-        member this.ID = this.TagText "id" |> (function | Some s -> s | _ -> "")
-        member this.Desc = this.Tag "desc" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
+        member this.ID = this.TagText "id"
+        member this.Desc = this.TagText "desc"
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
     type EventRoot() =
@@ -83,7 +83,13 @@ module CK2Process =
          //   | false -> x
         let fNode = (fun (x:Node) _ -> 
                         match x with
-                        | :? Event as e -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
+                        | :? Event as e when e.Tag "desc" |> Option.isSome 
+                            -> e.SetTag "desc" (LeafI (Leaf (KeyValueItem(Key("desc"), Value.String (getDesc e.Desc)))))
+                        | :? Event as e when e.Child "desc" |> Option.isSome
+                            -> e.Child "desc" |> 
+                                function 
+                                |Some n -> n.SetTag "text" (LeafI (Leaf (KeyValueItem(Key("text"), Value.String (getDesc (n.TagText "text"))))))
+                                |None -> ()
                         | :? Option as o -> o.SetTag "name" (LeafI (Leaf (KeyValueItem(Key("name"), Value.String (getDesc o.Name)))))
                         | _ -> ()
                         )
@@ -140,5 +146,12 @@ module CK2Process =
     let getEventViews (root : EventRoot) =
         let getView (e : Event) =
             //let etype = e.Tag "type" |> (function | Some (String s) -> s | _ -> "")
-            {ID = e.ID; Desc = e.Desc; Hidden = e.Hidden; Key = e.Key}
+            let desc =
+                match e.Desc with
+                |"" -> 
+                    match e.Child "desc" with
+                    |Some n -> n.TagText "text"
+                    |None -> ""
+                |a -> a
+            {ID = e.ID; Desc = desc; Hidden = e.Hidden; Key = e.Key}
         root.Events |> List.map getView

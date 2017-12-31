@@ -42,7 +42,7 @@ type Node (key : string) =
     member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
     member this.Has x = this.All |> (List.exists (bothFind x))
     member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-    member this.TagText x = this.Tag x |> Option.map (fun t -> t.ToString())
+    member this.TagText x = this.Tag x |> function |Some s -> s.ToString() |None -> ""
     member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Children |> List.tryPick (function |c when c.Key = x -> Some c |_ -> None)
 
