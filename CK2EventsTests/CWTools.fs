@@ -14,6 +14,7 @@ open CWTools.Process
 open CWTools.Localisation
 open CWTools.Localisation.CK2Localisation
 open CWTools.Process.CK2Process
+open CWTools.Games
 open CWTools
 open System.Diagnostics
 
@@ -50,15 +51,20 @@ let processTests =
         ]
 
         testCase "STLGame test" <| fun () ->
-            let game = CWTools.STLGame(steamFolder + "Stellaris")
+            let game = STLGame(steamFolder + "Stellaris")
             let results = game.Results
-            results |> List.tryFind (function |CWTools.FileResult.Fail(f, e) -> true |_ -> false)
+            results |> List.tryFind (function |FileResult.Fail(f, e) -> true |_ -> false)
                     |> function |Some (Fail(k, e)) -> Expect.isTrue false (k + " " + e) |None -> ()
         
         testCase "STLGame test2" <| fun () ->
-            let game = CWTools.STLGame(steamFolder + "Stellaris")
+            let game = STLGame(steamFolder + "Stellaris")
             let duplicates = game.Duplicates
             List.iter (fun d -> printfn "%A" d |> ignore) duplicates
+
+        testCase "STLGame ship validation" <| fun () ->
+            let game = STLGame("CK2EventsTests/stellaris")
+            let errors = game.ValidationErrors
+            errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e) |> ignore)
         // testCase "process all CK2" <| fun () ->
         //     let commons = 
         //         Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common"

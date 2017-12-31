@@ -1,13 +1,17 @@
-namespace CWTools
+namespace CWTools.Games
 
 open CWTools.Parser
 open System.IO
 open FParsec
+open CWTools.Process
+open CWTools.Process.STLProcess
+open CWTools.Validation.STLValidation
+open CWTools.Validation.ValidationCore
 
 
 type FileResult =
-        |Pass of string * Statement list
-        |Fail of string * string
+    |Pass of string * Statement list
+    |Fail of string * string
     
 
 type STLGame ( gameDirectory : string ) =
@@ -26,7 +30,7 @@ type STLGame ( gameDirectory : string ) =
                     "common/component_tags";
                     "common/component_templates";
                     "common/country_types";
-                    "common/defines";
+                    //"common/defines";
                     "common/deposits";
                     "common/diplo_phrases";
                     "common/diplomatic_actions";
@@ -76,8 +80,10 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
-        let allFiles = folders |> List.map (fun f -> f, Directory.EnumerateFiles (gameDirectory + "/" + f) |> List.ofSeq)
+        let allFiles = folders |> List.map (fun f -> gameDirectory + "/" + f)
+                               |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
                                |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
+                               |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
                                |> Map.ofList
         let parseResults = 
             let matchResult (k, f) = 
@@ -87,5 +93,32 @@ type STLGame ( gameDirectory : string ) =
             allFiles |> Map.toList 
                 |> List.map ((fun (k, f) -> k, CKParser.parseFile f) >> matchResult)
 
+        let entities = parseResults 
+                        |> List.choose (function |Pass(_,parsed) -> Some parsed |_ -> None) 
+                        |> List.collect id
+                        |> STLProcess.shipProcess.ProcessNode<Node>() "root"
+                        |> (fun n -> n.Children)
+
+        let findDuplicates (sl : Statement list) =
+            let node = ProcessCore.processNodeBasic "root" sl
+            node.Children |> List.groupBy (fun c -> c.Key)
+                          |> List.filter (fun (k,v) -> v.Length > 1)
+                          |> List.map (fun (k,v) -> k)
+
+        let validateDuplicates =
+            parseResults |> List.choose (function |Pass(k,parsed) -> Some (k, parsed) |_ -> None)
+                |> List.groupBy (fun (k,p) -> k)
+                |> List.map (fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
+                |> List.map (fun (k, vs) -> k, findDuplicates vs)
+
+        let validateShips = 
+            let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
+            ships |> List.map validateShip
+                  |> List.choose (function |Invalid es -> Some es |_ -> None)
+                  |> List.collect id
+
+
+
         member __.Results = parseResults
-        
+        member __.Duplicates = validateDuplicates
+        member __.ValidationErrors = validateShips

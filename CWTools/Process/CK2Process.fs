@@ -3,11 +3,14 @@ open CWTools.Parser
 open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
+open System.Text
+open FParsec
 
 module CK2Process =
     type Option(key) = 
         inherit Node(key)
         member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
+        member this.CustomTooltip = this.TagText "custom_tooltip"
     type Event(key) =
         inherit Node(key)
         member this.ID = this.TagText "id"
@@ -26,11 +29,9 @@ module CK2Process =
 
     let maps =
         [
-            "option", processNode<Option>;
-            "character_event", processNode<Event>;
-            "province_event", processNode<Event>;
-            "letter_event", processNode<Event>;
-        ] |> Map.ofList
+            (=) "option", processNode<Option>;
+            (fun s -> s.EndsWith("event")), processNode<Event>;
+        ]
 
     let ck2Process = BaseProcess(maps)
     let processCK2Node = ck2Process.ProcessNode<Node>()
@@ -100,23 +101,35 @@ module CK2Process =
         root.Events |> List.iter (addLocalisedDesc localisation)
         root
     let getOption (localisation : ILocalisationAPI) (option:Option) =
-        let fNode = (fun (x:Node) (d,i) ->
+        let fNode = (fun (x:Node) ((d, t),i) ->
                         match x with
                         | :? Option as o -> 
-                            match o.Name with
-                            |"" -> (d,i)
-                            |v -> (localisation.GetDesc(v), i)
+                            let name =
+                                match o.Name with
+                                |"" -> 
+                                    match o.Child  "name" with |Some n -> n.TagText "text" |None -> ""
+                                |a -> a
+                            let custom =
+                                match o.CustomTooltip with
+                                |"" -> 
+                                    match o.Child  "custom_toolip" with |Some n -> n.TagText "text" |None -> ""
+                                |a -> a
+                            match name, custom with
+                            |"", "" -> ((d,t),i)
+                            |"", vt -> ((d,localisation.GetDesc(vt)), i)
+                            |vd, "" -> ((localisation.GetDesc(vd),t), i)
+                            |vd, vt -> ((localisation.GetDesc(vd),localisation.GetDesc(vt)), i)
                         | n ->
                             match n.Tag "id" with
-                            |Some v -> (d, (v.ToString()) :: i)
-                            |_ -> (d, i)
+                            |Some v -> ((d,t), (v.ToString()) :: i)
+                            |_ -> ((d,t), i)
                              )
         let fCombine x c =
             match x, c with
-            |("",[]), c -> c
-            |("",l), (a,b) -> (a, l@b)
+            |(("",""),[]), c -> c
+            |(("",""),l), (a,b) -> (a, l@b)
             |(d,l), (_,b) -> (d,l@b)
-        foldNode2 fNode fCombine ("",[]) option
+        foldNode2 fNode fCombine (("",""),[]) option
 
     let getOptions (localisation : ILocalisationAPI) (event : Event) =
         event.Children |> List.choose (function | :? Option as o -> Some o |_ -> None)

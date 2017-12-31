@@ -5,7 +5,7 @@ module STLProcess =
     type Ship (key) =
         inherit Node(key)
         member this.Name = this.TagText "name"
-        member this.ShipSize = this.TextTag "ship_size"
+        member this.ShipSize = this.TagText "ship_size"
     
     type ShipSection (key) =
         inherit Node(key)
@@ -19,8 +19,12 @@ module STLProcess =
    
     let shipMap =
         [
-            "ship_design", processNode<Ship>;
-            "section", processNode<ShipSection>;
-            "component", processNode<ShipComponent>;
-        ] |> Map.ofList
+            (=) "ship_design", processNode<Ship>;
+            (=) "section", processNode<ShipSection>;
+            (=) "component", processNode<ShipComponent>;
+        ]
     let shipProcess = BaseProcess(shipMap)
+
+    
+
+    

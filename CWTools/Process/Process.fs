@@ -42,7 +42,7 @@ type Node (key : string) =
     member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
     member this.Has x = this.All |> (List.exists (bothFind x))
     member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
-    member this.TagText x = this.Tag x |> function |Some s -> s.ToString() |None -> ""
+    member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
     member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Children |> List.tryPick (function |c when c.Key = x -> Some c |_ -> None)
 
@@ -65,12 +65,13 @@ module ProcessCore =
                     |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
-
-    type BaseProcess (maps : Map< string, ((Node -> Statement -> unit) -> string -> Statement list -> Node) > ) =
+    
+    type NodeTypeMap = (string -> bool) * ((Node -> Statement -> unit) -> string -> Statement list -> Node)
+    type BaseProcess (maps : NodeTypeMap list ) =
         let rec lookup =
-            (fun key ->
-                match maps.TryFind key with
-                |Some t -> t processNodeInner key
+            (fun (key : string) ->
+                match maps |> List.tryFind (fun a -> fst a key) with
+                |Some (_,t) -> t processNodeInner key
                 |None -> processNode<Node> processNodeInner key
                 ) >> (fun f a -> NodeI (f a)) 
         and processNodeInner (node : Node) statement =
@@ -81,7 +82,7 @@ module ProcessCore =
             | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
         member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> processNodeInner
 
-    let baseMap = [] |> Map.ofList
+    let baseMap = []
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()
 
     let rec foldNode fNode acc (node : Node) :'r =

@@ -101,7 +101,7 @@ function main(data: Array<any>, triggers: any, options: any, pretties : Array<an
     options.forEach(function (event : any) {
         var parentID = event[0];
         event[1].forEach(function (option : any) {
-            var optionName = option[0];
+            var optionName = option[0][0] + "\n" + option[0][1];
             option[1].forEach(function (target : any) {
                 if (cy.getElementById(target).length > 0) {
                     var edge = cy.add({ group: 'edges', data: { source: parentID, target: target } });

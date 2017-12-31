@@ -68,7 +68,7 @@ System.register(["dagre", "cytoscape", "cytoscape-qtip", "cytoscape-dagre", "cyt
         options.forEach(function (event) {
             var parentID = event[0];
             event[1].forEach(function (option) {
-                var optionName = option[0];
+                var optionName = option[0][0] + "\n" + option[0][1];
                 option[1].forEach(function (target) {
                     if (cy.getElementById(target).length > 0) {
                         var edge = cy.add({ group: 'edges', data: { source: parentID, target: target } });
