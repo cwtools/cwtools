@@ -1,11 +1,16 @@
 namespace CWTools.Parser
 
+    
 open FParsec
+open System.IO
 
+type Position = Position of FParsec.Position with
+    //override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
+    static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
 
 type Key =
     | Key of string
-    override x.ToString() = let (Key v) = x in sprintf "%s" v  
+    override x.ToString() = let (Key v) = x in sprintf "%s" v;  
 
 type KeyValueItem = 
     | KeyValueItem of Key * Value
@@ -25,11 +30,30 @@ and Value =
         | Bool b -> if b then "yes" else "no"
         | Float f -> sprintf "%A" f
         | Int i -> sprintf "%A" i
+and [<CustomEquality; CustomComparison>] PosKeyValue  = 
+    | PosKeyValue of Position * KeyValueItem
+    override x.Equals(y) =
+        match y with
+        | :? PosKeyValue as y ->
+            let (PosKeyValue(_, k)) = x
+            let (PosKeyValue(_, k2)) = y
+            k = k2
+        | _ -> false
+    override x.GetHashCode() = let (PosKeyValue(_, k)) = x in k.GetHashCode()
+    interface System.IComparable with
+        member x.CompareTo(y) =
+            match y with
+            | :? PosKeyValue as y ->
+                let (PosKeyValue(_, k)) = x
+                let (PosKeyValue(_, k2)) = y
+                compare k k2
+            | _ -> failwith "wrong type"
 
 and Statement =
     | Comment of string
-    | KeyValue of KeyValueItem
+    | KeyValue of PosKeyValue
     | Value of Value
+
 [<StructuralEquality; StructuralComparison>]
 type EventFile = |EventFile of  Statement list
 
@@ -106,11 +130,24 @@ module CKParser =
 
     do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> valueS <?> "value"
     
-    do keyvalueimpl := pipe2 (key .>> operator) (value) (fun id value -> KeyValue(KeyValueItem(id, value)))
+    do keyvalueimpl := pipe3 (getPosition) (key .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
     let parseEventFile filepath = runParserOnFile alle () filepath (System.Text.Encoding.GetEncoding(1252))
-    let parseFile filepath = runParserOnFile all () filepath (System.Text.Encoding.GetEncoding(1252))
+
+    let internal applyParser (parser: Parser<'Result,'UserState>) (stream: CharStream<'UserState>) =
+        let reply = parser stream
+        if reply.Status = Ok then
+            Success(reply.Result, stream.UserState, stream.Position)
+        else
+            let error = ParserError(stream.Position, stream.UserState, reply.Error)
+            Failure(error.ToString(stream), error, stream.UserState)
+
+    let parseFile (filepath : string) =
+        let stream = new CharStream<unit>(filepath, System.Text.Encoding.GetEncoding(1252))
+        stream.UserState <- ()
+        stream.Name <- Path.GetFileName(filepath)
+        applyParser all stream
 
 
     let memoize keyFunction memFunction =
@@ -150,7 +187,7 @@ module CKPrinter =
     and printKeyValue kv depth =
         match kv with
         | Comment c -> (tabs depth) + "#" + c + "\n"
-        | KeyValue (KeyValueItem (key, v)) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
+        | KeyValue (PosKeyValue(_, KeyValueItem (key, v))) -> (tabs depth) + key.ToString() + " = " + (printValue v depth)
         | Value v -> (tabs depth) + (printValue v depth)
     and printKeyValueList kvl depth =
         kvl |> List.map (fun kv -> printKeyValue kv depth) |> List.fold (+) ""

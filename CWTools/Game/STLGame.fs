@@ -96,11 +96,11 @@ type STLGame ( gameDirectory : string ) =
         let entities = parseResults 
                         |> List.choose (function |Pass(_,parsed) -> Some parsed |_ -> None) 
                         |> List.collect id
-                        |> STLProcess.shipProcess.ProcessNode<Node>() "root"
+                        |> STLProcess.shipProcess.ProcessNode<Node>() "root" Position.Empty
                         |> (fun n -> n.Children)
 
         let findDuplicates (sl : Statement list) =
-            let node = ProcessCore.processNodeBasic "root" sl
+            let node = ProcessCore.processNodeBasic "root" Position.Empty sl
             node.Children |> List.groupBy (fun c -> c.Key)
                           |> List.filter (fun (k,v) -> v.Length > 1)
                           |> List.map (fun (k,v) -> k)
@@ -122,3 +122,4 @@ type STLGame ( gameDirectory : string ) =
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ValidationErrors = validateShips
+        member __.Entities = entities

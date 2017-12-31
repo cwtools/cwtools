@@ -1,7 +1,6 @@
 namespace CWTools.Process
 
 open CWTools.Parser
-open CWTools.Localisation
 open Newtonsoft.Json
 open System
 
@@ -22,20 +21,22 @@ module List =
     | Some ls -> ls
     | None -> add::xs
     
-type Leaf(keyvalueitem : KeyValueItem) =
+type Leaf(keyvalueitem : KeyValueItem, ?pos : Position) =
     let (KeyValueItem (Key(key), value)) = keyvalueitem
     member val Key = key with get, set
     member val Value = value with get, set
+    member val Position = defaultArg pos Position.Empty
     [<JsonIgnore>]
     member this.ToRaw = KeyValueItem(Key(this.Key), this.Value)
 type LeafValue(value : Value) =
     member val Value = value with get, set
     [<JsonIgnore>]
     member this.ToRaw = Value(this.Value)
-type Node (key : string) =
+type Node (key : string, pos : Position) =
     let bothFind x = function |NodeI n when n.Key = x -> true |LeafI l when l.Key = x -> true |_ -> false
-
+    new(key : string) = Node(key, Position.Empty)
     member val Key = key
+    member val Position = pos
     member val All : Both list = List.empty with get, set
     member this.Children = this.All |> List.choose (function |NodeI n -> Some n |_ -> None)
     member this.Values = this.All |> List.choose (function |LeafI l -> Some l |_ -> None)
@@ -49,9 +50,9 @@ type Node (key : string) =
     [<JsonIgnore>]
     member this.ToRaw : Statement list = this.All |> List.rev |>
                                          List.map (function 
-                                           |NodeI n -> KeyValue(KeyValueItem(Key n.Key, Clause n.ToRaw))
+                                           |NodeI n -> KeyValue(PosKeyValue(n.Position, KeyValueItem(Key n.Key, Clause n.ToRaw)))
                                            |LeafValueI lv -> lv.ToRaw
-                                           |LeafI l -> KeyValue l.ToRaw 
+                                           |LeafI l -> KeyValue(PosKeyValue (l.Position, l.ToRaw))
                                            |CommentI c -> (Comment c))
     
 and Both = |NodeI of Node | LeafI of Leaf |CommentI of string |LeafValueI of LeafValue
@@ -59,25 +60,29 @@ and Both = |NodeI of Node | LeafI of Leaf |CommentI of string |LeafValueI of Lea
 
 module ProcessCore =
 
-    let processNode< 'T when 'T :> Node > inner (key : string) (sl : Statement list) : Node =
-        let node = match key with
-                    |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
-                    |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
+    let processNode< 'T when 'T :> Node > inner (key : string) (pos : Position) (sl : Statement list) : Node =
+        // let node = match key with
+        //             |"" -> Activator.CreateInstance(typeof<'T>) :?> Node
+        //             |x -> Activator.CreateInstance(typeof<'T>, x) :?> Node
+        //let paramList : obj[] = [|key; pos|]
+        //let bindingFlags = BindingFlags.CreateInstance ||| BindingFlags.Public ||| BindingFlags.Instance ||| BindingFlags.OptionalParamBinding
+        //let node = Activator.CreateInstance(typeof<'T>, bindingFlags ,null, paramList, null) :?> Node
+        let node = Activator.CreateInstance(typeof<'T>, key, pos) :?> Node
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
     
-    type NodeTypeMap = (string -> bool) * ((Node -> Statement -> unit) -> string -> Statement list -> Node)
+    type NodeTypeMap = (string -> bool) * ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)
     type BaseProcess (maps : NodeTypeMap list ) =
         let rec lookup =
-            (fun (key : string) ->
+            (fun (key : string) (pos : Position) ->
                 match maps |> List.tryFind (fun a -> fst a key) with
-                |Some (_,t) -> t processNodeInner key
-                |None -> processNode<Node> processNodeInner key
-                ) >> (fun f a -> NodeI (f a)) 
+                |Some (_,t) -> t processNodeInner key pos
+                |None -> processNode<Node> processNodeInner key pos
+                ) >> (fun f a b -> NodeI (f a b)) 
         and processNodeInner (node : Node) statement =
             match statement with
-            | KeyValue(KeyValueItem(Key(k) , Clause(sl))) -> node.All <- lookup k sl::node.All
-            | KeyValue(kv) -> node.All <- LeafI(Leaf(kv))::node.All
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos sl::node.All
+            | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafI(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentI c::node.All
             | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
         member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> processNodeInner

@@ -2,18 +2,18 @@ namespace CWTools.Process
 open CWTools.Process.ProcessCore
 
 module STLProcess =
-    type Ship (key) =
-        inherit Node(key)
+    type Ship (key, pos) =
+        inherit Node(key, pos)
         member this.Name = this.TagText "name"
         member this.ShipSize = this.TagText "ship_size"
     
-    type ShipSection (key) =
-        inherit Node(key)
+    type ShipSection (key, pos) =
+        inherit Node(key, pos)
         member this.Template = this.TagText "template"
         member this.Slot = this.TagText "slot"
     
-    type ShipComponent (key) =
-        inherit Node(key)
+    type ShipComponent (key, pos) =
+        inherit Node(key, pos)
         member this.Template = this.TagText "template"
         member this.Slot = this.TagText "slot"
    

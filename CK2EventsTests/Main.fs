@@ -84,7 +84,7 @@ let parserTests =
             let parsed = (parser.parseFile "CK2EventsTests/event test files/bool.txt")
             match parsed with
                 | Success(v,_,_) ->
-                    let target = (EventFile [KeyValue(KeyValueItem(Key("test"),Bool(true)))])
+                    let target = (EventFile [KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("test"),Bool(true))))])
                     Expect.equal v target "Not equal"
                 | _ -> ()
 
@@ -177,6 +177,7 @@ let processingTests =
 
 
     ]
+    
 [<EntryPoint>]
 let main argv =
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

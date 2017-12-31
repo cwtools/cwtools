@@ -4,26 +4,25 @@ open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open System.Text
-open FParsec
 
 module CK2Process =
-    type Option(key) = 
-        inherit Node(key)
+    type Option(key, pos) = 
+        inherit Node(key, pos)
         member this.Name = this.Tag "name" |> (function | Some (String s) -> s | Some (QString s) -> s | _ -> "")
         member this.CustomTooltip = this.TagText "custom_tooltip"
-    type Event(key) =
-        inherit Node(key)
+    type Event(key, pos) =
+        inherit Node(key, pos)
         member this.ID = this.TagText "id"
         member this.Desc = this.TagText "desc"
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
 
-    type EventRoot() =
-        inherit Node("events")
+    type EventRoot(key, pos) =
+        inherit Node("events", Position.Empty)
         member __.Events : Event list = base.All |> List.choose (function |NodeI n -> Some n |_ -> None) |> List.choose (function | :? Event as e -> Some e |_ -> None)
         member this.Namespace = this.Tag "namespace" |> (function |Some (String s) -> s | _ -> "")
 
-    type ArtifactFile() =
-        inherit Node("artifacts")
+    type ArtifactFile(key, pos) =
+        inherit Node("artifacts", Position.Empty)
         member this.Slots = this.Child "slots" |> (function |Some c -> c.ToRaw | _ -> [])
         member __.Weapons = base.All |> List.choose (function |NodeI n when n.Key <> "slots" -> Some n |_ -> None)
 
@@ -38,9 +37,9 @@ module CK2Process =
     
     let processEventFile (ev : EventFile) = 
         let (EventFile e) = ev
-        (ck2Process.ProcessNode<EventRoot>()) "" e :?> EventRoot
+        (ck2Process.ProcessNode<EventRoot>()) "" Position.Empty e :?> EventRoot
 
-    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" >> (fun n -> n :?> ArtifactFile) 
+    let processArtifact = (ck2Process.ProcessNode<ArtifactFile>()) "" Position.Empty >> (fun n -> n :?> ArtifactFile) 
 
 
     let getTriggeredEvents (event:Event) =

@@ -17,6 +17,7 @@ open CWTools.Process.CK2Process
 open CWTools.Games
 open CWTools
 open System.Diagnostics
+open Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences
 
 let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
@@ -30,14 +31,14 @@ let test f =
 let processTests =
     testList "process tests" [
         testCase "process artifacts" <| fun () ->
-            let slots = [KeyValue(KeyValueItem(Key("weapon"),Int(1)));
-                         KeyValue(KeyValueItem(Key("ceremonial_weapon"), Int(1)));
-                         KeyValue(KeyValueItem(Key("scepter"), Int(1)));
-                         KeyValue(KeyValueItem(Key("crown"), Int(1)));
-                         KeyValue(KeyValueItem(Key("wrist"), Int(1)));
-                         KeyValue(KeyValueItem(Key("neck"), Int(1)));
-                         KeyValue(KeyValueItem(Key("torso"), Int(1)));
-                         KeyValue(KeyValueItem(Key("ceremonial_torso"), Int(1)));
+            let slots = [KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("weapon"),Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("ceremonial_weapon"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("scepter"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("crown"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("wrist"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("neck"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty,  KeyValueItem(Key("torso"), Int(1))));
+                         KeyValue(PosKeyValue(Position.Empty, KeyValueItem(Key("ceremonial_torso"), Int(1))));
                         ]
             let Success(parsed, _, _) as t = (CKParser.parseFile "CK2EventsTests/crusader kings 2/artifacts.txt")
             let Success(parsed2, _, _) as t2 = (CKParser.parseFile "CK2EventsTests/crusader kings 2/artifacts2.txt")
@@ -50,21 +51,22 @@ let processTests =
             yield! files |> List.map (fun f -> testCase ("process one " + f.ToString()) <| fun () -> test f)
         ]
 
-        testCase "STLGame test" <| fun () ->
-            let game = STLGame(steamFolder + "Stellaris")
-            let results = game.Results
-            results |> List.tryFind (function |FileResult.Fail(f, e) -> true |_ -> false)
-                    |> function |Some (Fail(k, e)) -> Expect.isTrue false (k + " " + e) |None -> ()
+        // testCase "STLGame test" <| fun () ->
+        //     let game = STLGame(steamFolder + "Stellaris")
+        //     let results = game.Results
+        //     results |> List.tryFind (function |FileResult.Fail(f, e) -> true |_ -> false)
+        //             |> function |Some (Fail(k, e)) -> Expect.isTrue false (k + " " + e) |None -> ()
         
-        testCase "STLGame test2" <| fun () ->
-            let game = STLGame(steamFolder + "Stellaris")
-            let duplicates = game.Duplicates
-            List.iter (fun d -> printfn "%A" d |> ignore) duplicates
+        // testCase "STLGame test2" <| fun () ->
+        //     let game = STLGame(steamFolder + "Stellaris")
+        //     let duplicates = game.Duplicates
+        //     List.iter (fun d -> printfn "%A" d |> ignore) duplicates
 
         testCase "STLGame ship validation" <| fun () ->
             let game = STLGame("CK2EventsTests/stellaris")
             let errors = game.ValidationErrors
-            errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e) |> ignore)
+            Expect.hasCountOf errors 2u (fun _ -> true) "Not enough errors"
+            //errors |> List.iter (fun (s, e) -> printfn "%A" (s.ToRaw |> CKPrinter.api.prettyPrintStatements, e, s.Position) |> ignore)
         // testCase "process all CK2" <| fun () ->
         //     let commons = 
         //         Directory.EnumerateDirectories "/home/thomas/.steam/steam/steamapps/common/Crusader Kings II/common"
