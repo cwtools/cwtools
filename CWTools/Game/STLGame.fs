@@ -80,11 +80,15 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
-        let allFiles = folders |> List.map (fun f -> gameDirectory + "/" + f)
-                               |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
-                               |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
-                               |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
-                               |> Map.ofList
+        let modFolders = Directory.EnumerateDirectories (gameDirectory + "/mod") |> List.ofSeq
+        let allFolders = gameDirectory :: modFolders
+        let getAllFiles path =
+            folders |> List.map (fun f -> path + "/" + f)
+                   |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
+                   |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
+                   |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
+                   
+        let allFiles = List.map getAllFiles allFolders |> List.collect id |> Map.ofList
         let parseResults = 
             let matchResult (k, f) = 
                 match f with
@@ -117,9 +121,15 @@ type STLGame ( gameDirectory : string ) =
                   |> List.choose (function |Invalid es -> Some es |_ -> None)
                   |> List.collect id
 
+        let parseErrors = parseResults
+                        |> List.choose (function |Fail(f,e) -> Some (f,e) |_ -> None)
+                        
+
 
 
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
+        member __.ParserErrors = parseErrors
         member __.ValidationErrors = validateShips
         member __.Entities = entities
+        member __.Folders = allFolders

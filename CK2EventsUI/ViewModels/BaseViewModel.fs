@@ -57,14 +57,21 @@ type LocalisationViewModel (settings, localisation) =
     member val localisation : ILocalisationAPI = localisation
     member val displayList = localisation.Results.Select(fun d -> (d.Key, d.Value)) |> List.ofSeq |> List.map (fun (key, (pass, entries, error)) -> {key = key; pass = pass; entries = entries; error = error})
 
-type ValidationViewModelRow = 
+type ValidationViewModelErrorRow = 
     {
         category : string
         error : string
         position : string
     }
+type ValidationViewModelParseRow =
+    {
+        file : string
+        error : string
+    }
 type ValidationViewModel (settings, appSettings : AppSettings) =
     inherit BaseViewModel(settings)
     let game = STLGame(settings.STLDirectory.gameDirectory)
     let validationErrors = game.ValidationErrors
+    member val folders = game.Folders
+    member val parserErrorList = game.ParserErrors |> List.map (fun (f, e) -> {file = f; error = e})
     member val validationErrorList = validationErrors |> List.map (fun (s,e) -> {category = s.GetType().Name ; error = e; position = s.Position.ToString()})
