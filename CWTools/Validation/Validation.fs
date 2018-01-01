@@ -14,3 +14,8 @@ module ValidationCore =
         | OK, OK -> OK
         | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
         | Invalid e, OK | OK, Invalid e -> Invalid e
+    let (<&&>) f1 f2 = 
+        match f1, f2 with
+        | OK, OK -> OK
+        | Invalid e1, Invalid e2 -> Invalid (e1 @ e2)
+        | Invalid e, OK | OK, Invalid e -> Invalid e

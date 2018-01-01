@@ -31,10 +31,20 @@ module STLValidation =
         (fun node -> 
             let defined = getDefinedVariables node |> Set.ofList
             let used = getUsedVariables node |> Set.ofList
-            let diff = Set.difference used defined
-            match diff |> Set.toList with
-            | [] -> OK
-            | x -> 
-                let errors = List.map (fun v -> (node, (v + " is not defined"))) x
-                Invalid errors
+            let undefined = Set.difference used defined
+            let errors = 
+                match undefined |> Set.toList with
+                | [] -> OK
+                | x -> 
+                    let errors = List.map (fun v -> (node, (v + " is not defined"))) x
+                    Invalid errors
+            let unused = Set.difference defined used
+            let warnings =
+                match unused |> Set.toList with
+                | [] -> OK
+                | x -> 
+                    let errors = List.map (fun v -> (node, (v + " is not used"))) x
+                    Invalid errors
+
+            errors <&&> warnings
         )

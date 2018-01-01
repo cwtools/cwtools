@@ -110,7 +110,7 @@ type STLGame ( gameDirectory : string ) =
         let entities = parseResults 
                         |> List.choose (function |Pass(f,parsed) -> Some (f,parsed) |_ -> None) 
                         //|> List.collect id
-                        |> List.map (fun (f, parsed) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(Path.GetFileName(f))) parsed))
+                        |> List.map (fun (f, parsed) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         let flatEntities = entities |> List.map (fun n -> n.Children) |> List.collect id
 
         let findDuplicates (sl : Statement list) =
@@ -146,6 +146,7 @@ type STLGame ( gameDirectory : string ) =
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors
         member __.ValidationErrors = validateAll
+        //member __.ValidationWarnings = warningsAll
         member __.Entities = entities
         member __.Folders = allFolders
         member __.AllFiles = parseResults |> List.map (function |Fail(f,_) -> (f, false) |Pass(f,_) -> (f, true))
