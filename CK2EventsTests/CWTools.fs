@@ -18,6 +18,7 @@ open CWTools.Games
 open CWTools
 open System.Diagnostics
 open Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences
+open CWTools.Parser.DocsParser
 
 let winFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\"
 let linuxFolder = "/home/thomas/.steam/steam/steamapps/common/"
@@ -76,4 +77,21 @@ let processTests =
         //         |> List.filter (fun f -> Path.GetExtension(f) = ".txt")
         //     commons |> List.map (CKParser.parseFile)
         //             |> List.iter (function |Success(parsed,_,_) -> () |Failure(msg, _, _) -> Expect.isTrue false msg )
+    ]
+
+[<Tests>]
+let docsTests =
+    testList "docs tests" [
+        testCase "effects parse" <| fun () ->
+            let path = "CK2EventsTests/game_effects (1).txt"
+            let parsed = parseDocs path
+            match parsed with
+            |Failure(msg,_,_) -> Expect.isTrue false msg
+            |_ -> ()
+        testCase "triggers parse" <| fun () ->
+            let path = "CK2EventsTests/game_triggers (1).txt"
+            let parsed = parseDocs path
+            match parsed with
+            |Failure(msg,_,_) -> Expect.isTrue false msg
+            |_ -> ()
     ]
