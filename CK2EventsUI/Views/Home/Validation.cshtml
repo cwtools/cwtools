@@ -20,3 +20,10 @@
     <tr><td>@result.category</td><td>@result.error</td><td>@result.position</td></tr>
 }
 </table>
+<h5>All files</h5>
+<table class="table">
+    <tr><th>File</th><th>Pass</th></tr>
+@foreach(var result in Model.allFileList){
+    <tr><td>@result.file</td><td>@result.pass</td></tr>
+}
+</table>

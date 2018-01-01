@@ -1,0 +1,4269 @@
+[11:38:26][game_application.cpp:271]: Game Version: Capek v1.8.3
+[11:38:26][defines.cpp:108]: 1182 defines loaded
+[11:48:34][consolecmdimpl.cpp:2607]: 
+== TRIGGER DOCUMENTATION ==
+text - For 'desc={trigger={' use. Shows custom text
+text = <text>
+Supported Scopes: all
+Supported Targets: none
+
+custom_tooltip - Replaces the tooltips for the enclosed triggers with a custom text
+custom_tooltip = {
+	text = <text used as fallback for both fails and successes>
+fail_text = <text used for fails["string"/default/none]>
+success_text = <text used for seccesses["string"/default/none]>
+	<triggers>
+}
+Supported Scopes: all
+Supported Targets: none
+
+if - A conditional trigger
+if = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+and - all inside trigger must be true
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+or - At least one entry inside the trigger must be true
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+not - An inverted trigger
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+happiness - Checks the pop's happiness percentage
+happiness < 90
+Supported Scopes: pop
+Supported Targets: none
+
+has_ring - Checks if the planet has a planetary ring
+has_ring = yes
+Supported Scopes: planet
+Supported Targets: none
+
+hidden_trigger - Hides the tooltip for the triggers within
+hidden_trigger = { <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_owner - Checks if the planet/system is colonized
+has_owner = yes
+Supported Scopes: planet galactic_object
+Supported Targets: none
+
+any_owned_planet - Checks if any of the country's owned planets meet the specified criteria
+any_owned_planet = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_controlled_planet - Checks if any of the country's controlled planets meet the specified criteria
+any_controlled_planet = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_ai - Checks if the country is played by the AI
+is_ai = no
+Supported Scopes: country
+Supported Targets: none
+
+always - Sets trigger to be either always true or false
+always = yes
+Supported Scopes: all
+Supported Targets: none
+
+has_trait - Checks if a pop/leader/species/country's dominant species has a certain trait
+has_trait = leader_trait_carefree
+Supported Scopes: country pop leader species
+Supported Targets: none
+
+has_ethic - Checks if a country has a certain ethos
+has_ethic = ethic_fanatic_pacifist
+Supported Scopes: country pop
+Supported Targets: none
+
+is_moon - Checks if the planet is the moon of another planet
+is_moon = yes
+Supported Scopes: planet
+Supported Targets: none
+
+opinion - Checks the country's opinion of the target country
+opinion = { who = <target> value = -70 }
+Supported Scopes: country
+Supported Targets: ???
+
+any_pop - Checks if any of the planet/species/pop faction/sector's pops meet the specified criteria
+any_pop = { <triggers> }
+Supported Scopes: planet species pop_faction sector
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_owned_by - Checks if the planet/system/army/ship is owned by the target country
+is_owned_by = <target>
+Supported Scopes: planet ship galactic_object army
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_same_species - checks if the scoped object is of the same species as another object
+is_same_species = <target>
+Supported Scopes: country ship pop leader army species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+ideal_planet_class - Checks if the country's ideal planet class is a specific class
+ideal_planet_class = pc_tundra
+Supported Scopes: country
+Supported Targets: none
+
+is_same_empire - Checks if the country is the same as another, target country
+is_same_empire = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_planet_class - Checks if the planet is of a certain class
+is_planet_class = pc_tundra
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_strategic_resource - Checks if the planet has any strategic resource
+has_strategic_resource = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+ethos - Checks the average ethics divergence on the planet
+ethos < 0.4
+Supported Scopes: planet
+Supported Targets: none
+
+is_star_class - Checks if the system/planet(star) is of a certain class
+is_star_class = sc_black_hole
+Supported Scopes: planet galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+distance - Checks the ship/fleet/planet/leader/pop/system's galaxy map distance to target in absolute units
+distance = { source = <target> min = 50 max = 120 }
+Supported Scopes: planet ship pop fleet galactic_object leader
+Supported Targets: none
+
+has_technology - Checks if the country has a technology (of at least a specific level)
+has_technology = tech_spaceport_4
+Supported Scopes: country
+Supported Targets: none
+
+has_planet_modifier - Checks if the planet has a specific planet modifier
+has_planet_modifier = pm_titanic_life
+Supported Scopes: planet
+Supported Targets: none
+
+has_planet_flag - Checks if the planet has a specific flag
+has_planet_flag = <flag>
+Supported Scopes: planet
+Supported Targets: none
+
+has_country_flag - Checks if the empire has a specific flag
+has_country_flag = <flag>
+Supported Scopes: country
+Supported Targets: none
+
+has_fleet_flag - Checks if the fleet has a specific flag
+has_fleet_flag = <flag>
+Supported Scopes: fleet
+Supported Targets: none
+
+has_ship_flag - Checks if the ship has a specific flag
+has_ship_flag = <flag>
+Supported Scopes: ship
+Supported Targets: none
+
+is_ship_class - Checks if the ship/fleet is a specific class
+is_ship_class = shipclass_colonizer
+Supported Scopes: ship fleet
+Supported Targets: none
+
+is_ship_size - Checks if the ship/fleet is a specific ship size
+is_ship_size = mining_station
+Supported Scopes: ship fleet
+Supported Targets: none
+
+is_capital - Checks if the planet is its owner's capital
+is_capital = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_ground_combat - Checks if ground combat is taking place on the planet
+has_ground_combat = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_at_war - Checks if the country is at war
+is_at_war = yes
+Supported Scopes: country
+Supported Targets: none
+
+num_owned_planets - Checks the country's number of owned planets
+num_owned_planets < 8
+Supported Scopes: country
+Supported Targets: none
+
+has_government - Checks if the country has a specific government type
+has_government = despotic_hegemony
+Supported Scopes: country
+Supported Targets: none
+
+num_pops - Checks the number of pops on the planet/country/pop faction
+num_pops > 12
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+is_primitive - Checks if the country is a primitive, pre-FTL civilization
+is_primitive = yes
+Supported Scopes: country
+Supported Targets: none
+
+is_inside_nebula - checks if the planet/ship/fleet/system is inside a nebula
+is_inside_nebula = yes
+Supported Scopes: planet ship fleet galactic_object
+Supported Targets: none
+
+is_pirate - Checks if the country is a pirate country
+is_pirate = yes
+Supported Scopes: country
+Supported Targets: none
+
+is_inside_border - Checks if the planet/ship/fleet/system is inside the borders of the target country
+is_inside_border = <target>
+Supported Scopes: planet ship fleet galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_country - Iterate through all countries
+any_country = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+planet_size - Checks the planet's size, in number of tiles
+planet_size < 20
+Supported Scopes: planet
+Supported Targets: ???
+
+any_planet - Checks if any planet in the system/sector meets the specified criteria
+any_planet = { <triggers> }
+Supported Scopes: galactic_object sector
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+influence - Checks the country's Influence total
+influence > 350
+Supported Scopes: country
+Supported Targets: none
+
+is_star - Checks if the planet is a star
+is_star = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_asteroid - Checks if the planet is an asteroid
+is_asteroid = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_overlord - Checks if the country is the overlord of any subject countries
+is_overlord = yes
+Supported Scopes: country
+Supported Targets: none
+
+is_at_war_with - Checks if the country is at war with the target country
+is_at_war_with = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+their_opinion - Checks target country's opinion value of the current country
+their_opinion = { who = <target> value > 25 }
+Supported Scopes: country
+Supported Targets: ???
+
+is_same_species_class - Checks if the pop/country is of the same species class as another pop/country
+is_same_species_class = <target>
+Supported Scopes: country pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_federation - Checks if the country is in a federation
+has_federation = yes
+Supported Scopes: country
+Supported Targets: none
+
+is_colonizable - Checks if the planet can theoretically be colonized
+is_colonizable = yes
+Supported Scopes: planet
+Supported Targets: none
+
+gender - Checks the leader's gender
+gender = female
+Supported Scopes: leader
+Supported Targets: ???
+
+has_level - Checks if the leader has a specific experience level
+has_level > 2
+Supported Scopes: leader
+Supported Targets: ???
+
+num_minerals - Checks the planet's total amount of minerals
+num_minerals < 20
+Supported Scopes: planet
+Supported Targets: none
+
+num_physics - Checks the planet's total amount of physics research
+num_physics = 8
+Supported Scopes: planet
+Supported Targets: none
+
+num_society - Checks the planet's total amount of society research
+num_society > 8
+Supported Scopes: planet
+Supported Targets: none
+
+num_engineering - Checks the planet's total amount of engineering research
+num_engineering < 8
+Supported Scopes: planet
+Supported Targets: none
+
+num_modifiers - Checks the planet's number of modifiers
+num_modifiers < 3
+Supported Scopes: planet
+Supported Targets: none
+
+has_any_strategic_resource - Checks if the planet has any strategic resource
+has_any_strategic_resource = yes
+Supported Scopes: planet
+Supported Targets: none
+
+free_leader_slots - Checks the country's open leader slots
+free_leader_slots > 1
+Supported Scopes: planet country ship pop fleet leader
+Supported Targets: none
+
+has_pop_flag - Checks if the pop has a specific flag
+has_pop_flag = <flag>
+Supported Scopes: pop
+Supported Targets: none
+
+is_occupied_flag - Checks if the planet is under military occupation
+is_occupied_flag = yes
+Supported Scopes: planet
+Supported Targets: none
+
+can_colonize - Checks if the planet can be colonized by target country
+can_colonize = { who = <target> status = yes }
+Supported Scopes: planet
+Supported Targets: none
+
+is_damaged - Checks if the ship is damaged
+is_damaged = yes
+Supported Scopes: ship
+Supported Targets: none
+
+has_hp - Checks the ship's hull points
+has_hp > 200
+Supported Scopes: ship
+Supported Targets: none
+
+is_surveyed - Checks if the planet/system has been survey by target country
+is_surveyed = { who = <target> status = yes }
+Supported Scopes: planet galactic_object
+Supported Targets: none
+
+has_global_flag - Checks if a Global Flag has been set
+has_global_flag = <flag>
+Supported Scopes: all
+Supported Targets: none
+
+check_variable - Checks a variable for the country/leader/planet/system/fleet
+check_variable = { which = <variable> value < 4 }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+any_planet_within_border - Checks if any planets within the country's borders meet the specified criteria
+any_planet_within_border = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_owned_ship - Checks if any of the country's ships meet the specified criteria
+any_owned_ship = { <triggers> }
+Supported Scopes: country fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_ship - Checks if any ships in the game meet the specified criteria
+any_ship = { <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+energy - Checks the country's Energy Credits total
+energy < 2350
+Supported Scopes: country
+Supported Targets: none
+
+pop_has_ethic - Checks if the pop has a specific ethos
+pop_has_ethic = ethic_fanatic_xenophile
+Supported Scopes: pop
+Supported Targets: none
+
+pop_has_trait - Checks if the pop has a specific trait
+pop_has_trait = trait_decadent
+Supported Scopes: pop
+Supported Targets: none
+
+is_colony - Checks if the planet is colonized
+is_colony = yes
+Supported Scopes: planet
+Supported Targets: none
+
+habitability - Checks the planet's habitability (0 to 1) for target pop/species
+habitability = { who = <target> value = 0.6 }
+Supported Scopes: planet
+Supported Targets: none
+
+has_building - Checks if the planet/tile has any, or a specific, building
+has_building = yes
+has_building = building_capital_3
+Supported Scopes: planet tile
+Supported Targets: none
+
+is_controlled_by - Checks if the planet is controlled by the target country
+is_controlled_by = <target>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_terraformed - Checks if the planet has ever been terraformed
+is_terraformed = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_terraforming - Checks if the planet is currently being terraformed
+is_terraforming = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_planet_edict - Checks if the planet has a specific edict active
+has_planet_edict = edict_reeducation_campaign
+Supported Scopes: planet
+Supported Targets: none
+
+has_country_edict - Checks if the country has a specific edict active
+has_planet_edict = society_research_focus
+Supported Scopes: country
+Supported Targets: none
+
+has_observation_outpost - Checks if the planet has an observation post
+has_observation_outpost = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_federation_leader - Checks if the country is the leader of their federation
+is_federation_leader = yes
+Supported Scopes: country
+Supported Targets: none
+
+starting_system - Checks if the system is the starting system for any country
+starting_system = yes
+Supported Scopes: galactic_object
+Supported Targets: none
+
+has_star_flag - Checks if the solar system has a specific flag
+has_star_flag = <flag>
+Supported Scopes: galactic_object
+Supported Targets: none
+
+has_mining_station - Checks if the planet has an orbital mining station
+has_mining_station = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_research_station - Checks if the planet has an orbital researc station
+has_research_station = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_spaceport - Checks if the planet has a spaceport
+has_spaceport = yes
+Supported Scopes: planet
+Supported Targets: none
+
+any_spaceport - Checks if the planet's spaceport meets the specified criteria
+any_spaceport = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_research_station - Checks if the planet's orbital research station meets the specified criteria
+any_research_station = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_mining_station - Checks if the planet's orbital mining station meets the specified criteria
+any_mining_station = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_system - Checks if any solar systems in the game meet the specified criteria
+any_system = { <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_system_within_border - Checks if any systems within the country's borders meet the specified criteria
+any_system_within_border = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+army_type - Checks the army's type
+army_type = assault_army
+Supported Scopes: army
+Supported Targets: none
+
+has_army - Checks if the planet has an army
+has_army = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_advisor_active - checks if a country has an advisor
+Supported Scopes: country
+Supported Targets: none
+
+count_pops - Checks the number of pops in the scope that fulfill the specified criteria
+count_pops = { limit = { <triggers> } count < 6 }
+Supported Scopes: planet species pop_faction sector
+Supported Targets: none
+
+is_enslaved - Checks if the pop is a slave
+is_enslaved = yes
+Supported Scopes: pop
+Supported Targets: none
+
+is_being_purged - Checks if the pop is being purged
+is_being_purged = yes
+Supported Scopes: pop
+Supported Targets: none
+
+graphical_culture - Checks if the country has specific graphical culture
+graphical_culture = fungoid_01
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+income - Checks the country's monthly energy credit income
+income < 90
+Supported Scopes: country
+Supported Targets: none
+
+expenses - Checks the country's monthly energy credit expenses
+expenses > 28
+Supported Scopes: country
+Supported Targets: none
+
+produced_energy - Checks the country's gross amount of produced energy credits
+produced_energy < 100
+Supported Scopes: country
+Supported Targets: none
+
+trade_income - Checks the country's energy credits income from trade for the previous month
+trade_income < 30
+Supported Scopes: country
+Supported Targets: none
+
+trade_expenses - Checks the country's energy credits expenses from trade for the previous month
+trade_expenses < 30
+Supported Scopes: country
+Supported Targets: none
+
+ship_maintenance - Checks the country's total ship maintenance expenses for the previous month, in energy credits
+ship_maintenance < 226
+Supported Scopes: country
+Supported Targets: none
+
+army_maintenance - Checks the country's total army maintenance expenses for the previous month, in energy credits
+army_maintenance > 226
+Supported Scopes: country
+Supported Targets: none
+
+colony_maintenance - Checks the country's total colony maintenance expenses for the previous month, in energy credits
+colony_maintenance > 25
+Supported Scopes: country
+Supported Targets: none
+
+station_maintenance - Checks the country's total orbital station maintenance expenses for the previous month, in energy credits
+station_maintenance > 126
+Supported Scopes: country
+Supported Targets: none
+
+construction_expenses - Checks the country's construction expenses for the previous month
+construction_expenses > 290
+Supported Scopes: country
+Supported Targets: none
+
+federation_expenses - Checks the country's federation expenses for the previous month
+federation_expenses < 1000
+Supported Scopes: country
+Supported Targets: none
+
+has_anomaly - Checks if the planet has an anomaly
+has_anomaly = yes
+Supported Scopes: planet
+Supported Targets: none
+
+stored_physics_points - Checks the country's amount of stored physics research
+stored_physics_points
+Supported Scopes: country
+Supported Targets: none
+
+stored_society_points - Checks the country's amount of stored society research
+stored_society_points
+Supported Scopes: country
+Supported Targets: none
+
+stored_engineering_points - Checks the country's amount of stored engineering research
+stored_engineering_points
+Supported Scopes: country
+Supported Targets: none
+
+balance - Checks the country's energy credit balance
+balance < 39
+Supported Scopes: country
+Supported Targets: none
+
+running_balance - Checks the country's running energy credit balance
+running_balance > 61
+Supported Scopes: country
+Supported Targets: none
+
+is_planet - Checks if the planet is the same as target planet
+is_planet = <target>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_pop - Checks if the pop is the same as target pop
+is_pop = <target>
+Supported Scopes: pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_ship - Checks if the ship is the same as target ship
+is_ship = <target>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_army - Checks if the army is the same as target army
+is_army = <target>
+Supported Scopes: army
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_country - Checks if the country is the same as target country
+is_country = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_tutorial_level - Checks the country's tutorial level (0 off, 1 limited, 2 full)
+is_tutorial_level = 0
+Supported Scopes: country
+Supported Targets: none
+
+is_multiplayer - Checks if the game is running in multiplayer
+is_multiplayer = yes
+Supported Scopes: all
+Supported Targets: none
+
+has_event_chain - Checks if the country has a specific event chain
+has_event_chain = old_gods_chain
+Supported Scopes: country
+Supported Targets: none
+
+is_species_class - Checks if the pop/country's founder species is a specific species class
+is_species_class = MAM
+Supported Scopes: country pop species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+vassals - Checks the country's number of vassals
+vassals > 0
+Supported Scopes: country
+Supported Targets: ???
+
+has_opinion_modifier - Checks if the country has a specific opinion modifier towards target country or anyone
+has_opinion_modifier = { who = <target (optional)> modifier = encroaching_colony is_reverse = no }
+Supported Scopes: country
+Supported Targets: none
+
+has_established_contact - Checks if the country has established contact with target country
+has_established_contact = <target>
+Supported Scopes: country
+Supported Targets: none
+
+has_completed_event_chain_counter - Checks if the country has completed a specific counter in an event chain
+has_completed_event_chain_counter = { event_chain = amoebas_2_chain counter = amoebas_slaughtered }
+Supported Scopes: country
+Supported Targets: none
+
+has_planet_class - Checks if the system has planet of specific class
+has_planet_class = pc_tundra
+Supported Scopes: galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_disabled - Checks if the ship/fleet is disabled
+is_disabled = yes
+Supported Scopes: ship fleet
+Supported Targets: ???
+
+has_existing_ship_design - Checks if the country has a specific ship design available
+
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+food - Checks the country's Food stockpile total
+food > 3350
+Supported Scopes: country
+Supported Targets: none
+
+minerals - Checks the country's Minerals total
+minerals > 3350
+Supported Scopes: country
+Supported Targets: none
+
+has_grown_pop - Checks if the planet/tile has a fully-grown pop
+has_grown_pop = yes
+Supported Scopes: planet tile
+Supported Targets: ???
+
+has_growing_pop - Checks if the planet/tile has a still-growing pop
+has_growing_pop = yes
+Supported Scopes: planet tile
+Supported Targets: ???
+
+has_resource - Checks if the planet/tile has a specific amount of a specific resource
+has_resource = { type = minerals amount < 5 }
+has_resource = no
+Supported Scopes: planet tile
+Supported Targets: ???
+
+has_building_construction - Checks if the planet/tile has any, or a specific, ongoing building construction
+has_building_construction = yes
+has_building_construction = building_capital_3
+Supported Scopes: planet tile
+Supported Targets: none
+
+any_neighboring_tile - Checks if any of the tile's neighbors meet the specified criteria
+any_neighboring_tile = { <triggers> }
+Supported Scopes: tile
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_tile - Checks if any tiles on the planet meet the criteria
+any_tile = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_blocker - Checks if the planet/tile has any, or a specific, tile blocker
+has_blocker = yes
+has_blocker = tb_dangerous_wildlife
+Supported Scopes: planet tile
+Supported Targets: none
+
+free_pop_tiles - Checks the planet's number of open tiles for pops
+free_pop_tiles < 6
+Supported Scopes: planet
+Supported Targets: ???
+
+free_building_tiles - Checks the planet's number of tiles available for new constructions
+free_building_tiles > 2
+Supported Scopes: planet
+Supported Targets: ???
+
+has_relation_flag - Checks if the country has a relation flag towards target country
+has_relation_flag = { who = <target> flag = <flag> }
+Supported Scopes: country
+Supported Targets: ???
+
+reverse_has_relation_flag - Checks if the target country has a relation flag towards the country
+reverse_has_relation_flag = { who = <target> flag = <flag> }
+Supported Scopes: country
+Supported Targets: ???
+
+exists - Checks if a target scope exists
+exists = <target>
+Supported Scopes: all
+Supported Targets: ???
+
+has_edict - Checks if the country/planet has a specific edict enabled
+has_edict = crystal_sonar
+Supported Scopes: planet country
+Supported Targets: ???
+
+has_moon - Checks if the planet has a moon
+has_moon = yes
+Supported Scopes: planet
+Supported Targets: none
+
+num_moons - Checks the planet's number of moons
+num_moons < 4
+Supported Scopes: planet
+Supported Targets: none
+
+is_in_cluster - Checks if the planet/system belongs to a specific spawning cluster
+is_in_cluster = resource_cluster_3
+Supported Scopes: planet galactic_object
+Supported Targets: ???
+
+any_moon - Checks if any of the planet's moons meet the specified criteria
+any_moon = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+num_empires - Checks the number of regular empires in the galaxy
+num_empires > 3
+Supported Scopes: country
+Supported Targets: none
+
+num_adjacent_tiles - Checks the tile's number of adjacent tiles
+num_adjacent_tiles < 2
+Supported Scopes: tile
+Supported Targets: none
+
+is_sapient - Checks if the pop is sapient
+is_sapient = no
+Supported Scopes: pop species
+Supported Targets: none
+
+leader_class - Checks if the leader is of a specific class
+leader_class = scientist
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_preventing_anomaly - Checks if the planet is prevented from generating anomalies
+is_preventing_anomaly = yes
+Supported Scopes: planet
+Supported Targets: ???
+
+observation_outpost_owner - Checks if the planet's observation post's owner meets the specified criteria
+observation_outpost_owner = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+observation_outpost - Checks if the planet's observation post meets the specified criteria
+observation_outpost = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_deposit - Checks if the planet/tile has any, or a specific, deposit
+has_deposit = yes
+has_deposit = d_immense_engineering_deposit
+Supported Scopes: planet tile
+Supported Targets: none
+
+has_deposit_for - Checks if the planet has a deposit for a specific ship class
+has_deposit_for = shipclass_mining_station
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+colony_age - Checks the planet's (colony's) age in months
+colony_age > 12
+Supported Scopes: planet
+Supported Targets: none
+
+is_rim_system - Checks if the system is on the galactic rim
+is_rim_system = yes
+Supported Scopes: galactic_object
+Supported Targets: ???
+
+any_rim_system - Iterate through all rim systems
+any_rim_system = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_mission - Checks if the observation post has a specific mission
+has_mission = technological_enlightenment_4
+Supported Scopes: fleet
+Supported Targets: none
+
+is_country_type - Checks if the country is a specific type
+is_country_type = fallen_empire
+Supported Scopes: country
+Supported Targets: none
+
+has_modifier - Checks if the country/planet/pop has a certain modifier
+has_modifier = <modifier>
+Supported Scopes: planet country ship pop pop_faction
+Supported Targets: none
+
+switch - Switch case for a trigger
+switch = {
+	trigger = pop_has_ethic
+	ethic_xenophile = { <effect> }
+	ethic_xenophobe = { <effect> }
+	default = { <effect> }
+}
+Supported Scopes: all
+Supported Targets: ???
+
+sectors - Checks the country's number of sectors
+ sectors < 4
+Supported Scopes: country
+Supported Targets: none
+
+num_fleets - Checks the country's number of fleets
+num_fleets < 8
+Supported Scopes: country
+Supported Targets: ???
+
+num_ships - Checks the country/fleet's number of ships
+num_ships > 39
+Supported Scopes: country fleet
+Supported Targets: ???
+
+any_ship_in_system - Checks if any ships in the system meet the specified criteria
+any_ship_in_system = { <triggers> }
+Supported Scopes: galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+mission_progress - Checks if the observation post has achieved specific progress in a mission
+mission_progress > 0.7
+Supported Scopes: fleet
+Supported Targets: none
+
+num_ethics - Checks the country/pop's number of ethics
+num_ethics = 3
+Supported Scopes: country pop
+Supported Targets: none
+
+num_traits - Checks the country/pop/leader/species' number of traits
+num_traits < 3
+Supported Scopes: country pop leader species
+Supported Targets: none
+
+has_truce - Checks if the country has a truce with target country
+has_truce = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_ringworld - Checks if the planet is a ringworld
+is_ringworld = yes
+Supported Scopes: planet
+Supported Targets: none
+
+member_of_faction - Checks if the pop belongs to any, or a specific, faction
+member_of_faction = no
+Supported Scopes: pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+support - Checks the faction's support level
+ support > 0.5
+Supported Scopes: pop_faction
+Supported Targets: none
+
+is_ideal_planet_class - Checks if the planet is of the ideal class for target country
+is_ideal_planet_class = { who = <target> status = yes }
+Supported Scopes: planet
+Supported Targets: none
+
+is_pop_faction_type - Checks the faction's type
+is_pop_faction_type = malcontent_slaves
+Supported Scopes: pop_faction
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_same_value - Checks if the current scope and the target scope are the same thing
+is_same_value = <target>
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+sector_controlled - Checks if the planet/fleet is controlled by a sector
+sector_controlled = yes
+Supported Scopes: planet fleet
+Supported Targets: none
+
+sectors_over_limit - Checks the country's number of sectors over its sector cap
+sectors_over_limit > 0
+Supported Scopes: country
+Supported Targets: none
+
+is_orbital_tile - Checks if the tile is the tile that orbital stations work
+is_orbital_tile = yes
+Supported Scopes: tile
+Supported Targets: none
+
+orbital_bombardment - Checks to what degree the planet is being bombarded
+orbital_bombardment = limited
+Supported Scopes: planet
+Supported Targets: none
+
+intel_level - Checks the country's intel level of target system
+intel_level = { level > low system = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+members - Checks the number of members in the alliance
+members < 5
+Supported Scopes: alliance
+Supported Targets: none
+
+is_researching_area - Checks the scientist's field of research
+is_researching_area = society
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_owned_leader - Checks if any of the country's leaders meet the specified criteria
+any_owned_leader = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_owned_pop - Iterate through all owned pops
+any_owned_pop = { <count=<num/all>> <triggers> }
+Supported Scopes: planet country pop_faction
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_faction - Checks if the country has any instance of target faction type
+has_faction = planet_separatists
+Supported Scopes: country
+Supported Targets: none
+
+count_owned_pops - Count the number of owned pops in the country that fulfill the specified criteria
+count_owned_pops = { limit = { <triggers> } count > 12 }
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+can_declare_war - Checks if the country can declare war against target country
+can_declare_war = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_hostile - Checks if the country is hostile towards target country
+is_hostile = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_communications - Checks if the country has established communications with target country
+has_communications = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_country_resource - Checks the country's amount of a specific stored resource
+has_country_resource = { type = minerals amount > 99 }
+Supported Scopes: country
+Supported Targets: ???
+
+has_leader_flag - Checks if the leader has a specific flag
+has_leader_flag = <flag>
+Supported Scopes: leader
+Supported Targets: none
+
+num_killed_ships - Checks how many of target country's ships that the country has destroyed
+num_killed_ships = { target = <target> value > 5 }
+Supported Scopes: country
+Supported Targets: ???
+
+num_taken_planets - Checks how many planets the country has taken from target country
+num_taken_planets = { target = <target> value > 1 }
+Supported Scopes: country
+Supported Targets: ???
+
+count_ships - Checks the number of ships in the galaxy that meet the specified criteria
+count_ships = { limit = { <triggers> } count < 20 }
+Supported Scopes: all
+Supported Targets: ???
+
+count_owned_ships - Checks the country's number of ships that meet the specified criteria
+count_owned_ships = { limit = { <triggers> } count < 20 }
+Supported Scopes: country
+Supported Targets: ???
+
+has_pop_faction_flag - Checks if the pop faction has a specific flag
+has_pop_faction_flag = <flag>
+Supported Scopes: pop pop_faction
+Supported Targets: none
+
+research_leader - Checks if the country's researcher in a specific field meets the specified criteria
+research_leader = { area = engineering <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+leader_of_faction - Checks if the leader is the leader of a faction
+leader_of_faction = yes
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_scope_valid - Checks if the current scope is valid
+is_scope_valid = yes
+Supported Scopes: all
+Supported Targets: none
+
+opposing_ethics_divergence - Checks how far removed the country/pop's ethos is from target's
+opposing_ethics_divergence = { steps > 1 who = <target> }
+Supported Scopes: country pop
+Supported Targets: ???
+
+is_war_leader - Checks if the country leads in a war
+is_war_leader = yes
+Supported Scopes: country pop_faction
+Supported Targets: none
+
+can_create_sector - Checks if the country can create a sector out of the target system
+can_create_sector = <target>
+Supported Scopes: country
+Supported Targets: ???
+
+is_in_federation_with - Checks if the country is in a federation with target country
+is_in_federation_with = <target>
+Supported Scopes: country
+Supported Targets: none
+
+can_change_policy - Checks if the country can change a specific policy
+can_change_policy = slavery_not_allowed
+Supported Scopes: country
+Supported Targets: ???
+
+count_pop_factions - Checks the country's number of factions that meet the criteria
+count_pop_factions = { limit = { <triggers> } count < 2 }
+Supported Scopes: country
+Supported Targets: none
+
+has_fleet_order - Checks if the ship/fleet has a specific fleet order
+has_fleet_order = survey_planet_order
+Supported Scopes: ship fleet
+Supported Targets: none
+
+closest_system - Checks if any close-by systems meet the criteria
+closest_system = { min_steps = 2 max_steps = 20 <triggers> }
+Supported Scopes: all
+Supported Targets: ???
+
+num_communications - Checks the country's number of established communications
+num_communications > 3
+Supported Scopes: country
+Supported Targets: none
+
+is_ironman - Check if current game is running in ironman mode
+is_ironman = yes
+Supported Scopes: all
+Supported Targets: none
+
+has_monthly_income - Checks the country's monthly income of a specific resource
+has_monthly_income = { resource = engineering_research  value < 20 }
+Supported Scopes: country
+Supported Targets: ???
+
+last_changed_policy - Checks if the last policy changed by the country was a specific policy
+last_changed_policy = slavery
+Supported Scopes: country
+Supported Targets: ???
+
+any_sector - Checks if any of the country's sectors meet the specified criteria
+any_sector = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_policy_flag - Checks if the country has a specific policy
+has_policy_flag = slavery_not_allowed
+Supported Scopes: country
+Supported Targets: none
+
+pops_have_happiness - Checks if pops of the species can have happiness
+pops_have_happiness = yes
+Supported Scopes: species
+Supported Targets: ???
+
+any_owned_fleet - Checks if any of the country's owned fleets meet the specified criteria
+any_owned_fleet = { <targets> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_deposits - Checks the number of deposits on the tile/planet that meet the specified criteria
+count_deposits = { limit = { <triggers> count < 2 }
+Supported Scopes: planet tile
+Supported Targets: ???
+
+has_ground_support_stance - Checks if the fleet has a specific orbital bombardment stance
+has_ground_support_stande = light
+Supported Scopes: fleet
+Supported Targets: none
+
+has_tech_option - Checks if the country has a tech research option currently available
+has_tech_option = tech_mining_network_2
+Supported Scopes: country
+Supported Targets: none
+
+is_species - Checks if the pop/country's founder species is of a specific pre-defined species
+is_species = ROBOT_POP_SPECIES_2
+Supported Scopes: pop leader species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_tech_options - Checks the country's number available tech research options in a specific field
+count_tech_options = { area = physics count > 0 }
+Supported Scopes: country
+Supported Targets: ???
+
+last_increased_tech - Checks if the country's last researched technology was a specific tech
+last_increased_tech = tech_gene_expressions
+Supported Scopes: country
+Supported Targets: ???
+
+has_country_strategic_resource - Checks if the country has a specific amount of a specific strategic resource
+has_country_strategic_resource = { type = sr_pitharan amount > 1 }
+Supported Scopes: country
+Supported Targets: ???
+
+has_point_of_interest - Checks if the scoped country has a specific point of interest in its situation log
+has_point_of_interest = { poi = <id> }
+Supported Scopes: planet country ship fleet galactic_object ambient_object
+Supported Targets: ???
+
+is_being_repaired - Checks if the ship/fleet is being repaired
+is_being_repaired = yes
+Supported Scopes: ship fleet
+Supported Targets: none
+
+any_war - Checks if any wars meet the specified criteria
+any_war = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_defender - Checks if any of the defenders in the war meet the specified criteria
+any_defender = { <triggers> }
+Supported Scopes: war
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_attacker - Checks if any attackers in the war meet the specified criteria
+any_attacker = { <triggers> }
+Supported Scopes: war
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_orbital_station - Checks if the planet has any kind of orbital station
+has_orbital_station = yes
+Supported Scopes: planet
+Supported Targets: none
+
+any_orbital_station - Checks if the planet's orbital station meets the specified criteria
+any_orbital_station = { <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_prev_building - Checks the building that was previously on the tile
+has_prev_building = building_capital_3
+Supported Scopes: tile
+Supported Targets: none
+
+any_ambient_object - Checks if any ambient objects in the game meet the specified criteria
+any_ambient_object = { <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_system_ambient_object - Checks if any ambient objects in the system meet the specified criteria
+any_system_ambient_object = { <triggers> }
+Supported Scopes: galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_ambient_object_flag - Checks if the ambient object has a specific flag
+has_ambient_object_flag = <flag>
+Supported Scopes: ambient_object
+Supported Targets: none
+
+war_demand_counter - Checks the amount of war demands of a specific type
+war_demand_counter = { type = liberated_or_vassalized value < 1 }
+Supported Scopes: all
+Supported Targets: none
+
+attacker_war_score - Checks the war score of the war's attackers
+attacker_war_score > 60
+Supported Scopes: war
+Supported Targets: ???
+
+defender_war_score - Checks the war score of the war's defenders
+defender_war_score < 20
+Supported Scopes: war
+Supported Targets: ???
+
+off_war_score_sum - Checks the country's total war score for all offensive wars
+off_war_score_sum < 10
+Supported Scopes: country
+Supported Targets: ???
+
+def_war_score_sum - Checks the country's total war score for all defemsove wars
+def_war_score_sum > 75
+Supported Scopes: country
+Supported Targets: ???
+
+any_bordering_country - Iterate through all bordering countries of a system
+any_bordering_country = { <count=<num/all>> <triggers> }
+Supported Scopes: galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+galaxy_percentage - Checks if the country has a specific percentage (0.00-1.00) of the galaxy within its borders
+galaxy_percentage > 0.40
+Supported Scopes: country
+Supported Targets: ???
+
+custom_tooltip_fail - Shows custom text only when the associated trigger fails
+custom_tooltip_fail = {
+	text = <text>
+	<triggers>
+}
+Supported Scopes: all
+Supported Targets: none
+
+count_armies - Checks the number of armies on/in the planet/country that meet the specified criteria
+count_armies = { limit = { <triggers> } count < 12 }
+Supported Scopes: planet country
+Supported Targets: none
+
+original_owner - Checks if the planet is still owned by its first colonizer
+original owner = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_in_combat - Checks if the ship/fleet is engaged in combat
+is_in_combat = yes
+Supported Scopes: ship fleet
+Supported Targets: none
+
+any_member - Checks if any members of the alliance meet the specified criteria
+any_member = { <triggers> }
+Supported Scopes: alliance
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_guaranteeing - Checks if the country is guaranteeing the independence of target country
+is_guaranteeing = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_war_participant - Checks if target country is participating in the war on the specified side
+is_war_participant = { who = <target> side = <target> }
+Supported Scopes: war
+Supported Targets: none
+
+is_homeworld - Checks if the planet is its owner's homeworld
+is_homeworld = yes
+Supported Scopes: planet
+Supported Targets: none
+
+years_passed - Checks the number of in-game years passed since the 2200 start
+years_passed < 150
+Supported Scopes: all
+Supported Targets: none
+
+is_threatened_to - Checks if the country has a threatened attitude towards target country
+is_threatened_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_protective_to - Checks if the country has a protective attitude towards target country
+is_protective_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_friendly_to - Checks if the country has a friendly attitude towards target country
+is_friendly_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_hostile_to - Checks if the country has a hostile attitude towards target country
+is_hostile_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_ruined - Checks if the tile has a ruined building
+is_ruined = yes
+Supported Scopes: tile
+Supported Targets: none
+
+is_dismissive_to - Checks if the country has a dismissive attitude towards target country
+is_dismissive_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_patronizing_to - Checks if the country has a patronizing attitude towards target country
+is_patronizing_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_angry_to - Checks if the country has an angry attitude towards target country
+is_angry_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_neighbor_of - Checks if the country/planet is neighbors with target country
+is_neighbor_of = <target>
+Supported Scopes: planet country ship fleet galactic_object
+Supported Targets: none
+
+is_rival - Checks if the country has a rival attitude towards target country
+is_rival = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_unfriendly_to - Checks if the country has an unfriendly attitude towards target country
+is_unfriendly_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_loyal_to - Checks if the country has a loyal attitude towards target country
+is_loyal_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_disloyal_to - Checks if the country has a disloyal attitude towards target country
+is_disloyal_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_cordial_to - Checks if the country has a cordial attitude towards target country
+is_cordial_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_domineering_to - Checks if the country has a domineering attitude towards target country
+is_domineering_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+fleet_power - Checks the scope's total fleet power
+fleet_power > 2500
+Supported Scopes: country fleet
+Supported Targets: none
+
+has_election_type - Checks if the country has a specific election type
+has_election_type = oligarchic
+Supported Scopes: country
+Supported Targets: none
+
+has_ai_personality - Checks if an AI empire has a certain personality type
+has_ai_personality = fanatic_befrienders
+Supported Scopes: country
+Supported Targets: none
+
+has_ai_personality_behaviour - Checks if a country has a certain AI personality behavior
+has_ai_personality_behaviour = slaver
+Supported Scopes: country
+Supported Targets: none
+
+has_valid_ai_personality - Checks if the country has a valid AI personality
+has_valid_ai_personality = yes
+Supported Scopes: country
+Supported Targets: none
+
+has_migration_access - Checks if the country has migration access to target country
+has_migration_access = <target>
+Supported Scopes: country
+Supported Targets: none
+
+logged_in_to_pdx_account - Checks if the local human is logged in to a Pdx account. This WILL cause an out of sync if used for anything that can change the game state
+Supported Scopes: all
+Supported Targets: ???
+
+tech_unlocked_ratio - Checks the relative amount of already-researched tech between the country and target country
+tech_unlocked_ratio = { who = <target> ratio = 0.4 }
+Supported Scopes: country
+Supported Targets: ???
+
+has_special_project - Checks if the country has a specific special project available
+has_special_project = EMERGENCY_BUOY_PROJECT
+Supported Scopes: country
+Supported Targets: none
+
+would_join_war - Checks if the country would join the side of target country in a hypothetical war
+would_join_war = { attacker = <target> defender = <target> side = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+can_be_subject - Checks if the country can be a subject of a specific type under target country
+can_be_subject = { subject_type = tributary overlord = <target> }
+Supported Scopes: country
+Supported Targets: ???
+
+count_war_participants - Checks the number of participants in the war on a specific side that meet the specified criteria
+count_war_participants = { limit = { <triggers> } side = target count < 4
+Supported Scopes: war
+Supported Targets: none
+
+count_potential_war_participants - Checks the amount of potential war participants in a specific war that meet the specified criteria
+count_potential_war_participants = { attacker = <target> defender = <target> side = <target> limit = { <triggers> } count > 2
+Supported Scopes: all
+Supported Targets: none
+
+has_skill - Checks if the leader has a specific experience level
+has_skill > 2
+Supported Scopes: leader
+Supported Targets: none
+
+has_experience - Checks if the leader has a specific amount of experience
+has_experience < 900
+Supported Scopes: leader
+Supported Targets: none
+
+any_neighbor_system - Checks if any of the system's neighboring systems meet the specified criteria
+any_neighbor_system = { <triggers> }
+Supported Scopes: galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_under_colonization - Checks if the planet is being colonized
+is_under_colonization = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_colony_progress - Checks the planet's progress towards completing colonization
+has_colony_progress > 20
+Supported Scopes: planet
+Supported Targets: none
+
+distance_to_empire - Checks the ship/fleet/planet/system's galaxy map distance to target empire
+distance = { who = <target> distance = x }
+Supported Scopes: planet ship fleet galactic_object
+Supported Targets: none
+
+is_unemployed - Checks if the pop is unemployed
+is_unemployed = yes
+Supported Scopes: pop
+Supported Targets: none
+
+years_of_peace - Checks the number of in-game years country has been at peace, with optional parameter to delay from start of game
+years_at_peace = { value > 10 delay = 0 }
+Supported Scopes: country
+Supported Targets: none
+
+is_within_borders_of - Checks if the planet/system is within the borders of the target country
+is_within_borders_of = <target>
+Supported Scopes: planet galactic_object
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_growing - Checks if the pop is currently growing
+is_growing = yes
+Supported Scopes: pop
+Supported Targets: none
+
+is_colony_pop - Checks if the pop is a designated colonization pop
+is_colony_pop = yes
+Supported Scopes: pop
+Supported Targets: none
+
+is_subspecies - Checks if the pop/country/species is a subspecies of the target pop/country/species
+is_subspecies = <target>
+Supported Scopes: country pop species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_belligerent_to - Checks if the country has a belligerent attitude towards target country
+is_belligerent_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_imperious_to - Checks if the country has a imperious attitude towards target country
+is_imperious_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_arrogant_to - Checks if the country has a arrogant attitude towards target country
+is_arrogant_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+has_association_status - Check if the country has federation association status with target country
+has_association_status = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_original_owner - Checks if the target country is the planet's original owner
+is_original_owner = <target>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_valid - Checks to see if target scope is valid for the country/planet/tile/army
+is_valid = <target>
+Supported Scopes: planet country army tile
+Supported Targets: ???
+
+fortification_health - Checks the planet's fortification health percentage
+fortification_health > 90
+Supported Scopes: planet
+Supported Targets: ???
+
+subject_can_diplomacy - Checks if the country is allowed by its overlord to take diplomatic action towards target country
+subject_can_diplomacy = <target>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_surveyed_class - Checks if the country has surveyed any planet of a specific class
+has_surveyed_class = pc_tundra
+Supported Scopes: country
+Supported Targets: none
+
+fleet_size - Checks the fleet's fleet size
+fleet_size < 125
+Supported Scopes: fleet
+Supported Targets: none
+
+check_pop_faction_parameter - Checks if one of the faction's parameters is the same as target scope
+check_pop_faction_parameter = { which = <parameter> value = <target> }
+Supported Scopes: pop_faction
+Supported Targets: none
+
+is_robot_pop - Checks if the pop is a robot
+is_robot_pop = yes
+Supported Scopes: pop
+Supported Targets: none
+
+host_has_dlc - Checks if the host has a specific DLC enabled
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+local_has_dlc - Checks if the local player has a specific DLC enabled
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+num_rare_techs - Checks the country's number of researched rare technologies
+num_rare_techs < 4
+Supported Scopes: country
+Supported Targets: none
+
+is_core_sector - Checks if the sector is its owner country's core sector
+is_core_sector = no
+Supported Scopes: sector
+Supported Targets: ???
+
+has_mandate - Checks if the leader has any, or a specific, mandate
+has_mandate = no
+has_mandate = mandate_shipwright
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_spaceport_module - Checks if the spaceport/planet has a specific module installed
+has_spaceport_module = solar_panel_network
+Supported Scopes: planet fleet
+Supported Targets: none
+
+has_free_spaceport_module_slot - Checks if the spaceport/planet has one or more free module slots
+has_free_spaceport_module_slot = yes
+Supported Scopes: planet fleet
+Supported Targets: none
+
+is_spaceport_module_slot_free - Checks if the spaceport/planet has a specific, numbered module slot free
+is_spaceport_module_slot_free = 3
+Supported Scopes: planet fleet
+Supported Targets: none
+
+can_build_spaceport_module - Checks if the spaceport/planet can build a specific module
+can_build_spaceport_module = fleet_academy
+Supported Scopes: planet fleet
+Supported Targets: none
+
+num_free_spaceport_module_slots - Checks the spaceport/planet's total number of free spaceport slots
+num_free_spaceport_module_slots < 3
+Supported Scopes: planet fleet
+Supported Targets: none
+
+num_spaceport_modules - Checks the spaceport/planet's number of built modules
+num_spaceport_modules < 3
+Supported Scopes: planet fleet
+Supported Targets: none
+
+nor - An inverted OR trigger
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+nand - An inverted AND trigger
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+num_energy - Checks the planet's total amount of energy
+num_energy > 19
+Supported Scopes: planet
+Supported Targets: none
+
+species_portrait - Checks if the species (or pop/empire's dominant species) uses a certain portrait
+species_portrait = rep13
+Supported Scopes: country pop species
+Supported Targets: none
+
+num_armies - Checks the country's number of armies
+num_armies < 20
+Supported Scopes: country
+Supported Targets: ???
+
+is_proposing_war_demands - Checks if currently proposing wardemands or handling existing wardemands
+Supported Scopes: planet country ship pop fleet
+Supported Targets: ???
+
+trust - Checks the country's trust of the target country
+trust = { who = <target> value = 50 }
+Supported Scopes: country
+Supported Targets: ???
+
+num_war_demands - Checks the number of war demands
+num_war_demands < 4
+Supported Scopes: all
+Supported Targets: ???
+
+max_naval_capacity - Checks the country's max naval capacity in absolute numbers
+max_naval_capacity > 120
+Supported Scopes: country
+Supported Targets: none
+
+used_naval_capacity_integer - Checks the country's used naval capacity in absolute numbers
+used_naval_capacity_integer < 89
+Supported Scopes: country
+Supported Targets: none
+
+used_naval_capacity_percent - Checks the country's used naval capacity in relative terms (0.00-1.00)
+used_naval_capacity_percent < 0.75
+Supported Scopes: country
+Supported Targets: none
+
+war_begun_num_fleets_gone_mia - Checks amount of target country's fleets that went MIA when the war began
+war_begun_num_fleets_gone_mia = { who = <target> value < 10 }
+Supported Scopes: war
+Supported Targets: none
+
+custom_tooltip_success - Shows custom text only when the associated trigger passes
+custom_tooltip_success = {
+	text = <text>
+	<triggers>
+}
+Supported Scopes: all
+Supported Targets: none
+
+success_text - For 'desc={trigger={' use. Shows custom text when the associated trigger passes.
+success_text = {
+	text = <text>
+	<triggers>
+}
+Supported Scopes: all
+Supported Targets: none
+
+fail_text - For 'desc={trigger={' use. Shows custom text when the associated trigger fails.
+fail_text = {
+	text = <text>
+	<triggers>
+}
+Supported Scopes: all
+Supported Targets: none
+
+war_begun_num_wormhole_stations_destroyed - Checks amount of target country's wormhole stations that were destroyed when the war began
+war_begun_num_wormhole_stations_destroyed = { who = <target> value < 3 }
+Supported Scopes: war
+Supported Targets: none
+
+is_neutral_to - Checks if the country has a neutral attitude towards target country
+is_neutral_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_subject_type - Checks if the country is a specific type of subject
+is_subject_type = vassal
+Supported Scopes: country
+Supported Targets: none
+
+has_defensive_pact - Checks if the country has a defensive pact with target country
+has_defensive_pact = <target>
+Supported Scopes: country
+Supported Targets: none
+
+calc_true_if - Returns true if the specified number of sub-triggers return true
+calc_true_if = { amount = 2 <trigger> <trigger> <trigger> }
+Supported Scopes: all
+Supported Targets: none
+
+has_spaceport_construction - Checks if the planet is constructing a spaceport
+has_spaceport_construction = yes
+Supported Scopes: planet
+Supported Targets: none
+
+is_researching_technology - Checks if the country is currently researching a specific technology
+is_researching_technology = tech_gene_seed_purification
+Supported Scopes: country
+Supported Targets: none
+
+has_any_resource - Checks if the tile has any resource
+has_any_resource = yes
+Supported Scopes: tile
+Supported Targets: none
+
+is_subject - Checks if the country is a subject of any other country
+is_subject = no
+Supported Scopes: country
+Supported Targets: none
+
+any_subject - Checks if any of the country's subject states meet the specified criteria
+any_subject = { <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+log - Prints a message to game.log for debugging purposes
+log = <string>
+Supported Scopes: planet country ship pop fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_enigmatic_to - Checks if the country has a enigmatic attitude towards target country
+is_enigmatic_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_berserker_to - Checks if the country has a berserker attitude towards target country
+is_berserker_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+has_same_ethos - Checks if a country has the same ethos (complete set of ethics) as a country or pop
+has_same_ethos = <target>
+Supported Scopes: country pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_majority_species - checks if a planet/country has a particular species as its dominant species
+Supported Scopes: planet pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_closed_borders - Check if the country has closed its borders to target country
+has_closed_borders = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_difficulty - Checks the game's difficulty level (0 normal, 1 hard, 2 insane)
+is_difficulty = 2
+Supported Scopes: all
+Supported Targets: none
+
+is_exact_same_species - Checks if the scoped object is originally of the same species, or currently of the exact same species instance, as another object
+is_exact_same_species = <target>
+Supported Scopes: country ship pop leader army species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+can_control_access_for - Checks if the country is allowed to control target country's border access to the country
+can_control_access_for = <target>
+Supported Scopes: country
+Supported Targets: none
+
+is_overlord_to - Checks if the country has an overlord attitude towards target country
+is_overlord_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+distance_to_core_percent - Checks the ship/fleet/planet/leader/pop/system's distance to the galactic core in percent, where center = 0 and galactic rim = 100
+distance_to_core_percent < 60
+Supported Scopes: all
+Supported Targets: ???
+
+has_empire_unique_building - Checks if the tile has any empire-unique building
+has_empire_unique_building = yes
+Supported Scopes: tile
+Supported Targets: none
+
+has_non_aggression_pact - Check if the country has a non-aggression pact with target country
+has_non_aggression_pact = <target>
+Supported Scopes: country
+Supported Targets: none
+
+happiness_planet - Checks the average happiness on the planet
+happiness_planet < 60
+Supported Scopes: planet
+Supported Targets: none
+
+count_fleet_ships - Checks the number of ships in the fleet that meet the specified criteria
+count_fleet_ships = { limit = { <triggers> } count > 15 }
+Supported Scopes: fleet
+Supported Targets: ???
+
+pre_ruler_leader_class - Checks the rulers previous leader class
+pre_ruler_leader_class = scientist
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+num_fallen_empires - Checks the number of fallen empires in the galaxy
+num_fallen_empires > 3
+Supported Scopes: country
+Supported Targets: none
+
+has_hp_percentage - Checks a fleet or ship's hit points percentage
+has_hp_percentage > 0.5
+Supported Scopes: ship fleet
+Supported Targets: none
+
+can_join_factions - Checks if scoped pop can join a faction
+Supported Scopes: pop
+Supported Targets: ???
+
+is_custodial_to - Checks if the country has a custodial attitude towards target country
+is_custodial_to = <target>
+Supported Scopes: country
+Supported Targets: none
+
+has_pop - Checks if the tile has a pop
+has_pop = yes
+Supported Scopes: planet tile
+Supported Targets: ???
+
+has_frontier_station - Checks if the planet has an orbital researc station
+has_frontier_station = yes
+Supported Scopes: planet
+Supported Targets: none
+
+has_valid_civic - Checks if the current country has a certain civic and if its validated
+has_valid_civic = my_test_civic_1
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_being_force_purged - Checks if the pop is being purged via script effect
+is_being_force_purged = yes
+Supported Scopes: pop
+Supported Targets: none
+
+has_non_swapped_tradition - Checks if a country has the given tradition and it is not swapped.
+has_non_swapped_tradition = tr_my_santa_claus_tradition
+Supported Scopes: country
+Supported Targets: none
+
+has_swapped_tradition - Checks if a country has the given swapped tradition.
+has_swapped_tradition = tr_my_santa_claus_tradition
+Supported Scopes: country
+Supported Targets: none
+
+is_event_leader - Checks if a leader is a special event leader (defined in create_leader)
+is_event_leader = no
+Supported Scopes: leader
+Supported Targets: ???
+
+num_strategic_resources - Checks the country's num of strategic resources
+num_strategic_resources < 3
+Supported Scopes: country
+Supported Targets: none
+
+is_crises_allowed - Check if current game allows crises
+is_crises_allowed = yes
+Supported Scopes: all
+Supported Targets: none
+
+is_custom_capital_location - Checks if the spatial object is its owner's custom capital location
+is_custom_capital_location = yes
+Supported Scopes: planet ship fleet galactic_object
+Supported Targets: ???
+
+is_preferred_weapons - Checks if the country's AI prefers weapons using this component tag
+is_preferred_weapons = weapon_type_energy
+Supported Scopes: country
+Supported Targets: none
+
+has_access_fleet - Checks if the system is accessible to the target country with construction vessels
+has_access_construction = <target>
+Supported Scopes: galactic_object
+Supported Targets: ???
+
+pop_percentage - Checks the percentage of pops in the scope that fulfill the specified criteria
+pop_percentage = { percentage > 0.74 limit = { <triggers> } }
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+num_species - Checks if the number of species on a planet, in an empire or in a pop faction is according to the argument. Does not count genetically modified species as unique.
+num_species > 8
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+num_unique_species - Checks if the number of species on a planet, in an empire or in a pop faction is according to the argument. Counts genetically modified species as unique.
+num_unique_species < 12
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+has_diplo_migration_treaty - Checks if two countries have a migration treaty.
+Supported Scopes: country
+Supported Targets: none
+
+is_point_of_interest - Checks if the planet/country/ship/system/ambient object has a specific point of interest for a specific event chain for a specific country
+is_point_of_interest = { id = <id> event_chain = <event_chain> owner = <target> }
+Supported Scopes: planet country ship galactic_object ambient_object
+Supported Targets: ???
+
+terraformed_by - Checks if planet is terraformed by country.
+Supported Scopes: planet
+Supported Targets: none
+
+won_with_condition - Checks if two countries have a migration treaty.
+Supported Scopes: country
+Supported Targets: none
+
+has_presence - Checks if a system contains any fleets, stations, mega structures or colonized planets.
+has_presence = yes
+Supported Scopes: galactic_object
+Supported Targets: none
+
+has_megastructure - Checks if a country or star has a mega structure.
+Supported Scopes: country galactic_object
+Supported Targets: none
+
+is_megastructure_type - is_megastructure_type = <name of type>. Compares the type of scope's mega structure to a type from the database
+Supported Scopes: megastructure
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+is_upgrading - is_upgrading = <yes/no>. Checks if the scope's fleet or mega structure is currently upgrading
+Supported Scopes: megastructure fleet
+Supported Targets: ???
+
+relative_power - Compares relative power between two countries. relative_power = { who = <target country> category = <fleet/capacity/technology/all> value ><= <pathetic/inferior/equivalent/superior/overwhelming>
+Supported Scopes: country
+Supported Targets: ???
+
+has_tradition - Checks if a country has the given tradition.
+has_tradition = tr_my_santa_claus_tradition
+Supported Scopes: country
+Supported Targets: none
+
+recently_lost_war - Checks if the country is at war
+is_at_war = yes
+Supported Scopes: country
+Supported Targets: none
+
+count_diplo_ties - Checks the number of diplomatic in the scope that fulfill the specified criteria
+count_countries = { count < 6 limit = { <triggers> } }
+Supported Scopes: country
+Supported Targets: none
+
+has_research_agreement - Checks if two countries have a research agreement.
+Supported Scopes: country
+Supported Targets: none
+
+has_tributary - Checks if two countries have a research agreement.
+Supported Scopes: country
+Supported Targets: none
+
+any_relation - Iterate through all relations
+any_relation = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+upgrade_days_left - Checks a mega structure amount of upgrade days left.
+upgrade_days_left > 360
+
+Supported Scopes: megastructure
+Supported Targets: none
+
+has_megastructure_flag - Checks if the mega structure has a specific flag
+has_megastructure_flag = <flag>
+Supported Scopes: megastructure
+Supported Targets: none
+
+has_citizenship_type - Checks if a species/pop/leader has a particular citizenship type in their country
+has_citizenship_type = { country = <who> type = <type> }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+has_population_control - Checks if the pop is prevented from reproducing
+has_population_control = yes
+Supported Scopes: pop
+Supported Targets: ???
+
+has_migration_control - Checks if the pop is prevented from migrating
+has_migration_control = yes
+Supported Scopes: pop
+Supported Targets: ???
+
+has_any_megastructure - Checks if the scope has a megastructure
+has_any_megastructure = yes
+Supported Scopes: planet galactic_object
+Supported Targets: none
+
+species_planet_slave_percentage - Checks if a pop's planet has a specific percentage (0.00-1.00) of the same species enslaved
+species_planet_slave_percentage > 0.40
+Supported Scopes: pop
+Supported Targets: ???
+
+has_ascension_perk - Checks if a country has the given ascension perk.
+has_ascension_perk = ap_my_ascension_perk
+Supported Scopes: country
+Supported Targets: none
+
+num_ascension_perks - Compares the number of AP points the country has spent with the given value
+num_ascension_perks > 7
+Supported Scopes: country
+Supported Targets: none
+
+pop_produces_resource - Checks if a pop is currently producing a particular resource
+pop_produces_resource = { type = minerals amount < 5 }
+Supported Scopes: pop
+Supported Targets: ???
+
+has_military_service_type - Checks if a species/pop/leader has a particular military service type in their country
+has_military_service_type = { country = <who> type = <type> }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+has_purge_type - Checks if a species/pop/leader has a particular purge type in their country
+has_purge_type = { country = <who> type = <type> }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+has_slavery_type - Checks if a species/pop/leader has a particular slavery type in their country
+has_slavery_type = { country = <who> type = <type> }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+unrest - Compares the unrest present on the planet with the given value
+unrest > 50
+Supported Scopes: planet
+Supported Targets: none
+
+pop_can_live_on_planet - Checks if the pop is allowed to live on its planet
+pop_can_live_on_planet = yes
+Supported Scopes: pop
+Supported Targets: none
+
+has_living_standard - Checks if a species/pop/leader has a particular living standard in their country
+has_living_standard = { country = <who> type = <type> }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+former_living_standard_type - Compares the former living standard type with the given one.
+former_living_standard_type = living_standard_normal
+Supported Scopes: pop
+Supported Targets: none
+
+former_citizenship_type - Compares the former citizenship type with the given one.
+former_citizenship_type = citizenship_full
+Supported Scopes: pop
+Supported Targets: none
+
+former_military_service_type - Compares the former military service type with the given one.
+former_military_service_type = military_service_full
+Supported Scopes: pop
+Supported Targets: none
+
+former_slavery_type - Compares the former slavery type with the given one.
+former_slavery_type = slavery_normal
+Supported Scopes: pop
+Supported Targets: none
+
+former_purge_type - Compares the former purge type with the given one.
+former_purge_type = purge_normal
+Supported Scopes: pop
+Supported Targets: none
+
+former_population_control_type - Compares the former population control type with the given one.
+former_population_control_type = population_control_yes
+Supported Scopes: pop
+Supported Targets: none
+
+former_migration_control_type - Compares the former migration control type with the given one.
+former_migration_control_type = migration_control_yes
+Supported Scopes: pop
+Supported Targets: none
+
+count_planets - Checks the planets in system that meet the criteria
+count_planets = { limit = { <triggers> } count < 2 }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+num_ascension_perk_slots - Compares the number of unlocked ascension perk slots of the scope with the given value
+num_ascension_perks > 7
+Supported Scopes: country
+Supported Targets: none
+
+is_fleet_idle - Checks if the ship/fleet is idfle
+is_fleet_idle = yes
+Supported Scopes: ship fleet
+Supported Targets: none
+
+debug_break - Trigger an assertion to stop the debugger when encountering this trigger; returns the value it is assigned
+debug_break = yes
+Supported Scopes: all
+Supported Targets: ???
+
+has_civic - Checks if the current country has the specified civic
+has_civic = my_test_civic_1
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_authority - Checks if the current country has the specified government authority
+has_government_authority = democratic
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_invalid_civic - Checks if the current country has a certain civic and if its invalidated
+has_invalid_civic = my_test_civic_1
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_colonization_control - Checks if the pop is prevented from migrating
+has_colonization_control = yes
+Supported Scopes: pop
+Supported Targets: ???
+
+unity - Checks the country's Unity total
+unity < 70
+Supported Scopes: country
+Supported Targets: none
+
+count_species - Counts the number of species in the scope that fulfill the specified criteria, not counting sub-species as unique.
+count_species = { count > 4 limit = { <triggers> } }
+Supported Scopes: planet country
+Supported Targets: none
+
+count_exact_species - Counts the number of species in the scope that fulfill the specified criteria, counting sub-species as unique.
+count_exact_species = { count > 4 limit = { <triggers> } }
+Supported Scopes: planet country
+Supported Targets: none
+
+is_constructing - Checks if the scoped construction ship is building the specified thing
+is_constructing = megastructure | <megastructure type>
+Supported Scopes: ship fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_ruler_trait - Checks if a leader has a certain ruler trait, even if they are not currently ruler
+has_ruler_trait = leader_trait_carefree
+Supported Scopes: leader
+Supported Targets: none
+
+num_trait_points - Checks the country/pop/leader/species' number of traits points spent
+num_traits < 3
+Supported Scopes: country pop leader species
+Supported Targets: none
+
+any_playable_country - Checks if any playable country meet the specified criteria
+any_playable_country = { <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_component - Checks if a ship has a certain component
+has_component = <component template key>
+Supported Scopes: ship
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+has_notification_modifier - Checks if a country has a certain notification modifier
+has_notification_modifier = <key>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_tile - Iterate through each defending army on a planet
+count_tile = { <count=<num/all>> <triggers> }
+Supported Scopes: planet
+Supported Targets: none
+
+pop_maintenance_cost - Checks the maintenace costs of a pop 
+pop_maintenance_cost > 0
+Supported Scopes: pop
+Supported Targets: none
+
+pop_can_reproduce - Checks if a pop, or the pops of a particular species can reproduce
+Supported Scopes: pop species
+Supported Targets: ???
+
+is_ftl_restricted - Checks if FTL is restricted
+is_ftl_restricted = yes
+Supported Scopes: all
+Supported Targets: none
+
+conditional_tooltip - The enclosed trigger will be completely ignored if the condition in "trigger" isn't true. Useful to hide part of tooltips that are not relevant.
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+any_war_participant - Iterate through all war participants
+any_war_participant = { <count=<num/all>> <triggers> }
+Supported Scopes: war
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_war_participant - Iterate through all war participants
+count_war_participant = { <count=<num/all>> <triggers> }
+Supported Scopes: war
+Supported Targets: none
+
+count_owned_pop - Iterate through all owned pops
+count_owned_pop = { <count=<num/all>> <triggers> }
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+count_country - Iterate through all countries
+count_country = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: none
+
+count_relation - Iterate through all relations
+count_relation = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+any_neighbor_country - Iterate through all neighbor countries
+any_neighbor_country = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_neighbor_country - Iterate through all neighbor countries
+count_neighbor_country = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+count_bordering_country - Iterate through all bordering countries of a system
+count_bordering_country = { <count=<num/all>> <triggers> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+count_rim_system - Iterate through all rim systems
+count_rim_system = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: none
+
+any_combatant_fleet - Iterate through each fleet this fleet is in combat with
+any_combatant_fleet = { <count=<num/all>> <triggers> }
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_combatant_fleet - Iterate through each fleet this fleet is in combat with
+count_combatant_fleet = { <count=<num/all>> <triggers> }
+Supported Scopes: fleet
+Supported Targets: none
+
+any_megastructure - Iterate through each megastructure
+any_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_megastructure - Iterate through each megastructure
+count_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: none
+
+any_owned_megastructure - Iterate through each owned megastructure
+any_owned_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_owned_megastructure - Iterate through each owned megastructure
+count_owned_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+any_system_megastructure - Iterate through each megastructure in system
+any_system_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_system_megastructure - Iterate through each megastructure in system
+count_system_megastructure = { <count=<num/all>> <triggers> }
+Supported Scopes: all
+Supported Targets: none
+
+any_pool_leader - Iterate through each leader that is recruitable for the country
+any_pool_leader = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_pool_leader - Iterate through each leader that is recruitable for the country
+count_pool_leader = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+any_owned_pop_species - Iterate through each species of a country's owned pops
+any_owned_pop_species = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_owned_pop_species - Iterate through each species of a country's owned pops
+count_owned_pop_species = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+any_owned_army - Iterate through each army that is owned by the country
+any_owned_army = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_owned_army - Iterate through each army that is owned by the country
+count_owned_army = { <count=<num/all>> <triggers> }
+Supported Scopes: country
+Supported Targets: none
+
+any_planet_army - Iterate through each defending army on a planet
+any_planet_army = { <count=<num/all>> <triggers> }
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+count_planet_army - Iterate through each defending army on a planet
+count_planet_army = { <count=<num/all>> <triggers> }
+Supported Scopes: planet
+Supported Targets: none
+
+
+=================
+[11:48:34][consolecmdimpl.cpp:2608]: 
+== EFFECT DOCUMENTATION ==
+tooltip - Just a tooltip
+Supported Scopes: planet country ship pop
+Supported Targets: ???
+
+hidden_effect - Prevents enclosed effects from being displayed in tooltip
+hidden_effect = { <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+custom_tooltip - Displays a specific localization string in tooltip
+custom_tooltip = <string>
+Supported Scopes: all
+Supported Targets: none
+
+if - Executes enclosed effects if limit criteria are met
+if = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+country_event - Fires a country event for the scoped country, with optional DAYS and RANDOM delay
+country_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: country
+Supported Targets: none
+
+planet_event - Fires a planet event for the scoped planet, with optional DAYS and RANDOM delay
+planet_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: planet
+Supported Targets: none
+
+random - All enclosed effects may or may not be executed depending on set chance
+random = { chance = 50 <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_list - Picks one random set of effects from a list, influenced by relative weight
+random_list = { 50 = { <effects> } 20 = { <effects> } 30 = { <effects> } 999 = { <effects> } }
+Supported Scopes: all
+Supported Targets: none
+
+every_owned_planet - Executes enclosed effects on every planet -owned by the scoped country- that meet the limit criteria
+every_owned_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_planet - Executes enclosed effects on a planet -owned by the scoped country- that meets the limit criteria
+random_owned_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_controlled_planet - Executes enclosed effects on every planet -controlled by the scoped country- that meet the limit criteria
+every_controlled_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_controlled_planet - Executes enclosed effects on a random planet -owned by the scoped country- that meets the limit criteria
+random_controlled_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+create_ship_design - Creates a new ship design for use with last_created_design target
+create_ship_design = { design = <key> ftl = <target, optional, sets FTL drive to target country's> }
+Supported Scopes: all
+Supported Targets: none
+
+change_government - Change the scoped country's government authority and/or civics
+change_government = random
+or
+change_government = {
+	authority = random / <key>
+	civics = random / { civic = <key> civic = random }
+}
+Supported Scopes: country
+Supported Targets: none
+
+ship_event - Fires a ship event for the scoped ship, with optional DAYS and RANDOM delay
+ship_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: ship
+Supported Targets: none
+
+add_energy - Adds a sum of energy credits to the scoped country
+add_energy = 500
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_minerals - Adds a sum of minerals to the scoped country)
+add_minerals = 3500
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+pop_event - Fires a pop event for the scoped pop, with optional DAYS and RANDOM delay
+pop_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: pop
+Supported Targets: none
+
+every_war_defender - Executes enclosed effects on every defender that meets the limit criteria in the scoped country's war with a specific enemy
+every_war_defender = { enemy = <target> limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+set_owner - Instantly sets the planet/army/fleet's owner to target country
+set_owner = <target>
+Supported Scopes: planet fleet army
+Supported Targets: none
+
+every_war_attacker - Executes enclosed effects on every attacker that meets the limit criteria in the scoped country's war with a specific enemy
+every_war_attacker = { enemy = <target> limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_war_defender - Executes enclosed effects on a random defender that meets the limit criteria in the scoped country's war with a specific enemy
+random_war_defender = { enemy = <target> limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_war_attacker - Executes enclosed effects on a random attacker that meets the limit criteria in the scoped country's war with a specific enemy
+random_war_attacker = { enemy = <target> limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+give_technology - Instantly gives a specific tech to the scoped country
+give_technology = { tech = tech_desert_colonization message = yes }
+Supported Scopes: country
+Supported Targets: none
+
+enable_special_project - Enables a specific special research project for target country at a specific location (should be same as the current scope where possible)
+enabble_special_project = { name = <project key> owner = <target> location = <target, ideally THIS> }
+Supported Scopes: all
+Supported Targets: none
+
+add_physics_research - Instantly gives stored physics research points to the scoped county
+add_physics_research = 300
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_society_research - Instantly gives stored society research points to the scoped county
+add_society_research = 300
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_engineering_research - Instantly gives stored engineering research points to the scoped county
+add_engineering_research = 300
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_country_flag - Sets an arbitrarily-named flag on the scoped country
+set_country_flag = <key>
+Supported Scopes: country
+Supported Targets: none
+
+set_planet_flag - Sets an arbitrarily-named flag on the scoped planet
+set_planet_flag = <key>
+Supported Scopes: planet
+Supported Targets: none
+
+set_fleet_flag - Sets an arbitrarily-named flag on the scoped fleet
+set_fleet_flag = <key>
+Supported Scopes: fleet
+Supported Targets: none
+
+set_ship_flag - Sets an arbitrarily-named flag on the scoped ship
+set_ship_flag = <key>
+Supported Scopes: ship
+Supported Targets: none
+
+remove_country_flag - Removes a flag from the scoped country
+remove_country_flag = <key>
+Supported Scopes: country
+Supported Targets: none
+
+remove_planet_flag - Removes a flag from the scoped planet
+remove_planet_flag = <key>
+Supported Scopes: planet
+Supported Targets: none
+
+remove_fleet_flag - Removes a flag from the scoped fleet
+remove_fleet_flag = <key>
+Supported Scopes: fleet
+Supported Targets: none
+
+remove_ship_flag - Removes a flag from the scoped ship
+remove_ship_flag = <key>
+Supported Scopes: ship
+Supported Targets: none
+
+every_owned_ship - Executes enclosed effects on every ship -owned by the scoped country- that meet the limit criteria
+every_owned_ship = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_ship - Executes enclosed effects on a random ship -owned by the scoped country/fleet- that meets the limit criteria
+random_owned_ship = { limit = { <triggers> } <effects> }
+Supported Scopes: country fleet
+Supported Targets: none
+
+create_species - Creates a new species
+create_species = {
+	name = <string>
+	plural = <string>
+	class = <species class key>
+	portrait = <random/portrait id>
+	homeworld = <target>
+	traits = { <specific/random traits> }
+	sapient = <Y/N, determines if species is pre-sapient>
+	is_mod = <Y/N, determines if species is a modification of another>
+	immortal = <Y/N, determines if species leaders are immortal>
+}
+Supported Scopes: all
+Supported Targets: none
+
+create_country - Creates a new country
+create_country = {
+	name = <string/random>
+	type = <key>
+	name_list = <key>
+	ship_prefix = <string>
+	authority = <key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	flag = <random / { icon = { category = <key> file = <filename.dds> } background = { category = <key> file = <filename.dds> } colors = { <key> <key> } }
+	ethos = <random / { ethic = <key> ethic = <key> }>
+	effect = { <effects executed on country> }
+}
+Supported Scopes: all
+Supported Targets: none
+
+create_fleet - Creates a new fleet
+create_fleet = { name = <string> effect = { <create_ship, set_owner, set_location etc effects go here> } } 
+Supported Scopes: all
+Supported Targets: none
+
+create_army - Creates a new army
+create_army = {
+	name = <string>
+	owner = <target>
+	species = <target>
+	type = <key>
+}
+Supported Scopes: planet
+Supported Targets: none
+
+set_location - Sets the fleet/ambient object's location, can be fine-tuned
+set_location = <target>
+set_location = { target = <target> distance = <int/random> angle = <int/random> }
+Supported Scopes: fleet ambient_object
+Supported Targets: none
+
+create_ship - Creates a new ship
+create_ship = {
+	name = <string/random>
+	design = <ship design key/target, or use random_existing_design>
+	random_existing_design = <ship size key>
+	graphical_culture = <graphical culture key>
+	prefix = <Y/N, determines if ship name should use owner country prefix>
+}
+Supported Scopes: fleet
+Supported Targets: none
+
+set_primitive - [DEPRECATED, USE SET_COUNTRY_TYPE] Sets the scoped country as primitive
+set_primitive = yes
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_pop - Creates a new pop on the scoped tile/planet
+create_pop = {
+	species = <target / key>
+ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet tile
+Supported Targets: none
+
+create_colony - Creates a colony on the scoped planet
+create_colony_effect = {
+owner = <target>
+species = <target / key>
+ ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet
+Supported Targets: none
+
+set_capital - Sets the scoped planet to be the capital of its owner country
+set_capital = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+change_pc - Changes the class of the scoped planet
+change_pc = <key>
+Supported Scopes: planet
+Supported Targets: none
+
+random_country - Iterate through all countries
+random_country = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_pop - Executes enclosed effects on a random pop that meets the limit criteria
+random_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: planet sector
+Supported Targets: none
+
+kill_pop - Instantly destroys the scoped pop/pop on scoped tile
+kill_pop = yes
+Supported Scopes: pop tile
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+enslave_pop - Immediately enslaves or frees the scoped pop
+enslave_pop = no
+Supported Scopes: pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+destroy_colony - Destroys the colony on the scoped planet
+destroy_colony = { keep_buildings = yes/no }
+Supported Scopes: planet
+Supported Targets: none
+
+every_system_planet - Executes enclosed effects on every planet within the scoped system that meets the limit criteria
+random_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+surveyed - Sets the planet as un/surveyed by target country
+surveyed = { set_surveyed = yes surveyor = <target> }
+Supported Scopes: planet
+Supported Targets: none
+
+add_experience - Adds a sum of experience points to the scoped leader
+add_experience = 200
+Supported Scopes: leader
+Supported Targets: none
+
+set_ring - Adds or removes a planetary ring around the scoped planet
+set_ring = no
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_mining_station - Creates a mining station in orbit of the scoped planet
+create_mining_station = { owner = <target> }
+Supported Scopes: planet
+Supported Targets: none
+
+create_research_station - Creates a research station in orbit of the scoped planet
+create_research_station = { owner = <target> }
+Supported Scopes: planet
+Supported Targets: none
+
+set_pop_flag - Sets an arbitrarily-named flag on the scoped country
+set_country_flag = <key>
+Supported Scopes: pop
+Supported Targets: none
+
+remove_pop_flag - Removes a flag from the scoped pop
+remove_fleet_flag = <key>
+Supported Scopes: pop
+Supported Targets: none
+
+every_owned_pop - Iterate through all owned pops
+every_owned_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+set_name - Sets the name of the scoped country/planet/ship/fleet/leader/army/system/pop faction
+set_name = <string>
+Supported Scopes: planet country ship fleet galactic_object leader army pop_faction
+Supported Targets: none
+
+random_planet - Executes enclosed effects on a random planet that meets the limit criteria
+random_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+add_modifier - Adds a specific modifier to the scoped planet/pop/country/fleet/ship/pop faction for a set duration
+add_modifier = { modifier = <key> days = <int, -1 means it never expires> }
+Supported Scopes: megastructure planet country ship pop fleet pop_faction
+Supported Targets: none
+
+create_leader - Creates a new leader for the scoped country
+create_leader = {
+	name = <random / string>
+	species = <target / key>
+	type = <random / key>
+	skill = <random / int>
+	set_age = <int>
+ traits = { trait = <key> trait = <key> }
+}
+Supported Scopes: country
+Supported Targets: none
+
+fleet_event - Fires a fleet event for the scoped fleet, with optional DAYS and RANDOM delay
+fleet_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: fleet
+Supported Targets: none
+
+reduce_hp - Reduces the hull points of the scoped ship by a specific amount
+reduce_hp = 120
+Supported Scopes: ship
+Supported Targets: none
+
+reduce_hp_percent - Reduces the hull points of the scoped ship by a relative amount
+reduce_hp_percent = 0.25
+Supported Scopes: ship
+Supported Targets: none
+
+repair_ship - Restores all hull points to the scoped ship
+repair_ship = yes
+Supported Scopes: ship
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+destroy_country - Destroys the scoped country
+destroy_country = yes
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_variable - Sets or creates an arbitrarily-named variable with a specific value in the current scope
+set_variable = { which = <string> value = <int> }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+remove_global_flag - Removes a global flag
+remove_global_flag = <key>
+Supported Scopes: all
+Supported Targets: none
+
+set_global_flag - Sets an arbitrarily-named global flag
+set_global_flag = <key>
+Supported Scopes: all
+Supported Targets: none
+
+change_variable - Increments a previously-set variable by a specific amount
+change_variable = { which = <string> = value = <int> }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+random_planet_within_border - Executes enclosed effects on a random planet within the scoped country's borders that meets the limit criteria
+random_planet_within_border = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_pop - Executes enclosed effects for every pop in the game that meet the limit criteria
+every_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_country - Iterate through all countries
+every_country = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_ship - Executes enclosed effects for every ship in the game that meet the limit criteria
+every_ship = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_planet - Executes enclosed effects for every planet in the game that meet the limit criteria
+every_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+add_influence - Adds a specific sum of influence to the scoped country
+add_influence = 200
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+pop_remove_ethic - Removes a specific ethic from the scoped pop
+pop_remove_ethic = <key>
+Supported Scopes: pop
+Supported Targets: none
+
+pop_migration - Sets the scoped pop's migration speed
+Supported Scopes: pop
+Supported Targets: none
+
+create_rebels - Creates a rebellion
+create_rebels = {
+	name = <random / string>
+	authority = <random / key>
+	civics = random / { civic = <key> civic = random }
+	species = <target>
+	ethos = <random / { ethic = <key> ethic = <key> }
+}
+Supported Scopes: planet
+Supported Targets: none
+
+cancel_terraformation - Cancels terraformation of the scoped planet
+cancel_terraformation = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_event_locked - Silently disables the scoped fleet to prevent player action, remember to unlock at the end of the event
+set_event_locked = no
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+clear_orders - Clears all fleet orders from the scoped fleet
+clear_order = yes
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+order_forced_return - Forces scoped fleet to retreat to friendly territory
+order_forced_return = yes
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+declare_war - Declares war betwee the scoped country and target country
+declare_war = <target>
+Supported Scopes: country
+Supported Targets: none
+
+asteroids_distance - Sets an asteroid belt at the distance in the scope 
+asteroid_distance = N, distance of zero will remove the belt
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_star_flag - Sets an arbitrarily-named flag on the scoped system
+set_star_flag = <key>
+Supported Scopes: galactic_object
+Supported Targets: none
+
+remove_star_flag - Removes a flag from the scoped system
+remove_star_flag = <key>
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_primitive_age - Sets a 'primitive age' for the scoped (primitive, pre-FTL) country
+set_primitive_age = renaissance_age
+Supported Scopes: country
+Supported Targets: none
+
+spawn_system - Spawns a new system at a position relative to the scoped system/planet/ship
+spawn_system = { min_distance = <int 0-100> max_distance = <int 0-100> initializer = <key for pre-defined system> }
+Supported Scopes: planet ship galactic_object
+Supported Targets: none
+
+random_research_station - Executes enclosed effects on a random orbital research station that meets the limit criteria
+random_research_station = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: ???
+
+dismantle - Dismantles the scoped orbital station (fleet)
+dismantle = yes
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+random_mining_station - Executes enclosed effects on a random orbital mining station that meets the limit criteria
+random_research_station = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: ???
+
+random_spaceport - Executes enclosed effects on a random spaceport that meets the limit criteria
+random_spaceport = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: ???
+
+random_system - Executes enclosed effects on a random star system that meets the limit criteria
+random_system = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: ???
+
+random_system_within_border - Executes enclosed effects on a random system within the scoped country's borders that meets the limit criteria
+random_system_within_border = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: ???
+
+set_advisor_active - Enables or disables the VIR window pop-in
+set_advisor_active = no
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+save_event_target_as - Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain
+save_event_target_as = <string>
+Supported Scopes: all
+Supported Targets: none
+
+save_global_event_target_as - Saves the current scope as an arbitrarily-named target to be referenced later, accessible globally until cleared
+save_event_target_as = <string>
+Supported Scopes: all
+Supported Targets: none
+
+clear_global_event_target - Deletes the specified saved global target reference
+clear_global_event_target = <string>
+Supported Scopes: all
+Supported Targets: none
+
+clear_global_event_targets - Deletes all saved global target references
+clear_global_event_targets = yes
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+break - Prevents execution of subsequent effects in the same effect block, used with if-statements
+break = yes
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_tutorial_level - Changes the scoped country's tutorial level (0 none, 1 limited, 2 full)
+set_tutorial_level = 0
+Supported Scopes: country
+Supported Targets: none
+
+begin_event_chain - Starts a situation log event chain for target country
+begin_event_chain = { event_chain = <key> target = <target> }
+Supported Scopes: all
+Supported Targets: none
+
+end_event_chain - Ends a specific situation log event chain for the scoped country
+end_event_chain = <key>
+Supported Scopes: country
+Supported Targets: none
+
+queue_actions - Adds actions to the scoped fleet's action queue
+queue_actions = { repeat = { <fleet actions> } }
+Supported Scopes: fleet
+Supported Targets: none
+
+while - Repeats enclosed effects while limit criteria are met or until set iteration count is reached
+while = { limit = { <triggers> } <effects> }
+ while = { count = 3 <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+clear_fleet_actions - Clears all queued fleet actions for target fleet
+clear_fleet_actions = <target>
+Supported Scopes: fleet
+Supported Targets: none
+
+destroy_fleet - Destroys the target fleet (with death graphics)
+destroy_fleet = <target>
+Supported Scopes: all
+Supported Targets: none
+
+create_ambient_object - Creates a new ambient object
+create_ambient_object = { type = <key> location = <target> }
+For VFX use:
+create_ambient_object = {
+	type = <key>
+	scale = <float>
+	location = <target>
+	use_3d_location = <bool, use 3D entity or 2D coordinate of the location entity as base>
+	entity_offset = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_angle = {
+		min = <int>
+		max = <int>
+	}
+	entity_offset_height = {
+		min = <int>
+		max = <int>
+	}
+ entity_face_object = star/FROM/etc
+ entity_scale_to_size = yes/no
+	target = <target>
+	duration = <int, days>
+}
+Supported Scopes: all
+Supported Targets: none
+
+destroy_ambient_object - Destroys target ambient object
+destroy_ambient_object = <target>
+Supported Scopes: all
+Supported Targets: none
+
+add_trait - Adds a specific trait to the scoped leader
+add_trait = <trait>
+Supported Scopes: leader
+Supported Targets: none
+
+remove_trait - Removes a specific trait from the scoped leader
+remove_trait = <key>
+Supported Scopes: leader
+Supported Targets: none
+
+modify_species - Creates a new, modified species based on an already-extant species
+modify_species = { species = <target> add_trait = <key, optional> remove_trait = <key, optional> ideal_planet_class = <target> }
+Supported Scopes: planet country pop leader
+Supported Targets: none
+
+add_opinion_modifier - Adds a specific opinion modifier for the scoped country towards target country
+add_opinion_modifier = { modifier = <key> who = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+establish_contact - Establishes first contact between the scoped country and target country at the set location
+establish_contact = { who = <target> location = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+set_faction_hostility - Sets the aggro state of the scoped faction-type country
+set_faction_hostility = { set_hostile = yes }
+Supported Scopes: country
+Supported Targets: none
+
+random_system_planet - Executes enclosed effects on a random planet within the scoped system that meets the limit criteria
+random_system_planet = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+add_event_chain_counter - Increments (or decrements with negative values) an event chain counter for the scoped country by a specific amount
+add_event_chain_counter = { event_chain = <key> counter = <key> amount = <int> }
+
+Supported Scopes: country
+Supported Targets: none
+
+add_anomaly - Adds a specific anomaly category to the scoped planet
+add_anomaly = <key>
+Supported Scopes: all
+Supported Targets: none
+
+set_disable_at_health - Sets the scoped ship to become disabled at a certain hull point percentage
+set_disable_at_health = <0-1 float>
+Supported Scopes: ship
+Supported Targets: none
+
+add_building_construction - Begins construction of a specific building on the scoped tile
+add_building_construction = <key>
+Supported Scopes: tile
+Supported Targets: none
+
+set_building - Immediately adds a specific building to the scoped tile
+set_building = <key>
+Supported Scopes: tile
+Supported Targets: none
+
+remove_building - Removes a building from the scoped tile
+remove_building = yes
+Supported Scopes: tile
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+change_planet_size - Adds/Removes tiles to/from the scoped planet to adjust its planet size
+change_planet_size = <+/- int>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_blocker - Adds a specific tile blocker to the scoped tile
+set_blocker = <random / key>
+Supported Scopes: tile
+Supported Targets: none
+
+remove_blocker - Removes the tile blocker from the scoped tile
+remove_blocker = yes
+Supported Scopes: tile
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+every_tile - Executes on every tile on planet
+Supported Scopes: planet
+Supported Targets: none
+
+random_tile - Executes enclosed effects on a random tile on the scoped planet that meets the limit criteria
+random_tile = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: none
+
+every_neighboring_tile - Executes enclosed effects on every one of the scoped tile's neighboring tiles that meet the limit criteria
+every_neighboring_tile = { limit = { <triggers> } <effects> }
+Supported Scopes: tile
+Supported Targets: none
+
+random_neighboring_tile - Executes enclosed effects on a random tile neighboring  the scoped tile that meets the limit criteria
+random_neighboring_tile = { limit = { <triggers> } <effects> }
+Supported Scopes: tile
+Supported Targets: none
+
+set_disabled - Enables or disables the scoped ship
+set_disabled = no
+Supported Scopes: ship
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_point_of_interest - Creates a point of interest for the scoped country at a specific location, associated with an event chain
+create_point_of_interest = { id = <key> name = <string> desc = <string> event_chain = <key> location = <target> }
+Supported Scopes: planet country ship pop
+Supported Targets: none
+
+remove_point_of_interest - Removes a specific point of interest from the scoped country's situation log
+remove_point_of_interest = <key>
+Supported Scopes: country
+Supported Targets: none
+
+set_relation_flag - Sets a relation flag for the scoped country towards target country
+set_relation_flag = { who = <target> flag = <key> }
+Supported Scopes: country
+Supported Targets: none
+
+remove_relation_flag - Removes a specific relation flag towards target country from the scoped country
+remove_relation_flag = { who = <target> flag = <key> }
+Supported Scopes: country
+Supported Targets: none
+
+random_moon - Executes enclosed effects on a random moon that meets the limit criteria
+random_moon = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: none
+
+every_moon - Executes enclosed effects on every moon that meets the limit criteria
+every_moon = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: none
+
+every_system_in_cluster - Executes enclosed effects on every system in the cluster that meet the limit criteria
+every_system_in_cluster = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+create_cluster - Creates a cluster centered around the specified spatial object
+Supported Scopes: all
+Supported Targets: none
+
+kill_leader - Kills the scoped leader or leader of the scoped country/fleet/ship/planet/army
+kill_leader = { type = general type = scientist etc. }
+kill_leader = { type = <key, optional, if left out will kill scoped leader> show_notification = <yes/no> heir = <yes, optional, if added to type = ruler, will kill heir instead> }
+Supported Scopes: planet country ship fleet leader army
+Supported Targets: none
+
+assign_leader - Assigns target leader to the scoped country/fleet/army/pop faction
+assign_leader = <target>
+Supported Scopes: country fleet army pop_faction
+Supported Targets: none
+
+country_add_ethic - Adds a specific ethic to the scoped country
+country_add_ethic = <key>
+Supported Scopes: country
+Supported Targets: none
+
+country_remove_ethic - Removes a specific ethic from the scoped country
+country_remove_ethic = <key>
+Supported Scopes: country
+Supported Targets: none
+
+set_timed_country_flag - Sets an arbitrarily-named flag on the scoped country for a set duration
+set_timed_country_flag = { flag = <key> days = <int> }
+Supported Scopes: country
+Supported Targets: none
+
+set_timed_fleet_flag - Sets an arbitrarily-named flag on the scoped fleet for a set duration
+set_timed_fleet_flag = { flag = <key> days = <int> }
+Supported Scopes: fleet
+Supported Targets: none
+
+set_timed_global_flag - Sets an arbitrarily-named global flag for a set duration
+set_timed_global_flag = { flag = <key> days = <int> }
+Supported Scopes: all
+Supported Targets: none
+
+set_timed_planet_flag - Sets an arbitrarily-named flag on the scoped planet for a set duration
+set_timed_planet_flag = { flag = <key> days = <int> }
+Supported Scopes: planet
+Supported Targets: none
+
+set_timed_pop_flag - Sets an arbitrarily-named flag on the scoped pop for a set duration
+set_timed_pop_flag = { flag = <key> days = <int> }
+Supported Scopes: pop
+Supported Targets: none
+
+set_timed_relation_flag - Sets an arbitrarily-named flag for the scoped country towards target country for a set duration
+set_timed_relation_flag = { flag = <key> who = <target> days = <int> }
+Supported Scopes: country
+Supported Targets: none
+
+set_timed_ship_flag - Sets an arbitrarily-named flag on the scoped ship for a set duration
+set_timed_ship_flag = { flag = <key> days = <int> }
+Supported Scopes: ship
+Supported Targets: none
+
+set_timed_star_flag - Sets an arbitrarily-named flag on the scoped system for a set duration
+set_timed_system_flag = { flag = <key> days = <int> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+remove_army - Removes the scoped army
+remove_army = yes
+Supported Scopes: army
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+prevent_anomaly - Disables or enables anomaly generation for the scoped planet
+prevent_anomaly = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+every_planet_within_border - Executes enclosed effects on every planet within the scoped country's borders that meet the limit criteria
+every_planet_within_border = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+observation_outpost_owner - Executes enclosed effects on the owner of the observation post in orbit around the scoped planet
+observation_outpost_owner = { <effects> }
+Supported Scopes: planet
+Supported Targets: ???
+
+observation_outpost - Executes enclosed effects on every observation post in the game that meets the limit criteria
+observation_outpost = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+Supported Targets: none
+
+add_deposit - Adds a specific deposit to the scoped tile
+add_deposit = <key>
+Supported Scopes: tile
+Supported Targets: none
+
+clear_deposits - Removes all deposits from the scoped tile or planet
+clear_desposits = yes
+Supported Scopes: planet tile
+Supported Targets: none
+
+join_alliance - Join federation with target
+join_alliance = { who = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+every_rim_system - Iterate through all rim systems
+every_rim_system = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_rim_system - Iterate through all rim systems
+random_rim_system = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+purge - Starts or stops purging the scoped pop/planet
+purge = no
+Supported Scopes: planet pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_planet_max_health - Sets the scoped planet's maximum fortification health to a specific value. Setting it to <= 0 will revert it to be calculated from pops and modifiers again.
+set_planet_max_health = <int>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_planet_health - Sets the scoped planet's current fortification health to a specific value. Set it to < 0 to reset it to the maximum. Does NOT trigger on_planet_zero_health.
+set_planet_health = <int>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+remove_modifier - Removes a specific modifier from the scopes planet/country/pop
+remove_modifier = <key>
+Supported Scopes: megastructure planet country ship pop fleet pop_faction
+Supported Targets: none
+
+set_country_type - Changes the country type of the scoped country
+set_country_type = <key>
+Supported Scopes: country
+Supported Targets: none
+
+add_ship_design - Adds a specific ship design to the scoped country
+add_ship_design = <target>
+Supported Scopes: country
+Supported Targets: none
+
+add_mission_progress - Adds or subtracts progress to/from the scoped observation post's current mission
+add_mission_progress = <+/- float>
+Supported Scopes: fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_army_transport - Creates a new army in a new transport ship
+create_army_transport = {
+	ship_name = <string>
+	graphical_culture = <key>
+	army_name = <string>
+	army_type = <key>
+	species = <target>
+}
+Supported Scopes: fleet
+Supported Targets: none
+
+set_spaceport_module - Adds a spaceport module to the specified slot in the scoped spaceport/planet's spaceport
+set_spaceport_module = { slot = <int> module = <key> }
+Supported Scopes: planet fleet
+Supported Targets: none
+
+create_spaceport - Creates a spaceport in orbit of the scoped planet
+create_spaceport = { owner = <target> initial_module = <key> }
+Supported Scopes: planet
+Supported Targets: none
+
+set_spaceport_level - Sets the level of scoped spaceport/planet's spaceport
+set_spaceport_level = <int>
+Supported Scopes: planet fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+switch - Executes the first appropriate effect set for a specific trigger
+switch = {
+	trigger = <trigger>
+	<corresponding key/bool/int> = { <effect> }
+	<corresponding key/bool/int> > (less/greater than appear 'reversed') { <effect> }
+	default = { <effect> }
+}
+Supported Scopes: all
+Supported Targets: none
+
+set_age - Sets the age of the scoped leader
+set_age = <int>
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_wormhole_station - Creates a wormhole station at the edge of the scoped system
+create_wormhole_station = { owner = <target> angle = <random / int>
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_pop_faction - Sets the scoped pop to belong to a specific pop faction
+set_pop_faction = <target>
+Supported Scopes: pop
+Supported Targets: none
+
+conquer - Conquers the planet by setting its owner to target country and adding an unhappiness modifier
+conquer = <target country>
+Supported Scopes: planet
+Supported Targets: none
+
+set_graphical_culture - Sets the scoped object's graphical culture
+set_graphical_culture = <key>
+Supported Scopes: megastructure country
+Supported Targets: none
+
+set_formation_scale - Scales the scoped fleet's formation's ship spacing, above and below 1.0
+set_formation_scale = <float>
+Supported Scopes: fleet
+Supported Targets: none
+
+set_controller - Instantly sets the planet/fleet's controller to target country
+set_controller = <target>
+Supported Scopes: planet fleet
+Supported Targets: none
+
+force_faction_evaluation - Forces target pop to immediately evaluate their attraction to various pop factions
+force_faction_evaluation = yes
+Supported Scopes: pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+enable_faction_of_type - Forces scoped country to evaluate whether to create a specific faction type immediately, rather than monthly
+enable_faction_of_type = <key>
+Supported Scopes: country
+Supported Targets: none
+
+clear_uncharted_space - Clears uncharted space from the galaxy map for the scoped country, in a radius around target system
+clear_uncharted_space = { from = <target> radius = <int> }
+Supported Scopes: country
+Supported Targets: none
+
+every_owned_leader - Executes enclosed effects on every leader owned by scoped country that meets the limit criteria
+every_owned_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_leader - Executes enclosed effects on a random leader owned by scoped country that meets the limit criteria
+random_owned_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+establish_communications - Establish communications between scoped country and target country
+establish_communications = <target>
+Supported Scopes: country
+Supported Targets: none
+
+add_monthly_resource_mult - Adds a lump sum of a resource to the scoped country, defined as a multiple of the country's monthly income of that resource (clamped to max and min allowed values)
+add_monthly_resource_mult = { resource = <key> value = <multiplier, float> max = <max cap, int> min = <min cap, int> }
+Supported Scopes: country
+Supported Targets: none
+
+pop_faction_event - Fires a pop faction event for the scoped pop faction, with optional DAYS and RANDOM delay
+pop_faction_event = { id = <event id> days = 30 random = 8 }
+Supported Scopes: pop_faction
+Supported Targets: none
+
+set_leader_flag - Sets an arbitrarily-named flag on the scoped leader
+set_leader_flag = <key>
+Supported Scopes: leader
+Supported Targets: none
+
+remove_leader_flag - Removes a flag from the scoped leader
+remove_leader_flag = <key>
+Supported Scopes: leader
+Supported Targets: none
+
+add_research_option - Adds a tech research option to the scoped country's tech view list, permanent until researched
+add_research_option = <key>
+Supported Scopes: country
+Supported Targets: none
+
+set_heir - Sets the target leader to be the scoped country's heir
+set_heir = <target>
+Supported Scopes: country
+Supported Targets: none
+
+set_pop_faction_flag - Sets an arbitrarily-named flag on the scoped pop's faction/pop faction
+set_pop_faction_flag = <key>
+Supported Scopes: pop pop_faction
+Supported Targets: none
+
+remove_pop_faction_flag - Removes a flag from the scoped pop's faction/pop faction
+remove_pop_faction_flag = <key>
+Supported Scopes: pop pop_faction
+Supported Targets: none
+
+set_timed_pop_faction_flag - Sets an arbitrarily-named flag on the scoped pop faction for a set duration
+set_timed_pop_faction_flag = { flag = <key> days = <int> }
+Supported Scopes: pop pop_faction
+Supported Targets: none
+
+declare_white_peace_with - Declares white peace between scoped country and target country
+declare_white_peace_with = <target>
+Supported Scopes: country
+Supported Targets: none
+
+leave_alliance - Removes scoped country from any alliances it is in
+leave_alliance = yes
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_sector - Creates a sector with a specific capital planet, of a specific type, and with optional additional systems within the scoped country
+create_sector = { capital = <target> type = <string> add = <target> add = <target>}
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_pop - Iterate through all owned pops
+random_owned_pop = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country pop_faction
+Supported Targets: none
+
+set_policy - Sets a policy to a specific option for the scoped country and specifies if policy cooldown should go into effect
+set_policy = { policy = <key> option = <key> cooldown = <bool> }
+Supported Scopes: all
+Supported Targets: none
+
+recruitable - Sets scoped leader as non/recruitable
+recruitable = yes
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_tech_progress - Gives percentage progress (0.0-1.0) in a specific tech to the scoped country
+add_tech_progress = { tech = <key> progress = <float> }
+Supported Scopes: country
+Supported Targets: none
+
+closest_system - Executes enclosed effects on a system -within a specific relative distance span- that meets the limit criteria
+closest_system = { min_steps = <int, minimum # of systems 'away'> max_steps = <int, maximum # of systems 'away'> limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_sector - Executes enclosed effects on a random sector that meets the limit criteria
+random_sector = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_sector - Executes enclosed effects on every sector that meets the limit criteria
+every_sector = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_fleet - Executes enclosed effects on a random fleet owned by the scoped country that meets the limit criteria
+random_owned_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_ambient_object - Executes enclosed effects on a random ambient object in the game that meets the limit criteria
+random_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_system_ambient_object - Executes enclosed effects on a random ambient object in the scoped system that meets the limit criteria
+random_system_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+every_ambient_object - Executes enclosed effects on every ambient object in the game that meets the limit criteria
+every_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_system_ambient_object - Executes enclosed effects on every ambient object in the scoped system that meets the limit criteria
+every_system_ambient_object = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_ambient_object_flag - Sets an arbitrarily-named flag on the scoped ambient object
+set_ambient_object_flag = <key>
+Supported Scopes: ambient_object
+Supported Targets: none
+
+set_timed_ambient_object_flag - Sets an arbitrarily-named flag on the scoped ambient object for a set duration
+set_timed_ambient_object_flag = { flag = <key> days = <int> }
+Supported Scopes: fleet
+Supported Targets: none
+
+remove_ambient_object_flag - Removes a flag from the scoped ambient object
+remove_ambient_object_flag = <key>
+Supported Scopes: ambient_object
+Supported Targets: none
+
+every_fleet_in_system - Executes enclosed effects on every fleet in the scoped system that meets the limit criteria
+every_fleet_in_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+random_fleet_in_system - Executes enclosed effects on a random fleet in the scoped system that meets the limit criteria
+random_fleet_in_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_aggro_range - Sets the scoped fleet/country's aggro range in intra-system units
+set_aggro_range = <int>
+Supported Scopes: country fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_fleet_stance - Sets the stance of the scoped fleet
+set_fleet_stance = <key, aggressive/passive/evasive>
+Supported Scopes: fleet
+Supported Targets: none
+
+set_aggro_range_measure_from - Determines whether the scoped fleet/country's aggro range is measured from the fleet's current position or its spawn location
+set_aggro_range_measure_from = <key, self/return_point>
+Supported Scopes: country fleet
+Supported Targets: none
+
+set_ruined - Sets or unsets the scoped tile's building to Ruined status
+set_ruined = <bool>
+Supported Scopes: tile
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+establish_communications_no_message - Silently establish communications between scoped country and target country
+establish_communications_no_message = <target>
+Supported Scopes: country
+Supported Targets: none
+
+set_subject_of - Sets the scoped country to be a specific subject of target country
+set_subject_of = { who = <target> subject_type = <key> }
+Supported Scopes: country
+Supported Targets: none
+
+abort_special_project - Aborts a specific special project for the country, removing it from the situation log
+abort_special_project = { type = <project key> location = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+unassign_leader - Unassigns scoped leader from their post or unassigns leader from the scoped planet/ship/fleet/army/sector
+unassign_leader = <target>
+Supported Scopes: planet ship fleet leader army sector
+Supported Targets: none
+
+exile_leader_as - Exiles the scoped country/fleet/army/pop faction's leader and saves them with a custom name
+exile_leader_as = <key>
+Supported Scopes: country fleet leader army pop_faction
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_leader - Reinstates a previously-exiled leader to the scoped country/fleet/army/pop faction
+set_leader = <key>
+Supported Scopes: country fleet army pop_faction
+Supported Targets: none
+
+add_skill - Adds a sum of experience points to the scoped leader
+add_skill = 200
+Supported Scopes: leader
+Supported Targets: none
+
+set_skill - Sets the scoped leader's level
+set_skill = 3
+Supported Scopes: leader
+Supported Targets: none
+
+every_neighbor_system - Executes enclosed effects on every one of the scoped system's neighboring systems that meet the limit criteria
+every_neighboring_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+random_neighbor_system - Executes enclosed effects on a random system neigboring the scoped system that meets the limit criteria
+random_neighboring_system = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_federation_leader - Sets a country to lead a federation
+Supported Scopes: country
+Supported Targets: none
+
+add_colony_progress - Adds to ongoing colonization progress on the scoped planet
+add_colony_progress = <0.0-1.0 float>
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+start_colony - Starts colonization of the scoped planet
+start_colony = {
+	owner = <target>
+	species = <target / key>
+	ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet
+Supported Targets: none
+
+subtract_variable - Decrements a previously-set variable by a specific amount
+subtract_variable = { which = <string> = value = <int> }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+multiply_variable - Multiplies a previously-set variable by a specific amount
+multiply_variable = { which = <string> = value = <int> }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+divide_variable - Divides a previously-set variable by a specific amount
+divide_variable = { which = <string> = value = <int> }
+Supported Scopes: planet country fleet galactic_object leader
+Supported Targets: none
+
+play_sound - Play the defined sound effect
+play_sound = myfirstsoundeffect
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_crisis_sound - Sets the crisis ambient loop to the current effect
+set_crisis_sound = myfirstsoundeffect
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+stop_crisis_sound - Stops the crisis ambient loop
+stop_crisis_sound = yes
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_is_female - Sets the gender of the scoped leader
+set_is_female = true
+Supported Scopes: leader
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+create_fleet_from_naval_cap - Creates a new fleet from empire designs up to specified fraction of naval cap
+create_fleet_from_naval_cap = 0.5
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+remove_opinion_modifier - Removes a specific opinion modifier towards target country or any contry from the scoped country
+remove_opinion_modifier = { modifier = <key> who = <target (optional)> }
+Supported Scopes: country
+Supported Targets: none
+
+add_war_demand - Adds a war demand to the scoped rebel country/war
+add_war_demand = { type = <key> parameter:<parameter> = <target> target = <target> warscore_cost = <int> }
+Supported Scopes: country war
+Supported Targets: none
+
+change_country_flag - Changes the scoped country's flag
+change_country_flag = random
+change_country_flag = { icon = { category = <key> file = <filename> } background = { category = <key> file = <filename> } colors = { <key> <key> } }
+Supported Scopes: all
+Supported Targets: none
+
+every_pop_faction - Executes enclosed effects on every pop faction within the scoped country that meets the limit criteria
+every_pop_faction = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_pop_faction - Executes enclosed effects on a random pop faction within the scoped country that meets the limit criteria
+random_pop_faction = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+add_threat - Adds diplomatic threat from target country
+add_threat = { who = <target> amount = 4 }
+Supported Scopes: planet country
+Supported Targets: none
+
+set_mission - Sets the current mission of an observation station
+Supported Scopes: fleet
+Supported Targets: none
+
+remove_spaceport_module - Removes a spaceport module from a spaceport. Argument is either a spaceport module slot number or a spaceport module tag
+Supported Scopes: planet fleet
+Supported Targets: none
+
+change_dominant_species - Changes the dominant species of the current Country
+Supported Scopes: country
+Supported Targets: none
+
+set_closed_borders - Changes closed borders status between two countries
+Supported Scopes: country
+Supported Targets: none
+
+every_war_participant - Iterate through all war participants
+every_war_participant = { limit = { <triggers> } <effects> }
+Supported Scopes: war
+Supported Targets: none
+
+repair_percentage - Restores all hull points to the scoped ship
+repair_ship = yes
+Supported Scopes: ship fleet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+endgame_telemetry - Send endgame telemetry event
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_deposit - Replaces resource deposit on the scoped tile
+set_deposit = <key>
+Supported Scopes: tile
+Supported Targets: none
+
+create_military_fleet - Creates a military fleet with the designs of a specified country.
+Supported Scopes: all
+Supported Targets: none
+
+guarantee_country - Makes a country guarantee another country
+Supported Scopes: country
+Supported Targets: none
+
+every_owned_fleet - Executes enclosed effects on every fleet owned by the scoped country that meets the limit criteria
+every_owned_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_subject - switches Scope to and goes through all Subjects
+Supported Scopes: country
+Supported Targets: none
+
+random_subject - Scopes to a random Subject
+Supported Scopes: country
+Supported Targets: none
+
+reroll_blockers - Rebuild resource blockers on target planet
+reroll_blockers = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+reroll_deposits - Rebuild resource deposits on target planet
+reroll_deposits = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+delete_fleet - Deletes the target fleet (no death graphics)
+delete_fleet = <target>
+Supported Scopes: all
+Supported Targets: none
+
+add_trust - Adds trust on scope country towards target country
+add_trust = { amount = <amount> who = <target> }
+Supported Scopes: country
+Supported Targets: none
+
+join_war - Joins wars on the side of target country
+join_war = <target>
+Supported Scopes: country
+Supported Targets: none
+
+add_global_ship_design - Adds a specific global design to the game
+add_global_ship_design = <target>
+Supported Scopes: all
+Supported Targets: none
+
+log - Prints a message to game.log for debugging purposes.
+Supported Scopes: all
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_species_homeworld - Defines a homeworld for the current species.
+Supported Scopes: species
+Supported Targets: none
+
+clear_resources - Clears resources of a tile
+Supported Scopes: tile
+Supported Targets: none
+
+every_mining_station - Executes enclosed effects on every orbital mining station in the game that meets the limit criteria
+every_mining_station = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+Supported Targets: none
+
+every_research_station - Executes enclosed effects on every orbital mining station in the game that meets the limit criteria
+every_mining_station = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+Supported Targets: none
+
+every_spaceport - Executes enclosed effects on every spaceport in the game that meets the limit criteria
+every_spaceport = { limit = { <triggers> } <effects> }
+Supported Scopes: planet country
+Supported Targets: none
+
+set_timed_leader_flag - Sets an arbitrarily-named flag on the scoped leader for a set duration
+set_timed_leader_flag = { flag = <key> days = <int> }
+Supported Scopes: leader
+Supported Targets: none
+
+set_species_identity - Sets the current species scopes identity to match the target scopes making them evaluate as the same species in is_same_species trigger.
+Supported Scopes: species
+Supported Targets: none
+
+pop_force_add_ethic - Adds a specific ethic to the scoped pop regardless if pop-species allows ethic divergence or not. 
+pop_add_ethic = <key>
+Supported Scopes: pop
+Supported Targets: none
+
+set_empire_name - Sets the name of the current Empire.
+Supported Scopes: country
+Supported Targets: none
+
+set_empire_flag - Sets the flag of the current Empire.
+Supported Scopes: country
+Supported Targets: none
+
+set_planet_name - Sets the name of the current planet.
+Supported Scopes: planet
+Supported Targets: none
+
+set_sector_name - Sets the name of the current sector.
+Supported Scopes: planet
+Supported Targets: none
+
+set_fleet_formation - Sets a custom fleet formation on a fleet. set_fleet_formation = { position = { x = 1 y = 1 } position = { x = 2 y = 1 } }
+Supported Scopes: fleet
+Supported Targets: none
+
+set_custom_capital_location - Sets a custom spatial object as custom country capital location.
+Supported Scopes: country
+Supported Targets: none
+
+build_pop - Creates a buildable pop on the scoped tile/planet
+create_pop = {
+	species = <target / key>
+ethos = <random / target / { ethic = <key> ethic = <key> }>
+}
+Supported Scopes: planet tile
+Supported Targets: none
+
+spawn_planet - Spawns a planet in a system.
+Supported Scopes: galactic_object
+Supported Targets: none
+
+create_message - Creates a message
+Supported Scopes: all
+Supported Targets: none
+
+spawn_megastructure - Spawns a mega structure in a system.
+Supported Scopes: galactic_object
+Supported Targets: none
+
+set_halted - Sets the mega structure upgrade to halted status for n days
+set_halted = nDays
+Supported Scopes: megastructure
+Supported Targets: none
+
+upgrade_megastructure_to - Starts an upgrade process on a mega structure. upgrade_megastructure_to = <new_type>
+Supported Scopes: megastructure
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+remove_megastructure - Removes a mega structure.
+remove_megastructure = <target mega structure>
+Supported Scopes: all
+Supported Targets: none
+
+set_planet_entity - Change entity of a planet. set_planet_entity = { entity = <name of entity> graphical_culture = <target or name of culture> }
+Supported Scopes: planet
+Supported Targets: none
+
+remove_planet - Removes the planet from the scope 
+remove_planet = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+reroll_planet_modifiers - Rebuild modifiers on target planet
+reroll_planet_modifiers = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_unity - Adds a sum of unity to the scoped country
+add_unity = 3500
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_megastructure_flag - Sets an arbitrarily-named flag on the scoped mega structure
+set_star_flag = <key>
+Supported Scopes: megastructure
+Supported Targets: none
+
+set_timed_megastructure_flag - Sets an arbitrarily-named flag on the scoped mega structure for a set duration
+set_timed_megastructure_flag = { flag = <key> days = <int> }
+Supported Scopes: megastructure
+Supported Targets: none
+
+remove_megastructure_flag - Removes a flag from the scoped mega structure
+remove_megastructure_flag = <key>
+Supported Scopes: megastructure
+Supported Targets: none
+
+destroy_ship - Destroys the target ship (with death graphics)
+destroy_ship = <target>
+Supported Scopes: all
+Supported Targets: none
+
+delete_ship - Deletes the target ship (no death graphics)
+delete_ship = <target>
+Supported Scopes: all
+Supported Targets: none
+
+change_species - Changes the species of the scoped object
+change_species = <target>
+Supported Scopes: ship pop leader army
+Supported Targets: none
+
+change_leader_portrait - Changes the portrait of the leader in scope.
+change_leader_portrait = <key or species event target>
+Supported Scopes: leader
+Supported Targets: none
+
+trigger_megastructure_icon - if a planet has trigger_megastructure_icon = yes then the map icon for the star will show a megastructure icon
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+resettle_pop - Instantly resettles pop
+resettle_pop = { pop = <target pop> planet = <target planet> }
+Supported Scopes: all
+Supported Targets: none
+
+copy_orbital_tile - Copies orbital tile of source planet onto scoped planet
+copy_orbital_tile = <source>
+Supported Scopes: planet
+Supported Targets: none
+
+set_citizenship_type - Set citizenship type for scoped species/pop/leader
+set_citizenship_type = { country = <target> type = citizenship_full cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_military_service_type - Set military service type for scoped species/pop/leader
+set_military_service_type = { country = <target> type = military_service_full cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_purge_type - Set purge type for scoped species/pop/leader
+set_purge_type = { country = <target> type = purge_full cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_slavery_type - Set slavery type for scoped species/pop/leader
+set_slavery_type = { country = <target> type = slavery_livestock cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_population_controls - Set population control for scoped species/pop/leader
+set_population_controls = { country = <target> type = yes cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_migration_controls - Set migration control for scoped species/pop/leader
+set_migration_controls = { country = <target> type = yes cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+set_living_standard - Set living standard for scoped species/pop/leader
+set_living_standard = { country = <target> type = living_standard_good cooldown = yes }
+Supported Scopes: pop leader species
+Supported Targets: none
+
+shift_ethic - Shifts an empire towards a specific ethic, adjusting aferwards to keep number of ethics points consistent
+shift_ethic = <key>
+Supported Scopes: country
+Supported Targets: none
+
+pop_change_ethic - Changes scoped pop to chosen ethic
+pop_change_ethic = <key>
+Supported Scopes: pop
+Supported Targets: none
+
+clear_ethos - Clears all ethics of specified pop or country
+clear_ethos = yes
+Supported Scopes: country pop
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_food - Adds a sum of food to the scoped country)
+add_food = 3500
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+clear_planet_modifiers - Clear modifiers on target planet
+clear_planet_modifiers = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+remove_all_armies - Removes all armies on scoped planet
+remove_all_armies = yes
+Supported Scopes: planet
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+mutate_species - Randomly mutate a species.
+Supported Scopes: species
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+debug_break - Trigger an assertion to stop the debugger when encountering this effect; argument is ignored
+debug_break = yes
+Supported Scopes: all
+Supported Targets: none
+
+rename_species - rename_species = { 
+	use one of the following:
+	name = "an explicit name with [Bracket.Stuff]"
+	name = random
+	name_list = "key"
+}
+Supported Scopes: species
+Supported Targets: none
+
+run_ai_strategic_data - Runs strategic data for AI
+destroy_country = yes
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+reset_years_of_peace - Resets years of peace for a country.
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+add_ruler_trait - Adds a specific ruler trait to the scoped leader, even if they are not currently ruler; it becomes active when they become ruler
+add_ruler_trait = <trait>
+Supported Scopes: leader
+Supported Targets: none
+
+remove_ruler_trait - Removes a specific ruler trait from the scoped leader, even if they are not currently ruler; this is relevant if they ever become ruler
+remove_ruler_trait = <trait>
+Supported Scopes: leader
+Supported Targets: none
+
+every_playable_country - switches Scope to and goes through all playable countries
+Supported Scopes: all
+Supported Targets: none
+
+random_playable_country - Scopes to a random playable country
+Supported Scopes: all
+Supported Targets: none
+
+add_notification_modifier - Add a notification modifier to the country
+add_notification_modifier = <key>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+remove_notification_modifier - Remove a notification modifier to the country
+remove_notification_modifier = <key>
+Supported Scopes: country
+Supported Targets: THIS ROOT PREV FROM OWNER CONTROLLER CAPITAL SOLAR_SYSTEM LEADER RANDOM FROMFROM PREVPREV PREVPREVPREV PREVPREVPREVPREV
+
+set_city_graphical_culture - Sets the scoped country's city graphical culture
+set_city_graphical_culture = <key>
+Supported Scopes: country
+Supported Targets: none
+
+set_player - Assign the player of the target country to play the scoped country instead
+event_target:new_country = { set_player = event_target:old_country }
+Supported Scopes: country
+Supported Targets: none
+
+change_species_characteristics - Changes the characteristics of a species
+change_species_characteristics = {
+	sapient = <Y/N, determines if species is pre-sapient>
+	immortal = <Y/N, determines if species leaders are immortal>
+	pops_can_be_colonizers = <Y/N, determines if pops of that species can colonize>
+	pops_can_migrate = <Y/N, determines if pops of that species can migrate>
+	pops_can_reproduce = <Y/N, determines if pops of that species can reproduce>
+	pops_can_join_factions = <Y/N, determines if pops of that species can join factions>
+	can_generate_leaders = <Y/N, determines if that species can generate leaders>
+	pops_can_be_slaves = <Y/N, determines if pops from that species can become slaves>
+	pops_have_happiness = <Y/N, determines if pops from that species have happiness>
+	consumer_goods = <Y/N, determines if pops from need consumer goods>
+	can_be_modified = <Y/N, determines if the species can be modified>
+	pops_auto_growth = <1, speed at which the pops from that species grow automatically
+	pop_maintenance = <1, amount of energy each pop of that species consume monthly
+	new_pop_resource_requirement = { type = food_surplus value = 42 }
+	portrait = <key or species event target>
+
+Supported Scopes: species
+Supported Targets: none
+
+copy_techs_from - Copies all techs from the target country to the scoped country, except for some exceptions listed. Tech weights (and weight modifiers) are honoured, meaning that techs a country should not have will not be copied.
+copy_techs_from = { 
+	target = country
+	except = { tech_1 tech_2 }
+}
+except = {} is not optional.
+Supported Scopes: country
+Supported Targets: none
+
+effect_on_blob - Executes an effect on systems with planets owned by the scoped country, starting at an origin, and until a certain percentage of owned planets matching the planet_limit has been covered.
+effect_on_blob = {
+	center = <system target>
+	owned_planets_percentage = 1.0
+	planet_limit = { <planet triggers> }
+	effect = { <system effects> }
+}
+Supported Scopes: country
+Supported Targets: none
+
+random_war_participant - Iterate through all war participants
+random_war_participant = { limit = { <triggers> } <effects> }
+Supported Scopes: war
+Supported Targets: none
+
+random_relation - Iterate through all relations
+random_relation = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_relation - Iterate through all relations
+every_relation = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_neighbor_country - Iterate through all neighbor countries
+random_neighbor_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_neighbor_country - Iterate through all neighbor countries
+every_neighbor_country = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_bordering_country - Iterate through all bordering countries of a system
+random_bordering_country = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+every_bordering_country - Iterate through all bordering countries of a system
+every_bordering_country = { limit = { <triggers> } <effects> }
+Supported Scopes: galactic_object
+Supported Targets: none
+
+random_combatant_fleet - Iterate through each fleet this fleet is in combat with
+random_combatant_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: fleet
+Supported Targets: none
+
+every_combatant_fleet - Iterate through each fleet this fleet is in combat with
+every_combatant_fleet = { limit = { <triggers> } <effects> }
+Supported Scopes: fleet
+Supported Targets: none
+
+random_megastructure - Iterate through each megastructure
+random_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_megastructure - Iterate through each megastructure
+every_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_owned_megastructure - Iterate through each owned megastructure
+random_owned_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_owned_megastructure - Iterate through each owned megastructure
+every_owned_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_system_megastructure - Iterate through each megastructure in system
+random_system_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+every_system_megastructure - Iterate through each megastructure in system
+every_system_megastructure = { limit = { <triggers> } <effects> }
+Supported Scopes: all
+Supported Targets: none
+
+random_pool_leader - Iterate through each leader that is recruitable for the country
+random_pool_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_pool_leader - Iterate through each leader that is recruitable for the country
+every_pool_leader = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_pop_species - Iterate through each species of a country's owned pops
+random_owned_pop_species = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_owned_pop_species - Iterate through each species of a country's owned pops
+every_owned_pop_species = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_owned_army - Iterate through each army that is owned by the country
+random_owned_army = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+every_owned_army - Iterate through each army that is owned by the country
+every_owned_army = { limit = { <triggers> } <effects> }
+Supported Scopes: country
+Supported Targets: none
+
+random_planet_army - Iterate through each defending army on a planet
+random_planet_army = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: none
+
+every_planet_army - Iterate through each defending army on a planet
+every_planet_army = { limit = { <triggers> } <effects> }
+Supported Scopes: planet
+Supported Targets: none
+
+
+=================

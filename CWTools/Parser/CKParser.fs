@@ -7,6 +7,7 @@ open System.IO
 type Position = Position of FParsec.Position with
     //override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
     static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
+    static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
 
 type Key =
     | Key of string
@@ -94,7 +95,9 @@ module CKParser =
     let strSkip s = skipString s .>> ws <?> ("skip string " + s)
     let ch c = pchar c .>> ws <?> ("char " + string c)
     let chSkip c = skipChar c .>> ws <?> ("skip char " + string c)
-    let clause inner = between (chSkip '{') (chSkip '}') inner
+    let clause inner = between (chSkip '{' <?> "opening brace") (chSkip '}' <?> "closing brace") inner
+    let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
+    let escapedChar = pstring "\\\"" |>> string
 
     // Base types
     // =======
@@ -103,11 +106,10 @@ module CKParser =
     let comment = skipChar '#' >>. manyCharsTill anyChar ((newline |>> ignore) <|> eof) .>> ws |>> string <?> "comment"
 
     let key = (many1Chars idchar) .>> ws |>> Key <?> "id"
+    let keyQ =  between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) .>> ws |>> Key <?> "quoted key"
 
     let valueS = (many1Chars valuechar) .>> ws |>> string |>> String <?> "string"
 
-    let quotedCharSnippet = many1Satisfy (fun c -> c <> '\\' && c <> '"')
-    let escapedChar = pstring "\\\"" |>> string
     let valueQ = between (ch '"') (ch '"') (manyStrings (quotedCharSnippet <|> escapedChar)) |>> QString <?> "quoted string"
 
     let valueB = ( (skipString "yes") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(true))) <|>

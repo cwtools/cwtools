@@ -80,28 +80,38 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
-        let modFolders = Directory.EnumerateDirectories (gameDirectory + "/mod") |> List.ofSeq
-        let allFolders = gameDirectory :: modFolders
-        let getAllFiles path =
-            folders |> List.map (fun f -> path + "/" + f)
-                   |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
-                   |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
-                   |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
-                   
-        let allFiles = List.map getAllFiles allFolders |> List.collect id |> Map.ofList
+        let mods = Directory.EnumerateFiles (gameDirectory + "/mod") 
+                        |> List.ofSeq
+                        |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
+                        |> List.map CKParser.parseFile
+                        |> List.choose ( function | Success(p, _, _) -> Some p | _ -> None )
+                        |> List.map ((ProcessCore.processNodeBasic "mod" Position.Empty) >> (fun s -> s.TagText "name", s.TagText "path"))
+
+        //let modFolders = Directory.EnumerateDirectories (gameDirectory + "/mod") |> List.ofSeq
+        let modFolders = mods |> List.map (fun (n, p) -> n, (gameDirectory + "/" + p))
+        let allFolders = gameDirectory :: (modFolders |> List.map snd)
+       
+        let allFiles = 
+            let getAllFiles path =
+                folders |> List.map (fun f -> path + "/" + f)
+                       |> List.map (fun f -> f, (if Directory.Exists f then Directory.EnumerateFiles f else Seq.empty )|> List.ofSeq)
+                       |> List.collect (fun (f, fs) -> fs |> List.map (fun x -> f, x))
+                       |> List.filter (fun (fl, f) -> Path.GetExtension(f) = ".txt")
+            List.map getAllFiles allFolders |> List.collect id
+
         let parseResults = 
             let matchResult (k, f) = 
                 match f with
                 |Success(parsed, _, _) -> Pass(k, parsed)
                 |Failure(msg, _,_) -> Fail(k, msg)
-            allFiles |> Map.toList 
-                |> List.map ((fun (k, f) -> k, CKParser.parseFile f) >> matchResult)
+            allFiles
+                |> List.map ((fun (k, f) -> f, CKParser.parseFile f) >> matchResult)
 
         let entities = parseResults 
-                        |> List.choose (function |Pass(_,parsed) -> Some parsed |_ -> None) 
-                        |> List.collect id
-                        |> STLProcess.shipProcess.ProcessNode<Node>() "root" Position.Empty
-                        |> (fun n -> n.Children)
+                        |> List.choose (function |Pass(f,parsed) -> Some (f,parsed) |_ -> None) 
+                        //|> List.collect id
+                        |> List.map (fun (f, parsed) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(Path.GetFileName(f))) parsed))
+        let flatEntities = entities |> List.map (fun n -> n.Children) |> List.collect id
 
         let findDuplicates (sl : Statement list) =
             let node = ProcessCore.processNodeBasic "root" Position.Empty sl
@@ -116,20 +126,26 @@ type STLGame ( gameDirectory : string ) =
                 |> List.map (fun (k, vs) -> k, findDuplicates vs)
 
         let validateShips = 
-            let ships = entities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
+            let ships = flatEntities |> List.choose (function | :? Ship as s -> Some s |_ -> None)
             ships |> List.map validateShip
                   |> List.choose (function |Invalid es -> Some es |_ -> None)
                   |> List.collect id
+                  |> List.map (fun (n, s) -> n :> Node , s)
 
         let parseErrors = parseResults
                         |> List.choose (function |Fail(f,e) -> Some (f,e) |_ -> None)
                         
-
+        let validateFiles =
+            entities |> List.map validateVariables
+                     |> List.choose (function |Invalid es -> Some es |_ -> None)
+                     |> List.collect id
+        let validateAll = validateShips @ validateFiles
 
 
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors
-        member __.ValidationErrors = validateShips
+        member __.ValidationErrors = validateAll
         member __.Entities = entities
         member __.Folders = allFolders
+        member __.AllFiles = parseResults |> List.map (function |Fail(f,_) -> (f, false) |Pass(f,_) -> (f, true))
