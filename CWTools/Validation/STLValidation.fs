@@ -46,5 +46,37 @@ module STLValidation =
                     let errors = List.map (fun v -> (node, (v + " is not used"))) x
                     Invalid errors
 
-            errors <&&> warnings
+            errors //<&&> warnings
         )
+
+    let eventScope (event : Event) =
+        match event.Key with
+        |"country_event" -> Scope.Country
+        |"fleet_event" -> Scope.Fleet
+        |"ship_event" -> Scope.Ship
+        |"pop_faction_event" -> Scope.PopFaction
+        |"pop_event" -> Scope.Pop
+        |_ -> Scope.Army
+
+    let scopeParse =
+        function
+        |"country" -> Scope.Country
+        |"fleet" -> Scope.Fleet
+        |"ship" -> Scope.Ship
+        |"pop_faction" -> Scope.PopFaction
+        |"pop" -> Scope.Pop
+        |_ -> Scope.Army
+
+    let valEventTrigger (node : Node) (triggers : Effect list) (leaf : Leaf) =
+        match List.exists (fun e -> e.name = leaf.Key) triggers with
+        |true -> OK
+        |false -> Invalid [node, (leaf.Key + " trigger used in incorrect scope")]
+
+    let valEventTriggers  (triggers : Effect list) (event : Event) =
+        let eventScope = eventScope event
+        let scopedTriggers = List.filter (fun e -> e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) triggers
+        match event.Child "trigger" with
+        |Some n -> 
+            let v = List.map (valEventTrigger event scopedTriggers) n.Values
+            v |> List.fold (<&&>) OK
+        |None -> OK

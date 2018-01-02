@@ -5,15 +5,17 @@ open FParsec
 open System.IO
 open CWTools.Parser.CKParser
 
+type Effect =
+    {
+        name : string
+        desc : string
+        usage : string
+        scopes : string list
+        targets : string list
+    }
+
 module DocsParser =
-    type Effect =
-        {
-            name : string
-            desc : string
-            usage : string
-            scopes : string list
-            targets : string list
-        }
+
 
     let idChar = letter <|> anyOf ['_']
     let valuechar = CKParser.valuechar <|> pchar '?'

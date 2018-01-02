@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="Common/Constants.fs" />
     <Compile Include="Parser/CKParser.fs" />
+    <Compile Include="Parser/DocsParser.fs" />
     <Compile Include="Localisation/LocalisationDomain.fs" />
     <Compile Include="Localisation/YAMLLocalisationParser.fs" />
     <Compile Include="Localisation/CK2Localisation.fs" />
@@ -18,7 +19,6 @@
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/STLValidation.fs" />
     <Compile Include="Game/STLGame.fs" />
-    <Compile Include="Parser/DocsParser.fs" />
   </ItemGroup>
   <Import Project="fsc.props" />
   <Import Project="..\.paket\Paket.Restore.targets" />

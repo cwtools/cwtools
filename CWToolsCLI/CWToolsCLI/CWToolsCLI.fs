@@ -2,6 +2,8 @@ namespace CWToolsCLI
 open System.Text
 open CWTools.Common
 open System.IO
+open CWTools.Parser
+open FParsec
 
 module CWToolsCLI =
     open Argu
@@ -18,6 +20,7 @@ module CWToolsCLI =
     type ListTypes =
         | Folders = 1
         | Files = 2
+        | Triggers = 3
     type ListSort =
         | Path = 1
         | Time = 2
@@ -63,7 +66,7 @@ module CWToolsCLI =
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let list game directory scope (results : ParseResults<ListArgs>) =
-        let gameObj = STL(directory, scope)
+        let gameObj = STL(directory, scope, [])
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -72,11 +75,17 @@ module CWToolsCLI =
             | ListSort.Path -> printfn "%A" gameObj.allFileList
             | ListSort.Time -> printfn "%A" (gameObj.allFileList |> List.sortByDescending (fun {time = t} -> t))
             | _ -> failwith "Unexpected sort order"
+        | ListTypes.Triggers ->
+            let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+            let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+            printfn "%A" t
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope (results : ParseResults<_>) =
+        let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+        let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope)
+        let gameObj = STL(directory, scope, t)
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList

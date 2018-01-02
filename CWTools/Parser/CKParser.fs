@@ -5,7 +5,7 @@ open FParsec
 open System.IO
 
 type Position = Position of FParsec.Position with
-    //override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
+    override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
     static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
     static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
 
