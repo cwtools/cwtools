@@ -10,8 +10,8 @@ open CWTools.Validation.ValidationCore
 
 
 type FileResult =
-    |Pass of string * Statement list
-    |Fail of string * string
+    |Pass of string * Statement list * int64
+    |Fail of string * string * int64
     
 
 type STLGame ( gameDirectory : string ) =
@@ -80,6 +80,13 @@ type STLGame ( gameDirectory : string ) =
                     "map/setup_scenarios";
                     "prescripted_countries"
                     ]
+
+        let duration f = 
+            let timer = System.Diagnostics.Stopwatch()
+            timer.Start()
+            let returnValue = f()
+            (returnValue  , timer.ElapsedMilliseconds)  
+
         let mods = Directory.EnumerateFiles (gameDirectory + "/mod") 
                         |> List.ofSeq
                         |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
@@ -100,17 +107,16 @@ type STLGame ( gameDirectory : string ) =
             List.map getAllFiles allFolders |> List.collect id
 
         let parseResults = 
-            let matchResult (k, f) = 
+            let matchResult (k, (f, t)) = 
                 match f with
-                |Success(parsed, _, _) -> Pass(k, parsed)
-                |Failure(msg, _,_) -> Fail(k, msg)
-            allFiles
-                |> List.map ((fun (k, f) -> f, CKParser.parseFile f) >> matchResult)
+                |Success(parsed, _, _) -> Pass(k, parsed, t)
+                |Failure(msg, _,_) -> Fail(k, msg, t)
+            allFiles |> List.map ((fun (k, f) -> f, (fun t -> duration (fun () -> CKParser.parseFile t)) f) >> matchResult)
 
         let entities = parseResults 
-                        |> List.choose (function |Pass(f,parsed) -> Some (f,parsed) |_ -> None) 
+                        |> List.choose (function |Pass(f,parsed,t) -> Some (f,parsed,t) |_ -> None) 
                         //|> List.collect id
-                        |> List.map (fun (f, parsed) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+                        |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         let flatEntities = entities |> List.map (fun n -> n.Children) |> List.collect id
 
         let findDuplicates (sl : Statement list) =
@@ -120,7 +126,7 @@ type STLGame ( gameDirectory : string ) =
                           |> List.map (fun (k,v) -> k)
 
         let validateDuplicates =
-            parseResults |> List.choose (function |Pass(k,parsed) -> Some (k, parsed) |_ -> None)
+            parseResults |> List.choose (function |Pass(k,parsed,t) -> Some (k, parsed) |_ -> None)
                 |> List.groupBy (fun (k,p) -> k)
                 |> List.map (fun (k, vs) -> k, List.collect (fun (_, vs2) -> vs2) vs)
                 |> List.map (fun (k, vs) -> k, findDuplicates vs)
@@ -133,7 +139,7 @@ type STLGame ( gameDirectory : string ) =
                   |> List.map (fun (n, s) -> n :> Node , s)
 
         let parseErrors = parseResults
-                        |> List.choose (function |Fail(f,e) -> Some (f,e) |_ -> None)
+                        |> List.choose (function |Fail(f,e,t) -> Some (f,e) |_ -> None)
                         
         let validateFiles =
             entities |> List.map validateVariables
@@ -149,4 +155,4 @@ type STLGame ( gameDirectory : string ) =
         //member __.ValidationWarnings = warningsAll
         member __.Entities = entities
         member __.Folders = allFolders
-        member __.AllFiles = parseResults |> List.map (function |Fail(f,_) -> (f, false) |Pass(f,_) -> (f, true))
+        member __.AllFiles = parseResults |> List.map (function |Fail(f,_,t) -> (f, false, t) |Pass(f,_,t) -> (f, true, t))
