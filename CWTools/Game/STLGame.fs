@@ -13,8 +13,11 @@ type FileResult =
     |Pass of string * Statement list * int64
     |Fail of string * string * int64
     
-
-type STLGame ( gameDirectory : string ) =
+type FilesScope =
+    |All
+    |Mods
+    |Vanilla
+type STLGame ( gameDirectory : string, scope : FilesScope ) =
         let folders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -96,7 +99,11 @@ type STLGame ( gameDirectory : string ) =
 
         //let modFolders = Directory.EnumerateDirectories (gameDirectory + "/mod") |> List.ofSeq
         let modFolders = mods |> List.map (fun (n, p) -> n, (gameDirectory + "/" + p))
-        let allFolders = gameDirectory :: (modFolders |> List.map snd)
+        let allFolders = 
+            match scope with
+            |All -> gameDirectory :: (modFolders |> List.map snd)
+            |Mods -> (modFolders |> List.map snd)
+            |Vanilla -> [gameDirectory]
        
         let allFiles = 
             let getAllFiles path =

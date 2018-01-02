@@ -46,6 +46,7 @@ module CWToolsCLI =
     type Arguments =
         | Directory of path : string
         | Game of Game
+        | Scope of CWTools.Games.FilesScope
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
         | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
 
@@ -57,11 +58,12 @@ module CWToolsCLI =
                 | Game _ -> "specify the game"
                 | Validate _ -> "Validate all mod files"
                 | List _ -> "List things"
+                | Scope _ -> "which files to include"
 
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
-    let list game directory (results : ParseResults<ListArgs>) =
-        let gameObj = STL(directory)
+    let list game directory scope (results : ParseResults<ListArgs>) =
+        let gameObj = STL(directory, scope)
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -72,9 +74,10 @@ module CWToolsCLI =
             | _ -> failwith "Unexpected sort order"
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory (results : ParseResults<_>) =
-        let gameObj = STL(directory)
-        match results.GetResult <@ ValType @> with
+    let validate game directory scope (results : ParseResults<_>) =
+        let valType = results.GetResult <@ ValType @>
+        let gameObj = STL(directory, scope)
+        match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
         | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" gameObj.validationErrorList
@@ -87,9 +90,10 @@ module CWToolsCLI =
         let results = parser.Parse argv
         let directory = results.GetResult <@ Directory @>
         let game = results.GetResult <@ Game @>
+        let scope = results.GetResult <@ Scope @>
         match results.GetSubCommand() with
-        | List r -> list game directory r
-        | Validate r -> validate game directory r
+        | List r -> list game directory scope r
+        | Validate r -> validate game directory scope r
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"
         

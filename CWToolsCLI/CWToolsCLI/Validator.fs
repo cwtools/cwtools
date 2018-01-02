@@ -9,6 +9,7 @@ module Validator =
             error : string
             position : string
         }
+        override x.ToString() = x.position + "\n" + x.category + ", " + x.error
     type ValidationViewModelParseRow =
         {
             file : string
@@ -22,8 +23,8 @@ module Validator =
             time : int64
         }
         override x.ToString() = x.file + " , " + x.pass.ToString() + " in " + x.time.ToString()
-    type STL (dir : string) =
-        let game = STLGame(dir)
+    type STL (dir : string, scope : CWTools.Games.FilesScope) =
+        let game = STLGame(dir, scope)
         let validationErrors = game.ValidationErrors
         member val folders = game.Folders
         member val parserErrorList = game.ParserErrors |> List.map (fun (f, e) -> {file = f; error = e})
