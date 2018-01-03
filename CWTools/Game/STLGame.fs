@@ -7,6 +7,7 @@ open CWTools.Process
 open CWTools.Process.STLProcess
 open CWTools.Validation.STLValidation
 open CWTools.Validation.ValidationCore
+open System.Text
 
 
 type FileResult =
@@ -126,6 +127,15 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
                         |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         let flatEntities = entities |> List.map (fun n -> n.Children) |> List.collect id
 
+        let scriptedTriggers = 
+            parseResults
+            |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some (f, p, t) |_ -> None)
+            //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
+            |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+            |> List.collect (fun n -> n.Children)
+            |> List.map (STLProcess.getScriptedTriggerScope triggers)
+                      
+
         let findDuplicates (sl : Statement list) =
             let node = ProcessCore.processNodeBasic "root" Position.Empty sl
             node.Children |> List.groupBy (fun c -> c.Key)
@@ -155,7 +165,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
 
         let validateEvents =
             let events = flatEntities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (fun e -> (valEventTriggers triggers e) <&&> (valEventEffects effects e))
+            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) e) <&&> (valEventEffects effects e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)
@@ -171,3 +181,5 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
         member __.Entities = entities
         member __.Folders = allFolders
         member __.AllFiles = parseResults |> List.map (function |Fail(f,_,t) -> (f, false, t) |Pass(f,_,t) -> (f, true, t))
+        member __.ScripteTriggers = scriptedTriggers
+        //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

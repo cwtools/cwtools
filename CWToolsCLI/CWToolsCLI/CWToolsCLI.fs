@@ -78,8 +78,9 @@ module CWToolsCLI =
             | Some ListSort.Time -> printfn "%A" (gameObj.allFileList |> List.sortByDescending (fun {time = t} -> t))
             | _ -> failwith "Unexpected sort order"
         | ListTypes.Triggers ->
-            let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
-            let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+            // let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+            // let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+            let t = gameObj.scriptedTriggerList
             printfn "%A" t
         | ListTypes.Effects ->
             let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"

@@ -18,6 +18,39 @@ module STLProcess =
         |Sector
         |Ship
         |Army
+    let allScopes = ["planet";"country";
+        "fleet";
+        "pop";
+        "galactic_object";
+        "leader";
+        "species";
+        "pop_faction";
+        "sector";
+        "ship";
+        "army";]
+
+    let rec scriptedTriggerScope (triggers : Effect list) (node : Node) =
+        let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"]
+        let valueTriggers = node.Values |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
+        let nodeRecTriggers = node.Children |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then Some v else None)
+        let nodeTriggers = node.Children |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
+        let valueScopes = 
+            valueTriggers @ nodeTriggers 
+            |> List.map (fun v -> 
+                triggers 
+                |> List.tryPick (fun t -> if t.name = v then Some t.scopes else None))
+            |> List.choose (function |Some s -> Some s |None -> None)
+        
+        let nodeScopes =
+            nodeRecTriggers
+            |> List.map (scriptedTriggerScope triggers)
+        if List.length (nodeScopes @ valueScopes) = 0 then allScopes else
+            nodeScopes @ valueScopes 
+                |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
+
+    let getScriptedTriggerScope (triggers : Effect list) (node : Node) =
+        let scopes = scriptedTriggerScope triggers node
+        {name = node.Key; desc = ""; usage = ""; scopes = scopes ; targets = []}
 
     type Ship (key, pos) =
         inherit Node(key, pos)
