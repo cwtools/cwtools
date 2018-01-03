@@ -25,8 +25,8 @@ module Validator =
             time : int64
         }
         override x.ToString() = x.file + " , " + x.pass.ToString() + " in " + x.time.ToString()
-    type STL (dir : string, scope : CWTools.Games.FilesScope, triggers : Effect list) =
-        let game = STLGame(dir, scope, triggers)
+    type STL (dir : string, scope : CWTools.Games.FilesScope, triggers : Effect list, effects : Effect list) =
+        let game = STLGame(dir, scope, triggers, effects)
         let validationErrors = game.ValidationErrors
         member val folders = game.Folders
         member val parserErrorList = game.ParserErrors |> List.map (fun (f, e) -> {file = f; error = e})

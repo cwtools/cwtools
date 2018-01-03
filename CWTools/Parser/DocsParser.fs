@@ -19,9 +19,9 @@ module DocsParser =
 
     let idChar = letter <|> anyOf ['_']
     let valuechar = CKParser.valuechar <|> pchar '?'
-    let header = skipCharsTillString "== TRIGGER DOCUMENTATION ==" true 1000 .>> ws <?> "header"
+    let header = skipCharsTillString "DOCUMENTATION ==" true 2000 .>> ws <?> "header"
     let name = (many1Chars idChar) .>> ws .>> pchar '-' .>>. restOfLine false .>> ws <?> "name"
-    let usage = charsTillString "Supported Scopes:" true 1000 .>> ws <?> "usage"
+    let usage = charsTillString "Supported Scopes:" true 2000 .>> ws <?> "usage"
     let scope = many1Chars valuechar .>> many spaces1 <?> "scope"
     let scopes = many1Till scope (skipString "Supported Targets:" .>> ws)
     let target = many1Chars valuechar .>> many (skipChar ' ') <?> "target"

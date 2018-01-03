@@ -56,6 +56,7 @@ module STLValidation =
         |"ship_event" -> Scope.Ship
         |"pop_faction_event" -> Scope.PopFaction
         |"pop_event" -> Scope.Pop
+        |"planet_event" -> Scope.Planet
         |_ -> Scope.Army
 
     let scopeParse =
@@ -65,6 +66,7 @@ module STLValidation =
         |"ship" -> Scope.Ship
         |"pop_faction" -> Scope.PopFaction
         |"pop" -> Scope.Pop
+        |"planet" -> Scope.Planet
         |_ -> Scope.Army
 
     let valEventTrigger (node : Node) (triggers : Effect list) (leaf : Leaf) =
@@ -80,3 +82,23 @@ module STLValidation =
             let v = List.map (valEventTrigger event scopedTriggers) n.Values
             v |> List.fold (<&&>) OK
         |None -> OK
+
+    let valEventEffect (node : Node) (effects : Effect list) (leaf : Leaf) =
+        match List.exists (fun e -> e.name = leaf.Key) effects with
+        |true -> OK
+        |false -> Invalid [node, (leaf.Key + " effect used in incorrect scope")]
+
+    let valEventEffects (effects : Effect list) (event : Event) =
+        let eventScope = eventScope event
+        let scopedEffects = List.filter (fun e -> e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) effects
+        let imm = match event.Child "immediate" with
+            |Some n -> 
+                let v = List.map (valEventEffect event scopedEffects) n.Values
+                v |> List.fold (<&&>) OK
+            |None -> OK
+        let aft = match event.Child "after" with
+            |Some n -> 
+                let v = List.map (valEventEffect event scopedEffects) n.Values
+                v |> List.fold (<&&>) OK
+            |None -> OK
+        imm <&&> aft

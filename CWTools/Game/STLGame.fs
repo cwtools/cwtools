@@ -17,7 +17,7 @@ type FilesScope =
     |All
     |Mods
     |Vanilla
-type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect list ) =
+type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect list, effects : Effect list ) =
         let folders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -155,7 +155,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
 
         let validateEvents =
             let events = flatEntities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (valEventTriggers triggers)
+            events |> List.map (fun e -> (valEventTriggers triggers e) <&&> (valEventEffects effects e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)

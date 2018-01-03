@@ -21,12 +21,13 @@ module CWToolsCLI =
         | Folders = 1
         | Files = 2
         | Triggers = 3
+        | Effects = 4
     type ListSort =
         | Path = 1
         | Time = 2
     type ListArgs =
         | [<MainCommand; ExactlyOnce; Last>] ListType of ListTypes
-        | Sort of ListSort
+        | Sort of ListSort option
     with
         interface IArgParserTemplate with
             member s.Usage =
@@ -66,26 +67,33 @@ module CWToolsCLI =
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let list game directory scope (results : ParseResults<ListArgs>) =
-        let gameObj = STL(directory, scope, [])
+        let gameObj = STL(directory, scope, [], [])
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
         | ListTypes.Files -> 
             match sortOrder with
-            | ListSort.Path -> printfn "%A" gameObj.allFileList
-            | ListSort.Time -> printfn "%A" (gameObj.allFileList |> List.sortByDescending (fun {time = t} -> t))
+            | None
+            | Some ListSort.Path -> printfn "%A" gameObj.allFileList
+            | Some ListSort.Time -> printfn "%A" (gameObj.allFileList |> List.sortByDescending (fun {time = t} -> t))
             | _ -> failwith "Unexpected sort order"
         | ListTypes.Triggers ->
             let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
             let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+            printfn "%A" t
+        | ListTypes.Effects ->
+            let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+            let t = effects |>  (function |Success(p, _, _) -> p |_ -> [])
             printfn "%A" t
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope (results : ParseResults<_>) =
         let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
         let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+        let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+        let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope, t)
+        let gameObj = STL(directory, scope, t, e)
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
