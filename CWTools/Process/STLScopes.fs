@@ -54,6 +54,10 @@ module STLScopes =
         |"alliance" -> Scope.Country
         |"megastructure" -> Scope.Ship
         |x -> failwith ("unexpected scope" + x.ToString())
+    let parseScopes =
+        function
+        |"all" -> allScopes
+        |x -> [parseScope x]
     let scopes =
         ["every_country", Scope.Any, Scope.Country
         ;"every_pop", Scope.Any, Scope.Pop
@@ -124,6 +128,8 @@ module STLScopes =
         ;"planet", Scope.Pop, Scope.Planet
         ;"fleet", Scope.Ship, Scope.Fleet
         ;"owner", Scope.Pop, Scope.Country
+        ;"owner", Scope.Ship, Scope.Country
+        ;"owner", Scope.Planet, Scope.Country //?
         ;"leader", Scope.Country, Scope.Leader
         ;"every_fleet_in_system", Scope.GalacticObject, Scope.Fleet
         ;"every_system_ambient_object", Scope.GalacticObject, Scope.AmbientObject
@@ -140,9 +146,9 @@ module STLScopes =
         ;"any_neighboring_tile", Scope.Tile, Scope.Tile
         ;"any_attacker", Scope.War, Scope.Country
         ;"any_defender", Scope.War, Scope.Country]
-    let changeScope scope = scopes 
-                            |> List.tryFind (fun (s, _, _) -> s = scope)
-                            |> Option.bind (fun (_, _, d) -> Some d)
+    let changeScope scope source = scopes 
+                                |> List.tryFind (fun (n, s, _) -> n = scope && s = source)
+                                |> Option.bind (fun (_, _, d) -> Some d)
     let sourceScope scope = scopes
-                            |> List.tryFind (fun (s, _, _) -> s = scope)
-                            |> Option.bind (fun (_, s,_) -> Some s)
+                            |> List.choose (function | (n, s, _) when n = scope -> Some s |_ -> None)
+                            |> (function |[] -> None |x -> Some x)

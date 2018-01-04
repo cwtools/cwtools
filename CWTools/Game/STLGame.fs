@@ -133,7 +133,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
             //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
-            |> List.map (STLProcess.getScriptedTriggerScope triggers)
+            |> List.map (STLProcess.getScriptedTriggerScope triggers triggers)
 
         let scriptedEffects =
             parseResults
@@ -141,7 +141,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
             //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
-            |> List.map (STLProcess.getScriptedTriggerScope effects)
+            |> List.map (STLProcess.getScriptedTriggerScope effects triggers)
                       
 
         let findDuplicates (sl : Statement list) =
