@@ -4,52 +4,37 @@ open CWTools.Parser
 open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
+open CWTools.Process.STLScopes
 
 module STLProcess =
-    type Scope =
-        |Planet
-        |Country
-        |Fleet
-        |Pop
-        |GalacticObject
-        |Leader
-        |Species
-        |PopFaction
-        |Sector
-        |Ship
-        |Army
-    let allScopes = ["planet";"country";
-        "fleet";
-        "pop";
-        "galactic_object";
-        "leader";
-        "species";
-        "pop_faction";
-        "sector";
-        "ship";
-        "army";]
+ 
+    
 
-    let rec scriptedTriggerScope (triggers : Effect list) (node : Node) =
-        let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"]
+
+    let rec scriptedTriggerScope (triggers : (string * Scope list) list) (node : Node) =
+        let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "limit"; "else"; "hidden_effect"]
         let valueTriggers = node.Values |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
-        let nodeRecTriggers = node.Children |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then Some v else None)
-        let nodeTriggers = node.Children |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
-        let valueScopes = 
-            valueTriggers @ nodeTriggers 
-            |> List.map (fun v -> 
-                triggers 
-                |> List.tryPick (fun t -> if t.name = v then Some t.scopes else None))
-            |> List.choose (function |Some s -> Some s |None -> None)
+        //valueTriggers |> List.iter (fun f -> printfn "%A" f)
+        let nodeScopeChanges = node.Children |> List.choose (fun v -> sourceScope v.Key) |> List.map (fun x -> [x])
+        let nodeSameScope = node.Children |> List.choose (fun v -> match sourceScope v.Key with |Some s -> None |None -> Some v)
+        let nodeTriggers = nodeSameScope |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
+        let valueScopes = (valueTriggers @ nodeTriggers)
+                        |> List.map (fun v -> 
+                            triggers 
+                            |> List.filter (fun (n, ss) -> n = v)
+                            |> List.map (fun (n, ss) -> ss)
+                            |> List.collect id)
+        let nodeRecTriggers = nodeSameScope |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then Some v else None)
         
         let nodeScopes =
             nodeRecTriggers
             |> List.map (scriptedTriggerScope triggers)
-        if List.length (nodeScopes @ valueScopes) = 0 then allScopes else
-            nodeScopes @ valueScopes 
+        nodeScopes @ valueScopes @ nodeScopeChanges
                 |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
     let getScriptedTriggerScope (triggers : Effect list) (node : Node) =
-        let scopes = scriptedTriggerScope triggers node
+        let triggers2 = List.map (fun t -> t.name, t.scopes |> List.map parseScope) triggers
+        let scopes = scriptedTriggerScope triggers2 node |> List.map (fun s -> s.ToString().ToLower())
         {name = node.Key; desc = ""; usage = ""; scopes = scopes ; targets = []}
 
     type Ship (key, pos) =

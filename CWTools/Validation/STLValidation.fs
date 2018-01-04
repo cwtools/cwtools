@@ -4,6 +4,7 @@ open CWTools.Process.STLProcess
 open CWTools.Process
 open CWTools.Process.ProcessCore
 open CWTools.Parser
+open CWTools.Process.STLScopes
 
 module STLValidation =
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(ship, "must have name")] else OK
@@ -69,36 +70,38 @@ module STLValidation =
         |"planet" -> Scope.Planet
         |_ -> Scope.Army
 
-    let valEventTrigger (node : Node) (triggers : Effect list) (leaf : Leaf) =
-        match List.exists (fun e -> e.name = leaf.Key) triggers with
-        |true -> OK
-        |false -> Invalid [node, (leaf.Key + " trigger used in incorrect scope")]
-
+    let valEventTrigger (node : Node) (triggers : (Effect * bool) list) (scope : string) (leaf : Leaf) =
+        match List.tryFind (fun (e, b) -> e.name = leaf.Key ) triggers with
+        |Some (_, true) -> OK
+        |Some (t, false) -> Invalid [node, sprintf "%s trigger used in incorrect scope. In %s but expected %s" leaf.Key scope (t.scopes |> List.fold (+) "")]
+        //Invalid [node, (leaf.Key + " trigger used in incorrect scope.")] //In " + scope + " and expected :"+ (triggers |> List.map (fun t -> t.ToString()) |> (List.fold (+) "")))]
+        |None -> Invalid [node, (sprintf "unknown trigger %s used." leaf.Key)]
     let valEventTriggers  (triggers : Effect list) (event : Event) =
         let eventScope = eventScope event
-        let scopedTriggers = List.filter (fun e -> e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) triggers
+        let scopedTriggers = List.map (fun e -> e, e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) triggers
         match event.Child "trigger" with
         |Some n -> 
-            let v = List.map (valEventTrigger event scopedTriggers) n.Values
+            let v = List.map (valEventTrigger event scopedTriggers (eventScope.ToString())) n.Values
             v |> List.fold (<&&>) OK
         |None -> OK
 
-    let valEventEffect (node : Node) (effects : Effect list) (leaf : Leaf) =
-        match List.exists (fun e -> e.name = leaf.Key) effects with
-        |true -> OK
-        |false -> Invalid [node, (leaf.Key + " effect used in incorrect scope")]
-
+    let valEventEffect (node : Node) (effects : (Effect * bool) list) (scope : string) (leaf : Leaf) =
+        match List.tryFind (fun (e, b) -> e.name = leaf.Key) effects with
+        |Some(_, true) -> OK
+        |Some (t, false) -> Invalid [node, sprintf "%s effect used in incorrect scope. In %s but expected %s" leaf.Key scope (t.scopes |> List.fold (+) "")]
+        //|Some(t, false) -> Invalid [node, (leaf.Key + " effect used in incorrect scope.")] // In " + scope + " and expected :"+ (effects |> List.map (fun t -> t.ToString()) |> (List.fold (+) "")))]
+        |None -> Invalid [node, (sprintf "unknown effect %s used." leaf.Key)]
     let valEventEffects (effects : Effect list) (event : Event) =
         let eventScope = eventScope event
-        let scopedEffects = List.filter (fun e -> e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) effects
+        let scopedEffects = List.map (fun e -> e, e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) effects
         let imm = match event.Child "immediate" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedEffects) n.Values
+                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.Values
                 v |> List.fold (<&&>) OK
             |None -> OK
         let aft = match event.Child "after" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedEffects) n.Values
+                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.Values
                 v |> List.fold (<&&>) OK
             |None -> OK
         imm <&&> aft

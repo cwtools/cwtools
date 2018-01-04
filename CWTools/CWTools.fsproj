@@ -15,6 +15,7 @@
     <Compile Include="Localisation/STLLocalisation.fs" />
     <Compile Include="Process/Process.fs" />
     <Compile Include="Process/CK2Process.fs" />
+    <Compile Include="Process/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/STLValidation.fs" />

@@ -67,7 +67,11 @@ module CWToolsCLI =
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let list game directory scope (results : ParseResults<ListArgs>) =
-        let gameObj = STL(directory, scope, [], [])
+        let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+        let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
+        let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+        let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
+        let gameObj = STL(directory, scope, t, e)
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders

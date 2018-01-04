@@ -134,6 +134,14 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
             |> List.map (STLProcess.getScriptedTriggerScope triggers)
+
+        let scriptedEffects =
+            parseResults
+            |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_effects") -> Some (f, p, t) |_ -> None)
+            //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
+            |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+            |> List.collect (fun n -> n.Children)
+            |> List.map (STLProcess.getScriptedTriggerScope effects)
                       
 
         let findDuplicates (sl : Statement list) =
@@ -165,7 +173,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
 
         let validateEvents =
             let events = flatEntities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) e) <&&> (valEventEffects effects e))
+            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) e) <&&> (valEventEffects (effects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)
