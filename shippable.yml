@@ -10,6 +10,9 @@ build:
   ci:
     - apt-get install -y p7zip-full
     - paket restore
+    - cd CWTools
+    - dotnet restore
+    - cd ./../
     - cd CK2EventsUI
     - dotnet restore
     - dotnet electronize build win
