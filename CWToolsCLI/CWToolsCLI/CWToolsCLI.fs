@@ -51,6 +51,7 @@ module CWToolsCLI =
         | Directory of path : string
         | Game of Game
         | Scope of CWTools.Games.FilesScope
+        | ModFilter of string
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
         | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
 
@@ -63,15 +64,16 @@ module CWToolsCLI =
                 | Validate _ -> "Validate all mod files"
                 | List _ -> "List things"
                 | Scope _ -> "which files to include"
+                | ModFilter _ -> "filter to mods with this in name"
 
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
-    let list game directory scope (results : ParseResults<ListArgs>) =
+    let list game directory scope modFilter (results : ParseResults<ListArgs>) =
         let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
         let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
         let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
         let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
-        let gameObj = STL(directory, scope, t, e)
+        let gameObj = STL(directory, scope, modFilter, t, e)
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -92,13 +94,13 @@ module CWToolsCLI =
             printfn "%A" t
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory scope (results : ParseResults<_>) =
+    let validate game directory scope modFilter (results : ParseResults<_>) =
         let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
         let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
         let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
         let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope, t, e)
+        let gameObj = STL(directory, scope, modFilter, t, e)
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
@@ -113,9 +115,10 @@ module CWToolsCLI =
         let directory = results.GetResult <@ Directory @>
         let game = results.GetResult <@ Game @>
         let scope = results.GetResult <@ Scope @>
+        let modFilter = results.GetResult(<@ ModFilter @>, defaultValue = "")
         match results.GetSubCommand() with
-        | List r -> list game directory scope r
-        | Validate r -> validate game directory scope r
+        | List r -> list game directory scope modFilter r
+        | Validate r -> validate game directory scope modFilter r
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"
         

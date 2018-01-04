@@ -39,13 +39,16 @@ module STLScopes =
         |"fleet" -> Scope.Fleet
         |"pop" -> Scope.Pop
         |"system"
+        |"galacticobject"
         |"galactic_object" -> Scope.GalacticObject
         |"leader" -> Scope.Leader
         |"species" -> Scope.Species
+        |"popfaction"
         |"pop_faction" -> Scope.PopFaction
         |"sector" -> Scope.Sector
         |"ship" -> Scope.Ship
         |"army" -> Scope.Army
+        |"ambientobject"
         |"ambient_object" -> Scope.AmbientObject
         |"war" -> Scope.War
         |"tile" -> Scope.Tile
@@ -146,10 +149,9 @@ module STLScopes =
         ;"any_neighboring_tile", Scope.Tile, Scope.Tile
         ;"any_attacker", Scope.War, Scope.Country
         ;"any_defender", Scope.War, Scope.Country]
-    let changeScope scope source = scopes 
-                                |> List.tryFind (fun (n, s, _) -> n = scope && s = source)
-                                |> Option.bind (fun (_, _, d) -> Some d)
-    let sourceScope scope = scopes
-                            |> List.choose (function | (n, s, _) when n = scope -> Some s |_ -> None)
-                            |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
-                            //|> (function |[] -> None |x -> Some x)
+    let changeScope (scope : string) source = scopes 
+                                                |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
+                                                |> Option.bind (fun (_, _, d) -> Some d)
+    let sourceScope (scope : string) = scopes
+                                    |> List.choose (function | (n, s, _) when n.ToLower() = scope.ToLower() -> Some s |_ -> None)
+                                    |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)

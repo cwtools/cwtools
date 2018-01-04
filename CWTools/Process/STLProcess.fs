@@ -11,26 +11,36 @@ module STLProcess =
     
 
 
-    let rec scriptedTriggerScope (effects : (string * Scope list) list) (triggers : (string * Scope list) list) (node : Node) =
+    let rec scriptedTriggerScope (strict : bool) (effects : (string * Scope list) list) (triggers : (string * Scope list) list) (root : string) (node : Node) =
+        let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
         let anyBlockKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT"; "if"; "else"; "hidden_effect"]
-        let triggerBlockKeys = ["limit"]
+        let triggerBlockKeys = ["limit"] //@ targetKeys
         let nodeScopes = node.Children 
                         |> List.map (
                             function
-                            | x when (x.Key.StartsWith("event_target:")) ->
+                            | x when x.Key = root -> 
                                 allScopes
-                            | x when List.contains x.Key anyBlockKeys ->
-                                scriptedTriggerScope effects triggers x
-                            | x when List.contains x.Key triggerBlockKeys -> 
-                                scriptedTriggerScope triggers triggers x
+                            | x when (x.Key.ToLower().StartsWith("event_target:")) ->
+                                allScopes
+                            | x when targetKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) ->
+                                allScopes
+                            | x when anyBlockKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) ->
+                                scriptedTriggerScope strict effects triggers root x
+                            | x when triggerBlockKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) -> 
+                                scriptedTriggerScope strict triggers triggers root x
                             | x ->
                                 match sourceScope x.Key with
                                 | Some v -> v
                                 | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
-                                
                         )
-        let valueScopes = node.Values |> List.map (fun v -> effects |> List.filter (fun (n, _) -> n = v.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id)
-        nodeScopes @ valueScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
+        let valueScopes = node.Values 
+                        |> List.map (
+                            function
+                            | x when x.Key = root -> allScopes
+                            | x -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
+                           )
+        let combinedScopes = nodeScopes @ valueScopes |> List.map (function | [] -> (if strict then [] else allScopes) |x -> x)
+        combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
         // let valueTriggers = node.Values |> List.choose (fun v -> if List.contains v.Key anyBlockKeys then None else Some v.Key)
         // //valueTriggers |> List.iter (fun f -> printfn "%A" f)
         // let nodeScopeChanges = node.Children |> List.choose (fun v -> sourceScope v.Key) //|> List.map (fun x -> [x])
@@ -55,7 +65,7 @@ module STLProcess =
     let getScriptedTriggerScope (effects : Effect list) (triggers : Effect list) (node : Node) =
         let effects2 = List.map (fun t -> t.name, t.scopes |> List.map parseScopes |> List.collect id) effects
         let triggers2 = List.map (fun t -> t.name, t.scopes |> List.map parseScopes |> List.collect id) triggers
-        let scopes = scriptedTriggerScope effects2 triggers2 node |> List.map (fun s -> s.ToString().ToLower())
+        let scopes = scriptedTriggerScope true effects2 triggers2 node.Key node |> List.map (fun s -> s.ToString().ToLower())
         {name = node.Key; desc = ""; usage = ""; scopes = scopes ; targets = []}
 
     type Ship (key, pos) =

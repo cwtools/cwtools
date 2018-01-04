@@ -85,23 +85,30 @@ module STLValidation =
             v |> List.fold (<&&>) OK
         |None -> OK
 
-    let valEventEffect (node : Node) (effects : (Effect * bool) list) (scope : string) (leaf : Leaf) =
-        match List.tryFind (fun (e, b) -> e.name = leaf.Key) effects with
-        |Some(_, true) -> OK
-        |Some (t, false) -> Invalid [node, sprintf "%s effect used in incorrect scope. In %s but expected %s" leaf.Key scope (t.scopes |> List.fold (+) "")]
-        //|Some(t, false) -> Invalid [node, (leaf.Key + " effect used in incorrect scope.")] // In " + scope + " and expected :"+ (effects |> List.map (fun t -> t.ToString()) |> (List.fold (+) "")))]
-        |None -> Invalid [node, (sprintf "unknown effect %s used." leaf.Key)]
+    let valEventEffect (root : Node) (effects : (Effect * bool) list) (scope : string) (effect : Both) =
+        match effect with
+        |LeafI leaf ->
+            match List.tryFind (fun (e, b) -> e.name = leaf.Key) effects with
+            |Some(_, true) -> OK
+            |Some (t, false) -> Invalid [root, sprintf "%s effect used in incorrect scope. In %s but expected %s" leaf.Key scope (t.scopes |> List.fold (+) "")]
+            |None -> Invalid [root, (sprintf "unknown effect %s used." leaf.Key)]
+        |NodeI node ->
+            match List.tryFind (fun (e, b) -> e.name = node.Key) effects with
+            |Some(_, true) -> OK
+            |Some (t, false) -> Invalid [node, sprintf "%s effect used in incorrect scope. In %s but expected %s" node.Key scope (t.scopes |> List.fold (+) "")]
+            |None -> OK//Invalid [node, (sprintf "unknown effect %s used." node.Key)]
+        |_ -> OK
     let valEventEffects (effects : Effect list) (event : Event) =
         let eventScope = eventScope event
         let scopedEffects = List.map (fun e -> e, e.scopes |> List.exists (fun s -> scopeParse s = eventScope || s = "all")) effects
         let imm = match event.Child "immediate" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.Values
+                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
         let aft = match event.Child "after" with
             |Some n -> 
-                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.Values
+                let v = List.map (valEventEffect event scopedEffects (eventScope.ToString())) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
         imm <&&> aft

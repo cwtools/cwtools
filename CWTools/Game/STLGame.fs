@@ -18,7 +18,7 @@ type FilesScope =
     |All
     |Mods
     |Vanilla
-type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect list, effects : Effect list ) =
+type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list ) =
         let folders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -99,7 +99,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
                         |> List.map ((ProcessCore.processNodeBasic "mod" Position.Empty) >> (fun s -> s.TagText "name", s.TagText "path"))
 
         //let modFolders = Directory.EnumerateDirectories (gameDirectory + "/mod") |> List.ofSeq
-        let modFolders = mods |> List.map (fun (n, p) -> n, (gameDirectory + "/" + p))
+        let modFolders = mods |> List.filter (fun (n, _) -> n.Contains(modFilter)) |> List.map (fun (n, p) -> n, (gameDirectory + "/" + p))
         let allFolders = 
             match scope with
             |All -> gameDirectory :: (modFolders |> List.map snd)
@@ -133,7 +133,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
             //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
-            |> List.map (STLProcess.getScriptedTriggerScope triggers triggers)
+            |> List.rev
+            |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) triggers
 
         let scriptedEffects =
             parseResults
@@ -141,7 +142,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, triggers : Effect lis
             //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
-            |> List.map (STLProcess.getScriptedTriggerScope effects triggers)
+            |> List.rev
+            |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es triggers e)::es) effects
                       
 
         let findDuplicates (sl : Statement list) =
