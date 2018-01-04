@@ -24,7 +24,7 @@ build:
     - cd ./../CWToolsCLI/CWToolsCLI/
     - dotnet restore
     - dotnet build
-    - dotnet publish -f netcoreapp2.0 -c Release --self-contained -r win-x64
+    - dotnet publish -f netcoreapp2.0 -c Release --self-contained -r win7-x64
     - cd ./../../CK2EventsUI
   on_success:
     - if [ "$IS_RELEASE" == true ]; then 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/CK2Events-win/* && aws s3 cp archive.7z "s3://ck2events/win/CK2Events-win-$GIT_TAG_NAME.7z" --region "eu-west-1" && 7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z ./bin/desktop/CK2Events-linux/* && aws s3 cp archive.7z "s3://ck2events/linux/CK2Events-linux-$GIT_TAG_NAME.7z" --region "eu-west-1"; fi
