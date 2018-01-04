@@ -19,6 +19,7 @@ build:
     - mv ./bin/desktop/ElectronNET.Host-linux-x64 ./bin/desktop/CK2Events-linux
     - mv ./bin/desktop/CK2Events-linux/ElectronNET.Host ./bin/desktop/CK2Events-linux/CK2Events
     - cd ./../CWToolsCLI/CWToolsCLI/
+    - dotnet build
     - dotnet publish -f netcoreapp2.0 -c Release
     - cd ./../../CK2EventsUI
   on_success:
