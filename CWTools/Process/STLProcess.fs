@@ -17,6 +17,8 @@ module STLProcess =
         let nodeScopes = node.Children 
                         |> List.map (
                             function
+                            | x when (x.Key.StartsWith("event_target:")) ->
+                                allScopes
                             | x when List.contains x.Key anyBlockKeys ->
                                 scriptedTriggerScope effects triggers x
                             | x when List.contains x.Key triggerBlockKeys -> 

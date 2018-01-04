@@ -151,4 +151,5 @@ module STLScopes =
                                 |> Option.bind (fun (_, _, d) -> Some d)
     let sourceScope scope = scopes
                             |> List.choose (function | (n, s, _) when n = scope -> Some s |_ -> None)
-                            |> (function |[] -> None |x -> Some x)
+                            |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
+                            //|> (function |[] -> None |x -> Some x)
