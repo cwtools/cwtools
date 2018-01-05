@@ -73,17 +73,19 @@ module STLValidation =
             match node.Key with
             |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains x ->
                 valNodeTriggers root triggers effects scope node
-            |x when changeScope x scope |> Option.isSome ->
-                valNodeTriggers root triggers effects ((changeScope x scope) |> (fun f -> f.Value)) node
             |x when STLProcess.targetKeys |> List.exists (fun t -> t.ToLower() = x.ToLower()) ->
                 OK //Handle later
             |x when x.StartsWith("event_target:") ->
                 OK //Handle later
             |x ->
-                match List.tryFind (fun (e, b) -> e.name = x ) triggers with
-                |Some (_, true) -> OK
-                |Some (t, false) -> Invalid [node, sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", ")]
-                |None -> Invalid [node, (sprintf "unknown trigger %s used." x)]
+                match changeScope x scope with
+                |NewScope s -> valNodeTriggers root triggers effects s node
+                |WrongScope ss -> Invalid [node, sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")]
+                |NotFound ->
+                    match List.tryFind (fun (e, b) -> e.name = x ) triggers with
+                    |Some (_, true) -> OK
+                    |Some (t, false) -> Invalid [node, sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", ")]
+                    |None -> Invalid [node, (sprintf "unknown trigger %s used." x)]
         |_ -> OK
 
     and valEventEffect (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (effect : Both) =
@@ -97,13 +99,15 @@ module STLValidation =
             match node.Key with
             |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains x ->
                 valNodeTriggers root triggers effects scope node
-            |x when changeScope x scope |> Option.isSome ->
-                valNodeEffects root triggers effects ((changeScope x scope) |> (fun f -> f.Value)) node
             |x ->
-                match List.tryFind (fun (e, b) -> e.name = x) effects with
-                |Some(_, true) -> OK
-                |Some (t, false) -> Invalid [node, sprintf "%s effect used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", ")]
-                |None -> OK//Invalid [node, (sprintf "unknown effect %s used." node.Key)]
+                match changeScope x scope with
+                |NewScope s -> valNodeEffects root triggers effects s node
+                |WrongScope ss -> Invalid [node, sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", ")]
+                |NotFound ->
+                    match List.tryFind (fun (e, b) -> e.name = x) effects with
+                    |Some(_, true) -> OK
+                    |Some (t, false) -> Invalid [node, sprintf "%s effect used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", ")]
+                    |None -> OK//Invalid [node, (sprintf "unknown effect %s used." node.Key)]
         |_ -> OK
     
     and valNodeTriggers (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (node : Node) =

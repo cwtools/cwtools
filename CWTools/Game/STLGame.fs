@@ -8,6 +8,7 @@ open CWTools.Process.STLProcess
 open CWTools.Validation.STLValidation
 open CWTools.Validation.ValidationCore
 open System.Text
+open FSharp.Collections.ParallelSeq
 
 
 type FileResult =
@@ -119,7 +120,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
                 match f with
                 |Success(parsed, _, _) -> Pass(k, parsed, t)
                 |Failure(msg, _,_) -> Fail(k, msg, t)
-            allFiles |> List.map ((fun (k, f) -> f, (fun t -> duration (fun () -> CKParser.parseFile t)) f) >> matchResult)
+            allFiles |> PSeq.map ((fun (k, f) -> f, (fun t -> duration (fun () -> CKParser.parseFile t)) f) >> matchResult)
+                     |> PSeq.toList
 
         let entities = parseResults 
                         |> List.choose (function |Pass(f,parsed,t) -> Some (f,parsed,t) |_ -> None) 
@@ -128,13 +130,17 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
         let flatEntities = entities |> List.map (fun n -> n.Children) |> List.collect id
 
         let scriptedTriggers = 
-            parseResults
-            |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some (f, p, t) |_ -> None)
-            //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
-            |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
-            |> List.collect (fun n -> n.Children)
-            |> List.rev
-            |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) triggers
+            let rawTriggers = 
+                parseResults
+                |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some (f, p, t) |_ -> None)
+                //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
+                |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+                |> List.collect (fun n -> n.Children)
+                |> List.rev
+            let firstPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) triggers
+            let secondPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) firstPass
+            secondPass
+
 
         let scriptedEffects =
             parseResults

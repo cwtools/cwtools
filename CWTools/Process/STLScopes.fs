@@ -17,21 +17,23 @@ module STLScopes =
         |War
         |Tile
         |Any
+
     let allScopes = [
-        Planet;
-        Country;
-        Fleet;
-        Pop;
-        GalacticObject;
-        Leader;
-        Species;
-        PopFaction;
-        Sector;
-        Ship;
-        Army;
-        AmbientObject;
-        War;
-        Tile]
+            Planet;
+            Country;
+            Fleet;
+            Pop;
+            GalacticObject;
+            Leader;
+            Species;
+            PopFaction;
+            Sector;
+            Ship;
+            Army;
+            AmbientObject;
+            War;
+            Tile
+            ]
     let parseScope =
         function    
         |"planet" -> Scope.Planet
@@ -57,10 +59,12 @@ module STLScopes =
         |"alliance" -> Scope.Country
         |"megastructure" -> Scope.Ship
         |x -> failwith ("unexpected scope" + x.ToString())
+
     let parseScopes =
         function
         |"all" -> allScopes
         |x -> [parseScope x]
+
     let scopes =
         ["every_country", Scope.Any, Scope.Country
         ;"every_pop", Scope.Any, Scope.Pop
@@ -154,10 +158,47 @@ module STLScopes =
         ;"tile", Scope.Pop, Scope.Tile //? Added manually
         ;"species", Scope.Leader, Scope.Species //? Added manually
         ;"species", Scope.Ship, Scope.Species //? Added manually
+        ;"owner", Scope.Fleet, Scope.Country //?Added manually
+        ;"owner", Scope.Country, Scope.Country //?Added manually
+        ;"any_owned_ship", Scope.Fleet, Scope.Ship //?Added manually
+        ;"solar_system", Scope.Fleet, Scope.GalacticObject //?Added manually
+        ;"random_owned_pop", Scope.Planet, Scope.Pop //?Added manually
+        ;"any_owned_pop", Scope.Planet, Scope.Pop //?Added manually
+        ;"every_owned_pop", Scope.Planet, Scope.Pop//?added manually
+        ;"leader", Scope.Fleet, Scope.Leader //?Added manually
+        ;"planet", Scope.Planet, Scope.Planet //?orbit?
+        ;"species", Scope.Planet, Scope.Species //?Added manually
+        ;"solar_system", Scope.Ship, Scope.GalacticObject //?Added manually
+        ;"leader", Scope.Ship, Scope.Leader //?Added manually
+        ;"closest_system", Scope.GalacticObject, Scope.GalacticObject //?Added manually
+        ;"home_planet", Scope.Country, Scope.Planet//?Added manually
+        ;"closest_system", Scope.Ship, Scope.GalacticObject//?Added manually
+        ;"solar_system", Scope.AmbientObject, Scope.GalacticObject//?Added manually
+        ;"species", Scope.Pop, Scope.Species //?Added manually
+        ;"leader", Scope.Planet, Scope.Leader //?Added manually
+        ;"closest_system", Scope.Planet, Scope.GalacticObject //?Added manually
+        ;"closest_system", Scope.Country, Scope.GalacticObject //?Added manually
+        ;"species", Scope.Country, Scope.Species //?Added manuallu
+
         ]
-    let changeScope (scope : string) source = scopes 
-                                                |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
-                                                |> Option.bind (fun (_, _, d) -> Some d)
+
+    type ScopeResult =
+        | NewScope of newScope : Scope
+        | WrongScope of expected : Scope list
+        | NotFound
+
+    let changeScope (scope : string) source = 
+        let possibles = scopes |> List.filter (fun (n, _, _) -> n.ToLower() = scope.ToLower())
+        let exact = possibles |> List.tryFind (fun (_, s, _) -> s = source || s = Scope.Any)
+        let possiblesScopes = possibles |> List.map (fun (_, s, _) -> s)
+        match possiblesScopes, exact with
+        | [], _ -> NotFound
+        | _, Some (_, _, d) -> NewScope d
+        | ss, None -> WrongScope ss
+
+    // let changeScope (scope : string) source = scopes 
+    //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
+    //                                             |> Option.bind (fun (_, _, d) -> Some d)
     let sourceScope (scope : string) = scopes
                                     |> List.choose (function | (n, s, _) when n.ToLower() = scope.ToLower() -> Some s |_ -> None)
                                     |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
