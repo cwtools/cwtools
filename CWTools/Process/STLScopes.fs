@@ -113,6 +113,7 @@ module STLScopes =
         ;"solar_system", Scope.Planet, Scope.GalacticObject //More
         ;"any_ship", Scope.Fleet, Scope.Ship
         ;"orbit", Scope.Fleet, Scope.Planet
+        ;"orbit", Scope.Ship, Scope.Planet
         ;"best_tile_for_pop", Scope.Planet, Scope.Tile
         ;"every_spaceport", Scope.Planet, Scope.Ship //?
         ;"every_planet_army", Scope.Planet, Scope.Army
@@ -125,7 +126,7 @@ module STLScopes =
         ;"any_tile", Scope.Planet, Scope.Tile
         ;"orbital_deposit_tile", Scope.Planet, Scope.Tile
         ;"observation_outpost_owner", Scope.Planet, Scope.Country
-        ;"observation_outpost", Scope.Planet, Scope.Ship //?
+        ;"observation_outpost", Scope.Planet, Scope.Fleet //?
         ;"closest_system", Scope.Fleet, Scope.GalacticObject
         ;"pop_faction", Scope.Pop, Scope.PopFaction
         ;"planet", Scope.Pop, Scope.Planet
@@ -148,7 +149,12 @@ module STLScopes =
         ;"random_neighboring_tile", Scope.Tile, Scope.Tile
         ;"any_neighboring_tile", Scope.Tile, Scope.Tile
         ;"any_attacker", Scope.War, Scope.Country
-        ;"any_defender", Scope.War, Scope.Country]
+        ;"any_defender", Scope.War, Scope.Country
+        ;"pop", Scope.Tile, Scope.Pop //? Added manually
+        ;"tile", Scope.Pop, Scope.Tile //? Added manually
+        ;"species", Scope.Leader, Scope.Species //? Added manually
+        ;"species", Scope.Ship, Scope.Species //? Added manually
+        ]
     let changeScope (scope : string) source = scopes 
                                                 |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
                                                 |> Option.bind (fun (_, _, d) -> Some d)

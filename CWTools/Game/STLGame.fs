@@ -175,7 +175,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
 
         let validateEvents =
             let events = flatEntities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) e) <&&> (valEventEffects (effects @ scriptedEffects) e))
+            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) (effects @ scriptedEffects) e) <&&> (valEventEffects (triggers @ scriptedTriggers) (effects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)

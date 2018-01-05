@@ -7,8 +7,10 @@ open CWTools.Process
 open CWTools.Process.STLScopes
 
 module STLProcess =
- 
-    
+    let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
+    let toTriggerBlockKeys = ["limit"]
+    let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
+    let toEffectBlockKeys = ["hidden_effect"; "if"; "else"]
 
 
     let rec scriptedTriggerScope (strict : bool) (effects : (string * Scope list) list) (triggers : (string * Scope list) list) (root : string) (node : Node) =
