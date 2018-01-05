@@ -149,7 +149,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
             |> List.collect (fun n -> n.Children)
             |> List.rev
-            |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es triggers e)::es) effects
+            |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es scriptedTriggers e)::es) effects
                       
 
         let findDuplicates (sl : Statement list) =

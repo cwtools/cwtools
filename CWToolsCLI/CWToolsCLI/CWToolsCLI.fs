@@ -104,7 +104,7 @@ module CWToolsCLI =
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
-        | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" gameObj.validationErrorList
+        | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" gameObj.validationErrorList; printfn "%A" (gameObj.parserErrorList.Length + gameObj.validationErrorList.Length)
         | _ -> failwith "Unexpected validation type"
 
     [<EntryPoint>]

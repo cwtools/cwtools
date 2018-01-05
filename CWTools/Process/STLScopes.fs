@@ -179,6 +179,9 @@ module STLScopes =
         ;"closest_system", Scope.Planet, Scope.GalacticObject //?Added manually
         ;"closest_system", Scope.Country, Scope.GalacticObject //?Added manually
         ;"species", Scope.Country, Scope.Species //?Added manuallu
+        ;"last_created_ship", Scope.Any, Scope.Ship //?Added manually
+        ;"random_owned_ship", Scope.Fleet, Scope.Ship //?Added manually
+        ;"ruler", Scope.Country, Scope.Leader//?Added manually
 
         ]
 

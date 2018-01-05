@@ -9,9 +9,18 @@ open CWTools.Process.STLScopes
 module STLProcess =
     let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
     let toTriggerBlockKeys = ["limit"]
-    let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
+    let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
+                        "CAPITAL_SCOPE"]//Added used in STH]
+    let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
     let toEffectBlockKeys = ["hidden_effect"; "if"; "else"]
-
+    let ignoreKeys = ["count"; "min_steps"; "max_steps"]
+    let rec isTargetKey =
+        function
+        |"" -> true
+        |x ->
+            match targetKeys |> List.tryFind (fun f -> x.ToLower().StartsWith(f.ToLower()))  with
+            |Some s -> if s.Length = x.Length then true else isTargetKey (x.Substring(s.Length + 1))
+            |None -> false
 
     let rec scriptedTriggerScope (strict : bool) (effects : (string * Scope list) list) (triggers : (string * Scope list) list) (root : string) (node : Node) =
         let targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV"]
