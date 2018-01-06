@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CWTools\CWTools.fsproj">
+    <ProjectReference Include="..\CWTools\CWTools.fsproj">
       <Name>CWTools.fsproj</Name>
     </ProjectReference>
   </ItemGroup>
@@ -12,7 +12,8 @@
     <Compile Include="Validator.fs" />
     <Compile Include="CWToolsCLI.fs" />
     <None Include="App.config" />
+    <EmbeddedResource Include="../CWTools/files/**"/>
   </ItemGroup>
   <Import Project="fsc.props" />
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

@@ -3,7 +3,10 @@ open System.Text
 open CWTools.Common
 open System.IO
 open CWTools.Parser
+open CWTools
 open FParsec
+open System.Diagnostics.Tracing
+open System.Reflection
 
 module CWToolsCLI =
     open Argu
@@ -52,6 +55,7 @@ module CWToolsCLI =
         | Game of Game
         | Scope of CWTools.Games.FilesScope
         | ModFilter of string
+        | DocsPath of string
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
         | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
 
@@ -65,15 +69,23 @@ module CWToolsCLI =
                 | List _ -> "List things"
                 | Scope _ -> "which files to include"
                 | ModFilter _ -> "filter to mods with this in name"
+                | DocsPath _ -> "path to a custom trigger_docs game.log file"
 
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
-    let list game directory scope modFilter (results : ParseResults<ListArgs>) =
-        let triggers = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_triggers (1).txt"
-        let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
-        let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
-        let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
-        let gameObj = STL(directory, scope, modFilter, t, e)
+    let getEffectsAndTriggers docsPath =
+        let docsParsed = 
+            match docsPath with
+            | Some path -> DocsParser.parseDocsFile path
+            | None ->                 
+                DocsParser.parseDocsStream (Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt"))
+        match docsParsed with
+        |Success(p, _, _) -> p 
+        |Failure(msg,_,_) -> failwith ("docs parsing failed with " + msg)
+
+    let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
+        let triggers, effects = getEffectsAndTriggers docsPath
+        let gameObj = STL(directory, scope, modFilter, triggers, effects)
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -89,18 +101,14 @@ module CWToolsCLI =
             let t = gameObj.scriptedTriggerList
             printfn "%A" t
         | ListTypes.Effects ->
-            let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
-            let t = effects |>  (function |Success(p, _, _) -> p |_ -> [])
+            let t = gameObj.scriptedEffectList
             printfn "%A" t
         | _ -> failwith "Unexpected list type"
 
-    let validate game directory scope modFilter (results : ParseResults<_>) =
-        let triggers = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_triggers (1).txt"
-        let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
-        let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
-        let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
+    let validate game directory scope modFilter docsPath (results : ParseResults<_>) =
+        let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope, modFilter, t, e)
+        let gameObj = STL(directory, scope, modFilter, triggers, effects)
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
@@ -116,9 +124,10 @@ module CWToolsCLI =
         let game = results.GetResult <@ Game @>
         let scope = results.GetResult <@ Scope @>
         let modFilter = results.GetResult(<@ ModFilter @>, defaultValue = "")
+        let docsPath = results.TryGetResult <@ DocsPath @>
         match results.GetSubCommand() with
-        | List r -> list game directory scope modFilter r
-        | Validate r -> validate game directory scope modFilter r
+        | List r -> list game directory scope modFilter docsPath r
+        | Validate r -> validate game directory scope modFilter docsPath r
         | Directory _
         | Game _ -> failwith "internal error: this code should never be reached"
         
