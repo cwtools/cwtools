@@ -85,7 +85,7 @@ module CKParser =
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
     let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-']
-    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@'] @ ['š'; 'Š'; '’'])
+    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''] @ ['š'; 'Š'; '’'])
 
 
     // Utility parsers
@@ -132,7 +132,7 @@ module CKParser =
 
     do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> valueS <?> "value"
     
-    do keyvalueimpl := pipe3 (getPosition) (key .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
+    do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))
     //let all = ws >>. attempt (many statement) <|> (many1 ((value |>> Value) <|> (comment |>> Comment))) .>> eof
     let all = ws >>. many statement .>> eof
