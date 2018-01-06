@@ -92,7 +92,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
             let returnValue = f()
             (returnValue  , timer.ElapsedMilliseconds)  
 
-        let mods = Directory.EnumerateFiles (gameDirectory + "/mod") 
+        let mods = if not (Directory.Exists (gameDirectory + "/mod")) then [] else
+                    Directory.EnumerateFiles (gameDirectory + "/mod") 
                         |> List.ofSeq
                         |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                         |> List.map CKParser.parseFile

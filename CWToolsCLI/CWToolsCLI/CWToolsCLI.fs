@@ -69,9 +69,9 @@ module CWToolsCLI =
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
     let list game directory scope modFilter (results : ParseResults<ListArgs>) =
-        let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+        let triggers = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_triggers (1).txt"
         let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
-        let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+        let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
         let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
         let gameObj = STL(directory, scope, modFilter, t, e)
         let sortOrder = results.GetResult <@ Sort @>
@@ -89,15 +89,15 @@ module CWToolsCLI =
             let t = gameObj.scriptedTriggerList
             printfn "%A" t
         | ListTypes.Effects ->
-            let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+            let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
             let t = effects |>  (function |Success(p, _, _) -> p |_ -> [])
             printfn "%A" t
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter (results : ParseResults<_>) =
-        let triggers = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_triggers (1).txt"
+        let triggers = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_triggers (1).txt"
         let t = triggers |>  (function |Success(p, _, _) -> p |_ -> [])
-        let effects = DocsParser.parseDocs "C:\Users\Jennifer\Documents\Thomas\CK2Events\CK2EventsTests\game_effects (1).txt"
+        let effects = DocsParser.parseDocs "G:\Projects\CK2 Events\CK2EventsTests\game_effects (1).txt"
         let e = effects |>  (function |Success(p, _, _) -> p |Failure(msg,_,_) -> failwith msg)
         let valType = results.GetResult <@ ValType @>
         let gameObj = STL(directory, scope, modFilter, t, e)
