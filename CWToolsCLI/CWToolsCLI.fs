@@ -50,6 +50,13 @@ module CWToolsCLI =
             member s.Usage =
                 match s with
                 | ValType _ -> "Which errors to output"
+    type ParseArgs =
+        | [<MainCommand; ExactlyOnce; Last>] File of string
+    with
+        interface IArgParserTemplate with
+            member s.Usage =
+                match s with
+                |File _ -> "file to parse"
     type Arguments =
         | Directory of path : string
         | Game of Game
@@ -58,6 +65,7 @@ module CWToolsCLI =
         | DocsPath of string
         | [<CliPrefix(CliPrefix.None)>] Validate of ParseResults<ValidateArgs>
         | [<CliPrefix(CliPrefix.None)>] List of ParseResults<ListArgs>
+        | [<CliPrefix(CliPrefix.None)>] Parse of ParseResults<ParseArgs>
 
     with
         interface IArgParserTemplate with
@@ -70,6 +78,7 @@ module CWToolsCLI =
                 | Scope _ -> "which files to include"
                 | ModFilter _ -> "filter to mods with this in name"
                 | DocsPath _ -> "path to a custom trigger_docs game.log file"
+                | Parse _ -> "parse a file"
 
     let parser = ArgumentParser.Create<Arguments>(programName = "CWToolsCLI.exe", errorHandler = new Exiter())
 
@@ -114,6 +123,11 @@ module CWToolsCLI =
         | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
         | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" gameObj.validationErrorList; printfn "%A" (gameObj.parserErrorList.Length + gameObj.validationErrorList.Length)
         | _ -> failwith "Unexpected validation type"
+
+    let parse file =
+        match CKParser.parseFile file with
+        |Success(_,_,_) -> true, ""
+        |Failure(msg,_,_) -> false, msg
 
     [<EntryPoint>]
     let main argv =

@@ -13,7 +13,7 @@ open FSharp.Collections.ParallelSeq
 
 type FileResult =
     |Pass of string * Statement list * int64
-    |Fail of string * string * int64
+    |Fail of string * string * Position * int64
     
 type FilesScope =
     |All
@@ -120,8 +120,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
             let matchResult (k, (f, t)) = 
                 match f with
                 |Success(parsed, _, _) -> Pass(k, parsed, t)
-                |Failure(msg, _,_) -> Fail(k, msg, t)
-            allFiles |> PSeq.map ((fun (k, f) -> f, (fun t -> duration (fun () -> CKParser.parseFile t)) f) >> matchResult)
+                |Failure(msg, pe,_) -> Fail(k, msg, pe.Position, t)
+            allFiles |> PSeq.map ((fun (k, f) -> f, (fun t -> duration (fun () -> CKParser.parseFile t)) (Path.GetFullPath(f))) >> matchResult)
                      |> PSeq.toList
 
         let entities = parseResults 
@@ -173,7 +173,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
                   |> List.map (fun (n, s) -> n :> Node , s)
 
         let parseErrors = parseResults
-                        |> List.choose (function |Fail(f,e,t) -> Some (f,e) |_ -> None)
+                        |> List.choose (function |Fail(f,e,p,t) -> Some (f,e,p) |_ -> None)
                         
         let validateFiles =
             entities |> List.map validateVariables
@@ -197,7 +197,7 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
         //member __.ValidationWarnings = warningsAll
         member __.Entities = entities
         member __.Folders = allFolders
-        member __.AllFiles = parseResults |> List.map (function |Fail(f,_,t) -> (f, false, t) |Pass(f,_,t) -> (f, true, t))
+        member __.AllFiles = parseResults |> List.map (function |Fail(f,_,_,t) -> (f, false, t) |Pass(f,_,t) -> (f, true, t))
         member __.ScripteTriggers = scriptedTriggers
         member __.ScriptedEffects = scriptedEffects
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )

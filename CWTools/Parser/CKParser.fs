@@ -8,6 +8,7 @@ type Position = Position of FParsec.Position with
     override x.ToString() = let (Position p) = x in sprintf "Position (Ln: %i, Pos: %i, File: %s)" p.Line p.Column p.StreamName
     static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
     static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
+    static member Conv(pos : FParsec.Position) = Position (pos)
 
 type Key =
     | Key of string
@@ -149,7 +150,7 @@ module CKParser =
     let parseFile (filepath : string) =
         let stream = new CharStream<unit>(filepath, System.Text.Encoding.GetEncoding(1252))
         stream.UserState <- ()
-        stream.Name <- Path.GetFileName(filepath)
+        stream.Name <- filepath
         applyParser all stream
 
 
