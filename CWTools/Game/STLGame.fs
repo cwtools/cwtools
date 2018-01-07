@@ -135,18 +135,23 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
                         |> List.filter (fun file -> Path.GetExtension(file) = ".txt")
             List.map getAllFiles allFolders |> List.collect id
 
-        let parseResults files = 
-            let matchResult (file, (parseResult, time)) = 
+        let matchResult (file, (parseResult, time)) = 
                 match parseResult with
                 |Success(parsed, _, _) -> Pass (file, {statements = parsed; parseTime = time})
                 |Failure(msg, pe,_) -> Fail(file, {error = msg; position = pe.Position; parseTime =  time})
-            files |> PSeq.map ((fun file -> file, (fun t -> duration (fun () -> CKParser.parseFile t)) (Path.GetFullPath(file))) >> matchResult)
+        let parseResults files = 
+            files |> PSeq.map ((fun file -> file, (fun t -> duration (fun () -> CKParser.parseFile t)) ((file))) >> matchResult)
                      |> PSeq.toList
+                
+        let parseEntities validfiles =
+            validfiles
+            |> List.choose (function |(file, parsed) -> Some (file, parsed.statements, parsed.parseTime) |_ -> None) 
+            |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
 
-        let entities() = validFiles()
-                        |> List.choose (function |(file, parsed) -> Some (file, parsed.statements, parsed.parseTime) |_ -> None) 
-                        //|> List.collect id
-                        |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+        // let entities() = validFiles()
+        //                 |> List.choose (function |(file, parsed) -> Some (file, parsed.statements, parsed.parseTime) |_ -> None) 
+        //                 //|> List.collect id
+        //                 |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         //let flatEntities() = entities() |> List.map (fun n -> n.Children) |> List.collect id
 
         let scriptedTriggers() = 
@@ -208,20 +213,29 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)
 
-        let validateAll()  = 
-            let es = entities()
+        let validateAll (entities : (string * PassFileResult) list)  = 
+            let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
+
+        let updateFile file =
+            eprintfn "%s" file
+            let newFiles = parseResults [file] 
+            files <- newFiles |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> List.fold (fun x s -> x.Add(s)) files
+            let valid = newFiles |> List.choose  (function  | Pass (f, r) -> Some ((f, r)) |_ -> None)
+            validateAll valid
 
         do files <- parseResults allFilesByPath |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> Map.ofList
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
-        member __.ValidationErrors = (validateAll())
+        member __.ValidationErrors = (validateAll (validFiles()))
         //member __.ValidationWarnings = warningsAll
-        member __.Entities = entities
         member __.Folders = allFolders
         member __.AllFiles = files |> Map.toList |> List.map (snd >> (function |(Fail (file, result)) -> (file, false, result.parseTime) |Pass(file, result) -> (file, true, result.parseTime)))
         member __.ScripteTriggers = scriptedTriggers
         member __.ScriptedEffects = scriptedEffects
+        member __.UpdateFile file = updateFile file
+
+
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
