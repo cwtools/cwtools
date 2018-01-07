@@ -28,8 +28,9 @@ module Validator =
     type STL (dir : string, scope : CWTools.Games.FilesScope, modFilter : string, triggers : Effect list, effects : Effect list) =
         let game = STLGame(dir, scope, modFilter, triggers, effects)
         let validationErrors = game.ValidationErrors
+        let parserErrors = game.ParserErrors
         member val folders = game.Folders
-        member val parserErrorList = game.ParserErrors |> List.map (fun (f, e, p) -> {file = f; error = e})
+        member val parserErrorList = parserErrors |> List.map (fun (f, e, p) -> {file = f; error = e})
         member val validationErrorList = validationErrors |> List.map (fun (s,e) -> {category = s.GetType().Name ; error = e; position = s.Position.ToString()})
         member val allFileList = game.AllFiles |> List.map (fun (f, p, t) -> {file = f; pass = p; time = t})
         member val scriptedTriggerList = game.ScripteTriggers
