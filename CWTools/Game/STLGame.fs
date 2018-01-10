@@ -10,6 +10,7 @@ open CWTools.Validation.ValidationCore
 open System.Text
 open FSharp.Collections.ParallelSeq
 open System.Collections.Generic
+open FSharpPlus
 
 
 type PassFileResult = {
@@ -24,6 +25,7 @@ type FailFileResult = {
 type FileResult =
     |Pass of file : string * result : PassFileResult
     |Fail of file : string * result : FailFileResult
+    |Embedded of file : string * statements : Statement list
     
 type FilesScope =
     |All
@@ -32,7 +34,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -109,23 +111,60 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
         let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, r) -> Some ((f, r)) |_ -> None))
         let invalidFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Fail (f, r) -> Some ((f, r)) |_ -> None))
 
+        let mutable scriptedTriggers : Effect list = []
+        let mutable scriptedEffects : Effect list = []
 
-        let mods = if not (Directory.Exists (gameDirectory + "/mod")) then [] else
-                    Directory.EnumerateFiles (gameDirectory + "/mod") 
+        let rec getAllFolders dirs =
+            if Seq.isEmpty dirs then Seq.empty else
+                seq { yield! dirs |> Seq.collect Directory.EnumerateDirectories
+                      yield! dirs |> Seq.collect Directory.EnumerateDirectories |> getAllFolders }
+        let getAllFoldersUnion dirs =
+            seq { 
+                yield! dirs
+                yield! getAllFolders dirs
+            }
+        let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
+        let gameDirectory = 
+            allDirs |> List.iter (fun (a, b) -> eprintfn "%s %s" a b)
+            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> map fst
+            match dir with
+            |Some s -> eprintfn "Found stellaris directory at %s" s
+            |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
+            dir
+        let mods = 
+            let getModFiles modDir =
+                Directory.EnumerateFiles (modDir) 
                         |> List.ofSeq
                         |> List.filter (fun f -> Path.GetExtension(f) = ".mod")
                         |> List.map CKParser.parseFile
                         |> List.choose ( function | Success(p, _, _) -> Some p | _ -> None )
-                        |> List.map ((ProcessCore.processNodeBasic "mod" Position.Empty) >> (fun s -> s.TagText "name", s.TagText "path"))
+                        |> List.map ((ProcessCore.processNodeBasic "mod" Position.Empty) >> (fun s -> s.TagText "name", s.TagText "path", modDir))
 
-        let modFolders = mods |> List.filter (fun (n, _) -> n.Contains(modFilter)) |> List.map (fun (n, p) -> n, (gameDirectory + "/" + p))
+
+            let modDirs = allDirs |> List.filter(fun (path, folder) -> folder.ToLower() = "mod" || folder.ToLower() = "mods")
+            match modDirs with
+            | [] -> eprintfn "%s" "Didn't find any mod directories" 
+            | x ->
+                eprintfn "Found %i mod directories:" x.Length
+                x |> List.iter (fun d -> eprintfn "%s" (fst d))
+            let modFiles = modDirs |> List.collect (fst >> getModFiles)
+            match modFiles with
+            | [] -> eprintfn "%s" "Didn't find any mods"
+            | x -> 
+                eprintfn "Found %i mods:" x.Length
+                x |> List.iter (fun (n, p, d) -> eprintfn "%s, %s" n p)
+            modFiles
+        let modFolders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
+                              |> map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (r + (string Path.DirectorySeparatorChar) + p))
         
         let allFolders = 
-            match scope with
-            |All -> gameDirectory :: (modFolders |> List.map snd)
-            |Mods -> (modFolders |> List.map snd)
-            |Vanilla -> [gameDirectory]
+            match gameDirectory, scope with
+            |None, _ -> (modFolders |> List.map snd)
+            |Some s, All -> s :: (modFolders |> List.map snd)
+            |_, Mods -> (modFolders |> List.map snd)
+            |Some s, Vanilla -> [s]
        
+        let getEmbeddedFiles = embeddedFiles |> map (fun (fn, f) -> "embeddedfiles." + fn, f)
         let allFilesByPath = 
             let getAllFiles path =
                 scriptFolders
@@ -133,20 +172,26 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
                         >> (fun folder -> folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (folder, files) -> files )
                         |> List.filter (fun file -> Path.GetExtension(file) = ".txt")
-            List.map getAllFiles allFolders |> List.collect id
+            let allFiles = map getAllFiles allFolders |> List.collect id |> map (fun f -> f, File.ReadAllText f)
+            allFiles
 
-        let matchResult (file, (parseResult, time)) = 
-                match parseResult with
-                |Success(parsed, _, _) -> Pass (file, {statements = parsed; parseTime = time})
-                |Failure(msg, pe,_) -> Fail(file, {error = msg; position = pe.Position; parseTime =  time})
+        let matchResult (file : string, (parseResult, time)) = 
+                match file, parseResult with
+                |file, Success(parsed, _, _) when file.Contains("embeddedfiles.") -> Embedded(file, parsed)
+                |file, Failure(msg, pe, _) when file.Contains("embeddedfiles.") -> failwith ("Embedded file failed: " + file + msg)
+                |file, Success(parsed, _, _) -> Pass (file, {statements = parsed; parseTime = time})
+                |file, Failure(msg, pe,_) -> Fail(file, {error = msg; position = pe.Position; parseTime =  time})
         let parseResults files = 
-            files |> PSeq.map ((fun file -> file, (fun t -> duration (fun () -> CKParser.parseFile t)) ((file))) >> matchResult)
+            files |> PSeq.map ((fun (file, fileString) -> file, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (file, fileString)) >> matchResult)
                      |> PSeq.toList
                 
         let parseEntities validfiles =
             validfiles
-            |> List.choose (function |(file, parsed) -> Some (file, parsed.statements, parsed.parseTime) |_ -> None) 
+            |> List.map (fun (file, parsed) -> (file, parsed.statements, parsed.parseTime))
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+
+        let embeddedParsed = parseResults getEmbeddedFiles
+            
 
         // let entities() = validFiles()
         //                 |> List.choose (function |(file, parsed) -> Some (file, parsed.statements, parsed.parseTime) |_ -> None) 
@@ -154,28 +199,29 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
         //                 |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         //let flatEntities() = entities() |> List.map (fun n -> n.Children) |> List.collect id
 
-        let scriptedTriggers() = 
+        let updateScriptedTriggers (validfiles : (string * Statement list) list ) = 
             let rawTriggers = 
-                validFiles()
-                |> List.choose (function |(file, parsed) when file.Contains("scripted_triggers") -> Some (file, parsed.statements, parsed.parseTime) |_ -> None)
+                validfiles
+                |> List.choose (function |(file, statements) when file.Contains("scripted_triggers") -> Some (file, statements) |_ -> None)
                 //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
-                |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
+                |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
             let firstPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) triggers
             let secondPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) firstPass
-            secondPass
+            scriptedTriggers <- secondPass
 
 
-        let scriptedEffects() =
-            let scriptedTriggers = scriptedTriggers()
-            validFiles()
-            |> List.choose (function |(file, parsed) when file.Contains("scripted_effects") -> Some (file, parsed.statements, parsed.parseTime) |_ -> None)
-            //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
-            |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
-            |> List.collect (fun n -> n.Children)
-            |> List.rev
-            |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es scriptedTriggers e)::es) effects
+        let updateScriptedEffects (validfiles : (string * Statement list) list ) =
+            let effects = 
+                validfiles
+                |> List.choose (function |(file, statements) when file.Contains("scripted_effects") -> Some (file, statements) |_ -> None)
+                //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
+                |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
+                |> List.collect (fun n -> n.Children)
+                |> List.rev
+                |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es scriptedTriggers e)::es) effects
+            scriptedEffects <- effects
                       
 
         let findDuplicates (sl : Statement list) =
@@ -206,8 +252,8 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
 
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            let scriptedTriggers = scriptedTriggers()
-            let scriptedEffects = scriptedEffects()
+            let scriptedTriggers = scriptedTriggers
+            let scriptedEffects = scriptedEffects
             events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) (effects @ scriptedEffects) e) <&&> (valEventEffects (triggers @ scriptedTriggers) (effects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
@@ -218,14 +264,24 @@ type STLGame ( gameDirectory : string, scope : FilesScope, modFilter : string, t
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
 
-        let updateFile file =
-            eprintfn "%s" file
-            let newFiles = parseResults [file] 
+        let updateFile filepath =
+            eprintfn "%s" filepath
+            let file = File.ReadAllText filepath
+            let newFiles = parseResults [(filepath, file)] 
             files <- newFiles |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> List.fold (fun x s -> x.Add(s)) files
             let valid = newFiles |> List.choose  (function  | Pass (f, r) -> Some ((f, r)) |_ -> None)
             validateAll valid
 
-        do files <- parseResults allFilesByPath |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> Map.ofList
+        do 
+            files <- parseResults allFilesByPath |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> Map.ofList
+            let embedded =  (embeddedParsed |> List.choose (function |Embedded (f, s) -> Some (f, s) |_ -> None))
+            let user = (validFiles() |> map (fun (fn, pf) -> fn, pf.statements))
+            let coreFiles = 
+                match gameDirectory with
+                |Some _ -> user
+                |None -> user @ embedded
+            updateScriptedTriggers (coreFiles)
+            updateScriptedEffects (coreFiles)
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()

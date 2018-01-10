@@ -22,3 +22,4 @@ nuget System.Text.Encoding.CodePages
 nuget FAKE
 nuget Argu
 nuget FSharp.Collections.ParallelSeq
+nuget FSharpPlus
