@@ -158,3 +158,22 @@ module STLValidation =
                 v |> List.fold (<&&>) OK
             |None -> OK
         imm <&&> aft
+
+    /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
+    /// Not mandatory, but performance reasons, suggested by Caligula
+    /// Check "mean_time_to_happen", "is_triggered_only", "fire_only_once" and "trigger = { always = no }".
+    /// Create issue if none are true
+    let valEventVals (event : Event) =
+        let isMTTH = event.Has "mean_time_to_happen"
+        let isTrig = event.Has "is_triggered_only"
+        let isOnce = event.Has "fire_only_once"
+        let isAlwaysNo = 
+            match event.Child "trigger" with
+            | Some t -> 
+                match t.Tag "always" with
+                | Some (Bool b) when b = false -> true
+                | _ -> false
+            | None -> false
+        match isMTTH || isTrig || isOnce || isAlwaysNo with
+        | false -> Invalid [(event :> Node), "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
+        | true -> OK

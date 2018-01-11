@@ -125,8 +125,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             }
         let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let gameDirectory = 
-            allDirs |> List.iter (fun (a, b) -> eprintfn "%s %s" a b)
-            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> map fst
+            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> map fst >>= (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
             |Some s -> eprintfn "Found stellaris directory at %s" s
             |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
@@ -154,9 +153,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 eprintfn "Found %i mods:" x.Length
                 x |> List.iter (fun (n, p, d) -> eprintfn "%s, %s" n p)
             modFiles
-        let modFolders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
-                              |> map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (r + (string Path.DirectorySeparatorChar) + p))
-        
+        let modFolders = 
+            let folders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
+                                |> map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
+            eprintfn "Mod folders"                            
+            folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
+            folders
+
         let allFolders = 
             match gameDirectory, scope with
             |None, _ -> (modFolders |> List.map snd)
@@ -254,12 +257,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = scriptedTriggers
             let scriptedEffects = scriptedEffects
-            events |> List.map (fun e -> (valEventTriggers (triggers @ scriptedTriggers) (effects @ scriptedEffects) e) <&&> (valEventEffects (triggers @ scriptedTriggers) (effects @ scriptedEffects) e))
+            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (triggers @ scriptedTriggers) (effects @ scriptedEffects) e) <&&> (valEventEffects (triggers @ scriptedTriggers) (effects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)
 
         let validateAll (entities : (string * PassFileResult) list)  = 
+            eprintfn "Validating %i files" (entities.Length)
             let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
@@ -273,6 +277,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             validateAll valid
 
         do 
+            eprintfn "Parsing %i files" allFilesByPath.Length
             files <- parseResults allFilesByPath |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> Map.ofList
             let embedded =  (embeddedParsed |> List.choose (function |Embedded (f, s) -> Some (f, s) |_ -> None))
             let user = (validFiles() |> map (fun (fn, pf) -> fn, pf.statements))

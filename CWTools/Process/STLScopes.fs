@@ -182,6 +182,8 @@ module STLScopes =
         ;"last_created_ship", Scope.Any, Scope.Ship //?Added manually
         ;"random_owned_ship", Scope.Fleet, Scope.Ship //?Added manually
         ;"ruler", Scope.Country, Scope.Leader//?Added manually
+        ;"sector", Scope.Planet, Scope.Sector//??Added manullay?
+        ;"root", Scope.Any, Scope.Any//??Added manullay?
 
         ]
 
