@@ -11,6 +11,7 @@ open System.Text
 open FSharp.Collections.ParallelSeq
 open System.Collections.Generic
 open FSharpPlus
+open CWTools.Localisation
 
 
 type PassFileResult = {
@@ -123,6 +124,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 yield! dirs
                 yield! getAllFolders dirs
             }
+        do eprintfn "%s %b" scopeDirectory (Directory.Exists scopeDirectory)
         let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let gameDirectory = 
             let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> map fst >>= (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
@@ -267,6 +269,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
+        
+        let localisationCheck (loc : ILocalisationAPI) (entities : (string * PassFileResult) list) =
+            eprintfn "Localisation check %i files" (entities.Length)
+            let es = entities |> parseEntities
+            let fes = es |> List.map (fun n -> n.Children) |> List.collect id
+            let events = fes |> List.choose (function | :? Event as e -> Some e |_ -> None)
+            events |> List.map (fun e -> valEventLocs e loc)
+                    |> List.choose (function |Invalid es -> Some es |_ -> None)
+                    |> List.collect id
 
         let updateFile filepath =
             eprintfn "%s" filepath
@@ -291,6 +302,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (validFiles()))
+        member __.LocalisationErrors(loc : ILocalisationAPI) = (localisationCheck loc (validFiles()))
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
         member __.AllFiles = files |> Map.toList |> List.map (snd >> (function |(Fail (file, result)) -> (file, false, result.parseTime) |Pass(file, result) -> (file, true, result.parseTime)))

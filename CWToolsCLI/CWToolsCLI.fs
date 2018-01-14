@@ -7,6 +7,8 @@ open CWTools
 open FParsec
 open System.Diagnostics.Tracing
 open System.Reflection
+open CWTools.Localisation
+open CWTools.Localisation.STLLocalisation
 
 module CWToolsCLI =
     open Argu
@@ -25,6 +27,7 @@ module CWToolsCLI =
         | Files = 2
         | Triggers = 3
         | Effects = 4
+        | Localisation = 5
     type ListSort =
         | Path = 1
         | Time = 2
@@ -43,6 +46,7 @@ module CWToolsCLI =
         | Warnings = 3
         | Info = 4
         | All = 5
+        | Localisation = 6
     type ValidateArgs =
         | [<MainCommand; ExactlyOnce; Last>] ValType of ValidateType
     with
@@ -94,7 +98,8 @@ module CWToolsCLI =
 
     let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
         let triggers, effects = getEffectsAndTriggers docsPath
-        let gameObj = STL(directory, scope, modFilter, triggers, effects)
+        let loc = STLLocalisationService({ folder = directory+"\\localisation"; language = CK2Lang.English}).Api
+        let gameObj = STL(directory, scope, modFilter, triggers, effects, loc)
         let sortOrder = results.GetResult <@ Sort @>
         match results.GetResult <@ ListType @> with
         | ListTypes.Folders -> printfn "%A" gameObj.folders
@@ -112,16 +117,21 @@ module CWToolsCLI =
         | ListTypes.Effects ->
             let t = gameObj.scriptedEffectList
             printfn "%A" t
+        | ListTypes.Localisation ->
+            printfn "%A" loc.GetKeys
         | _ -> failwith "Unexpected list type"
 
     let validate game directory scope modFilter docsPath (results : ParseResults<_>) =
         let  triggers, effects = getEffectsAndTriggers docsPath
         let valType = results.GetResult <@ ValType @>
-        let gameObj = STL(directory, scope, modFilter, triggers, effects)
+        let loc = STLLocalisationService({ folder = directory+"\\localisation"; language = CK2Lang.English}).Api
+        let gameObj = STL(directory, scope, modFilter, triggers, effects, loc)
         match valType with
         | ValidateType.ParseErrors -> printfn "%A" gameObj.parserErrorList
-        | ValidateType.Errors -> printfn "%A" gameObj.validationErrorList
-        | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" gameObj.validationErrorList; printfn "%A" (gameObj.parserErrorList.Length + gameObj.validationErrorList.Length)
+        | ValidateType.Errors -> printfn "%A" (gameObj.validationErrorList())
+        | ValidateType.Localisation -> 
+            printfn "%A" (gameObj.localisationErrorList)
+        | ValidateType.All -> printfn "%A" gameObj.parserErrorList;  printfn "%A" (gameObj.validationErrorList()); printfn "%A" (gameObj.parserErrorList.Length + (gameObj.validationErrorList().Length))
         | _ -> failwith "Unexpected validation type"
 
     let parse file =

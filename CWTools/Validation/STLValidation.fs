@@ -6,6 +6,7 @@ open CWTools.Process.ProcessCore
 open CWTools.Parser
 open CWTools.Process.STLScopes
 open System.ComponentModel.Design.Serialization
+open CWTools.Localisation
 
 module STLValidation =
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(ship, "must have name")] else OK
@@ -177,3 +178,16 @@ module STLValidation =
         match isMTTH || isTrig || isOnce || isAlwaysNo with
         | false -> Invalid [(event :> Node), "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
         | true -> OK
+
+
+    let checkLocKey (event : Event) key (keys : string list) =
+        match key = "" || key.Contains(" "), List.contains key keys with
+        | true, _ -> OK
+        | _, true -> OK
+        | _, false -> Invalid [(event :> Node), sprintf "Localisation key %s is not defined" key]
+    let valEventLocs (event : Event) (loc : ILocalisationAPI) =
+        let title = event.TagText "title"
+        let desc = event.TagText "desc"
+        let keys = loc.GetKeys
+        checkLocKey event title keys <&&> checkLocKey event desc keys
+        
