@@ -26,8 +26,8 @@ type FailFileResult = {
     parseTime : int64
 }
 type FileResult =
-    |Pass of file : string * result : PassFileResult
-    |Fail of file : string * result : FailFileResult
+    |Pass of file : string * scope : string * result : PassFileResult
+    |Fail of file : string * scope : string * result : FailFileResult
     |Embedded of file : string * statements : Statement list
     
 type FilesScope =
@@ -37,7 +37,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list, langs : Lang list ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -111,8 +111,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             (returnValue  , timer.ElapsedMilliseconds) 
 
         let mutable files : Map<string, FileResult> = Map.empty
-        let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, r) -> Some ((f, r)) |_ -> None))
-        let invalidFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Fail (f, r) -> Some ((f, r)) |_ -> None))
+        let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, s, r) -> Some ((f, s, r)) |_ -> None))
+        let invalidFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Fail (f, s, r) -> Some ((f, s, r)) |_ -> None))
+        let validatableFiles() = if validateVanilla then validFiles() else validFiles() |> List.filter (fun(f, s, r) -> s <> "vanilla")
 
         let mutable scriptedTriggers : Effect list = []
         let mutable scriptedEffects : Effect list = []
@@ -167,36 +168,36 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let allFolders = 
             match gameDirectory, scope with
-            |None, _ -> (modFolders |> List.map snd)
-            |Some s, All -> s :: (modFolders |> List.map snd)
-            |_, Mods -> (modFolders |> List.map snd)
-            |Some s, Vanilla -> [s]
+            |None, _ -> (modFolders)
+            |Some s, All -> ("vanilla", s) :: (modFolders)
+            |_, Mods -> (modFolders)
+            |Some s, Vanilla -> ["vanilla", s]
         let locFolders = allDirs |> List.filter(fun (path, folder) -> folder.ToLower() = "localisation")
         
-        let getEmbeddedFiles = embeddedFiles |> map (fun (fn, f) -> "embeddedfiles." + fn, f)
+        let getEmbeddedFiles = embeddedFiles |> map (fun (fn, f) -> "embedded", "embeddedfiles." + fn, f)
         let allFilesByPath = 
-            let getAllFiles path =
+            let getAllFiles (scope, path) =
                 scriptFolders
-                        |> List.map ((fun folder -> path + "/" + folder)
-                        >> (fun folder -> folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
-                        |> List.collect (fun (folder, files) -> files )
-                        |> List.filter (fun file -> Path.GetExtension(file) = ".txt")
-            let allFiles = map getAllFiles allFolders |> List.collect id |> map (fun f -> f, File.ReadAllText f)
+                        |> List.map ((fun folder -> scope, path + "/" + folder)
+                        >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
+                        |> List.collect (fun (scope, folder, files) -> files |> List.map (fun f -> scope, f) )
+                        |> List.filter (fun (scope, file) -> Path.GetExtension(file) = ".txt")
+            let allFiles = map getAllFiles allFolders |> List.collect id |> map (fun( s, f) -> s, f, File.ReadAllText f)
             allFiles
 
-        let matchResult (file : string, (parseResult, time)) = 
+        let matchResult (scope : string, file : string, (parseResult, time)) = 
                 match file, parseResult with
                 |file, Success(parsed, _, _) when file.Contains("embeddedfiles.") -> Embedded(file, parsed)
                 |file, Failure(msg, pe, _) when file.Contains("embeddedfiles.") -> failwith ("Embedded file failed: " + file + msg)
-                |file, Success(parsed, _, _) -> Pass (file, {statements = parsed; parseTime = time})
-                |file, Failure(msg, pe,_) -> Fail(file, {error = msg; position = pe.Position; parseTime =  time})
+                |file, Success(parsed, _, _) -> Pass (file, scope, {statements = parsed; parseTime = time})
+                |file, Failure(msg, pe,_) -> Fail(file, scope, {error = msg; position = pe.Position; parseTime =  time})
         let parseResults files = 
-            files |> PSeq.map ((fun (file, fileString) -> file, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (file, fileString)) >> matchResult)
+            files |> PSeq.map ((fun (scope, file, fileString) -> scope, file, (fun (t, t2) -> duration (fun () -> CKParser.parseString t t2)) (file, fileString)) >> matchResult)
                      |> PSeq.toList
                 
         let parseEntities validfiles =
             validfiles
-            |> List.map (fun (file, parsed) -> (file, parsed.statements, parsed.parseTime))
+            |> List.map (fun (file, scope, parsed) -> (file, parsed.statements, parsed.parseTime))
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
 
         let embeddedParsed = parseResults getEmbeddedFiles
@@ -256,7 +257,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                   |> List.collect id
                   |> List.map (fun (n, s) -> n :> Node , s)
 
-        let parseErrors() = invalidFiles() |> List.map (fun (file, fail) -> (file, fail.error, fail.position))
+        let parseErrors() = invalidFiles() |> List.map (fun (file, scope, fail) -> (file, fail.error, fail.position))
                         
         let validateFiles (entities : Node list) =
             entities |> List.map validateVariables
@@ -272,13 +273,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                    |> List.collect id
                    |> List.map (fun (n, s) -> n :> Node, s)
 
-        let validateAll (entities : (string * PassFileResult) list)  = 
+        let validateAll (entities : (string * string * PassFileResult) list)  = 
             eprintfn "Validating %i files" (entities.Length)
             let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
         
-        let localisationCheck (entities : (string * PassFileResult) list) =
+        let localisationCheck (entities : (string * string * PassFileResult) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
@@ -292,16 +293,16 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateFile filepath =
             eprintfn "%s" filepath
             let file = File.ReadAllText filepath
-            let newFiles = parseResults [(filepath, file)] 
-            files <- newFiles |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> List.fold (fun x s -> x.Add(s)) files
-            let valid = newFiles |> List.choose  (function  | Pass (f, r) -> Some ((f, r)) |_ -> None)
+            let newFiles = parseResults [(filepath, "", file)] 
+            files <- newFiles |> List.map (function |Pass (file, scope, result) -> (file, Pass(file, scope, result)) |Fail (file, scope, result) -> (file, Fail(file, scope, result))) |> List.fold (fun x s -> x.Add(s)) files
+            let valid = newFiles |> List.choose  (function  | Pass (f, s, r) -> Some (f, s, r) |_ -> None)
             validateAll valid @ localisationCheck valid
 
         do 
             eprintfn "Parsing %i files" allFilesByPath.Length
-            files <- parseResults allFilesByPath |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> Map.ofList
+            files <- parseResults allFilesByPath |> List.map (function |Pass (file, scope, result) -> (file, Pass(file, scope, result)) |Fail (file, scope, result) -> (file, Fail(file, scope, result))) |> Map.ofList
             let embedded =  (embeddedParsed |> List.choose (function |Embedded (f, s) -> Some (f, s) |_ -> None))
-            let user = (validFiles() |> map (fun (fn, pf) -> fn, pf.statements))
+            let user = (validFiles() |> map (fun (fn, s, pf) -> fn, pf.statements))
             let coreFiles = 
                 match gameDirectory with
                 |Some _ -> user
@@ -313,11 +314,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
-        member __.ValidationErrors = (validateAll (validFiles()))
-        member __.LocalisationErrors= (localisationCheck (validFiles()))
+        member __.ValidationErrors = (validateAll (validatableFiles()))
+        member __.LocalisationErrors= (localisationCheck (validatableFiles()))
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
-        member __.AllFiles = files |> Map.toList |> List.map (snd >> (function |(Fail (file, result)) -> (file, false, result.parseTime) |Pass(file, result) -> (file, true, result.parseTime)))
+        member __.AllFiles = files |> Map.toList |> List.map (snd >> (function |(Fail (file, s, result)) -> (file, false, result.parseTime) |Pass(file, s, result) -> (file, true, result.parseTime)))
         member __.ScripteTriggers = scriptedTriggers
         member __.ScriptedEffects = scriptedEffects
         member __.UpdateFile file = updateFile file
