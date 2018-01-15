@@ -25,6 +25,6 @@ module YAMLLocalisationParser =
     let value = digit .>> spaces <?> "version"
     let entry = pipe3 (key) (opt value) (desc .>> spaces) (fun k v d -> {key = k; value = v; desc = d}) <?> "entry"
     let comment = pstring "#" >>. restOfLine true .>> spaces <?> "comment"
-    let file = pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
+    let file = many (attempt comment) >>. pipe2 (key) (many ((attempt comment |>> (fun _ -> None)) <|> (entry |>> Some)) .>> eof) (fun k es -> {key = k; entries = List.choose id es}) <?> "file"
 
     let parseLocFile filepath = runParserOnFile file () filepath System.Text.Encoding.UTF8

@@ -7,6 +7,7 @@ open CWTools.Parser
 open CWTools.Process.STLScopes
 open System.ComponentModel.Design.Serialization
 open CWTools.Localisation
+open CWTools.Common
 
 module STLValidation =
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(ship, "must have name")] else OK
@@ -180,14 +181,16 @@ module STLValidation =
         | true -> OK
 
 
-    let checkLocKey (event : Event) key (keys : string list) =
-        match key = "" || key.Contains(" "), List.contains key keys with
+    let checkLocKey (event : Event) key (keys : Set<string>) (lang : Lang) =
+        match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [(event :> Node), sprintf "Localisation key %s is not defined" key]
-    let valEventLocs (event : Event) (loc : ILocalisationAPI) =
+        | _, false -> Invalid [(event :> Node), sprintf "Localisation key %s is not defined for %A" key lang]
+    let checkLocKeys (event : Event) key (keys : (Lang * Set<string>) list) =
+        keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey event key keys l) OK
+    
+    let valEventLocs (event : Event) (keys : (Lang * Set<string>) list) =
         let title = event.TagText "title"
         let desc = event.TagText "desc"
-        let keys = loc.GetKeys
-        checkLocKey event title keys <&&> checkLocKey event desc keys
+        checkLocKeys event title keys <&&> checkLocKeys event desc keys
         

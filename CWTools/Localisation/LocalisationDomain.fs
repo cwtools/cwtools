@@ -12,9 +12,11 @@ type ILocalisationAPI =
     abstract Values : IDictionary<string, string>
     abstract GetKeys : string list
     abstract GetDesc : string -> string
+    abstract GetLang : Lang
+
 
 type LocalisationSettings = 
     {
         folder : string
-        language : CK2Lang
+        language : Lang
     }

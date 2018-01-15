@@ -12,7 +12,9 @@ module CK2Localisation =
 
     type CK2LocalisationService(localisationSettings : LocalisationSettings) =
         let localisationFolder : string = localisationSettings.folder
-        let language : CK2Lang = localisationSettings.language
+        let language : CK2Lang = 
+            match localisationSettings.language with
+            | CK2 l -> l
         let mutable csv : Runtime.CsvFile<LocalisationEntry.Row> = upcast LocalisationEntry.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let mutable csvFallback : Runtime.CsvFile<LocalisationEntryFallback.Row> = upcast LocalisationEntryFallback.Parse "#CODE;ENGLISH;FRENCH;GERMAN;;SPANISH;;;;;;;;;x\nPROV1013;Lori;;Lori;;;;;;;;;;;x"
         let addFile (x : string) =
@@ -94,4 +96,5 @@ module CK2Localisation =
                 member __.Values = values
                 member __.GetKeys = getKeys
                 member __.GetDesc x = getDesc x
+                member this.GetLang = CK2 language
             }

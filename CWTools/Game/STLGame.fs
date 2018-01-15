@@ -12,6 +12,8 @@ open FSharp.Collections.ParallelSeq
 open System.Collections.Generic
 open FSharpPlus
 open CWTools.Localisation
+open CWTools.Localisation.STLLocalisation
+open CWTools.Common
 
 
 type PassFileResult = {
@@ -35,7 +37,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list, langs : Lang list ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -114,6 +116,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let mutable scriptedTriggers : Effect list = []
         let mutable scriptedEffects : Effect list = []
+        let mutable localisationAPIs : ILocalisationAPI list = []
 
         let rec getAllFolders dirs =
             if Seq.isEmpty dirs then Seq.empty else
@@ -168,7 +171,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |Some s, All -> s :: (modFolders |> List.map snd)
             |_, Mods -> (modFolders |> List.map snd)
             |Some s, Vanilla -> [s]
-       
+        let locFolders = allDirs |> List.filter(fun (path, folder) -> folder.ToLower() = "localisation")
+        
         let getEmbeddedFiles = embeddedFiles |> map (fun (fn, f) -> "embeddedfiles." + fn, f)
         let allFilesByPath = 
             let getAllFiles path =
@@ -227,6 +231,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.rev
                 |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es scriptedTriggers e)::es) effects
             scriptedEffects <- effects
+        
+        let updateLocalisation() = 
+            localisationAPIs <- 
+                locFolders |> List.collect (fun (l, _) -> langs |> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
                       
 
         let findDuplicates (sl : Statement list) =
@@ -270,12 +278,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
         
-        let localisationCheck (loc : ILocalisationAPI) (entities : (string * PassFileResult) list) =
+        let localisationCheck (entities : (string * PassFileResult) list) =
             eprintfn "Localisation check %i files" (entities.Length)
             let es = entities |> parseEntities
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             let events = fes |> List.choose (function | :? Event as e -> Some e |_ -> None)
-            events |> List.map (fun e -> valEventLocs e loc)
+            let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
+            //let keys = localisationAPIs |> List.collect (fun l -> l.GetKeys) |> Set.ofList
+            events |> List.map (fun e -> valEventLocs e keys)
                     |> List.choose (function |Invalid es -> Some es |_ -> None)
                     |> List.collect id
 
@@ -285,7 +295,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let newFiles = parseResults [(filepath, file)] 
             files <- newFiles |> List.map (function |Pass (file, result) -> (file, Pass(file, result)) |Fail (file, result) -> (file, Fail(file, result))) |> List.fold (fun x s -> x.Add(s)) files
             let valid = newFiles |> List.choose  (function  | Pass (f, r) -> Some ((f, r)) |_ -> None)
-            validateAll valid
+            validateAll valid @ localisationCheck valid
 
         do 
             eprintfn "Parsing %i files" allFilesByPath.Length
@@ -298,11 +308,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |None -> user @ embedded
             updateScriptedTriggers (coreFiles)
             updateScriptedEffects (coreFiles)
+            updateLocalisation()
+
         member __.Results = parseResults
         member __.Duplicates = validateDuplicates
         member __.ParserErrors = parseErrors()
         member __.ValidationErrors = (validateAll (validFiles()))
-        member __.LocalisationErrors(loc : ILocalisationAPI) = (localisationCheck loc (validFiles()))
+        member __.LocalisationErrors= (localisationCheck (validFiles()))
         //member __.ValidationWarnings = warningsAll
         member __.Folders = allFolders
         member __.AllFiles = files |> Map.toList |> List.map (snd >> (function |(Fail (file, result)) -> (file, false, result.parseTime) |Pass(file, result) -> (file, true, result.parseTime)))

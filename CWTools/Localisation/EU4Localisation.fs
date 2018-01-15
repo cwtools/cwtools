@@ -9,7 +9,9 @@ module EU4Localisation =
 
     type EU4LocalisationService(localisationSettings : LocalisationSettings) =
         let localisationFolder : string = localisationSettings.folder
-        let language : CK2Lang = localisationSettings.language
+        let language : CK2Lang = 
+            match localisationSettings.language with
+                | CK2 l -> l
         let languageKey =
             match language with
             |CK2Lang.English -> "l_english"
@@ -46,4 +48,5 @@ module EU4Localisation =
                 member __.Values = values
                 member __.GetKeys = getKeys
                 member __.GetDesc x = getDesc x
+                member this.GetLang = CK2 language
             }

@@ -9,14 +9,19 @@ module STLLocalisation =
 
     type STLLocalisationService(localisationSettings : LocalisationSettings) =
         let localisationFolder : string = localisationSettings.folder
-        let language : CK2Lang = localisationSettings.language
+        let language : STLLang = 
+            match localisationSettings.language with
+            | STL l -> l
 
         let languageKey =
             match language with
-            |CK2Lang.English -> "l_english"
-            |CK2Lang.French -> "l_french"
-            |CK2Lang.Spanish -> "l_spanish"
-            |CK2Lang.German -> "l_german"
+            |STLLang.English -> "l_english"
+            |STLLang.French -> "l_french"
+            |STLLang.Spanish -> "l_spanish"
+            |STLLang.German -> "l_german"
+            |STLLang.Russian -> "l_russian"
+            |STLLang.Polish -> "l_polish"
+            |STLLang.BrazPor -> "l_braz_por"
             |_ -> failwith "Unknown language enum value"
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable records : Entry list = []
@@ -45,7 +50,8 @@ module STLLocalisation =
                         let files = Directory.EnumerateDirectories localisationFolder 
                                         |> List.ofSeq
                                         |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
-                        results <- addFiles files |> dict
+                        let rootFiles = Directory.EnumerateFiles localisationFolder |> List.ofSeq
+                        results <- addFiles (files @ rootFiles)|> dict
                         eprintfn "%A" (getKeys())
             | false -> eprintfn "%s not found" localisationFolder
 
@@ -55,4 +61,5 @@ module STLLocalisation =
                 member __.Values = values()
                 member __.GetKeys = getKeys()
                 member __.GetDesc x = getDesc x
+                member this.GetLang = STL language
             }
