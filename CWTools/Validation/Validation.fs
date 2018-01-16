@@ -3,15 +3,19 @@ open CWTools.Process
 
 module ValidationCore =
     
-
+    type Severity =
+        | Error = 1
+        | Warning = 2
+        | Information = 3
+        | Hint = 4
     type ValidationResult = 
         | OK
-        | Invalid of (CWTools.Parser.Position * int * string) list
+        | Invalid of (Severity * CWTools.Parser.Position * int * string) list
 
-    let inline inv (l : ^a) (s : string) = 
+    let inline inv (sev : Severity) (l : ^a) (s : string) = 
         let pos = (^a : (member Position : CWTools.Parser.Position) l)
         let key = (^a : (member Key : string) l)
-        pos, key.Length, s
+        sev, pos, key.Length, s
 
     type Validator<'T when 'T :> Node> = 'T -> ValidationResult
 

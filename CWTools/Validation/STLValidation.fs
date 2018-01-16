@@ -9,9 +9,9 @@ open CWTools.Common
 
 
 module STLValidation =
-
-    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv ship "must have name")] else OK
-    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv ship "must have size")] else OK
+    type S = Severity
+    let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv S.Error ship "must have name")] else OK
+    let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv S.Error ship "must have size")] else OK
 
     let validateShip : Validator<Ship>  = shipName <&> shipSize
 
@@ -40,14 +40,14 @@ module STLValidation =
                 match undefined |> Set.toList with
                 | [] -> OK
                 | x -> 
-                    let errors = List.map (fun v -> (inv node (v + " is not defined"))) x
+                    let errors = List.map (fun v -> (inv S.Error node (v + " is not defined"))) x
                     Invalid errors
             let unused = Set.difference defined used
             let warnings =
                 match unused |> Set.toList with
                 | [] -> OK
                 | x -> 
-                    let errors = List.map (fun v -> (inv node (v + " is not used"))) x
+                    let errors = List.map (fun v -> (inv S.Error node (v + " is not used"))) x
                     Invalid errors
 
             errors //<&&> warnings
@@ -66,12 +66,12 @@ module STLValidation =
     let handleUnknownTrigger root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> Invalid [inv root (sprintf "unknown trigger %s used." key)]
+        |None -> Invalid [inv S.Error root (sprintf "unknown trigger %s used." key)]
     
     let handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> Invalid [inv root (sprintf "unknown effect %s used." key)]
+        |None -> Invalid [inv S.Error root (sprintf "unknown effect %s used." key)]
     
 
     let rec valEventTrigger (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (effect : Both) =
@@ -79,7 +79,7 @@ module STLValidation =
         |LeafI leaf ->
             match List.tryFind (fun (e, _) -> e.name = leaf.Key ) triggers with
             |Some (_, true) -> OK
-            |Some (t, false) -> Invalid [inv root (sprintf "%s trigger used in incorrect scope. In %A but expected %s" leaf.Key scope (t.scopes |> String.concat ", "))]
+            |Some (t, false) -> Invalid [inv S.Error root (sprintf "%s trigger used in incorrect scope. In %A but expected %s" leaf.Key scope (t.scopes |> String.concat ", "))]
             |None -> handleUnknownTrigger root leaf.Key
         |NodeI node ->
             match node.Key with
@@ -92,11 +92,11 @@ module STLValidation =
             |x ->
                 match changeScope x scope with
                 |NewScope s -> valNodeTriggers root triggers effects s node
-                |WrongScope ss -> Invalid [inv node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
+                |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
                     match List.tryFind (fun (e, _) -> e.name.ToLower() = x.ToLower() ) triggers with
                     |Some (_, true) -> OK
-                    |Some (t, false) -> Invalid [inv node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", "))]
+                    |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s trigger used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", "))]
                     |None -> handleUnknownTrigger node x
         |_ -> OK
 
@@ -105,7 +105,7 @@ module STLValidation =
         |LeafI leaf ->
             match List.tryFind (fun (e, _) -> e.name = leaf.Key) effects with
             |Some(_, true) -> OK
-            |Some (t, false) -> Invalid [inv root (sprintf "%s effect used in incorrect scope. In %A but expected %s" leaf.Key scope (t.scopes |> String.concat ", "))]
+            |Some (t, false) -> Invalid [inv S.Error root (sprintf "%s effect used in incorrect scope. In %A but expected %s" leaf.Key scope (t.scopes |> String.concat ", "))]
             |None -> handleUnknownEffect root leaf.Key
         |NodeI node ->
             match node.Key with
@@ -118,11 +118,11 @@ module STLValidation =
             |x ->
                 match changeScope x scope with
                 |NewScope s -> valNodeEffects root triggers effects s node
-                |WrongScope ss -> Invalid [inv node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
+                |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
                     match List.tryFind (fun (e, _) -> e.name.ToLower() = x.ToLower()) effects with
                     |Some(_, true) -> OK
-                    |Some (t, false) -> Invalid [inv node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", "))]
+                    |Some (t, false) -> Invalid [inv S.Error node (sprintf "%s effect used in incorrect scope. In %A but expected %s" x scope (t.scopes |> String.concat ", "))]
                     |None -> handleUnknownEffect node x
         |_ -> OK
     
@@ -179,7 +179,7 @@ module STLValidation =
                 | _ -> false
             | None -> false
         match isMTTH || isTrig || isOnce || isAlwaysNo with
-        | false -> Invalid [inv event "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
+        | false -> Invalid [inv S.Error event "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
         | true -> OK
 
 
@@ -187,7 +187,7 @@ module STLValidation =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [inv leaf (sprintf "Localisation key %s is not defined for %A" key lang)]
+        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %A" key lang)]
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())

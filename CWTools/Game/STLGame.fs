@@ -300,7 +300,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let updateFile filepath =
             eprintfn "%s" filepath
             let file = File.ReadAllText filepath
-            let newFiles = parseResults [(filepath, "", file)] 
+            let newFiles = parseResults [("", filepath, file)] 
             files <- newFiles |> List.map (function |Pass (file, scope, result) -> (file, Pass(file, scope, result)) |Fail (file, scope, result) -> (file, Fail(file, scope, result))) |> List.fold (fun x s -> x.Add(s)) files
             let valid = newFiles |> List.choose  (function  | Pass (f, s, r) -> Some (f, s, r) |_ -> None)
             validateAll valid @ localisationCheck valid
