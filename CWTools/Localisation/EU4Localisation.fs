@@ -12,6 +12,8 @@ module EU4Localisation =
         let language : CK2Lang = 
             match localisationSettings.language with
                 | CK2 l -> l
+                | _ -> failwith "Wrong language for localisation"
+
         let languageKey =
             match language with
             |CK2Lang.English -> "l_english"
@@ -48,5 +50,5 @@ module EU4Localisation =
                 member __.Values = values
                 member __.GetKeys = getKeys
                 member __.GetDesc x = getDesc x
-                member this.GetLang = CK2 language
+                member __.GetLang = CK2 language
             }

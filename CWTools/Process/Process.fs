@@ -43,9 +43,13 @@ type Node (key : string, pos : Position) =
     member this.Comments = this.All |> List.choose (function |CommentI c -> Some c |_ -> None)
     member this.Has x = this.All |> (List.exists (bothFind x))
     member this.Tag x = this.Values |> List.tryPick (function |l when l.Key = x -> Some l.Value |_ -> None)
+    member this.Leafs x = this.Values |> List.choose (function |l when l.Key = x -> Some l |_ -> None)
+    member this.Tags x = this.Values |> List.choose (function |l when l.Key = x -> Some l.Value |_ -> None)
     member this.TagText x = this.Tag x |> function |Some (QString s) -> s |Some s -> s.ToString() |None -> ""
+    member this.TagsText x = this.Tags x |> List.map (function |(QString s) -> s |s -> s.ToString())
     member this.SetTag x v = this.All <- this.All |> List.replaceOrAdd (bothFind x) (fun _ -> v) v
     member this.Child x = this.Children |> List.tryPick (function |c when c.Key = x -> Some c |_ -> None)
+    member this.Childs x = this.Children |> List.choose (function |c when c.Key = x -> Some c |_ -> None)
 
     [<JsonIgnore>]
     member this.ToRaw : Statement list = this.All |> List.rev |>
@@ -109,5 +113,5 @@ module ProcessCore =
     let rec cata fNode (node:Node) :'r =
         let recurse = cata fNode
         fNode node (node.Children |> List.map recurse)
-
+    
    

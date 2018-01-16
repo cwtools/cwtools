@@ -11,7 +11,7 @@ module STLLocalisation =
         let language : STLLang = 
             match lang with
             | STL l -> l
-
+            | _ -> failwith "Wrong language for localisation"
         let languageKey =
             match language with
             |STLLang.English -> "l_english"
@@ -66,5 +66,5 @@ module STLLocalisation =
                 member __.Values = values()
                 member __.GetKeys = getKeys()
                 member __.GetDesc x = getDesc x
-                member this.GetLang = STL language
+                member __.GetLang = STL language
             }

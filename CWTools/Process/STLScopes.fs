@@ -1,7 +1,7 @@
 namespace CWTools.Process
 
 module STLScopes =
-   type Scope =
+    type Scope =
         |Planet
         |Country
         |Fleet
