@@ -85,8 +85,8 @@ module CKParser =
     // =======
     let whitespaceTextChars = " \t\r\n"
     let norseChars =['ö';'ð';'æ';'ó';'ä';'Þ';'Å';'Ö']
-    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-']
-    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''] @ ['š'; 'Š'; '’'])
+    let idchar = letter <|> digit <|> anyOf ['_'; ':'; '@'; '.'; '\"'; '-'; ''']
+    let valuechar = letter <|> digit <|> anyOf (['_'; '.'; '-'; ':'; '\''; '['; ']'; '@';'''; '+'; '`'] @ ['š'; 'Š'; '’'])
 
 
     // Utility parsers
@@ -117,7 +117,9 @@ module CKParser =
                     ((skipString "no") .>> notFollowedBy (valuechar) .>> ws  |>> (fun _ -> Bool(false)))
 
     let valueI = pint64 .>> notFollowedBy (valuechar) .>> ws |>> int |>> Int
-    let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float                
+    let valueF = pfloat .>> notFollowedBy (valuechar) .>> ws |>> float |>> Float     
+
+    let hsv = strSkip "hsv" >>. clause (pipe3 valueF valueF valueF (fun a b c -> Clause [Statement.Value a;Statement.Value b; Statement.Value c]))          
 
     // Complex types
     // =======
@@ -126,12 +128,12 @@ module CKParser =
     let keyvalue, keyvalueimpl = createParserForwardedToRef()
     let value, valueimpl = createParserForwardedToRef()
 
-    let statement = comment |>> Comment <|> keyvalue <?> "statement"
+    let statement = comment |>> Comment <|> (attempt keyvalue) <|> (value |>> Value) <?> "statement"
     let valueBlock = clause (many1 ((value |>> Value) <|> (comment |>> Comment))) |>> Clause <?> "value clause"
     
     let valueClause = clause (many statement) |>> Clause <?> "statement clause"
 
-    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> valueS <?> "value"
+    do valueimpl := valueQ <|> (attempt valueBlock) <|> valueClause <|> (attempt valueB) <|> (attempt valueI) <|> (attempt valueF) <|> (attempt hsv) <|> valueS  <?> "value"
     
     do keyvalueimpl := pipe3 (getPosition) ((keyQ <|> key) .>> operator) (value) (fun pos id value -> KeyValue(PosKeyValue(Position pos, KeyValueItem(id, value))))
     let alle = ws >>. many statement .>> eof |>> (fun f -> (EventFile f : EventFile))

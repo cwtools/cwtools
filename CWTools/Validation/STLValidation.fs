@@ -179,7 +179,7 @@ module STLValidation =
                 | _ -> false
             | None -> false
         match isMTTH || isTrig || isOnce || isAlwaysNo with
-        | false -> Invalid [inv S.Error event "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
+        | false -> Invalid [inv S.Information event "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
         | true -> OK
 
 
