@@ -200,7 +200,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |> List.map (fun (file, scope, parsed) -> (file, parsed.statements, parsed.parseTime))
             |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
 
-        let embeddedParsed = parseResults getEmbeddedFiles
+        let embeddedParsed = getEmbeddedFiles |> List.filter (fun (s, fn, f) -> fn.Contains("common")) |> parseResults
             
 
         // let entities() = validFiles()
@@ -234,8 +234,18 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             scriptedEffects <- effects
         
         let updateLocalisation() = 
+
             localisationAPIs <- 
-                locFolders |> List.collect (fun (l, _) -> langs |> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
+                let allLocs = locFolders |> List.collect (fun (l, _) -> langs |> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
+                match gameDirectory with
+                |Some s -> allLocs
+                |None ->  allLocs @ (getEmbeddedFiles 
+                    |> List.filter (fun (s, fn, f )-> fn.Contains("localisation"))
+                    |> List.map (fun (s, fn, f) -> (fn, f))
+                    |> (fun files -> langs |> List.map (fun lang -> STLLocalisationService(files, lang).Api)))
+
+            //TODO: Add loc from embedded
+                
                       
 
         let findDuplicates (sl : Statement list) =

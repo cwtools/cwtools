@@ -7,10 +7,9 @@ module STLLocalisation =
     open YAMLLocalisationParser
     open FParsec
 
-    type STLLocalisationService(localisationSettings : LocalisationSettings) =
-        let localisationFolder : string = localisationSettings.folder
+    type STLLocalisationService(files : (string * string) list, lang : Lang) =
         let language : STLLang = 
-            match localisationSettings.language with
+            match lang with
             | STL l -> l
 
         let languageKey =
@@ -25,35 +24,41 @@ module STLLocalisation =
             |_ -> failwith "Unknown language enum value"
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable records : Entry list = []
-        let addFile f = 
-            eprintfn "%s" f
-            match parseLocFile f with
+        let addFile f t = 
+            //eprintfn "%s" f
+            match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) when key = languageKey ->
-                eprintfn "%s %i" key entries.Length
+                //eprintfn "%s %i" key entries.Length
                 records <- entries@records; (true, entries.Length, "")
             | Success(v, _, _) -> (true, v.entries.Length, "")
             | Failure(msg, _, _) -> 
-                eprintfn "%s %s" f msg
+                //eprintfn "%s %s" f msg
                 (false, 0, msg)
-        let addFiles (x : string list) = List.map (fun f -> (f, addFile f)) x
+        let addFiles (x : (string * string) list) = List.map (fun (f, t )-> (f, addFile f t)) x
 
         let values() = records |> List.map (fun r -> (r.key, r.desc)) |> dict
 
         let getDesc x = records |> List.tryPick (fun r -> if r.key = x then Some r.desc else None) |> Option.defaultValue x
 
         let getKeys() = records |> List.map (fun r -> r.key)
-
+        
         do
-            eprintfn "Loading STL localisation in %s" localisationFolder 
-            match Directory.Exists(localisationFolder) with
+            results <- addFiles files |> dict
+
+        new(localisationSettings : LocalisationSettings) =
+            eprintfn "Loading STL localisation in %s" localisationSettings.folder 
+            match Directory.Exists(localisationSettings.folder) with
             | true -> 
-                        let files = Directory.EnumerateDirectories localisationFolder 
+                        let files = Directory.EnumerateDirectories localisationSettings.folder 
                                         |> List.ofSeq
                                         |> List.collect (Directory.EnumerateFiles >> List.ofSeq)
-                        let rootFiles = Directory.EnumerateFiles localisationFolder |> List.ofSeq
-                        results <- addFiles (files @ rootFiles)|> dict
-                        eprintfn "%A" (getKeys())
-            | false -> eprintfn "%s not found" localisationFolder
+                        let rootFiles = Directory.EnumerateFiles localisationSettings.folder |> List.ofSeq
+                        let actualFiles = files @ rootFiles |> List.map (fun f -> f, File.ReadAllText(f, System.Text.Encoding.UTF8))
+                        STLLocalisationService(actualFiles, localisationSettings.language)
+            | false -> 
+                eprintfn "%s not found" localisationSettings.folder
+                STLLocalisationService([], localisationSettings.language)
+
 
         member __.Api = {
             new ILocalisationAPI with
