@@ -67,12 +67,12 @@ module STLValidation =
     let handleUnknownTrigger root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> Invalid [inv S.Error root (sprintf "unknown trigger %s used." key)]
+        |None -> if key.StartsWith("@") then OK else Invalid [inv S.Error root (sprintf "unknown trigger %s used." key)]
     
     let handleUnknownEffect root (key : string) =
         match STLProcess.ignoreKeys |> List.tryFind (fun k -> k.ToLower() = key.ToLower()) with
         |Some _ -> OK //Do better
-        |None -> Invalid [inv S.Error root (sprintf "unknown effect %s used." key)]
+        |None -> if key.StartsWith("@") then OK else Invalid [inv S.Error root (sprintf "unknown effect %s used." key)]
     
 
     let rec valEventTrigger (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (effect : Both) =

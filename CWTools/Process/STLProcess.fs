@@ -46,10 +46,12 @@ module STLProcess =
                                 | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
                         )
         let valueScopes = node.Values 
+                        //|> List.filter (fun v -> v.Key.StartsWith("@"))
                         |> List.map (
                             function
+                            | x when x.Key.StartsWith("@") -> allScopes
                             | x when x.Key = root -> allScopes
-                            | x -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
+                            | x -> effects |> List.tryFind (fun (n, _) -> n = x.Key) |> (function |Some (_,s) -> s |None -> (eprintfn "%A" x.Key); [])
                            )
         let combinedScopes = nodeScopes @ valueScopes |> List.map (function | [] -> (if strict then [] else allScopes) |x -> x)
         combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes

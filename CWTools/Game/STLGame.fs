@@ -228,21 +228,29 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 (before |> Set.ofList) = (final |> Set.ofList)
                 //( before |> List.map (fun f -> f.Name, f.Scopes)) = (final |> List.map (fun f -> f.Name, f.Scopes))
             repeatUntilTrue ff 
-            //let firstPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) triggers
-            //let secondPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) firstPass
             scriptedTriggers <- final
 
 
         let updateScriptedEffects (validfiles : (string * Statement list) list ) =
-            let effects = 
+            let rawEffects = 
                 validfiles
                 |> List.choose (function |(file, statements) when file.Contains("scripted_effects") -> Some (file, statements) |_ -> None)
                 //|> List.collect (fun (f, passed, t) -> List.map (fun p -> f, p, t) passed)
                 |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-                |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) effects
-            scriptedEffects <- effects
+            let repeatUntilTrue f =
+                Seq.initInfinite (fun _ -> f())
+                |> Seq.find id
+                |> ignore
+            let mutable final = effects
+            let ff() = 
+                eprintfn "next effects"
+                let before = final
+                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) final
+                (before |> Set.ofList) = (final |> Set.ofList)
+            repeatUntilTrue ff 
+            scriptedEffects <- final
         
         let updateLocalisation() = 
 
