@@ -4,18 +4,12 @@ namespace CWTools.Parser
 open FParsec
 open System.IO
 open CWTools.Parser.CKParser
+open CWTools.Common
+open CWTools.Common.STLConstants
 
-type Effect =
-    {
-        name : string
-        desc : string
-        usage : string
-        scopes : string list
-        targets : string list
-    }
+
 
 module DocsParser =
-
 
     let idChar = letter <|> anyOf ['_']
     let valuechar = CKParser.valuechar <|> pchar '?'
@@ -32,5 +26,9 @@ module DocsParser =
 
     let twoDocs = docFile .>>. docFile
 
+    let toDocEffect effectType (x : RawEffect) = DocEffect(x, effectType)
+    let processDocs (t, e) = t |> List.map (toDocEffect EffectType.Trigger), e |> List.map (toDocEffect EffectType.Effect)
+
     let parseDocsFile filepath = runParserOnFile twoDocs () filepath (System.Text.Encoding.GetEncoding(1252))
+    
     let parseDocsStream file = runParserOnStream twoDocs () "docFile" file (System.Text.Encoding.GetEncoding(1252))

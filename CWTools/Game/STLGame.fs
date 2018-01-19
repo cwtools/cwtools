@@ -12,6 +12,7 @@ open FSharpPlus
 open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
 open CWTools.Common
+open CWTools.Common.STLConstants
 
 
 type PassFileResult = {
@@ -99,7 +100,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "events";
                     "map/galaxy";
                     "map/setup_scenarios";
-                    "prescripted_countries"
+                    "prescripted_countries";
+                    "interface";
                     ]
 
         let duration f = 
@@ -179,7 +181,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                         |> List.map ((fun folder -> scope, path + "/" + folder)
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f) )
-                        |> List.filter (fun (_, file) -> Path.GetExtension(file) = ".txt")
+                        |> List.filter (fun (_, file) -> List.contains (Path.GetExtension(file)) [".txt"; ".gui"; ".gfx"])
             let allFiles = map getAllFiles allFolders |> List.collect id |> map (fun( s, f) -> s, f, File.ReadAllText f)
             allFiles
 
@@ -215,9 +217,20 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-            let firstPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) triggers
-            let secondPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope ts ts t)::ts) firstPass
-            scriptedTriggers <- secondPass
+            let repeatUntilTrue f =
+                Seq.initInfinite (fun _ -> f())
+                |> Seq.find id
+                |> ignore
+            let mutable final = triggers
+            let ff() = 
+                let before = final
+                final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) final
+                (before |> Set.ofList) = (final |> Set.ofList)
+                //( before |> List.map (fun f -> f.Name, f.Scopes)) = (final |> List.map (fun f -> f.Name, f.Scopes))
+            repeatUntilTrue ff 
+            //let firstPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) triggers
+            //let secondPass = rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) firstPass
+            scriptedTriggers <- final
 
 
         let updateScriptedEffects (validfiles : (string * Statement list) list ) =
@@ -228,7 +241,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-                |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope es scriptedTriggers e)::es) effects
+                |> List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) effects
             scriptedEffects <- effects
         
         let updateLocalisation() = 

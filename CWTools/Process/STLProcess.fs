@@ -5,11 +5,12 @@ open CWTools.Localisation
 open CWTools.Process.ProcessCore
 open CWTools.Process
 open CWTools.Process.STLScopes
+open CWTools.Common.STLConstants
 
 module STLProcess =
     let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
     let toTriggerBlockKeys = ["limit"]
-    let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
+    let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]
     let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
     let toEffectBlockKeys = ["hidden_effect"; "if"; "else"]
@@ -40,7 +41,7 @@ module STLProcess =
                             | x when triggerBlockKeys |> List.exists (fun y -> y.ToLower() = x.Key.ToLower()) -> 
                                 scriptedTriggerScope strict triggers triggers root x
                             | x ->
-                                match sourceScope x.Key with
+                                match STLScopes.sourceScope x.Key with
                                 | Some v -> v
                                 | None -> effects |> List.filter (fun (n, _) -> n = x.Key) |> List.map (fun (_, ss) -> ss) |> List.collect id
                         )
@@ -73,11 +74,11 @@ module STLProcess =
         //nodeScopes @ valueScopes @ nodeScopeChanges @ limitScopes
         //        |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
-    let getScriptedTriggerScope (effects : Effect list) (triggers : Effect list) (node : Node) =
-        let effects2 = List.map (fun t -> t.name, t.scopes |> List.map parseScopes |> List.collect id) effects
-        let triggers2 = List.map (fun t -> t.name, t.scopes |> List.map parseScopes |> List.collect id) triggers
-        let scopes = scriptedTriggerScope true effects2 triggers2 node.Key node |> List.map (fun s -> s.ToString().ToLower())
-        {name = node.Key; desc = ""; usage = ""; scopes = scopes ; targets = []}
+    let getScriptedTriggerScope (effectType : EffectType) (effects : Effect list) (triggers : Effect list) (node : Node) =
+        let effects2 = effects |> List.map (fun t -> t.Name, t.Scopes)
+        let triggers2 = triggers |> List.map (fun t -> t.Name, t.Scopes)
+        let scopes = scriptedTriggerScope true effects2 triggers2 node.Key node
+        ScriptedEffect(node.Key, scopes, effectType)
 
     type Ship (key, pos) =
         inherit Node(key, pos)
