@@ -234,7 +234,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let before = final
                 final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) final
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
-            while not ff() do ()
+            while (not (ff())) do ()
                 //( before |> List.map (fun f -> f.Name, f.Scopes)) = (final |> List.map (fun f -> f.Name, f.Scopes))
             scriptedTriggers <- final
 
@@ -254,7 +254,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 let before = final
                 final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) final
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
-            while not ff() do ()
+            while (not (ff())) do ()
             scriptedEffects <- final
         
         let updateLocalisation() = 
