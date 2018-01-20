@@ -175,10 +175,22 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Mod folders"                            
             folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
             folders
+          
 
         let allFolders = 
             match gameDirectory, scope with
-            |None, _ -> (modFolders)
+            |None, _ -> 
+                if modFolders.Length > 0 then modFolders
+                else 
+                    eprintfn "Couldn't find the game directory or any mods"
+                    let foundAnyFolders = Directory.EnumerateDirectories scopeDirectory |> List.ofSeq |> List.exists (fun f -> f.Contains("common") || f.Contains("events"))
+                    match foundAnyFolders with
+                    | true ->
+                        eprintfn "I think you opened a mod folder directly"
+                        [(Path.GetFileName scopeDirectory, scopeDirectory)]
+                    | false ->
+                        eprintfn "I don't think you opened a mod folder directly"
+                        []
             |Some s, All -> ("vanilla", s) :: (modFolders)
             |_, Mods -> (modFolders)
             |Some s, Vanilla -> ["vanilla", s]
