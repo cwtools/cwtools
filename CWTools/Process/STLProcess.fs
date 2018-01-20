@@ -9,11 +9,11 @@ open CWTools.Common.STLConstants
 
 module STLProcess =
     let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
-    let toTriggerBlockKeys = ["limit"]
+    let toTriggerBlockKeys = ["limit"; "trigger"; "allow"]
     let _targetKeys = ["THIS"; "ROOT"; "PREV"; "FROM"; "OWNER"; "CONTROLLER"; "CAPITAL"; "SOLAR_SYSTEM"; "LEADER"; "RANDOM"; "FROMFROM"; "FROMFROMFROM"; "FROMFROMFROMFROM"; "PREVPREV"; "PREVPREVPREV"; "PREVPREVPREVPREV";
                         "CAPITAL_SCOPE"]//Added used in STH]
     let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
-    let toEffectBlockKeys = ["hidden_effect"; "if"; "else"]
+    let toEffectBlockKeys = ["hidden_effect"; "if"; "else"; "tooltip"]
     let ignoreKeys = ["count"; "min_steps"; "max_steps"]
     let rec isTargetKey =
         function
@@ -51,7 +51,7 @@ module STLProcess =
                             function
                             | x when x.Key.StartsWith("@") -> allScopes
                             | x when x.Key = root -> allScopes
-                            | x -> effects |> List.tryFind (fun (n, _) -> n = x.Key) |> (function |Some (_,s) -> s |None -> (eprintfn "%A" x.Key); [])
+                            | x -> effects |> List.tryFind (fun (n, _) -> n = x.Key) |> (function |Some (_,s) -> s |None -> [])
                            )
         let combinedScopes = nodeScopes @ valueScopes |> List.map (function | [] -> (if strict then [] else allScopes) |x -> x)
         combinedScopes |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes

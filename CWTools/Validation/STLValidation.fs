@@ -84,14 +84,16 @@ module STLValidation =
             |None -> handleUnknownTrigger root leaf.Key
         |NodeI node ->
             match node.Key with
-            |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains x ->
+            |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
                 valNodeTriggers root triggers effects scope node
             |x when STLProcess.isTargetKey x ->
                 OK //Handle later
             |x when x.StartsWith("event_target:") ->
                 OK //Handle later
+            |x when x.StartsWith("parameter:") ->
+                OK //Handle later
             |x ->
-                match changeScope x scope with
+                match changeScope effects triggers x scope with
                 |NewScope s -> valNodeTriggers root triggers effects s node
                 |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
@@ -116,8 +118,10 @@ module STLValidation =
                 OK //Handle later
             |x when x.StartsWith("event_target:") ->
                 OK //Handle later
+            |x when x.StartsWith("parameter:") ->
+                OK //Handle later
             |x ->
-                match changeScope x scope with
+                match changeScope effects triggers x scope with
                 |NewScope s -> valNodeEffects node triggers effects s node
                 |WrongScope ss -> Invalid [inv S.Error node (sprintf "%s scope command used in incorrect scope. In %A but expected %s" x scope (ss |> List.map (fun s -> s.ToString()) |> String.concat ", "))]
                 |NotFound ->
@@ -136,6 +140,17 @@ module STLValidation =
         let scopedTriggers = triggers |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
         let scopedEffects = effects |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
         List.map (valEventEffect root scopedTriggers scopedEffects scope) node.All |> List.fold (<&&>) OK
+
+    let valOption (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (node : Node) =
+        let optionExcludes = ["name"; "custom_tooltip"; "response_text"; "is_dialog_only"; "sound"; "ai_chance"; "custom_gui"; "default_hide_option"]
+        let filterFunction =
+            function
+            | NodeI n -> optionExcludes |> List.contains (n.Key.ToLower())
+            | LeafI l -> optionExcludes |> List.contains (l.Key.ToLower())
+            | _ -> false
+        let children = node.All |> List.filter (filterFunction >> not)
+        children |> List.map (valEventEffect node triggers effects scope) |> List.fold (<&&>) OK
+        
     
     let valEventTriggers  (triggers : (Effect) list) (effects : (Effect) list) (event : Event) =
         let eventScope = eventScope event
@@ -162,7 +177,9 @@ module STLValidation =
                 let v = List.map (valEventEffect event scopedTriggers scopedEffects eventScope) n.All
                 v |> List.fold (<&&>) OK
             |None -> OK
-        imm <&&> aft
+        let opts = event.Childs "option" |> List.map (fun o -> (valOption o scopedTriggers scopedEffects eventScope o))
+        let opts2 = opts |> List.fold (<&&>) OK
+        imm <&&> aft <&&> opts2
 
     /// Make sure an event either has a mean_time_to_happen or is stopped from checking all the time
     /// Not mandatory, but performance reasons, suggested by Caligula

@@ -90,7 +90,49 @@ module STLScopes =
 // this
 // event_target:
 // parameter:
-
+    let scopedEffects = [
+        ScopedEffect("space_owner", [Scope.GalacticObject], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("controller", [], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("last_refugee_country", [], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("heir", [], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country], Scope.GalacticObject, EffectType.Both, "", "");
+        ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, "", "");
+        ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, "", "");
+        ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, "", "");
+        ScopedEffect("orbit", [Scope.Fleet; Scope.Ship], Scope.Planet, EffectType.Both, "", "");
+        ScopedEffect("home_planet", [Scope.Country; Scope.Species; Scope.Planet], Scope.Planet, EffectType.Both, "", "");
+        ScopedEffect("star", [], Scope.Planet, EffectType.Both, "", "");
+        ScopedEffect("last_created_ship", allScopes, Scope.Ship, EffectType.Both, "", "");
+        ScopedEffect("spaceport", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
+        ScopedEffect("mining_station", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
+        ScopedEffect("research_station", [Scope.Planet], Scope.Fleet, EffectType.Both, "", "");
+        ScopedEffect("last_created_fleet", allScopes, Scope.Fleet, EffectType.Both, "", "");
+        ScopedEffect("fleet", [Scope.Ship], Scope.Fleet, EffectType.Both, "", "");
+        ScopedEffect("pop", [Scope.Tile], Scope.Pop, EffectType.Both, "", "");
+        ScopedEffect("last_created_pop", allScopes, Scope.Pop, EffectType.Both, "", "");
+        ScopedEffect("last_created_ambient_object", allScopes, Scope.AmbientObject, EffectType.Both, "", "");
+        ScopedEffect("last_created_army", allScopes, Scope.Army, EffectType.Both, "", "");
+        ScopedEffect("tile", [Scope.Pop], Scope.Tile, EffectType.Both, "", "");
+        ScopedEffect("orbital_deposit_tile", [Scope.Planet], Scope.Tile, EffectType.Both, "", "");
+        ScopedEffect("best_tile_for_pop", [Scope.Planet], Scope.Tile, EffectType.Both, "", "");
+        ScopedEffect("owner_species", [Scope.Country], Scope.Species, EffectType.Both, "", "");
+        ScopedEffect("last_created_species", allScopes, Scope.Species, EffectType.Both, "", "");
+        ScopedEffect("species", [Scope.Country; Scope.Ship; Scope.Leader; Scope.Pop], Scope.Species, EffectType.Both, "", "");
+        ScopedEffect("pop_faction", [Scope.Pop], Scope.PopFaction, EffectType.Both, "", "");
+        ScopedEffect("last_created_pop_faction", allScopes, Scope.PopFaction, EffectType.Both, "", "");
+        ScopedEffect("core_sector", [], Scope.Sector, EffectType.Both, "", "");
+        ScopedEffect("sector", [Scope.Planet], Scope.Sector, EffectType.Both, "", "");
+        ScopedEffect("alliance", [], Scope.Alliance, EffectType.Both, "", "");
+    ]
     let relativeScopes =
         ["root", Scope.Any, Scope.Any;
         "from", Scope.Any, Scope.Any;
@@ -134,140 +176,152 @@ module STLScopes =
 // any/every/random_subject
     let scopeLists =[ 
         //These are from blackninja9939
-        "any_ship", allScopes, Scope.Ship;
-        "every_ship", allScopes, Scope.Ship;
-        "random_ship", allScopes, Scope.Ship;
+        "any_ship",  Scope.Ship;
+        "every_ship",  Scope.Ship;
+        "random_ship",  Scope.Ship;
 
-        "any_pop", allScopes, Scope.Pop;
-        "every_pop", allScopes, Scope.Pop;
-        "random_pop", allScopes, Scope.Pop;
+        "any_pop",  Scope.Pop;
+        "every_pop",  Scope.Pop;
+        "random_pop",  Scope.Pop;
 
-        "any_owned_ship", allScopes, Scope.Ship;
-        "every_owned_ship", allScopes, Scope.Ship;
-        "random_owned_ship", allScopes, Scope.Ship;
+        "any_owned_ship",  Scope.Ship;
+        "every_owned_ship",  Scope.Ship;
+        "random_owned_ship",  Scope.Ship;
 
-        "any_owned_planet", allScopes, Scope.Planet;
-        "every_owned_planet", allScopes, Scope.Planet;
-        "random_owned_planet", allScopes, Scope.Planet;
+        "any_owned_planet",  Scope.Planet;
+        "every_owned_planet",  Scope.Planet;
+        "random_owned_planet",  Scope.Planet;
 
-        "any_controlled_planet", allScopes, Scope.Planet;
-        "every_controlled_planet", allScopes, Scope.Planet;
-        "random_controlled_planet", allScopes, Scope.Planet;
+        "any_controlled_planet",  Scope.Planet;
+        "every_controlled_planet",  Scope.Planet;
+        "random_controlled_planet",  Scope.Planet;
 
-        "any_war_defender", allScopes, Scope.Country;
-        "every_war_defender", allScopes, Scope.Country;
-        "random_war_defender", allScopes, Scope.Country;
+        "any_war_defender",  Scope.Country;
+        "every_war_defender",  Scope.Country;
+        "random_war_defender",  Scope.Country;
 
-        "any_war_attacker", allScopes, Scope.Country;
-        "every_war_attacker", allScopes, Scope.Country;
-        "random_war_attacker", allScopes, Scope.Country;
-        
-        "any_planet", allScopes, Scope.Planet;
-        "every_planet", allScopes, Scope.Planet;
-        "random_planet", allScopes, Scope.Planet;
-        
-        "any_planet_within_border", allScopes, Scope.Planet;
-        "every_planet_within_border", allScopes, Scope.Planet;
-        "random_planet_within_border", allScopes, Scope.Planet;
-        
-        "any_ambient_object", allScopes, Scope.AmbientObject;
-        "every_ambient_object", allScopes, Scope.AmbientObject;
-        "random_ambient_object", allScopes, Scope.AmbientObject;
-        
-        "any_system_ambient_object", [Scope.GalacticObject], Scope.AmbientObject;
-        "every_system_ambient_object", [Scope.GalacticObject], Scope.AmbientObject;
-        "random_system_ambient_object", [Scope.GalacticObject], Scope.AmbientObject;
-        
-        "any_mining_station", allScopes, Scope.Fleet;
-        "every_mining_station", allScopes, Scope.Fleet;
-        "random_mining_station", allScopes, Scope.Fleet;
-        
-        "any_research_station", allScopes, Scope.Fleet;
-        "every_research_station", allScopes, Scope.Fleet;
-        "random_research_station", allScopes, Scope.Fleet;
-        
-        "any_spaceport", allScopes, Scope.Fleet;
-        "every_spaceport", allScopes, Scope.Fleet;
-        "random_spaceport", allScopes, Scope.Fleet;
-        
-        "any_system_planet", [Scope.GalacticObject], Scope.Planet;
-        "every_system_planet", [Scope.GalacticObject], Scope.Planet;
-        "random_system_planet", [Scope.GalacticObject], Scope.Planet;
-        
-        "any_neighboring_tile", [Scope.Tile], Scope.Tile;
-        "every_neighboring_tile", [Scope.Tile], Scope.Tile;
-        "random_neighboring_tile", [Scope.Tile], Scope.Tile;
-        
-        "any_tile", allScopes, Scope.Tile;
-        "every_tile", allScopes, Scope.Tile;
-        "random_tile", allScopes, Scope.Tile;
-        
-        "any_neighbor_system",  [Scope.GalacticObject], Scope.GalacticObject;
-        "every_neighbor_system",  [Scope.GalacticObject], Scope.GalacticObject;
-        "random_neighbor_system",  [Scope.GalacticObject], Scope.GalacticObject;
-        
-        "any_moon", allScopes, Scope.Planet;
-        "every_moon", allScopes, Scope.Planet;
-        "random_moon", allScopes, Scope.Planet;
-        
-        "any_system_in_cluster", allScopes, Scope.GalacticObject;
-        "every_system_in_cluster", allScopes, Scope.GalacticObject;
-        "random_system_in_cluster", allScopes, Scope.GalacticObject;
-        
-        "any_owned_leader", allScopes, Scope.Leader;
-        "every_owned_leader", allScopes, Scope.Leader;
-        "random_owned_leader", allScopes, Scope.Leader;
-        
-        "any_sector", allScopes, Scope.Sector;
-        "every_sector", allScopes, Scope.Sector;
-        "random_sector", allScopes, Scope.Sector;
-        
-        "any_owned_fleet", allScopes, Scope.Fleet;
-        "every_owned_fleet", allScopes, Scope.Fleet;
-        "random_owned_fleet", allScopes, Scope.Fleet;
-        
-        "any_fleet_in_system", [Scope.GalacticObject], Scope.Fleet;
-        "every_fleet_in_system",[Scope.GalacticObject], Scope.Fleet;
-        "random_fleet_in_system", [Scope.GalacticObject], Scope.Fleet;
-        
-        //"any_pop_faction", allScopes, Scope.PopFaction; //Doesn't exist according to caligula
-        "every_pop_faction", allScopes, Scope.PopFaction;
-        "random_pop_faction", allScopes, Scope.PopFaction;
-        
-        "any_playable_country", allScopes, Scope.Country;
-        "every_playable_country", allScopes, Scope.Country;
-        "random_playable_country", allScopes, Scope.Country;
-        
-        "any_subject", allScopes, Scope.Country;
-        "every_subject", allScopes, Scope.Country;
-        "random_subject", allScopes, Scope.Country;
-        
-        ///The following are assumptions 
-        "any_country", allScopes, Scope.Country;
-        "every_country", allScopes, Scope.Country;
-        "random_country", allScopes, Scope.Country;
-        
-        "any_army", allScopes, Scope.Army;
-        "every_army", allScopes, Scope.Army;
-        "random_army", allScopes, Scope.Army;
-        
-        "any_rim_system", allScopes, Scope.GalacticObject;
-        "every_rim_system", allScopes, Scope.GalacticObject;
-        "random_rim_system", allScopes, Scope.GalacticObject;
-        
-        "any_neighbor_country", [Scope.Country], Scope.Country;
-        "every_neighbor_country", [Scope.Country], Scope.Country;
-        "random_neighbor_country", [Scope.Country], Scope.Country;
-        
-        "any_system_within_border", [Scope.Country], Scope.GalacticObject;
-        "every_system_within_border", [Scope.Country], Scope.GalacticObject;
-        "random_system_within_border", [Scope.Country], Scope.GalacticObject;
-        
-        "any_planet_army", [Scope.Planet], Scope.Army;
-        "every_planet_army", [Scope.Planet], Scope.Army;
-        "random_planet_army", [Scope.Planet], Scope.Army;
+        "any_war_attacker",  Scope.Country;
+        "every_war_attacker",  Scope.Country;
+        "random_war_attacker",  Scope.Country;
+                
+        "any_planet",  Scope.Planet;
+        "every_planet",  Scope.Planet;
+        "random_planet",  Scope.Planet;
+                
+        "any_planet_within_border",  Scope.Planet;
+        "every_planet_within_border",  Scope.Planet;
+        "random_planet_within_border",  Scope.Planet;
+                
+        "any_ambient_object",  Scope.AmbientObject;
+        "every_ambient_object",  Scope.AmbientObject;
+        "random_ambient_object",  Scope.AmbientObject;
+                
+        "any_system_ambient_object",  Scope.AmbientObject;
+        "every_system_ambient_object",  Scope.AmbientObject;
+        "random_system_ambient_object",  Scope.AmbientObject;
+                
+        "any_mining_station",  Scope.Fleet;
+        "every_mining_station",  Scope.Fleet;
+        "random_mining_station",  Scope.Fleet;
+                
+        "any_research_station",  Scope.Fleet;
+        "every_research_station",  Scope.Fleet;
+        "random_research_station",  Scope.Fleet;
+                
+        "any_spaceport",  Scope.Fleet;
+        "every_spaceport",  Scope.Fleet;
+        "random_spaceport",  Scope.Fleet;
+                
+        "any_system_planet",  Scope.Planet;
+        "every_system_planet",  Scope.Planet;
+        "random_system_planet",  Scope.Planet;
+                
+        "any_neighboring_tile",  Scope.Tile;
+        "every_neighboring_tile",  Scope.Tile;
+        "random_neighboring_tile",  Scope.Tile;
+                
+        "any_tile",  Scope.Tile;
+        "every_tile",  Scope.Tile;
+        "random_tile",  Scope.Tile;
+                
+        "any_neighbor_system",  Scope.GalacticObject;
+        "every_neighbor_system",  Scope.GalacticObject;
+        "random_neighbor_system",  Scope.GalacticObject;
+                
+        "any_moon",  Scope.Planet;
+        "every_moon",  Scope.Planet;
+        "random_moon",  Scope.Planet;
+                
+        "any_system_in_cluster",  Scope.GalacticObject;
+        "every_system_in_cluster",  Scope.GalacticObject;
+        "random_system_in_cluster",  Scope.GalacticObject;
+                
+        "any_owned_leader",  Scope.Leader;
+        "every_owned_leader",  Scope.Leader;
+        "random_owned_leader",  Scope.Leader;
+                
+        "any_sector",  Scope.Sector;
+        "every_sector",  Scope.Sector;
+        "random_sector",  Scope.Sector;
+                
+        "any_owned_fleet",  Scope.Fleet;
+        "every_owned_fleet",  Scope.Fleet;
+        "random_owned_fleet",  Scope.Fleet;
+                
+        "any_fleet_in_system",  Scope.Fleet;
+        "every_fleet_in_system",  Scope.Fleet;
+        "random_fleet_in_system",  Scope.Fleet;
+                
+                //"any_pop_faction", allScopes, Scope.PopFaction; //Doesn't exist according to caligula
+        "every_pop_faction",  Scope.PopFaction;
+        "random_pop_faction",  Scope.PopFaction;
+                
+        "any_playable_country",  Scope.Country;
+        "every_playable_country",  Scope.Country;
+        "random_playable_country",  Scope.Country;
+                
+        "any_subject",  Scope.Country;
+        "every_subject",  Scope.Country;
+        "random_subject",  Scope.Country;
+                
+                ///The following are assumptions 
+        "any_country",  Scope.Country;
+        "every_country",  Scope.Country;
+        "random_country",  Scope.Country;
+                
+        "any_army",  Scope.Army;
+        "every_army",  Scope.Army;
+        "random_army",  Scope.Army;
+                
+        "any_rim_system",  Scope.GalacticObject;
+        "every_rim_system",  Scope.GalacticObject;
+        "random_rim_system",  Scope.GalacticObject;
+                
+        "any_neighbor_country",  Scope.Country;
+        "every_neighbor_country",  Scope.Country;
+        "random_neighbor_country",  Scope.Country;
+                
+        "any_system_within_border",  Scope.GalacticObject;
+        "every_system_within_border",  Scope.GalacticObject;
+        "random_system_within_border",  Scope.GalacticObject;
+                
+        "any_planet_army",  Scope.Army;
+        "every_planet_army",  Scope.Army;
+        "random_planet_army",  Scope.Army;
+
+        "last_created_ambient_object", Scope.AmbientObject;
+        "last_created_country", Scope.Country;
+        "last_created_fleet", Scope.Fleet;
+        "last_created_leader", Scope.Leader;
+        "last_created_pop", Scope.Pop;
+        "last_created_species", Scope.Species
 
         ]
+    let addInnerScope (des : DocEffect list) =
+        des |> List.map (fun de ->
+                match scopeLists |> List.tryPick (function | (n, t) when n = de.Name -> Some t |_ -> None) with
+                | Some t -> ScopedEffect(de, t) :> DocEffect
+                | None -> de) 
 
     let anyScopes = [
         "last_created_ambient_object", allScopes, Scope.AmbientObject
@@ -397,6 +451,7 @@ module STLScopes =
         ;"ruler", Scope.Country, Scope.Leader//?Added manually
         ;"sector", Scope.Planet, Scope.Sector//??Added manullay?
         ;"root", Scope.Any, Scope.Any//??Added manullay?
+        ;"random_owned_pop", Scope.PopFaction, Scope.Pop//?added manually
 
         ]
 
@@ -405,14 +460,20 @@ module STLScopes =
         | WrongScope of expected : Scope list
         | NotFound
 
-    let changeScope (scope : string) source = 
-        let possibles = scopes |> List.filter (fun (n, _, _) -> n.ToLower() = scope.ToLower())
-        let exact = possibles |> List.tryFind (fun (_, s, _) -> s = source || s = Scope.Any)
-        let possiblesScopes = possibles |> List.map (fun (_, s, _) -> s)
-        match possiblesScopes, exact with
-        | [], _ -> NotFound
-        | _, Some (_, _, d) -> NewScope d
-        | ss, None -> WrongScope ss
+    let changeScope (effects : (Effect * bool) list) (triggers : (Effect * bool) list) (key : string) (source : Scope) = 
+        let effect = (effects @ triggers) 
+                    |> List.map fst
+                    |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                    |> List.tryFind (fun e -> e.Name = key)
+        match effect with
+        | None -> NotFound
+        | Some e -> 
+            let possibleScopes = e.Scopes
+            let exact = possibleScopes |> List.contains source
+            match possibleScopes, exact with
+            | [], _ -> NotFound
+            | _, true -> NewScope e.InnerScope
+            | ss, false -> WrongScope ss
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)

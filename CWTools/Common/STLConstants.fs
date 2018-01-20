@@ -76,7 +76,7 @@ module STLConstants =
         |"all" -> allScopes
         |x -> [parseScope x]
 
-    type EffectType = |Effect |Trigger
+    type EffectType = |Effect |Trigger |Both
     type Effect internal (name, scopes, effectType) =
         member val Name : string = name
         member val Scopes : Scope list = scopes
@@ -92,9 +92,7 @@ module STLConstants =
                     let r1 = x.Name.CompareTo(y.Name)
                     if r1 = 0 then 0 else List.compareWith compare x.Scopes y.Scopes
                 | _ -> invalidArg "yobj" ("cannot compare values of different types" + yobj.GetType().ToString())
-    type ScopedEffect(name, scopes, effectType, inner) =
-        inherit Effect(name, scopes, effectType)
-        member val InnerScope : Scope = inner
+    
 
     type ScriptedEffect(name, scopes, effectType) =
         inherit Effect(name, scopes, effectType)
@@ -124,3 +122,8 @@ module STLConstants =
         new(rawEffect : RawEffect, effectType) =
             let scopes = rawEffect.scopes |> List.collect parseScopes
             DocEffect(rawEffect.name, scopes, effectType, rawEffect.desc, rawEffect.usage)
+    type ScopedEffect(name, scopes, inner, effectType, desc, usage) =
+        inherit DocEffect(name, scopes, effectType, desc, usage)
+        member val InnerScope : Scope = inner
+        new(de : DocEffect, inner : Scope) =
+            ScopedEffect(de.Name, de.Scopes, inner, de.Type, de.Desc, de.Usage)

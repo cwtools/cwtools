@@ -13,6 +13,7 @@ open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
 open CWTools.Common
 open CWTools.Common.STLConstants
+open CWTools.Process.STLScopes
 
 
 type PassFileResult = {
@@ -36,7 +37,7 @@ type FilesScope =
 
 //type GameFile = GameFile of result : FileResult
 
-type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : Effect list, effects : Effect list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
+type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, triggers : DocEffect list, effects : DocEffect list, embeddedFiles : (string * string) list, langs : Lang list, validateVanilla : bool ) =
         let scriptFolders = [
                     "common/agendas";
                     "common/ambient_objects";
@@ -109,6 +110,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             timer.Start()
             let returnValue = f()
             (returnValue  , timer.ElapsedMilliseconds) 
+
+        let vanillaEffects = 
+            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let ve = effects |> addInnerScope |> List.map (fun e -> e :> Effect)
+            se @ ve
+        let vanillaTriggers = 
+            let se = scopedEffects |> List.map (fun e -> e :> Effect)
+            let vt = triggers |> addInnerScope |> List.map (fun e -> e :> Effect)
+            se @ vt
 
         let mutable files : Map<string, FileResult> = Map.empty
         let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, s, r) -> Some ((f, s, r)) |_ -> None))
@@ -217,17 +227,15 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-            let repeatUntilTrue f =
-                Seq.initInfinite (fun _ -> f())
-                |> Seq.find id
-                |> ignore
-            let mutable final = triggers
+            let mutable final = vanillaTriggers
+            let mutable i = 0
             let ff() = 
+                i <- i + 1
                 let before = final
                 final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) final
-                (before |> Set.ofList) = (final |> Set.ofList)
+                ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
+            while not ff() do ()
                 //( before |> List.map (fun f -> f.Name, f.Scopes)) = (final |> List.map (fun f -> f.Name, f.Scopes))
-            repeatUntilTrue ff 
             scriptedTriggers <- final
 
 
@@ -239,17 +247,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.map (fun (f, statements) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) statements))
                 |> List.collect (fun n -> n.Children)
                 |> List.rev
-            let repeatUntilTrue f =
-                Seq.initInfinite (fun _ -> f())
-                |> Seq.find id
-                |> ignore
-            let mutable final = effects
+            let mutable final = vanillaEffects
+            let mutable i = 0
             let ff() = 
-                eprintfn "next effects"
+                i <- i + 1
                 let before = final
                 final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) final
-                (before |> Set.ofList) = (final |> Set.ofList)
-            repeatUntilTrue ff 
+                ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
+            while not ff() do ()
             scriptedEffects <- final
         
         let updateLocalisation() = 
@@ -297,7 +302,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = scriptedTriggers
             let scriptedEffects = scriptedEffects
-            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (triggers @ scriptedTriggers) (effects @ scriptedEffects) e) <&&> (valEventEffects (triggers @ scriptedTriggers) (effects @ scriptedEffects) e))
+            events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
 
