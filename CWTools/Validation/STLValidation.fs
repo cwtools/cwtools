@@ -205,26 +205,24 @@ module STLValidation =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
-        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %A" key lang)]
+        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %O" key lang)]
 
     let checkLocKeys (keys : (Lang * Set<string>) list) (leaf : Leaf) =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leaf keys l key) OK
 
-    let getLocKeys (node : Node) =
+    let getLocKeys (keys : (Lang * Set<string>) list) (node : Node) =
         let fNode = (fun (x:Node) children ->
                         let tags = ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"]
-                        match tags |> List.choose (fun t -> match x.TagText t with |"" -> None |s -> Some s) with
-                        | [] -> children
-                        | [key] -> key::children
-                        | keys -> keys @ children)
-        let fCombine = (@)
-        node |> (foldNode2 fNode fCombine [])
+                        let results =  x.Values |> List.filter (fun l -> tags |> List.contains l.Key) |> List.fold (fun s t -> s <&&> (checkLocKeys keys t) ) OK
+                        results <&&> children)
+        let fCombine = (<&&>)
+        node |> (foldNode2 fNode fCombine OK)
     
     let valEventLocs (event : Event) (keys : (Lang * Set<string>) list) =
         let titles = event.Leafs "title" |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
         let options = event.Childs "option" |> List.collect (fun o -> o.Leafs "name" |> List.map (checkLocKeys keys))
                                             |> List.fold (<&&>) OK                
-        //let usedKeys = getLocKeys event
-        titles <&&> options //(usedKeys |> List.map (checkLocKeys event keys) |> List.fold (<&&>) OK)
+        let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys c)) OK
+        titles <&&> options <&&> usedKeys
         
