@@ -353,7 +353,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let cres = comps |> List.map (fun t -> valCompSetLocs t keys)
                             |> List.choose (function |Invalid es -> Some es |_ -> None)
                             |> List.collect id
-            eres @ tres @ cres
+            let ctglob = Glob.Parse("**/common/component_templates/*.txt")
+            let temps = e1 |> List.choose (function |(f, t) when ctglob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
+            let tempres = temps |> List.map (fun t -> valCompTempLocs t keys)
+                            |> List.choose (function |Invalid es -> Some es |_ -> None)
+                            |> List.collect id
+            eres @ tres @ cres @ tempres
              
 
         let updateFile filepath =

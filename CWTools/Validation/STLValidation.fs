@@ -250,3 +250,6 @@ module STLValidation =
             let ckeydescres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckeydesc) OK
             ckeyres <&&> ckeydescres
         | _ -> OK
+
+    let valCompTempLocs (node : Node) (keys : (Lang * Set<string>) list) = 
+        node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
