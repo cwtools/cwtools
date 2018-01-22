@@ -211,9 +211,8 @@ module STLValidation =
         let key = leaf.Value |> (function |QString s -> s |s -> s.ToString())
         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocKey leaf keys l key) OK
 
-    let getLocKeys (keys : (Lang * Set<string>) list) (node : Node) =
+    let getLocKeys (keys : (Lang * Set<string>) list) (tags : string list) (node : Node) =
         let fNode = (fun (x:Node) children ->
-                        let tags = ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"]
                         let results =  x.Values |> List.filter (fun l -> tags |> List.contains l.Key) |> List.fold (fun s t -> s <&&> (checkLocKeys keys t) ) OK
                         results <&&> children)
         let fCombine = (<&&>)
@@ -223,6 +222,19 @@ module STLValidation =
         let titles = event.Leafs "title" |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
         let options = event.Childs "option" |> List.collect (fun o -> o.Leafs "name" |> List.map (checkLocKeys keys))
                                             |> List.fold (<&&>) OK                
-        let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys c)) OK
+        let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
         titles <&&> options <&&> usedKeys
+
+    let checkLocNode (node : Node) (keys : Set<string>) (lang : Lang) key =
+        match key = "" || key.Contains(" "), Set.contains key keys with
+        | true, _ -> OK
+        | _, true -> OK
+        | _, false -> Invalid [inv S.Warning node (sprintf "Localisation key %s is not defined for %O" key lang)]
         
+    let valTechLocs (node : Node) (keys : (Lang * Set<string>) list) =
+        let key = node.Key
+        let desc = key + "_desc"
+        let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK
+        let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK
+        let usedKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
+        keyres <&&> descres <&&> usedKeys

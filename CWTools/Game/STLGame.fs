@@ -14,6 +14,7 @@ open CWTools.Localisation.STLLocalisation
 open CWTools.Common
 open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes
+open DotNet.Globbing
 
 
 type PassFileResult = {
@@ -220,7 +221,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let parseEntities validfiles =
             validfiles
             |> List.map ((fun (file, _, parsed) -> (file, parsed.statements, parsed.parseTime))
-            >> (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed)))
+            >> (fun (f, parsed, _) ->  f, (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed)))
 
         let embeddedParsed = getEmbeddedFiles |> List.filter (fun (_, fn, _) -> fn.Contains("common")) |> parseResults
             
@@ -310,6 +311,10 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                      |> List.choose (function |Invalid es -> Some es |_ -> None)
                      |> List.collect id
 
+        let validateTechnology (entities : (string * Node) list) =
+            let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/")) 
+            tech |> List.iter (fun (f, t) -> eprintfn "%s" f)
+            
         let validateEvents (entities : Node list) =
             let events = entities |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let scriptedTriggers = scriptedTriggers
@@ -317,23 +322,33 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             events |> List.map (fun e -> (valEventVals e) <&&> (valEventTriggers (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e) <&&> (valEventEffects (vanillaTriggers @ scriptedTriggers) (vanillaEffects @ scriptedEffects) e))
                    |> List.choose (function |Invalid es -> Some es |_ -> None)
                    |> List.collect id
-
+        let snood = snd
         let validateAll (entities : (string * string * PassFileResult) list)  = 
             eprintfn "Validating %i files" (entities.Length)
-            let es = entities |> parseEntities
-            let fes = es |> List.map (fun n -> n.Children) |> List.collect id
-            (validateShips (fes)) @ (validateFiles (es)) @ (validateEvents (fes))
+            let entitiesByFile = entities |> parseEntities
+            let allEntitiesByFile = entitiesByFile |> List.map snood
+            let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
+            (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened))
         
         let localisationCheck (entities : (string * string * PassFileResult) list) =
             eprintfn "Localisation check %i files" (entities.Length)
-            let es = entities |> parseEntities
+            let e1 = entities |> parseEntities
+            let es = e1 |> List.map snd
             let fes = es |> List.map (fun n -> n.Children) |> List.collect id
             let events = fes |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             //let keys = localisationAPIs |> List.collect (fun l -> l.GetKeys) |> Set.ofList
-            events |> List.map (fun e -> valEventLocs e keys)
-                    |> List.choose (function |Invalid es -> Some es |_ -> None)
-                    |> List.collect id
+            let eres = events |> List.map (fun e -> valEventLocs e keys)
+                            |> List.choose (function |Invalid es -> Some es |_ -> None)
+                            |> List.collect id
+            let glob = Glob.Parse("**/common/technology/*.txt")
+            //let findFolders (f : string) = f.Contains("common/technology/") || f.Contains("common/technology\\") || f.Contains("common\\technology\\") || f.Contains("common\\technology/")
+            let techs = e1 |> List.choose (function |(f, t) when glob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
+            let tres = techs |> List.map (fun t -> valTechLocs t keys)
+                            |> List.choose (function |Invalid es -> Some es |_ -> None)
+                            |> List.collect id
+            eres @ tres
+             
 
         let updateFile filepath =
             eprintfn "%s" filepath
