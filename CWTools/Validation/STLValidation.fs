@@ -238,3 +238,15 @@ module STLValidation =
         let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK
         let usedKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
         keyres <&&> descres <&&> usedKeys
+
+    let valCompSetLocs (node : Node) (keys : (Lang * Set<string>) list) =
+        let key = node.Key
+        let required = node.Tag "required_component_set" |> (function |Some (Bool b) when b = true -> true |_ -> false)
+        match key, required with
+        | "component_set", false -> 
+            let ckey = node.TagText "key"
+            let ckeydesc = ckey + "_DESC"
+            let ckeyres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckey) OK
+            let ckeydescres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckeydesc) OK
+            ckeyres <&&> ckeydescres
+        | _ -> OK

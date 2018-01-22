@@ -15,6 +15,7 @@ open CWTools.Common
 open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes
 open DotNet.Globbing
+open System.Collections.Specialized
 
 
 type PassFileResult = {
@@ -347,7 +348,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let tres = techs |> List.map (fun t -> valTechLocs t keys)
                             |> List.choose (function |Invalid es -> Some es |_ -> None)
                             |> List.collect id
-            eres @ tres
+            let csglob = Glob.Parse("**/common/component_sets/*.txt")
+            let comps = e1 |> List.choose (function |(f, t) when csglob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
+            let cres = comps |> List.map (fun t -> valCompSetLocs t keys)
+                            |> List.choose (function |Invalid es -> Some es |_ -> None)
+                            |> List.collect id
+            eres @ tres @ cres
              
 
         let updateFile filepath =
