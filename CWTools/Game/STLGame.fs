@@ -16,6 +16,7 @@ open CWTools.Common.STLConstants
 open CWTools.Process.STLScopes
 open DotNet.Globbing
 open System.Collections.Specialized
+open CWTools.Validation.STLLocalisationValidation
 
 
 type PassFileResult = {
@@ -96,6 +97,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/technology";
                     "common/terraform";
                     "common/tile_blockers";
+                    "common/traditions";
+                    "common/tradition_categories";
                     "common/traits";
                     "common/triggered_modifiers";
                     "common/war_demand_counters";
@@ -126,6 +129,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, s, r) -> Some ((f, s, r)) |_ -> None))
         let invalidFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Fail (f, s, r) -> Some ((f, s, r)) |_ -> None))
         let validatableFiles() = if validateVanilla then validFiles() else validFiles() |> List.filter (fun(_, s, _) -> s <> "vanilla")
+        let mutable allEntities : Map<string, Node> = Map.empty
+        let entitiesList() = allEntities |> Map.toList
 
         let mutable scriptedTriggers : Effect list = []
         let mutable scriptedEffects : Effect list = []
@@ -232,6 +237,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         //                 //|> List.collect id
         //                 |> List.map (fun (f, parsed, _) -> (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed))
         //let flatEntities() = entities() |> List.map (fun n -> n.Children) |> List.collect id
+        let updateEntities() = 
+            allEntities <- validFiles() |> parseEntities |> Map.ofList
 
         let updateScriptedTriggers (validfiles : (string * Statement list) list ) = 
             let rawTriggers = 
@@ -332,6 +339,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened))
         
         let localisationCheck (entities : (string * string * PassFileResult) list) =
+           
             eprintfn "Localisation check %i files" (entities.Length)
             let e1 = entities |> parseEntities
             let es = e1 |> List.map snd
@@ -342,23 +350,27 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let eres = events |> List.map (fun e -> valEventLocs e keys)
                             |> List.choose (function |Invalid es -> Some es |_ -> None)
                             |> List.collect id
-            let glob = Glob.Parse("**/common/technology/*.txt")
-            //let findFolders (f : string) = f.Contains("common/technology/") || f.Contains("common/technology\\") || f.Contains("common\\technology\\") || f.Contains("common\\technology/")
-            let techs = e1 |> List.choose (function |(f, t) when glob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
-            let tres = techs |> List.map (fun t -> valTechLocs t keys)
+            let globMatch (globString : string) (e : (string * Node) list) =
+                let glob = Glob.Parse(globString)
+                e |> List.choose (function |(f, t) when glob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
+
+            let locCheck (globString : string) loc e =
+                let matches = globMatch globString e
+                matches |> List.map (fun t -> loc t keys)
                             |> List.choose (function |Invalid es -> Some es |_ -> None)
                             |> List.collect id
-            let csglob = Glob.Parse("**/common/component_sets/*.txt")
-            let comps = e1 |> List.choose (function |(f, t) when csglob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
-            let cres = comps |> List.map (fun t -> valCompSetLocs t keys)
-                            |> List.choose (function |Invalid es -> Some es |_ -> None)
-                            |> List.collect id
-            let ctglob = Glob.Parse("**/common/component_templates/*.txt")
-            let temps = e1 |> List.choose (function |(f, t) when ctglob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
-            let tempres = temps |> List.map (fun t -> valCompTempLocs t keys)
-                            |> List.choose (function |Invalid es -> Some es |_ -> None)
-                            |> List.collect id
-            eres @ tres @ cres @ tempres
+
+            let techs = locCheck "**/common/technology/*.txt" valTechLocs e1
+            let compsets = locCheck "**/common/component_sets/*.txt" valCompSetLocs e1
+            let comptemp = locCheck "**/common/component_templates/*.txt" valCompTempLocs e1
+            let buildings = locCheck "**/common/buildings/*.txt" valBuildingLocs e1
+            let traditionCategories = globMatch "**/common/tradition_categories/*.txt" (entitiesList())
+            //eprintfn "%A %i" traditionCategories (traditionCategories.Length)
+            let traditions = globMatch "**/common/traditions/*.txt" e1
+            let traditionRes = valTraditionLocCats traditionCategories traditions keys 
+                                |> (function |Invalid es ->  es |_ -> [])
+
+            eres @ techs @ compsets @ comptemp @ buildings @ traditionRes
              
 
         let updateFile filepath =
@@ -367,6 +379,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let newFiles = parseResults [("", filepath, file)] 
             files <- newFiles |> List.map (function |Pass (file, scope, result) -> (file, Pass(file, scope, result)) |Fail (file, scope, result) -> (file, Fail(file, scope, result))) |> List.fold (fun x s -> x.Add(s)) files
             let valid = newFiles |> List.choose  (function  | Pass (f, s, r) -> Some (f, s, r) |_ -> None)
+            let newEntities = parseEntities valid
+            allEntities <- newEntities |> List.fold (fun x s -> x.Add(s)) allEntities
             validateAll valid @ localisationCheck valid
 
         do 
@@ -378,6 +392,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 match gameDirectory with
                 |Some _ -> user
                 |None -> user @ embedded
+            updateEntities()
             updateScriptedTriggers (coreFiles)
             updateScriptedEffects (coreFiles)
             updateLocalisation()

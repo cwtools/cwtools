@@ -20,6 +20,7 @@
     <Compile Include="Process/STLProcess.fs" />
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/STLValidation.fs" />
+    <Compile Include="Validation/STLLocalisationValidation.fs" />
     <Compile Include="Game/STLGame.fs" />
   </ItemGroup>
   <Import Project="fsc.props" />
