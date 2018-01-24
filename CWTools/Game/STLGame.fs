@@ -313,11 +313,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                   |> List.collect id
 
         let parseErrors() = invalidFiles() |> List.map (fun (file, _, fail) -> (file, fail.error, fail.position))
-                        
-        let validateFiles (entities : Node list) =
-            entities |> List.map validateVariables
-                     |> List.choose (function |Invalid es -> Some es |_ -> None)
-                     |> List.collect id
+
 
         let validateTechnology (entities : (string * Node) list) =
             let tech = entities |> List.filter (fun (f, _) -> f.Contains("common/technology/")) 
@@ -337,13 +333,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entitiesByFile |> List.map snood
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [valTechnology]
+            let validators = [validateVariables; valTechnology]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet entitiesByFile
             let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
                        |> (function |Invalid es -> es |_ -> [])
 
-            (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened)) @ res
+            (validateShips (flattened)) @ (validateEvents (flattened)) @ res
         
         let localisationCheck (entities : (string * string * PassFileResult) list) =
             eprintfn "Localisation check %i files" (entities.Length)

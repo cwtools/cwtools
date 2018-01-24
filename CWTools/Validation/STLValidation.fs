@@ -18,6 +18,7 @@ module STLValidation =
             entities |> List.choose (fun (f, n) -> if glob.IsMatch(f) then Some n else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
+        member __.All = entities |> List.map snd
 
     type StructureValidator = EntitySet -> EntitySet -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv S.Error ship "must have name")] else OK
@@ -27,41 +28,36 @@ module STLValidation =
 
 
     let getDefinedVariables (node : Node) =
-        node.Values |> List.filter (fun kv -> kv.Key.StartsWith("@"))
-                    |> List.map (fun kv -> kv.Key)
-
-    let getUsedVariables (node : Node) =
         let fNode = (fun (x:Node) children ->
-                        let values = x.Values |> List.choose (fun v -> match v.Value with |String s when s.StartsWith("@") -> Some s |_ -> None)
+                        let values = x.Values |> List.choose (function  kv when kv.Key.StartsWith("@") -> Some kv.Key |_ -> None)
+                        values @ children)
+        let fCombine = (@)
+        node |> (foldNode2 fNode fCombine [])
+
+    let checkUsedVariables (node : Node) (variables : string list) =
+        let fNode = (fun (x:Node) children ->
+                        let values = x.Values |> List.choose (fun v -> match v.Value with |String s when s.StartsWith("@") -> Some v |_ -> None)
                         match values with
                         | [] -> children
-                        | x -> x@children)
-        let fCombine = (@)
-        ([node] |> List.collect (foldNode2 fNode fCombine []))
+                        | x -> 
+                            x |> List.map ((fun f -> f, f.Value.ToString()) >> (fun (l, v) -> if variables |> List.contains v then OK else Invalid [inv S.Error l (v + " is not defined")]))
+                              |> List.fold (<&&>) OK)
+        let fCombine = (<&&>)
+        node |> (foldNode2 fNode fCombine OK)
     
     
 
-    let validateVariables : Validator<Node> =
-        (fun node -> 
-            let defined = getDefinedVariables node |> Set.ofList
-            let used = getUsedVariables node |> Set.ofList
-            let undefined = Set.difference used defined
-            let errors = 
-                match undefined |> Set.toList with
-                | [] -> OK
-                | x -> 
-                    let errors = List.map (fun v -> (inv S.Error node (v + " is not defined"))) x
-                    Invalid errors
-            let unused = Set.difference defined used
-            let warnings =
-                match unused |> Set.toList with
-                | [] -> OK
-                | x -> 
-                    let errors = List.map (fun v -> (inv S.Error node (v + " is not used"))) x
-                    Invalid errors
-
-            errors //<&&> warnings
-        )
+    let validateVariables : StructureValidator =
+        fun _ es ->
+            let x =  
+                es.All  
+                |> List.map
+                    (fun node -> 
+                        let defined = getDefinedVariables node
+                        let errors = checkUsedVariables node defined
+                        errors
+                    )
+            x |> List.fold (<&&>) OK
 
     let eventScope (event : Event) =
         match event.Key with
