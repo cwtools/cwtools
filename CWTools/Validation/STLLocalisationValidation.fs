@@ -8,15 +8,10 @@ open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
 open DotNet.Globbing
+open CWTools.Validation.STLValidation
 
 module STLLocalisationValidation =
     type S = Severity
-    type EntitySet(entities : (string * Node) list) =
-        member __.GlobMatch(pattern : string) =
-            let glob = Glob.Parse(pattern)
-            entities |> List.choose (fun (f, n) -> if glob.IsMatch(f) then Some n else None)
-        member this.GlobMatchChildren(pattern : string) =
-            this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
     type LocalisationValidator = EntitySet -> (Lang * Set<string>) list -> EntitySet -> ValidationResult
 
     let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =

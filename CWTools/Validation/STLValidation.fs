@@ -7,10 +7,19 @@ open CWTools.Parser
 open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
+open DotNet.Globbing
 
 
 module STLValidation =
     type S = Severity
+    type EntitySet(entities : (string * Node) list) =
+        member __.GlobMatch(pattern : string) =
+            let glob = Glob.Parse(pattern)
+            entities |> List.choose (fun (f, n) -> if glob.IsMatch(f) then Some n else None)
+        member this.GlobMatchChildren(pattern : string) =
+            this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
+
+    type StructureValidator = EntitySet -> EntitySet -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv S.Error ship "must have name")] else OK
     let shipSize (ship : Ship) = if ship.ShipSize = "" then Invalid [(inv S.Error ship "must have size")] else OK
 
@@ -197,6 +206,30 @@ module STLValidation =
                 | _ -> false
             | None -> false
         match isMTTH || isTrig || isOnce || isAlwaysNo with
-        | false -> Invalid [inv S.Information event "This event should be explicitely marked as 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
+        | false -> Invalid [inv S.Information event "This event might affect performance as it runs on every tick, consider adding 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
         | true -> OK
+
+    let valResearchLeader (area : string) (node : Node) =
+        let fNode = (fun (x:Node) children ->
+                        let results = 
+                            match x.Key with
+                            | "research_leader" ->
+                                match x.TagText "area" with
+                                | "" -> Invalid [inv S.Error x "This research_leader is missing required \"area\""]
+                                | area2 when area <> area2 -> Invalid [inv S.Information x (sprintf "This research_leader is uses area %s but the technology uses area %s" area2 area)]
+                                | _ -> OK
+                            | _ -> OK
+                        results <&&> children)
+        let fCombine = (<&&>)
+        node |> (foldNode2 fNode fCombine OK)
+
+    let valTechnology : StructureValidator =
+        fun _ es ->
+            let techs = es.GlobMatchChildren("**/common/technology/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let area = node.TagText "area"
+                    valResearchLeader area node
+            techs |> List.map inner |> List.fold (<&&>) OK
+
 

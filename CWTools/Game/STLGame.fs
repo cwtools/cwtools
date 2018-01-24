@@ -336,7 +336,14 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let entitiesByFile = entities |> parseEntities
             let allEntitiesByFile = entitiesByFile |> List.map snood
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
-            (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened))
+
+            let validators = [valTechnology]
+            let oldEntities = EntitySet (entitiesList())
+            let newEntities = EntitySet entitiesByFile
+            let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
+                       |> (function |Invalid es -> es |_ -> [])
+
+            (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened)) @ res
         
         let localisationCheck (entities : (string * string * PassFileResult) list) =
             eprintfn "Localisation check %i files" (entities.Length)
