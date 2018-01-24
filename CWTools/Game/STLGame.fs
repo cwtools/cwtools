@@ -339,38 +339,16 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             (validateShips (flattened)) @ (validateFiles (allEntitiesByFile)) @ (validateEvents (flattened))
         
         let localisationCheck (entities : (string * string * PassFileResult) list) =
-           
             eprintfn "Localisation check %i files" (entities.Length)
             let e1 = entities |> parseEntities
-            let es = e1 |> List.map snd
-            let fes = es |> List.map (fun n -> n.Children) |> List.collect id
-            let events = fes |> List.choose (function | :? Event as e -> Some e |_ -> None)
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
-            //let keys = localisationAPIs |> List.collect (fun l -> l.GetKeys) |> Set.ofList
-            let eres = events |> List.map (fun e -> valEventLocs e keys)
-                            |> List.choose (function |Invalid es -> Some es |_ -> None)
-                            |> List.collect id
-            let globMatch (globString : string) (e : (string * Node) list) =
-                let glob = Glob.Parse(globString)
-                e |> List.choose (function |(f, t) when glob.IsMatch(f) -> Some t.Children |_ -> None) |> List.collect id
+            
+            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats]
+            let oldEntities = EntitySet (entitiesList())
+            let newEntities = EntitySet e1
 
-            let locCheck (globString : string) loc e =
-                let matches = globMatch globString e
-                matches |> List.map (fun t -> loc t keys)
-                            |> List.choose (function |Invalid es -> Some es |_ -> None)
-                            |> List.collect id
-
-            let techs = locCheck "**/common/technology/*.txt" valTechLocs e1
-            let compsets = locCheck "**/common/component_sets/*.txt" valCompSetLocs e1
-            let comptemp = locCheck "**/common/component_templates/*.txt" valCompTempLocs e1
-            let buildings = locCheck "**/common/buildings/*.txt" valBuildingLocs e1
-            let traditionCategories = globMatch "**/common/tradition_categories/*.txt" (entitiesList())
-            //eprintfn "%A %i" traditionCategories (traditionCategories.Length)
-            let traditions = globMatch "**/common/traditions/*.txt" e1
-            let traditionRes = valTraditionLocCats traditionCategories traditions keys 
-                                |> (function |Invalid es ->  es |_ -> [])
-
-            eres @ techs @ compsets @ comptemp @ buildings @ traditionRes
+            validators |> List.map (fun v -> v oldEntities keys newEntities) |> List.fold (<&&>) OK
+                       |> (function |Invalid es -> es |_ -> [])
              
 
         let updateFile filepath =

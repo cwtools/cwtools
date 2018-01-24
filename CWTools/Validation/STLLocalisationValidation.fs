@@ -7,9 +7,17 @@ open CWTools.Parser
 open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
+open DotNet.Globbing
 
 module STLLocalisationValidation =
     type S = Severity
+    type EntitySet(entities : (string * Node) list) =
+        member __.GlobMatch(pattern : string) =
+            let glob = Glob.Parse(pattern)
+            entities |> List.choose (fun (f, n) -> if glob.IsMatch(f) then Some n else None)
+        member this.GlobMatchChildren(pattern : string) =
+            this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
+    type LocalisationValidator = EntitySet -> (Lang * Set<string>) list -> EntitySet -> ValidationResult
 
     let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
         match key = "" || key.Contains(" "), Set.contains key keys with
@@ -49,30 +57,55 @@ module STLLocalisationValidation =
         let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK
         keyres <&&> descres
         
-    let valTechLocs (node : Node) (keys : (Lang * Set<string>) list) =
-        let keyres = checkKeyAndDesc node keys
-        let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
-        keyres <&&> innerKeys
+    let valTechLocs : LocalisationValidator =
+        fun _ keys es ->
+            let entities = es.GlobMatchChildren("**/common/technology/*.txt")
+            entities |> List.map
+                (fun (node : Node) ->
+                let keyres = checkKeyAndDesc node keys
+                let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
+                keyres <&&> innerKeys
+                )
+                |> List.fold (<&&>) OK
+        
 
-    let valCompSetLocs (node : Node) (keys : (Lang * Set<string>) list) =
-        let key = node.Key
-        let required = node.Tag "required_component_set" |> (function |Some (Bool b) when b = true -> true |_ -> false)
-        match key, required with
-        | "component_set", false -> 
-            let ckey = node.TagText "key"
-            let ckeydesc = ckey + "_DESC"
-            let ckeyres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckey) OK
-            let ckeydescres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckeydesc) OK
-            ckeyres <&&> ckeydescres
-        | _ -> OK
+    let valCompSetLocs : LocalisationValidator =
+        fun _ keys es ->
+            let entities = es.GlobMatchChildren("**/common/component_sets/*.txt")
+            entities |> List.map
+                (fun (node : Node) -> 
+                    let key = node.Key
+                    let required = node.Tag "required_component_set" |> (function |Some (Bool b) when b = true -> true |_ -> false)
+                    match key, required with
+                    | "component_set", false -> 
+                        let ckey = node.TagText "key"
+                        let ckeydesc = ckey + "_DESC"
+                        let ckeyres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckey) OK
+                        let ckeydescres =  keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l ckeydesc) OK
+                        ckeyres <&&> ckeydescres
+                    | _ -> OK)
+                |> List.fold (<&&>) OK
+            
 
-    let valCompTempLocs (node : Node) (keys : (Lang * Set<string>) list) = 
-        node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
 
-    let valBuildingLocs (node : Node) (keys : (Lang * Set<string>) list) = 
-        let keyres = checkKeyAndDesc node keys
-        let failtext = node.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["fail_text"] c)) OK
-        keyres <&&> failtext
+    let valCompTempLocs : LocalisationValidator = 
+        fun _ keys es ->
+            let entities = es.GlobMatchChildren("**/common/component_templates/*.txt")
+            let inner = 
+                fun (node : Node) ->
+                    node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
+            entities |> List.map inner |> List.fold (<&&>) OK
+
+
+    let valBuildingLocs : LocalisationValidator =
+        fun _ keys es ->
+            let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
+            let inner =
+                fun node ->
+                    let keyres = checkKeyAndDesc node keys
+                    let failtext = node.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["fail_text"] c)) OK
+                    keyres <&&> failtext
+            entities |> List.map inner |> List.fold (<&&>) OK
 
     let valTraditionLocs (node : Node) (keys : (Lang * Set<string>) list) (starts : string list) (finals : string list) (traditions : string list)= 
         let key = node.Key
@@ -112,11 +145,19 @@ module STLLocalisationValidation =
         let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode cat keys l key) OK
         (keyres, start, finish, traditions)
 
-    let valTraditionLocCats (cats : Node list) (traditions : Node list) (keys : (Lang * Set<string>) list) =
-        //eprintfn "%A" cats
-        let catres, starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun (rs, ss, fs, ts) (r, s, f, t) -> rs <&&> r, s::ss,  f::fs, ts @ t) (OK, [], [], [])
-        //eprintfn "%A %A %A" starts finishes trads
-        let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
-        catres <&&> tradres
+    let valTraditionLocCats : LocalisationValidator = 
+        fun entitySet keys nes -> 
+            let cats = entitySet.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
+            let catres, starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun (rs, ss, fs, ts) (r, s, f, t) -> rs <&&> r, s::ss,  f::fs, ts @ t) (OK, [], [], [])
+            let traditions = nes.GlobMatch("**/traditions/*.txt")  |> List.collect (fun e -> e.Children)
+            let inner = fun tradition -> valTraditionLocs tradition keys starts finishes trads
+            traditions |> List.map inner |> List.fold (<&&>) catres
+
+    // let valTraditionLocCats (cats : Node list) (traditions : Node list) (keys : (Lang * Set<string>) list) =
+    //     //eprintfn "%A" cats
+    //     let catres, starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun (rs, ss, fs, ts) (r, s, f, t) -> rs <&&> r, s::ss,  f::fs, ts @ t) (OK, [], [], [])
+    //     //eprintfn "%A %A %A" starts finishes trads
+    //     let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
+    //     catres <&&> tradres
 
 
