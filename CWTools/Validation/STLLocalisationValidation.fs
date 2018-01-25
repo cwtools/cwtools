@@ -206,4 +206,26 @@ module STLLocalisationValidation =
                     
             diplos |> List.collect (fun n -> n.Children) |> List.map inner |> List.fold (<&&>) OK
 
+    let valShipLoc : LocalisationValidator =
+        fun _ keys es ->
+            let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let key = node.Key
+                    let plural = key + "_plural"
+                    let speed = "shipsize_" + key + "_construction_speed_mult"
+                    let cost =  "shipsize_" + key + "_build_cost_mult"
+                    let upkeep =  "shipsize_" + key + "_upkeep_mult"
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l plural) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l speed) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l cost) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l upkeep) OK)
+            ships |> List.map inner |> List.fold (<&&>) OK
+
+
 

@@ -346,7 +346,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let e1 = entities |> parseEntities
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             
-            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc; valArmyAttachmentLocs; valDiploPhrases]
+            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc; valArmyAttachmentLocs; valDiploPhrases; valShipLoc]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet e1
 
