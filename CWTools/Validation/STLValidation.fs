@@ -205,7 +205,7 @@ module STLValidation =
         | false -> Invalid [inv S.Information event "This event might affect performance as it runs on every tick, consider adding 'is_triggered_only', 'fire_only_once' or 'mean_time_to_happen'"]
         | true -> OK
 
-    let valResearchLeader (area : string) (node : Node) =
+    let valResearchLeader (area : string) (cat : string option) (node : Node) =
         let fNode = (fun (x:Node) children ->
                         let results = 
                             match x.Key with
@@ -213,6 +213,12 @@ module STLValidation =
                                 match x.TagText "area" with
                                 | "" -> Invalid [inv S.Error x "This research_leader is missing required \"area\""]
                                 | area2 when area <> area2 -> Invalid [inv S.Information x (sprintf "This research_leader is uses area %s but the technology uses area %s" area2 area)]
+                                | _ -> OK
+                                <&&>
+                                match cat, x.TagText "has_trait" with
+                                | None, _ -> OK
+                                | _, "" -> Invalid [inv S.Error x "This research_leader is missing required \"has_trait\""]
+                                | Some c, t when ("leader_trait_expertise_" + c) <> t -> Invalid [inv S.Warning x "This research_leader has the wrong expertise"]
                                 | _ -> OK
                             | _ -> OK
                         results <&&> children)
@@ -225,7 +231,12 @@ module STLValidation =
             let inner =
                 fun (node : Node) ->
                     let area = node.TagText "area"
-                    valResearchLeader area node
+                    let cat = node.Child "category" |> Option.bind (fun c -> c.All |> List.tryPick (function |LeafValueI lv -> Some (lv.Value.ToString()) |_ -> None))
+                    let catres = 
+                        match cat with
+                        | None -> Invalid [inv S.Error node "No category found for this technology"]
+                        | Some _ -> OK
+                    catres <&&> valResearchLeader area cat node
             techs |> List.map inner |> List.fold (<&&>) OK
 
 

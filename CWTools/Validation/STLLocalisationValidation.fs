@@ -88,7 +88,10 @@ module STLLocalisationValidation =
             let entities = es.GlobMatchChildren("**/common/component_templates/*.txt")
             let inner = 
                 fun (node : Node) ->
-                    node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
+                    let keyres = node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
+                    let auras = node.Childs "friendly_aura" @ node.Childs "hostile_aura"
+                    let aurares = auras |> List.fold (fun s c -> s <&&> (getLocKeys keys ["name"] c)) OK
+                    keyres <&&> aurares
             entities |> List.map inner |> List.fold (<&&>) OK
 
 
@@ -154,5 +157,53 @@ module STLLocalisationValidation =
     //     //eprintfn "%A %A %A" starts finishes trads
     //     let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
     //     catres <&&> tradres
+
+    let valArmiesLoc : LocalisationValidator =
+        fun _ keys es ->
+            let armies = es.GlobMatchChildren("**/common/armies/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let army = node.Key
+                    let armyplural = army + "_plural"
+                    let armydesc = army + "_desc"
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l army) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armyplural) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armydesc) OK)
+            armies |> List.map inner |> List.fold (<&&>) OK
+
+    let valArmyAttachmentLocs : LocalisationValidator =
+        fun _ keys es ->
+            let armies = es.GlobMatchChildren("**/common/army_attachments/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let army = "army_attachment_"+node.Key
+                    let armyplural = army + "_plural"
+                    let armydesc = army + "_desc"
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l army) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armyplural) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armydesc) OK)
+            armies |> List.map inner |> List.fold (<&&>) OK
+
+    let valDiploPhrases : LocalisationValidator =
+        fun _ keys es ->
+            let diplos = es.GlobMatchChildren("**/common/diplo_phrases/*.txt")
+            let rec inner =
+                fun (node : Node) ->
+                    match node.Key with
+                    | "greetings"
+                    | "select"
+                    | "propose"
+                    | "accept"
+                    | "consider"
+                    | "refuse"
+                    | "propose_vote" ->
+                         node.Children |> List.map (fun c -> keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode c keys l c.Key) OK)  |> List.fold (<&&>) OK
+                    | _ -> node.Children |> List.map inner |> List.fold (<&&>) OK
+                    
+            diplos |> List.collect (fun n -> n.Children) |> List.map inner |> List.fold (<&&>) OK
 
 
