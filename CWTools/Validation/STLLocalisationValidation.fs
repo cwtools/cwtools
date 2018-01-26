@@ -227,5 +227,12 @@ module STLLocalisationValidation =
                     (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l upkeep) OK)
             ships |> List.map inner |> List.fold (<&&>) OK
 
+    let valFactionDemands : LocalisationValidator =
+        fun _ keys es ->
+            let factions = es.GlobMatchChildren("**/common/pop_faction_types/*.txt")
+            let demands = factions |> List.collect (fun f -> f.Childs "demand")
+            let inner = fun c -> (getLocKeys keys ["title"; "desc"; "unfulfilled_title"] c)
+            demands |> List.fold (fun s c -> s <&&> (inner c)) OK
+
 
 
