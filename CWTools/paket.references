@@ -2,5 +2,4 @@ FParsec
 FSharp.Data
 Newtonsoft.Json.FSharp
 FSharp.Collections.ParallelSeq
-FSharpPlus
 DotNet.Glob

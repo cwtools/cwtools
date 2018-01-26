@@ -8,7 +8,6 @@ open CWTools.Process.STLProcess
 open CWTools.Validation.STLValidation
 open CWTools.Validation.ValidationCore
 open FSharp.Collections.ParallelSeq
-open FSharpPlus
 open CWTools.Localisation
 open CWTools.Localisation.STLLocalisation
 open CWTools.Common
@@ -150,7 +149,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         do eprintfn "%s %b" scopeDirectory (Directory.Exists scopeDirectory)
         let allDirs = if Directory.Exists scopeDirectory then getAllFoldersUnion [scopeDirectory] |> List.ofSeq |> List.map(fun folder -> folder, Path.GetFileName folder) else []
         let gameDirectory = 
-            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> map fst >>= (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
+            let dir = allDirs |> List.tryFind (fun (_, folder) -> folder.ToLower() = "stellaris") |> Option.map (fst) |> Option.bind (fun f -> if Directory.Exists (f + (string Path.DirectorySeparatorChar) + "common") then Some f else None)
             match dir with
             |Some s -> eprintfn "Found stellaris directory at %s" s
             |None -> eprintfn "Couldn't find stellaris directory, falling back to embedded vanilla files"
@@ -180,7 +179,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             modFiles
         let modFolders = 
             let folders = mods |> List.filter (fun (n, _, _) -> n.Contains(modFilter))
-                                |> map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
+                                |> List.map (fun (n, p, r) -> if Path.IsPathRooted p then n, p else n, (Directory.GetParent(r).FullName + (string Path.DirectorySeparatorChar) + p))
             eprintfn "Mod folders"                            
             folders |> List.iter (fun (n, f) -> eprintfn "%s, %s" n f)
             folders
@@ -205,7 +204,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |Some s, Vanilla -> ["vanilla", s]
         let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation")
         
-        let getEmbeddedFiles = embeddedFiles |> map (fun (fn, f) -> "embedded", "embeddedfiles." + fn, f)
+        let getEmbeddedFiles = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles." + fn, f)
         let allFilesByPath = 
             let getAllFiles (scope, path) =
                 scriptFolders
@@ -213,7 +212,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f) )
                         |> List.filter (fun (_, file) -> List.contains (Path.GetExtension(file)) [".txt"; ".gui"; ".gfx"])
-            let allFiles = map getAllFiles allFolders |> List.collect id |> map (fun( s, f) -> s, f, File.ReadAllText f)
+            let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.map (fun( s, f) -> s, f, File.ReadAllText f)
             allFiles
 
         let matchResult (scope : string, file : string, (parseResult, time)) = 
@@ -372,7 +371,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             eprintfn "Parsing %i files" allFilesByPath.Length
             files <- parseResults allFilesByPath |> List.map (function |Pass (file, scope, result) -> (file, Pass(file, scope, result)) |Fail (file, scope, result) -> (file, Fail(file, scope, result))) |> Map.ofList
             let embedded =  (embeddedParsed |> List.choose (function |Embedded (f, s) -> Some (f, s) |_ -> None))
-            let user = (validFiles() |> map (fun (fn, _, pf) -> fn, pf.statements))
+            let user = (validFiles() |> List.map (fun (fn, _, pf) -> fn, pf.statements))
             let coreFiles = 
                 match gameDirectory with
                 |Some _ -> user
