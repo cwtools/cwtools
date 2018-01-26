@@ -146,15 +146,19 @@ module STLLocalisationValidation =
         let vals = cat.Child "traditions" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
         let traditions = vals |> List.map (function |QString s -> s |x -> x.ToString())
         let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode cat keys l key) OK
-        (keyres, start, finish, traditions)
+        (start, finish, traditions)
 
     let valTraditionLocCats : LocalisationValidator = 
         fun entitySet keys nes -> 
             let cats = entitySet.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
-            let catres, starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun (rs, ss, fs, ts) (r, s, f, t) -> rs <&&> r, s::ss,  f::fs, ts @ t) (OK, [], [], [])
+            let newcats = nes.GlobMatch("**/tradition_categories/*.txt") |> List.collect (fun e -> e.Children)
+            let starts, finishes, trads = cats |> List.map (processTradCat keys) |> List.fold (fun ( ss, fs, ts) (s, f, t) -> s::ss,  f::fs, ts @ t) ([], [], [])
             let traditions = nes.GlobMatch("**/traditions/*.txt")  |> List.collect (fun e -> e.Children)
             let inner = fun tradition -> valTraditionLocs tradition keys starts finishes trads
-            traditions |> List.map inner |> List.fold (<&&>) catres
+            let innerCat = fun (cat : Node) -> keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode cat keys l cat.Key) OK
+            newcats |> List.map innerCat |> List.fold (<&&>) OK
+            <&&>
+            (traditions |> List.map inner |> List.fold (<&&>) OK)
 
     // let valTraditionLocCats (cats : Node list) (traditions : Node list) (keys : (Lang * Set<string>) list) =
     //     //eprintfn "%A" cats

@@ -214,12 +214,13 @@ module STLValidation =
                                 | "" -> Invalid [inv S.Error x "This research_leader is missing required \"area\""]
                                 | area2 when area <> area2 -> Invalid [inv S.Information x (sprintf "This research_leader is uses area %s but the technology uses area %s" area2 area)]
                                 | _ -> OK
-                                <&&>
-                                match cat, x.TagText "has_trait" with
-                                | None, _ -> OK
-                                | _, "" -> Invalid [inv S.Error x "This research_leader is missing required \"has_trait\""]
-                                | Some c, t when ("leader_trait_expertise_" + c) <> t -> Invalid [inv S.Warning x "This research_leader has the wrong expertise"]
-                                | _ -> OK
+                                /// These aren't really required
+                                // <&&>
+                                // match cat, x.TagText "has_trait" with
+                                // | None, _ -> OK
+                                // | _, "" -> Invalid [inv S.Error x "This research_leader is missing required \"has_trait\""]
+                                // | Some c, t when ("leader_trait_expertise_" + c) <> t -> Invalid [inv S.Warning x "This research_leader has the wrong expertise"]
+                                // | _ -> OK
                             | _ -> OK
                         results <&&> children)
         let fCombine = (<&&>)
