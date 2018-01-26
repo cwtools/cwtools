@@ -59,7 +59,12 @@ module STLLocalisationValidation =
                 (fun (node : Node) ->
                 let keyres = checkKeyAndDesc node keys
                 let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
-                keyres <&&> innerKeys
+                let gateway = node.TagText "gateway"
+                let gatewayres =
+                    match gateway with
+                    | "" -> OK
+                    | x -> keys |> List.fold (fun state (l, keys) -> state <&&> checkLocNode node keys l ("gateway_" + x)) OK
+                keyres <&&> innerKeys <&&> gatewayres
                 )
                 |> List.fold (<&&>) OK
         
@@ -233,6 +238,53 @@ module STLLocalisationValidation =
             let demands = factions |> List.collect (fun f -> f.Childs "demand")
             let inner = fun c -> (getLocKeys keys ["title"; "desc"; "unfulfilled_title"] c)
             demands |> List.fold (fun s c -> s <&&> (inner c)) OK
+
+    let valSpeciesRightsLocs : LocalisationValidator =
+        fun _ keys es ->
+            let species = es.GlobMatchChildren("**/common/species_rights/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let key = node.Key
+                    let tooltip = key + "_tooltip"
+                    let delayed = key + "_tooltip_delayed"
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l tooltip) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l delayed) OK)
+                    <&&>
+                    getLocKeys keys ["text"; "fail_text"] node
+            species |> List.fold (fun s c -> s <&&> (inner c)) OK
+
+
+    let valMapsLocs : LocalisationValidator = 
+        fun _ keys es ->
+            let maps = es.GlobMatchChildren("**/map/setup_scenarios/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let name  = node.TagText "name"
+                    match name with
+                    | "" -> OK
+                    | x -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l x) OK)
+            maps |> List.fold (fun s c -> s <&&> (inner c)) OK
+
+    let valMegastructureLocs : LocalisationValidator = 
+        fun _ keys es ->
+            let megas = es.GlobMatchChildren("**/common/megastructures/*.txt")
+            let inner =
+                fun (node : Node) ->
+                    let key = node.Key
+                    let desc = key + "_DESC"
+                    let details = key + "_MEGASTRUCTURE_DETAILS"
+                    let delayed = key + "_CONSTRUCTION_INFO_DELAYED"
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l details) OK)
+                    <&&>
+                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l delayed) OK)
+            megas |> List.fold (fun s c -> s <&&> (inner c)) OK
 
 
 

@@ -69,6 +69,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/governments";
                     "common/graphical_culture";
                     "common/mandates";
+                    "common/megastructures";
                     "common/name_lists";
                     "common/observation_station_missions";
                     "common/on_actions";
@@ -90,6 +91,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/spaceport_modules";
                     "common/special_projects";
                     "common/species_classes";
+                    "common/species_rights";
                     "common/start_screen_messages";
                     "common/static_modifiers";
                     "common/strategic_resources";
@@ -346,7 +348,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let e1 = entities |> parseEntities
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             
-            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc; valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands]
+            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
+                                 valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
+                                 valMapsLocs; valMegastructureLocs]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet e1
 
