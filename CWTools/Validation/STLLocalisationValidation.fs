@@ -289,6 +289,11 @@ module STLLocalisationValidation =
                     <&&>
                     (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l delayed) OK)
             megas |> List.fold (fun s c -> s <&&> (inner c)) OK
+    
+    let valModifiers : LocalisationValidator =
+        fun _ keys es ->
+            let mods = es.GlobMatch("**/common/static_modifiers/*.txt")
+            mods |> List.fold (fun s c -> eprintfn "%s" c.Key; s <&&> checkKeyAndDesc c keys) OK
 
 
 
