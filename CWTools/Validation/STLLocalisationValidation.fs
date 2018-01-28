@@ -173,32 +173,25 @@ module STLLocalisationValidation =
     //     let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
     //     catres <&&> tradres
 
+    let checkLocNodeKeyAdv (node : Node) keys prefix suffix = 
+        let key = prefix + node.Key + suffix
+        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
+    
+    let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv node keys prefix c)) OK
+
+    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
+
     let valArmiesLoc : LocalisationValidator =
         fun _ keys es ->
             let armies = es.GlobMatchChildren("**/common/armies/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let army = node.Key
-                    let armyplural = army + "_plural"
-                    let armydesc = army + "_desc"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l army) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armyplural) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armydesc) OK)
-            armies |> List.map inner |> List.fold (<&&>) OK
+            let inner = checkLocNodeKeyAdvs keys "" [""; "_plural"; "_desc"]
+            armies <&!&> inner
 
     let valArmyAttachmentLocs : LocalisationValidator =
         fun _ keys es ->
             let armies = es.GlobMatchChildren("**/common/army_attachments/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let army = "army_attachment_"+node.Key
-                    let armydesc = army + "_desc"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l army) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armydesc) OK)
-            armies |> List.map inner |> List.fold (<&&>) OK
+            let inner = checkLocNodeKeyAdvs keys "army_attachment_" [""; "_desc"]
+            armies <&!&> inner
 
     let valDiploPhrases : LocalisationValidator =
         fun _ keys es ->
@@ -221,57 +214,28 @@ module STLLocalisationValidation =
     let valShipLoc : LocalisationValidator =
         fun _ keys es ->
             let ships = es.GlobMatchChildren("**/common/ship_sizes/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let key = node.Key
-                    let plural = key + "_plural"
-                    let speed = "shipsize_" + key + "_construction_speed_mult"
-                    let cost =  "shipsize_" + key + "_build_cost_mult"
-                    let upkeep =  "shipsize_" + key + "_upkeep_mult"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l plural) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l speed) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l cost) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l upkeep) OK)
-            ships |> List.map inner |> List.fold (<&&>) OK
+            let inner1 = checkLocNodeKeyAdvs keys "" [""; "_plural"]
+            let inner2 = checkLocNodeKeyAdvs keys "shipsize_" ["_construction_speed_mult"; "_build_cost_mult"; "_upkeep_mult"]
+            ships <&!&> inner1
+            <&&>
+            (ships <&!&> inner2)
 
     let valFactionDemands : LocalisationValidator =
         fun _ keys es ->
             let factions = es.GlobMatchChildren("**/common/pop_faction_types/*.txt")
             let demands = factions |> List.collect (fun f -> f.Childs "demand")
             let inner = fun c -> (getLocKeys keys ["title"; "desc"; "unfulfilled_title"] c)
-            let finner =
-                fun (node : Node) ->
-                    let key = "pft_" + node.Key
-                    let desc = key + "_desc"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
-            demands |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let finner = checkLocNodeKeyAdvs keys "pft_" [""; "_desc"]
+            demands <&!&> inner
             <&&>
-            (factions |> List.fold (fun s c -> s <&&> (finner c)) OK)
+            (factions <&!&> finner)
 
 
     let valSpeciesRightsLocs : LocalisationValidator =
         fun _ keys es ->
             let species = es.GlobMatchChildren("**/common/species_rights/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let key = node.Key
-                    let tooltip = key + "_tooltip"
-                    let delayed = key + "_tooltip_delayed"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l tooltip) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l delayed) OK)
-                    <&&>
-                    getLocKeys keys ["text"; "fail_text"] node
-            species |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeKeyAdvs keys "" [""; "_tooltip";"_tooltip_delayed"] <&> getLocKeys keys ["text"; "fail_text"]
+            species <&!&> inner
 
 
     let valMapsLocs : LocalisationValidator = 
@@ -306,7 +270,9 @@ module STLLocalisationValidation =
     let valModifiers : LocalisationValidator =
         fun _ keys es ->
             let mods = es.GlobMatchChildren("**/common/static_modifiers/*.txt")
-            mods |> List.fold (fun s c -> eprintfn "%s" c.Key; s <&&> checkKeyAndDesc c keys) OK
+            mods <&!&> (checkLocNodeKeyAdvs keys "" [""])
+            //TODO: Add desc back behind a "strict" flag
+           // mods |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
 
     let valModules : LocalisationValidator = 
         fun _ keys es ->
