@@ -349,7 +349,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             
             let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
-                                 valMapsLocs; valMegastructureLocs; valModifiers]
+                                 valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
+                                 valEthics; valPlanetClasses; valEdicts; valPolicies]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet e1
 
