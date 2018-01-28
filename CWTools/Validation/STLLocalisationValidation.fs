@@ -60,12 +60,17 @@ module STLLocalisationValidation =
                 (fun (node : Node) ->
                 let keyres = checkKeyAndDesc node keys
                 let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
+                let flags = node.Child "feature_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
+                let flags2 = flags |> List.map (fun f -> "feature_" + f.ToString())
+                let flagres = flags2 |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l c) OK)) OK
+                let flagdesc = flags2 |> List.map (fun f -> f + "_desc")
+                let flagdescres = flagdesc |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l c) OK)) OK
                 let gateway = node.TagText "gateway"
                 let gatewayres =
                     match gateway with
                     | "" -> OK
                     | x -> keys |> List.fold (fun state (l, keys) -> state <&&> checkLocNode node keys l ("gateway_" + x)) OK
-                keyres <&&> innerKeys <&&> gatewayres
+                keyres <&&> innerKeys <&&> gatewayres <&&> flagres <&&> flagdescres
                 )
                 |> List.fold (<&&>) OK
         
@@ -428,3 +433,26 @@ module STLLocalisationValidation =
             policies |> List.fold (fun s c -> s <&&> (inner c)) OK
             <&&>
             (options |> List.fold (fun s c -> s <&&> (oinner c)) OK)
+
+    let valSectionTemplates : LocalisationValidator =
+        fun _ keys es ->
+            let secs = es.GlobMatchChildren("**/common/section_templates/*.txt")
+            secs |> List.fold (fun s c -> s <&&> (getLocKeys keys ["key"]  c)) OK
+
+    let valSpeciesNames : LocalisationValidator =
+        fun _ keys es ->
+            let species = es.GlobMatchChildren("**/common/species_names/*.txt")
+            let inner = 
+                fun (node : Node) ->
+                    let key = node.Key
+                    let suff = ["_desc"; "_plural"; "_insult_01"; "_insult_plural_01"; "_compliment_01";"_compliment_plural_01";"_spawn";"_spawn_plural";
+                                "_sound_01";"_sound_02";"_sound_03";"_sound_04";"_sound_05";"_organ";"_mouth"]
+                    suff |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (key + c)) OK)) OK
+            species |> List.filter (fun s -> s.Key <> "named_lists")
+                    |> List.fold (fun s c -> s <&&> (inner c)) OK
+
+    let valStratRes : LocalisationValidator =
+        fun _ keys es ->
+            let res = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
+            res |> List.filter (fun r -> r.Key <> "time")
+                |> List.fold (fun s c -> s <&&> (checkKeyAndDesc c keys)) OK
