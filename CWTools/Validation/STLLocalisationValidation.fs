@@ -194,11 +194,8 @@ module STLLocalisationValidation =
             let inner =
                 fun (node : Node) ->
                     let army = "army_attachment_"+node.Key
-                    let armyplural = army + "_plural"
                     let armydesc = army + "_desc"
                     (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l army) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armyplural) OK)
                     <&&>
                     (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l armydesc) OK)
             armies |> List.map inner |> List.fold (<&&>) OK
@@ -357,7 +354,8 @@ module STLLocalisationValidation =
     let valEthics : LocalisationValidator =
         fun _ keys es ->
             let ethics = es.GlobMatchChildren("**/common/ethics/*.txt")
-            ethics |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
+            ethics  |> List.filter (fun e -> e.Key <> "ethic_categories")
+                    |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
 
     let valPlanetClasses : LocalisationValidator =
         fun _ keys es ->
