@@ -93,7 +93,7 @@ module CWToolsCLI =
             | None ->                 
                 DocsParser.parseDocsStream (Assembly.GetEntryAssembly().GetManifestResourceStream("CWToolsCLI.game_effects_triggers_1.9.1.txt"))
         match docsParsed with
-        |Success(p, _, _) -> p 
+        |Success(p, _, _) -> p |> DocsParser.processDocs
         |Failure(msg,_,_) -> failwith ("docs parsing failed with " + msg)
 
     let list game directory scope modFilter docsPath (results : ParseResults<ListArgs>) =
