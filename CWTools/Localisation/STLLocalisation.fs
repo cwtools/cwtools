@@ -21,6 +21,7 @@ module STLLocalisation =
             |STLLang.Russian -> "l_russian"
             |STLLang.Polish -> "l_polish"
             |STLLang.Braz_Por -> "l_braz_por"
+            |STLLang.Default -> "l_default"
             |_ -> failwith "Unknown language enum value"
         let mutable results : IDictionary<string, (bool * int * string)> = upcast new Dictionary<string, (bool * int * string)>()
         let mutable records : Entry list = []

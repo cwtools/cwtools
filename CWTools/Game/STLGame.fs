@@ -203,7 +203,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |Some s, All -> ("vanilla", s) :: (modFolders)
             |_, Mods -> (modFolders)
             |Some s, Vanilla -> ["vanilla", s]
-        let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation")
+        let locFolders = allDirs |> List.filter(fun (_, folder) -> folder.ToLower() = "localisation" || folder.ToLower() = "localisation_synced")
         
         let getEmbeddedFiles = embeddedFiles |> List.map (fun (fn, f) -> "embedded", "embeddedfiles." + fn, f)
         let allFilesByPath = 
@@ -231,7 +231,9 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             |> List.map ((fun (file, _, parsed) -> (file, parsed.statements, parsed.parseTime))
             >> (fun (f, parsed, _) ->  f, (STLProcess.shipProcess.ProcessNode<Node>() "root" (Position.File(f)) parsed)))
 
-        let embeddedParsed = getEmbeddedFiles |> List.filter (fun (_, fn, _) -> fn.Contains("common")) |> parseResults
+        let embeddedParsed = 
+            //let glob = Glob.Parse("**/common/**")
+            getEmbeddedFiles |> List.filter (fun (_, fn, _) -> fn.Contains(".common.")) |> parseResults
             
 
         // let entities() = validFiles()
@@ -290,7 +292,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     allLocs @ (getEmbeddedFiles 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
-                    |> (fun files -> langs |> List.map (fun lang -> STLLocalisationService(files, lang).Api)))
+                    |> (fun files -> (STL STLLang.Default :: langs) |> List.map (fun lang -> STLLocalisationService(files, lang).Api)))
 
             //TODO: Add loc from embedded
                 
@@ -348,10 +350,11 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let e1 = entities |> parseEntities
             let keys = localisationAPIs |> List.groupBy (fun l -> l.GetLang) |> List.map (fun (k, g) -> k, g |>List.collect (fun ls -> ls.GetKeys) |> Set.ofList )
             
-            let validators = [valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
+            let validators = [valEventLocs; valTechLocs; valCompSetLocs; valCompTempLocs; valBuildingLocs; valTraditionLocCats; valArmiesLoc;
                                  valArmyAttachmentLocs; valDiploPhrases; valShipLoc; valFactionDemands; valSpeciesRightsLocs;
                                  valMapsLocs; valMegastructureLocs; valModifiers; valModules; valTraits; valGoverments; valPersonalities;
-                                 valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes]
+                                 valEthics; valPlanetClasses; valEdicts; valPolicies; valSectionTemplates; valSpeciesNames; valStratRes;
+                                 valAmbient]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet e1
 

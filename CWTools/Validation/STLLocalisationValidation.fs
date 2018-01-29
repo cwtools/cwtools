@@ -10,12 +10,20 @@ open CWTools.Common.STLConstants
 open DotNet.Globbing
 open CWTools.Validation.STLValidation
 open System.Xml.Linq
+open System.Threading
 
 module STLLocalisationValidation =
     type S = Severity
     type LocalisationValidator = EntitySet -> (Lang * Set<string>) list -> EntitySet -> ValidationResult
 
     let checkLocKey (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
+        if lang = STL STLLang.Default then OK else
+        match key = "" || key.Contains(" "), Set.contains key keys with
+        | true, _ -> OK
+        | _, true -> OK
+        | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %O" key lang)]
+
+    let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
@@ -32,19 +40,33 @@ module STLLocalisationValidation =
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
 
+    let valEventNameLocs (keys : (Lang * Set<string>) list) (node : Node) =
+        let names = keys |> List.choose (fun (l, ks) -> if l = STL STLLang.Default then Some ks else None) |> List.tryHead |> Option.defaultValue Set.empty
+        let fNode = (fun (x : Node) children ->
+                        match x.Key.ToLower(), x.Leafs "name" with
+                        | "create_point_of_interest", _
+                        | "enable_special_project", _
+                        | "option", _ -> children
+                        | _, [] -> children
+                        | _, [leaf] -> 
+                            let name = leaf.Value |> function |(QString s) -> s |s -> s.ToString()
+                            if name = "random" then OK else
+                                children <&&> (checkLocName leaf names (STL STLLang.Default) (name))
+                        | _, names -> children
+                         )
+        let fCombine = (<&&>)
+        node |> (foldNode2 fNode fCombine OK)
     
-    let valEventLocs (event : Event) (keys : (Lang * Set<string>) list) =
-        let titles = event.Leafs "title" |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
-        let options = event.Childs "option" |> List.collect (fun o -> o.Leafs "name" |> List.map (checkLocKeys keys))
-                                            |> List.fold (<&&>) OK                
-        let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
-        titles <&&> options <&&> usedKeys
 
     let checkLocNode (node : Node) (keys : Set<string>) (lang : Lang) key =
-        match key = "" || key.Contains(" "), Set.contains key keys with
-        | true, _ -> OK
-        | _, true -> OK
-        | _, false -> Invalid [inv S.Warning node (sprintf "Localisation key %s is not defined for %O" key lang)]
+        if lang = STL STLLang.Default then OK else
+            match key = "" || key.Contains(" "), Set.contains key keys with
+            | true, _ -> OK
+            | _, true -> OK
+            | _, false -> Invalid [inv S.Warning node (sprintf "Localisation key %s is not defined for %O" key lang)]
+    
+    let checkLocNodeS (node : Node) (keys : (Lang * Set<string>) list) key =
+         keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK
         
     let checkKeyAndDesc (node : Node) (keys : (Lang * Set<string>) list) =
         let key = node.Key
@@ -52,6 +74,28 @@ module STLLocalisationValidation =
         let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK
         let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK
         keyres <&&> descres
+
+    let checkLocNodeKeyAdv (node : Node) keys prefix suffix = 
+        let key = prefix + node.Key + suffix
+        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
+    
+    let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv node keys prefix c)) OK
+
+    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
+
+        
+    let valEventLocs : LocalisationValidator =
+        fun _ keys es ->
+            let es = es.GlobMatchChildren("**/events/*.txt")
+            let inner =
+                fun (event : Node) ->
+                    let titles = event.Leafs "title" |> List.map (checkLocKeys keys) |> List.fold (<&&>) OK
+                    let options = event.Childs "option" |> List.collect (fun o -> o.Leafs "name" |> List.map (checkLocKeys keys))
+                                                        |> List.fold (<&&>) OK                
+                    let usedKeys = event.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "text"; "custom_tooltip"; "fail_text"; "response_text"] c)) OK
+                    let nameres = valEventNameLocs keys event
+                    titles <&&> options <&&> usedKeys <&&> nameres
+            es <&!&> inner
         
     let valTechLocs : LocalisationValidator =
         fun _ keys es ->
@@ -173,13 +217,6 @@ module STLLocalisationValidation =
     //     let tradres = traditions |> List.fold (fun state trad -> state <&&> (valTraditionLocs trad keys starts finishes trads)) OK
     //     catres <&&> tradres
 
-    let checkLocNodeKeyAdv (node : Node) keys prefix suffix = 
-        let key = prefix + node.Key + suffix
-        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-    
-    let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv node keys prefix c)) OK
-
-    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
 
     let valArmiesLoc : LocalisationValidator =
         fun _ keys es ->
@@ -252,20 +289,8 @@ module STLLocalisationValidation =
     let valMegastructureLocs : LocalisationValidator = 
         fun _ keys es ->
             let megas = es.GlobMatchChildren("**/common/megastructures/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let key = node.Key
-                    let desc = key + "_DESC"
-                    let details = key + "_MEGASTRUCTURE_DETAILS"
-                    let delayed = key + "_CONSTRUCTION_INFO_DELAYED"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l details) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l delayed) OK)
-            megas |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeKeyAdvs keys "" [""; "_DESC"; "_MEGASTRUCTURE_DETAILS"; "_CONSTRUCTION_INFO_DELAYED"]
+            megas <&!&> inner
     
     let valModifiers : LocalisationValidator =
         fun _ keys es ->
@@ -420,3 +445,18 @@ module STLLocalisationValidation =
             let res = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
             res |> List.filter (fun r -> r.Key <> "time")
                 |> List.fold (fun s c -> s <&&> (checkKeyAndDesc c keys)) OK
+
+    let valAmbient : LocalisationValidator =
+        fun _ keys es ->
+            let ams = es.GlobMatchChildren("**/common/ambient_object/*.txt")
+            let inner = 
+                fun (node : Node) ->
+                    let key = node.Key
+                    let tooltip = node.TagText "tooltip"
+                    let desc = node.TagText "description"
+                    checkLocNodeS node keys key
+                    <&&>
+                    (checkLocNodeS node keys tooltip)
+                    <&&>
+                    (checkLocNodeS node keys desc)
+            ams <&!&> inner
