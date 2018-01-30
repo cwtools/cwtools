@@ -68,18 +68,30 @@ module STLLocalisationValidation =
     let checkLocNodeS (node : Node) (keys : (Lang * Set<string>) list) key =
          keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK
         
-    let checkKeyAndDesc (node : Node) (keys : (Lang * Set<string>) list) =
+    let checkKeyAndDesc (keys : (Lang * Set<string>) list) (node : Node) =
         let key = node.Key
         let desc = key + "_desc"
         let keyres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK
         let descres = keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK
         keyres <&&> descres
 
-    let checkLocNodeKeyAdv (node : Node) keys prefix suffix = 
+    let checkLocNodeKeyAdv keys prefix suffix (node : Node) = 
         let key = prefix + node.Key + suffix
         (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
     
-    let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv node keys prefix c)) OK
+    let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv keys prefix c node)) OK
+
+    let checkLocNodeTagAdv keys prefix suffix tag (node : Node) = 
+        let name  = node.TagText tag
+        match name with
+        | "" -> OK
+        | x -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (prefix + x + suffix)) OK)
+
+    let checkLocNodeTagAdvs keys prefix suffixes tag (node : Node) =
+        suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeTagAdv keys prefix c tag node)) OK
+
+    let checkLocNodeTag keys tag (node : Node) = checkLocNodeTagAdvs keys "" [""] tag node
+
 
     let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
 
@@ -102,7 +114,7 @@ module STLLocalisationValidation =
             let entities = es.GlobMatchChildren("**/common/technology/*.txt")
             entities |> List.map
                 (fun (node : Node) ->
-                let keyres = checkKeyAndDesc node keys
+                let keyres = checkKeyAndDesc keys node
                 let innerKeys = node.Childs "prereqfor_desc" |> List.fold (fun s c -> s <&&> (getLocKeys keys ["desc"; "title"] c)) OK
                 let flags = node.Child "feature_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
                 let flags2 = flags |> List.map (fun f -> "feature_" + f.ToString())
@@ -155,7 +167,7 @@ module STLLocalisationValidation =
             let entities = es.GlobMatchChildren("**/common/buildings/*.txt")
             let inner =
                 fun node ->
-                    let keyres = checkKeyAndDesc node keys
+                    let keyres = checkKeyAndDesc keys node
                     let failtext = node.Children |> List.fold (fun s c -> s <&&> (getLocKeys keys ["fail_text"] c)) OK
                     keyres <&&> failtext
             entities |> List.map inner |> List.fold (<&&>) OK
@@ -278,13 +290,8 @@ module STLLocalisationValidation =
     let valMapsLocs : LocalisationValidator = 
         fun _ keys es ->
             let maps = es.GlobMatchChildren("**/map/setup_scenarios/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let name  = node.TagText "name"
-                    match name with
-                    | "" -> OK
-                    | x -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l x) OK)
-            maps |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeTag keys "name"
+            maps <&!&> inner
 
     let valMegastructureLocs : LocalisationValidator = 
         fun _ keys es ->
@@ -302,131 +309,79 @@ module STLLocalisationValidation =
     let valModules : LocalisationValidator = 
         fun _ keys es ->
             let mods = es.GlobMatchChildren("**/common/spaceport_modules/*.txt")
-            let inner = 
-                fun (node : Node) ->
-                    let key = "sm_" + node.Key
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-            mods |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeKeyAdvs keys "sm_" [""]
+            mods <&!&> inner
 
     let valTraits : LocalisationValidator =
         fun _ keys es ->
             let traits = es.GlobMatchChildren("**/common/traits/*.txt")
-            traits |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
+            traits <&!&> (checkKeyAndDesc keys)
 
     let valGoverments : LocalisationValidator =
         fun _ keys es ->
             let govs = es.GlobMatchChildren("**/common/governments/*.txt")
             let civics = es.GlobMatchChildren("**/common/governments/civics/*.txt")
-            let ginner =
-                fun (node : Node) ->
-                    let key = node.Key
-                    let keyres = (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    let titlesres = getLocKeys keys ["ruler_title"; "ruler_title_female"; "heir_title"; "heir_title_female"] node
-                    keyres <&&> titlesres
-            //let inner = fun (node : Node) -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l node.Key) OK)
-            civics |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
+            let ginner = checkLocNodeKeyAdvs keys "" [""] <&> getLocKeys keys ["ruler_title"; "ruler_title_female"; "heir_title"; "heir_title_female"]
+            civics <&!&> checkKeyAndDesc keys
             <&&>
-            (civics |> List.fold (fun s c -> s <&&> (getLocKeys keys ["description"] c)) OK)
+            (civics <&!&> getLocKeys keys ["description"])
             <&&>
-            (govs |> List.fold (fun s c -> s <&&> (ginner c)) OK)
+            (govs <&!&> ginner)
             
     let valPersonalities : LocalisationValidator =
         fun _ keys es ->
             let pers = es.GlobMatchChildren("**/common/personalities/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let key = "personality_" + node.Key
-                    let desc = key + "_desc"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
-            pers |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeKeyAdvs keys "personality_" [""; "_desc"]
+            pers <&!&> inner
 
     let valEthics : LocalisationValidator =
         fun _ keys es ->
             let ethics = es.GlobMatchChildren("**/common/ethics/*.txt")
             ethics  |> List.filter (fun e -> e.Key <> "ethic_categories")
-                    |> List.fold (fun s c -> s <&&> checkKeyAndDesc c keys) OK
+                    <&!&> checkKeyAndDesc keys
 
     let valPlanetClasses : LocalisationValidator =
         fun _ keys es ->
             let planets = es.GlobMatchChildren("**/common/planet_classes/*.txt")
             let inner =
                 fun (node : Node) ->
-                    let key = node.Key
-                    let desc = key + "_desc"
-                    let tile = key + "_tile"
-                    let tiledesc = tile + "_desc"
-                    let traitk = "trait_" + key + "_preference"
-                    let traitdesc = traitk + "_desc"
-                    let hab = key + "_habitability"
                     let colonizable = node.Tag "colonizable" |> (function |Some (Bool b) when b -> true |_ -> false)
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
+                    checkLocNodeKeyAdvs keys "" [""; "_desc"] node
                     <&&>
                     if not colonizable then OK else
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l tile) OK)
+                        checkLocNodeKeyAdvs keys "" ["_tile"; "_tile_desc"; "_habitability"] node
                         <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l tiledesc) OK)
-                        <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l traitk) OK)
-                        <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l traitdesc) OK)
-                        <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l hab) OK)
+                        checkLocNodeKeyAdvs keys "trait_" ["_preference"; "_preference_desc"] node
             planets 
                 |> List.filter (fun n -> n.Key <> "random_list")
-                |> List.fold (fun s c -> s <&&> (inner c)) OK
+                <&!&> inner
 
     let valEdicts : LocalisationValidator =
         fun _ keys es ->
             let edicts = es.GlobMatchChildren("**/common/edicts/*.txt")
-            let inner =
-                fun (node : Node) ->
-                    let name = node.TagText "name"
-                    match name with
-                    | "" -> OK
-                    | x ->
-                        let x2 = "edict_" + x
-                        let namedesc = x2 + "_desc"
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l x2) OK)
-                            <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l namedesc) OK)
-            edicts |> List.fold (fun s c -> s <&&> (inner c)) OK
+            let inner = checkLocNodeTagAdvs keys "edict_" [""; "_desc"] "name"
+            edicts <&!&> inner
 
     let valPolicies : LocalisationValidator =
         fun _ keys es ->
             let policies = es.GlobMatchChildren("**/common/policies/*.txt")
             let options = policies |> List.collect (fun p -> p.Childs "option")
-            let inner =
-                fun (node : Node) ->
-                    let key = "policy_" + node.Key
-                    let desc = key + "_desc"
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l key) OK)
-                    <&&>
-                    (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l desc) OK)
+            let inner = checkLocNodeKeyAdvs keys "policy_" [""; "_desc"]
             let oinner =
                 fun (node : Node) ->
                     let vals = node.Child "policy_flags" |> Option.map (fun c -> c.All |> List.choose (function |LeafValueI lv -> Some lv.Value |_ -> None )) |> Option.defaultValue []
                     let vals2 = vals |> List.map (fun v -> v.ToString() + "_name")
-                    let name = node.TagText "name"
                     vals2 |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l c) OK)) OK
                     <&&>
-                    (match name with
-                    | "" -> OK
-                    | x ->
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l x) OK)
-                            <&&>
-                        (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (x + "_desc")) OK))
-            policies |> List.fold (fun s c -> s <&&> (inner c)) OK
+                    (checkLocNodeTagAdvs keys "" [""; "_desc"] "name" node)
+            policies <&!&> inner
             <&&>
-            (options |> List.fold (fun s c -> s <&&> (oinner c)) OK)
+            (options <&!&> oinner)
 
     let valSectionTemplates : LocalisationValidator =
         fun _ keys es ->
             let secs = es.GlobMatchChildren("**/common/section_templates/*.txt")
-            secs |> List.fold (fun s c -> s <&&> (getLocKeys keys ["key"]  c)) OK
+            secs <&!&> getLocKeys keys ["key"]
 
     let valSpeciesNames : LocalisationValidator =
         fun _ keys es ->
@@ -438,25 +393,20 @@ module STLLocalisationValidation =
                                 "_sound_01";"_sound_02";"_sound_03";"_sound_04";"_sound_05";"_organ";"_mouth"]
                     suff |> List.fold (fun s c -> s <&&> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (key + c)) OK)) OK
             species |> List.filter (fun s -> s.Key <> "named_lists")
-                    |> List.fold (fun s c -> s <&&> (inner c)) OK
+                    <&!&> inner
 
     let valStratRes : LocalisationValidator =
         fun _ keys es ->
-            let res = es.GlobMatchChildren("**/common/strategic_resources/*.txt")
-            res |> List.filter (fun r -> r.Key <> "time")
-                |> List.fold (fun s c -> s <&&> (checkKeyAndDesc c keys)) OK
+            let res = es.GlobMatchChildren("**/common/strategic_resources/*.txt") |> List.filter (fun r -> r.Key <> "time")
+            res <&!&> (checkKeyAndDesc keys)
 
     let valAmbient : LocalisationValidator =
         fun _ keys es ->
-            let ams = es.GlobMatchChildren("**/common/ambient_object/*.txt")
+            let ams = es.GlobMatchChildren("**/common/ambient_objects/*.txt")
             let inner = 
-                fun (node : Node) ->
-                    let key = node.Key
-                    let tooltip = node.TagText "tooltip"
-                    let desc = node.TagText "description"
-                    checkLocNodeS node keys key
-                    <&&>
-                    (checkLocNodeS node keys tooltip)
-                    <&&>
-                    (checkLocNodeS node keys desc)
+                checkLocNodeTag keys "name"
+                <&>
+                (checkLocNodeTag keys "tooltip")
+                <&>
+                (checkLocNodeTag keys "description")
             ams <&!&> inner
