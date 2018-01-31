@@ -9,6 +9,7 @@ type Position = Position of FParsec.Position with
     static member Empty = Position (FParsec.Position("none", 0L, 0L, 0L))
     static member File(fileName) = Position (FParsec.Position(fileName, 0L, 0L, 0L))
     static member Conv(pos : FParsec.Position) = Position (pos)
+    static member UnConv(pos : Position) = let (Position p) = pos in p
 
 type Key =
     | Key of string
@@ -30,6 +31,14 @@ and Value =
         | QString s -> "\"" + s + "\""
         | String s -> s
         | Bool b -> if b then "yes" else "no"
+        | Float f -> sprintf "%A" f
+        | Int i -> sprintf "%A" i
+    member x.ToRawString() =
+        match x with
+        | Clause b -> "{ " + sprintf "%O" b + " }"
+        | QString s -> s
+        | String s -> s
+        | Bool b -> sprintf "%A" b
         | Float f -> sprintf "%A" f
         | Int i -> sprintf "%A" i
 and [<CustomEquality; CustomComparison>] PosKeyValue  = 

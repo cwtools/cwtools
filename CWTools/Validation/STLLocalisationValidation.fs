@@ -23,7 +23,7 @@ module STLLocalisationValidation =
         | _, true -> OK
         | _, false -> Invalid [inv S.Warning leaf (sprintf "Localisation key %s is not defined for %O" key lang)]
 
-    let checkLocName (leaf : Leaf) (keys : Set<string>) (lang : Lang) key =
+    let checkLocName (keys : Set<string>) (lang : Lang) key (leaf : Leaf)  =
         match key = "" || key.Contains(" "), Set.contains key keys with
         | true, _ -> OK
         | _, true -> OK
@@ -51,12 +51,13 @@ module STLLocalisationValidation =
                         | _, [leaf] -> 
                             let name = leaf.Value |> function |(QString s) -> s |s -> s.ToString()
                             if name = "random" then OK else
-                                children <&&> (checkLocName leaf names (STL STLLang.Default) (name))
+                                children <&&> (checkLocName names (STL STLLang.Default) (name) leaf)
                         | _, names -> children
                          )
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
     
+    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
 
     let checkLocNode (node : Node) (keys : Set<string>) (lang : Lang) key =
         if lang = STL STLLang.Default then OK else
@@ -81,11 +82,14 @@ module STLLocalisationValidation =
     
     let checkLocNodeKeyAdvs keys prefix suffixes node = suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeKeyAdv keys prefix c node)) OK
 
-    let checkLocNodeTagAdv keys prefix suffix tag (node : Node) = 
-        let name  = node.TagText tag
-        match name with
-        | "" -> OK
-        | x -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (prefix + x + suffix)) OK)
+    let checkLocNodeTagAdv keys prefix suffix tag (node : Node) =
+        let names = node.Leafs tag 
+        let inner = (fun (leaf : Leaf) -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocName keys l (prefix + (leaf.Value.ToRawString()) + suffix) leaf) OK))
+        names <&!&> inner
+        // let name  = node.TagText tag
+        // match name with
+        // | "" -> OK
+        // | x -> (keys |> List.fold (fun state (l, keys)  -> state <&&> checkLocNode node keys l (prefix + x + suffix)) OK)
 
     let checkLocNodeTagAdvs keys prefix suffixes tag (node : Node) =
         suffixes |> List.fold (fun s c -> s <&&> (checkLocNodeTagAdv keys prefix c tag node)) OK
@@ -93,7 +97,6 @@ module STLLocalisationValidation =
     let checkLocNodeTag keys tag (node : Node) = checkLocNodeTagAdvs keys "" [""] tag node
 
 
-    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
 
         
     let valEventLocs : LocalisationValidator =
@@ -403,10 +406,12 @@ module STLLocalisationValidation =
     let valAmbient : LocalisationValidator =
         fun _ keys es ->
             let ams = es.GlobMatchChildren("**/common/ambient_objects/*.txt")
-            let inner = 
-                checkLocNodeTag keys "name"
-                <&>
-                (checkLocNodeTag keys "tooltip")
-                <&>
-                (checkLocNodeTag keys "description")
+            let inner (node : Node) = 
+                if node.Tag "show_name" |> (function |Some (Bool b) when b -> true |_ -> false) then checkLocNodeTag keys "name" node else OK
+                <&&>
+                if node.Tag "selectable" |> (function |Some (Bool b) when b -> true |_ -> false) then 
+                    (checkLocNodeTag keys "tooltip" node)
+                    <&&>
+                    (checkLocNodeTag keys "description" node)
+                    else OK
             ams <&!&> inner

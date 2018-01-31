@@ -397,6 +397,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         member __.ScripteTriggers = scriptedTriggers
         member __.ScriptedEffects = scriptedEffects
         member __.UpdateFile file = updateFile file
+        member __.ValidFiles = validFiles()
 
 
         //member __.ScriptedTriggers = parseResults |> List.choose (function |Pass(f, p, t) when f.Contains("scripted_triggers") -> Some p |_ -> None) |> List.map (fun t -> )
