@@ -1,0 +1,20 @@
+#key
+#key_desc
+civic_agrarian_idyll = {
+	description = "test_required"
+	potential = { ethics = { NOT = { value = ethic_gestalt_consciousness } } }
+	possible = {
+		ethics = {
+			value = ethic_fanatic_pacifist	
+			NOR = {
+				text = civic_tooltip_not_authoritarian
+				value = ethic_authoritarian
+				value = ethic_fanatic_authoritarian
+			}
+		}
+		civics = {
+			NOT = { value = civic_syncretic_evolution }
+		}		
+	}
+	random_weight = { base = 1 }
+}

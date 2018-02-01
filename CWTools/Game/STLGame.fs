@@ -66,6 +66,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/game_rules";
                     "common/global_ship_designs";
                     "common/governments";
+                    "common/governments/civics";
                     "common/graphical_culture";
                     "common/mandates";
                     "common/megastructures";

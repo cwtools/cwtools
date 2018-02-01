@@ -19,7 +19,7 @@ let getAllTestLocs node =
     node |> (foldNode2 fNode fCombine ([],[]))
 
 let getNodeComments (node : Node) =
-    let findComment t s (a : Both) =
+    let findComments t s (a : Both) =
             match (s, a) with
             | ((b, c), _) when b -> (b, c)
             | ((_, c), CommentI nc) -> (false, nc::c)
@@ -27,17 +27,29 @@ let getNodeComments (node : Node) =
             | ((_, c), LeafI v) when v.Key = t -> (true, c)
             | ((_, _), _) -> (false, [])
     let fNode = (fun (node:Node) (children) ->
-            let one = node.Values |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComment e.Key) (false, []) |> snd)
-            let two = node.Children |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComment e.Key) (false, []) |> snd)
+            let one = node.Values |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Key) (false, []) |> snd)
+            //eprintfn "%s %A" node.Key (node.All |> List.rev)
+            //eprintfn "%A" one
+            let two = node.Children |> List.map (fun e -> let (Position p) = e.Position in p, node.All |> List.rev |> List.fold (findComments e.Key) (false, []) |> snd)
             let new2 = one @ two |> List.filter (fun (p, c) -> not (List.isEmpty c))
             new2 @ children
                 )
     let fCombine = (@)
     node |> (foldNode2 fNode fCombine [])
 
+let rec remove_first lst item =
+    match lst with
+    | h::t when item = h -> t
+    | h::t -> h::remove_first t item
+    | _ -> []
+let remove_all x y =
+    y |> List.fold remove_first x
+
+
+
 let getLocTestInfo node = 
     let req, noreq = getAllTestLocs node
-    let comments = getNodeComments node |> List.filter(fun (p, c) -> not (List.isEmpty c)) |> List.map fst
+    let comments = getNodeComments node |> List.filter(fun (p, c) -> not (List.isEmpty c)) |> List.collect (fun (f, c) -> c |> List.map (fun cc -> f, cc)) |> List.map fst
     req, noreq, comments
 let parseEntities validfiles =
     validfiles
@@ -62,8 +74,8 @@ let tests =
                     let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
                     let expected = req @ nodekeys
                     let fileErrors = errors |> List.filter (fun f -> f.StreamName = file )
-                    let missing = Set.difference (Set.ofList expected) (Set.ofList fileErrors)
-                    let extras = Set.difference (Set.ofList fileErrors) (Set.ofList expected)
+                    let missing = remove_all expected fileErrors
+                    let extras = remove_all fileErrors expected
                     Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A, all errors: %A, all expected: %A" missing fileErrors expected)
                     Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A, all errors: %A, all expected: %A" extras fileErrors expected)
                     Expect.isEmpty (extra) (sprintf "Incorrect required %s" file)

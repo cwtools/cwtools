@@ -1,0 +1,37 @@
+ethic_categories = {
+	col = {}
+	
+	xen = {}
+	
+	mil = {}
+	
+	spi = {}
+	
+	hive = {}
+}
+
+#key
+#key_desc
+ethic_fanatic_authoritarian = {
+	cost = 2
+	category = "col"
+	category_value = 0
+	
+	use_for_pops = no
+	
+	regular_variant = ethic_authoritarian
+	
+	country_modifier = {
+		country_resource_influence_add = 1
+		pop_slave_resource_output = 0.10
+	}
+	
+	tags = {
+		ETHIC_ALLOWS_CASTE_SYSTEM
+		ETHIC_ONLY_AUTOCRACY
+	}	
+	
+	random_weight = {
+		value = 150
+	}
+}

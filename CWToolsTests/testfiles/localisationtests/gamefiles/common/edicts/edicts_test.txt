@@ -1,8 +1,7 @@
 country_edict = {
     #edict_key
-    #
     #edict_key_desc
-	name = "test_required"
+	name = "test"
 	modifier = {
 		pop_government_ethic_attraction = 0.25
 	}
@@ -21,6 +20,6 @@ country_edict = {
 				has_ethic = ethic_authoritarian
 				has_ethic = ethic_fanatic_authoritarian
 			}
-		}		
-	}	
+		}
+	}
 }

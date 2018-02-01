@@ -1,0 +1,19 @@
+#key
+gov_representative_democracy = {
+    #key
+	ruler_title = RT_PRESIDENT
+    #key
+    ruler_title_female = RT_PRESIDENT_FEMALE
+    #key
+    heir_title = test
+    #key
+    heir_title_female = test
+
+	possible = {
+		has_authority = auth_democratic
+	}
+
+	weight = {
+		base = 1
+	}
+}
