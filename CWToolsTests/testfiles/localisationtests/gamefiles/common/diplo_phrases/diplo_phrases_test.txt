@@ -1,0 +1,85 @@
+greetings = {
+    #key
+	test_required = {
+		trigger = {
+			NOR = {
+				has_ethic = ethic_gestalt_consciousness
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				is_same_species = FROM
+				is_at_war_with = FROM
+			}
+			OR = {
+				is_hostile_to = FROM
+				is_domineering_to = FROM
+				is_unfriendly_to = FROM
+			}
+		}
+	}
+
+    #key
+    tests_required = {
+		trigger = {
+			NOR = {
+				has_ethic = ethic_gestalt_consciousness
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				is_same_species = FROM
+				is_at_war_with = FROM
+			}
+			OR = {
+				is_hostile_to = FROM
+				is_domineering_to = FROM
+				is_unfriendly_to = FROM
+			}
+		}
+    }
+}
+
+action_declare_war = {
+	select = {
+		#key
+		test_required = {
+
+		}
+	}
+
+	propose = {
+		#key
+		test_required = {
+			
+		}
+	}
+
+	accept = {
+		#key
+		test_required = {
+			
+		}
+	}
+
+	consider = {
+		#key
+		test_required = {
+			
+		}
+	}
+
+	refuse = {
+		#key
+		test_required = {
+			
+		}
+	}
+
+	propose_vote = {
+		#key
+		test_required = {
+			
+		}
+	}
+}

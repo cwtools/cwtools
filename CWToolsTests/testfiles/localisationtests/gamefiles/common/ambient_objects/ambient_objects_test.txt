@@ -26,7 +26,7 @@ ambient_object = {
 }
 
 ambient_object = {
-	name = "ambient_object_name_required"
+	name = "test_required"
 	entity = "probe_entity"
 	selectable = no
 	show_name = yes

@@ -1,0 +1,26 @@
+country_edict = {
+    #edict_key
+    #
+    #edict_key_desc
+	name = "test_required"
+	modifier = {
+		pop_government_ethic_attraction = 0.25
+	}
+	
+	influence_cost = 1
+	
+	potential = {
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+	}
+	
+	ai_weight = {
+		weight = 1
+		modifier = {
+			factor = 0
+			NOR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}		
+	}	
+}

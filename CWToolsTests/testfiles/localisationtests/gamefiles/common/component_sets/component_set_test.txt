@@ -1,0 +1,16 @@
+component_set = {
+	key = "test_optional"
+	
+	required_component_set = yes
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}
+
+component_set = {
+    #desc
+	key = "test_required"
+	
+	required_component_set = no
+	icon = "GFX_ship_part_computer"
+	icon_frame = 1	
+}

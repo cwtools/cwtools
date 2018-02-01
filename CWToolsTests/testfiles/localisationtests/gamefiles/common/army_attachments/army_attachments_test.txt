@@ -1,0 +1,6 @@
+#key
+#key_desc
+test_army_attachment =
+{
+
+}
