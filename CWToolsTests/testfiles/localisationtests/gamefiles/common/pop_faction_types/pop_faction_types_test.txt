@@ -13,7 +13,6 @@ imperialist = {
 		unfulfilled_title = "test_required"
 		desc = "test_required"
 
-		#fulfilled_effect = 5
 		unfulfilled_effect = -10
 
 		potential = {

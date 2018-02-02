@@ -275,11 +275,14 @@ module STLLocalisationValidation =
         fun _ keys es ->
             let factions = es.GlobMatchChildren("**/common/pop_faction_types/*.txt")
             let demands = factions |> List.collect (fun f -> f.Childs "demand")
+            let actions = factions |> List.collect (fun f -> f.Childs "actions")
             let inner = fun c -> (getLocKeys keys ["title"; "desc"; "unfulfilled_title"] c)
             let finner = checkLocNodeKeyAdvs keys "pft_" [""; "_desc"]
             demands <&!&> inner
             <&&>
             (factions <&!&> finner)
+            <&&>
+            (actions <&!&> (getLocKeys keys ["name"; "title"; "description"; "text"; "custom_tooltip"; "fail_text"; "response_text"]))
 
 
     let valSpeciesRightsLocs : LocalisationValidator =

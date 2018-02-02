@@ -1,0 +1,9 @@
+#key
+difficulty_insane_ai = {
+	tile_resource_minerals_mult = 1
+	tile_resource_energy_mult = 1
+	tile_resource_physics_research_mult = 1
+	tile_resource_society_research_mult = 1
+	tile_resource_engineering_research_mult = 1
+	navy_size_mult = 1
+}

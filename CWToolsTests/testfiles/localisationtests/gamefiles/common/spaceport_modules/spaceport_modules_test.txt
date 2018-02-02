@@ -1,0 +1,12 @@
+#sm_key
+projectile_weapon = {
+	icon = "GFX_spaceport_modules"
+	icon_frame = 1
+	initial = yes
+	initial_only = yes
+	replaceable = no
+	section = "CORE_SPACEPORT_SECTION"
+	component_set = "SPACEPORT_MASS_DRIVER"
+	prerequisites = { "tech_mass_drivers_1" }
+	ai_weight = { weight = 0 }
+}

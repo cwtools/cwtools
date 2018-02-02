@@ -1,0 +1,41 @@
+#key
+#key_tooltip
+#key_tooltip_delayed
+military_service_none = {
+	token = military_service_none
+	name = military_service_none_name
+
+	potential = {
+		OR = {
+			from = { NOT = { has_authority = auth_hive_mind } }
+			NOT = { has_trait = trait_hive_mind }
+		}	
+	}
+
+	allow = {
+		hidden_trigger = { exists = from }
+		custom_tooltip = {
+			fail_text = "test_required"
+			NOT = { is_same_species = from }
+		}
+		custom_tooltip = {
+			fail_text = "test_required"
+			NOT = {
+				has_slavery_type = { country = from type = slavery_military }
+			}
+		}
+		custom_tooltip = {
+			fail_text = "test_required"
+			OR = {
+				NOT = { from = { has_authority = auth_machine_intelligence } }
+				NOR = {
+					has_trait = trait_mechanical
+					has_trait = trait_machine_unit
+				}
+			}			
+		}
+	}
+	ai_will_do = {
+		factor = 0
+	}
+}
