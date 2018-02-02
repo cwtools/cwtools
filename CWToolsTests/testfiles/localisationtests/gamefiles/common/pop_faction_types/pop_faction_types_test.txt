@@ -1,0 +1,125 @@
+#pft_key
+#pft_key_desc
+imperialist = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_militarist
+	
+	unique = yes
+	support_multiplier = 1
+
+
+	demand = {
+		title = "test_required"
+		unfulfilled_title = "test_required"
+		desc = "test_required"
+
+		#fulfilled_effect = 5
+		unfulfilled_effect = -10
+
+		potential = {
+			exists = owner
+			owner = {
+				any_relation = {
+					has_communications = root.owner
+					is_country_type = default
+					NOT = { exists = overlord }
+				}
+			}
+		}
+
+		trigger = {
+			owner = { has_policy_flag = unrestricted_wars }
+		}
+	}
+
+	actions = {
+		embrace_faction = {
+			title = "test_required"
+			description = "test_required"
+			
+			cost = {
+				influence = 500
+			}
+			
+			potential = {
+				exists = owner
+				owner = {
+					OR = {
+						is_subject = no
+						NOT = { is_subject_type = dominion }
+					}
+				}
+			}
+			
+			valid = {
+				custom_tooltip = {
+					fail_text = "test_required"
+					parameter:empire = {
+						NOT = { has_modifier = embraced_faction_timer }
+					}
+				}
+				support > 0.20
+				parameter:empire = {
+					NOT = { has_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+
+			effect = {
+				add_modifier = { modifier = embraced_faction days = 3600 }
+				parameter:empire = {
+					shift_ethic = ethic_militarist
+					hidden_effect = {
+						add_modifier = { modifier = embraced_faction_timer days = 3600 }
+						every_pop_faction = {
+							limit = { NOT = { is_same_value = root } }
+							add_modifier = { modifier = embraced_another_faction days = 3600 }
+						}
+					}
+				}
+				hidden_effect = {
+					save_event_target_as = TargetFaction
+					parameter:empire = {
+						every_relation = {
+							limit = {
+								is_ai = no
+								is_country_type = default			
+								has_communications = prev
+							}
+							country_event = { id = factions.2000 }
+						}
+					}				
+				}				
+			}
+			
+			ai_weight = {
+				base = 1
+				modifier = {
+					factor = 0
+					support < 0.50
+					owner = {
+						has_ethic = ethic_militarist
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { 
+						owner = {	
+							exists = ruler
+							ruler = {
+								leader_of_faction = imperialist
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						count_pop_factions = {
+							count < 4
+						}					
+					}
+				}				
+			}
+		}
+    }
+}

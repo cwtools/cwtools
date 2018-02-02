@@ -1,0 +1,17 @@
+#policy_key
+#policy_key_desc
+slavery = {
+	potential = {
+		NOT = { has_ethic = "ethic_gestalt_consciousness" }
+	}
+    #key_name
+	option = {
+        #key
+        #key_desc
+		name = "slavery_not_allowed"
+		
+		policy_flags = {
+			slavery_not_allowed
+		}
+    }
+}

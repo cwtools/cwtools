@@ -298,7 +298,7 @@ module STLLocalisationValidation =
     let valMegastructureLocs : LocalisationValidator = 
         fun _ keys es ->
             let megas = es.GlobMatchChildren("**/common/megastructures/*.txt")
-            let inner = checkLocNodeKeyAdvs keys "" [""; "_DESC"; "_MEGASTRUCTURE_DETAILS"; "_CONSTRUCTION_INFO_DELAYED"]
+            let inner = checkLocNodeKeyAdvs keys "" [""; "_DESC"; "_MEGASTRUCTURE_DETAILS"; "_CONSTRUCTION_INFO_DELAYED"] <&> getLocKeys keys ["text"; "fail_text"]
             megas <&!&> inner
     
     let valModifiers : LocalisationValidator =
