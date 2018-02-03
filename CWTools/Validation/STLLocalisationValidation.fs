@@ -46,6 +46,7 @@ module STLLocalisationValidation =
                         match x.Key.ToLower(), x.Leafs "name" with
                         | "create_point_of_interest", _
                         | "enable_special_project", _
+                        | "create_species", _
                         | "option", _ -> children
                         | _, [] -> children
                         | _, [leaf] -> 
