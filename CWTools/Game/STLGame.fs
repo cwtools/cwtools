@@ -131,7 +131,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let mutable files : Map<string, FileResult> = Map.empty
         let validFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Pass (f, s, r) -> Some ((f, s, r)) |_ -> None))
         let invalidFiles() = files |> Map.toList |> List.choose ( snd >> (function  | Fail (f, s, r) -> Some ((f, s, r)) |_ -> None))
-        let validatableFiles() = if validateVanilla then validFiles() else validFiles() |> List.filter (fun(_, s, _) -> s <> "vanilla")
+        let validatableFiles() = if validateVanilla then validFiles() else validFiles() |> List.filter (fun(f, s, _) -> s <> "vanilla")
         let mutable allEntities : Map<string, Node> = Map.empty
         let entitiesList() = allEntities |> Map.toList
 
@@ -210,7 +210,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let allFilesByPath = 
             let getAllFiles (scope, path) =
                 scriptFolders
-                        |> List.map ((fun folder -> scope, path + "/" + folder)
+                        |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
                         >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
                         |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f) )
                         |> List.filter (fun (_, file) -> List.contains (Path.GetExtension(file)) [".txt"; ".gui"; ".gfx"])
@@ -284,9 +284,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             scriptedEffects <- final
         
         let updateLocalisation() = 
-
-            localisationAPIs <- 
-                let allLocs = locFolders |> List.collect (fun (l, _) -> langs |> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
+            localisationAPIs <-
+                let allLocs = locFolders |> List.collect (fun (l, _) -> (STL STLLang.Default :: langs)|> List.map (fun lang -> STLLocalisationService({ folder = l; language = lang}).Api))
                 match gameDirectory with
                 |Some _ -> allLocs
                 |None ->  
@@ -294,7 +293,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     |> List.filter (fun (_, fn, _ )-> fn.Contains("localisation"))
                     |> List.map (fun (_, fn, f) -> (fn, f))
                     |> (fun files -> (STL STLLang.Default :: langs) |> List.map (fun lang -> STLLocalisationService(files, lang).Api)))
-
             //TODO: Add loc from embedded
                 
                       

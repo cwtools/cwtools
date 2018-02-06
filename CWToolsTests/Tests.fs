@@ -60,7 +60,7 @@ let parseEntities validfiles =
 let tests =
     testList "localisation" [
         testList "no loc" [
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [STL STLLang.English], true)
+                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
                 let errors = stl.LocalisationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
                 let entities = stl.ValidFiles |> parseEntities
                 let testLocKeys = entities |> List.map (fun (f, s) -> f, getLocTestInfo s)
@@ -84,7 +84,7 @@ let tests =
             testList "with loc" [
                 
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
-                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [locfiles], [STL STLLang.English], true)
+                let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [locfiles], [STL STLLang.English], false)
                 let errors = stl.LocalisationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
                 let testLocKeys = stl.ValidFiles |> parseEntities |> List.map (fun (f, s) -> f, getLocTestInfo s)
                 let inner (file, ((req : FParsec.Position list), (noreq : FParsec.Position list), (nodekeys : FParsec.Position list) ))=

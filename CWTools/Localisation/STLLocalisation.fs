@@ -29,9 +29,11 @@ module STLLocalisation =
             //eprintfn "%s" f
             match parseLocText t f with
             | Success({key = key; entries = entries}, _, _) when key = languageKey ->
-                //eprintfn "%s %i" key entries.Length
+                //eprintfn "%A %s %i" lang key entries.Length
                 records <- entries@records; (true, entries.Length, "")
-            | Success(v, _, _) -> (true, v.entries.Length, "")
+            | Success({key = key; entries = entries}, _, _) -> 
+                //eprintfn "%A %s %i" lang key entries.Length
+                (true, entries.Length, "")
             | Failure(msg, _, _) -> 
                 //eprintfn "%s %s" f msg
                 (false, 0, msg)
