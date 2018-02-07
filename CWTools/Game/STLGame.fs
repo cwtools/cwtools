@@ -255,10 +255,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.rev
             let mutable final = vanillaTriggers
             let mutable i = 0
+            let mutable first = true
             let ff() = 
                 i <- i + 1
                 let before = final
-                final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope EffectType.Trigger ts ts t) :> Effect::ts) final
+                final <- rawTriggers |> List.fold (fun ts t -> (STLProcess.getScriptedTriggerScope first EffectType.Trigger ts ts t) :> Effect::ts) final
+                first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
                 //( before |> List.map (fun f -> f.Name, f.Scopes)) = (final |> List.map (fun f -> f.Name, f.Scopes))
@@ -275,10 +277,12 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                 |> List.rev
             let mutable final = vanillaEffects
             let mutable i = 0
+            let mutable first = true
             let ff() = 
                 i <- i + 1
                 let before = final
-                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope EffectType.Effect es scriptedTriggers e) :> Effect::es) final
+                final <- rawEffects |>  List.fold (fun es e -> (STLProcess.getScriptedTriggerScope first EffectType.Effect es scriptedTriggers e) :> Effect::es) final
+                first <- false
                 ((before |> Set.ofList) = (final |> Set.ofList)) || i > 10
             while (not (ff())) do ()
             scriptedEffects <- final

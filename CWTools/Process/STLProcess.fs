@@ -76,10 +76,10 @@ module STLProcess =
         //nodeScopes @ valueScopes @ nodeScopeChanges @ limitScopes
         //        |> List.fold (fun a b -> Set.intersect (Set.ofList a) (Set.ofList b) |> Set.toList) allScopes
 
-    let getScriptedTriggerScope (effectType : EffectType) (effects : Effect list) (triggers : Effect list) (node : Node) =
+    let getScriptedTriggerScope (firstRun: bool) (effectType : EffectType) (effects : Effect list) (triggers : Effect list) (node : Node) =
         let effects2 = effects |> List.map (fun t -> t.Name, t.Scopes)
         let triggers2 = triggers |> List.map (fun t -> t.Name, t.Scopes)
-        let scopes = scriptedTriggerScope true effects2 triggers2 node.Key node
+        let scopes = scriptedTriggerScope firstRun effects2 triggers2 node.Key node
         ScriptedEffect(node.Key, scopes, effectType)
 
     type Ship (key, pos) =
