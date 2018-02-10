@@ -6,6 +6,7 @@ open CWTools.Process.ProcessCore
 open CWTools.Process
 open CWTools.Process.STLScopes
 open CWTools.Common.STLConstants
+open DotNet.Globbing
 
 module STLProcess =
     let toTriggerKeys = ["OR"; "AND"; "NOR"; "NAND"; "NOT";]
@@ -97,23 +98,34 @@ module STLProcess =
         member this.Template = this.TagText "template"
         member this.Slot = this.TagText "slot"
 
+    type Button_Effect (key, pos) =
+        inherit Node(key, pos)
+
     type Event(key, pos) =
         inherit Node(key, pos)
         member this.ID = this.TagText "id"
         member this.Desc = this.TagText "desc"
         member this.Hidden = this.Tag "hide_window" |> (function | Some (Bool b) -> b | _ -> false)
    
+    let globCheckPosition (pattern : string) =
+        let glob = Glob.Parse(pattern)
+        (fun (p : Position) ->
+            let p2 = Position.UnConv(p)
+            glob.IsMatch(p2.StreamName))
+
+    
     let shipMap =
         [
-            (=) "ship_design", processNode<Ship>;
-            (=) "section", processNode<ShipSection>;
-            (=) "component", processNode<ShipComponent>;
-            (=) "planet_event", processNode<Event>;
-            (=) "country_event", processNode<Event>;
-            (=) "fleet_event", processNode<Event>;
-            (=) "ship_event", processNode<Event>;
-            (=) "pop_faction_event", processNode<Event>;
-            (=) "pop_event", processNode<Event>;
+            fst3 >> ((=) "ship_design"), processNode<Ship>, id;
+            fst3 >> ((=) "section"), processNode<ShipSection>, id;
+            fst3 >> ((=) "component"), processNode<ShipComponent>, id;
+            fst3 >> ((=) "planet_event"), processNode<Event>, id;
+            fst3 >> ((=) "country_event"), processNode<Event>, id;
+            fst3 >> ((=) "fleet_event"), processNode<Event>, id;
+            fst3 >> ((=) "ship_event"), processNode<Event>, id;
+            fst3 >> ((=) "pop_faction_event"), processNode<Event>, id;
+            fst3 >> ((=) "pop_event"), processNode<Event>, id;
+            (fun (_, p, c) -> (globCheckPosition("**/common/button_effects/*.txt") p) && not c.complete), processNode<Button_Effect>, (fun c -> { c with complete = true});
        ]
     let shipProcess = BaseProcess(shipMap)
 

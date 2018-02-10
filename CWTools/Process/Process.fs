@@ -74,22 +74,26 @@ module ProcessCore =
         let node = Activator.CreateInstance(typeof<'T>, key, pos) :?> Node
         sl |> List.iter (fun e -> inner node e) |> ignore
         node
+    type LookupContext = { complete : bool}
+    type NodeTypeMap = ((string * Position * LookupContext) -> bool) * ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node) * (LookupContext -> LookupContext)
     
-    type NodeTypeMap = (string -> bool) * ((Node -> Statement -> unit) -> string -> Position -> Statement list -> Node)
+    let fst3 (x, _, _) = x
+    let snd3 (_, x, _) = x
+    let tri3 (_, _, x) = x
     type BaseProcess (maps : NodeTypeMap list ) =
         let rec lookup =
-            (fun (key : string) (pos : Position) ->
-                match maps |> List.tryFind (fun a -> fst a key) with
-                |Some (_,t) -> t processNodeInner key pos
-                |None -> processNode<Node> processNodeInner key pos
-                ) >> (fun f a b -> NodeI (f a b)) 
-        and processNodeInner (node : Node) statement =
+            (fun (key : string) (pos : Position) (context : LookupContext) ->
+                match maps |> List.tryFind (fun (a, _, _) -> a (key, pos, context)) with
+                |Some (_,t, c) -> t (processNodeInner (c context)) key pos
+                |None -> processNode<Node> (processNodeInner context) key pos
+                ) >> (fun f a b c -> NodeI (f a b c))
+        and processNodeInner (c : LookupContext) (node : Node) statement =
             match statement with
-            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos sl::node.All
+            | KeyValue(PosKeyValue(pos, KeyValueItem(Key(k) , Clause(sl)))) -> node.All <- lookup k pos c sl::node.All
             | KeyValue(PosKeyValue(pos, kv)) -> node.All <- LeafI(Leaf(kv, pos))::node.All
             | Comment(c) -> node.All <- CommentI c::node.All
             | Value(v) -> node.All <- LeafValueI(LeafValue(v))::node.All
-        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> processNodeInner
+        member __.ProcessNode<'T when 'T :> Node >() = processNode<'T> (processNodeInner { complete = false})
 
     let baseMap = []
     let processNodeBasic = BaseProcess(baseMap).ProcessNode()

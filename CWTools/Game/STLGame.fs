@@ -49,6 +49,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
                     "common/attitudes";
                     "common/buildable_pops";
                     "common/buildings";
+                    "common/button_effects";
                     "common/colors";
                     "common/component_flags";
                     "common/component_sets";
@@ -337,11 +338,13 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
         let validateAll (entities : (string * string * PassFileResult) list)  = 
             eprintfn "Validating %i files" (entities.Length)
             let entitiesByFile = entities |> parseEntities
+            eprintfn "%A" entitiesByFile
             let allEntitiesByFile = entitiesByFile |> List.map snood
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables; valTechnology]
+            let validators = [validateVariables; valTechnology; valButtonEffects]
             let oldEntities = EntitySet (entitiesList())
+            eprintfn "%A" oldEntities.Raw
             let newEntities = EntitySet entitiesByFile
             let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
                        |> (function |Invalid es -> es |_ -> [])

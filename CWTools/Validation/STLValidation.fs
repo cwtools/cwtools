@@ -19,6 +19,8 @@ module STLValidation =
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
         member __.All = entities |> List.map snd
+        member __.Raw = entities
+        member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 
     type StructureValidator = EntitySet -> EntitySet -> ValidationResult
     let shipName (ship : Ship) = if ship.Name = "" then Invalid [(inv S.Error ship "must have name")] else OK
@@ -239,5 +241,25 @@ module STLValidation =
                         | Some _ -> OK
                     catres <&&> valResearchLeader area cat node
             techs |> List.map inner |> List.fold (<&&>) OK
+
+    let valButtonEffects : StructureValidator =
+        fun os es ->
+            let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
+                            |> (fun es -> eprintfn "%i" es.Length; es)
+                            |> List.filter (fun e -> e :? Button_Effect)
+                            |> List.map (fun e -> e.Key)
+            eprintfn "%A" effects
+            let buttons = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
+            let fNode = (fun (x : Node) children ->
+                            let results =
+                                match x.Key with
+                                | "effectButtonType" -> 
+                                    x.TagsText "effect" <&!&> (fun e -> if List.contains e effects then OK else Invalid [inv S.Error x (sprintf "Button effect %s not found" e)])
+                                | _ -> OK
+                            results <&&> children
+                                )
+            let fCombine = (<&&>)
+            buttons <&!&> (foldNode2 fNode fCombine OK)
+
 
 

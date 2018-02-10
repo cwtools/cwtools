@@ -28,8 +28,8 @@ module CK2Process =
 
     let maps =
         [
-            (=) "option", processNode<Option>;
-            (fun s -> s.EndsWith("event")), processNode<Event>;
+            fst3 >> ((=) "option"), processNode<Option>, id;
+            (fun (s, _, _) -> s.EndsWith("event")), processNode<Event>, id;
         ]
 
     let ck2Process = BaseProcess(maps)

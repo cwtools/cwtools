@@ -58,7 +58,6 @@ module STLLocalisationValidation =
         let fCombine = (<&&>)
         node |> (foldNode2 fNode fCombine OK)
     
-    let (<&!&>) es f = es |> List.fold (fun s c -> s <&&> (f c)) OK
 
     let checkLocNode (keys : Set<string>) (lang : Lang) key (node : Node) =
         if lang = STL STLLang.Default then OK else
