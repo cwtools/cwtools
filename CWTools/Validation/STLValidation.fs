@@ -245,16 +245,14 @@ module STLValidation =
     let valButtonEffects : StructureValidator =
         fun os es ->
             let effects = (os.GlobMatchChildren("**/common/button_effects/*.txt"))
-                            |> (fun es -> eprintfn "%i" es.Length; es)
                             |> List.filter (fun e -> e :? Button_Effect)
                             |> List.map (fun e -> e.Key)
-            eprintfn "%A" effects
             let buttons = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
             let fNode = (fun (x : Node) children ->
                             let results =
                                 match x.Key with
                                 | "effectButtonType" -> 
-                                    x.TagsText "effect" <&!&> (fun e -> if List.contains e effects then OK else Invalid [inv S.Error x (sprintf "Button effect %s not found" e)])
+                                    x.Leafs "effect" <&!&> (fun e -> if List.contains (e.Value.ToRawString()) effects then OK else Invalid [inv S.Error e (sprintf "Button effect %s not found" (e.Value.ToString()))])
                                 | _ -> OK
                             results <&&> children
                                 )

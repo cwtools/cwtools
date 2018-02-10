@@ -96,3 +96,20 @@ let tests =
             ]
     ]
     
+[<Tests>]
+let tests2 = 
+    testList "validation" [
+        let stl = STLGame("./testfiles/validationtests/interfacetests", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
+        let errors = stl.ValidationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
+        let testVals = stl.ValidFiles |> parseEntities |> List.map (fun (f, s) -> f, getNodeComments s |> List.map fst)
+        //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
+        let inner (file, ((nodekeys : FParsec.Position list)) )=
+            let expected = nodekeys
+            let fileErrors = errors |> List.filter (fun f -> f.StreamName = file )
+            let missing = remove_all expected fileErrors
+            let extras = remove_all fileErrors expected
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+        yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+
+    ]
