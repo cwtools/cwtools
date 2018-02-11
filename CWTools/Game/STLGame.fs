@@ -192,8 +192,8 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let getAllFiles (scope, path) =
                 scriptFolders
                         |> List.map ((fun folder -> scope, Path.GetFullPath(Path.Combine(path, folder)))
-                        >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then Directory.EnumerateFiles folder else Seq.empty )|> List.ofSeq))
-                        |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, f) )
+                        >> (fun (scope, folder) -> scope, folder, (if Directory.Exists folder then getAllFoldersUnion [folder] |> Seq.collect Directory.EnumerateFiles else Seq.empty )|> List.ofSeq))
+                        |> List.collect (fun (scope, _, files) -> files |> List.map (fun f -> scope, Path.GetFullPath(f)))
                         |> List.filter (fun (_, file) -> List.contains (Path.GetExtension(file)) [".txt"; ".gui"; ".gfx"])
             let allFiles = List.map getAllFiles allFolders |> List.collect id |> List.map (fun( s, f) -> s, f, File.ReadAllText f)
             allFiles
@@ -324,7 +324,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filteredfiles = if validateVanilla then files else files |> List.map (fun f -> if f.scope = "vanilla" then {f with validate = false} else f)
             resources.UpdateFiles(filteredfiles) |> ignore
             let embedded = embeddedFiles |> List.map (fun (f, ft) -> {scope = "embedded"; filepath = f; filetext = ft; validate = false})
-
+            embeddedFiles |> List.iter (fun (f, ft) -> eprintfn "%A" f)
            
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore
