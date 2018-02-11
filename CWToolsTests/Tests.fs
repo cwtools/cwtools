@@ -62,9 +62,9 @@ let tests =
         testList "no loc" [
                 let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
                 let errors = stl.LocalisationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
-                let entities = stl.ValidFiles |> parseEntities
-                let testLocKeys = entities |> List.map (fun (f, s) -> f, getLocTestInfo s)
-                let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
+                let entities = stl.AllEntities
+                let testLocKeys = entities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
+                let nodeComments = entities |> List.collect (fun e -> getNodeComments e.entity) |> List.map fst
                 
                 eprintfn "%A" testLocKeys
                 // eprintfn "%A" entities
@@ -86,7 +86,7 @@ let tests =
                 let locfiles = "localisation/l_english.yml", File.ReadAllText("./testfiles/localisationtests/localisation/l_english.yml")
                 let stl = STLGame("./testfiles/localisationtests/gamefiles", FilesScope.All, "", [], [], [locfiles], [STL STLLang.English], false)
                 let errors = stl.LocalisationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
-                let testLocKeys = stl.ValidFiles |> parseEntities |> List.map (fun (f, s) -> f, getLocTestInfo s)
+                let testLocKeys = stl.AllEntities |> List.map (fun e -> e.filepath, getLocTestInfo e.entity)
                 let inner (file, ((req : FParsec.Position list), (noreq : FParsec.Position list), (nodekeys : FParsec.Position list) ))=
                     let missing = req |> List.filter (fun r -> not (errors |> List.contains r))
                     let extra = noreq |> List.filter (fun r -> errors |> List.contains r)
@@ -101,7 +101,7 @@ let tests2 =
     testList "validation" [
         let stl = STLGame("./testfiles/validationtests/interfacetests", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
         let errors = stl.ValidationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
-        let testVals = stl.ValidFiles |> parseEntities |> List.map (fun (f, s) -> f, getNodeComments s |> List.map fst)
+        let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
         //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
         let inner (file, ((nodekeys : FParsec.Position list)) )=
             let expected = nodekeys

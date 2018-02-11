@@ -18,6 +18,7 @@
     <Compile Include="Process/CK2Process.fs" />
     <Compile Include="Process/STLScopes.fs" />
     <Compile Include="Process/STLProcess.fs" />
+    <Compile Include="Game/ResourceManager.fs" />
     <Compile Include="Validation/Validation.fs" />
     <Compile Include="Validation/STLValidation.fs" />
     <Compile Include="Validation/STLLocalisationValidation.fs" />

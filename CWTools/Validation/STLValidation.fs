@@ -8,17 +8,18 @@ open CWTools.Process.STLScopes
 open CWTools.Common
 open CWTools.Common.STLConstants
 open DotNet.Globbing
+open CWTools.Games
 
 
 module STLValidation =
     type S = Severity
-    type EntitySet(entities : (string * Node) list) =
+    type EntitySet(entities : Entity list) =
         member __.GlobMatch(pattern : string) =
             let glob = Glob.Parse(pattern)
-            entities |> List.choose (fun (f, n) -> if glob.IsMatch(f) then Some n else None)
+            entities |> List.choose (fun es -> if glob.IsMatch(es.filepath) then Some es.entity else None)
         member this.GlobMatchChildren(pattern : string) =
             this.GlobMatch(pattern) |> List.map (fun e -> e.Children) |> List.collect id
-        member __.All = entities |> List.map snd
+        member __.All = entities |> List.map (fun es -> es.entity)
         member __.Raw = entities
         member this.Merge(y : EntitySet) = EntitySet(this.Raw @ y.Raw)
 
@@ -263,7 +264,7 @@ module STLValidation =
         fun os es ->
             let sprites = os.GlobMatchChildren("**/interface/*.gfx")
                             |> List.filter (fun e -> e.Key = "spriteTypes")
-                            |> List.collect (fun e -> e.Children |> List.filter (fun s -> s.Key = "spriteType"))
+                            |> List.collect (fun e -> e.Children |> List.filter (fun s -> s.Key = "spriteType" || s.Key = "portraitType"))
                             |> List.collect (fun s -> s.TagsText "name")
             let gui = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
             let fNode = (fun (x : Node) children ->
