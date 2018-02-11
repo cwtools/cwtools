@@ -324,7 +324,6 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let filteredfiles = if validateVanilla then files else files |> List.map (fun f -> if f.scope = "vanilla" then {f with validate = false} else f)
             resources.UpdateFiles(filteredfiles) |> ignore
             let embedded = embeddedFiles |> List.map (fun (f, ft) -> {scope = "embedded"; filepath = f; filetext = ft; validate = false})
-            embeddedFiles |> List.iter (fun (f, ft) -> eprintfn "%A" f)
            
             match gameDirectory with
             |None -> resources.UpdateFiles(embedded) |> ignore

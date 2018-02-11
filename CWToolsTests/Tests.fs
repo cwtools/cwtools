@@ -8,6 +8,7 @@ open CWTools.Process
 open CWTools.Parser
 open CWTools.Process.ProcessCore
 open System.IO
+open System.Reflection
 
 
 let getAllTestLocs node =
@@ -111,5 +112,42 @@ let tests2 =
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
+
+    ]
+
+let rec replaceFirst predicate value = function
+        | [] -> []
+        | h :: t when predicate h -> value :: t
+        | h :: t -> h :: replaceFirst predicate value t
+
+let fixEmbeddedFileName (s : string) =
+    let count = (Seq.filter ((=) '.') >> Seq.length) s
+    let mutable out = "//" + s
+    [1 .. count - 1] |> List.iter (fun _ -> out <- (replaceFirst ((=) '.') '/' (out |> List.ofSeq)) |> Array.ofList |> FSharp.Core.string )
+    out
+
+[<Tests>]
+let embeddedTests =
+    testList "embedded" [
+        let embeddedFileNames = Assembly.GetEntryAssembly().GetManifestResourceNames() |> Array.filter (fun f -> f.Contains("common") || f.Contains("localisation") || f.Contains("interface"))
+        let embeddedFiles = embeddedFileNames |> List.ofArray |> List.map (fun f -> fixEmbeddedFileName f, (new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream(f))).ReadToEnd())
+        let stlE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], embeddedFiles, [STL STLLang.English], false)
+        let stlNE = STLGame("./testfiles/embeddedtest/test", FilesScope.All, "", [], [], [], [STL STLLang.English], false)
+        let eerrors = stlE.ValidationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
+        let neerrors = stlNE.ValidationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
+        let etestVals = stlE.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let netestVals = stlNE.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        let einner (file, ((nodekeys : FParsec.Position list)) )=
+            let fileErrors = eerrors |> List.filter (fun f -> f.StreamName = file )
+            Expect.isEmpty (fileErrors) (sprintf "Following lines are not expected to have an error %A" fileErrors )
+        yield! etestVals |> List.map (fun (f, t) -> testCase ("embed" + f.ToString()) <| fun () -> einner (f, t))
+        let neinner (file, ((nodekeys : FParsec.Position list)) )=
+            let expected = nodekeys
+            let fileErrors = neerrors |> List.filter (fun f -> f.StreamName = file )
+            let missing = remove_all expected fileErrors
+            let extras = remove_all fileErrors expected
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        yield! netestVals |> List.map (fun (f, t) -> testCase ("no embed" + f.ToString()) <| fun () -> neinner (f, t))
 
     ]

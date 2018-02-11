@@ -13,5 +13,8 @@
     <Compile Include="Main.fs" />
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="testfiles/embeddedtest/embedded/**" />
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
