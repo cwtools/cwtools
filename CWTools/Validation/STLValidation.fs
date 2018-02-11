@@ -259,5 +259,23 @@ module STLValidation =
             let fCombine = (<&&>)
             buttons <&!&> (foldNode2 fNode fCombine OK)
 
+    let valSprites : StructureValidator = 
+        fun os es ->
+            let sprites = os.GlobMatchChildren("**/interface/*.gfx")
+                            |> List.filter (fun e -> e.Key = "spriteTypes")
+                            |> List.collect (fun e -> e.Children |> List.filter (fun s -> s.Key = "spriteType"))
+                            |> List.collect (fun s -> s.TagsText "name")
+            let gui = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
+            let fNode = (fun (x : Node) children ->
+                            let results =
+                                match x.Leafs "spriteType" with
+                                | [] -> OK
+                                | xs -> 
+                                    xs <&!&> (fun e -> if List.contains (e.Value.ToRawString()) sprites then OK else Invalid [inv S.Error e (sprintf "Sprite type %s not found" (e.Value.ToString()))])
+                            results <&&> children
+                                )
+            let fCombine = (<&&>)
+            gui <&!&> (foldNode2 fNode fCombine OK)
+
 
 

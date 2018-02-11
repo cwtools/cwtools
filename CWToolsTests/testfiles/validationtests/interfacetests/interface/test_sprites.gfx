@@ -1,0 +1,12 @@
+spriteTypes = {
+	spriteType = {
+		name = "test_sprite_1"
+		textureFile = "gfx/interface/icons/faction_icons/faction_icons_regionalist.dds"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = test_sprite_2
+		texturefile = "gfx/interface/icons/custom/icon_sector_logo.dds"
+    }
+}

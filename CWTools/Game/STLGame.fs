@@ -235,7 +235,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
 
         let embeddedParsed = 
             //let glob = Glob.Parse("**/common/**")
-            getEmbeddedFiles |> List.filter (fun (_, fn, _) -> fn.Contains(".common.")) |> parseResults
+            getEmbeddedFiles |> List.filter (fun (_, fn, _) -> fn.Contains(".common.") || fn.Contains(".interface.")) |> parseResults
             
 
         // let entities() = validFiles()
@@ -341,7 +341,7 @@ type STLGame ( scopeDirectory : string, scope : FilesScope, modFilter : string, 
             let allEntitiesByFile = entitiesByFile |> List.map snood
             let flattened = allEntitiesByFile |> List.map (fun n -> n.Children) |> List.collect id
 
-            let validators = [validateVariables; valTechnology; valButtonEffects]
+            let validators = [validateVariables; valTechnology; valButtonEffects; valSprites]
             let oldEntities = EntitySet (entitiesList())
             let newEntities = EntitySet entitiesByFile
             let res = validators |> List.map (fun v -> v oldEntities newEntities) |> List.fold (<&&>) OK
