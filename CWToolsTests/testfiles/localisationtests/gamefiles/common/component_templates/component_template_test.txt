@@ -41,3 +41,13 @@ test_component_template = {
 		weight = 2
 	}
 }
+
+test_component_template = {
+	key = "test_not_required"
+	hidden = yes
+}
+
+test_component_template = {
+	key = "test_required"
+	hidden = no
+}

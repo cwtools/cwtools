@@ -154,7 +154,10 @@ module STLLocalisationValidation =
             let entities = es.GlobMatchChildren("**/common/component_templates/*.txt")
             let inner = 
                 fun (node : Node) ->
-                    let keyres = node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
+                    let keyres = 
+                        match node.TagText "hidden" with
+                        | "yes" -> OK
+                        | _ -> node.Leafs "key" |> List.fold (fun s l -> s <&&> (checkLocKeys keys l)) OK
                     let auras = node.Childs "friendly_aura" @ node.Childs "hostile_aura"
                     let aurares = auras |> List.fold (fun s c -> s <&&> (getLocKeys keys ["name"] c)) OK
                     keyres <&&> aurares
