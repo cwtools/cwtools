@@ -108,8 +108,8 @@ let tests2 =
             let fileErrors = errors |> List.filter (fun f -> f.StreamName = file )
             let missing = remove_all expected fileErrors
             let extras = remove_all fileErrors expected
-            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
             Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
 
     ]

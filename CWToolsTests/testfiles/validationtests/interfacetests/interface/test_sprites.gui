@@ -14,9 +14,8 @@ guiTypes = {
         iconType = {
             name = "hex_bg" 
             #error
-            spriteType = "test_sprite_not_defined" 
+            spriteType = "test_sprite_not_defined"
             position = { x = -10 y = -14 } 
             alwaysTransparent = yes }
-        iconType = { name = "empire_header_line" quadTextureSprite = "GFX_line_long" position = { x = 6 y = 22 } alwaysTransparent = yes }
     }
 }
