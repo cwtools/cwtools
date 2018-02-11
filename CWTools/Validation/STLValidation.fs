@@ -269,7 +269,7 @@ module STLValidation =
                             |> List.collect (fun e -> e.Children)
                             |> List.collect (fun s -> s.TagsText "name")
             eprintfn "%A" sprites
-            let gui = es.GlobMatchChildren("**/interface/*.gui") @ es.GlobMatchChildren("**/interface/**/*.gui")
+            let gui = es.GlobMatchChildren("**/interface/**/*.gui")
             let fNode = (fun (x : Node) children ->
                             let results =
                                 match x.Leafs "spriteType" with
