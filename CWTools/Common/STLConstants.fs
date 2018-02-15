@@ -22,6 +22,8 @@ module STLConstants =
         |War
         |Megastructure
         |Any
+        |Design
+        |Starbase
         |InvalidScope
 
     let allScopes = [
@@ -40,6 +42,8 @@ module STLConstants =
             Sector;
             Alliance;
             War;
+            Design;
+            Starbase;
             Megastructure;
             ]
     let parseScope =
@@ -67,6 +71,8 @@ module STLConstants =
             |"alliance" -> Scope.Country
             |"war" -> Scope.War
             |"megastructure" -> Scope.Ship
+            |"design" -> Scope.Design
+            |"starbase" -> Scope.Starbase
             |"any" -> Scope.Any
             |"all" -> Scope.Any
             |x -> failwith ("unexpected scope" + x.ToString()))
