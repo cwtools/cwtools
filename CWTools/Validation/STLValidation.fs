@@ -95,7 +95,7 @@ module STLValidation =
             |x when STLProcess.toTriggerKeys @ STLProcess.toTriggerBlockKeys |> List.contains (x.ToLower()) ->
                 valNodeTriggers root triggers effects scope node
             |x when STLProcess.isTargetKey x ->
-                OK //Handle later
+                valNodeTriggers root triggers effects Scope.Any node
             |x when x.StartsWith("event_target:") ->
                 OK //Handle later
             |x when x.StartsWith("parameter:") ->
@@ -140,13 +140,13 @@ module STLValidation =
         |_ -> OK
     
     and valNodeTriggers (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (node : Node) =
-        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
-        let scopedEffects = effects |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
+        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scope)) 
+        let scopedEffects = effects |> List.map (fun (e, _) -> e, scope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scope)) 
         List.map (valEventTrigger root scopedTriggers scopedEffects scope) node.All |> List.fold (<&&>) OK
 
     and valNodeEffects (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (node : Node) =
-        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
-        let scopedEffects = effects |> List.map (fun (e, _) -> e, e.Scopes |> List.exists (fun s -> s = scope)) 
+        let scopedTriggers = triggers |> List.map (fun (e, _) -> e, scope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scope)) 
+        let scopedEffects = effects |> List.map (fun (e, _) -> e, scope = Scope.Any || e.Scopes |> List.exists (fun s -> s = scope)) 
         List.map (valEventEffect root scopedTriggers scopedEffects scope) node.All |> List.fold (<&&>) OK
 
     let valOption (root : Node) (triggers : (Effect * bool) list) (effects : (Effect * bool) list) (scope : Scope) (node : Node) =

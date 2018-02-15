@@ -470,10 +470,11 @@ module STLScopes =
         | Some e -> 
             let possibleScopes = e.Scopes
             let exact = possibleScopes |> List.contains source
-            match possibleScopes, exact with
-            | [], _ -> NotFound
-            | _, true -> NewScope e.InnerScope
-            | ss, false -> WrongScope ss
+            match source, possibleScopes, exact with
+            | _, [], _ -> NotFound
+            | _, _, true -> NewScope e.InnerScope
+            | Scope.Any, _, _ -> NewScope e.InnerScope
+            | _, ss, false -> WrongScope ss
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
