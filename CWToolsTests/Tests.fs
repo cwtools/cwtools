@@ -9,6 +9,7 @@ open CWTools.Parser
 open CWTools.Process.ProcessCore
 open System.IO
 open System.Reflection
+open CWTools.Parser.DocsParser
 
 
 let getAllTestLocs node =
@@ -113,6 +114,24 @@ let tests2 =
             Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
         yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
 
+    ]
+
+[<Tests>]
+let tests3 = 
+    testList "validation" [
+        let triggers, effects = parseDocsFile "./testfiles/validationtests/trigger_docs_0.2.txt" |> (function |Success(p, _, _) -> DocsParser.processDocs p)
+        let stl = STLGame("./testfiles/validationtests/scopetests", FilesScope.All, "", triggers, effects, [], [STL STLLang.English], false)
+        let errors = stl.ValidationErrors |> List.map (fun (s, n, l, f) -> Position.UnConv n)
+        let testVals = stl.AllEntities |> List.map (fun (e) -> e.filepath, getNodeComments e.entity |> List.map fst)
+        //let nodeComments = entities |> List.collect (fun (f, s) -> getNodeComments s) |> List.map fst
+        let inner (file, ((nodekeys : FParsec.Position list)) )=
+            let expected = nodekeys
+            let fileErrors = errors |> List.filter (fun f -> f.StreamName = file )
+            let missing = remove_all expected fileErrors
+            let extras = remove_all fileErrors expected
+            Expect.isEmpty (extras) (sprintf "Following lines are not expected to have an error %A" extras )
+            Expect.isEmpty (missing) (sprintf "Following lines are expected to have an error %A" missing)
+        yield! testVals |> List.map (fun (f, t) -> testCase (f.ToString()) <| fun () -> inner (f, t))
     ]
 
 let rec replaceFirst predicate value = function

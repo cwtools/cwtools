@@ -16,6 +16,8 @@ module STLProcess =
     let targetKeys = _targetKeys |> List.sortByDescending (fun k -> k.Length)
     let toEffectBlockKeys = ["hidden_effect"; "if"; "else"; "tooltip"]
     let ignoreKeys = ["count"; "min_steps"; "max_steps"]
+
+
     let rec isTargetKey =
         function
         |"" -> true

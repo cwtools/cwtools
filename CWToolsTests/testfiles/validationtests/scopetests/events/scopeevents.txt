@@ -1,0 +1,31 @@
+namespace = test_events
+
+fleet_event =
+{
+    is_triggered_only = yes
+    trigger =
+    {
+        has_fleet_order = yes
+        OWNER = {
+            #error
+            has_fleet_order = yes
+            PREV = {
+                has_fleet_order = yes
+            }
+            OWNER = {
+                #error
+                has_fleet_order = yes
+                PREVPREV = {
+                    has_fleet_order = yes
+                }
+                PREV.PREV = {
+                    has_fleet_order = yes
+                }
+                PREV = {
+                    #error
+                    has_fleet_order = yes
+                }
+            }
+        }
+    }
+}

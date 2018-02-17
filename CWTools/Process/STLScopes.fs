@@ -95,16 +95,16 @@ module STLScopes =
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("owner", [Scope.Ship; Scope.Pop], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("controller", [], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("owner", [Scope.Ship; Scope.Pop; Scope.Fleet; Scope.Planet; Scope.PopFaction; Scope.Sector; Scope.Leader; Scope.Country], Scope.Country, EffectType.Both, "", ""); //Fleet, Planet, PopFaction, Sector, Leader, Country from vanilla use
+        ScopedEffect("controller", [Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from vanilla use
         ScopedEffect("planet_owner", [Scope.Planet], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("last_created_country", allScopes, Scope.Country, EffectType.Both, "", "");
         ScopedEffect("last_refugee_country", [], Scope.Country, EffectType.Both, "", "");
-        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country], Scope.Leader, EffectType.Both, "", "");
+        ScopedEffect("leader", [Scope.Ship; Scope.Planet; Scope.Country; Scope.PopFaction; Scope.Fleet], Scope.Leader, EffectType.Both, "", ""); //PopFaction, Fleet from vanilla use
         ScopedEffect("last_created_leader", allScopes, Scope.Leader, EffectType.Both, "", "");
         ScopedEffect("ruler", [Scope.Country], Scope.Leader, EffectType.Both, "", "");
         ScopedEffect("heir", [], Scope.Leader, EffectType.Both, "", "");
-        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country], Scope.GalacticObject, EffectType.Both, "", "");
+        ScopedEffect("solar_system", [Scope.Ship; Scope.Planet; Scope.Country; Scope.Fleet; Scope.AmbientObject], Scope.GalacticObject, EffectType.Both, "", ""); //Fleet, Ambient object from vanilla use
         ScopedEffect("last_created_system", allScopes, Scope.GalacticObject, EffectType.Both, "", "");
         ScopedEffect("planet", [Scope.Pop; Scope.Tile; Scope.Planet], Scope.Planet, EffectType.Both, "", "");
         ScopedEffect("capital_scope", [Scope.Country], Scope.Planet, EffectType.Both, "", "");
@@ -455,26 +455,61 @@ module STLScopes =
 
         ]
 
+ 
+
+    type ScopeContext =
+        {
+            Root : Scope
+            From : Scope list
+            Scopes : Scope list
+        }
+        member this.CurrentScope = match this.Scopes with |[] -> Scope.Any |x::_ -> x
+        member this.PopScope = match this.Scopes with |[] -> [] |_::xs -> xs
+
     type ScopeResult =
-        | NewScope of newScope : Scope
+        | NewScope of newScope : ScopeContext
         | WrongScope of expected : Scope list
         | NotFound
 
-    let changeScope (effects : (Effect * bool) list) (triggers : (Effect * bool) list) (key : string) (source : Scope) = 
-        let effect = (effects @ triggers) 
-                    |> List.map fst
-                    |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
-                    |> List.tryFind (fun e -> e.Name = key)
-        match effect with
-        | None -> NotFound
-        | Some e -> 
-            let possibleScopes = e.Scopes
-            let exact = possibleScopes |> List.contains source
-            match source, possibleScopes, exact with
-            | _, [], _ -> NotFound
-            | _, _, true -> NewScope e.InnerScope
-            | Scope.Any, _, _ -> NewScope e.InnerScope
-            | _, ss, false -> WrongScope ss
+    let oneToOneScopes = 
+        let from = fun s -> {s with Scopes = Scope.Any::s.Scopes}
+        let prev = fun s -> {s with Scopes = s.PopScope}
+        [
+        "THIS", id;
+        "ROOT", fun s -> {s with Scopes = s.Root::s.Scopes};
+        "FROM", from; //TODO Make it actually use FROM
+        "FROMFROM", from >> from;
+        "FROMFROMFROM", from >> from >> from;
+        "FROMFROMFROMFROM", from >> from >> from >> from;
+        "PREV", prev;
+        "PREVPREV", prev >> prev;
+        "PREVPREVPREV", prev >> prev >> prev;
+        "PREVPREVPREVPREV", prev >> prev >> prev >> prev
+    ]
+    let changeScope (effects : (Effect * bool) list) (triggers : (Effect * bool) list) (key : string) (source : ScopeContext) = 
+        let keys = key.Split('.');
+        let inner (context : ScopeContext) (nextKey : string) =
+            let onetoone = oneToOneScopes |> List.tryFind (fun (k, f) -> k.ToLower() = nextKey.ToLower())
+            match onetoone with
+            | Some (_, f) -> f context, NewScope (f context)
+            | None ->
+                let effect = (effects @ triggers) 
+                            |> List.map fst
+                            |> List.choose (function | :? ScopedEffect as e -> Some e |_ -> None)
+                            |> List.tryFind (fun e -> e.Name.ToLower() = nextKey.ToLower())
+                match effect with
+                | None -> context, NotFound
+                | Some e -> 
+                    let possibleScopes = e.Scopes
+                    let exact = possibleScopes |> List.contains context.CurrentScope
+                    match context.CurrentScope, possibleScopes, exact with
+                    | _, [], _ -> context, NotFound
+                    | _, _, true -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
+                    | Scope.Any, _, _ -> {context with Scopes = e.InnerScope::context.Scopes}, NewScope {context with Scopes = e.InnerScope::context.Scopes}
+                    | _, ss, false -> context, WrongScope ss
+        let inner2 = fun a b -> inner a b |> (fun (c, d) -> c, Some d)
+        keys |> Array.fold (fun (c, r) k -> match r with |None -> inner2 c k |Some (NewScope x) -> inner2 x k |Some x -> c, Some x) (source, None) |> snd |> Option.defaultValue (NotFound)
+
 
     // let changeScope (scope : string) source = scopes 
     //                                             |> List.tryFind (fun (n, s, _) -> n.ToLower() = scope.ToLower() && s = source)
@@ -482,3 +517,4 @@ module STLScopes =
     let sourceScope (scope : string) = scopes
                                     |> List.choose (function | (n, s, _) when n.ToLower() = scope.ToLower() -> Some s |_ -> None)
                                     |> (function |x when List.contains Scope.Any x -> Some allScopes |[] -> None |x -> Some x)
+
