@@ -28,4 +28,29 @@ fleet_event =
             }
         }
     }
+
+    immediate = {
+        set_fleet_stance = aggressive
+        OWNER = {
+            #error
+            set_fleet_stance = aggressive
+            PREV = {
+                set_fleet_stance = aggressive
+            }
+            OWNER ={
+                #error
+                set_fleet_stance = aggressive
+                PREVPREV ={
+                    set_fleet_stance = aggressive
+                }
+                PREV.PREV = {
+                    set_fleet_stance = aggressive
+                }
+                PREV  = {
+                    #error
+                    set_fleet_stance = aggressive
+                }
+            }
+        }
+    }
 }

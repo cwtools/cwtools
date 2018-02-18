@@ -1,0 +1,94 @@
+namespace = test
+
+planet_event = {
+    is_triggered_only = yes
+    desc = {
+        trigger = {
+            #error
+            has_fleet_order = yes
+            has_building_construction = yes
+        }
+        no_error = yes
+    }
+
+    trigger = {
+        #error
+        has_fleet_order = yes
+        has_building_construction = yes
+    }
+
+    immediate = {
+        #error
+        set_fleet_stance = aggressive
+        add_anomaly = yes
+    }
+
+    option = {
+        tooltip = {
+            #error
+            set_fleet_stance = aggressive
+            add_anomaly = yes
+        }
+        trigger = {
+            #error
+            has_fleet_order = yes
+            has_building_construction = yes
+        }
+        allow = {
+            #error
+            has_fleet_order = yes
+            has_building_construction = yes        
+        }
+        hidden_effect = {
+            #error
+            set_fleet_stance = aggressive
+            add_anomaly = yes
+        }
+        default_hide_option = yes
+    }
+
+    after = {
+        #error
+        set_fleet_stance = aggressive
+        add_anomaly = yes
+    }
+
+}
+
+country_event = 
+{
+    is_triggered_only = yes
+    option = {
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 5
+			min = 5
+			max = 5
+		}
+    }
+    desc = {
+		trigger = {
+			hidden:owner = {
+                has_authority = auth_machine_intelligence
+                #error
+                has_fleet_order = aggressive
+            }
+            hidden:event_target:owner ={
+                has_authority = yes
+            }
+		}
+    }
+    
+    desc = {
+		trigger = {
+			hidden:owner = {
+                has_authority = auth_machine_intelligence
+                #error
+                has_fleet_order = aggressive
+            }
+            hidden:event_target:owner ={
+                has_authority = yes
+            }
+		}
+	}
+}

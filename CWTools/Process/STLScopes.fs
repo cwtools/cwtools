@@ -487,7 +487,8 @@ module STLScopes =
         "PREVPREVPREVPREV", prev >> prev >> prev >> prev
     ]
     let changeScope (effects : (Effect * bool) list) (triggers : (Effect * bool) list) (key : string) (source : ScopeContext) = 
-        let keys = key.Split('.');
+        let key = if key.StartsWith("hidden:") then key.Substring(7) else key
+        let keys = key.Split('.')
         let inner (context : ScopeContext) (nextKey : string) =
             let onetoone = oneToOneScopes |> List.tryFind (fun (k, f) -> k.ToLower() = nextKey.ToLower())
             match onetoone with
