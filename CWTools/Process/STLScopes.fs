@@ -91,7 +91,7 @@ module STLScopes =
 // event_target:
 // parameter:
     let scopedEffects = [
-        ScopedEffect("space_owner", [Scope.GalacticObject], Scope.Country, EffectType.Both, "", "");
+        ScopedEffect("space_owner", [Scope.GalacticObject; Scope.Planet], Scope.Country, EffectType.Both, "", ""); //Planet from MoreEventsMod
         ScopedEffect("overlord", [Scope.Country], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("defender", [Scope.War], Scope.Country, EffectType.Both, "", "");
         ScopedEffect("attacker", [Scope.War], Scope.Country, EffectType.Both, "", "");
